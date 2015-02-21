@@ -11,3 +11,4 @@ psycopg2
 Pillow
 
 fastkml
+dj-database-url
