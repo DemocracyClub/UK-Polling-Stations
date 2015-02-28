@@ -12,3 +12,7 @@ Pillow
 
 fastkml
 dj-database-url
+
+django-localflavor==1.1
+requests
+beautifulsoup4

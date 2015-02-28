@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+<h1>{{ council.name }}</h1>
+
+<p>We don't have any data on {{ council.name }}, try contacting them and asking where you should vote:</p>
+<ul>
+    <li>{{ council.phone }}</li>
+    <li>{{ council.email }}</li>
+    <li>
+        {{ council.address|linebreaksbr }}<br>
+        {{ council.postcode }}
+    </li>
+</ul>
+</main>
+<div id="area_map"></div>
+{% endblock content %}
+
+
+{% block extra_javascript %}
+<style>
+    .council_location_icon {
+        background-color:black;
+        border-radius: 50%;
+        height:2px;
+        width:2px;
+    }
+</style>
+<script>
+
+// Maps
+window.create_area_map = function(point, feature) {
+    var area = L.geoJson(feature);
+    // var council_location = L.geoJson(point);
+    var council_location = point;
+    var b = area.getBounds();
+
+    var map = L.map('area_map', {zoomControl:false}).setView(b.getCenter(), 13);
+    map.fitBounds(map.fitBounds(b));
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+
+    var Stamen_TonerLite = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      subdomains: 'abcd',
+    }).addTo(map);
+
+
+    window.map = map;
+
+    area.addTo(map);
+
+    L.marker(council_location, {
+        'icon': L.divIcon({className: 'council_location_icon'}),
+        'clickable': false,
+    }).addTo(map);
+
+}
+// var point = {{ council.location.geojson|safe }};
+var point = [{{ council.location.1 }}, {{ council.location.0 }}];
+var feature = {{ council.area.geojson|safe }};
+
+create_area_map(point, feature)
+
+</script>
+{% endblock extra_javascript %}

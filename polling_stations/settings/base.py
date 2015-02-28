@@ -130,6 +130,7 @@ INSTALLED_APPS = (
 
 PROJECT_APPS = (
     'pollingstations',
+    'councils',
 )
 
 INSTALLED_APPS += PROJECT_APPS
