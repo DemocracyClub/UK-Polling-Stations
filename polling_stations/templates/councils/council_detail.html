@@ -4,7 +4,29 @@
 <main>
 <h1>{{ council.name }}</h1>
 
-<p>We don't have any data on {{ council.name }}, try contacting them and asking where you should vote:</p>
+<h2>Data quality</h2>
+{% if council.pollingstation_set.all and not council.pollingdistrict_set.all %}
+    <p><strong>Good news!</strong>  We have polling station locations for
+        {{ council.name }}, but we don't know how the
+        council has allocate houses to those stations, so we can't tell you
+        exactly where to vote.</p>
+    <p>You will have to phone the council on <a href="tel:{{ council.phone }}">
+        {{ council.phone }}</a> to find your polling station</p>
+{% endif %}
+{% if council.pollingdistrict_set.all and not council.pollingstation_set.all %}
+    <p><strong>Good news!</strong>  We have polling districts for
+        {{ council.name }}, but we don't know exactly where the polling stations
+        are yet, so we can't tell you exactly where to vote.</p>
+    <p>You will have to phone the council on <a href="tel:{{ council.phone }}">
+        {{ council.phone }}</a> to find your polling station</p>
+{% endif %}
+{% if not council.pollingdistrict_set.all and not council.pollingstation_set.all %}
+<p>We don't have any data on {{ council.name }}, try contacting them and asking:</p>
+<ul>
+    <li>Where your polling station is (you'll need to give them your address)</li>
+    <li>If they will open their polling data so this project and other can make use of it in future (say you came from this site)</li>
+</ul>
+{% endif %}
 <ul>
     <li>{{ council.phone }}</li>
     <li>{{ council.email }}</li>
@@ -13,6 +35,8 @@
         {{ council.postcode }}
     </li>
 </ul>
+
+
 </main>
 <div id="area_map"></div>
 {% endblock content %}
@@ -36,12 +60,12 @@ window.create_area_map = function(point, feature) {
     var council_location = point;
     var b = area.getBounds();
 
-    var map = L.map('area_map', {zoomControl:false}).setView(b.getCenter(), 13);
+    var map = L.map('area_map', {zoomControl:true}).setView(b.getCenter(), 13);
     map.fitBounds(map.fitBounds(b));
-    map.dragging.disable();
-    map.touchZoom.disable();
-    map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
+    // map.dragging.disable();
+    // map.touchZoom.disable();
+    // map.doubleClickZoom.disable();
+    // map.scrollWheelZoom.disable();
 
     var Stamen_TonerLite = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -52,6 +76,18 @@ window.create_area_map = function(point, feature) {
     window.map = map;
 
     area.addTo(map);
+
+    {% for area in council.pollingdistrict_set.all %}
+        L.geoJson({{ area.area.geojson|safe }}).addTo(map);
+    {% endfor %}
+
+    {% for station in council.pollingstation_set.all %}
+        L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
+            'icon': L.divIcon({className: 'council_location_icon'}),
+            'clickable': false,
+        }).addTo(map);
+    {% endfor %}
+
 
     L.marker(council_location, {
         'icon': L.divIcon({className: 'council_location_icon'}),

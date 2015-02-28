@@ -2,10 +2,23 @@
 
 {% block content %}
 
+<h2>Preview of Polling Station Finder</h2>
+<p>This is a very early preview of the <a href="https://democracyclub.org.uk">
+    Democracy Club</a> Polling Station Finder</p>
+<p>It's far from ready for use, however you can see an example of where we're
+    hoping to be by typing in a postcode below:</p>
+
 <form method=post>
     {% csrf_token %}
     {{ form.as_p }}
     <button type=submit>Search</button>
 </form>
+
+<p>Some example searches to show a range of data quality:</p>
+<ul>
+    <li><a href="http://localhost:8000/council/E08000026/">Coventry City Council</a> (no data)</li>
+    <li><a href="http://localhost:8000/council/E06000037/">West Berkshire Council</a> (Polling stations, no polling districts)</li>
+    <li><a href="http://localhost:8000/council/E06000037/">Canterbury City Council</a> (Polling districts, no polling stations )</li>
+</ul>
 
 {% endblock content %}

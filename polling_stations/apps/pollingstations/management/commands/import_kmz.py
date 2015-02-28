@@ -43,9 +43,10 @@ class Command(BaseCommand):
                 'name': district.name,
                 'area': WKT,
             }
-            # import ipdb; ipdb.set_trace()
+            import ipdb; ipdb.set_trace()
             PollingDistrict.objects.update_or_create(
-                council_id=district.id,
+                council_id="E07000106",
+                internal_council_id=district.id,
                 defaults=default_values
             )
 
