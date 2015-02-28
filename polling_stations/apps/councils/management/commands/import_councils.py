@@ -1,3 +1,5 @@
+import time
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -60,7 +62,6 @@ class Command(BaseCommand):
             if not council.area:
                 council.area = self.get_wkt_from_mapit(mapit_id)
                 council.save()
-                import time
                 time.sleep(1)
             if not council.location:
                 print council.postcode
@@ -68,7 +69,6 @@ class Command(BaseCommand):
                     l = geocode(council.postcode)
                 except:
                     continue
-                import time
                 time.sleep(1)
                 council.location = Point(l['wgs84_lon'], l['wgs84_lat'])
                 council.save()
