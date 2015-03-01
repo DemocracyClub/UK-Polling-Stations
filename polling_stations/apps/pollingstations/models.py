@@ -23,4 +23,5 @@ class PollingDistrict(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        return self.name
+        name = self.name or "Unnamed"
+        return "%s (%s)" % (name, self.council)
