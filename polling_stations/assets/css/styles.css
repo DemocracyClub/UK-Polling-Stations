@@ -474,11 +474,14 @@
 
 
 /* div icon */
-
 .leaflet-div-icon {
-	background: #fff;
-	border: 1px solid #666;
-	}
+    background: #fff;
+    border: 1px solid #666;
+}
+
+.your_location_icon {
+    background:red;
+}
 
 html, body, .container {
     height:100%;

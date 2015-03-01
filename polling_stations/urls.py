@@ -6,7 +6,7 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from data_finder.views import HomeView, CouncilView
+from data_finder.views import HomeView, CouncilView, PostcodeView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -18,6 +18,8 @@ urlpatterns = patterns('',
 
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
+    url(r'^postcode/(?P<postcode>.+)/$',
+        PostcodeView.as_view(), name='postcode_view'),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

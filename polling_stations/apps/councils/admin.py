@@ -19,5 +19,17 @@ class CouncilAdmin(ReadOnlyAdminMixIn, admin.OSMGeoAdmin):
     ]
     inlines = [CouncilDataInfoInline, ]
 
+    def data_format(self, obj):
+        return obj.dataquality.data_format
+
+    def public_notes(self, obj):
+        return obj.dataquality.public_notes
+
+    list_display = (
+        '__unicode__',
+        'data_format',
+        'public_notes',
+    )
+
 admin.site.register(models.Council, CouncilAdmin)
 

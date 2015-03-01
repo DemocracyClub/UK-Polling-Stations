@@ -95,5 +95,5 @@ class Command(BaseCommand):
 
 
     def handle(self, **options):
-        # self.import_areas()
+        self.import_areas()
         self.import_stations()

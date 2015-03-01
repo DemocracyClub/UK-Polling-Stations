@@ -18,7 +18,7 @@ class PollingDistrict(models.Model):
     council = models.ForeignKey(Council, null=True)
     internal_council_id = models.CharField(blank=True, max_length=100)
     extra_id = models.CharField(blank=True, null=True, max_length=100)
-    area = models.MultiPolygonField(null=True, blank=True, geography=True)
+    area = models.MultiPolygonField(null=True, blank=True)
 
     objects = models.GeoManager()
 
