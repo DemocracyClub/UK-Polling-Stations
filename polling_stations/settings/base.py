@@ -131,6 +131,8 @@ INSTALLED_APPS = (
 PROJECT_APPS = (
     'pollingstations',
     'councils',
+    'data_finder.app.DataFinder',
+    'data_collection',
 )
 
 INSTALLED_APPS += PROJECT_APPS
