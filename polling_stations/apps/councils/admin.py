@@ -2,7 +2,7 @@ from django.contrib.gis import admin
 from django import forms
 
 from data_finder.admin import ReadOnlyAdminMixIn
-from data_finder.models import DataQuality
+from data_collection.models import DataQuality
 
 import models
 

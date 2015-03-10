@@ -38,7 +38,7 @@
 
 
 </main>
-<div id="area_map"></div>
+<div id="area_map" class="container"></div>
 {% endblock content %}
 
 
@@ -52,6 +52,7 @@
     }
 </style>
 <script>
+alert('asd');
 
 // Maps
 window.create_area_map = function(point, feature) {
@@ -60,12 +61,12 @@ window.create_area_map = function(point, feature) {
     var council_location = point;
     var b = area.getBounds();
 
-    var map = L.map('area_map', {zoomControl:true}).setView(b.getCenter(), 13);
+    var map = L.map('area_map', {zoomControl:false}).setView(b.getCenter(), 13);
     map.fitBounds(map.fitBounds(b));
-    // map.dragging.disable();
-    // map.touchZoom.disable();
-    // map.doubleClickZoom.disable();
-    // map.scrollWheelZoom.disable();
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
 
     var Stamen_TonerLite = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
       attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',

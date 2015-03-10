@@ -8,18 +8,21 @@
 <p>It's far from ready for use, however you can see an example of where we're
     hoping to be by typing in a postcode below:</p>
 
-<form method=post>
+<form method=post class="form-inline">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form }}
     <button type=submit>Search</button>
+    <p></p>
 </form>
 
-<p>Some example searches to show a range of data quality:</p>
-<ul>
-    <li><a href="/postcode/CV15RR/">Coventry City Council</a> (no data)</li>
-    <li><a href="/postcode/RG145LD/">West Berkshire Council</a> (Polling stations, no polling districts)</li>
-    <li><a href="/postcode/CT11YW/">Canterbury City Council</a> (Polling districts, no polling stations )</li>
-    <li><a href="/postcode/BS15TR/">Bristol City Council</a> (all data – looks crazy, but it's there!)</li>
-</ul>
+<div class="well well-large">
+  <p>Some example searches to show a range of data quality:</p>
+  <ul>
+      <li><a href="/postcode/CV15RR/">Coventry City Council</a> (no data)</li>
+      <li><a href="/postcode/RG145LD/">West Berkshire Council</a> (Polling stations, no polling districts)</li>
+      <li><a href="/postcode/CT11YW/">Canterbury City Council</a> (Polling districts, no polling stations )</li>
+      <li><a href="/postcode/BS15TR/">Bristol City Council</a> (all data – looks crazy, but it's there!)</li>
+  </ul>
+</div>
 
 {% endblock content %}

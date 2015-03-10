@@ -1,0 +1,16 @@
+.navbar {
+    overflow:auto;
+}
+.navbar-brand > img {
+    position:relative;
+    top:-20px;
+    left:-15px;
+    float:left;
+}
+
+@media only screen and (min-width: 42em) {
+    .navbar-brand > img {
+        left:0px;
+        padding-right:1em;
+    }
+}

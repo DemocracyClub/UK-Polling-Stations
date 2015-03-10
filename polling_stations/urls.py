@@ -15,6 +15,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^league_table/', include('data_collection.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),

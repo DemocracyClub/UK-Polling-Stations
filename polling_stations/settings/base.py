@@ -108,6 +108,18 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    'django.core.context_processors.request',
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.contrib.auth.context_processors.auth",
+)
+
+
 ROOT_URLCONF = 'polling_stations.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -131,8 +143,8 @@ INSTALLED_APPS = (
 PROJECT_APPS = (
     'pollingstations',
     'councils',
-    'data_finder.app.DataFinder',
-    'data_collection',
+    'data_finder',
+    'data_collection.app.DataCollection',
 )
 
 INSTALLED_APPS += PROJECT_APPS

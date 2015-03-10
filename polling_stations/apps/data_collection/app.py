@@ -13,8 +13,8 @@ def link_to_councils(sender, **kwargs):
 
 
 
-class DataFinder(AppConfig):
-    name = 'data_finder'
+class DataCollection(AppConfig):
+    name = 'data_collection'
     verbose_name = "Data Finder"
     def ready(self):
         post_migrate.connect(link_to_councils, sender=self)
