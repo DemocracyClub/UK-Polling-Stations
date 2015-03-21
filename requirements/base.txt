@@ -17,3 +17,4 @@ django-localflavor==1.1
 requests
 beautifulsoup4
 git+git://github.com/geomet/geomet.git
+pyshp
