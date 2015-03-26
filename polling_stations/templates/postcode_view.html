@@ -41,7 +41,9 @@
     <h3>Council Contact info</h3>
     <ul>
         <li>{{ areas.council.phone }}</li>
-        <li>{{ areas.council.email }}</li>
+        <li>
+          <a href="mailto:{{ areas.council.email }}">{{ areas.council.email }}</a>
+        </li>
         <li>
             {{ areas.council.address|linebreaksbr }}<br>
             {{ areas.council.postcode }}
