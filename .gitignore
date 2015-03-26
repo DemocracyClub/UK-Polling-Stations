@@ -56,3 +56,6 @@ target/
 
 # Local settings
 polling_stations/settings/local.py
+
+# editor cruft
+*~
