@@ -1,0 +1,13 @@
+{% extends "rest_framework/base.html" %}
+
+{% load staticfiles %}
+
+{% block bootstrap_theme %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootswatch.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/map.css' %}" rel="stylesheet">
+{% endblock %}
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock %}

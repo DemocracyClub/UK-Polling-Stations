@@ -1,0 +1,27 @@
+{% load staticfiles %}
+      <header class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a href="/" class="navbar-brand">
+              <img src="{% static 'images/logo.png' %}" height="60"  alt="Democracy Club logo">
+              Polling Stations
+            </a>
+            <p class="navbar-text visible-lg-block visible-md-block hidden-sm hidden-xs">
+              From Democracy Club
+            </p>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+
+            <nav class="navbar-collapse collapse navbar-right" id="navbar-main">
+              <ul class="nav navbar-nav">
+                  <li><a href="{% url "home" %}">Home</a></li>
+                  <li><a href="{% url "league_table" %}">League Table of Councils</a></li>
+              </ul>
+          </nav>
+        </div>
+      </header>
