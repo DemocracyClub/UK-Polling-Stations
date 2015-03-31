@@ -8,4 +8,4 @@ This is a work in progress project that needs help in a number of ways:
 2. If you are a developer (python, django, frontend, etc) or designer, we need help making the site itself.
 3. If you are interested in helping us gather this data, or if you know a lot about the strange world of the UK geographic system.
 
-If you are interested in helping out in any way at all, please contact sym@demodracyclub.org.uk
+If you are interested in helping out in any way at all, please contact sym@democracyclub.org.uk
