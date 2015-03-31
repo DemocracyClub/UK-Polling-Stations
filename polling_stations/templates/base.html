@@ -11,52 +11,27 @@
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
 
     <link rel="icon" type="image/gif" href="{% static 'img/favicon.gif' %}">
 
     {% block css %}
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootswatch.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'css/map.css' %}" rel="stylesheet">
+      <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static 'css/bootswatch.min.css' %}" rel="stylesheet">
+      <link href="{% static 'css/style.css' %}" rel="stylesheet">
+      <link href="{% static 'css/map.css' %}" rel="stylesheet">
     {% endblock %}
 
   </head>
 
   <body>
-      <header class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <a href="/" class="navbar-brand">
-              <img src="{% static 'images/logo.png' %}" height="60"  alt="Democracy Club logo">
-              Polling Stations
-            </a>
-            <p class="navbar-text visible-lg-block visible-md-block hidden-sm hidden-xs">
-              From Democracy Club
-            </p>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          </div>
-
-            <nav class="navbar-collapse collapse navbar-right" id="navbar-main">
-              <ul class="nav navbar-nav">
-                  <li><a href="{% url "home" %}">Home</a></li>
-                  <li><a href="{% url "league_table" %}">League Table of Councils</a></li>
-              </ul>
-          </nav>
-        </div>
-      </header>
-      <p class="well" align="center">
-        This is a very early preview site from
-        <a href="https://democracyclub.org.uk">Democracy Club</a> and we
-        need your help.  <a href="https://twitter.com/democlub/">Please get in touch</a>!
-      </p>
+    {% include 'navbar.html' %}
+    <p class="well" align="center">
+      This is a very early preview site from
+      <a href="https://democracyclub.org.uk">Democracy Club</a> and we
+      need your help.  <a href="https://twitter.com/democlub/">Please get in touch</a>!
+    </p>
 
     <div class="container">
 
@@ -66,15 +41,14 @@
 
     </div> <!-- /container -->
 
-
     <!-- Le javascript
-    ================================================== -->
+         ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-      <script src="{% static 'js/jquery.min.js' %}"></script>
-      <script src="{% static 'js/bootstrap.min.js' %}"></script>
-      <script src="{% static 'js/leaflet.js' %}"></script>
-      <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
     {% block extra_javascript %}{% endblock extra_javascript %}
   </body>
 </html>
