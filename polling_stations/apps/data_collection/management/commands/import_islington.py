@@ -30,7 +30,7 @@ class Command(BaseShpImporter):
             'council': self.council,
             'internal_council_id': record.u_polldid,
             'postcode': record.postcode,
-            'address': "\n".join([record.stat_title, record.stat_addr1, record.postcode]),
+            'address': "\n".join([record.stat_title, record.stat_addr1]),
             'location': location
         }
     
