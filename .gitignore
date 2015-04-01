@@ -53,3 +53,9 @@ docs/_build/
 # PyBuilder
 target/
 .DS_Store
+
+# Local settings
+polling_stations/settings/local.py
+
+# editor cruft
+*~

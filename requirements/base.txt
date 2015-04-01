@@ -18,3 +18,7 @@ requests
 beautifulsoup4
 git+git://github.com/geomet/geomet.git
 pyshp
+
+djangorestframework
+markdown      
+django-filter 
