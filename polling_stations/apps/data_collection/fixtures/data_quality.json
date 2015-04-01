@@ -1,0 +1,6077 @@
+[
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000113"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 1
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000013"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 2
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000025"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 3
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000007"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 4
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000005"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 5
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000019"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 6
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000015"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 7
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000009"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 8
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000016"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 9
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000006"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 10
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000018"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 11
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000021"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 12
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000014"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 13
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000012"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 14
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000019"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 15
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000030"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 16
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000007"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 17
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000033"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 18
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000020"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 19
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000013"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 20
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000032"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 21
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000024"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 22
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000029"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 23
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000028"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 24
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000022"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 25
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000011"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 26
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000023"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 27
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000010"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 28
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000026"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 29
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000031"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 30
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000025"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 31
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000002"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 32
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000163"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 33
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000168"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 34
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000167"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 35
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000164"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 36
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000223"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 37
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000007"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 38
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000238"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 39
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000108"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 40
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000004"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 41
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000082"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 42
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000079"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 43
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000013"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 44
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000080"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 45
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000069"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 46
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000084"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 47
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000078"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 48
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000083"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 49
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000086"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 50
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000091"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 51
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000166"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 52
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000165"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 53
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000169"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 54
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000027"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 55
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000207"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 56
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000036"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 57
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000024"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 58
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000038"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 59
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000016"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 60
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000007"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 61
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000005"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 62
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000021"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 63
+},
+{
+    "fields": {
+        "rating": "8",
+        "in_contact_with_dc": false,
+        "url": "http://maps.bristol.gov.uk/arcgis/rest/services/ext/localinfo/MapServer",
+        "public_notes": "",
+        "has_polling_discricts_online": true,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": true,
+        "council": "E06000023"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 64
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000012"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 65
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000010"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 66
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000015"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 67
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000018"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 68
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000045"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 69
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000031"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 70
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000019"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 71
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000002"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 72
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000024"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 73
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000035"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 74
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000032"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 75
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000001"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 76
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000006"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 77
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000012"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 78
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000023"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 79
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000213"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 80
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000221"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 81
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000219"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 82
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000224"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 83
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000229"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 84
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000226"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 85
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000053"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 86
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000146"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 87
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000211"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 88
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000149"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 89
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000209"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 90
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000074"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 91
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000067"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 92
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000070"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 93
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000071"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 94
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000076"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 95
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000077"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 96
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000075"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 97
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000072"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 98
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000153"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 99
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000151"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 100
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000173"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 101
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000172"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 102
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000152"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 103
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000010"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 104
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000004"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 105
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000005"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 106
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000006"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 107
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000150"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 108
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000234"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 109
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000047"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 110
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000239"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 111
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000235"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 112
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000204"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 113
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000176"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 114
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000236"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 115
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000237"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 116
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000216"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 117
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000062"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 118
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000220"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 119
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000048"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 120
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000199"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 121
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000065"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 122
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000140"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 123
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000141"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 124
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000138"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 125
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000137"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 126
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000145"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 127
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000147"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 128
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000011"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 129
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000008"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 130
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000012"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 131
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000009"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 132
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000215"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 133
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000175"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 134
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000205"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 135
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000042"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 136
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000206"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 137
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000200"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 138
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000202"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 139
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000143"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 140
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000203"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 141
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000038"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 142
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000032"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 143
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000033"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 144
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000035"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 145
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000034"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 146
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000043"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 147
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000045"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 148
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000177"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 149
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000217"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 150
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000179"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 151
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000030"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 152
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000026"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 153
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000037"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 154
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000029"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 155
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000031"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 156
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000028"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 157
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000036"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 158
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000039"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 159
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000208"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 160
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000174"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 161
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000148"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 162
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000107"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 163
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000109"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 164
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000180"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 165
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000114"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 166
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000192"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 167
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000196"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 168
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000198"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 169
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000018"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 170
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000028"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 171
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000046"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 172
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000008"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 173
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000005"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 174
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000042"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 175
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000037"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 176
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000016"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 177
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000018"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 178
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000142"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 179
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000133"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 180
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000129"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 181
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000130"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 182
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000120"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 183
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000117"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 184
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000132"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 185
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000134"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 186
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000218"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 187
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000121"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 188
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000127"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 189
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000187"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 190
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000190"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 191
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000144"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 192
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000181"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 193
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000178"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 194
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000044"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 195
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000046"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 196
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000110"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 197
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000188"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 198
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000189"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 199
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000197"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 200
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000195"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 201
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000194"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 202
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000052"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 203
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000099"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 204
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000241"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 205
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000243"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 206
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000103"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 207
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000096"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 208
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000240"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 209
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000242"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 210
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000112"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 211
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000116"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 212
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000191"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 213
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000085"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 214
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000094"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 215
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000093"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 216
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000088"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 217
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000087"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 218
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000090"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 219
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000092"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 220
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000102"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 221
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000098"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 222
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000016"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 223
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000011"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 224
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000012"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 225
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000035"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 226
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000017"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 227
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000026"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 228
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000037"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 229
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000021"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 230
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000014"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 231
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000003"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 232
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000029"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 233
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000023"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 234
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000033"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 235
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000031"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 236
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000032"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 237
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000002"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 238
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000014"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 239
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000019"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 240
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000006"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 241
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000028"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 242
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95V"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 243
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95O"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 244
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95X"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 245
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95U"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 246
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95P"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 247
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95Q"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 248
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95Y"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 249
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95C"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 250
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95J"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 251
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95I"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 252
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95L"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 253
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95K"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 254
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95N"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 255
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95M"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 256
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95A"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 257
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95Z"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 258
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95B"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 259
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95S"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 260
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95D"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 261
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95T"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 262
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95R"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 263
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95W"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 264
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95E"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 265
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95F"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 266
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95G"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 267
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "95H"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 268
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000011"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 269
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000027"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 270
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000026"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 271
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000011"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 272
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000020"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 273
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000045"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 274
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000027"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 275
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000017"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 276
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000041"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 277
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000212"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 278
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000214"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 279
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000050"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 280
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000049"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 281
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000155"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 282
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000024"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 283
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000036"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 284
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000036"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 285
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000044"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 286
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000006"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 287
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000014"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 288
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000028"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 289
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000018"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 290
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000021"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 291
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000022"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 292
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000055"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 293
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000020"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 294
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000030"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 295
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000052"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 296
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000004"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 297
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000030"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 298
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000050"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 299
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000057"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 300
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000054"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 301
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000049"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 302
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000011"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 303
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000010"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 304
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000005"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 305
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000039"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 306
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000033"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 307
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000017"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 308
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000026"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 309
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000004"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 310
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000021"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 311
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000056"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 312
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000041"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 313
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000025"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 314
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000022"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 315
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000029"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 316
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000009"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 317
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000003"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 318
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000019"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 319
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000023"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 320
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000038"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 321
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000043"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 322
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000105"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 323
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000111"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 324
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000106"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 325
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000027"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 326
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000030"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 327
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000010"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 328
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000003"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 329
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000008"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 330
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000029"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 331
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000044"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 332
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000027"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 333
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000004"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 334
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000225"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 335
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000073"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 336
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000154"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 337
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000013"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 338
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000136"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 339
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000156"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 340
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000131"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 341
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000124"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 342
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000122"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 343
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000128"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 344
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000123"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 345
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000119"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 346
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000125"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 347
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000126"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 348
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000118"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 349
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000042"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 350
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000034"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 351
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000040"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 352
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000015"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 353
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000002"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 354
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000041"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 355
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000005"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 356
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000001"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 357
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000003"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 358
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000046"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 359
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000039"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 360
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000008"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 361
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000222"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 362
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000066"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 363
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000040"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 364
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000171"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 365
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000006"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 366
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000115"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 367
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000193"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 368
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000095"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 369
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000089"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 370
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000034"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 371
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000015"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 372
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000008"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 373
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000001"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 374
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000010"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 375
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000022"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 376
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E08000009"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 377
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000014"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 378
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000033"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 379
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000047"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 380
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000034"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 381
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000015"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 382
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000008"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 383
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "W06000009"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 384
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000024"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 385
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000017"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 386
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000020"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 387
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000013"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 388
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "S12000035"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 389
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E06000051"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 390
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E09000001"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 391
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000063"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 392
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000228"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 393
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000227"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 394
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000068"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 395
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000064"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 396
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000061"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 397
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000139"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 398
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000081"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 399
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000210"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 400
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000051"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 401
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000170"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 402
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000201"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 403
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000040"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 404
+},
+{
+    "fields": {
+        "rating": null,
+        "in_contact_with_dc": false,
+        "url": "",
+        "public_notes": "",
+        "has_polling_discricts_online": false,
+        "data_format": "",
+        "needs_manually_importing": false,
+        "has_polling_stations_online": false,
+        "council": "E07000135"
+    },
+    "model": "data_collection.dataquality",
+    "pk": 405
+}
+]
