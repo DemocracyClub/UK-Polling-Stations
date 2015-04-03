@@ -2,7 +2,7 @@
 
 This is a work in progress project that needs help in a number of ways:
 
-1. Importing the data we have collected from councils
+1. Importing the data we have collected from councils ([See Below](https://github.com/DemocracyClub/UK-Polling-Stations#importing-the-data-we-have-from-councils))
 2. If you are a developer (python, django, frontend, etc) or designer, we need help making the site itself.
 3. If you are interested in helping us gather this data, or if you know a lot about the strange world of the UK geographic system.
 
