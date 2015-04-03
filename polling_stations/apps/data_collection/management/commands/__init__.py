@@ -9,56 +9,22 @@ import shapefile
 from django.core.management.base import BaseCommand
 from django.contrib.gis import geos
 from django.contrib.gis.geos import Point, GEOSGeometry
+import ffs
 
 from councils.models import Council
 from pollingstations.models import PollingStation, PollingDistrict
 
 class BaseImporter(BaseCommand):
-    pass
-
-class BaseShpImporter(BaseCommand):
     srid = 27700
 
     council_id     = None
     stations_name  = "polling_places"
     districts_name = "polling_districts"
 
-    def import_data(self):
-        self.import_polling_districts()
-        self.import_polling_stations()
-
-
-    def import_polling_districts(self):
-        sf = shapefile.Reader("{0}/{1}".format(
-            self.base_folder_path,
-            self.districts_name
-            ))
-        for district in sf.shapeRecords():
-            district_info = self.district_record_to_dict(district.record)
-            # import ipdb; ipdb.set_trace()
-
-            geojson = json.dumps(district.shape.__geo_interface__)
-            poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
-
-            district_info['area'] = poly
-            # import ipdb; ipdb.set_trace()
-            self.add_polling_district(district_info)
-
-    def add_polling_district(self, district_info):
-        PollingDistrict.objects.update_or_create(
-            council=self.council,
-            internal_council_id=district_info.get('internal_council_id', None),
-            defaults=district_info,
-        )
-
     def clean_poly(self, poly):
-        # print wkt
-        # import ipdb; ipdb.set_trace()
         if isinstance(poly, geos.Polygon):
             poly = geos.MultiPolygon(poly, srid=self.srid)
-            return poly
-        # import ipdb; ipdb.set_trace()
-
+            return poly 
         # try:
         #     polygons = wkt[18:-3].split(')), ((')
         #     WKT = ""
@@ -75,10 +41,21 @@ class BaseShpImporter(BaseCommand):
         #         WKT += cleaned_points
         # except:
         #     WKT = wkt
-        #
-        # WKT = "MULTIPOLYGON (%s)" % wkt
-        # print WKT
         return poly
+
+    def import_data(self):
+        """
+        There are two types of import - districts and stations.
+        """
+        self.import_polling_districts()
+        self.import_polling_stations()
+
+    def add_polling_district(self, district_info):
+        PollingDistrict.objects.update_or_create(
+            council=self.council,
+            internal_council_id=district_info.get('internal_council_id', None),
+            defaults=district_info,
+        )
 
     def add_polling_station(self, station_info):
         PollingStation.objects.update_or_create(
@@ -88,18 +65,12 @@ class BaseShpImporter(BaseCommand):
         )
 
     def import_polling_stations(self):
-        sf = shapefile.Reader("{0}/{1}".format(
-            self.base_folder_path,
-            self.stations_name
-            ))
-        for station in sf.shapeRecords():
-            station_info = self.station_record_to_dict(station.record)
-            station_info['location'] = Point(
-                *station.shape.points[0],
-                srid=self.srid)
-            self.add_polling_station(station_info)
-
-
+        base_folder = ffs.Path(self.base_folder_path)
+        stations = base_folder/self.stations_name
+        with stations.csv(header=True) as csv:
+            for row in csv: 
+                station_info = self.station_record_to_dict(row)
+                self.add_polling_station(station_info)
 
     def handle(self, *args, **kwargs):
         if self.council_id is None:
@@ -109,12 +80,50 @@ class BaseShpImporter(BaseCommand):
         self.base_folder_path = os.path.abspath(
          glob.glob('data/{0}-*'.format(self.council_id))[0]
         )
-
-
         self.import_data()
 
 
+class BaseShpImporter(BaseCommand):
+
+    def import_polling_districts(self):
+        sf = shapefile.Reader("{0}/{1}".format(
+            self.base_folder_path,
+            self.districts_name
+            ))
+        for district in sf.shapeRecords():
+            district_info = self.district_record_to_dict(district.record)
+            geojson = json.dumps(district.shape.__geo_interface__)
+            poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
+            district_info['area'] = poly
+            self.add_polling_district(district_info)
+
+    # def import_polling_stations(self):
+    #     sf = shapefile.Reader("{0}/{1}".format(
+    #         self.base_folder_path,
+    #         self.stations_name
+    #         ))
+    #     for station in sf.shapeRecords():
+    #         station_info = self.station_record_to_dict(station.record)
+    #         station_info['location'] = Point(
+    #             *station.shape.points[0],
+    #             srid=self.srid)
+    #         self.add_polling_station(station_info)
 
 
 
+class BaseJasonImporter(BaseImporter):
+    """
+    Import those councils whose data is JASON.
+    """
+
+    def import_polling_districts(self):
+        base_folder = ffs.Path(self.base_folder_path)
+        districtsfile = base_folder/self.districts_name
+        districts = districtsfile.json_load()
+
+        for district in districts['features']:
+            district_info = self.district_record_to_dict(district)
+            poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.srid))
+            district_info['area'] = poly
+            self.add_polling_district(district_info)
 
