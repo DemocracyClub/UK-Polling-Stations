@@ -27,19 +27,34 @@
 
   <body>
     {% include 'navbar.html' %}
-    <p class="well" align="center">
-      This is a very early preview site from
-      <a href="https://democracyclub.org.uk">Democracy Club</a> and we
-      need your help.  <a href="https://twitter.com/democlub/">Please get in touch</a>!
-    </p>
-
+    
     <div class="container">
-
       {% block content %}
         <p>Use this document as a way to quick start any new project.</p>
       {% endblock content %}
 
     </div> <!-- /container -->
+
+    <footer class="footer">
+      <div class="container">
+        <div class="col-md-6">
+          <p>
+            Built by
+            <a href="http://democracyclub.org.uk">
+              <img src="{% static 'images/logo-with-text.png' %}" class="dc-logo">
+            </a>
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p class="text-right">
+            <a href="{% url "league_table" %}">League Table of Councils</a> &nbsp;·&nbsp; <a href="https://github.com/DemocracyClub/UK-Polling-Stations">Issue Tracker</a> &nbsp;·&nbsp; <a href="/api" %}">Open Data API</a>
+          </p>
+        </div>
+        
+      </div>
+    </footer>
+
+
 
     <!-- Le javascript
          ================================================== -->

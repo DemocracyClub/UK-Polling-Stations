@@ -14,3 +14,16 @@
         padding-right:1em;
     }
 }
+
+.footer {
+    background: #f3f0ed;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.dc-logo {
+    height: 45px;
+    margin-left: .5em;
+}
+
+form .row { padding-bottom:2em; padding-top: 1em;
