@@ -53,7 +53,7 @@ class BaseImporter(BaseCommand):
     def add_polling_district(self, district_info):
         PollingDistrict.objects.update_or_create(
             council=self.council,
-            internal_council_id=district_info.get('internal_council_id', None),
+            internal_council_id=district_info.get('internal_council_id', 'none'),
             defaults=district_info,
         )
 
@@ -123,6 +123,8 @@ class BaseJasonImporter(BaseImporter):
 
         for district in districts['features']:
             district_info = self.district_record_to_dict(district)
+            if district_info is None:
+                continue
             poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.srid))
             district_info['area'] = poly
             self.add_polling_district(district_info)
