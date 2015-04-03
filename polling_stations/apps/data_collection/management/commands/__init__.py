@@ -83,7 +83,7 @@ class BaseImporter(BaseCommand):
         self.import_data()
 
 
-class BaseShpImporter(BaseCommand):
+class BaseShpImporter(BaseImporter):
 
     def import_polling_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
@@ -97,17 +97,18 @@ class BaseShpImporter(BaseCommand):
             district_info['area'] = poly
             self.add_polling_district(district_info)
 
-    # def import_polling_stations(self):
-    #     sf = shapefile.Reader("{0}/{1}".format(
-    #         self.base_folder_path,
-    #         self.stations_name
-    #         ))
-    #     for station in sf.shapeRecords():
-    #         station_info = self.station_record_to_dict(station.record)
-    #         station_info['location'] = Point(
-    #             *station.shape.points[0],
-    #             srid=self.srid)
-    #         self.add_polling_station(station_info)
+
+def import_polling_station_shapefiles(importer):
+    sf = shapefile.Reader("{0}/{1}".format(
+        importer.base_folder_path,
+        importer.stations_name
+        ))
+    for station in sf.shapeRecords():
+        station_info = importer.station_record_to_dict(station.record)
+        station_info['location'] = Point(
+            *station.shape.points[0],
+            srid=importer.srid)
+        importer.add_polling_station(station_info)
 
 
 
