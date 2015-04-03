@@ -1,5 +1,5 @@
 """
-Import Lambeth Council
+Import Bournemouth Council
 """
 from django.contrib.gis.geos import Point
 
@@ -7,7 +7,7 @@ from data_collection.management.commands import BaseJasonImporter
 
 class Command(BaseJasonImporter):
     """
-    Imports the Polling station/district data from Lambeth Council
+    Imports the Polling station/district data from Bournemouth Council
     """
     council_id     = 'E06000028'
     districts_name = 'Bournemouth_Polling_Districts.geojson'
@@ -24,7 +24,6 @@ class Command(BaseJasonImporter):
         )
 
     def station_record_to_dict(self, record):
-        print record
         location = Point(float(record.easting), float(record.northing), srid=self.srid)
         return dict(
             council=self.council,
