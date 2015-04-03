@@ -1,0 +1,57 @@
+FID_,OBJECTID_1,OBJECTID,POLLING_DI,POLLING_ST,BUILDING,ROAD,TOWN_VILLA,POINT_X,POINT_Y
+,7,7,AC1,1,Echelford Primary School,Park Road,Ashford,507986.374,171295.8118
+,8,8,AC2,2,Ashford C of E School,School Road,Ashford,507772.8461,170867.8367
+,9,10,AC3,3,Spelthorne School,Chertsey Road,Ashford Common,509056.7945,170890.0673
+,10,11,AC3,4,Spelthorne School,Chertsey Road,Ashford Common,509056.7945,170890.0673
+,67,0,AC4,5,Ashford C of E School,School Road,Ashford,507779.6211,170862.2278
+,11,12,AE1,6,St. Matthew's Church Hall,Muncaster Close,Ashford,507228.8227,171569.5963
+,12,13,AE1,7,St. Matthew's Church Hall,Muncaster Close,Ashford,507228.8227,171569.5963
+,15,16,AE2,8,St. Michael's RC School,Feltham Hill Road,Ashford,507328.5363,171340.1045
+,16,17,AE2,9,St. Michael's RC School,Feltham Hill Road,Ashford,507328.5363,171340.1045
+,1,1,ANS1,10,Stanwell Congregational Church Hall,Viscount Road,"Stanwell, Staines",506052.5338,173476.189
+,2,2,ANS1,11,Stanwell Congregational Church Hall,Viscount Road,"Stanwell, Staines",506052.5338,173476.189
+,4,4,ANS2,12,Fordway Centre,Stanwell Road,Ashford,506381.2792,172226.0303
+,5,5,ANS3,13,Fordway Centre,Stanwell Road,Ashford,506381.2792,172226.0303
+,18,19,AT1,14,Salvation Army Hall,Woodthorpe Road,Ashford,506096.9657,171645.8288
+,19,20,AT1,15,Salvation Army Hall,Woodthorpe Road,Ashford,506096.9657,171645.8288
+,20,21,AT2,16,Congregational Church Hall,Clarendon Road,Ashford,506751.546,171540.6097
+,21,22,AT2,17,Congregational Church Hall,Clarendon Road,Ashford,506751.546,171540.6097
+,22,27,HSW1,18,Halliford Community Centre,Upper Halliford Road,Shepperton,509103.4417,168205.5789
+,24,29,HSW2,19,Springfield County Primary School,Nursery Road,Sunbury,509612.9669,169464.6159
+,25,30,HSW2,20,Springfield County Primary School,Nursery Road,Sunbury,509612.9669,169464.6159
+,26,31,HSW3,21,St. Mary's Parish Hall,Green Street,Sunbury,510504.5685,168482.1038
+,27,32,LSG1,22,All Saint's Church Hall,The Broadway,"Laleham, Staines",505329.2636,168987.33
+,28,33,LSG2,23,Saxon Primary School,Briar Road,Shepperton,507065.149,167665.9874
+,29,34,LSG2,24,Saxon Primary School,Briar Road,Shepperton,507060.8135,167660.5524
+,31,36,LSG3,25,Charlton Village Hall,Hetherington Road,"Charlton, Shepperton",508425.6258,169164.7572
+,32,37,LSG3,26,Charlton Village Hall,Hetherington Road,"Charlton, Shepperton",508425.6258,169164.7572
+,33,38,RL1,27,St. Peter's Church Hall,Laleham Road,Staines-upon-Thames,503768.6715,170982.7171
+,34,39,RL1,28,St. Peter's Church Hall,Laleham Road,Staines-upon-Thames,503768.6715,170982.7171
+,35,41,RL2,29,Buckland Infant School,Berryscroft Road,"Laleham, Staines",505296.9631,170297.5557
+,36,42,RL2,30,Buckland Infant School,Berryscroft Road,"Laleham, Staines",505296.9631,170297.5557
+,68,0,RL3,31,Buckland Junior School,Berryscroft Road,"Laleham, Staines",505295.233,170292.4024
+,39,45,S1,32,Staines Youth Sports Centre,Leacroft,Staines-upon-Thames,504431.794,171562.75
+,40,46,S1,33,Staines Youth Sports Centre,Leacroft,Staines-upon-Thames,504431.794,171562.75
+,38,44,S2,34,Staines Community Centre,Thames Street,Staines-upon-Thames,503553.1146,171472.4723
+,41,48,S3,35,Our Lady of the Rosary School,Park Avenue,Staines-upon-Thames,504099.7925,170800.538
+,69,0,S4,36,Staines Youth Sports Centre,Leacroft,Staines-upon-Thames,504431.794,171562.75
+,58,65,SC,37,Kenyngton Manor Primary School,"Bryony Way, off Beechwood Avenue",Sunbury,510096.9091,170926.576
+,59,66,SC,38,Kenyngton Manor Primary School,"Bryony Way, off Beechwood Avenue",Sunbury,510096.9091,170926.576
+,60,67,SC,39,Kenyngton Manor Primary School,"Bryony Way, off Beechwood Avenue",Sunbury,510096.9091,170926.576
+,61,68,SC,40,Kenyngton Manor Primary School,"Bryony Way, off Beechwood Avenue",Sunbury,510096.9091,170926.576
+,63,70,SE1,41,"The Manning Room, St. Ignatius Church",Green Street,Sunbury,510037.5365,169687.0414
+,64,71,SE2,42,Chennestone County Primary School,Manor Lane,Sunbury,510966.8888,169319.402
+,65,72,SE2,43,Chennestone County Primary School,Manor Lane,Sunbury,510966.8888,169319.402
+,66,73,SE3,44,"Beauclerc Infant School, 116",French Street,Sunbury,511333.0852,168914.6021
+,52,59,SN1,45,Stanwell Moor Village Hall,Horton Road,Stanwell Moor,504308.6164,174705.5655
+,53,60,SN2,46,Stanwell Village Hall,High Street,"Stanwell, Staines",505607.8288,174273.1488
+,55,62,SN3,47,Stanwell Youth Centre,Hadrian Way,"Stanwell, Staines",505813.1571,173801.1875
+,57,64,SN4,48,Stanwell Fields School,Clare Road,"Stanwell, Staines",506275.8225,174001.1565
+,48,55,SS1,49,St. Martin's Court Hall,Kingston Crescent,Staines-upon-Thames,505401.1016,171090.956
+,49,56,SS2,50,"Resource Centre, Staines Park Car Park",Commercial Road,Staines-upon-Thames,504382.3325,170722.5938
+,50,57,SS2,51,"Resource Centre, Staines Park Car Park",Commercial Road,Staines-upon-Thames,504382.3325,170722.5938
+,51,58,SS3,52,Buckland Junior School,Berryscroft Road,"Laleham, Staines",505296.9631,170297.5557
+,43,50,ST,53,Shepperton Village Hall,High Street,Shepperton,508061.2096,167217.6693
+,44,51,ST,54,Shepperton Village Hall,High Street,Shepperton,508061.2096,167217.6693
+,45,52,ST,55,Shepperton Village Hall,High Street,Shepperton,508061.2096,167217.6693
+,46,53,ST,56,Shepperton Village Hall,High Street,Shepperton,508061.2096,167217.6693
