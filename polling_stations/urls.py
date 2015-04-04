@@ -113,6 +113,7 @@ urlpatterns = patterns(
     url(r'^league_table/', include('data_collection.urls')),
 
     url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^about$', TemplateView.as_view(template_name='about.html'), name='about'),
     url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),

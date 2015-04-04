@@ -20,6 +20,7 @@
 
     {% if not has_polling_district %}
     {% if points.0 %}
+      <h2>We're not sure exactly where you should vote</h2>
     <p><strong>Good news!</strong>  We have polling station locations for
         {{ council.name }}, but we don't know how the
         council has allocate houses to those stations, so we can't tell you
@@ -28,6 +29,8 @@
         {{ council.phone }}</a> to find your polling station</p>
 
     {% else %}
+      <h2>We're not sure exactly where you should vote</h2>
+
     <p>We don't have any data on {{ areas.council.name }}, try contacting them and asking:</p>
     <ul>
         <li>Where your polling station is (you'll need to give them your address)</li>
