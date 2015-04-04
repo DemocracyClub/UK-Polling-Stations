@@ -12,8 +12,8 @@
     {% csrf_token %}
     <div class="row">
       <div class="col-xs-3">
-        <input id="id_postcode" name="postcode" placeholder="Postcode" 
-               class="input-lg form-control" autofocus="" type="text" autocomplete="off">
+        <input id="id_postcode" name="postcode" placeholder="" 
+               class="input-lg form-control text-uppercase" autofocus="" type="text" autocomplete="off">
       </div>
       <div class="col-xs-3">
         <button type="submit" class="btn btn-lg btn-success" id="submit-postcode" 
@@ -24,16 +24,17 @@
     </div>
   </form>
 
-
-
-
   <div class="well well-large">
-    <p>This is a very early preview of the <a href="https://democracyclub.org.uk">
-        Democracy Club</a> Polling Station Finder</p>
-    <p>It's far from ready for use, however you can see an example of where we're
+    <p>
+      This is a very early preview of the <a href="https://democracyclub.org.uk">
+      Democracy Club</a> Polling Station Finder
+    </p>
+    <p>
+      It's far from ready for use, however you can see an example of where we're
       hoping to be by typing in a postcode below:</p>
-
-    <p>Some example searches to show a range of data quality:</p>
+    <p>
+      Some example searches to show a range of data quality:
+    </p>
     <ul>
       <li><a href="/postcode/CV15RR/">Coventry City Council</a> (no data)</li>
       <li><a href="/postcode/RG145LD/">West Berkshire Council</a> (Polling stations, no polling districts)</li>
