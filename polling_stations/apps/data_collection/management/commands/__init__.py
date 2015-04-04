@@ -53,7 +53,7 @@ class BaseImporter(BaseCommand):
     def add_polling_district(self, district_info):
         PollingDistrict.objects.update_or_create(
             council=self.council,
-            internal_council_id=district_info.get('internal_council_id', None),
+            internal_council_id=district_info.get('internal_council_id', 'none'),
             defaults=district_info,
         )
 
@@ -83,7 +83,7 @@ class BaseImporter(BaseCommand):
         self.import_data()
 
 
-class BaseShpImporter(BaseCommand):
+class BaseShpImporter(BaseImporter):
 
     def import_polling_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
@@ -97,17 +97,18 @@ class BaseShpImporter(BaseCommand):
             district_info['area'] = poly
             self.add_polling_district(district_info)
 
-    # def import_polling_stations(self):
-    #     sf = shapefile.Reader("{0}/{1}".format(
-    #         self.base_folder_path,
-    #         self.stations_name
-    #         ))
-    #     for station in sf.shapeRecords():
-    #         station_info = self.station_record_to_dict(station.record)
-    #         station_info['location'] = Point(
-    #             *station.shape.points[0],
-    #             srid=self.srid)
-    #         self.add_polling_station(station_info)
+
+def import_polling_station_shapefiles(importer):
+    sf = shapefile.Reader("{0}/{1}".format(
+        importer.base_folder_path,
+        importer.stations_name
+        ))
+    for station in sf.shapeRecords():
+        station_info = importer.station_record_to_dict(station.record)
+        station_info['location'] = Point(
+            *station.shape.points[0],
+            srid=importer.srid)
+        importer.add_polling_station(station_info)
 
 
 
@@ -123,6 +124,8 @@ class BaseJasonImporter(BaseImporter):
 
         for district in districts['features']:
             district_info = self.district_record_to_dict(district)
+            if district_info is None:
+                continue
             poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.srid))
             district_info['area'] = poly
             self.add_polling_district(district_info)
