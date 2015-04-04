@@ -1,78 +1,109 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main>
-    {% if has_polling_district %}
-    {% if points.0 %}
-        <h2>We think we know where you should vote</h2>
-        <p>We found a polling station at</p>
-        <p>
+  <div class="page-header">
+    <h2>
+      {% if we_know_where_you_should_vote %}
+        We think we know where you should vote
+      {% endif %}
+      {% if only_polling_stations or only_polling_districts %}
+        We're not sure exactly where you should vote    
+      {% endif %}
+      {% if no_data %}
+        We don't know where you should vote
+      {% endif %}
+    </h2>
+  </div>
+
+  <main>
+
+    <div class="row">
+      <div class="col-md-9">
+        <!-- This is the main left hand column ! -->
+        {% if only_polling_stations %}
+          <p class="lead">
+            <strong>Good news!</strong>  We have polling station locations for
+            <strong>{{ council.name }}</strong>, but we don't know how the
+            council has allocated houses to those stations, so we can't tell you
+            exactly where to vote.
+          </p>
+        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
+            {{ council.phone }}</a> to find your polling station
+        </p>          
+      {% endif %}
+
+      {% if only_polling_districts %}
+          <p class="lead">
+            Unfortunately <strong>{{ council.name }}</strong> wasn't able to
+            tell us where the polling stations were in your area.
+            We know what Polling district you're in, but not where the polling station is.
+          </p>
+        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
+            {{ council.phone }}</a> to find your polling station
+        </p>                  
+      {% endif %}
+
+      {% if no_data %}
+        <p class="lead">
+          We don't have any data on 
+          <strong>{{ council.name }}</strong>, try contacting them and asking:
+        </p>
+        <ul class="lead">
+          <li>Where your polling station is (you'll need to give them your address)</li>
+          <li>
+            If they will open their polling data so this project and others can make use of 
+            it in future (say you came from this site)
+          </li>
+        </ul>        
+      {% endif %}
+      
+      <div id="area_map"></div>
+      </div> <!-- Main Left hand column -->
+      <div class="col-md-3">
+        {% if we_know_where_you_should_vote %}
+          <h3 class="notopmargin">Your Polling Station</h3>
+          <address>
             {{ points.0.address|linebreaksbr }}<br>
             {{ points.0.postcode }}
-        </p>
-        <div id="directions"><a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.postcode }}">
-            About {{ directions.routes.0.legs.0.duration.text }} walk
-            ({{ directions.routes.0.legs.0.distance.text }})</a>
-        </div>
-    {% endif %}
-    {% endif %}
+          </address>
+          <div id="directions">
+            <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.postcode }}">
+              About {{ directions.routes.0.legs.0.duration.text }} walk
+              ({{ directions.routes.0.legs.0.distance.text }})</a>
+          </div>
+        {% endif %}
 
+        <h3 class="{% if not we_know_where_you_should_vote %}notopmargin{% endif %}">
+          Council Contact info
+        </h3>
+        <address>
+          {{ council.address|linebreaksbr }}<br>
+          {{ council.postcode }}<br><br>
+          <abbr title="Phone">P:</abbr> {{ council.phone }}<br>
+          <abbr title="Email">E:</abbr>
+          <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+        </address>
+      </div>
 
-    {% if not has_polling_district %}
-    {% if points.0 %}
-      <h2>We're not sure exactly where you should vote</h2>
-    <p><strong>Good news!</strong>  We have polling station locations for
-        {{ council.name }}, but we don't know how the
-        council has allocate houses to those stations, so we can't tell you
-        exactly where to vote.</p>
-    <p>You will have to phone the council on <a href="tel:{{ council.phone }}">
-        {{ council.phone }}</a> to find your polling station</p>
-
-    {% else %}
-      <h2>We're not sure exactly where you should vote</h2>
-
-    <p>We don't have any data on {{ areas.council.name }}, try contacting them and asking:</p>
-    <ul>
-        <li>Where your polling station is (you'll need to give them your address)</li>
-        <li>If they will open their polling data so this project and other can make use of it in future (say you came from this site)</li>
-    </ul>
-
-    {% endif %}
-    {% endif %}
-
-    <hr>
-    <h3>Council Contact info</h3>
-    <ul>
-        <li>{{ areas.council.phone }}</li>
-        <li>
-          <a href="mailto:{{ areas.council.email }}">{{ areas.council.email }}</a>
-        </li>
-        <li>
-            {{ areas.council.address|linebreaksbr }}<br>
-            {{ areas.council.postcode }}
-        </li>
-    </ul>
-
-
+    </div> <!-- Main Left hand column -->
+</div>
 </main>
-
-<div id="area_map"></div>
 
 {% endblock content %}
 
 {% block extra_javascript %}
-<style>
+  <style>
     .council_location_icon {
-        background-color:black;
-        border-radius: 50%;
-        height:2px;
-        width:2px;
+    background-color:black;
+    border-radius: 50%;
+    height:2px;
+    width:2px;
     }
-</style>
-<script>
+  </style>
+  <script>
 
-// Maps
-window.create_area_map = function(point, feature) {
+    // Maps
+    window.create_area_map = function(point, feature) {
     var area = L.geoJson(feature);
     // var council_location = L.geoJson(point);
     var council_location = point;
@@ -86,14 +117,14 @@ window.create_area_map = function(point, feature) {
     map.scrollWheelZoom.disable();
 
     var Stamen_TonerLite = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      subdomains: 'abcd',
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: 'abcd',
     }).addTo(map);
 
     var Neighbours = {
-        "color": "#666",
-        "weight": 5,
-        "opacity": 0.65
+    "color": "#666",
+    "weight": 5,
+    "opacity": 0.65
     };
 
     window.map = map;
@@ -101,38 +132,38 @@ window.create_area_map = function(point, feature) {
     area.addTo(map);
 
     {% for area in areas.neighbours %}
-        L.geoJson({{ area.area.geojson|safe }}, {
-            style: Neighbours
-        }).addTo(map);
+      L.geoJson({{ area.area.geojson|safe }}, {
+      style: Neighbours
+      }).addTo(map);
     {% endfor %}
 
     {% for station in points %}
-        L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-            'icon': L.divIcon({className: 'council_location_icon'}),
-            'clickable': false,
-        }).addTo(map);
+      L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
+      'icon': L.divIcon({className: 'council_location_icon'}),
+      'clickable': false,
+      }).addTo(map);
     {% endfor %}
 
 
     L.marker(council_location, {
-        'icon': L.divIcon({className: 'your_location_icon'}),
-        'clickable': false,
+    'icon': L.divIcon({className: 'your_location_icon'}),
+    'clickable': false,
     }).addTo(map);
 
-}
+    }
 
-var point = [{{ location.1 }}, {{ location.0 }}];
+    var point = [{{ location.1 }}, {{ location.0 }}];
 
-{% if areas.polling_district %}
-var feature = {{ areas.polling_district.area.geojson|safe }};
-{% endif %}
+    {% if areas.polling_district %}
+      var feature = {{ areas.polling_district.area.geojson|safe }};
+    {% endif %}
 
-{% if not has_polling_district %}
-var feature = {{ areas.council.area.geojson|safe }};
-{% endif %}
+    {% if not has_polling_district %}
+      var feature = {{ areas.council.area.geojson|safe }};
+    {% endif %}
 
-create_area_map(point, feature)
+    create_area_map(point, feature)
 
 
-</script>
+  </script>
 {% endblock extra_javascript %}

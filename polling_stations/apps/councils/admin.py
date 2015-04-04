@@ -17,6 +17,7 @@ class CouncilAdmin(ReadOnlyAdminMixIn, admin.OSMGeoAdmin):
         'area',
         'location',
     ]
+    search_fields = ['name']
     inlines = [CouncilDataInfoInline, ]
 
     def data_format(self, obj):

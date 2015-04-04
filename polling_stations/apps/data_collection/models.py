@@ -26,3 +26,4 @@ class DataQuality(models.Model):
 
     def __unicode__(self):
         return "Data quality for %s" % self.council
+
