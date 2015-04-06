@@ -5,9 +5,12 @@ import json
 import glob
 import os
 import shapefile
+import sys
+import zipfile
 
 from django.core.management.base import BaseCommand
 from django.contrib.gis import geos
+from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import Point, GEOSGeometry
 import ffs
 
@@ -16,6 +19,7 @@ from pollingstations.models import PollingStation, PollingDistrict
 
 class BaseImporter(BaseCommand):
     srid = 27700
+
 
     council_id     = None
     stations_name  = "polling_places"
@@ -143,3 +147,35 @@ class BaseJasonImporter(BaseImporter):
             district_info['area'] = poly
             self.add_polling_district(district_info)
 
+
+class BaseKamlImporter(BaseImporter):
+    """
+    Import those councils whose data is KML
+    """    
+    def import_polling_districts(self):
+        base_folder = ffs.Path(self.base_folder_path)
+        districtsfile = base_folder/self.districts_name
+
+        def add_kml_district(kml):
+            ds = DataSource(kml)
+            lyr = ds[0]
+            for feature in lyr:
+                district_info = self.district_record_to_dict(feature)
+                if 'council' not in district_info:
+                    district_info['council'] = self.council
+                
+                self.add_polling_district(district_info)
+
+        if not districtsfile.endswith('.kmz'):
+            add_kml_district(districtsfile)
+
+        # It's a .kmz file ! 
+        # Because the C lib that the django DataSource is wrapping
+        # expects a file on disk, let's extract the actual KML to a tmpfile.
+        kmz = zipfile.ZipFile(districtsfile, 'r')
+        kmlfile = kmz.open('doc.kml', 'r')
+        
+        with ffs.Path.tempfile() as tmp:
+            tmp << kmlfile.read()
+            add_kml_district(tmp)
+        
