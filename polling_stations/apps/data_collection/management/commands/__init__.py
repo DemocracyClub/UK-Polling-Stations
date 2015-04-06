@@ -70,6 +70,9 @@ class BaseImporter(BaseCommand):
         with stations.csv(header=True) as csv:
             for row in csv: 
                 station_info = self.station_record_to_dict(row)
+                if 'council' not in station_info:
+                    station_info['council'] = self.council
+
                 self.add_polling_station(station_info)
 
     def handle(self, *args, **kwargs):
@@ -92,6 +95,9 @@ class BaseShpImporter(BaseImporter):
             ))
         for district in sf.shapeRecords():
             district_info = self.district_record_to_dict(district.record)
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+            
             geojson = json.dumps(district.shape.__geo_interface__)
             poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
             district_info['area'] = poly
@@ -105,6 +111,10 @@ def import_polling_station_shapefiles(importer):
         ))
     for station in sf.shapeRecords():
         station_info = importer.station_record_to_dict(station.record)
+        if 'council' not in station_info:
+            station_info['council'] = importer.council
+            
+
         station_info['location'] = Point(
             *station.shape.points[0],
             srid=importer.srid)
@@ -124,6 +134,9 @@ class BaseJasonImporter(BaseImporter):
 
         for district in districts['features']:
             district_info = self.district_record_to_dict(district)
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+            
             if district_info is None:
                 continue
             poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.srid))
