@@ -21,6 +21,7 @@ class Command(BaseShpImporter):
         }
 
     def station_record_to_dict(self, record):
+        return
         location = Point(float(record.lat), float(record.long), srid=4326)
         raise Exception('The points are wrong - we tried to set them manually ')
         return {

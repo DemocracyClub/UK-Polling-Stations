@@ -74,6 +74,8 @@ class BaseImporter(BaseCommand):
         with stations.csv(header=True) as csv:
             for row in csv: 
                 station_info = self.station_record_to_dict(row)
+                if station_info is None:
+                    continue
                 if 'council' not in station_info:
                     station_info['council'] = self.council
 
