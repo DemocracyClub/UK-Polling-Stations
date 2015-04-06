@@ -67,3 +67,28 @@ class PostcodeView(TemplateView):
 
 class CouncilView(DetailView):
     model = Council
+
+class CoverageView(TemplateView):
+    template_name = 'coverage.html'
+
+    def get_context_data(self, *a, **k):
+        context = super(CoverageView, self).get_context_data(*a, **k)
+        num_councils  = Council.objects.count()
+        districts, stations = 0, 0
+        covered = []
+        for council in Council.objects.all():
+            if council.pollingstation_set.count() > 1:
+                stations += 1
+                covered.append(council)
+            if council.pollingdistrict_set.count() > 1:
+                districts += 1
+
+        context['num_councils']          = num_councils
+        context['num_district_councils'] = districts
+        print districts
+        print num_councils
+        context['perc_districts']        = "%d%%" % (float(districts) / num_councils * 100)
+        context['num_station_councils']  = stations
+        context['perc_stations']         = "%d%%" % (float(stations) / num_councils * 100)
+        context['covered']               = covered
+        return context
