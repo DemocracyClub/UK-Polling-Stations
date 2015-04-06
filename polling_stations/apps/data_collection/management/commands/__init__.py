@@ -170,6 +170,7 @@ class BaseKamlImporter(BaseImporter):
 
         if not districtsfile.endswith('.kmz'):
             add_kml_district(districtsfile)
+            return
 
         # It's a .kmz file ! 
         # Because the C lib that the django DataSource is wrapping
