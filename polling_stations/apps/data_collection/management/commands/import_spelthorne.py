@@ -16,16 +16,6 @@ class Command(BaseKamlImporter):
     districts_name = 'Polling_Districts.kmz'
     stations_name  = 'Polling_Stations.csv'
 
-    def import_data(self):
-        """
-        There are two types of import - districts and stations.
-        """
-        for dist in self.council.pollingdistrict_set.all():
-            dist.delete()
-        self.import_polling_districts()
-        self.import_polling_stations()
-
-    
     def strip_z_values(self, geojson):
         districts = json.loads(geojson)
         districts['type'] = 'Polygon'
