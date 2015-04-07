@@ -26,7 +26,6 @@ class Command(BaseShpImporter):
 
     def station_record_to_dict(self, record):
         return {
-            'council'            : self.council,
             'internal_council_id': " ".join(record),
             'postcode'           : '(No postcode supplied)',
             'address'            : "\n".join(record[:-1]),

@@ -5,9 +5,12 @@ import json
 import glob
 import os
 import shapefile
+import sys
+import zipfile
 
 from django.core.management.base import BaseCommand
 from django.contrib.gis import geos
+from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import Point, GEOSGeometry
 import ffs
 
@@ -16,6 +19,7 @@ from pollingstations.models import PollingStation, PollingDistrict
 
 class BaseImporter(BaseCommand):
     srid = 27700
+
 
     council_id     = None
     stations_name  = "polling_places"
@@ -70,6 +74,11 @@ class BaseImporter(BaseCommand):
         with stations.csv(header=True) as csv:
             for row in csv: 
                 station_info = self.station_record_to_dict(row)
+                if station_info is None:
+                    continue
+                if 'council' not in station_info:
+                    station_info['council'] = self.council
+
                 self.add_polling_station(station_info)
 
     def handle(self, *args, **kwargs):
@@ -92,6 +101,9 @@ class BaseShpImporter(BaseImporter):
             ))
         for district in sf.shapeRecords():
             district_info = self.district_record_to_dict(district.record)
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+            
             geojson = json.dumps(district.shape.__geo_interface__)
             poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
             district_info['area'] = poly
@@ -105,6 +117,10 @@ def import_polling_station_shapefiles(importer):
         ))
     for station in sf.shapeRecords():
         station_info = importer.station_record_to_dict(station.record)
+        if 'council' not in station_info:
+            station_info['council'] = importer.council
+            
+
         station_info['location'] = Point(
             *station.shape.points[0],
             srid=importer.srid)
@@ -124,9 +140,45 @@ class BaseJasonImporter(BaseImporter):
 
         for district in districts['features']:
             district_info = self.district_record_to_dict(district)
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+            
             if district_info is None:
                 continue
             poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.srid))
             district_info['area'] = poly
             self.add_polling_district(district_info)
 
+
+class BaseKamlImporter(BaseImporter):
+    """
+    Import those councils whose data is KML
+    """    
+    def import_polling_districts(self):
+        base_folder = ffs.Path(self.base_folder_path)
+        districtsfile = base_folder/self.districts_name
+
+        def add_kml_district(kml):
+            ds = DataSource(kml)
+            lyr = ds[0]
+            for feature in lyr:
+                district_info = self.district_record_to_dict(feature)
+                if 'council' not in district_info:
+                    district_info['council'] = self.council
+                
+                self.add_polling_district(district_info)
+
+        if not districtsfile.endswith('.kmz'):
+            add_kml_district(districtsfile)
+            return
+
+        # It's a .kmz file ! 
+        # Because the C lib that the django DataSource is wrapping
+        # expects a file on disk, let's extract the actual KML to a tmpfile.
+        kmz = zipfile.ZipFile(districtsfile, 'r')
+        kmlfile = kmz.open('doc.kml', 'r')
+        
+        with ffs.Path.tempfile() as tmp:
+            tmp << kmlfile.read()
+            add_kml_district(tmp)
+        
