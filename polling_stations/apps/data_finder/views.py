@@ -85,8 +85,6 @@ class CoverageView(TemplateView):
 
         context['num_councils']          = num_councils
         context['num_district_councils'] = districts
-        print districts
-        print num_councils
         context['perc_districts']        = "%d%%" % (float(districts) / num_councils * 100)
         context['num_station_councils']  = stations
         context['perc_stations']         = "%d%%" % (float(stations) / num_councils * 100)
