@@ -16,7 +16,6 @@ class Command(BaseShpImporter):
 
     def district_record_to_dict(self, record):
         return {
-            'council': self.council,
             'internal_council_id': record[0],
             'name': record[1],
         }
@@ -27,7 +26,6 @@ class Command(BaseShpImporter):
         except ValueError:
             location = Point(float(record.easting), float(record.northing), srid=self.srid)
         return {
-            'council'            : self.council,
             'internal_council_id': record.internal_id,
             'postcode'           : record.address.split(',')[-1],
             'address'            : "\n".join(record.address.split(',')[:-1]),

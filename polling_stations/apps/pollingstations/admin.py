@@ -6,6 +6,7 @@ class PollingStationAdmin(admin.OSMGeoAdmin):
     pass
 
 class PollingDistrictAdmin(admin.OSMGeoAdmin):
+    list_filter = ('council',)
     pass
 
 

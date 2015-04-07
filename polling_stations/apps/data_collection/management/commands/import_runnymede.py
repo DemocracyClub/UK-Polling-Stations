@@ -16,14 +16,12 @@ class Command(BaseShpImporter):
 
     def district_record_to_dict(self, record):
         return {
-            'council': self.council,
             'internal_council_id': record[-1],
             'name': record[0],
         }
 
     def station_record_to_dict(self, record):
         return {
-            'council'            : self.council,
             'internal_council_id': record[-1],
             'postcode'           : '(No postcode supplied)',
             'address'            : record[1],
