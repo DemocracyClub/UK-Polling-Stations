@@ -1,0 +1,349 @@
+ Polling Stations Analysis
+
+ Parliamentary Election
+
+ Thursday 7 May 2015
+
+ Reference District(s)      Ballo  Elector   Visit   Count      Polling Place
+                               t      Count   Order  Table
+                            Boxes
+
+
+ 119                                  96951
+
+ 1         AA                   1       613       0             Ashby De La Launde Village Hall, Church 
+                                                                Avenue, Ashby De La Launde
+
+ 2         AB001                1       913       0             Cranwell, The Brunei Community Centre/Hive, 
+                                                                Cranwell Avenue, Cranwell
+
+ 3         AB002                1      1076       0             Cranwell Village Hall, Old School Lane, 
+                                                                Cranwell Village
+
+ 4         AC, AE               1       610       0             Digby War Memorial Hall, North Street, Digby
+
+ 5         AD                   1       301       0             Dorrington, Wesleyan Chapel School Room, 125 
+                                                                Main Street, Dorrington
+
+ 6         AF                   1       526       0             Scopwick and Kirkby Green Village Hall, 
+                                                                Brookside, Scopwick
+
+ 7         BA                   1       277       0             Aubourn The Enterprise Centre, Bridge Road, 
+                                                                Aubourn
+
+ 8         BB, BJ               1      1235       0             Bassingham Hammond Hall, Bassingham Playing 
+                                                                Fields, Lincoln Road
+
+ 9         BC                   1       263       0             Beckingham Village Hall, Chapel Street, 
+                                                                Beckingham
+
+ 10        BD                   1       595       0             Brant Broughton Village Hall, West Street, 
+                                                                Brant Broughton
+
+ 11        BE                   1       449       0             Carlton Le Moorland Village Hall, Church 
+                                                                Street, Carlton Le Moorland
+
+ 12        BF, BI               1       276       0             Norton Disney Village Hall, Main Street, 
+                                                                Norton Disney
+
+ 13        BG, BH               1       786       0             South Hykeham Village Hall, Boundary Lane, 
+                                                                South Hykeham
+
+ 14        CA001, CA002         1      1722       0             Billinghay Village Hall, Ringmoor Close, 
+                                                                Billinghay
+
+ 15        CB                   1       273       0             Chapel Hill, Crown Lodge, 16 Main Street, 
+                                                                Chapel Hill
+
+ 16        CC001                1       549       0             Martin Village Hall, High Street, Martin
+
+ 17        CC002                1       199       0             Martin, The Kings Arms, Church Road, Martin 
+                                                                Dales
+
+ 18        CD                   1       362       0             North Kyme Village Hall, Vacherie Lane, 
+                                                                North Kyme
+
+ 19        CE                   1       470       0             Timberland Village Hall, Hallams Lane, 
+                                                                Timberland
+
+ 20        CF                   1       456       0             Walcott Village Hall, High Street, Walcott
+
+ 21        DA001                1      1394       0             Bracebridge Heath Village Hall, London Road, 
+                                                                Bracebridge Heath
+
+ 22        DA002                1      1337       0             Bracebridge Heath Village Hall, London Road, 
+                                                                Bracebridge Heath
+
+ 23        DA003                1      1437       0             Bracbridge Heath, The Sports Pavilion, Bath 
+                                                                Road, Bracebridge Heath
+
+ 24        DB001                1      1155       0             Waddington Youth Centre, High Street, 
+                                                                Waddington
+
+ 25        DB002                1      1281       0             Waddington Youth Centre, High Street, 
+                                                                Waddington
+
+ 26        EA001                1      1609       0             Branston C E Church Hall, Church Road, 
+                                                                Branston
+
+ 27        EA002                1      1632       0             Branston C E Church Hall, Church Road, 
+                                                                Branston
+
+ 28        EA003                1       142       0             Branston Booths Village Hall, Delph Road, 
+                                                                Branston Booths
+
+ 29        EB                   1       601       0             Potterhanworth Memorial Hall, The Green, 
+                                                                Potterhanworth
+
+ 30        FA, FB               1       499       0             Coleby Community Centre, Rectory Road, Coleby
+
+ 31        FC                   1       517       0             Harmston Memorial Hall, School Lane, Harmston
+
+ 32        FD                   1       316       0             Leadenham Village Hall, Main Road, Leadenham
+
+ 33        FE                   1      1718       0             Navenby, the Venue, Grantham Road, Navenby
+
+ 34        FF                   1       530       0             Welbourn Village Hall, Beck Street, Welbourn
+
+ 35        FG                   1       617       0             Wellingore Memorial Hall, Memorial Hall 
+                                                                Drive, Wellingore
+
+ 36        GA                   1       251       0             Doddington, The Coach House, Doddington Hall
+
+ 37        GB                   1       583       0             Eagle Village Hall, High Street, Eagle
+
+ 38        GC                   1       489       0             North Scarle Methodist School Room, High 
+                                                                Street, North Scarle
+
+ 39        GD                   1       559       0             Swinderby Village Hall, Bulpit Lane, 
+                                                                Swinderby
+
+ 40        GE                   1       425       0             Oliver Roper Parish Meeting Room, Lincoln 
+                                                                Lane, Thorpe on the Hill
+
+ 41        GF                   1      1745       0             Witham St Hughs Villlage Hall, Caraway Drive,
+                                                                 Witham St Hughs
+
+ 42        HB                   1       612       0             Great Hale, Hale Magna Hall, Little Hale 
+                                                                Road, Great Hale
+
+ 43        HC, HD001            1      1382       0             Heckington Village Hall, High Street, 
+                                                                Heckington
+
+ 44        HD002                1      1396       0             Heckington Village Hall, High Street, 
+                                                                Heckington
+
+ 45        HE                   1       706       0             Helpringham Memorial Hall Main Hall, The 
+                                                                Green, Helpringham
+
+ 46        HF, HA               1       260       0             Little Hale, Parva House (Small Hall), Main 
+                                                                Road, Little Hale
+
+ 47        IA                   1       266       0             Canwick Village Hall, Montagu Road, Canwick
+
+ 48        IB001                1      1172       0             Heighington Jubilee Hall, High Street, 
+                                                                Heighington
+
+ 49        IB002                1      1176       0             Heighington Jubilee Hall, High Street, 
+                                                                Heighington
+
+ 50        IC001                1       952       0             Washingborough Community Centre, Fen Road, 
+                                                                Washingborough
+
+ 51        IC002                1       909       0             Washingborough Community Centre, Fen Road, 
+                                                                Washingborough
+
+ 52        IC003                1       934       0             Washingborough Community Centre, Fen Road, 
+                                                                Washingborough
+
+ 53        JA                   1       306       0             Anwick Community Centre, River Lane, Anwick
+
+ 54        JB, JD               1       941       0             Kirkby La Thorpe & Asgarby C P School, 
+                                                                Church Lane, Kirkby La Thorpe
+
+ 55        JC                   1       356       0             Ewerby, The Reading Rooms, Main Street, 
+                                                                Ewerby
+
+ 56        JE                   1       304       0             South Kyme Coronation Hall, High Street, 
+                                                                South Kyme
+
+ 57        KA                   1      1322       0             Leasingham Village Hall, Chapel Lane, 
+                                                                Leasingham
+
+ 58        KB, KC               1       423       0             Rauceby Village Hall, Main Street, South 
+                                                                Rauceby
+
+ 59        LA                   1       200       0             Blankney Cricket Pavilion, Off Lincoln Road, 
+                                                                Blankney
+
+ 60        LB                   1       576       0             Dunston Village Hall, Chapel Lane, Dunston
+
+ 61        LC001                1      1393       0             Metheringham Village Hall, Fen Road, 
+                                                                Metheringham
+
+ 62        LC002                1      1414       0             Metheringham Village Hall, Fen Road, 
+                                                                Metheringham
+
+ 63        LD                   1       601       0             Nocton Village Hall, Main Street, Nocton
+
+ 64        MA001                1       900       0             North Hykeham, Fosse Way Academy, Ash Grove, 
+                                                                North Hykeham
+
+ 65        MA002                1       919       0             North Hykeham, Fosse Way Academy, Ash Grove, 
+                                                                North Hykeham
+
+ 66        MB001                1       943       0             North Hykeham Memorial Hall, 317 Newark Road,
+                                                                 North Hykeham
+
+ 67        MB002                1      1174       0             North Hykeham, Ling Moor Primary Academy, 
+                                                                Richmond Drive, North Hykeham
+
+ 68        MC001                1      1782       0             North Hykeham, The Ark, All Saints Church, 
+                                                                Moor Lane
+
+ 69        MC002                1      1827       0             North Hykeham, The Ark, All Saints Church, 
+                                                                Moor Lane
+
+ 70        MD001                1       935       0             North Hykeham, Fosse Way Academy, Ash Grove, 
+                                                                North Hykeham
+
+ 71        MD002                1       979       0             North Hykeham, Methodist Hall, Chapel Lane, 
+                                                                North Hykeham
+
+ 72        ME001                1       971       0             North Hykeham Civic Offices, Fen Lane, North 
+                                                                Hykeham
+
+ 73        ME002                1       962       0             North Hykeham Youth Centre Sports Hall, 
+                                                                Middle Street, North Hykeham
+
+ 74        NA, NB, NI, NJ,      1       822       0             Osbournby Village Hall, London Road, 
+           ND, NE                                               Osbournby
+
+ 75        NF                   1       224       0             Scredington Community Centre, Church Lane, 
+                                                                Scredington
+
+ 76        NG                   1       276       0             Silk Willoughby Village Hall, School Lane, 
+                                                                Silk Willoughby
+
+ 77        NH                   1       151       0             Swaton Community Hall, High Street, Swaton
+
+ 78        NK, NC               1       419       0             Wilsford Village Hall (Small Hall), School 
+                                                                Lane, Wilsford
+
+ 79        OA001                1      1448       0             Ruskington Winchelsea Centre, High Street 
+                                                                North, Ruskington
+
+ 80        OA002                1      1465       0             Ruskington Winchelsea Centre, High Street 
+                                                                North, Ruskington
+
+ 81        OA003                1      1450       0             Ruskington Methodist Church Hall, Ruskington,
+                                                                 SLEAFORD
+
+ 82        PA001                1      1382       0             Skellingthorpe Youth Centre, Lincoln Road, 
+                                                                Skellingthorpe
+
+ 83        PA002                1      1427       0             Skellingthorpe Youth Centre, Lincoln Road, 
+                                                                Skellingthorpe
+
+ 84        QA001                1       947       0             Sleaford, The Source, Riverside Church, 
+                                                                Southgate
+
+ 85        QA002                1       916       0             Sleaford, St Botolphs Primary School, 
+                                                                Rookery Avenue, Quarrington
+
+ 86        QB001                1      1002       0             Sleaford, The Jolly Scotchman, Holdingham, 
+                                                                SLEAFORD
+
+ 87        QB002                1       983       0             Sleaford Greenfield Road Community Centre, 
+                                                                15 Greenfield Road, SLEAFORD
+
+ 88        QC001                1       886       0             Sleaford Sure Start Childrens Centre, 
+                                                                Money`s Mill, Carre Street
+
+ 89        QC002                1      1015       0             Sleaford Leisure Centre, East Banks
+
+ 90        QD                   1       896       0             Sleaford Golf Club, Willoughby Road, Greylees
+
+ 91        QE001                1       828       0             Sleaford, New Life Conference Centre, 
+                                                                Mareham Lane, SLEAFORD
+
+ 92        QE002                1      1001       0             Sleaford, New Life Conference Centre, 
+                                                                Mareham Lane, SLEAFORD
+
+ 93        QF001                1       826       0             Sleaford, St Botolphs Community Centre, 
+                                                                Grantham Road, SLEAFORD
+
+ 94        QF002                1       801       0             Sleaford, St. Botolphs Church Room, Rear of 
+                                                                Quarrington Church, Quarrington
+
+ 95        QF003                1       899       0             Sleaford, St Botolphs Primary School, 
+                                                                Rookery Avenue, Quarrington
+
+ 96        QG001                1       982       0             Sleaford, Cadet Training Centre, Drove Lane, 
+                                                                SLEAFORD
+
+ 97        QG002                1       917       0             Sleaford, Northgate Methodist Hall, Church 
+                                                                Lane, SLEAFORD
+
+ 98        RA001                1       961       0             Waddington, Redwood Drive Community Centre, 
+                                                                Waddington
+
+ 99        RA002                1       950       0             Waddington, Redwood Drive Community Centre, 
+                                                                Waddington
+
+ 100       BLE2                 1       787       0             Allington Village Hall, Side Street, 
+                                                                Allington
+
+ 101       BLF2                 1      1604       0             The Reading Room, Church Street, Barrowby
+
+ 102       BLG2                 1       281       0             Sedgebrook Social Club, Abbey Lane, 
+                                                                Sedgebrook
+
+ 103       GAC2                 1       180       0             Gonerby Hill Foot School, Gonerby Hill Foot, 
+                                                                Grantham
+
+ 104       GWE2                 1       240       0             Cliffedale Primary School, Northcliffe Road, 
+                                                                Grantham
+
+ 105       LVA2                 1      1090       0             Caythorpe and Frieston Village Hall, High 
+                                                                Street, Caythorpe
+
+ 106       LVB2, LVE2           1       262       0             Stubton Village Hall, Fenton Road, Stubton
+
+ 107       LVC2                 1       423       0             Fulbeck Village Hall, Lincoln Road, Fulbeck
+
+ 108       LVD2                 1       336       0             All Saints Church, High Road, Hough-on-the-
+                                                                Hill
+
+ 109       PCA2                 1      1288       0             Ancaster Parish Hall, Ermine Street, Ancaster
+
+ 110       PCB2, PCH2           1       558       0             Barkston & Syston Village Hall, Main Road, 
+                                                                Barkston
+
+ 111       PCC2                 1       179       0             Manthorpe Playgroup Hall, Low Road, Manthorpe
+
+ 112       PCG2, PCF2, PCD2     1       363       0             Carlton Scroop Village Hall, Newark Lane, 
+                                                                Carlton Scroop
+
+ 113       PCE2                 1      1599       0             St. Sebastian`s C of E Primary School, High 
+                                                                Street, Great Gonerby
+
+ 114       VKA2                 1      1140       0             Claypole New Hall, Claypole C.E. Primary 
+                                                                School, School Lane
+
+ 115       VKB2                 1       424       0             Foston Village Hall, Church Street, Foston
+
+ 116       VKC2, VKE2           1       471       0             Hougham & Marston Village Hall, Frinkley 
+                                                                Lane, Hougham
+
+ 117       VKD2                 1      1767       0             Long Bennington Village Hall, Main Road, 
+                                                                Long Bennington
+
+ 118       VKF2                 1       185       0             Dry Doddington Village Hall, Main Street, 
+                                                                Dry Doddington
+
+ 119       VKG2                 1       119       0             Westborough Village Hall, Town Street, 
+                                                                Westborough
+
+                                                                          Printed on 8 April 2015, Page 1 of 1
+
