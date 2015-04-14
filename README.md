@@ -85,3 +85,16 @@ imports the raw data. There are some base importer command classes in the __init
 
 We then serialize the imported data to `polling_stations/apps/pollingstations/fixtures/initial_data.json`
 
+## Running the website
+
+```
+python manage.py runserver
+```
+
+Or if using vagrant
+
+```
+python manage.py runserver 0.0.0.0:8000
+```
+
+Now go to http://localhost:8000 in your browser!
