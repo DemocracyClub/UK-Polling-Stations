@@ -29,6 +29,10 @@ function main(){
   sudo -u postgres psql -c "CREATE USER dev WITH PASSWORD 'dev';"
   sudo -u postgres psql pollingstations -c "CREATE EXTENSION postgis;"
   echo "export DATABASE_URL=postgresql://dev:dev@localhost/pollingstations" >> /home/vagrant/.bashrc
+
+  # python dependancies
+  pip install -r requirements/frist.txt      
+  pip install -r requirements/base.txt 
 }
 
 main

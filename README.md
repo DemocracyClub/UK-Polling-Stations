@@ -56,13 +56,14 @@ CREATE EXTENSION
 pollingstations=#
 ```
 
-## App setup
-
-Requirements (if using vagrant you will have to run these using sudo)
+Requirements 
  ```
 pip install -r requirements/frist.txt      
 pip install -r requirements/base.txt    
 ```
+
+## App setup
+
 Initial database setup
 ```
 python manage.py migrate
