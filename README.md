@@ -59,19 +59,19 @@ pollingstations=#
 ## App setup
 
 Requirements (if using vagrant you will have to run these using sudo)
-    ```
-    pip install -r requirements/frist.txt      
-    pip install -r requirements/base.txt    
-    ```
+ ```
+pip install -r requirements/frist.txt      
+pip install -r requirements/base.txt    
+```
 Initial database setup
-    ```
-    python manage.py migrate
-    ```
+```
+python manage.py migrate
+```
 Import initial data
-    ```
-    python manage.py import_councils
-    python manage.py loaddata polling_stations/apps/pollingstations/fixtures/initial_data.json
-    ```
+```
+python manage.py import_councils
+python manage.py loaddata polling_stations/apps/pollingstations/fixtures/initial_data.json
+```
 ## Importing the data we have from councils
 
 Each council that has unimported data has a Github Issue with the `Data Import` label.
