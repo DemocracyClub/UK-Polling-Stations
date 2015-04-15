@@ -1,0 +1,30 @@
+"""
+Import Wokingham Polling stations
+"""
+
+from data_collection.management.commands import BaseShpImporter, import_polling_station_shapefiles
+
+class Command(BaseShpImporter):
+    """
+    Imports the Polling Station data from Wokingham Council
+    """
+    council_id     = 'E06000037'
+    districts_name = 'polling_districts'
+    stations_name  = 'polling_places.shp'
+ 
+   def district_record_to_dict(self, record): 
+        return {
+            'internal_council_id': record[0],
+            'name': record[2],
+        }
+
+
+    def station_record_to_dict(self, record):
+        return {
+            'internal_council_id': record[4],
+            'postcode'           : record[5].split(',')[-1],
+            'address'            : "\n".join(record[5].split(',')[:-1]),
+        }
+    
+    def import_polling_stations(self):
+        import_polling_station_shapefiles(self)
