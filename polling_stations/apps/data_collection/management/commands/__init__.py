@@ -95,7 +95,9 @@ class BaseImporter(BaseCommand):
 
 
 class BaseShpImporter(BaseImporter):
-
+    """
+    Import data where districts are shapefiles and stations are csv
+    """
     def import_polling_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
             self.base_folder_path,
@@ -110,6 +112,15 @@ class BaseShpImporter(BaseImporter):
             poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
             district_info['area'] = poly
             self.add_polling_district(district_info)
+
+
+class BaseShpShpImporter(BaseShpImporter):
+    """
+    Import data where both stations and polling districts are
+    shapefiles.
+    """
+    def import_polling_stations(self):
+        import_polling_station_shapefiles(self)
 
 
 def import_polling_station_shapefiles(importer):
