@@ -25,8 +25,8 @@ class Command(BaseShpShpImporter):
         print 'Station', record
         sys.exit(1)
         return {
-            'internal_council_id': record.internal_id,
-            'postcode'           : record.address.split(',')[-1],
-            'address'            : "\n".join(record.address.split(',')[:-1]),
+            'internal_council_id': record[0],
+            'postcode'           : record[1],
+            'address'            : record[2]
         }
     
