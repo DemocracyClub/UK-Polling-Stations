@@ -25,6 +25,8 @@ class BaseImporter(BaseCommand):
     stations_name  = "polling_places"
     districts_name = "polling_districts"
 
+    def postcode_from_address(self, address): return address.split(',')[-1]
+
     def clean_poly(self, poly):
         if isinstance(poly, geos.Polygon):
             poly = geos.MultiPolygon(poly, srid=self.srid)
@@ -153,7 +155,32 @@ class BaseJasonImporter(BaseImporter):
 class BaseKamlImporter(BaseImporter):
     """
     Import those councils whose data is KML
-    """    
+    """   
+    def strip_z_values(self, geojson):
+        districts = json.loads(geojson)
+        districts['type'] = 'Polygon'
+        for points in districts['coordinates'][0][0]:
+            if len(points) == 3:
+                points.pop()
+        districts['coordinates'] = districts['coordinates'][0]
+        return json.dumps(districts)
+
+    def district_record_to_dict(self, record):
+        geojson = self.strip_z_values(record.geom.geojson)
+        # Th SRID for the KML is 4326 but the CSV is 2770 so we
+        # set it each time we create the polygon.
+        # We could probably do with a more elegant way of doing
+        # this longer term.
+        self._srid = self.srid
+        self.srid = 4326
+        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
+        self.srid = self._srid
+        return {
+            'internal_council_id': record['Name'].value,
+            'name'               : record['Name'].value,
+            'area'               : poly
+        }
+ 
     def import_polling_districts(self):
         base_folder = ffs.Path(self.base_folder_path)
         districtsfile = base_folder/self.districts_name
