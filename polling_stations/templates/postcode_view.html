@@ -7,7 +7,7 @@
         We think we know where you should vote
       {% endif %}
       {% if only_polling_stations or only_polling_districts %}
-        We're not sure exactly where you should vote    
+        We're not sure exactly where you should vote
       {% endif %}
       {% if no_data %}
         We don't know where you should vote
@@ -18,53 +18,15 @@
   <main>
 
     <div class="row">
-      <div class="col-md-9">
-        <!-- This is the main left hand column ! -->
-        {% if only_polling_stations %}
-          <p class="lead">
-            <strong>Good news!</strong>  We have polling station locations for
-            <strong>{{ council.name }}</strong>, but we don't know how the
-            council has allocated houses to those stations, so we can't tell you
-            exactly where to vote.
-          </p>
-        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
-            {{ council.phone }}</a> to find your polling station
-        </p>          
-      {% endif %}
+      <div class="col-md-6">
 
-      {% if only_polling_districts %}
-          <p class="lead">
-            Unfortunately <strong>{{ council.name }}</strong> wasn't able to
-            tell us where the polling stations were in your area.
-            We know what Polling district you're in, but not where the polling station is.
-          </p>
-        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
-            {{ council.phone }}</a> to find your polling station
-        </p>                  
-      {% endif %}
-
-      {% if no_data %}
-        <p class="lead">
-          We don't have any data on 
-          <strong>{{ council.name }}</strong>, try contacting them and asking:
-        </p>
-        <ul class="lead">
-          <li>Where your polling station is (you'll need to give them your address)</li>
-          <li>
-            If they will open their polling data so this project and others can make use of 
-            it in future (say you came from this site)
-          </li>
-        </ul>        
-      {% endif %}
-      
-      <div id="area_map"></div>
-      </div> <!-- Main Left hand column -->
-      <div class="col-md-3">
         {% if we_know_where_you_should_vote %}
           <h3 class="notopmargin">Your Polling Station</h3>
           <address>
             {{ points.0.address|linebreaksbr }}<br>
+            {% if not points.0.postcode in points.0.address %}
             {{ points.0.postcode }}
+            {% endif %}
           </address>
           <div id="directions">
             <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.postcode }}">
@@ -79,11 +41,66 @@
         <address>
           {{ council.address|linebreaksbr }}<br>
           {{ council.postcode }}<br><br>
-          <abbr title="Phone">P:</abbr> {{ council.phone }}<br>
+          <abbr title="Phone">P:</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
           <abbr title="Email">E:</abbr>
           <a href="mailto:{{ council.email }}">{{ council.email }}</a>
         </address>
+
+        <h3>You don't need your polling card to vote</h3>
+        <p>If you don't have your polling card, you can just turn up at the polling
+          station and give them your name and address.  You don't need anything else.</p>
+
+        <h3>Disclaimer</h3>
+        <p>We cannot be 100% that the information presented here is correct.</p>
+        <p>The people at the polling station shown will be able to tell you
+          if you are at the right place or tell you where your actual polling
+          station is.</p>
+        <p>If in doubt, you should <a href="tel:{{ council.phone }}">
+          phone your council</a></p>
       </div>
+
+
+      <div class="col-md-6">
+        <!-- This is the main left hand column ! -->
+        {% if only_polling_stations %}
+          <p class="lead">
+            <strong>Good news!</strong>  We have polling station locations for
+            <strong>{{ council.name }}</strong>, but we don't know how the
+            council has allocated houses to those stations, so we can't tell you
+            exactly where to vote.
+          </p>
+        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
+            {{ council.phone }}</a> to find your polling station
+        </p>
+      {% endif %}
+
+      {% if only_polling_districts %}
+          <p class="lead">
+            Unfortunately <strong>{{ council.name }}</strong> wasn't able to
+            tell us where the polling stations were in your area.
+            We know what Polling district you're in, but not where the polling station is.
+          </p>
+        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
+            {{ council.phone }}</a> to find your polling station
+        </p>
+      {% endif %}
+
+      {% if no_data %}
+        <p class="lead">
+          We don't have any data on
+          <strong>{{ council.name }}</strong>, try contacting them and asking:
+        </p>
+        <ul class="lead">
+          <li>Where your polling station is (you'll need to give them your address)</li>
+          <li>
+            If they will open their polling data so this project and others can make use of
+            it in future (say you came from this site)
+          </li>
+        </ul>
+      {% endif %}
+
+      <div id="area_map"></div>
+      </div> <!-- Main Left hand column -->
 
     </div> <!-- Main Left hand column -->
 </div>
@@ -139,14 +156,14 @@
 
     {% for station in points %}
       L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-      'icon': L.divIcon({className: 'council_location_icon'}),
-      'clickable': false,
+      'icon': L.divIcon({className: 'fa fa-lg fa-plus-square-o'}),
+      'clickable': true,
       }).addTo(map);
     {% endfor %}
 
 
     L.marker(council_location, {
-    'icon': L.divIcon({className: 'your_location_icon'}),
+    'icon': L.divIcon({className: 'fa fa-lg fa-home'}),
     'clickable': false,
     }).addTo(map);
 
