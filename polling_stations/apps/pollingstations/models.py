@@ -22,6 +22,9 @@ class PollingDistrict(models.Model):
     internal_council_id = models.CharField(blank=True, max_length=100)
     extra_id            = models.CharField(blank=True, null=True, max_length=100)
     area                = models.MultiPolygonField(null=True, blank=True)
+    # This is NOT a FK, as we might not have the polling station aat
+    # the point of import
+    polling_station_id  = models.CharField(blank=True, max_length=255)
 
     objects = models.GeoManager()
 
