@@ -16,6 +16,7 @@ class Command(BaseShpShpImporter):
         return {
             'internal_council_id': record[4],
             'name': record[2],
+            'polling_station_id': record[6]
         }
 
     def station_record_to_dict(self, record):
