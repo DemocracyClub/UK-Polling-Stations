@@ -12,11 +12,11 @@
     {% csrf_token %}
     <div class="row">
       <div class="col-xs-3">
-        <input id="id_postcode" name="postcode" placeholder="" 
+        <input id="id_postcode" name="postcode" placeholder=""
                class="input-lg form-control text-uppercase" autofocus="" type="text" autocomplete="off">
       </div>
       <div class="col-xs-3">
-        <button type="submit" class="btn btn-lg btn-success" id="submit-postcode" 
+        <button type="submit" class="btn btn-lg btn-success" id="submit-postcode"
                 data-loading-text="Find your Polling Station">
           Find your Polling Station
         </button>
@@ -24,6 +24,7 @@
     </div>
   </form>
 
+  {% if not is_whitelabel %}
   <div class="well well-large">
     <p>
       This is a very early preview of the <a href="https://democracyclub.org.uk">
@@ -42,5 +43,6 @@
       <li><a href="/postcode/BS15TR/">Bristol City Council</a> (all data – looks crazy, but it's there!)</li>
     </ul>
   </div>
+  {% endif %}
 
 {% endblock content %}

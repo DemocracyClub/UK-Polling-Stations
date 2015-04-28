@@ -106,6 +106,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitelabel.middleware.WhiteLabelModdleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -117,6 +118,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.contrib.auth.context_processors.auth",
+    "whitelabel.context_processors.base_template",
 )
 
 
@@ -146,6 +148,7 @@ PROJECT_APPS = (
     'councils',
     'data_finder',
     'data_collection.app.DataCollection',
+    'whitelabel',
 )
 
 INSTALLED_APPS += PROJECT_APPS
@@ -192,6 +195,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+EMBED_PREFIXES = (
+    'embed',
+)
 
 # .local.py overrides all the common settings.
 try:
