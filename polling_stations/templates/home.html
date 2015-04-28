@@ -8,14 +8,11 @@
     Enter Your Postcode
   </h2>
 
-  <form method=post class="form-inline">
+  <form method=post class="form form-inline">
     {% csrf_token %}
-    <div class="row">
-      <div class="col-xs-3">
-        <input id="id_postcode" name="postcode" placeholder=""
-               class="input-lg form-control text-uppercase" autofocus="" type="text" autocomplete="off">
-      </div>
-      <div class="col-xs-3">
+    <div class="form-group">
+        <input id="id_postcode" name="postcode"
+               class="input-lg form-control text-uppercase" autofocus="" type="text" autocomplete="on">
         <button type="submit" class="btn btn-lg btn-success" id="submit-postcode"
                 data-loading-text="Find your Polling Station">
           Find your Polling Station
@@ -23,25 +20,27 @@
       </div>
     </div>
   </form>
-
+  <p></p>
   {% if not is_whitelabel %}
-  <div class="well well-large">
-    <p>
-      This is a very early preview of the <a href="https://democracyclub.org.uk">
-      Democracy Club</a> Polling Station Finder
-    </p>
-    <p>
-      It's far from ready for use, however you can see an example of where we're
-      hoping to be by typing in a postcode below:</p>
-    <p>
-      Some example searches to show a range of data quality:
-    </p>
-    <ul>
-      <li><a href="/postcode/CV15RR/">Coventry City Council</a> (no data)</li>
-      <li><a href="/postcode/RG145LD/">West Berkshire Council</a> (All data)</li>
-      <li><a href="/postcode/CT11YW/">Canterbury City Council</a> (Polling districts, no polling stations )</li>
-      <li><a href="/postcode/BS15TR/">Bristol City Council</a> (all data – looks crazy, but it's there!)</li>
-    </ul>
+  <div class="container">
+    <div class="well well-large">
+      <p>
+        This is a very early preview of the <a href="https://democracyclub.org.uk">
+        Democracy Club</a> Polling Station Finder
+      </p>
+      <p>
+        It's far from ready for use, however you can see an example of where we're
+        hoping to be by typing in a postcode below:</p>
+      <p>
+        Some example searches to show a range of data quality:
+      </p>
+      <ul>
+        <li><a href="/postcode/CV15RR/">Coventry City Council</a> (no data)</li>
+        <li><a href="/postcode/RG145LD/">West Berkshire Council</a> (All data)</li>
+        <li><a href="/postcode/CT11YW/">Canterbury City Council</a> (Polling districts, no polling stations )</li>
+        <li><a href="/postcode/BS15TR/">Bristol City Council</a> (all data – looks crazy, but it's there!)</li>
+      </ul>
+    </div>
   </div>
   {% endif %}
 
