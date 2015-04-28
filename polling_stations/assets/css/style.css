@@ -10,6 +10,14 @@ body.embed, .page-header {
     margin-top: 0px;
 }
 
+body.embed .page-header {
+  margin-left: 15px;
+}
+body.embed .row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
 .navbar-brand > img {
     position:relative;
     top:-20px;

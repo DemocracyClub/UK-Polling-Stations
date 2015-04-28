@@ -18,14 +18,14 @@
   <main>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6 col-sm-12">
 
         {% if we_know_where_you_should_vote %}
           <h3 class="notopmargin">Your Polling Station</h3>
           <address>
             {{ points.0.address|linebreaksbr }}<br>
             {% if not points.0.postcode in points.0.address %}
-            {{ points.0.postcode }}
+              {{ points.0.postcode }}
             {% endif %}
           </address>
           <div id="directions">
@@ -56,7 +56,7 @@
           if you are at the right place or tell you where your actual polling
           station is.</p>
         <p>If in doubt, you should <a href="tel:{{ council.phone }}">
-          phone your council</a></p>
+            phone your council</a></p>
       </div>
 
 
@@ -75,11 +75,11 @@
       {% endif %}
 
       {% if only_polling_districts %}
-          <p class="lead">
-            Unfortunately <strong>{{ council.name }}</strong> wasn't able to
-            tell us where the polling stations were in your area.
-            We know what Polling district you're in, but not where the polling station is.
-          </p>
+        <p class="lead">
+          Unfortunately <strong>{{ council.name }}</strong> wasn't able to
+          tell us where the polling stations were in your area.
+          We know what Polling district you're in, but not where the polling station is.
+        </p>
         <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
             {{ council.phone }}</a> to find your polling station
         </p>
