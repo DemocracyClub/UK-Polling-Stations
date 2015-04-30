@@ -38,6 +38,7 @@ body.embed .row {
 
 .footer {
     background: #f3f0ed;
+    margin-bottom: 0;
     padding-top: 2em;
     padding-bottom: 2em;
 }
