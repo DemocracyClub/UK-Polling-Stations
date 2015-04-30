@@ -26,15 +26,19 @@
           <h3 class="notopmargin">Your Polling Station</h3>
           <address>
             {{ points.0.address|linebreaksbr }}<br>
-            {% if not points.0.postcode in points.0.address %}
-              {{ points.0.postcode }}
+            {% if points.0.postcode %}
+              {% if not points.0.postcode in points.0.address %}
+                {{ points.0.postcode }}
+              {% endif %}
             {% endif %}
           </address>
+          {% if directions.routes.0.legs.0.duration.text %}
           <div id="directions">
             <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.postcode }}">
               About {{ directions.routes.0.legs.0.duration.text }} walk
               ({{ directions.routes.0.legs.0.distance.text }})</a>
           </div>
+          {% endif %}
         {% endif %}
 
         <h3 class="{% if not we_know_where_you_should_vote %}notopmargin{% endif %}">

@@ -141,13 +141,14 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'rest_framework',
+    'lettuce.django',
 )
 
 PROJECT_APPS = (
     'pollingstations',
     'councils',
     'data_finder',
-    'data_collection.app.DataCollection',
+    'data_collection',
     'whitelabel',
 )
 
@@ -206,6 +207,7 @@ try:
 except ImportError:
     pass
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and 'test' in sys.argv[1]:
