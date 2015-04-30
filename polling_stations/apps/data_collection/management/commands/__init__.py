@@ -31,7 +31,7 @@ class BaseImporter(BaseCommand):
     def clean_poly(self, poly):
         if isinstance(poly, geos.Polygon):
             poly = geos.MultiPolygon(poly, srid=self.srid)
-            return poly 
+            return poly
         # try:
         #     polygons = wkt[18:-3].split(')), ((')
         #     WKT = ""
@@ -75,7 +75,7 @@ class BaseImporter(BaseCommand):
         base_folder = ffs.Path(self.base_folder_path)
         stations = base_folder/self.stations_name
         with stations.csv(header=True) as csv:
-            for row in csv: 
+            for row in csv:
                 station_info = self.station_record_to_dict(row)
                 if station_info is None:
                     continue
@@ -87,8 +87,13 @@ class BaseImporter(BaseCommand):
     def handle(self, *args, **kwargs):
         if self.council_id is None:
             self.council_id = args[0]
-            
+
         self.council = Council.objects.get(pk=self.council_id)
+
+        # Delete old data for this council
+        PollingStation.objects.filter(council=self.council).delete()
+        PollingDistrict.objects.filter(council=self.council).delete()
+
         self.base_folder_path = os.path.abspath(
          glob.glob('data/{0}-*'.format(self.council_id))[0]
         )
@@ -108,7 +113,7 @@ class BaseShpImporter(BaseImporter):
             district_info = self.district_record_to_dict(district.record)
             if 'council' not in district_info:
                 district_info['council'] = self.council
-            
+
             geojson = json.dumps(district.shape.__geo_interface__)
             poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
             district_info['area'] = poly
@@ -133,7 +138,7 @@ def import_polling_station_shapefiles(importer):
         station_info = importer.station_record_to_dict(station.record)
         if 'council' not in station_info:
             station_info['council'] = importer.council
-            
+
 
         station_info['location'] = Point(
             *station.shape.points[0],
@@ -156,7 +161,7 @@ class BaseJasonImporter(BaseImporter):
             district_info = self.district_record_to_dict(district)
             if 'council' not in district_info:
                 district_info['council'] = self.council
-            
+
             if district_info is None:
                 continue
             poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.srid))
@@ -167,7 +172,7 @@ class BaseJasonImporter(BaseImporter):
 class BaseKamlImporter(BaseImporter):
     """
     Import those councils whose data is KML
-    """   
+    """
     def strip_z_values(self, geojson):
         districts = json.loads(geojson)
         districts['type'] = 'Polygon'
@@ -192,7 +197,7 @@ class BaseKamlImporter(BaseImporter):
             'name'               : record['Name'].value,
             'area'               : poly
         }
- 
+
     def import_polling_districts(self):
         base_folder = ffs.Path(self.base_folder_path)
         districtsfile = base_folder/self.districts_name
@@ -204,20 +209,20 @@ class BaseKamlImporter(BaseImporter):
                 district_info = self.district_record_to_dict(feature)
                 if 'council' not in district_info:
                     district_info['council'] = self.council
-                
+
                 self.add_polling_district(district_info)
 
         if not districtsfile.endswith('.kmz'):
             add_kml_district(districtsfile)
             return
 
-        # It's a .kmz file ! 
+        # It's a .kmz file !
         # Because the C lib that the django DataSource is wrapping
         # expects a file on disk, let's extract the actual KML to a tmpfile.
         kmz = zipfile.ZipFile(districtsfile, 'r')
         kmlfile = kmz.open('doc.kml', 'r')
-        
+
         with ffs.Path.tempfile() as tmp:
             tmp << kmlfile.read()
             add_kml_district(tmp)
-        
+
