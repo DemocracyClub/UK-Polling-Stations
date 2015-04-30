@@ -24,9 +24,28 @@ class HomeView(FormView):
 class PostcodeView(TemplateView):
     template_name = "postcode_view.html"
 
+
+    def get_points(self, areas):
+        if areas['polling_district'].polling_station_id:
+            stations = PollingStation.objects.filter(internal_council_id=
+                    areas['polling_district'].polling_station_id)
+            if stations:
+                return stations
+
+        stations = PollingStation.objects.filter(
+            location__within=areas['polling_district'].area)
+        if stations:
+            return stations
+
+        return PollingStation.objects.filter(
+            location__within=areas['council'].area)
+
+
+
     def get_context_data(self, **context):
         l = geocode(self.kwargs['postcode'])
         context['location'] = Point(l['wgs84_lon'], l['wgs84_lat'])
+        context['points'] = []
 
         areas = {}
         areas['council'] = Council.objects.get(
@@ -41,20 +60,10 @@ class PostcodeView(TemplateView):
         except PollingDistrict.DoesNotExist:
             context['has_polling_district'] = False
 
-        if context['has_polling_district'] and \
-            areas['polling_district'].polling_station_id:
-            try:
-                context['points'] = PollingStation.objects.filter(
-                    internal_council_id=
-                    areas['polling_district'].polling_station_id)
-            except PollingStation.DoesNotExist:
-                context['points'] = PollingStation.objects.filter(
-                    location__within=areas['polling_district'].area)
-        else:
-            context['points'] = PollingStation.objects.filter(
-                location__within=areas['council'].area)
+        if context['has_polling_district']:
+            context['points'] = self.get_points(areas)
 
-        if context['points']:
+        if context and context['points']:
             context['directions'] = requests.get(
                 "{base_url}{postcode}&destination={destination}".format(
                     base_url=base_google_url,
