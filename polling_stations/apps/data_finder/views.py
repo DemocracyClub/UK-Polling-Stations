@@ -41,7 +41,8 @@ class PostcodeView(TemplateView):
         except PollingDistrict.DoesNotExist:
             context['has_polling_district'] = False
 
-        if context['has_polling_district']:
+        if context['has_polling_district'] and \
+            areas['polling_district'].polling_station_id:
             try:
                 context['points'] = PollingStation.objects.filter(
                     internal_council_id=
