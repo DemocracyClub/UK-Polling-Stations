@@ -4,7 +4,9 @@
   <div class="page-header">
     <h2>
       {% if we_know_where_you_should_vote %}
+        {% if not is_whitelabel %}
         We think we know where you should vote
+        {% endif %}
       {% endif %}
       {% if only_polling_stations or only_polling_districts %}
         We're not sure exactly where you should vote
@@ -50,6 +52,7 @@
         <p>If you don't have your polling card, you can just turn up at the polling
           station and give them your name and address.  You don't need anything else.</p>
 
+        {% if not is_whitelabel %}
         <h3>Disclaimer</h3>
         <p>We cannot be 100% that the information presented here is correct.</p>
         <p>The people at the polling station shown will be able to tell you
@@ -57,6 +60,7 @@
           station is.</p>
         <p>If in doubt, you should <a href="tel:{{ council.phone }}">
             phone your council</a></p>
+        {% endif %}
       </div>
 
 
