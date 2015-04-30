@@ -148,7 +148,7 @@ PROJECT_APPS = (
     'pollingstations',
     'councils',
     'data_finder',
-    'data_collection.app.DataCollection',
+    'data_collection',
     'whitelabel',
 )
 
