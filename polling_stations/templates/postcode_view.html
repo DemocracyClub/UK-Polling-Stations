@@ -8,11 +8,8 @@
         We think we know where you should vote
         {% endif %}
       {% endif %}
-      {% if only_polling_stations or only_polling_districts %}
-        We're not sure exactly where you should vote
-      {% endif %}
-      {% if no_data %}
-        We don't know where you should vote
+      {% if only_polling_stations or only_polling_districts or no_data %}
+        Contact {{ council.name }} to find out where you should vote
       {% endif %}
     </h2>
   </div>
@@ -52,11 +49,24 @@
           <a href="mailto:{{ council.email }}">{{ council.email }}</a>
         </address>
 
-        <h3>You don't need your polling card to vote</h3>
-        <p>If you don't have your polling card, you can just turn up at the polling
-          station and give them your name and address.  You don't need anything else.</p>
+        {% if only_polling_stations or only_polling_districts or no_data %}
+          <p class="lead">
+            Phone {{ council.name }}
+            (<a href="tel:{{ council.phone }}">{{ council.phone }}</a>) and ask:
+          </p>
+          <ul class="lead">
+            <li>
+              Where your polling station is (you'll need to give them your full
+              address)
+            </li>
+            <li>
+              If they will help make this information available online in the future
+              by helping this project (say you came from this site)
+            </li>
+          </ul>
+        {% endif %}
 
-        {% if not is_whitelabel %}
+        {% if we_know_where_you_should_vote and not is_whitelabel %}
         <h3>Disclaimer</h3>
         <p>We cannot be 100% that the information presented here is correct.</p>
         <p>The people at the polling station shown will be able to tell you
@@ -69,48 +79,14 @@
 
 
       <div class="col-md-6">
-        <!-- This is the main left hand column ! -->
-        {% if only_polling_stations %}
-          <p class="lead">
-            <strong>Good news!</strong>  We have polling station locations for
-            <strong>{{ council.name }}</strong>, but we don't know how the
-            council has allocated houses to those stations, so we can't tell you
-            exactly where to vote.
-          </p>
-        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
-            {{ council.phone }}</a> to find your polling station
-        </p>
-      {% endif %}
-
-      {% if only_polling_districts %}
-        <p class="lead">
-          Unfortunately <strong>{{ council.name }}</strong> wasn't able to
-          tell us where the polling stations were in your area.
-          We know what Polling district you're in, but not where the polling station is.
-        </p>
-        <p class="lead">You will have to phone the council on <a href="tel:{{ council.phone }}">
-            {{ council.phone }}</a> to find your polling station
-        </p>
-      {% endif %}
-
-      {% if no_data %}
-        <p class="lead">
-          We don't have any data on
-          <strong>{{ council.name }}</strong>, try contacting them and asking:
-        </p>
-        <ul class="lead">
-          <li>Where your polling station is (you'll need to give them your address)</li>
-          <li>
-            If they will open their polling data so this project and others can make use of
-            it in future (say you came from this site)
-          </li>
-        </ul>
-      {% endif %}
-
+        <!-- This is the main right hand column ! -->
+        <h3>You don't need your polling card to vote</h3>
+        <p>If you don't have your polling card, you can just turn up at the polling
+            station and give them your name and address.  You don't need anything else.</p>
       <div id="area_map"></div>
-      </div> <!-- Main Left hand column -->
+      </div> <!-- Main right hand column -->
 
-    </div> <!-- Main Left hand column -->
+    </div>
 </div>
 </main>
 
