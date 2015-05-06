@@ -38,22 +38,13 @@
           {% endif %}
         {% endif %}
 
-        <h3 class="{% if not we_know_where_you_should_vote %}notopmargin{% endif %}">
-          Council Contact info
-        </h3>
-        <address>
-          {{ council.address|linebreaksbr }}<br>
-          {{ council.postcode }}<br><br>
-          <abbr title="Phone">P:</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
-          <abbr title="Email">E:</abbr>
-          <a href="mailto:{{ council.email }}">{{ council.email }}</a>
-        </address>
 
         {% if only_polling_stations or only_polling_districts or no_data %}
           <p class="lead">
-            Phone {{ council.name }}
-            (<a href="tel:{{ council.phone }}">{{ council.phone }}</a>) and ask:
+            Phone {{ council.name }}:
+            <a href="tel:{{ council.phone }}">{{ council.phone }}</a>
           </p>
+          <p class="lead">And ask them:</p>
           <ul class="lead">
             <li>
               Where your polling station is (you'll need to give them your full
@@ -65,6 +56,18 @@
             </li>
           </ul>
         {% endif %}
+
+        <h3 class="{% if not we_know_where_you_should_vote %}notopmargin{% endif %}">
+          Council Contact info
+        </h3>
+        <address>
+          {{ council.address|linebreaksbr }}<br>
+          {{ council.postcode }}<br><br>
+          <abbr title="Phone">P:</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
+          <abbr title="Email">E:</abbr>
+          <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+        </address>
+
 
         {% if we_know_where_you_should_vote and not is_whitelabel %}
         <h3>Disclaimer</h3>
