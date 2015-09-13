@@ -17,7 +17,7 @@ class Command(BaseKamlImporter):
 
 
     def district_record_to_dict(self, record):
-        print 'District', record
+        print('District', record)
         sys.exit(1)
         geojson = self.strip_z_values(record.geom.geojson)
         # Th SRID for the KML is 4326 but the CSV is 2770 so we
@@ -36,7 +36,7 @@ class Command(BaseKamlImporter):
         }
 
     def station_record_to_dict(self, record):
-        print 'Station', record
+        print('Station', record)
         sys.exit(1)
         try:
             location = Point(int(record.point_x), int(record.point_y), srid=self.srid)

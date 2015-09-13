@@ -20,7 +20,7 @@ class Command(BaseShpShpImporter):
         }
 
     def station_record_to_dict(self, record):
-        print record
+        print(record)
         return {
             'internal_council_id': record[1],
             'postcode'           : record[3].split(',')[-1],

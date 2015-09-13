@@ -15,7 +15,7 @@ class Command(BaseShpImporter):
     stations_name  = 'your.csv'
 
     def district_record_to_dict(self, record):
-        print 'District:', record
+        print('District:', record)
         sys.exit(1)
         return {
             'internal_council_id': record[0],
@@ -23,7 +23,7 @@ class Command(BaseShpImporter):
         }
 
     def station_record_to_dict(self, record):
-        print 'Station', record
+        print('Station', record)
         sys.exit(1)
         try:
             location = Point(int(record.easting), int(record.northing), srid=self.srid)

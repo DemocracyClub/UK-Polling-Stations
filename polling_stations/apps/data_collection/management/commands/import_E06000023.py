@@ -23,8 +23,8 @@ class Command(BaseCommand):
         kml_file = kmz.open('doc.kml', 'r')
         k = kml.KML()
         k.from_string(kml_file.read())
-        main = k.features().next()
-        districts = main.features().next()
+        main = next(k.features())
+        districts = next(main.features())
 
         council_id = "E06000023"
         for district in districts.features():
@@ -63,7 +63,7 @@ class Command(BaseCommand):
         in_file = json.loads(open(filename).read())
         council_id = "E06000023"
         for polling_station in in_file['features']:
-            print polling_station
+            print(polling_station)
             defaults = {
                 'location': Point(
                     int(polling_station['geometry']['x']),
@@ -73,12 +73,12 @@ class Command(BaseCommand):
                 'postcode': polling_station['attributes']['POSTCODE'],
             }
 
-            print [
+            print([
                 polling_station['attributes'].get('LOCATION_NAME', '') or "",
                 polling_station['attributes'].get('STREET', '') or "",
                 polling_station['attributes'].get('LOCALITY', '') or "",
                 polling_station['attributes'].get('TOWN', '') or "",
-            ]
+            ])
 
             defaults['address'] = "\n".join([
                 polling_station['attributes'].get('LOCATION_NAME', '') or "",
@@ -86,7 +86,7 @@ class Command(BaseCommand):
                 polling_station['attributes'].get('LOCALITY', '') or "",
                 polling_station['attributes'].get('TOWN', '') or "",
             ])
-            print polling_station['attributes']['UPRN']
+            print(polling_station['attributes']['UPRN'])
             PollingStation.objects.update_or_create(
                 council_id=council_id,
                 internal_council_id=polling_station['attributes']['UPRN'] or polling_station['attributes']['LOCATION_NAME'],

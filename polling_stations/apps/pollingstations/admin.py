@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 
-import models
+from . import models
 
 class PollingStationAdmin(admin.OSMGeoAdmin):
     pass

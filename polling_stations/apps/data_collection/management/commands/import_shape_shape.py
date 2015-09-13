@@ -14,7 +14,7 @@ class Command(BaseShpShpImporter):
     stations_name  = 'your.shp'
 
     def district_record_to_dict(self, record):
-        print 'District:', record
+        print('District:', record)
         sys.exit(1)
         return {
             'internal_council_id': record[0],
@@ -22,7 +22,7 @@ class Command(BaseShpShpImporter):
         }
 
     def station_record_to_dict(self, record):
-        print 'Station', record
+        print('Station', record)
         sys.exit(1)
         return {
             'internal_council_id': record[0],

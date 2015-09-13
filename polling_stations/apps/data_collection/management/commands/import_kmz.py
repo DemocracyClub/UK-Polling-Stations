@@ -16,8 +16,8 @@ class Command(BaseCommand):
         kml_file = kmz.open('doc.kml', 'r')
         k = kml.KML()
         k.from_string(kml_file.read())
-        main = k.features().next()
-        districts = main.features().next()
+        main = next(k.features())
+        districts = next(main.features())
         for district in districts.features():
             # station.geometry.wkt
             # station.name

@@ -21,10 +21,10 @@ class Command(BaseShpImporter):
         }
 
     def station_record_to_dict(self, record):
-        print record
-        print record[1]
-        print record[4]
-        print record[5]
+        print(record)
+        print(record[1])
+        print(record[4])
+        print(record[5])
 
         return {
             'internal_council_id': record[0],

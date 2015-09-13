@@ -42,11 +42,11 @@ class Command(BaseCommand):
 
     def get_type_from_mapit(self, council_type):
         req = requests.get('%sareas/%s' % (constants.MAPIT_URL, council_type))
-        for mapit_id, council in req.json().items():
+        for mapit_id, council in list(req.json().items()):
             council_id = council['codes'].get('gss')
             if not council_id:
                 council_id = council['codes'].get('ons')
-            print council_id
+            print(council_id)
             contact_info = {
                 'name': council['name'],
             }
@@ -64,7 +64,7 @@ class Command(BaseCommand):
                 council.save()
                 time.sleep(1)
             if not council.location:
-                print council.postcode
+                print(council.postcode)
                 try:
                     l = geocode(council.postcode)
                 except:
