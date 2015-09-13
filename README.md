@@ -10,10 +10,14 @@ If you are interested in helping out in any way at all, please contact sym@democ
 
 ### Getting Started
 
+Pre-requisites:
+
+* libgeos (`brew install geos` on OS X)
+* gdal (`brew install gdal` on OS X)
+
 Requirements
 
-    pip install -r requirements/frist.txt      
-    pip install -r requirements/base.txt      
+    pip install -r requirements/base.txt
 
 Import initial data
 

@@ -4,7 +4,7 @@ from django import forms
 from data_finder.admin import ReadOnlyAdminMixIn
 from data_collection.models import DataQuality
 
-import models
+from . import models
 
 class CouncilDataInfoInline(admin.StackedInline):
     model = DataQuality
