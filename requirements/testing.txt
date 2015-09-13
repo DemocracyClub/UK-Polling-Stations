@@ -2,6 +2,5 @@
 
 mock
 model-mommy
-lettuce
 lxml
 python-Levenshtein
