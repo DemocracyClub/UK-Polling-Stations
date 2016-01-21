@@ -6,6 +6,6 @@ from .views import LeagueTable
 
 urlpatterns = patterns(
     '',
-    url(r'^$',  LeagueTable.as_view(), name='league_table'),
+    url(r'^$',  cache_page(60 * 15)(LeagueTable.as_view()), name='league_table'),
 )
 
