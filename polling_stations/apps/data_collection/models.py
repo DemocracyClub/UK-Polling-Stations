@@ -27,3 +27,10 @@ class DataQuality(models.Model):
     def __unicode__(self):
         return "Data quality for %s" % self.council
 
+
+from django.db.models.signals import post_save
+
+def council_saved(sender, **kwargs):
+    DataQuality.objects.get_or_create(council=kwargs['instance'])
+
+post_save.connect(council_saved, sender=Council)
