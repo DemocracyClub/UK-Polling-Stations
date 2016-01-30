@@ -15,9 +15,15 @@ Pre-requisites:
 * libgeos (`brew install geos` on OS X)
 * gdal (`brew install gdal` on OS X)
 
+See [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django on Linux.
+
 Requirements
 
     pip install -r requirements/base.txt
+
+Build Database
+
+    python manage.py migrate
 
 Import initial data
 
