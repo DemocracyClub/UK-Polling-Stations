@@ -44,13 +44,12 @@ Because who does that every week?
 
 #### Creating a database
 
-sudo -u postgres createdb pollingstations
-sudo -u postgres createuser dc -P -s
-sudo -u postgres psql pollingstations
-psql (9.3.6)
-Type "help" for help.
+    sudo -u postgres createdb pollingstations
+    sudo -u postgres createuser dc -P -s
+    sudo -u postgres psql pollingstations
+    psql (9.3.6)
+    Type "help" for help.
 
-pollingstations=# CREATE EXTENSION postgis;
-CREATE EXTENSION
-pollingstations=#
-
+    pollingstations=# CREATE EXTENSION postgis;
+    CREATE EXTENSION
+    pollingstations=#
