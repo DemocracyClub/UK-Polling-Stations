@@ -8,7 +8,7 @@ from data_collection.management.commands import BaseShpImporter
 
 class Command(BaseShpImporter):
     """
-    Imports the Polling Station data from Boston Council
+    Imports the Polling Station data from East Riding of Yorkshire Council
     """
     council_id     = 'E06000011'
     districts_name = 'Polling_Districts.shpn'
