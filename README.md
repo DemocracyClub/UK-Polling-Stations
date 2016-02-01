@@ -16,9 +16,15 @@ Pre-requisites:
 * libgeos (`brew install geos` on OS X)
 * gdal (`brew install gdal` on OS X)
 
+See [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django on Linux.
+
 Requirements
 
     pip install -r requirements/base.txt
+
+Build Database
+
+    python manage.py migrate
 
 Import initial data
 
@@ -45,13 +51,12 @@ Because who does that every week?
 
 #### Creating a database
 
-sudo -u postgres createdb pollingstations
-sudo -u postgres createuser dc -P -s
-sudo -u postgres psql pollingstations
-psql (9.3.6)
-Type "help" for help.
+    sudo -u postgres createdb pollingstations
+    sudo -u postgres createuser dc -P -s
+    sudo -u postgres psql pollingstations
+    psql (9.3.6)
+    Type "help" for help.
 
-pollingstations=# CREATE EXTENSION postgis;
-CREATE EXTENSION
-pollingstations=#
-
+    pollingstations=# CREATE EXTENSION postgis;
+    CREATE EXTENSION
+    pollingstations=#
