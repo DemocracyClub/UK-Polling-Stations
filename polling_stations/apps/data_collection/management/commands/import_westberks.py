@@ -1,12 +1,12 @@
 """
-Import Wokingham Polling stations
+Import West Berkshire Polling stations
 """
 
 from data_collection.management.commands import BaseShpShpImporter
 
 class Command(BaseShpShpImporter):
     """
-    Imports the Polling Station data from Wokingham Council
+    Imports the Polling Station data from West Berkshire Council
     """
     council_id     = 'E06000037'
     districts_name = 'polling_districts'
