@@ -16,7 +16,7 @@ class Council(models.Model):
 
     objects = models.GeoManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @models.permalink

@@ -27,7 +27,7 @@ class CouncilAdmin(ReadOnlyAdminMixIn, admin.OSMGeoAdmin):
         return obj.dataquality.public_notes
 
     list_display = (
-        '__unicode__',
+        '__str__',
         'data_format',
         'public_notes',
     )
