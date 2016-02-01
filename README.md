@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/democracyclub/uk-polling-stations.png?label=ready&title=Ready)](https://waffle.io/democracyclub/uk-polling-stations)
 # UK-Polling-Stations
 
 This is a work in progress project that needs help in a number of ways:
