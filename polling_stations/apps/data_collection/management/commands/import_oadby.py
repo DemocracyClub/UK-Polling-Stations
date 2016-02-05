@@ -2,7 +2,10 @@
 Import Oadby & Wigston
 """
 from data_collection.management.commands import BaseShpShpImporter
-from data_collection.google_geocoding_api_wrapper import GoogleGeocodingApiWrapper
+from data_collection.google_geocoding_api_wrapper import (
+    GoogleGeocodingApiWrapper,
+    PostcodeNotFoundException
+)
 
 
 class Command(BaseShpShpImporter):
@@ -30,7 +33,10 @@ class Command(BaseShpShpImporter):
             # if postcode is missing, attempt to attach it
             if not postcode:
                 gwrapper = GoogleGeocodingApiWrapper(address)
-                postcode = gwrapper.address_to_postcode()
+                try:
+                    postcode = gwrapper.address_to_postcode()
+                except PostcodeNotFoundException:
+                    postcode = ''
 
             return {
                 'internal_council_id': record[15],

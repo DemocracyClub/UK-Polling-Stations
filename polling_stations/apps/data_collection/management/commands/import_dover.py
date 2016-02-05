@@ -2,7 +2,10 @@
 Import Dover
 """
 from data_collection.management.commands import BaseShpShpImporter
-from data_collection.google_geocoding_api_wrapper import GoogleGeocodingApiWrapper
+from data_collection.google_geocoding_api_wrapper import (
+    GoogleGeocodingApiWrapper,
+    PostcodeNotFoundException
+)
 
 
 class Command(BaseShpShpImporter):
@@ -30,17 +33,20 @@ class Command(BaseShpShpImporter):
         # if postcode is invalid, attempt to fix it
         if len(postcode_parts[1]) == 2:
             gwrapper = GoogleGeocodingApiWrapper(address)
-            suggested_postcode = gwrapper.address_to_postcode()
-            """
-            In this case we have a partial postcode we can use to verify, so:
-            If the first 6 characters of the suggested postcode match
-            with the partial postcode we already have then accept the suggestion
-            otherwise, discard both and insert blank postcode
-            """
-            if suggested_postcode[:-1] == postcode:
-                postcode = suggested_postcode
-            else:
-                postcode = ""
+            try:
+                suggested_postcode = gwrapper.address_to_postcode()
+                """
+                In this case we have a partial postcode we can use to verify, so:
+                If the first 6 characters of the suggested postcode match
+                with the partial postcode we already have then accept the suggestion
+                otherwise, discard both and insert blank postcode
+                """
+                if suggested_postcode[:-1] == postcode:
+                    postcode = suggested_postcode
+                else:
+                    postcode = ''
+            except PostcodeNotFoundException:
+                postcode = ''
 
         return {
             'internal_council_id': record[0],
