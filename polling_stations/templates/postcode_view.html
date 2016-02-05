@@ -166,8 +166,9 @@
       var feature = {{ areas.council.area.geojson|safe }};
     {% endif %}
 
-    create_area_map(point, feature)
-
+    fallback.ready(['L'], function() {
+        create_area_map(point, feature);
+    });
 
   </script>
 {% endblock extra_javascript %}

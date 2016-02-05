@@ -74,10 +74,29 @@
     <!-- Le javascript
          ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script src="{% static 'js/fallback.min.js' %}"></script>
+    <script type="text/javascript">
+        fallback.load({
+            jQuery: [
+                '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
+                '//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js',
+                '{% static 'js/jquery.min.js' %}'
+            ],
+            'jQuery.fn.modal': [
+                '//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js',
+                '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js',
+                '{% static 'js/bootstrap.min.js' %}'
+            ],
+            L: [
+                '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                '{% static 'js/leaflet.js' %}'
+            ]
+        }, {
+            shim: {
+                'jQuery.fn.modal': ['jQuery']
+            }
+        });
+    </script>
     <script src="{% static 'js/scripts.js' %}"></script>
     {% block extra_javascript %}{% endblock extra_javascript %}
 
