@@ -1,0 +1,20 @@
+language: python
+python:
+- '3.4'
+addons:
+  postgresql: '9.3'
+services:
+- postgresql
+before_script:
+- psql -U postgres -c "create extension postgis"
+cache:
+  pip: true
+  directories:
+    - $HOME/.pip-cache/
+install:
+  - pip install --upgrade pip
+  - pip install -r requirements/testing.txt --cache-dir $HOME/.pip-cache
+script: python manage.py test
+notifications:
+  slack:
+    secure: XDoMlbyJR1HOfF3ibOGNEizbb7MYGG8abDPrVTdTBscV5d3vm7qE0Uvd7Hq7YefwhSv8dJ+psrnWwMxBH7Z8zQmyLDyeVCNysOIfc3JfLi/cgrxZ0x0GoqUiiW8sgMl4Um/9jlEpcd5te5HpIeCFp0PHDO3GIWpzxx7xMbS6/0Q=

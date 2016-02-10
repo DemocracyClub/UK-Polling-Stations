@@ -1,4 +1,7 @@
 [![Stories in Ready](https://badge.waffle.io/democracyclub/uk-polling-stations.png?label=ready&title=Ready)](https://waffle.io/democracyclub/uk-polling-stations)
+
+[![Build Status](https://travis-ci.org/DemocracyClub/UK-Polling-Stations.svg?branch=master)](https://travis-ci.org/DemocracyClub/UK-Polling-Stations)
+
 # UK-Polling-Stations
 
 This is a work in progress project that needs help in a number of ways:
