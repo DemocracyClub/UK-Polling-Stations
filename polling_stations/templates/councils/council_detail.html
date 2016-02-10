@@ -100,7 +100,9 @@ window.create_area_map = function(point, feature) {
 var point = [{{ council.location.1 }}, {{ council.location.0 }}];
 var feature = {{ council.area.geojson|safe }};
 
-create_area_map(point, feature)
+fallback.ready(['L'], function() {
+    create_area_map(point, feature);
+});
 
 </script>
 {% endblock extra_javascript %}
