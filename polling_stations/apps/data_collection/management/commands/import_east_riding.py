@@ -2,7 +2,6 @@
 Import East Riding
 """
 from django.contrib.gis.geos import Point
-import ffs
 
 from data_collection.management.commands import BaseShpImporter
 
