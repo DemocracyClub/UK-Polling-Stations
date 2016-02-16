@@ -4,7 +4,6 @@ Imports Spelthorne Council.
 import json 
 
 from django.contrib.gis.geos import Point, GEOSGeometry
-import ffs
 
 from data_collection.management.commands import BaseKamlImporter
 

@@ -1,10 +1,9 @@
 """
 Import Islington
 """
+import os
 from django.contrib.gis.geos import Point
-import ffs
-
-from data_collection.management.commands import BaseShpImporter
+from data_collection.management.commands import BaseShpImporter, CsvHelper
 
 class Command(BaseShpImporter):
     """
@@ -35,9 +34,9 @@ class Command(BaseShpImporter):
         }
     
     def import_polling_stations(self):
-        base_folder = ffs.Path(self.base_folder_path)
-        stations = base_folder/self.stations_name
-        with stations.csv(header=True) as csv:
-            for row in csv: 
-                station_info = self.station_record_to_dict(row)
-                self.add_polling_station(station_info)
+        stations = os.path.join(self.base_folder_path, self.stations_name)
+        helper = CsvHelper(stations)
+        data = helper.parseCsv()
+        for row in data:
+            station_info = self.station_record_to_dict(row)
+            self.add_polling_station(station_info)
