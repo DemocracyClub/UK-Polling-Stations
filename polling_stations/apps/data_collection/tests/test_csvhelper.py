@@ -7,7 +7,7 @@ class CsvHelperTest(TestCase):
 
     def test_parse_csv(self):
         helper = CsvHelper(
-            os.path.join(os.path.dirname(__file__), 'fixtures/test/test.csv')
+            os.path.join(os.path.dirname(__file__), 'fixtures/csv_helper/test.csv')
         )
         data = helper.parseCsv()
 
