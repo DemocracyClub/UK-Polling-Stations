@@ -47,9 +47,10 @@ class BaseImporter(BaseCommand):
     srid = 27700
 
 
-    council_id     = None
-    stations_name  = "polling_places"
-    districts_name = "polling_districts"
+    council_id       = None
+    base_folder_path = None
+    stations_name    = "polling_places"
+    districts_name   = "polling_districts"
 
     def postcode_from_address(self, address): return address.split(',')[-1]
     def string_to_newline_addr(self, string): return "\n".join(string.split(',')[:-1])
@@ -121,9 +122,11 @@ class BaseImporter(BaseCommand):
         PollingStation.objects.filter(council=self.council).delete()
         PollingDistrict.objects.filter(council=self.council).delete()
 
-        self.base_folder_path = os.path.abspath(
-         glob.glob('data/{0}-*'.format(self.council_id))[0]
-        )
+        if self.base_folder_path is None:
+            self.base_folder_path = os.path.abspath(
+                glob.glob('data/{0}-*'.format(self.council_id))[0]
+            )
+
         self.import_data()
 
 
