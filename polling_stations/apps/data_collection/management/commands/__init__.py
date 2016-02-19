@@ -44,8 +44,8 @@ class CsvHelper:
 
 
 class BaseImporter(BaseCommand):
-    srid = 27700
-
+    srid           = 27700
+    districts_srid = None
 
     council_id     = None
     stations_name  = "polling_places"
@@ -54,9 +54,15 @@ class BaseImporter(BaseCommand):
     def postcode_from_address(self, address): return address.split(',')[-1]
     def string_to_newline_addr(self, string): return "\n".join(string.split(',')[:-1])
 
+    def get_srid(self, type=None):
+        if type == 'districts' and self.districts_srid is not None:
+            return self.districts_srid
+        else:
+            return self.srid
+
     def clean_poly(self, poly):
         if isinstance(poly, geos.Polygon):
-            poly = geos.MultiPolygon(poly, srid=self.srid)
+            poly = geos.MultiPolygon(poly, srid=self.get_srid('districts'))
             return poly
         # try:
         #     polygons = wkt[18:-3].split(')), ((')
@@ -142,7 +148,7 @@ class BaseShpImporter(BaseImporter):
                 district_info['council'] = self.council
 
             geojson = json.dumps(district.shape.__geo_interface__)
-            poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
+            poly = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid('districts')))
             district_info['area'] = poly
             self.add_polling_district(district_info)
 
@@ -170,7 +176,7 @@ def import_polling_station_shapefiles(importer):
 
             station_info['location'] = Point(
                 *station.shape.points[0],
-                srid=importer.srid)
+                srid=importer.get_srid())
             importer.add_polling_station(station_info)
 
 
@@ -191,7 +197,7 @@ class BaseJasonImporter(BaseImporter):
 
             if district_info is None:
                 continue
-            poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.srid))
+            poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.get_srid('districts')))
             district_info['area'] = poly
             self.add_polling_district(district_info)
 
@@ -200,6 +206,9 @@ class BaseKamlImporter(BaseImporter):
     """
     Import those councils whose data is KML
     """
+
+    districts_srid = 4326
+
     def strip_z_values(self, geojson):
         districts = json.loads(geojson)
         districts['type'] = 'Polygon'
@@ -211,14 +220,7 @@ class BaseKamlImporter(BaseImporter):
 
     def district_record_to_dict(self, record):
         geojson = self.strip_z_values(record.geom.geojson)
-        # Th SRID for the KML is 4326 but the CSV is 2770 so we
-        # set it each time we create the polygon.
-        # We could probably do with a more elegant way of doing
-        # this longer term.
-        self._srid = self.srid
-        self.srid = 4326
-        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
-        self.srid = self._srid
+        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid('districts')))
         return {
             'internal_council_id': record['Name'].value,
             'name'               : record['Name'].value,
