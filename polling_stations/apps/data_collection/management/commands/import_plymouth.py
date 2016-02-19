@@ -22,14 +22,7 @@ class Command(BaseKamlImporter):
         # this kml has no altitude co-ordinates so the data is ok as it stands
         geojson = record.geom.geojson
 
-        # The SRID for the KML is 4326 but the CSV is 2770 so we
-        # set it each time we create the polygon.
-        # We could probably do with a more elegant way of doing
-        # this longer term.
-        self._srid = self.srid
-        self.srid = 4326
-        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.srid))
-        self.srid = self._srid
+        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid('districts')))
 
         # manually deal with dodgy/missing data
         if record['DISTRICT'].value == '' and record['NOTES1'].value == 'EGGBUCKLAND' and record['AREA'].value == 689766:
@@ -51,7 +44,7 @@ class Command(BaseKamlImporter):
         }
 
     def station_record_to_dict(self, record):
-        location = Point(float(record.east), float(record.north), srid=self.srid)
+        location = Point(float(record.east), float(record.north), srid=self.get_srid())
 
         address = "\n".join([record.addressl1, record.addressl2, record.addressl3])
         if address[-1:] == '\n':
