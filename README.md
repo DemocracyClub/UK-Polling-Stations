@@ -12,29 +12,61 @@ This is a work in progress project that needs help in a number of ways:
 
 If you are interested in helping out in any way at all, please contact sym@democracyclub.org.uk
 
-### Getting Started
+## Getting Started
 
-Pre-requisites:
+### Python
+UK-Polling-Stations requires python 3.4
 
-* libgeos (`brew install geos` on OS X)
-* gdal (`brew install gdal` on OS X)
+### Install system dependencies
+UK-Polling-Stations requires Postgres, PostGIS, libgeos and GDAL.
 
-See [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django on Linux.
+On Mac OSX, run:
+```
+brew install postgresql
+brew install geos
+brew install gdal
+```
+From a clean install of Ubuntu 14 (Trusty), the command:
+```
+sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1
+```
+will install all of the necessary dependencies.
 
-Requirements
+For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
-    pip install -r requirements/base.txt
+### Install project requirements
+```
+pip install -r requirements/base.txt
+```
 
-Build Database
+### Create database
+```
+sudo -u postgres createdb pollingstations
+sudo -u postgres createuser dc -P -s
+sudo -u postgres psql pollingstations
+psql (9.3.6)
+Type "help" for help.
 
-    python manage.py migrate
+pollingstations=# CREATE EXTENSION postgis;
+CREATE EXTENSION
+pollingstations=#
+```
 
-Import initial data
+### Define database connection
+UK-Polling-Stations uses [dj-database-url](https://github.com/kennethreitz/dj-database-url) to manage database connection. To set up a db connection, define an environment variable `DATABASE_URL` of the form `postgis://dc:password@127.0.0.1:5432/pollingstations`
 
-    python manage.py import_councils
-    python manage.py loaddata polling_stations/apps/pollingstations/fixtures/initial_data.json
+### Run migrations
+```
+python manage.py migrate
+```
 
-### Importing the data we have from councils
+### Import initial data
+```
+python manage.py import_councils
+python manage.py loaddata polling_stations/apps/pollingstations/fixtures/initial_data.json
+```
+
+## Importing the data we have from councils
 
 Each council that has unimported data has a Github Issue with the `Data Import` label.
 
@@ -43,23 +75,6 @@ You can see the current status in [the Waffle Board](https://waffle.io/Democracy
 Data lives in ./data/[council.id]-[council.name]/*
 
 We make a Django manage.py command in the data_collection app for each council which converts
-imports the raw data. There are some base importer command classes in the __init__.py of `data_collection.management.commands`.
+imports the raw data. There are some base importer command classes in the `__init__.py` of `data_collection.management.commands`.
 
 We then serialize the imported data to `polling_stations/apps/pollingstations/fixtures/initial_data.json`
-
-
-### Postgis install notes
-
-Because who does that every week?
-
-#### Creating a database
-
-    sudo -u postgres createdb pollingstations
-    sudo -u postgres createuser dc -P -s
-    sudo -u postgres psql pollingstations
-    psql (9.3.6)
-    Type "help" for help.
-
-    pollingstations=# CREATE EXTENSION postgis;
-    CREATE EXTENSION
-    pollingstations=#
