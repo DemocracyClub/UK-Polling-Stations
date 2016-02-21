@@ -5,23 +5,31 @@ import sys
 
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseShpImporter
+from data_collection.management.commands import BaseJasonImporter
 
-class Command(BaseShpImporter):
+class Command(BaseJasonImporter):
     """
     Imports the Polling Station data from COUNCIL
     """
     council_id     = 'COUNCIL_ID'
-    districts_name = 'name_without_.shp'
+    districts_name = 'DISTRICT_FILE.geojson'
     stations_name  = 'STATION_FILE.csv'
+    """
+    if geojson uses lat/long co-ordinates, set districts_srid = 4326
+    if geojson uses UK national grid, remove this
+    """
+    districts_srid = 4326
 
     def district_record_to_dict(self, record):
-        print('District: ', record)
+        properties = record['properties']
+
+        print('District:', properties)
         sys.exit(1)
 
         return {
-            'internal_council_id': record[0],
-            'name': record[1],
+            'council':             self.council,
+            'internal_council_id': properties['id'],
+            'name':                properties['name']
         }
 
     def station_record_to_dict(self, record):

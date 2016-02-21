@@ -74,7 +74,6 @@ You can see the current status in [the Waffle Board](https://waffle.io/Democracy
 
 Data lives in ./data/[council.id]-[council.name]/*
 
-We make a Django manage.py command in the data_collection app for each council which converts
-imports the raw data. There are some base importer command classes in the `__init__.py` of `data_collection.management.commands`.
+We make a Django manage.py command in the data_collection app for each council which imports the raw data. There are some base importer command classes in the `__init__.py` of `data_collection.management.commands` and some template import scripts in `polling_stations/apps/data_collection/management/commands/templates/` to use as a starting point.
 
 We then serialize the imported data to `polling_stations/apps/pollingstations/fixtures/initial_data.json`
