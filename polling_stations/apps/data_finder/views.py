@@ -64,12 +64,15 @@ class PostcodeView(TemplateView):
             context['points'] = self.get_points(areas)
 
         if context and context['points']:
-            context['directions'] = requests.get(
-                "{base_url}{postcode}&destination={destination}".format(
+            url = "{base_url}{postcode}&destination={destination}".format(
                     base_url=base_google_url,
                     postcode=context['postcode'],
-                    destination=context['points'][0].postcode,
-                )).json()
+                    destination="{0},{1}".format(
+                        context['points'][0].location.y,
+                        context['points'][0].location.x,
+                    ),
+                )
+            context['directions'] = requests.get(url).json()
 
         context['we_know_where_you_should_vote'] = context['points'] and context['has_polling_district']
         context['only_polling_stations'] = context['points'] and (not context['has_polling_district'])
