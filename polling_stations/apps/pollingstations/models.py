@@ -15,6 +15,9 @@ class PollingStation(models.Model):
 
     objects = models.GeoManager()
 
+    def __str__(self):
+        return "{0} ({1})".format(self.internal_council_id, self.council)
+
 
 class PollingDistrict(models.Model):
     name                = models.CharField(blank=True, null=True, max_length=255)
