@@ -7,6 +7,7 @@ def base_template(request):
     if base_path in settings.EMBED_PREFIXES:
         template_name = select_template([
             '%s.html' % base_path,
+            '%s/base.html' % base_path,
             'base_embed.html',
         ])
         return {
