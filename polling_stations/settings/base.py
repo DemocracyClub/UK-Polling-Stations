@@ -149,6 +149,7 @@ PROJECT_APPS = (
     'data_finder',
     'data_collection',
     'whitelabel',
+    'nus_wales',
 )
 
 INSTALLED_APPS += PROJECT_APPS
@@ -198,6 +199,7 @@ REST_FRAMEWORK = {
 
 EMBED_PREFIXES = (
     'embed',
+    'nus_wales',
 )
 
 # .local.py overrides all the common settings.
