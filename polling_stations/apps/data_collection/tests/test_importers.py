@@ -76,7 +76,7 @@ class ImporterTest(TestCase):
         self.create_dummy_council()
 
         # run our stub importer
-        cmd = stub_kmlimport_different_srids.Command()
+        cmd = stub_kmlimport.Command()
         opts = {}
         cmd.handle(**opts)
 
@@ -86,7 +86,7 @@ class ImporterTest(TestCase):
         self.create_dummy_council()
 
         # run our stub importer
-        cmd = stub_kmlimport.Command()
+        cmd = stub_kmlimport_different_srids.Command()
         opts = {}
         cmd.handle(**opts)
 
