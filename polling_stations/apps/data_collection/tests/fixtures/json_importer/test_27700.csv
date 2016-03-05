@@ -1,0 +1,4 @@
+internal_council_id, address, postcode, east, north
+1,1 Foo Street,XX1 1XX,389394,324659
+2,1 Bar Street,YY1 1YY,585297,364285
+3,1 Baz Street,ZZ1 1ZZ,481780,356631
