@@ -23,11 +23,12 @@ from pollingstations.models import PollingStation, PollingDistrict
 
 class CsvHelper:
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, encoding='utf-8'):
         self.filepath = filepath
+        self.encoding = encoding
 
     def parseCsv(self):
-        file = open(self.filepath, 'rt')
+        file = open(self.filepath, 'rt', encoding=self.encoding)
         reader = csv.reader(file)
         header = next(reader)
 
@@ -44,13 +45,13 @@ class CsvHelper:
 
 
 class BaseImporter(BaseCommand):
-    srid           = 27700
-    districts_srid = None
-
+    srid             = 27700
+    districts_srid   = None
     council_id       = None
     base_folder_path = None
     stations_name    = "polling_places"
     districts_name   = "polling_districts"
+    csv_encoding     = 'utf-8'
 
     def postcode_from_address(self, address): return address.split(',')[-1]
     def string_to_newline_addr(self, string): return "\n".join(string.split(',')[:-1])
@@ -107,7 +108,7 @@ class BaseImporter(BaseCommand):
     def import_polling_stations(self):
         stations = os.path.join(self.base_folder_path, self.stations_name)
 
-        helper = CsvHelper(stations)
+        helper = CsvHelper(stations, self.csv_encoding)
         data = helper.parseCsv()
         for row in data:
             station_info = self.station_record_to_dict(row)
