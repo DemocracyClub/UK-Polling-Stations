@@ -45,7 +45,7 @@ class Command(BaseKamlImporter):
             address = "\n".join(record.pollingplace.strip().split(', ') + thoroughfare_parts)
 
             # attempt to attach postcode if missing
-            gwrapper = GoogleGeocodingApiWrapper(address + ', Guildford, UK')
+            gwrapper = GoogleGeocodingApiWrapper(address + ', Guildford, UK', self.council_id, 'DIS')
             try:
                 postcode = gwrapper.address_to_postcode()
             except PostcodeNotFoundException:

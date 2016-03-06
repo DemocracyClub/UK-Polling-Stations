@@ -32,7 +32,7 @@ class Command(BaseShpShpImporter):
 
             # if postcode is missing, attempt to attach it
             if not postcode:
-                gwrapper = GoogleGeocodingApiWrapper(address)
+                gwrapper = GoogleGeocodingApiWrapper(address, self.council_id, 'DIS')
                 try:
                     postcode = gwrapper.address_to_postcode()
                 except PostcodeNotFoundException:
