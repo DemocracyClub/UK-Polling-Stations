@@ -18,7 +18,7 @@ from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import Point, GEOSGeometry
 
 from councils.models import Council
-from pollingstations.models import PollingStation, PollingDistrict
+from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 
 
 class CsvHelper:
@@ -128,6 +128,7 @@ class BaseImporter(BaseCommand):
         # Delete old data for this council
         PollingStation.objects.filter(council=self.council).delete()
         PollingDistrict.objects.filter(council=self.council).delete()
+        ResidentialAddress.objects.filter(council=self.council).delete()
 
         if self.base_folder_path is None:
             self.base_folder_path = os.path.abspath(
@@ -258,3 +259,29 @@ class BaseKamlImporter(BaseImporter):
             tmp.write(kmlfile.read())
             add_kml_district(tmp.name)
             tmp.close()
+
+
+class BaseAddressCsvImporter(BaseImporter):
+
+    def add_residential_address(self, address_info):
+        ResidentialAddress.objects.update_or_create(
+            council=self.council,
+            address=address_info['address'],
+            postcode=address_info['postcode'],
+            polling_station_id=address_info['polling_station_id'],
+        )
+
+    def import_residential_addresses(self):
+        addresses = os.path.join(self.base_folder_path, self.addresses_name)
+
+        helper = CsvHelper(addresses, self.csv_encoding)
+        data = helper.parseCsv()
+        for row in data:
+            address_info = self.address_record_to_dict(row)
+            if 'council' not in address_info:
+                address_info['council'] = self.council
+            self.add_residential_address(address_info)
+
+    def import_data(self):
+        self.import_residential_addresses()
+        self.import_polling_stations()
