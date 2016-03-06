@@ -31,3 +31,9 @@ class PollingDistrict(models.Model):
     def __unicode__(self):
         name = self.name or "Unnamed"
         return "%s (%s)" % (name, self.council)
+
+class ResidentialAddress(models.Model):
+    address            = models.TextField(blank=True, null=True)
+    postcode           = models.CharField(blank=True, null=True, max_length=100, db_index=True)
+    council            = models.ForeignKey(Council, null=True)
+    polling_station_id = models.CharField(blank=True, max_length=100)
