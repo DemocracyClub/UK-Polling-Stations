@@ -118,6 +118,9 @@ class BaseImporter(BaseCommand):
 
             self.add_polling_station(station_info)
 
+    def post_import(self):
+        raise NotImplementedError
+
     def handle(self, *args, **kwargs):
         if self.council_id is None:
             self.council_id = args[0]
@@ -134,6 +137,12 @@ class BaseImporter(BaseCommand):
             )
 
         self.import_data()
+
+        # Optional step for post import tasks
+        try:
+            self.post_import()
+        except NotImplementedError:
+            pass
 
 
 class BaseShpImporter(BaseImporter):

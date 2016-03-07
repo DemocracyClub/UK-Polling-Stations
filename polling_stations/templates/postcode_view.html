@@ -31,7 +31,7 @@
           </address>
           {% if directions.routes.0.legs.0.duration.text %}
           <div id="directions">
-            <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.postcode }}">
+            <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.location.y }},{{ points.0.location.x }}">
               About {{ directions.routes.0.legs.0.duration.text }} walk
               ({{ directions.routes.0.legs.0.distance.text }})</a>
           </div>

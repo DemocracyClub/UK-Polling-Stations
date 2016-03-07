@@ -1,0 +1,24 @@
+{% extends "template.html" %}
+{% load staticfiles %}
+{% block body %}
+  <body class="embed">
+    <header style="background-color:#00677f;padding:2em;color:#FFF;margin:2em 0;">
+      <h2>Where can I vote?</h2>
+    </header>
+
+    <div class="container">
+      <div class="col-md-12">
+      {% block content %}{% endblock content %}
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="col-md-6">
+          <h1><img src="{% static 'images/nus_logo.jpg' %}" width=200>
+            <img src="{% static 'images/logo-with-text.png' %}" width=200></h1>
+        </div>
+      </div>
+    </footer>
+{% endblock body %}
+
