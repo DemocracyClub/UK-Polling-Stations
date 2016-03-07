@@ -32,7 +32,7 @@ class Command(BaseShpShpImporter):
 
         # if postcode is invalid, attempt to fix it
         if len(postcode_parts[1]) == 2:
-            gwrapper = GoogleGeocodingApiWrapper(address)
+            gwrapper = GoogleGeocodingApiWrapper(address, self.council_id, 'DIS')
             try:
                 suggested_postcode = gwrapper.address_to_postcode()
                 """

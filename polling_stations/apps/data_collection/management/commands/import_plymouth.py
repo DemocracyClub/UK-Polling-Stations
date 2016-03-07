@@ -51,7 +51,7 @@ class Command(BaseKamlImporter):
             address = address[:-1]
 
         # attempt to attach postcodes
-        gwrapper = GoogleGeocodingApiWrapper(address + ", Plymouth, UK")
+        gwrapper = GoogleGeocodingApiWrapper(address + ", Plymouth, UK", self.council_id, 'UTA')
         try:
             postcode = gwrapper.address_to_postcode()
         except PostcodeNotFoundException:
