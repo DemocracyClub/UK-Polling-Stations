@@ -1,0 +1,10 @@
+!table
+!version 300
+!charset WindowsLatin1
+
+Definition Table
+  Type NATIVE Charset "WindowsLatin1"
+  Fields 3
+    NAME Char (40) ;
+    CODE Char (6) ;
+    POLLING_STATION Char (140) ;
