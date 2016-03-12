@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if not is_whitelabel %}
+  <div class="page-header">
+    <h1>Where is my Polling Station?</h1>
+  </div>
+  {% endif %}
+  <h2>
+    Choose Your Address / Street
+  </h2>
+
+  <form method=post class="form form-inline">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-lg btn-success" id="submit-address"
+                data-loading-text="Find your Polling Station">
+          Find your Polling Station
+        </button>
+    </div>
+  </form>
+
+{% endblock content %}
