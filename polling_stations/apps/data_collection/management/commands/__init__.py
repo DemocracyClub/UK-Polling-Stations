@@ -5,6 +5,7 @@ import csv
 import json
 import glob
 import os
+import re
 import shapefile
 import sys
 import tempfile
@@ -273,10 +274,17 @@ class BaseKamlImporter(BaseImporter):
 class BaseAddressCsvImporter(BaseImporter):
 
     def add_residential_address(self, address_info):
+
+        """
+        strip all whitespace from postcode and convert to uppercase
+        this will make it easier to query this based on user-supplied postcode
+        """
+        postcode = re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
+
         ResidentialAddress.objects.update_or_create(
             council=self.council,
             address=address_info['address'],
-            postcode=address_info['postcode'],
+            postcode=postcode,
             polling_station_id=address_info['polling_station_id'],
         )
 
