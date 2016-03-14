@@ -155,8 +155,7 @@ class AddressView(TemplateView):
         )
 
         # council
-        areas = {}
-        areas['council'] = Council.objects.get(
+        council = Council.objects.get(
             pk=address.council_id
         )
 
@@ -179,8 +178,7 @@ class AddressView(TemplateView):
         context['points'] = stations
         context['we_know_where_you_should_vote'] = context['points']
         context['no_data'] = (not context['points']) and (not context['has_polling_district'])
-        #context['areas'] = areas
-        context['council'] = areas['council']
+        context['council'] = council
         return context
 
 

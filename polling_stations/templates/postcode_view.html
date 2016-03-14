@@ -56,7 +56,7 @@
         </ul>
       {% endif %}
 
-      <div id="area_map" class="card_inset">asd</div>
+      <div id="area_map" class="card_inset"></div>
 
 
     </div>
@@ -100,58 +100,53 @@
   <script>
 
     // Maps
-    window.create_area_map = function(point, feature) {
-    var area = L.geoJson(feature);
-    // var council_location = L.geoJson(point);
-    var council_location = point;
-    var b = area.getBounds();
+    window.create_area_map = function(point) {
+      // var council_location = L.geoJson(point);
+      var polling_station_location = point;
 
-    var map = L.map('area_map', {zoomControl:true}).setView(b.getCenter(), 8);
-    // map.dragging.disable();
-    // map.touchZoom.disable();
-    // map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
+      var map = L.map('area_map', {zoomControl:true});
+      // map.dragging.disable();
+      // map.touchZoom.disable();
+      // map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
 
-    map.setView(new L.LatLng(51.3, 0.7),10);
-    map.fitBounds(map.fitBounds(b));
-    // map.addLayer(osm);
+      map.setView(polling_station_location,10);
+      // map.addLayer(osm);
 
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    window.map = map;
-    map.setZoom(15)
-
-    // area.addTo(map);
-
-    {% for station in points %}
-      L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-      'clickable': true,
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
       }).addTo(map);
-    {% endfor %}
 
+      window.map = map;
+      map.setZoom(15)
 
-  }
+      // area.addTo(map);
+
+      {% for station in points %}
+        L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
+        'clickable': true,
+        }).addTo(map);
+      {% endfor %}
+    }
 
     var point = [{{ location.1 }}, {{ location.0 }}];
 
-    {% if areas.polling_district %}
-      var feature = {{ areas.polling_district.area.geojson|safe }};
-    {% endif %}
-
-    {% if not has_polling_district %}
-      var feature = {{ areas.council.area.geojson|safe }};
-    {% endif %}
-
-    // fallback.ready(['L'], function() {
-        create_area_map(point, feature);
-    // });
+    fallback.ready(['L'], function() {
+        create_area_map(point);
+    });
 
   </script>
 {% endblock in_page_javascript %}
 
 
 {% block extra_javascript %}
-<script src="{% static "js/leaflet.js" %}"></script>
+<script type="text/javascript">
+        fallback.load({
+            L: [
+                '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+                '{% static 'js/leaflet.js' %}'
+            ]
+        });
+    </script>
+<script src=""></script>
 {% endblock extra_javascript %}
