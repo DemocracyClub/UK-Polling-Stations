@@ -15,7 +15,7 @@
     <form method=post class="form form-inline">
       {% csrf_token %}
       <label class="card_header">{% trans "Enter Your Postcode" %}
-        <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text">
+        <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
       </label>
       <p class="help-text" id="postcode_help_text">{% trans 'e.g. <a href="postcode/CF105AJ/">CF10 5AJ</a>' %}</p>
       <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
