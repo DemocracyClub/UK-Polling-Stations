@@ -47,7 +47,8 @@ extra_patterns = patterns(
     url(r'^about$', TemplateView.as_view(template_name='about.html'), name='about'),
 )
 
-for EMBED in settings.EMBED_PREFIXES:
+PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
+for EMBED in PREFIXED_URLS:
     extra_patterns += patterns(
         '',
         url(r'^%s/' % EMBED, include('whitelabel.urls')),

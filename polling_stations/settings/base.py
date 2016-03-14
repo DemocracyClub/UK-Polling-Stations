@@ -233,6 +233,9 @@ REST_FRAMEWORK = {
 
 EMBED_PREFIXES = (
     'embed',
+)
+
+WHITELABEL_PREFIXES = (
     'nus_wales',
 )
 
