@@ -1,18 +1,27 @@
-{% extends "template.html" %}
+{% extends "dc_base_naked.html" %}
 {% load staticfiles %}
-{% block body %}
-  <body class="embed">
+
+{% load compile_static %}
+{% load static %}
+{% block extra_site_css %}
+{# <link rel="stylesheet" href="{% static "css/style.scss"|compile %}" /> #}
+{% endblock extra_site_css %}
+
+
+{% block body_class_attr %}class="embed"{% endblock body_class_attr %}
+{% block body_base %}
+
     {% block content %}{% endblock content %}
-    <footer class="footer">
-      <div class="container">
-        <div class="col-md-6">
+
+    <footer class="row">
+      <div class="columns large-12">
           <p>
             Built by
             <a href="http://democracyclub.org.uk">
               <img src="{% static 'images/logo-with-text.png' %}" class="dc-logo">
             </a>
           </p>
-        </div>
       </div>
     </footer>
-{% endblock body %}
+
+{% endblock body_base %}

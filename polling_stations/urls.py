@@ -53,8 +53,6 @@ for EMBED in settings.EMBED_PREFIXES:
         url(r'^%s/' % EMBED, include('whitelabel.urls')),
     )
 
-urlpatterns =  extra_patterns + core_patterns + static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+urlpatterns =  extra_patterns + core_patterns+ static(
+    settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

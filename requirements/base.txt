@@ -18,3 +18,6 @@ pygeoif==0.6
 pyshp==1.2.3
 python-dateutil==2.4.2
 requests==2.7.0
+
+
+git+https://github.com/DemocracyClub/django-static-precompiler

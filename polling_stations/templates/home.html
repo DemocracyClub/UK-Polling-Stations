@@ -1,26 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% if not is_whitelabel %}
-  <div class="page-header">
-    <h1>Where is my Polling Station?</h1>
-  </div>
-  {% endif %}
-  <h2>
-    Enter Your Postcode
-  </h2>
 
-  <form method=post class="form form-inline">
-    {% csrf_token %}
-    <div class="form-group">
-        <input id="id_postcode" name="postcode"
-               class="input-lg form-control text-uppercase" autofocus="" type="text" autocomplete="on">
-        <button type="submit" class="btn btn-lg btn-success" id="submit-postcode"
-                data-loading-text="Find your Polling Station">
-          Find your Polling Station
-        </button>
-        <p>e.g. <a href="postcode/CF105AJ/">CF10 5AJ</a></p>
-    </div>
-  </form>
+<div class="row">
+  <div class="columns large-centered columns large-6 card">
+    {% if not is_whitelabel %}
+    <header>
+      <h2>Find your polling station</h2>
+    </header>
+    {% endif %}
+    <form method=post class="form form-inline">
+      {% csrf_token %}
+      <label class="card_header">Enter Your Postcode
+        <input id="id_postcode" name="postcode" class="" type="text" aria-describedby="postcode_help_text">
+      </label>
+      <p class="help-text" id="postcode_help_text">e.g. <a href="postcode/CF105AJ/">CF10 5AJ</a></p>
+      <button type="submit" class="button" id="submit-postcode">Find your Polling Station</button>
+    </form>
+  </div>
+</div>
 
 {% endblock content %}
