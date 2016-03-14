@@ -1,13 +1,13 @@
 {% extends "dc_base.html" %}
+{% load i18n %}
 {% load staticfiles %}
-  {% block meta %}
+{% block site_meta %}
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="description" content="{% block description %}{% endblock %}" />
     <meta name="keywords" content="{% block keywords %}{% endblock %}" />
-    <meta name="viewport" content="{% block viewport %}width=device-width"{% endblock %}>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  {% endblock meta %}
-  {% block icons %}
+{% endblock site_meta %}
+{% block site_icons %}
     <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-icon-72x72.png">
@@ -21,35 +21,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="/static/icons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
-  {% endblock icons %}
+{% endblock site_icons %}
 
-{% block body %}
-  <body>
-    {% include 'navbar.html' %}
 
-    <div class="container">
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-
-    </div> <!-- /container -->
-
-    <footer class="footer">
-      <div class="container">
-        <div class="col-md-6">
-          <p>
-            Built by
-            <a href="http://democracyclub.org.uk">
-              <img src="{% static 'images/logo-with-text.png' %}" class="dc-logo">
-            </a>
-          </p>
-        </div>
-        <div class="col-md-6">
-          <p class="text-right">
-            <a href="{% url "league_table" %}">League Table of Councils</a> &nbsp;·&nbsp; <a href="https://github.com/DemocracyClub/UK-Polling-Stations">Issue Tracker</a> &nbsp;·&nbsp; <a href="/api">Open Data API</a>
-          </p>
-        </div>
-
-      </div>
-    </footer>
-{% endblock body %}

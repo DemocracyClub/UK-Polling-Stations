@@ -206,8 +206,11 @@ LOGGING = {
     }
 }
 
-
-# EMAILS
+from django.utils.translation import ugettext_lazy as _
+LANGUAGES = [
+  ('en', _('English')),
+  ('cy-gb', _('Welsh')),
+]
 
 
 # API Settings
@@ -236,3 +239,5 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
     from .testing import *
+
+

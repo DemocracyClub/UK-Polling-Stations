@@ -1,13 +1,6 @@
 {% extends "dc_base_naked.html" %}
 {% load staticfiles %}
 
-{% load compile_static %}
-{% load static %}
-{% block extra_site_css %}
-{# <link rel="stylesheet" href="{% static "css/style.scss"|compile %}" /> #}
-{% endblock extra_site_css %}
-
-
 {% block body_class_attr %}class="embed"{% endblock body_class_attr %}
 {% block body_base %}
 
