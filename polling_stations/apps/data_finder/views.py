@@ -114,8 +114,6 @@ class PostcodeView(TemplateView):
         try:
             areas['polling_district'] = PollingDistrict.objects.get(
                 area__covers=context['location'])
-            areas['neighbours'] = PollingDistrict.objects.filter(
-                area__touches=areas['polling_district'].area)
             context['has_polling_district'] = True
         except PollingDistrict.DoesNotExist:
             context['has_polling_district'] = False
