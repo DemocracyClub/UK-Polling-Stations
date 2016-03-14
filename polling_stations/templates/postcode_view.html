@@ -120,15 +120,12 @@
       // map.doubleClickZoom.disable();
       map.scrollWheelZoom.disable();
 
-      map.setView(polling_station_location,10);
-      // map.addLayer(osm);
-
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
       }).addTo(map);
 
       window.map = map;
-      map.setZoom(15)
+      window.polling_station_location = polling_station_location;
 
       // area.addTo(map);
 
@@ -136,6 +133,7 @@
         L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
         'clickable': true,
         }).addTo(map);
+        map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
       {% endfor %}
     }
 
@@ -152,11 +150,15 @@
 {% block extra_javascript %}
 <script type="text/javascript">
         fallback.load({
-            L: [
-                '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-                '{% static 'js/leaflet.js' %}'
-            ]
-        });
+          L: [
+              '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+              '{% static 'js/leaflet.js' %}'
+          ]}, {
+            shim: {
+              'L': 'jQuery'
+            }
+          }
+        );
     </script>
 <script src=""></script>
 {% endblock extra_javascript %}
