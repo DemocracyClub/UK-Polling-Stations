@@ -10,7 +10,7 @@ class AddressSelectForm(forms.Form):
         choices = (),
         label = "",
         initial = "",
-        widget = forms.Select(attrs={'class' : 'input-lg form-control'}),
+        widget = forms.Select(attrs={'class' : 'select_multirow', 'size': 10}),
         required=True
     )
 

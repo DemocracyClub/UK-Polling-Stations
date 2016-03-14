@@ -14,3 +14,11 @@ footer {
   }
 
 }
+
+select.select_multirow {
+    height: auto;
+}
+
+select[size], select[multiple] {
+    background-image: none;
+}
