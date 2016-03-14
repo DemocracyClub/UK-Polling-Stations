@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+
+{% load i18n %}
 {% load static %}
 
 {% block extra_page_css %}
@@ -12,10 +14,10 @@
     <div class="card">
       <h2>
         {% if we_know_where_you_should_vote %}
-          Your polling station
+          {% trans "Your polling station" %}
         {% endif %}
         {% if only_polling_stations or only_polling_districts or no_data %}
-          Contact {{ council.name }} to find out where you should vote
+          {% blocktrans %}Contact {{ council.name }} to find out where you should vote{% endblocktrans %}
         {% endif %}
       </h2>
 
@@ -31,8 +33,10 @@
         {% if directions.routes.0.legs.0.duration.text %}
         <div id="directions">
           <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.location.y }},{{ points.0.location.x }}">
-            About {{ directions.routes.0.legs.0.duration.text }} walk
-            ({{ directions.routes.0.legs.0.distance.text }})</a>
+            {% with directions.routes.0.legs.0.duration.text as walk_time %}
+              {% blocktrans %}About {{ walk_time }} walk{% endblocktrans %}
+              ({{ directions.routes.0.legs.0.distance.text }})</a>
+            {% endwith %}
         </div>
         {% endif %}
       {% endif %}
@@ -40,18 +44,22 @@
 
       {% if only_polling_stations or only_polling_districts or no_data %}
         <p class="lead">
-          Phone {{ council.name }}:
+          {% blocktrans %}Phone {{ council.name }}{% endblocktrans %}:
           <a href="tel:{{ council.phone }}">{{ council.phone }}</a>
         </p>
-        <p class="lead">And ask them:</p>
+        <p class="lead">{% blocktrans context "calling the council" %}And ask them{% endblocktrans %}:</p>
         <ul class="lead">
           <li>
+            {% blocktrans context "calling the council" %}
             Where your polling station is (you'll need to give them your full
             address)
+            {% endblocktrans %}
           </li>
           <li>
+            {% blocktrans context "calling the council" %}
             If they will help make this information available online in the future
             by helping this project (say you came from this site)
+            {% endblocktrans %}
           </li>
         </ul>
       {% endif %}
@@ -66,15 +74,17 @@
 
   <div class="columns large-4">
     <div class="card">
+        {% blocktrans %}
         <h3>You don't need your poll card to vote</h3>
         <p>If you don't have your polling card, you can just go to the polling
             station and give them your name and address.</p>
         <p>You don't need any other form of ID.</p>
+        {% endblocktrans %}
     </div>
 
 
     <div class="card">
-      <h3>Council Contact info</h3>
+      <h3>{% trans "Council Contact info" %}</h3>
       <address>
         {{ council.address|linebreaksbr }}<br>
         {{ council.postcode }}<br><br>

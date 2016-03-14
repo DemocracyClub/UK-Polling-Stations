@@ -21,8 +21,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 
-
 core_patterns = patterns(
+
     url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
@@ -35,7 +35,7 @@ core_patterns = patterns(
 
 extra_patterns = patterns(
     '',
-
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 

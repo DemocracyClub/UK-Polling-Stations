@@ -6,6 +6,7 @@ from os.path import join, abspath, dirname
 here = lambda *x: join(abspath(dirname(__file__)), *x)
 PROJECT_ROOT = here("..")
 root = lambda *x: join(abspath(PROJECT_ROOT), *x)
+repo_root = lambda *x: join(abspath(here("../..")), *x)
 
 sys.path.insert(0, root('apps'))
 
@@ -123,6 +124,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -207,10 +209,16 @@ LOGGING = {
 }
 
 from django.utils.translation import ugettext_lazy as _
+LANGUAGE_CODE = 'en'
 LANGUAGES = [
-  ('en', _('English')),
-  ('cy-gb', _('Welsh')),
+  ('en', 'English'),
+  ('cy-gb', 'Welsh'),
 ]
+USE_I18N = True,
+USE_L10N = True,
+LOCALE_PATHS = (
+    repo_root('locale'),
+)
 
 
 # API Settings
