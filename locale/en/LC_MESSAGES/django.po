@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 14:23+0000\n"
+"POT-Creation-Date: 2016-03-14 18:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: polling_stations/apps/nus_wales/templates/nus_wales/base.html:9
 #: polling_stations/templates/home.html:11
 msgid "Find your polling station"
 msgstr ""
 
-#: polling_stations/templates/home.html:19
+#: polling_stations/templates/home.html:17
 msgid "Enter Your Postcode"
 msgstr ""
 
-#: polling_stations/templates/home.html:22
+#: polling_stations/templates/home.html:20
 msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 msgstr ""
 
-#: polling_stations/templates/home.html:23
+#: polling_stations/templates/home.html:21
 msgid "Find your Polling Station"
 msgstr ""
 

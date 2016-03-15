@@ -3,14 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Gair Cymraeg <Gaircymraeg@nus.org.uk>, 2016
+# Gareth Morlais, 2016
 # Sym Roe <sym@talusdesign.co.uk>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-14 14:23+0000\n"
-"PO-Revision-Date: 2016-03-14 14:34+0000\n"
-"Last-Translator: Sym Roe <sym@talusdesign.co.uk>\n"
+"PO-Revision-Date: 2016-03-15 10:14+0000\n"
+"Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-club/uk-polling-stations/language/cy_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,43 +22,43 @@ msgstr ""
 
 #: polling_stations/templates/home.html:11
 msgid "Find your polling station"
-msgstr ""
+msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/home.html:19
 msgid "Enter Your Postcode"
-msgstr ""
+msgstr "Nodwch eich cod post"
 
 #: polling_stations/templates/home.html:22
 msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
-msgstr ""
+msgstr "e.e. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 
 #: polling_stations/templates/home.html:23
 msgid "Find your Polling Station"
-msgstr ""
+msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/postcode_view.html:17
 msgid "Your polling station"
-msgstr ""
+msgstr "Eich gorsaf bleidleisio"
 
 #: polling_stations/templates/postcode_view.html:20
 #, python-format
 msgid "Contact %(council.name)s to find out where you should vote"
-msgstr ""
+msgstr "Cysylltwch â Chyngor %(council.name)s i gael gwybod ble ddylech chi bleidleisio"
 
 #: polling_stations/templates/postcode_view.html:37
 #, python-format
 msgid "About %(walk_time)s walk"
-msgstr ""
+msgstr "Tua %(walk_time)s o gerdded"
 
 #: polling_stations/templates/postcode_view.html:47
 #, python-format
 msgid "Phone %(council.name)s"
-msgstr ""
+msgstr "Ffoniwch Gyngor %(council.name)s"
 
 #: polling_stations/templates/postcode_view.html:50
 msgctxt "calling the council"
 msgid "And ask them"
-msgstr ""
+msgstr "A gofynnwch iddyn nhw"
 
 #: polling_stations/templates/postcode_view.html:53
 msgctxt "calling the council"
@@ -65,7 +67,7 @@ msgid ""
 "            Where your polling station is (you'll need to give them your full\n"
 "            address)\n"
 "            "
-msgstr ""
+msgstr "\nLleoliad eich swyddfa bleidleisio \n(bydd angen ichi roi eich\ncyfeiriad)"
 
 #: polling_stations/templates/postcode_view.html:59
 msgctxt "calling the council"
@@ -74,7 +76,7 @@ msgid ""
 "            If they will help make this information available online in the future\n"
 "            by helping this project (say you came from this site)\n"
 "            "
-msgstr ""
+msgstr "\nOs wnawn nhw ryddhau'r wybodaeth arlein yn y dyfodol\n wrth iddynt helpu'r prosiect hon (soniwch eich bod wedi dod o'r fan hyn)"
 
 #: polling_stations/templates/postcode_view.html:77
 msgid ""
@@ -84,8 +86,8 @@ msgid ""
 "            station and give them your name and address.</p>\n"
 "        <p>You don't need any other form of ID.</p>\n"
 "        "
-msgstr ""
+msgstr "\n<h3>Does dim angen eich cerdyn pleidleisio i bleidleisio</h3>\n<p>Os nad oes gennych chi eich cerdyn pleidleisio, gallwch fynd i'r orsaf bleidleisio a rhoi eich enw a'ch cyfeiriad.</p>\n<p>Does dim angen unrhyw fodd arall o adnabod arnoch.</p>"
 
 #: polling_stations/templates/postcode_view.html:87
 msgid "Council Contact info"
-msgstr ""
+msgstr "Manylion Cyswllt y Cyngor"
