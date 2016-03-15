@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 
 <div class="row">
   <div class="columns large-12">
     <div class="card">
-
-      <h2>
-        Choose Your Address / Street
+      <h2 id="address_picker">
+        {% trans "Choose Your Address / Street" %}
       </h2>
 
       <form method=post class="form form-inline">
         {% csrf_token %}
         <div class="form-group">
             {{ form.as_p }}
-            <button type="submit" class="button" id="submit-address"
-                    data-loading-text="Find your Polling Station">
-              Find your Polling Station
+            <button type="submit" class="button" id="submit-address">
+              {% trans "Find your Polling Station" %}
             </button>
         </div>
       </form>
