@@ -11,6 +11,7 @@ from django.views.generic import FormView, DetailView, TemplateView
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
+from data_finder.models import LoggedPostcode
 from pollingstations.models import (
     PollingDistrict,
     PollingStation,
@@ -36,6 +37,18 @@ def natural_sort(l, key):
     alphanum_key = lambda item: [ convert(c) for c in re.split('([0-9]+)', key(item)) ]
     return sorted(l, key = alphanum_key)
 
+
+class LogLookUpMixin(object):
+    def log_postcode(self, postcode, context):
+        kwargs = {
+            'postcode': postcode,
+            'had_data': bool(context['we_know_where_you_should_vote']),
+            'location': context['location'],
+            'council': context['council'],
+            'brand': self.request.brand,
+        }
+        kwargs.update(self.request.session['utm_data'])
+        LoggedPostcode.objects.create(**kwargs)
 
 class HomeView(FormView):
     form_class = PostcodeLookupForm
@@ -82,7 +95,7 @@ class HomeView(FormView):
         return super(HomeView, self).form_valid(form)
 
 
-class PostcodeView(TemplateView):
+class PostcodeView(TemplateView, LogLookUpMixin):
     template_name = "postcode_view.html"
 
 
@@ -140,10 +153,11 @@ class PostcodeView(TemplateView):
         context['no_data'] = (not context['points']) and (not context['has_polling_district'])
         context['areas'] = areas
         context['council'] = areas['council']
+        self.log_postcode(self.kwargs['postcode'], context)
         return context
 
 
-class AddressView(TemplateView):
+class AddressView(TemplateView, LogLookUpMixin):
     template_name = "postcode_view.html"
 
     def get_context_data(self, **context):
@@ -184,6 +198,7 @@ class AddressView(TemplateView):
         context['we_know_where_you_should_vote'] = context['points']
         context['no_data'] = (not context['points']) and (not context['has_polling_district'])
         context['council'] = council
+        self.log_postcode(address.postcode, context)
         return context
 
 

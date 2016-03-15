@@ -128,6 +128,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'data_finder.middleware.UTMTrackerModdleware',
     'whitelabel.middleware.WhiteLabelModdleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -164,6 +165,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'rest_framework',
+    'django_extensions',
 )
 
 PROJECT_APPS = (
