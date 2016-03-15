@@ -17,7 +17,7 @@
           {% trans "Your polling station" %}
         {% endif %}
         {% if only_polling_stations or only_polling_districts or no_data %}
-          {% blocktrans %}Contact {{ council.name }} to find out where you should vote{% endblocktrans %}
+          {% blocktrans with council.name as council_name %}Contact {{ council_name }}{% endblocktrans %}
         {% endif %}
       </h2>
 
@@ -43,28 +43,15 @@
 
 
       {% if only_polling_stations or only_polling_districts or no_data %}
-        <p class="lead">
-          {% blocktrans %}Phone {{ council.name }}{% endblocktrans %}:
-          <a href="tel:{{ council.phone }}">{{ council.phone }}</a>
-        </p>
-        <p class="lead">{% blocktrans context "calling the council" %}And ask them{% endblocktrans %}:</p>
-        <ul class="lead">
-          <li>
-            {% blocktrans context "calling the council" %}
-            Where your polling station is (you'll need to give them your full
-            address)
-            {% endblocktrans %}
-          </li>
-          <li>
-            {% blocktrans context "calling the council" %}
-            If they will help make this information available online in the future
-            by helping this project (say you came from this site)
-            {% endblocktrans %}
-          </li>
-        </ul>
+          {% blocktrans with council.phone as council_phone %}
+          <p>We don't have data for your area, so you need to contact the council.</p>
+          <p>You can call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
+          {% endblocktrans %}
       {% endif %}
 
+      {% if we_know_where_you_should_vote %}
       <div id="area_map" class="card_inset"></div>
+      {% endif %}
 
 
     </div>
