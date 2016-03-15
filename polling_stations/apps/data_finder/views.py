@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, DetailView, TemplateView
+from django.utils.translation import ugettext as _
 
 from councils.models import Council
 from pollingstations.models import (
@@ -128,6 +129,11 @@ class PostcodeView(TemplateView):
                 context['points'][0].location.x
             )
             context['directions'] = requests.get(url).json()
+            try:
+                context['walk_time'] = str(context['directions']['routes'][0]['legs'][0]['duration']['text'])
+                context['walk_time'] = context['walk_time'].replace('mins', _('minutes'))
+            except:
+                pass
 
         context['we_know_where_you_should_vote'] = context['points'] and context['has_polling_district']
         context['only_polling_stations'] = context['points'] and (not context['has_polling_district'])
