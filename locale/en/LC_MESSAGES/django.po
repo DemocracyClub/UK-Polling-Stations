@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 22:18+0000\n"
+"POT-Creation-Date: 2016-03-15 22:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: polling_stations/apps/data_finder/views.py:134
+msgid "minutes"
+msgstr ""
+
 #: polling_stations/apps/nus_wales/templates/nus_wales/base.html:9
 #: polling_stations/templates/home.html:11
 msgid "Find your polling station"
+msgstr ""
+
+#: polling_stations/templates/address_select.html:11
+msgid "Choose Your Address / Street"
+msgstr ""
+
+#: polling_stations/templates/address_select.html:19
+#: polling_stations/templates/home.html:21
+msgid "Find your Polling Station"
 msgstr ""
 
 #: polling_stations/templates/home.html:17
@@ -28,10 +41,6 @@ msgstr ""
 
 #: polling_stations/templates/home.html:20
 msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
-msgstr ""
-
-#: polling_stations/templates/home.html:21
-msgid "Find your Polling Station"
 msgstr ""
 
 #: polling_stations/templates/postcode_view.html:17
@@ -43,12 +52,12 @@ msgstr ""
 msgid "Contact %(council_name)s"
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:37
+#: polling_stations/templates/postcode_view.html:36
 #, python-format
 msgid "About %(walk_time)s walk"
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:46
+#: polling_stations/templates/postcode_view.html:44
 #, python-format
 msgid ""
 "\n"
@@ -59,7 +68,7 @@ msgid ""
 "          "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:64
+#: polling_stations/templates/postcode_view.html:62
 msgid ""
 "\n"
 "        <h3>You don't need your poll card to vote</h3>\n"
@@ -77,6 +86,16 @@ msgid ""
 "        "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:79
+#: polling_stations/templates/postcode_view.html:77
 msgid "Council Contact info"
+msgstr ""
+
+#: polling_stations/templates/postcode_view.html:81
+msgctxt "Short for Phone:"
+msgid "P:"
+msgstr ""
+
+#: polling_stations/templates/postcode_view.html:82
+msgctxt "Short for Email:"
+msgid "E:"
 msgstr ""

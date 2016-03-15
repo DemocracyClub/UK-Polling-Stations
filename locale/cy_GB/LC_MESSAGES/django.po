@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 22:18+0000\n"
+"POT-Creation-Date: 2016-03-15 22:48+0000\n"
 "PO-Revision-Date: 2016-03-15 10:14+0000\n"
 "Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
@@ -22,9 +22,22 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
 "11) ? 2 : 3;\n"
 
+#: polling_stations/apps/data_finder/views.py:134
+msgid "minutes"
+msgstr ""
+
 #: polling_stations/apps/nus_wales/templates/nus_wales/base.html:9
 #: polling_stations/templates/home.html:11
 msgid "Find your polling station"
+msgstr "Dod o hyd i'ch gorsaf bleidleisio"
+
+#: polling_stations/templates/address_select.html:11
+msgid "Choose Your Address / Street"
+msgstr ""
+
+#: polling_stations/templates/address_select.html:19
+#: polling_stations/templates/home.html:21
+msgid "Find your Polling Station"
 msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/home.html:17
@@ -34,10 +47,6 @@ msgstr "Nodwch eich cod post"
 #: polling_stations/templates/home.html:20
 msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 msgstr "e.e. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
-
-#: polling_stations/templates/home.html:21
-msgid "Find your Polling Station"
-msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/postcode_view.html:17
 msgid "Your polling station"
@@ -49,12 +58,12 @@ msgstr "Eich gorsaf bleidleisio"
 msgid "Contact %(council_name)s"
 msgstr "Ffoniwch Gyngor %(council.name)s"
 
-#: polling_stations/templates/postcode_view.html:37
+#: polling_stations/templates/postcode_view.html:36
 #, python-format
 msgid "About %(walk_time)s walk"
 msgstr "Tua %(walk_time)s o gerdded"
 
-#: polling_stations/templates/postcode_view.html:46
+#: polling_stations/templates/postcode_view.html:44
 #, python-format
 msgid ""
 "\n"
@@ -65,7 +74,7 @@ msgid ""
 "          "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:64
+#: polling_stations/templates/postcode_view.html:62
 msgid ""
 "\n"
 "        <h3>You don't need your poll card to vote</h3>\n"
@@ -83,9 +92,19 @@ msgid ""
 "        "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:79
+#: polling_stations/templates/postcode_view.html:77
 msgid "Council Contact info"
 msgstr "Manylion Cyswllt y Cyngor"
+
+#: polling_stations/templates/postcode_view.html:81
+msgctxt "Short for Phone:"
+msgid "P:"
+msgstr ""
+
+#: polling_stations/templates/postcode_view.html:82
+msgctxt "Short for Email:"
+msgid "E:"
+msgstr ""
 
 #~ msgid "Contact %(council.name)s to find out where you should vote"
 #~ msgstr ""
