@@ -241,6 +241,9 @@ WHITELABEL_PREFIXES = (
     'nus_wales',
 )
 
+
+INTERNAL_IPS = ('127.0.0.1')
+
 # .local.py overrides all the common settings.
 try:
     from .local import *
