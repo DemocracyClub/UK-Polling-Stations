@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # Gair Cymraeg <Gaircymraeg@nus.org.uk>, 2016
 # Gareth Morlais, 2016
@@ -10,29 +10,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 14:23+0000\n"
+"POT-Creation-Date: 2016-03-15 22:18+0000\n"
 "PO-Revision-Date: 2016-03-15 10:14+0000\n"
 "Last-Translator: Gareth Morlais\n"
-"Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-club/uk-polling-stations/language/cy_GB/)\n"
+"Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
+"club/uk-polling-stations/language/cy_GB/)\n"
+"Language: cy_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cy_GB\n"
-"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
+"11) ? 2 : 3;\n"
 
+#: polling_stations/apps/nus_wales/templates/nus_wales/base.html:9
 #: polling_stations/templates/home.html:11
 msgid "Find your polling station"
 msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
-#: polling_stations/templates/home.html:19
+#: polling_stations/templates/home.html:17
 msgid "Enter Your Postcode"
 msgstr "Nodwch eich cod post"
 
-#: polling_stations/templates/home.html:22
+#: polling_stations/templates/home.html:20
 msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 msgstr "e.e. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 
-#: polling_stations/templates/home.html:23
+#: polling_stations/templates/home.html:21
 msgid "Find your Polling Station"
 msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
@@ -41,53 +44,94 @@ msgid "Your polling station"
 msgstr "Eich gorsaf bleidleisio"
 
 #: polling_stations/templates/postcode_view.html:20
-#, python-format
-msgid "Contact %(council.name)s to find out where you should vote"
-msgstr "Cysylltwch â Chyngor %(council.name)s i gael gwybod ble ddylech chi bleidleisio"
+#, fuzzy, python-format
+#| msgid "Phone %(council.name)s"
+msgid "Contact %(council_name)s"
+msgstr "Ffoniwch Gyngor %(council.name)s"
 
 #: polling_stations/templates/postcode_view.html:37
 #, python-format
 msgid "About %(walk_time)s walk"
 msgstr "Tua %(walk_time)s o gerdded"
 
-#: polling_stations/templates/postcode_view.html:47
+#: polling_stations/templates/postcode_view.html:46
 #, python-format
-msgid "Phone %(council.name)s"
-msgstr "Ffoniwch Gyngor %(council.name)s"
-
-#: polling_stations/templates/postcode_view.html:50
-msgctxt "calling the council"
-msgid "And ask them"
-msgstr "A gofynnwch iddyn nhw"
-
-#: polling_stations/templates/postcode_view.html:53
-msgctxt "calling the council"
 msgid ""
 "\n"
-"            Where your polling station is (you'll need to give them your full\n"
-"            address)\n"
-"            "
-msgstr "\nLleoliad eich swyddfa bleidleisio \n(bydd angen ichi roi eich\ncyfeiriad)"
+"          <p>We don't have data for your area, so you need to contact the "
+"council.</p>\n"
+"          <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong></p>\n"
+"          "
+msgstr ""
 
-#: polling_stations/templates/postcode_view.html:59
-msgctxt "calling the council"
-msgid ""
-"\n"
-"            If they will help make this information available online in the future\n"
-"            by helping this project (say you came from this site)\n"
-"            "
-msgstr "\nOs wnawn nhw ryddhau'r wybodaeth arlein yn y dyfodol\n wrth iddynt helpu'r prosiect hon (soniwch eich bod wedi dod o'r fan hyn)"
-
-#: polling_stations/templates/postcode_view.html:77
+#: polling_stations/templates/postcode_view.html:64
 msgid ""
 "\n"
 "        <h3>You don't need your poll card to vote</h3>\n"
-"        <p>If you don't have your polling card, you can just go to the polling\n"
+"        <p>If you don't have your poll card, you can go to the polling\n"
 "            station and give them your name and address.</p>\n"
 "        <p>You don't need any other form of ID.</p>\n"
+"        <p>If you haven’t received a polling card but think you should have "
+"done, contact your council</p>\n"
+"        <p><strong>Polling stations are open from 7am to 10pm on polling day."
+"</strong></p>\n"
+"        <p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" "
+"target=\"_blank\">\n"
+"          Read more about voting in the UK\n"
+"        </a></p>\n"
 "        "
-msgstr "\n<h3>Does dim angen eich cerdyn pleidleisio i bleidleisio</h3>\n<p>Os nad oes gennych chi eich cerdyn pleidleisio, gallwch fynd i'r orsaf bleidleisio a rhoi eich enw a'ch cyfeiriad.</p>\n<p>Does dim angen unrhyw fodd arall o adnabod arnoch.</p>"
+msgstr ""
 
-#: polling_stations/templates/postcode_view.html:87
+#: polling_stations/templates/postcode_view.html:79
 msgid "Council Contact info"
 msgstr "Manylion Cyswllt y Cyngor"
+
+#~ msgid "Contact %(council.name)s to find out where you should vote"
+#~ msgstr ""
+#~ "Cysylltwch â Chyngor %(council.name)s i gael gwybod ble ddylech chi "
+#~ "bleidleisio"
+
+#~ msgctxt "calling the council"
+#~ msgid "And ask them"
+#~ msgstr "A gofynnwch iddyn nhw"
+
+#~ msgctxt "calling the council"
+#~ msgid ""
+#~ "\n"
+#~ "            Where your polling station is (you'll need to give them your "
+#~ "full\n"
+#~ "            address)\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "Lleoliad eich swyddfa bleidleisio \n"
+#~ "(bydd angen ichi roi eich\n"
+#~ "cyfeiriad)"
+
+#~ msgctxt "calling the council"
+#~ msgid ""
+#~ "\n"
+#~ "            If they will help make this information available online in "
+#~ "the future\n"
+#~ "            by helping this project (say you came from this site)\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "Os wnawn nhw ryddhau'r wybodaeth arlein yn y dyfodol\n"
+#~ " wrth iddynt helpu'r prosiect hon (soniwch eich bod wedi dod o'r fan hyn)"
+
+#~ msgid ""
+#~ "\n"
+#~ "        <h3>You don't need your poll card to vote</h3>\n"
+#~ "        <p>If you don't have your polling card, you can just go to the "
+#~ "polling\n"
+#~ "            station and give them your name and address.</p>\n"
+#~ "        <p>You don't need any other form of ID.</p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "<h3>Does dim angen eich cerdyn pleidleisio i bleidleisio</h3>\n"
+#~ "<p>Os nad oes gennych chi eich cerdyn pleidleisio, gallwch fynd i'r orsaf "
+#~ "bleidleisio a rhoi eich enw a'ch cyfeiriad.</p>\n"
+#~ "<p>Does dim angen unrhyw fodd arall o adnabod arnoch.</p>"

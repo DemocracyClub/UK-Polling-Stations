@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 18:32+0000\n"
+"POT-Creation-Date: 2016-03-15 22:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: polling_stations/templates/postcode_view.html:20
 #, python-format
-msgid "Contact %(council.name)s to find out where you should vote"
+msgid "Contact %(council_name)s"
 msgstr ""
 
 #: polling_stations/templates/postcode_view.html:37
@@ -48,47 +48,35 @@ msgstr ""
 msgid "About %(walk_time)s walk"
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:47
+#: polling_stations/templates/postcode_view.html:46
 #, python-format
-msgid "Phone %(council.name)s"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:50
-msgctxt "calling the council"
-msgid "And ask them"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:53
-msgctxt "calling the council"
 msgid ""
 "\n"
-"            Where your polling station is (you'll need to give them your "
-"full\n"
-"            address)\n"
-"            "
+"          <p>We don't have data for your area, so you need to contact the "
+"council.</p>\n"
+"          <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong></p>\n"
+"          "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:59
-msgctxt "calling the council"
-msgid ""
-"\n"
-"            If they will help make this information available online in the "
-"future\n"
-"            by helping this project (say you came from this site)\n"
-"            "
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:77
+#: polling_stations/templates/postcode_view.html:64
 msgid ""
 "\n"
 "        <h3>You don't need your poll card to vote</h3>\n"
-"        <p>If you don't have your polling card, you can just go to the "
-"polling\n"
+"        <p>If you don't have your poll card, you can go to the polling\n"
 "            station and give them your name and address.</p>\n"
 "        <p>You don't need any other form of ID.</p>\n"
+"        <p>If you haven’t received a polling card but think you should have "
+"done, contact your council</p>\n"
+"        <p><strong>Polling stations are open from 7am to 10pm on polling day."
+"</strong></p>\n"
+"        <p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" "
+"target=\"_blank\">\n"
+"          Read more about voting in the UK\n"
+"        </a></p>\n"
 "        "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:87
+#: polling_stations/templates/postcode_view.html:79
 msgid "Council Contact info"
 msgstr ""
