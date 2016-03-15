@@ -23,6 +23,7 @@ UK-Polling-Stations requires Postgres, PostGIS, libgeos and GDAL.
 On Mac OSX, run:
 ```
 brew install postgresql
+brew install postgis
 brew install geos
 brew install gdal
 ```
