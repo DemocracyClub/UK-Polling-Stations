@@ -21,8 +21,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 
-
 core_patterns = patterns(
+
     url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
@@ -35,7 +35,7 @@ core_patterns = patterns(
 
 extra_patterns = patterns(
     '',
-
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
@@ -47,14 +47,13 @@ extra_patterns = patterns(
     url(r'^about$', TemplateView.as_view(template_name='about.html'), name='about'),
 )
 
-for EMBED in settings.EMBED_PREFIXES:
+PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
+for EMBED in PREFIXED_URLS:
     extra_patterns += patterns(
         '',
         url(r'^%s/' % EMBED, include('whitelabel.urls')),
     )
 
-urlpatterns =  extra_patterns + core_patterns + static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+urlpatterns =  extra_patterns + core_patterns+ static(
+    settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

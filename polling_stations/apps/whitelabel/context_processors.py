@@ -4,7 +4,8 @@ from django.template.loader import select_template
 
 def base_template(request):
     base_path = request.path.split('/')[1]
-    if base_path in settings.EMBED_PREFIXES:
+    PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
+    if base_path in PREFIXED_URLS:
         template_name = select_template([
             '%s.html' % base_path,
             '%s/base.html' % base_path,

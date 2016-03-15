@@ -1,100 +1,104 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+{% load static %}
+
+{% block extra_page_css %}
+<link rel="stylesheet" href="{% static "css/map.css" %}" />
+{% endblock extra_page_css %}
+
 {% block content %}
-  <div class="page-header">
-    <h2>
-      {% if we_know_where_you_should_vote %}
-        {% if not is_whitelabel %}
-        We think we know where you should vote
-        {% endif %}
-      {% endif %}
-      {% if only_polling_stations or only_polling_districts or no_data %}
-        Contact {{ council.name }} to find out where you should vote
-      {% endif %}
-    </h2>
-  </div>
 
-  <main>
-
-    <div class="row">
-      <div class="col-md-6 col-sm-12">
-
+<div class="row">
+  <div class="columns large-8">
+    <div class="card">
+      <h2>
         {% if we_know_where_you_should_vote %}
-          <h3 class="notopmargin">Your Polling Station</h3>
-          <address>
-            {{ points.0.address|linebreaksbr }}<br>
-            {% if points.0.postcode %}
-              {% if not points.0.postcode in points.0.address %}
-                {{ points.0.postcode }}
-              {% endif %}
-            {% endif %}
-          </address>
-          {% if directions.routes.0.legs.0.duration.text %}
-          <div id="directions">
-            <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.location.y }},{{ points.0.location.x }}">
-              About {{ directions.routes.0.legs.0.duration.text }} walk
-              ({{ directions.routes.0.legs.0.distance.text }})</a>
-          </div>
-          {% endif %}
+          {% trans "Your polling station" %}
         {% endif %}
-
-
         {% if only_polling_stations or only_polling_districts or no_data %}
-          <p class="lead">
-            Phone {{ council.name }}:
-            <a href="tel:{{ council.phone }}">{{ council.phone }}</a>
-          </p>
-          <p class="lead">And ask them:</p>
-          <ul class="lead">
-            <li>
-              Where your polling station is (you'll need to give them your full
-              address)
-            </li>
-            <li>
-              If they will help make this information available online in the future
-              by helping this project (say you came from this site)
-            </li>
-          </ul>
+          {% blocktrans %}Contact {{ council.name }} to find out where you should vote{% endblocktrans %}
         {% endif %}
+      </h2>
 
-        <h3 class="{% if not we_know_where_you_should_vote %}notopmargin{% endif %}">
-          Council Contact info
-        </h3>
+      {% if we_know_where_you_should_vote %}
         <address>
-          {{ council.address|linebreaksbr }}<br>
-          {{ council.postcode }}<br><br>
-          <abbr title="Phone">P:</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
-          <abbr title="Email">E:</abbr>
-          <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+          {{ points.0.address|linebreaksbr }}<br>
+          {% if points.0.postcode %}
+            {% if not points.0.postcode in points.0.address %}
+              {{ points.0.postcode }}
+            {% endif %}
+          {% endif %}
         </address>
-
-
-        {% if we_know_where_you_should_vote and not is_whitelabel %}
-        <h3>Disclaimer</h3>
-        <p>We cannot be 100% that the information presented here is correct.</p>
-        <p>The people at the polling station shown will be able to tell you
-          if you are at the right place or tell you where your actual polling
-          station is.</p>
-        <p>If in doubt, you should <a href="tel:{{ council.phone }}">
-            phone your council</a></p>
+        {% if directions.routes.0.legs.0.duration.text %}
+        <div id="directions">
+          <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.location.y }},{{ points.0.location.x }}">
+            {% with directions.routes.0.legs.0.duration.text as walk_time %}
+              {% blocktrans %}About {{ walk_time }} walk{% endblocktrans %}
+              ({{ directions.routes.0.legs.0.distance.text }})</a>
+            {% endwith %}
+        </div>
         {% endif %}
-      </div>
+      {% endif %}
 
 
-      <div class="col-md-6">
-        <!-- This is the main right hand column ! -->
-        <h3>You don't need your polling card to vote</h3>
-        <p>If you don't have your polling card, you can just turn up at the polling
-            station and give them your name and address.  You don't need anything else.</p>
-      <div id="area_map"></div>
-      </div> <!-- Main right hand column -->
+      {% if only_polling_stations or only_polling_districts or no_data %}
+        <p class="lead">
+          {% blocktrans %}Phone {{ council.name }}{% endblocktrans %}:
+          <a href="tel:{{ council.phone }}">{{ council.phone }}</a>
+        </p>
+        <p class="lead">{% blocktrans context "calling the council" %}And ask them{% endblocktrans %}:</p>
+        <ul class="lead">
+          <li>
+            {% blocktrans context "calling the council" %}
+            Where your polling station is (you'll need to give them your full
+            address)
+            {% endblocktrans %}
+          </li>
+          <li>
+            {% blocktrans context "calling the council" %}
+            If they will help make this information available online in the future
+            by helping this project (say you came from this site)
+            {% endblocktrans %}
+          </li>
+        </ul>
+      {% endif %}
+
+      <div id="area_map" class="card_inset"></div>
+
 
     </div>
-</main>
 
+  </div>
+
+
+  <div class="columns large-4">
+    <div class="card">
+        {% blocktrans %}
+        <h3>You don't need your poll card to vote</h3>
+        <p>If you don't have your polling card, you can just go to the polling
+            station and give them your name and address.</p>
+        <p>You don't need any other form of ID.</p>
+        {% endblocktrans %}
+    </div>
+
+
+    <div class="card">
+      <h3>{% trans "Council Contact info" %}</h3>
+      <address>
+        {{ council.address|linebreaksbr }}<br>
+        {{ council.postcode }}<br><br>
+        <abbr title="Phone">P:</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
+        <abbr title="Email">E:</abbr>
+        <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+      </address>
+    </div>
+
+  </div>
+</div>
 {% endblock content %}
 
-{% block extra_javascript %}
+{% block in_page_javascript %}
   <style>
     .council_location_icon {
     background-color:black;
@@ -106,68 +110,55 @@
   <script>
 
     // Maps
-    window.create_area_map = function(point, feature) {
-    var area = L.geoJson(feature);
-    // var council_location = L.geoJson(point);
-    var council_location = point;
-    var b = area.getBounds();
+    window.create_area_map = function(point) {
+      // var council_location = L.geoJson(point);
+      var polling_station_location = point;
 
-    var map = L.map('area_map', {zoomControl:true}).setView(b.getCenter(), 14);
-    map.fitBounds(map.fitBounds(b));
-    // map.dragging.disable();
-    // map.touchZoom.disable();
-    // map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
+      var map = L.map('area_map', {zoomControl:true});
+      // map.dragging.disable();
+      // map.touchZoom.disable();
+      // map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
 
-    var Stamen_TonerLite = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    subdomains: 'abcd',
-    }).addTo(map);
-
-    var Neighbours = {
-    "color": "#666",
-    "weight": 5,
-    "opacity": 0.65
-    };
-
-    window.map = map;
-
-    area.addTo(map);
-
-    {% for area in areas.neighbours %}
-      L.geoJson({{ area.area.geojson|safe }}, {
-      style: Neighbours
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
       }).addTo(map);
-    {% endfor %}
 
-    {% for station in points %}
-      L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-      'icon': L.divIcon({className: 'fa fa-lg fa-plus-square-o'}),
-      'clickable': true,
-      }).addTo(map);
-    {% endfor %}
+      window.map = map;
+      window.polling_station_location = polling_station_location;
 
+      // area.addTo(map);
 
-    L.marker(council_location, {
-    'icon': L.divIcon({className: 'fa fa-lg fa-home'}),
-    'clickable': false,
-    }).addTo(map);
-
+      {% for station in points %}
+        L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
+        'clickable': true,
+        }).addTo(map);
+        map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
+      {% endfor %}
     }
 
     var point = [{{ location.1 }}, {{ location.0 }}];
 
-    {% if areas.polling_district %}
-      var feature = {{ areas.polling_district.area.geojson|safe }};
-    {% endif %}
-
-    {% if not has_polling_district %}
-      var feature = {{ areas.council.area.geojson|safe }};
-    {% endif %}
-
     fallback.ready(['L'], function() {
-        create_area_map(point, feature);
+        create_area_map(point);
     });
 
   </script>
+{% endblock in_page_javascript %}
+
+
+{% block extra_javascript %}
+<script type="text/javascript">
+        fallback.load({
+          L: [
+              '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+              '{% static 'js/leaflet.js' %}'
+          ]}, {
+            shim: {
+              'L': 'jQuery'
+            }
+          }
+        );
+    </script>
+<script src=""></script>
 {% endblock extra_javascript %}

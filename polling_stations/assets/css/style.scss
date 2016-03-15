@@ -1,0 +1,24 @@
+@import 'dc_base';
+
+body.embed {
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+footer {
+  margin-top: 2em;
+
+  .dc-logo {
+      height: 45px;
+      margin-left: .5em;
+  }
+
+}
+
+select.select_multirow {
+    height: auto;
+}
+
+select[size], select[multiple] {
+    background-image: none;
+}

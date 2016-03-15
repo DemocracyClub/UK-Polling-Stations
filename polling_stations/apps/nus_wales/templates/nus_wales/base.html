@@ -1,9 +1,14 @@
-{% extends "template.html" %}
+{% extends "dc_base.html" %}
+{% load i18n %}
 {% load staticfiles %}
-{% block body %}
+{% block body_base %}
   <body class="embed">
     <header style="background-color:#00677f;padding:2em;color:#FFF;margin:2em 0;">
-      <h2>Where can I vote?</h2>
+      <div class="row">
+        <div class="columns large-12">
+          <h2>{% trans "Find your polling station" %}</h2>
+        </div>
+      </div>
     </header>
 
     <div class="container">
@@ -13,12 +18,12 @@
     </div>
 
     <footer class="footer">
-      <div class="container">
-        <div class="col-md-6">
+      <div class="row">
+        <div class="columns large-12">
           <h1><img src="{% static 'images/nus_logo.jpg' %}" width=200>
             <img src="{% static 'images/logo-with-text.png' %}" width=200></h1>
         </div>
       </div>
     </footer>
-{% endblock body %}
+{% endblock body_base %}
 
