@@ -95,12 +95,11 @@ class PostcodeView(TemplateView):
 
         stations = PollingStation.objects.filter(
             location__within=areas['polling_district'].area)
-        if stations:
+
+        if len(stations) == 1:
             return stations
 
-        return PollingStation.objects.filter(
-            location__within=areas['council'].area)
-
+        return []
 
 
     def get_context_data(self, **context):

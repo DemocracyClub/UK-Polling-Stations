@@ -9,6 +9,7 @@ import re
 import shapefile
 import sys
 import tempfile
+import urllib.request
 import zipfile
 
 from collections import namedtuple
@@ -242,21 +243,31 @@ class BaseKamlImporter(BaseImporter):
             'area'               : poly
         }
 
+    def add_kml_district(self, kml):
+        ds = DataSource(kml)
+        lyr = ds[0]
+        for feature in lyr:
+            district_info = self.district_record_to_dict(feature)
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+
+            self.add_polling_district(district_info)
+
+    def add_kml_station(self, kml):
+        ds = DataSource(kml)
+        lyr = ds[0]
+        for feature in lyr:
+            station_info = self.station_record_to_dict(feature)
+            if 'council' not in station_info:
+                station_info['council'] = self.council
+
+            self.add_polling_station(station_info)
+
     def import_polling_districts(self):
         districtsfile = os.path.join(self.base_folder_path, self.districts_name)
 
-        def add_kml_district(kml):
-            ds = DataSource(kml)
-            lyr = ds[0]
-            for feature in lyr:
-                district_info = self.district_record_to_dict(feature)
-                if 'council' not in district_info:
-                    district_info['council'] = self.council
-
-                self.add_polling_district(district_info)
-
         if not districtsfile.endswith('.kmz'):
-            add_kml_district(districtsfile)
+            self.add_kml_district(districtsfile)
             return
 
         # It's a .kmz file !
@@ -267,8 +278,54 @@ class BaseKamlImporter(BaseImporter):
 
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(kmlfile.read())
-            add_kml_district(tmp.name)
+            self.add_kml_district(tmp.name)
             tmp.close()
+
+
+class BaseApiKmlKmlImporter(BaseKamlImporter):
+    srid             = 4326
+    districts_srid   = 4326
+    districts_url    = None
+    stations_url     = None
+
+    # override handle because we aren't using files in this situation
+    def handle(self, *args, **kwargs):
+        if self.council_id is None:
+            self.council_id = args[0]
+
+        self.council = Council.objects.get(pk=self.council_id)
+
+        # Delete old data for this council
+        PollingStation.objects.filter(council=self.council).delete()
+        PollingDistrict.objects.filter(council=self.council).delete()
+        ResidentialAddress.objects.filter(council=self.council).delete()
+
+        self.import_data()
+
+        # Optional step for post import tasks
+        try:
+            self.post_import()
+        except NotImplementedError:
+            pass
+
+    def import_data(self):
+        # deal with 'stations only' or 'districts only' data
+        if self.districts_url is not None:
+            self.import_polling_districts()
+        if self.stations_url is not None:
+            self.import_polling_stations()
+
+    def import_polling_districts(self):
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
+            self.add_kml_district(tmp.name)
+        return
+
+    def import_polling_stations(self):
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
+            self.add_kml_station(tmp.name)
+        return
 
 
 class BaseAddressCsvImporter(BaseImporter):

@@ -11,6 +11,7 @@ django-model-utils==2.3.1
 djangorestframework==3.2.3
 fastkml==0.11
 git+git://github.com/geomet/geomet.git
+lxml==3.5.0
 markdown==2.6.2
 Pillow==2.9.0
 psycopg2==2.6.1
