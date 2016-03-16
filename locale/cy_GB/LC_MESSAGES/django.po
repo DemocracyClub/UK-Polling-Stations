@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 22:48+0000\n"
+"POT-Creation-Date: 2016-03-16 20:00+0000\n"
 "PO-Revision-Date: 2016-03-15 10:14+0000\n"
 "Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
@@ -22,12 +22,16 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
 "11) ? 2 : 3;\n"
 
-#: polling_stations/apps/data_finder/views.py:134
-msgid "minutes"
+#: polling_stations/apps/data_finder/views.py:148
+msgid "minute"
+msgstr ""
+
+#: polling_stations/apps/data_finder/views.py:151
+msgid "miles"
 msgstr ""
 
 #: polling_stations/apps/nus_wales/templates/nus_wales/base.html:9
-#: polling_stations/templates/home.html:11
+#: polling_stations/templates/home.html:12
 msgid "Find your polling station"
 msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
@@ -48,33 +52,52 @@ msgstr "Nodwch eich cod post"
 msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 msgstr "e.e. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 
-#: polling_stations/templates/postcode_view.html:17
-msgid "Your polling station"
+#: polling_stations/templates/postcode_view.html:10
+#, fuzzy
+#| msgid "Your polling station"
+msgid "Your Polling Station"
 msgstr "Eich gorsaf bleidleisio"
 
 #: polling_stations/templates/postcode_view.html:20
+msgid "Your polling station"
+msgstr "Eich gorsaf bleidleisio"
+
+#: polling_stations/templates/postcode_view.html:22
 #, fuzzy, python-format
 #| msgid "Phone %(council.name)s"
 msgid "Contact %(council_name)s"
 msgstr "Ffoniwch Gyngor %(council.name)s"
 
-#: polling_stations/templates/postcode_view.html:36
+#: polling_stations/templates/postcode_view.html:27
 #, python-format
-msgid "About %(walk_time)s walk"
-msgstr "Tua %(walk_time)s o gerdded"
+msgid "The polling station for <strong>%(postcode)s</strong> is:"
+msgstr ""
 
-#: polling_stations/templates/postcode_view.html:44
+#: polling_stations/templates/postcode_view.html:41
 #, python-format
 msgid ""
 "\n"
-"          <p>We don't have data for your area, so you need to contact the "
-"council.</p>\n"
-"          <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
-"%(council_phone)s</a></strong></p>\n"
-"          "
+"              It's about %(walk_dist)s away or a %(walk_time)s walk from "
+"%(postcode)s.\n"
+"            "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:62
+#: polling_stations/templates/postcode_view.html:45
+msgid "Get walking directions"
+msgstr ""
+
+#: polling_stations/templates/postcode_view.html:50
+#, python-format
+msgid ""
+"\n"
+"        <p>We don't have data for your area, so you need to contact the "
+"council.</p>\n"
+"        <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong></p>\n"
+"        "
+msgstr ""
+
+#: polling_stations/templates/postcode_view.html:65
 msgid ""
 "\n"
 "        <h3>You don't need your poll card to vote</h3>\n"
@@ -92,19 +115,33 @@ msgid ""
 "        "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:77
+#: polling_stations/templates/postcode_view.html:79
+msgid ""
+"\n"
+"        <h3>You need to be registered in order to vote</h3>\n"
+"        <p>If you aren’t registered to vote visit <a href=\"https://www.gov."
+"uk/register-to-vote\">https://www.gov.uk/register-to-vote</a> <strong>before "
+"the 18th of April</strong>.</p>\n"
+"\n"
+"        "
+msgstr ""
+
+#: polling_stations/templates/postcode_view.html:88
 msgid "Council Contact info"
 msgstr "Manylion Cyswllt y Cyngor"
 
-#: polling_stations/templates/postcode_view.html:81
+#: polling_stations/templates/postcode_view.html:92
 msgctxt "Short for Phone:"
 msgid "P:"
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:82
+#: polling_stations/templates/postcode_view.html:93
 msgctxt "Short for Email:"
 msgid "E:"
 msgstr ""
+
+#~ msgid "About %(walk_time)s walk"
+#~ msgstr "Tua %(walk_time)s o gerdded"
 
 #~ msgid "Contact %(council.name)s to find out where you should vote"
 #~ msgstr ""
