@@ -18,8 +18,7 @@
       <h2>
         {% if we_know_where_you_should_vote %}
           {% trans "Your polling station" %}
-        {% endif %}
-        {% if only_polling_stations or only_polling_districts or no_data %}
+        {% else %}
           {% blocktrans with council.name as council_name %}Contact {{ council_name }}{% endblocktrans %}
         {% endif %}
       </h2>
@@ -28,10 +27,10 @@
       {% blocktrans %}The polling station for <strong>{{ postcode }}</strong> is:{% endblocktrans %}
         <p>
           <address>
-            {{ points.0.formatted_address|linebreaksbr }}<br>
-            {% if points.0.postcode %}
-              {% if not points.0.postcode in points.0.address %}
-                {{ points.0.postcode }}
+            {{ station.formatted_address|linebreaksbr }}<br>
+            {% if station.postcode %}
+              {% if not station.postcode in station.address %}
+                {{ station.postcode }}
               {% endif %}
             {% endif %}
           </address>
@@ -42,19 +41,16 @@
             {% blocktrans with walk_time as walk_time and walk_dist as walk_dist %}
               It's about {{ walk_dist }} away or a {{ walk_time }} walk from {{ postcode }}.
             {% endblocktrans %}</p>
-          <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.location.y }},{{ points.0.location.x }}">
+          <a href="https://www.google.com/maps/dir/{{postcode}}/{{ station.location.y }},{{ station.location.x }}">
             {% trans "Get walking directions" %}
           </a>
         </div>
         {% endif %}
-      {% endif %}
-
-
-      {% if only_polling_stations or only_polling_districts or no_data %}
-          {% blocktrans with council.phone as council_phone %}
-          <p>We don't have data for your area, so you need to contact the council.</p>
-          <p>You can call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-          {% endblocktrans %}
+      {% else %}
+        {% blocktrans with council.phone as council_phone %}
+        <p>We don't have data for your area, so you need to contact the council.</p>
+        <p>You can call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
+        {% endblocktrans %}
       {% endif %}
 
       {% if we_know_where_you_should_vote %}
@@ -120,7 +116,7 @@
       var polling_station_location = point;
 
       var map = L.map('area_map', {zoomControl:true});
-      // map.dragging.disable();
+      map.dragging.disable();
       // map.touchZoom.disable();
       // map.doubleClickZoom.disable();
       map.scrollWheelZoom.disable();
@@ -132,14 +128,10 @@
       window.map = map;
       window.polling_station_location = polling_station_location;
 
-      // area.addTo(map);
-
-      {% for station in points %}
-        L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-        'clickable': true,
-        }).addTo(map);
-        map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
-      {% endfor %}
+      L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
+      'clickable': true,
+      }).addTo(map);
+      map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
     }
 
     var point = [{{ location.1 }}, {{ location.0 }}];
