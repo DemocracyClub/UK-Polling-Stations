@@ -188,6 +188,15 @@ class AddressView(BasePollingStationView):
                 stations[0].location.x
             )
             context['directions'] = requests.get(url).json()
+            try:
+                context['walk_time'] = str(context['directions']['routes'][0]['legs'][0]['duration']['text'])
+                context['walk_time'] = context['walk_time'].replace('mins', _('minute'))
+
+                context['walk_dist'] = str(context['directions']['routes'][0]['legs'][0]['distance']['text'])
+                context['walk_dist'] = context['walk_dist'].replace('mi', _('miles'))
+            except:
+                pass
+
 
         # geocode residential address grid ref
         location = geocode(address.postcode)
