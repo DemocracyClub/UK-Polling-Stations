@@ -101,27 +101,24 @@ class PostcodeView(TemplateView, LogLookUpMixin):
     template_name = "postcode_view.html"
 
 
-    def get_points(self, areas):
+    def get_point(self, areas):
         if areas['polling_district'].polling_station_id:
-            stations = PollingStation.objects.filter(internal_council_id=
+            station = PollingStation.objects.filter(internal_council_id=
                     areas['polling_district'].polling_station_id)
-            if stations:
-                return stations
+            if len(station) == 1:
+                return station
 
         if areas['polling_district'].internal_council_id:
-            stations = PollingStation.objects.filter(polling_district_id=\
+            station = PollingStation.objects.filter(polling_district_id=\
                 areas['polling_district'].internal_council_id)
-            if stations:
-                return stations
+            if len(station) == 1:
+                return station
 
 
-        stations = PollingStation.objects.filter(
+        station = PollingStation.objects.filter(
             location__within=areas['polling_district'].area)
-
-        if len(stations) == 1:
-            return stations
-
-        return []
+        if len(station) == 1:
+            return station
 
 
     def get_context_data(self, **context):
@@ -141,13 +138,13 @@ class PostcodeView(TemplateView, LogLookUpMixin):
             context['has_polling_district'] = False
 
         if context['has_polling_district']:
-            context['points'] = self.get_points(areas)
+            context['point'] = self.get_point(areas)
 
-        if context and context['points']:
+        if context and context['point']:
             url = build_directions_url(
                 context['postcode'],
-                context['points'][0].location.y,
-                context['points'][0].location.x
+                context['point'].location.y,
+                context['point'].location.x
             )
             context['directions'] = requests.get(url).json()
             try:

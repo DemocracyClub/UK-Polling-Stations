@@ -28,10 +28,10 @@
       {% blocktrans %}The polling station for <strong>{{ postcode }}</strong> is:{% endblocktrans %}
         <p>
           <address>
-            {{ points.0.formatted_address|linebreaksbr }}<br>
-            {% if points.0.postcode %}
-              {% if not points.0.postcode in points.0.address %}
-                {{ points.0.postcode }}
+            {{ point.formatted_address|linebreaksbr }}<br>
+            {% if point.postcode %}
+              {% if not point.postcode in point.address %}
+                {{ point.postcode }}
               {% endif %}
             {% endif %}
           </address>
@@ -42,7 +42,7 @@
             {% blocktrans with walk_time as walk_time and walk_dist as walk_dist %}
               It's about {{ walk_dist }} away or a {{ walk_time }} walk from {{ postcode }}.
             {% endblocktrans %}</p>
-          <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.location.y }},{{ points.0.location.x }}">
+          <a href="https://www.google.com/maps/dir/{{postcode}}/{{ point.location.y }},{{ point.location.x }}">
             {% trans "Get walking directions" %}
           </a>
         </div>
@@ -120,7 +120,7 @@
       var polling_station_location = point;
 
       var map = L.map('area_map', {zoomControl:true});
-      // map.dragging.disable();
+      map.dragging.disable();
       // map.touchZoom.disable();
       // map.doubleClickZoom.disable();
       map.scrollWheelZoom.disable();
@@ -132,14 +132,10 @@
       window.map = map;
       window.polling_station_location = polling_station_location;
 
-      // area.addTo(map);
-
-      {% for station in points %}
-        L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-        'clickable': true,
-        }).addTo(map);
-        map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
-      {% endfor %}
+      L.marker([{{ point.location.1 }}, {{ point.location.0 }}], {
+      'clickable': true,
+      }).addTo(map);
+      map.setView([{{ point.location.1 }}, {{ point.location.0 }}],15);
     }
 
     var point = [{{ location.1 }}, {{ location.0 }}];
