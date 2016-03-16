@@ -96,7 +96,7 @@ class PostcodeView(TemplateView):
         stations = PollingStation.objects.filter(
             location__within=areas['polling_district'].area)
 
-        if stations:
+        if len(stations) == 1:
             return stations
 
         return []
