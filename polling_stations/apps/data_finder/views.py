@@ -17,6 +17,7 @@ from pollingstations.models import (
     PollingStation,
     ResidentialAddress
 )
+from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import geocode
 
@@ -50,7 +51,8 @@ class LogLookUpMixin(object):
         kwargs.update(self.request.session['utm_data'])
         LoggedPostcode.objects.create(**kwargs)
 
-class HomeView(FormView):
+
+class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
     form_class = PostcodeLookupForm
     template_name = "home.html"
 
