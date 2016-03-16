@@ -27,16 +27,12 @@ class Command(BaseShpShpImporter):
         }
 
     def station_record_to_dict(self, record):
-        try:
-            return {
-                'internal_council_id': record[0],
-                'postcode'           : "",
-                'address'            : str(record[2]),
-                'polling_district_id': str(record[1]),
-            }
-        except TypeError:
-            # there is a single bad row, it seems
-            pass
+        return {
+            'internal_council_id': record[0],
+            'postcode'           : "",
+            'address'            : str(record[2]),
+            'polling_district_id': str(record[1]),
+        }
 
     @transaction.atomic
     def post_import(self):
