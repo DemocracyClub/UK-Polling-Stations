@@ -97,54 +97,50 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         return super(HomeView, self).form_valid(form)
 
 
-class PostcodeView(TemplateView, LogLookUpMixin):
+class BasePollingStationView(TemplateView, LogLookUpMixin):
     template_name = "postcode_view.html"
 
 
-    def get_point(self, areas):
-        if areas['polling_district'].polling_station_id:
-            station = PollingStation.objects.filter(internal_council_id=
-                    areas['polling_district'].polling_station_id)
+class PostcodeView(BasePollingStationView):
+
+    def get_polling_station(self, location):
+        try:
+            polling_district = PollingDistrict.objects.get(
+                area__covers=location)
+        except PollingDistrict.DoesNotExist:
+            return None
+
+        if polling_district.internal_council_id:
+            station = PollingStation.objects.filter(
+                polling_district_id=polling_district.internal_council_id)
             if len(station) == 1:
-                return station
+                return station[0]
 
-        if areas['polling_district'].internal_council_id:
-            station = PollingStation.objects.filter(polling_district_id=\
-                areas['polling_district'].internal_council_id)
+        if polling_district:
+            station = PollingStation.objects.filter(
+                internal_council_id=polling_district.polling_station_id)
             if len(station) == 1:
-                return station
+                return station[0]
 
-
-        station = PollingStation.objects.filter(
-            location__within=areas['polling_district'].area)
-        if len(station) == 1:
-            return station
-
+            station = PollingStation.objects.filter(
+                location__within=polling_district.area)
+            if len(station) == 1:
+                return station[0]
 
     def get_context_data(self, **context):
         l = geocode(self.kwargs['postcode'])
         context['location'] = Point(l['wgs84_lon'], l['wgs84_lat'])
-        context['points'] = []
 
-        areas = {}
-        areas['council'] = Council.objects.get(
+        context['council'] = Council.objects.get(
             area__covers=context['location'])
 
-        try:
-            areas['polling_district'] = PollingDistrict.objects.get(
-                area__covers=context['location'])
-            context['has_polling_district'] = True
-        except PollingDistrict.DoesNotExist:
-            context['has_polling_district'] = False
+        context['station'] = self.get_polling_station(context['location'])
 
-        if context['has_polling_district']:
-            context['point'] = self.get_point(areas)
-
-        if context and context['point']:
+        if context['station']:
             url = build_directions_url(
                 context['postcode'],
-                context['point'].location.y,
-                context['point'].location.x
+                context['station'].location.y,
+                context['station'].location.x
             )
             context['directions'] = requests.get(url).json()
             try:
@@ -156,18 +152,12 @@ class PostcodeView(TemplateView, LogLookUpMixin):
             except:
                 pass
 
-        context['we_know_where_you_should_vote'] = context['points'] and context['has_polling_district']
-        context['only_polling_stations'] = context['points'] and (not context['has_polling_district'])
-        context['only_polling_districts'] = (not context['points']) and context['has_polling_district']
-        context['no_data'] = (not context['points']) and (not context['has_polling_district'])
-        context['areas'] = areas
-        context['council'] = areas['council']
+        context['we_know_where_you_should_vote'] = context.get('station')
         self.log_postcode(self.kwargs['postcode'], context)
         return context
 
 
-class AddressView(TemplateView, LogLookUpMixin):
-    template_name = "postcode_view.html"
+class AddressView(BasePollingStationView):
 
     def get_context_data(self, **context):
 
@@ -181,6 +171,9 @@ class AddressView(TemplateView, LogLookUpMixin):
         stations = PollingStation.objects.filter(
             internal_council_id=address.polling_station_id
         )
+        station = None
+        if stations:
+            station = stations[0]
 
         # council
         council = Council.objects.get(
@@ -201,11 +194,9 @@ class AddressView(TemplateView, LogLookUpMixin):
 
         # assemble context variables
         context['location'] = Point(location['wgs84_lon'], location['wgs84_lat'])
-        context['has_polling_district'] = False
         context['postcode'] = address.postcode
-        context['points'] = stations
-        context['we_know_where_you_should_vote'] = context['points']
-        context['no_data'] = (not context['points']) and (not context['has_polling_district'])
+        context['station'] = station
+        context['we_know_where_you_should_vote'] = station
         context['council'] = council
         self.log_postcode(address.postcode, context)
         return context
