@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="{% static "css/map.css" %}" />
 {% endblock extra_page_css %}
 
+{% block base_title %}{% trans "Your Polling Station" %}{% endblock base_title %}
+
+
 {% block content %}
 
 <div class="row">
@@ -22,19 +25,26 @@
       </h2>
 
       {% if we_know_where_you_should_vote %}
-        <address>
-          {{ points.0.address|linebreaksbr }}<br>
-          {% if points.0.postcode %}
-            {% if not points.0.postcode in points.0.address %}
-              {{ points.0.postcode }}
+      {% blocktrans %}The polling station for <strong>{{ postcode }}</strong> is:{% endblocktrans %}
+        <p>
+          <address>
+            {{ points.0.formatted_address|linebreaksbr }}<br>
+            {% if points.0.postcode %}
+              {% if not points.0.postcode in points.0.address %}
+                {{ points.0.postcode }}
+              {% endif %}
             {% endif %}
-          {% endif %}
-        </address>
+          </address>
+        </p>
         {% if directions.routes.0.legs.0.duration.text %}
         <div id="directions">
+          <p>
+            {% blocktrans with walk_time as walk_time and walk_dist as walk_dist %}
+              It's about {{ walk_dist }} away or a {{ walk_time }} walk from {{ postcode }}.
+            {% endblocktrans %}</p>
           <a href="https://www.google.com/maps/dir/{{postcode}}/{{ points.0.location.y }},{{ points.0.location.x }}">
-          {% blocktrans with walk_time as walk_time %}About {{ walk_time }} walk{% endblocktrans %}
-          ({{ directions.routes.0.legs.0.distance.text }})</a>
+            {% trans "Get walking directions" %}
+          </a>
         </div>
         {% endif %}
       {% endif %}
@@ -50,10 +60,7 @@
       {% if we_know_where_you_should_vote %}
       <div id="area_map" class="card_inset"></div>
       {% endif %}
-
-
     </div>
-
   </div>
 
 
@@ -69,6 +76,14 @@
         <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_blank">
           Read more about voting in the UK
         </a></p>
+        {% endblocktrans %}
+    </div>
+
+    <div class="card">
+        {% blocktrans %}
+        <h3>You need to be registered in order to vote</h3>
+        <p>If you aren’t registered to vote visit <a href="https://www.gov.uk/register-to-vote">https://www.gov.uk/register-to-vote</a> <strong>before the 18th of April</strong>.</p>
+
         {% endblocktrans %}
     </div>
 

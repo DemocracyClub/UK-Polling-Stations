@@ -1,6 +1,9 @@
 """
 Models for actual Polling Stations and Polling Districts!
 """
+
+from itertools import groupby
+
 from django.contrib.gis.db import models
 
 from councils.models import Council
@@ -17,6 +20,10 @@ class PollingStation(models.Model):
 
     def __str__(self):
         return "{0} ({1})".format(self.internal_council_id, self.council)
+
+    @property
+    def formatted_address(self):
+        return "\n".join([x[0] for x in groupby(self.address.split(','))])
 
 
 class PollingDistrict(models.Model):
