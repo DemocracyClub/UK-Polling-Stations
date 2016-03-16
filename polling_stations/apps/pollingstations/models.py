@@ -15,6 +15,9 @@ class PollingStation(models.Model):
     postcode            = models.CharField(blank=True, null=True, max_length=100)
     address             = models.TextField(blank=True, null=True)
     location            = models.PointField(null=True, blank=True)
+    # This is NOT a FK, as we might not have the polling district at
+    # the point of import
+    polling_district_id  = models.CharField(blank=True, max_length=255)
 
     objects = models.GeoManager()
 
@@ -32,7 +35,7 @@ class PollingDistrict(models.Model):
     internal_council_id = models.CharField(blank=True, max_length=100)
     extra_id            = models.CharField(blank=True, null=True, max_length=100)
     area                = models.MultiPolygonField(null=True, blank=True)
-    # This is NOT a FK, as we might not have the polling station aat
+    # This is NOT a FK, as we might not have the polling station at
     # the point of import
     polling_station_id  = models.CharField(blank=True, max_length=255)
 

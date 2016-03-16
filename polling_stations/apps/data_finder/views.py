@@ -108,6 +108,13 @@ class PostcodeView(TemplateView, LogLookUpMixin):
             if stations:
                 return stations
 
+        if areas['polling_district'].internal_council_id:
+            stations = PollingStation.objects.filter(polling_district_id=\
+                areas['polling_district'].internal_council_id)
+            if stations:
+                return stations
+
+
         stations = PollingStation.objects.filter(
             location__within=areas['polling_district'].area)
 
