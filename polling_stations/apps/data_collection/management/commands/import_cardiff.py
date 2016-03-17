@@ -27,8 +27,11 @@ class Command(BaseShpShpImporter):
         }
 
     def station_record_to_dict(self, record):
+        unique_id = "-".join(
+                (str(record[0]).strip('\'b'), str(record[1]).strip())
+            ).strip()
         return {
-            'internal_council_id': record[0],
+            'internal_council_id': unique_id,
             'postcode'           : "",
             'address'            : str(record[2]),
             'polling_district_id': str(record[1]),
