@@ -5,6 +5,14 @@
 
 {% block extra_page_css %}
 <link rel="stylesheet" href="{% static "css/map.css" %}" />
+<style>
+    .council_location_icon {
+    background-color:black;
+    border-radius: 50%;
+    height:2px;
+    width:2px;
+    }
+</style>
 {% endblock extra_page_css %}
 
 {% block base_title %}{% trans "Your Polling Station" %}{% endblock base_title %}
@@ -100,14 +108,6 @@
 {% endblock content %}
 
 {% block in_page_javascript %}
-  <style>
-    .council_location_icon {
-    background-color:black;
-    border-radius: 50%;
-    height:2px;
-    width:2px;
-    }
-  </style>
   <script>
 
     // Maps
