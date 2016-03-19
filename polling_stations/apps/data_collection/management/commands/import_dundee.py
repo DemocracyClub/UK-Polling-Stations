@@ -17,7 +17,7 @@ class Command(BaseJasonImporter):
         properties = record['properties']
         return {
             'council':             self.council,
-            'internal_council_id': properties['POLLING_STATION_ID'],
+            'internal_council_id': properties['POLLING_DISTRICT'],
             'name':                properties['POLLING_STATION_NAME']
         }
 
@@ -34,5 +34,6 @@ class Command(BaseJasonImporter):
             'internal_council_id': record.objectid,
             'postcode':            "",
             'address':             record.name,
-            'location':            location
+            'location':            location,
+            'polling_district_id': record.polling_district
         }
