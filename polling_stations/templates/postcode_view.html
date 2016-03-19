@@ -12,6 +12,13 @@
     height:2px;
     width:2px;
   }
+  address {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: inherit;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
 </style>
 {% endblock extra_page_css %}
 
@@ -33,7 +40,7 @@
 
       {% if we_know_where_you_should_vote %}
       {% blocktrans %}The polling station for <strong>{{ postcode }}</strong> is:{% endblocktrans %}
-        <p>
+        <div>
           <address>
             {{ station.formatted_address|linebreaksbr }}<br />
             {% if station.postcode %}
@@ -42,7 +49,7 @@
               {% endif %}
             {% endif %}
           </address>
-        </p>
+        </div>
         {% if directions.routes.0.legs.0.duration.text %}
         <div id="directions">
           <p>
