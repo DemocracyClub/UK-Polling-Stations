@@ -103,7 +103,7 @@ class BasePollingStationView(TemplateView, LogLookUpMixin):
 
 class PostcodeView(BasePollingStationView):
 
-    def get_polling_station(self, location):
+    def get_polling_station(self, location, council_id):
         try:
             polling_district = PollingDistrict.objects.get(
                 area__covers=location)
@@ -112,13 +112,17 @@ class PostcodeView(BasePollingStationView):
 
         if polling_district.internal_council_id:
             station = PollingStation.objects.filter(
-                polling_district_id=polling_district.internal_council_id)
+                polling_district_id=polling_district.internal_council_id,
+                council_id=council_id
+            )
             if len(station) == 1:
                 return station[0]
 
         if polling_district:
             station = PollingStation.objects.filter(
-                internal_council_id=polling_district.polling_station_id)
+                internal_council_id=polling_district.polling_station_id,
+                council_id=council_id
+            )
             if len(station) == 1:
                 return station[0]
 
@@ -134,7 +138,7 @@ class PostcodeView(BasePollingStationView):
         context['council'] = Council.objects.get(
             area__covers=context['location'])
 
-        context['station'] = self.get_polling_station(context['location'])
+        context['station'] = self.get_polling_station(context['location'], context['council'].council_id)
 
         if context['station']:
             url = build_directions_url(
