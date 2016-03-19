@@ -21,7 +21,8 @@ class Command(BaseShpShpImporter):
 
         return {
             'internal_council_id': record[0],
-            'name': record[1],
+            'name'               : record[1],
+            'polling_station_id' : record[0]
         }
 
     def station_record_to_dict(self, record):
@@ -34,17 +35,23 @@ class Command(BaseShpShpImporter):
         try:
             address_parts = address.split(', ')
             postcode = address_parts[-1]
-            if postcode == 'Penarth' or postcode == 'The Knap' or postcode == 'Leckwith':
+            if postcode == 'Penarth' or\
+               postcode == 'The Knap' or\
+               postcode == 'Leckwith' or\
+               postcode == 'Barry' or\
+               postcode == 'Llantwit Major,':
                 postcode = ''
+            else:
+                del(address_parts[-1])
         except TypeError:
             postcode = ''
 
         # format address
-        del(address_parts[-1])
         address = "\n".join(address_parts)
 
         return {
             'internal_council_id': record[0],
             'postcode'           : postcode,
-            'address'            : address
+            'address'            : address,
+            'polling_district_id': record[0]
         }
