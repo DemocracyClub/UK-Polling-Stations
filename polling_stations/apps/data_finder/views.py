@@ -110,7 +110,12 @@ class PostcodeView(BasePollingStationView):
         except PollingDistrict.DoesNotExist:
             return None
 
+        if not polling_district:
+            # is this different to PollingDistrict.DoesNotExist exception?
+            return None
+
         if polling_district.internal_council_id:
+            # always attempt to look up district id in stations table
             station = PollingStation.objects.filter(
                 polling_district_id=polling_district.internal_council_id,
                 council_id=council_id
@@ -118,18 +123,29 @@ class PostcodeView(BasePollingStationView):
             if len(station) == 1:
                 return station[0]
 
-        if polling_district:
+        if polling_district.polling_station_id:
+            # only try to look up station id if it is a sensible value
             station = PollingStation.objects.filter(
                 internal_council_id=polling_district.polling_station_id,
                 council_id=council_id
             )
             if len(station) == 1:
                 return station[0]
-
+            else:
+                # if polling_station_id is set and we don't get a station back
+                # or it maps to more than one station due to dodgy data
+                # do not fall back and attempt point within polygon lookup
+                return None
+        else:
+            # only try a point within polygon lookup
+            # if polling_station_id is not set
             station = PollingStation.objects.filter(
                 location__within=polling_district.area)
             if len(station) == 1:
                 return station[0]
+            else:
+                # make this explicit rather than implied
+                return None
 
     def get_context_data(self, **context):
         l = geocode(self.kwargs['postcode'])
