@@ -57,9 +57,15 @@ class Command(BaseKamlImporter):
         except PostcodeNotFoundException:
             postcode = ''
 
-        return {
-            'internal_council_id': record.statno,
-            'postcode':            postcode,
-            'address':             address,
-            'location':            location
-        }
+        # These district codes don't exist in the district boundaries
+        # so don't import stations for them
+        if (record.pdref == 'BC' or record.pdref == 'BH'):
+            return None
+        else:
+            return {
+                'internal_council_id': record.statno,
+                'postcode':            postcode,
+                'address':             address,
+                'location':            location,
+                'polling_district_id': record.pdref
+            }
