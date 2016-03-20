@@ -29,7 +29,8 @@ class Command(BaseKamlImporter):
             'internal_council_id': record['register'].value,
             'extra_id'           : record['mi_prinx'].value,
             'name'               : record['pollingdistrictname'].value,
-            'area'               : poly
+            'area'               : poly,
+            'polling_station_id' : record['register'].value
         }
 
     def station_record_to_dict(self, record):
