@@ -26,6 +26,7 @@
 
 
 {% block content %}
+{{ route }}
 
 <div class="row">
   <div class="columns large-8">
@@ -50,10 +51,10 @@
             {% endif %}
           </address>
         </div>
-        {% if directions.routes.0.legs.0.duration.text %}
+        {% if directions.walk_time %}
         <div id="directions">
           <p>
-            {% blocktrans with walk_time as walk_time and walk_dist as walk_dist %}
+            {% blocktrans with directions.walk_time as walk_time and directions.walk_dist as walk_dist %}
               It's about {{ walk_dist }} away or a {{ walk_time }} walk from {{ postcode }}.
             {% endblocktrans %}</p>
           <a href="https://www.google.com/maps/dir/{{postcode}}/{{ station.location.y }},{{ station.location.x }}">
@@ -135,12 +136,30 @@
         subdomains: '1234'
       }).addTo(map); 
 
+      {% if directions.route %}
+      var pointList = [
+      {% for p in directions.route %}
+          new L.LatLng({{p.1}}, {{p.0}}){% if not loop.last %},{% endif %}
+      {% endfor %}
+      ];
+
+      var firstpolyline = new L.Polyline(pointList, {
+        color: 'red',
+        weight: 3,
+        opacity: 1.0,
+        smoothFactor: 1,
+        dashArray: "5, 5"
+      });
+      firstpolyline.addTo(map);
+      {% endif %}
+
       window.map = map;
       window.polling_station_location = polling_station_location;
 
       L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-      'clickable': true,
+        'clickable': true,
       }).addTo(map);
+
       map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
     };
 
