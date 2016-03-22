@@ -110,10 +110,6 @@ class PostcodeView(BasePollingStationView):
         except PollingDistrict.DoesNotExist:
             return None
 
-        if not polling_district:
-            # is this different to PollingDistrict.DoesNotExist exception?
-            return None
-
         if polling_district.internal_council_id:
             # always attempt to look up district id in stations table
             station = PollingStation.objects.filter(
