@@ -8,6 +8,8 @@ from django.contrib.gis.geos import Point
 
 from data_collection import constants
 
+class PostcodeError(Exception):
+    pass
 
 def geocode(postcode):
     """
@@ -15,10 +17,14 @@ def geocode(postcode):
     """
     res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
     res_json = res.json()
-    return {
-        'wgs84_lon': res_json['wgs84_lon'],
-        'wgs84_lat': res_json['wgs84_lat'],
-    }
+
+    if 'error' in res_json:
+        raise PostcodeError("Mapit error {}: {}".format(res_json['code'], res_json['error']))
+    else:
+        return {
+            'wgs84_lon': res_json['wgs84_lon'],
+            'wgs84_lat': res_json['wgs84_lat'],
+        }
 
 
 Directions = namedtuple('Directions', ['walk_time', 'walk_dist', 'route'])

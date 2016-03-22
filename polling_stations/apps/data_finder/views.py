@@ -21,12 +21,12 @@ from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     geocode,
+    PostcodeError,
     get_ors_route,
     get_google_route,
     OrsDirectionsApiError,
     GoogleDirectionsApiError,
 )
-
 
 # sort a list of tuples by key in natural/human order
 def natural_sort(l, key):
@@ -139,7 +139,12 @@ class PostcodeView(BasePollingStationView):
         return directions 
 
     def get_context_data(self, **context):
-        l = geocode(self.kwargs['postcode'])
+        try:
+            l = geocode(self.kwargs['postcode'])
+        except PostcodeError as e:
+            context['error'] = e
+            return context
+
         context['location'] = Point(l['wgs84_lon'], l['wgs84_lat'])
 
         context['council'] = Council.objects.get(

@@ -24,13 +24,27 @@
 
 {% block base_title %}{% trans "Your Polling Station" %}{% endblock base_title %}
 
-
 {% block content %}
-{{ route }}
-
 <div class="row">
   <div class="columns large-8">
     <div class="card">
+    {% if error %}
+
+      <h2>Sorry, we can't find {{ postcode }}</h2>
+      <p>This doesn't appear to be a valid postcode.</p>
+      <form method="post" action="{% url 'home' %}" class="form form-inline">
+          {% csrf_token %}
+          <label class="card_header">{% trans "Enter Your Postcode" %}
+            <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
+          </label>
+          <p class="help-text" id="postcode_help_text">
+            {% trans 'e.g.' %} <a href="{% url 'postcode_view' postcode="CF105AJ" %}">CF10 5AJ</a>
+          </p>
+          <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
+      </form>
+
+    {% else %}
+
       <h2>
         {% if we_know_where_you_should_vote %}
           {% trans "Your polling station" %}
@@ -72,6 +86,8 @@
       {% if we_know_where_you_should_vote %}
       <div id="area_map" class="card_inset"></div>
       {% endif %}
+
+    {% endif %}
     </div>
   </div>
 
