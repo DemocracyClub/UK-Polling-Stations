@@ -35,8 +35,6 @@ def get_ors_route(longlat_from, longlat_to):
 
     resp = requests.get(url)
     
-    #raise OrsDirectionsApiError("Test error")
-
     root = lxml.etree.fromstring(resp.content)
 
     ns = {
@@ -80,8 +78,6 @@ def get_google_route(postcode, end):
 
     directions = requests.get(url).json()
         
-    #raise GoogleDirectionsApiError("Test error")
-
     if directions['status'] != 'OK':
         raise GoogleDirectionsApiError("Google Directions API error: {}".format(directions['status']))
 
