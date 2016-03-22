@@ -19,18 +19,14 @@ from pollingstations.models import (
 )
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
-from .helpers import geocode
+from .helpers import (
+    geocode,
+    get_ors_route,
+    get_google_route,
+    OrsDirectionsApiError,
+    GoogleDirectionsApiError,
+)
 
-
-base_google_url = "https://maps.googleapis.com/maps/api/directions/json?mode=walking&units=imperial&origin="
-
-def build_directions_url(postcode, y, x):
-    url = "{base_url}{postcode}&destination={destination}".format(
-            base_url=base_google_url,
-            postcode=postcode,
-            destination="{0},{1}".format(y, x),
-        )
-    return url
 
 # sort a list of tuples by key in natural/human order
 def natural_sort(l, key):
@@ -127,6 +123,21 @@ class PostcodeView(BasePollingStationView):
             if len(station) == 1:
                 return station[0]
 
+    def get_directions(self, **kwargs):
+        try:
+            directions = get_google_route(kwargs['start_postcode'], kwargs['end_location'])
+        except GoogleDirectionsApiError as e1:
+            # Should log error here
+
+            try:
+                directions = get_ors_route(kwargs['start_location'], kwargs['end_location'])
+            except OrsDirectionsApiError as e2:
+                # Should log error here
+
+                directions = None
+
+        return directions 
+
     def get_context_data(self, **context):
         l = geocode(self.kwargs['postcode'])
         context['location'] = Point(l['wgs84_lon'], l['wgs84_lat'])
@@ -137,23 +148,16 @@ class PostcodeView(BasePollingStationView):
         context['station'] = self.get_polling_station(context['location'])
 
         if context['station']:
-            url = build_directions_url(
-                context['postcode'],
-                context['station'].location.y,
-                context['station'].location.x
+            context['directions'] = self.get_directions(
+                start_postcode=self.kwargs['postcode'],
+                start_location=context['location'],
+                end_location=context['station'].location,
             )
-            context['directions'] = requests.get(url).json()
-            try:
-                context['walk_time'] = str(context['directions']['routes'][0]['legs'][0]['duration']['text'])
-                context['walk_time'] = context['walk_time'].replace('mins', _('minute'))
-
-                context['walk_dist'] = str(context['directions']['routes'][0]['legs'][0]['distance']['text'])
-                context['walk_dist'] = context['walk_dist'].replace('mi', _('miles'))
-            except:
-                pass
 
         context['we_know_where_you_should_vote'] = context.get('station')
+
         self.log_postcode(self.kwargs['postcode'], context)
+
         return context
 
 
