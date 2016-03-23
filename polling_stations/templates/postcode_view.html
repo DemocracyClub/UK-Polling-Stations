@@ -176,7 +176,11 @@
         'clickable': true,
       }).addTo(map);
 
+      {% if directions.route %}
+      map.fitBounds(firstpolyline.getBounds(), {maxZoom: 16});
+      {% else %}
       map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
+      {% endif %}
     };
 
     var point = [{{ location.1 }}, {{ location.0 }}];
