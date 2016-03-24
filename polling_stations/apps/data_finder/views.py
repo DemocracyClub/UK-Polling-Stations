@@ -13,7 +13,6 @@ from django.utils.translation import ugettext as _
 from councils.models import Council
 from data_finder.models import LoggedPostcode
 from pollingstations.models import (
-    PollingDistrict,
     PollingStation,
     ResidentialAddress
 )
@@ -99,30 +98,6 @@ class BasePollingStationView(TemplateView, LogLookUpMixin):
 
 class PostcodeView(BasePollingStationView):
 
-    def get_polling_station(self, location):
-        try:
-            polling_district = PollingDistrict.objects.get(
-                area__covers=location)
-        except PollingDistrict.DoesNotExist:
-            return None
-
-        if polling_district.internal_council_id:
-            station = PollingStation.objects.filter(
-                polling_district_id=polling_district.internal_council_id)
-            if len(station) == 1:
-                return station[0]
-
-        if polling_district:
-            station = PollingStation.objects.filter(
-                internal_council_id=polling_district.polling_station_id)
-            if len(station) == 1:
-                return station[0]
-
-            station = PollingStation.objects.filter(
-                location__within=polling_district.area)
-            if len(station) == 1:
-                return station[0]
-
     def get_directions(self, **kwargs):
         try:
             directions = get_google_route(kwargs['start_postcode'], kwargs['end_location'])
@@ -150,7 +125,10 @@ class PostcodeView(BasePollingStationView):
         context['council'] = Council.objects.get(
             area__covers=context['location'])
 
-        context['station'] = self.get_polling_station(context['location'])
+        context['station'] = PollingStation.objects.get_polling_station(
+            context['location'],
+            context['council'].council_id
+        )
 
         if context['station']:
             context['directions'] = self.get_directions(
