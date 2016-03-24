@@ -32,5 +32,6 @@ class Command(BaseKamlImporter):
             'internal_council_id': record.polling_station_address,
             'postcode':            postcode,
             'address':             address,
-            'location':            point
+            'location':            point,
+            'polling_district_id': record.polling_station_address
         }

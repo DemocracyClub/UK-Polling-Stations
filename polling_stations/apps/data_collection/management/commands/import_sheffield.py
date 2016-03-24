@@ -13,8 +13,9 @@ class Command(BaseShpShpImporter):
 
     def district_record_to_dict(self, record):
         return {
-            'internal_council_id': record[0],
-            'name': record[1],
+            'internal_council_id': record[1],
+            'extra_id':            record[0],
+            'name':                record[1],
         }
 
     def station_record_to_dict(self, record):
@@ -36,5 +37,6 @@ class Command(BaseShpShpImporter):
         return {
             'internal_council_id': record[0],
             'postcode'           : record[2],
-            'address'            : address
+            'address'            : address,
+            'polling_district_id': record[-1]
         }
