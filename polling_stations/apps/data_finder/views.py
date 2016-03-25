@@ -93,7 +93,7 @@ class BasePollingStationView(TemplateView, LogLookUpMixin):
     template_name = "postcode_view.html"
 
 
-class PostcodeView(BasePollingStationView): 
+class PostcodeView(BasePollingStationView):
 
     def get_context_data(self, **context):
         try:

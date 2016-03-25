@@ -47,7 +47,7 @@ class DirectionsHelper():
         url = constants.ORS_ROUTE_URL_TEMPLATE.format(longlat_from.x, longlat_from.y, longlat_to.x, longlat_to.y)
 
         resp = requests.get(url)
-        
+
         root = lxml.etree.fromstring(resp.content)
 
         ns = {
@@ -63,9 +63,9 @@ class DirectionsHelper():
 
         walk_dist = "{} {}".format(
             root.xpath('//xls:RouteSummary/xls:TotalDistance/@value', namespaces=ns)[0],
-            _('miles'),        
+            _('miles'),
         )
-        
+
         time_text = root.xpath('//xls:RouteSummary/xls:TotalTime/text()', namespaces=ns)[0]
         matches = self.re_time.match(
             time_text,
@@ -85,7 +85,7 @@ class DirectionsHelper():
             )
 
         directions = requests.get(url).json()
-            
+
         if directions['status'] != 'OK':
             raise GoogleDirectionsApiError("Google Directions API error: {}".format(directions['status']))
 
