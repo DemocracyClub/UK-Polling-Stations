@@ -1,0 +1,58 @@
+[
+    {
+        "fields": {
+            "council_type": "",
+            "mapit_id": "",
+            "name": "",
+            "email": "",
+            "phone": "",
+            "website": "",
+            "postcode": "",
+            "address": "",
+            "location": null,
+            "area": null
+        },
+        "model": "councils.council",
+        "pk": "X01000001"
+    },
+    {
+        "fields": {
+            "address": "1 Foo Street, Bar Town",
+            "postcode": "AA11AA",
+            "polling_station_id": "1",
+            "council": "X01000001"
+        },
+        "model": "pollingstations.residentialaddress",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "address": "2 Foo Street, Bar Town",
+            "postcode": "AA11AA",
+            "polling_station_id": "1",
+            "council": "X01000001"
+        },
+        "model": "pollingstations.residentialaddress",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "address": "1 Baz Street, Bar Town",
+            "postcode": "BB11BB",
+            "polling_station_id": "3",
+            "council": "X01000001"
+        },
+        "model": "pollingstations.residentialaddress",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "address": "2 Baz Street, Bar Town",
+            "postcode": "BB11BB",
+            "polling_station_id": "4",
+            "council": "X01000001"
+        },
+        "model": "pollingstations.residentialaddress",
+        "pk": 4
+    }
+]
