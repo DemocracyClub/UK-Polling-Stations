@@ -8,6 +8,8 @@ from django.contrib.gis.geos import Point
 
 from data_collection import constants
 
+from pollingstations.models import ResidentialAddress
+
 
 class PostcodeError(Exception):
     pass
@@ -138,3 +140,45 @@ class DirectionsHelper():
                 directions = None
 
         return directions
+
+
+# use a postcode do decide which endpoint the user should be directed to
+class RoutingHelper():
+
+    def __init__(self):
+        self.Endpoint = namedtuple('Endpoint', ['view', 'kwargs'])
+
+    def get_endpoint(self,postcode):
+
+        addresses = ResidentialAddress.objects.filter(
+            postcode=postcode
+        )
+
+        if addresses:
+            distinct_stations = ResidentialAddress\
+                .objects\
+                .filter(postcode=postcode)\
+                .values('polling_station_id')\
+                .distinct()
+
+            if len(distinct_stations) == 1:
+                # all the addresses in this postcode
+                # map to one polling station
+                return self.Endpoint(
+                    'address_view',
+                    {'address_id': addresses[0].id}
+                )
+            elif len(distinct_stations) > 1:
+                # addresses in this postcode map to
+                # multiple polling stations
+                return self.Endpoint(
+                    'address_select_view',
+                    {'postcode': postcode}
+                )
+
+        else:
+            # postcode is not in ResidentialAddress table
+            return self.Endpoint(
+                'postcode_view',
+                {'postcode': postcode}
+            )

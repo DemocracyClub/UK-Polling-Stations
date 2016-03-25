@@ -5,7 +5,7 @@ from operator import itemgetter
 
 from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
-from django.http import Http404
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, DetailView, TemplateView
 from django.utils.translation import ugettext as _
@@ -20,9 +20,10 @@ from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     geocode,
+    DirectionsHelper,
     natural_sort,
     PostcodeError,
-    DirectionsHelper
+    RoutingHelper
 )
 
 
@@ -47,40 +48,13 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 
         postcode = form.cleaned_data['postcode'].replace(' ', '')
 
-        addresses = ResidentialAddress.objects.filter(
-            postcode=postcode
+        rh = RoutingHelper()
+        endpoint = rh.get_endpoint(postcode)
+        self.success_url = reverse(
+            endpoint.view,
+            kwargs=endpoint.kwargs
         )
 
-        if addresses:
-            distinct_stations = ResidentialAddress\
-                .objects\
-                .filter(postcode=postcode)\
-                .values('polling_station_id')\
-                .distinct()
-
-            if len(distinct_stations) == 1:
-                # all the addresses in this postcode
-                # map to one polling station
-                self.success_url = reverse(
-                    'address_view',
-                    kwargs={'address_id': addresses[0].id}
-                )
-            elif len(distinct_stations) > 1:
-                # addresses in this postcode map to
-                # multiple polling stations
-                self.success_url = reverse(
-                    'address_select_view',
-                    kwargs={'postcode': postcode}
-                )
-            else:
-                return super(HomeView, self).form_valid(form)
-
-        else:
-            # postcode is not in ResidentialAddress table
-            self.success_url = reverse(
-                'postcode_view',
-                kwargs={'postcode': postcode}
-            )
         return super(HomeView, self).form_valid(form)
 
 
@@ -89,6 +63,18 @@ class BasePollingStationView(TemplateView, LogLookUpMixin):
 
 
 class PostcodeView(BasePollingStationView):
+
+    def get(self, request, *args, **kwargs):
+        rh = RoutingHelper()
+        endpoint = rh.get_endpoint(self.kwargs['postcode'])
+        if endpoint.view != 'postcode_view':
+            return HttpResponseRedirect(
+                reverse(endpoint.view, kwargs=endpoint.kwargs)
+            )
+        else:
+            # we are already in postcode_view
+            context = self.get_context_data(**kwargs)
+            return self.render_to_response(context)
 
     def get_context_data(self, **context):
         try:
