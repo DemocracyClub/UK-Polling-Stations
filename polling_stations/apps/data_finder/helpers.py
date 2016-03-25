@@ -115,11 +115,14 @@ class DirectionsHelper():
         except GoogleDirectionsApiError as e1:
             # Should log error here
 
-            try:
-                directions = self.get_ors_route(kwargs['start_location'], kwargs['end_location'])
-            except OrsDirectionsApiError as e2:
-                # Should log error here
+            if kwargs['start_location']:
+                try:
+                    directions = self.get_ors_route(kwargs['start_location'], kwargs['end_location'])
+                except OrsDirectionsApiError as e2:
+                    # Should log error here
 
+                    directions = None
+            else:
                 directions = None
 
         return directions
