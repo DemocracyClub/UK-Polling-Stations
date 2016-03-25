@@ -47,6 +47,8 @@ class DirectionsHelper():
         url = constants.ORS_ROUTE_URL_TEMPLATE.format(longlat_from.x, longlat_from.y, longlat_to.x, longlat_to.y)
 
         resp = requests.get(url)
+        if resp.status_code != 200:
+            raise OrsDirectionsApiError("Open Route Service API error: HTTP status code %i" % resp.status_code)
 
         root = lxml.etree.fromstring(resp.content)
 
@@ -84,7 +86,10 @@ class DirectionsHelper():
                 destination="{0},{1}".format(end.y, end.x),
             )
 
-        directions = requests.get(url).json()
+        resp = requests.get(url)
+        if resp.status_code != 200:
+            raise GoogleDirectionsApiError("Google Directions API error: HTTP status code %i" % resp.status_code)
+        directions = resp.json()
 
         if directions['status'] != 'OK':
             raise GoogleDirectionsApiError("Google Directions API error: {}".format(directions['status']))
