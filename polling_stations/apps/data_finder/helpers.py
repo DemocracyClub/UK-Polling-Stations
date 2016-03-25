@@ -29,6 +29,13 @@ def geocode(postcode):
         }
 
 
+# sort a list of tuples by key in natural/human order
+def natural_sort(l, key):
+    convert = lambda text: int(text) if text.isdigit() else text
+    alphanum_key = lambda item: [ convert(c) for c in re.split('([0-9]+)', key(item)) ]
+    return sorted(l, key = alphanum_key)
+
+
 class OrsDirectionsApiError(Exception):
     pass
 
