@@ -150,20 +150,25 @@ class AddressView(BasePollingStationView):
             pk=address.council_id
         )
 
-        # geocode residential address grid ref
-        location = geocode(address.postcode)
+        # Geocode residential address grid ref
+        # AddressView is a bit different to PostcodeView here
+        # Failure to look up postcode in mapit is not fatal
+        try:
+            location = geocode(address.postcode)
+            context['location'] = Point(location['wgs84_lon'], location['wgs84_lat'])
+        except PostcodeError:
+            context['location'] = None
 
         # assemble directions url
         if context and station.location and address.postcode:
             dh = DirectionsHelper()
             context['directions'] = dh.get_directions(
                 start_postcode=address.postcode,
-                start_location=location,
+                start_location=context['location'],
                 end_location=station.location,
             )
 
         # assemble context variables
-        context['location'] = Point(location['wgs84_lon'], location['wgs84_lat'])
         context['postcode'] = address.postcode
         context['station'] = station
         context['we_know_where_you_should_vote'] = station
