@@ -21,10 +21,7 @@ from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     geocode,
     PostcodeError,
-    get_ors_route,
-    get_google_route,
-    OrsDirectionsApiError,
-    GoogleDirectionsApiError,
+    DirectionsHelper
 )
 
 # sort a list of tuples by key in natural/human order
@@ -96,22 +93,7 @@ class BasePollingStationView(TemplateView, LogLookUpMixin):
     template_name = "postcode_view.html"
 
 
-class PostcodeView(BasePollingStationView):
-
-    def get_directions(self, **kwargs):
-        try:
-            directions = get_google_route(kwargs['start_postcode'], kwargs['end_location'])
-        except GoogleDirectionsApiError as e1:
-            # Should log error here
-
-            try:
-                directions = get_ors_route(kwargs['start_location'], kwargs['end_location'])
-            except OrsDirectionsApiError as e2:
-                # Should log error here
-
-                directions = None
-
-        return directions 
+class PostcodeView(BasePollingStationView): 
 
     def get_context_data(self, **context):
         try:
@@ -130,8 +112,9 @@ class PostcodeView(BasePollingStationView):
             context['council'].council_id
         )
 
-        if context['station']:
-            context['directions'] = self.get_directions(
+        if context['station'] and context['station'].location:
+            dh = DirectionsHelper()
+            context['directions'] = dh.get_directions(
                 start_postcode=self.kwargs['postcode'],
                 start_location=context['location'],
                 end_location=context['station'].location,
@@ -167,26 +150,17 @@ class AddressView(BasePollingStationView):
             pk=address.council_id
         )
 
-        # assemble directions url
-        if context and stations[0].location:
-            url = build_directions_url(
-                address.postcode,
-                stations[0].location.y,
-                stations[0].location.x
-            )
-            context['directions'] = requests.get(url).json()
-            try:
-                context['walk_time'] = str(context['directions']['routes'][0]['legs'][0]['duration']['text'])
-                context['walk_time'] = context['walk_time'].replace('mins', _('minute'))
-
-                context['walk_dist'] = str(context['directions']['routes'][0]['legs'][0]['distance']['text'])
-                context['walk_dist'] = context['walk_dist'].replace('mi', _('miles'))
-            except:
-                pass
-
-
         # geocode residential address grid ref
         location = geocode(address.postcode)
+
+        # assemble directions url
+        if context and station.location and address.postcode:
+            dh = DirectionsHelper()
+            context['directions'] = dh.get_directions(
+                start_postcode=address.postcode,
+                start_location=location,
+                end_location=station.location,
+            )
 
         # assemble context variables
         context['location'] = Point(location['wgs84_lon'], location['wgs84_lat'])
