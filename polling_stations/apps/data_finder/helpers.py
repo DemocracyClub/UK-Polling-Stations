@@ -148,7 +148,7 @@ class RoutingHelper():
     def __init__(self):
         self.Endpoint = namedtuple('Endpoint', ['view', 'kwargs'])
 
-    def get_endpoint(self,postcode):
+    def get_endpoint(self, postcode):
 
         addresses = ResidentialAddress.objects.filter(
             postcode=postcode
