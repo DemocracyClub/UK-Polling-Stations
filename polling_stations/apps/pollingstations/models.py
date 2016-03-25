@@ -45,17 +45,14 @@ class PollingStationManager(models.GeoManager):
 
         if polling_district.polling_station_id:
             # only try to look up station id if it is a sensible value
-            station = self.filter(
+            station = self.get_polling_station_by_id(
                 internal_council_id=polling_district.polling_station_id,
                 council_id=council_id
             )
-            if len(station) == 1:
-                return station[0]
-            else:
-                # if polling_station_id is set and we don't get a station back
-                # or it maps to more than one station due to dodgy data
-                # do not fall back and attempt point within polygon lookup
-                return None
+            # if polling_station_id is set and we don't get a station back
+            # or it maps to more than one station due to dodgy data
+            # do not fall back and attempt point within polygon lookup
+            return station
         else:
             # only try a point within polygon lookup
             # if polling_station_id is not set
@@ -66,6 +63,16 @@ class PollingStationManager(models.GeoManager):
             else:
                 # make this explicit rather than implied
                 return None
+
+    def get_polling_station_by_id(self, internal_council_id, council_id):
+        station = self.filter(
+            internal_council_id=internal_council_id,
+            council_id=council_id
+        )
+        if len(station) == 1:
+            return station[0]
+        else:
+            return None
 
 
 class PollingStation(models.Model):
