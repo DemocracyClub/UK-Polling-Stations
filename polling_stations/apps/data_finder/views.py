@@ -1,7 +1,7 @@
+import abc
 import re
 import requests
 
-from abc import ABCMeta, abstractmethod
 from operator import itemgetter
 
 from django.contrib.gis.geos import Point
@@ -59,20 +59,20 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         return super(HomeView, self).form_valid(form)
 
 
-class BasePollingStationView(TemplateView, LogLookUpMixin):
-    __metaclass__ = ABCMeta
+class BasePollingStationView(
+    TemplateView, LogLookUpMixin, metaclass=abc.ABCMeta):
 
     template_name = "postcode_view.html"
 
-    @abstractmethod
+    @abc.abstractmethod
     def get_location(self):
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def get_council(self):
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def get_station(self):
         pass
 
