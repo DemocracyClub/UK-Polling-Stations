@@ -5,7 +5,8 @@ Polling Stations Open Data API
 from django.utils.encoding import smart_str
 from rest_framework import routers, serializers, viewsets, views
 from councils.models import Council
-from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
+from pollingstations.models import (PollingStation, PollingDistrict,
+    ResidentialAddress)
 
 # Fields define serialization of complex field types (GEO)
 class PointField(serializers.Field):
@@ -90,7 +91,7 @@ class PollingDistrictViewSet(viewsets.ModelViewSet):
     serializer_class = PollingDistrictSerializer
 
 from rest_framework.response import Response
-from data_finder.helpers import PostcodeError, geocode
+from data_finder.helpers import PostcodeError, geocode, RoutingHelper
 from django.contrib.gis.geos import Point
 
 
@@ -107,15 +108,15 @@ class PostcodeViewSet(viewsets.ViewSet):
 
     def retrieve(self, requst, pk=None, format=None):
         postcode = pk.replace(' ', '')
-        polling_station = None
         ret = {}
         ret['polling_station_known'] = False
+        polling_station = None
 
         try:
             l = geocode(pk)
         except PostcodeError as e:
-            ret['error'] = e
-            return ret
+            ret['error'] = e.args[0]
+            return Response(ret)
 
         location = Point(l['wgs84_lon'], l['wgs84_lat'])
         ret['postcode_location'] = PointField().to_representation(
@@ -124,26 +125,20 @@ class PostcodeViewSet(viewsets.ViewSet):
         ret['council'] = CouncilSerializer(Council.objects.get(
             area__covers=location)).data
 
-        addresses = ResidentialAddress.objects.filter(postcode=postcode)
-        if addresses:
-            distinct_stations = ResidentialAddress\
-                .objects\
-                .filter(postcode=postcode)\
-                .distinct()
+        rh = RoutingHelper(postcode)
 
-            if len(distinct_stations) == 1:
-                polling_station = distinct_stations[0]
+        if rh.route_type == "multiple_addresses":
+            ret['addresses'] = [
+                ResidentialAddressSerializer(address, context={
+                    'request': self.request}
+                    ).data for address in
+                rh.addresses
+            ]
 
-            elif len(distinct_stations) > 1:
-                ret['addresses'] = [
-                    ResidentialAddressSerializer(address, context={
-                        'request': self.request}
-                        ).data for address in
-                    distinct_stations
-                ]
+        if rh.route_type == "single_address":
+            polling_station = rh.addresses[0]
 
-        else:
-
+        if rh.route_type == "postcode":
             polling_station = self.get_queryset(
                 location=location,
                 council=ret['council'],
@@ -154,9 +149,7 @@ class PostcodeViewSet(viewsets.ViewSet):
             ret['polling_station'] = PollingStationSerializer(
                 polling_station, context={'request': self.request}).data
 
-
         return Response(ret)
-        return
 
 
 # Routers provide an easy way of automatically determining the URL conf.
