@@ -85,7 +85,7 @@
         {% endblocktrans %}
       {% endif %}
 
-      {% if we_know_where_you_should_vote %}
+      {% if we_know_where_you_should_vote and station.location %}
       <div id="area_map" class="card_inset"></div>
       {% endif %}
 
