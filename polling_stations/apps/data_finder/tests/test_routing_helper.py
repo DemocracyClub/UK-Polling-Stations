@@ -6,16 +6,16 @@ class RoutingHelperTest(TestCase):
     fixtures = ['test_routing.json']
 
     def test_address_view(self):
-        rh = RoutingHelper()
-        endpoint = rh.get_endpoint('AA11AA')
+        rh = RoutingHelper('AA11AA')
+        endpoint = rh.get_endpoint()
         self.assertEqual('address_view', endpoint.view)
 
     def test_address_select_view(self):
-        rh = RoutingHelper()
-        endpoint = rh.get_endpoint('BB11BB')
+        rh = RoutingHelper('BB11BB')
+        endpoint = rh.get_endpoint()
         self.assertEqual('address_select_view', endpoint.view)
 
     def test_postcode_view(self):
-        rh = RoutingHelper()
-        endpoint = rh.get_endpoint('CC11CC')
+        rh = RoutingHelper('CC11CC')
+        endpoint = rh.get_endpoint()
         self.assertEqual('postcode_view', endpoint.view)

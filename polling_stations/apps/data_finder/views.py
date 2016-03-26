@@ -49,8 +49,8 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 
         postcode = form.cleaned_data['postcode'].replace(' ', '')
 
-        rh = RoutingHelper()
-        endpoint = rh.get_endpoint(postcode)
+        rh = RoutingHelper(postcode)
+        endpoint = rh.get_endpoint()
         self.success_url = reverse(
             endpoint.view,
             kwargs=endpoint.kwargs
@@ -118,8 +118,8 @@ class BasePollingStationView(TemplateView, LogLookUpMixin):
 class PostcodeView(BasePollingStationView):
 
     def get(self, request, *args, **kwargs):
-        rh = RoutingHelper()
-        endpoint = rh.get_endpoint(self.kwargs['postcode'])
+        rh = RoutingHelper(self.kwargs['postcode'])
+        endpoint = rh.get_endpoint()
         if endpoint.view != 'postcode_view':
             return HttpResponseRedirect(
                 reverse(endpoint.view, kwargs=endpoint.kwargs)

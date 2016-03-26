@@ -112,7 +112,7 @@ class DirectionsHelper():
             Point(x['end_location']['lng'], x['end_location']['lat'])
             for x in directions['routes'][0]['legs'][0]['steps']
         ]
-        
+
         walk_time = str(
             directions['routes'][0]['legs'][0]['duration']['text']
         ).replace('mins', _('minute'))
@@ -145,40 +145,70 @@ class DirectionsHelper():
 # use a postcode do decide which endpoint the user should be directed to
 class RoutingHelper():
 
-    def __init__(self):
+    def __init__(self, postcode):
+        self.postcode = postcode.replace(' ', '')
         self.Endpoint = namedtuple('Endpoint', ['view', 'kwargs'])
+        self.get_addresses()
 
-    def get_endpoint(self, postcode):
+    def get_addresses(self):
+        self.addresses = ResidentialAddress.objects.filter(
+            postcode=self.postcode
+        )#.distinct()
+        return self.addresses
 
-        addresses = ResidentialAddress.objects.filter(
-            postcode=postcode
-        )
+    @property
+    def has_addresses(self):
+        if getattr(self, 'addresses', None):
+            self.get_addresses()
+        return bool(self.addresses)
 
-        if addresses:
-            distinct_stations = ResidentialAddress\
-                .objects\
-                .filter(postcode=postcode)\
-                .values('polling_station_id')\
-                .distinct()
+    @property
+    def has_single_address(self):
+        if getattr(self, 'addresses', None):
+            self.get_addresses()
+        return self.addresses.count == 1
 
-            if len(distinct_stations) == 1:
+    @property
+    def address_have_single_station(self):
+        if getattr(self, 'addresses', None):
+            self.get_addresses()
+        stations = self.addresses.values('polling_station_id').distinct()
+        return len(stations) == 1
+
+    @property
+    def route_type(self):
+        if self.has_addresses:
+            if self.address_have_single_station:
                 # all the addresses in this postcode
                 # map to one polling station
-                return self.Endpoint(
-                    'address_view',
-                    {'address_id': addresses[0].id}
-                )
-            elif len(distinct_stations) > 1:
+                return "single_address"
+            else:
                 # addresses in this postcode map to
                 # multiple polling stations
-                return self.Endpoint(
-                    'address_select_view',
-                    {'postcode': postcode}
-                )
-
+                return "multiple_addresses"
         else:
+            # postcode is not in ResidentialAddress table
+            return "postcode"
+
+
+    def get_endpoint(self):
+        if self.route_type == "single_address":
+            # all the addresses in this postcode
+            # map to one polling station
+            return self.Endpoint(
+                'address_view',
+                {'address_id': self.addresses[0].id}
+            )
+        if self.route_type == "multiple_addresses":
+            # addresses in this postcode map to
+            # multiple polling stations
+            return self.Endpoint(
+                'address_select_view',
+                {'postcode': self.postcode}
+            )
+        if self.route_type == "postcode":
             # postcode is not in ResidentialAddress table
             return self.Endpoint(
                 'postcode_view',
-                {'postcode': postcode}
+                {'postcode': self.postcode}
             )
