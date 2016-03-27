@@ -16,7 +16,7 @@ class Command(BaseShpImporter):
     def district_record_to_dict(self, record):
         return {
             'internal_council_id': record[0],
-            'name': record[1],
+            'name': "%s - %s" % (record[1], record[0]),
             'polling_station_id': record[0]
         }
 
