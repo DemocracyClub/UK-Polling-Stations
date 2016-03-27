@@ -15,14 +15,17 @@ class Command(BaseShpShpImporter):
 
     def district_record_to_dict(self, record):
         return {
-            'internal_council_id': record[0],
+            'internal_council_id': record[3],
             'name': record[4],
+            'extra_id': record[0],
+            'polling_station_id': record[3]
         }
 
     def station_record_to_dict(self, record):
         return {
-            'internal_council_id': record[0],
+            'internal_council_id': record[3],
             'postcode'           : self.postcode_from_address(record[-1]),
-            'address'            : "\n".join(record[-1].split(',')[:-1])
+            'address'            : "\n".join(record[-1].split(',')[:-1]),
+            'polling_district_id': record[3]
         }
     
