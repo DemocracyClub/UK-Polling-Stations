@@ -16,11 +16,12 @@ class Command(BaseJasonImporter):
     def district_record_to_dict(self, record):
         properties = record['properties']
         if properties['Polling_Districts'] is None:
-            return
+            return None
         return dict(
             council=self.council,
             internal_council_id=properties['Polling_Districts'],
-            name=properties['Ward'],
+            name="%s - %s" % (properties['Ward'], properties['Polling_Districts']),
+            polling_station_id=properties['Polling_Districts']
         )
 
     def station_record_to_dict(self, record):
@@ -30,5 +31,6 @@ class Command(BaseJasonImporter):
             internal_council_id=record.polling_station_code,
             postcode=None,
             address=record.location,
-            location=location
+            location=location,
+            polling_district_id=record.polling_station_code
         )
