@@ -22,10 +22,20 @@ class Command(BaseShpShpImporter):
         }
 
     def station_record_to_dict(self, record):
+
+        address_parts = [x.strip() for x in record[5].split(',')]
+        address = "\n".join(address_parts[:-1])
+        postcode = address_parts[-1]
+        if postcode == 'Blackwall Way':
+            address = "%s\n%s" % (address, postcode)
+            postcode = ''
+        if postcode[:6] == 'London':
+            address = "%s\n%s" % (address, 'London')
+            postcode = "%s %s" % (postcode.split(' ')[-2], postcode.split(' ')[-1])
+
         return {
             'internal_council_id': record[3],
-            'postcode'           : self.postcode_from_address(record[-1]),
-            'address'            : "\n".join(record[-1].split(',')[:-1]),
+            'postcode'           : postcode,
+            'address'            : address,
             'polling_district_id': record[3]
         }
-    
