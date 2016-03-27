@@ -4,7 +4,7 @@ Import Denbighshire
 from time import sleep
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseAddressCsvImporter
-from data_finder.helpers import geocode
+from data_finder.helpers import geocode, PostcodeError
 
 class Command(BaseAddressCsvImporter):
     """
@@ -41,7 +41,7 @@ class Command(BaseAddressCsvImporter):
         try:
             gridref = geocode(record.pollingplaceaddress7)
             location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
-        except KeyError:
+        except PostcodeError:
             location = None
 
         return {
