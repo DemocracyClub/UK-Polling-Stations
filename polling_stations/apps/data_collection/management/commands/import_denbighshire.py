@@ -42,10 +42,7 @@ class Command(BaseAddressCsvImporter):
             gridref = geocode(record.pollingplaceaddress7)
             location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
         except KeyError:
-            if record.pollingplaceaddress7 == 'LL21 8HA':
-                location = Point(-3.7330709, 52.9864346, srid=4326)
-            else:
-                location = None
+            location = None
 
         return {
             'internal_council_id': record.pollingplaceid,
