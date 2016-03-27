@@ -15,7 +15,7 @@ class Command(BaseApiKmlKmlImporter):
     stations_url     = 'http://www.mapping2.cityoflondon.gov.uk/arcgis/services/INSPIRE/MapServer/WFSServer?request=GetFeature&version=1.1.0&service=wfs&typeNames=INSPIRE:UK_Parliamentary_General_Election_Polling_Places'
     """
     note:
-    These aren't actually KML - they're GML (hence use of SRID 27700)
+    These aren't actually KML - they're QML (hence use of SRID 27700)
     but gdal.DataSource will just deal with them for us :)
     """
 
