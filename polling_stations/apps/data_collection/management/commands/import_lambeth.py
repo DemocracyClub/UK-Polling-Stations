@@ -19,7 +19,7 @@ class Command(BaseJasonImporter):
             council=self.council,
             internal_council_id=properties['DISTRICT_C'],
             extra_id=properties['OBJECTID'],
-            name=properties['WARD'],
+            name="%s - %s" % (properties['WARD'], properties['DISTRICT_C']),
             polling_station_id=properties['DISTRICT_C']
         )
 
