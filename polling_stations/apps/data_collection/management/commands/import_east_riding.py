@@ -39,8 +39,11 @@ class Command(BaseShpImporter):
             location = Point(int(record.easting), int(record.northing), srid=self.srid)
         except ValueError:
             location = Point(float(record.easting), float(record.northing), srid=self.srid)
-        addr = [record.name_of_station]
-        addr += record.address.split(',')[:-1]
+        addr = [record.name_of_station.strip()]
+        addr += [x.strip() for x in record.address.split(',')[:-1]]
+
+        postcode_parts = record.address.split(',')[-1].split(' ')
+        postcode = "%s %s" % (postcode_parts[-2], postcode_parts[-1])
 
         """
         In this data, sometimes a single polling station serves several
@@ -51,7 +54,7 @@ class Command(BaseShpImporter):
         if (len(internal_ids) == 1):
             return [{
                 'internal_council_id': record.code,
-                'postcode'           : record.address.split(',')[-1],
+                'postcode'           : postcode,
                 'address'            : "\n".join(addr),
                 'location'           : location
             }]
@@ -60,7 +63,7 @@ class Command(BaseShpImporter):
             for id in internal_ids:
                 stations.append({
                     'internal_council_id': id,
-                    'postcode'           : record.address.split(',')[-1],
+                    'postcode'           : postcode,
                     'address'            : "\n".join(addr),
                     'location'           : location
                 })
