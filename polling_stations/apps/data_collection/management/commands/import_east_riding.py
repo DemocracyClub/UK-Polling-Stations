@@ -17,6 +17,7 @@ class Command(BaseShpImporter):
         return {
             'internal_council_id': record[1],
             'name': record[2],
+            'polling_station_id': record[1]
         }
 
     # station_record_to_dicts() returns an array of dicts in this script
