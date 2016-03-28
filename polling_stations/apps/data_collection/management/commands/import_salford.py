@@ -29,6 +29,7 @@ class Command(BaseShpImporter):
             'internal_council_id': record.id,
             'postcode'           : record.location.split(',')[-1],
             'address'            : "\n".join(record.location.split(',')[:-1]),
-            'location'           : location
+            'location'           : location,
+            'polling_district_id': record.polling_district_code
         }
     
