@@ -1,3 +1,4 @@
+import abc
 import re
 import requests
 
@@ -5,7 +6,7 @@ from operator import itemgetter
 
 from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
-from django.http import Http404
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, DetailView, TemplateView
 from django.utils.translation import ugettext as _
@@ -20,18 +21,11 @@ from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     geocode,
+    DirectionsHelper,
+    natural_sort,
     PostcodeError,
-    get_ors_route,
-    get_google_route,
-    OrsDirectionsApiError,
-    GoogleDirectionsApiError,
+    RoutingHelper
 )
-
-# sort a list of tuples by key in natural/human order
-def natural_sort(l, key):
-    convert = lambda text: int(text) if text.isdigit() else text
-    alphanum_key = lambda item: [ convert(c) for c in re.split('([0-9]+)', key(item)) ]
-    return sorted(l, key = alphanum_key)
 
 
 class LogLookUpMixin(object):
@@ -55,147 +49,125 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 
         postcode = form.cleaned_data['postcode'].replace(' ', '')
 
-        addresses = ResidentialAddress.objects.filter(
-            postcode=postcode
+        rh = RoutingHelper()
+        endpoint = rh.get_endpoint(postcode)
+        self.success_url = reverse(
+            endpoint.view,
+            kwargs=endpoint.kwargs
         )
 
-        if addresses:
-            distinct_stations = ResidentialAddress\
-                .objects\
-                .filter(postcode=postcode)\
-                .values('polling_station_id')\
-                .distinct()
-
-            if len(distinct_stations) == 1:
-                # all the addresses in this postcode
-                # map to one polling station
-                self.success_url = reverse(
-                    'address_view',
-                    kwargs={'address_id': addresses[0].id}
-                )
-            elif len(distinct_stations) > 1:
-                # addresses in this postcode map to
-                # multiple polling stations
-                self.success_url = reverse(
-                    'address_select_view',
-                    kwargs={'postcode': postcode}
-                )
-            else:
-                return super(HomeView, self).form_valid(form)
-
-        else:
-            # postcode is not in ResidentialAddress table
-            self.success_url = reverse(
-                'postcode_view',
-                kwargs={'postcode': postcode}
-            )
         return super(HomeView, self).form_valid(form)
 
 
-class BasePollingStationView(TemplateView, LogLookUpMixin):
+class BasePollingStationView(
+    TemplateView, LogLookUpMixin, metaclass=abc.ABCMeta):
+
     template_name = "postcode_view.html"
 
+    @abc.abstractmethod
+    def get_location(self):
+        pass
 
-class PostcodeView(BasePollingStationView):
+    @abc.abstractmethod
+    def get_council(self):
+        pass
 
-    def get_directions(self, **kwargs):
-        try:
-            directions = get_google_route(kwargs['start_postcode'], kwargs['end_location'])
-        except GoogleDirectionsApiError as e1:
-            # Should log error here
+    @abc.abstractmethod
+    def get_station(self):
+        pass
 
-            try:
-                directions = get_ors_route(kwargs['start_location'], kwargs['end_location'])
-            except OrsDirectionsApiError as e2:
-                # Should log error here
-
-                directions = None
-
-        return directions 
+    def get_directions(self):
+        if self.postcode and self.station and self.station.location:
+            dh = DirectionsHelper()
+            return dh.get_directions(
+                start_postcode=self.postcode,
+                start_location=self.location,
+                end_location=self.station.location,
+            )
+        else:
+            return None
 
     def get_context_data(self, **context):
         try:
-            l = geocode(self.kwargs['postcode'])
+            l = self.get_location()
         except PostcodeError as e:
             context['error'] = e
             return context
 
-        context['location'] = Point(l['wgs84_lon'], l['wgs84_lat'])
+        if l is None:
+            # AddressView.get_location() may legitimately return None
+            self.location = None
+        else:
+            self.location = Point(l['wgs84_lon'], l['wgs84_lat'])
 
-        context['council'] = Council.objects.get(
-            area__covers=context['location'])
+        self.council = self.get_council()
+        self.station = self.get_station()
+        self.directions = self.get_directions()
 
-        context['station'] = PollingStation.objects.get_polling_station(
-            context['location'],
-            context['council'].council_id
-        )
+        context['postcode'] = self.postcode
+        context['location'] = self.location
+        context['council'] = self.council
+        context['station'] = self.station
+        context['directions'] = self.directions
+        context['we_know_where_you_should_vote'] = self.station
 
-        if context['station']:
-            context['directions'] = self.get_directions(
-                start_postcode=self.kwargs['postcode'],
-                start_location=context['location'],
-                end_location=context['station'].location,
-            )
-
-        context['we_know_where_you_should_vote'] = context.get('station')
-
-        self.log_postcode(self.kwargs['postcode'], context)
-
+        self.log_postcode(self.postcode, context)
         return context
+
+
+class PostcodeView(BasePollingStationView):
+
+    def get(self, request, *args, **kwargs):
+        rh = RoutingHelper()
+        endpoint = rh.get_endpoint(self.kwargs['postcode'])
+        if endpoint.view != 'postcode_view':
+            return HttpResponseRedirect(
+                reverse(endpoint.view, kwargs=endpoint.kwargs)
+            )
+        else:
+            # we are already in postcode_view
+            self.postcode = kwargs['postcode']
+            context = self.get_context_data(**kwargs)
+            return self.render_to_response(context)
+
+    def get_location(self):
+        return geocode(self.postcode)
+
+    def get_council(self):
+        return Council.objects.get(
+            area__covers=self.location)
+
+    def get_station(self):
+        return PollingStation.objects.get_polling_station(
+            self.location, self.council.council_id)
 
 
 class AddressView(BasePollingStationView):
 
-    def get_context_data(self, **context):
-
-        # address
-        address = get_object_or_404(
+    def get(self, request, *args, **kwargs):
+        self.address = get_object_or_404(
             ResidentialAddress,
             pk=self.kwargs['address_id']
         )
+        self.postcode = self.address.postcode
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
 
-        # polling station
-        stations = PollingStation.objects.filter(
-            internal_council_id=address.polling_station_id
-        )
-        station = None
-        if stations:
-            station = stations[0]
+    def get_location(self):
+        try:
+            location = geocode(self.postcode)
+            return location
+        except PostcodeError:
+            return None
 
-        # council
-        council = Council.objects.get(
-            pk=address.council_id
-        )
+    def get_council(self):
+        return Council.objects.get(
+            pk=self.address.council_id)
 
-        # assemble directions url
-        if context and stations[0].location:
-            url = build_directions_url(
-                address.postcode,
-                stations[0].location.y,
-                stations[0].location.x
-            )
-            context['directions'] = requests.get(url).json()
-            try:
-                context['walk_time'] = str(context['directions']['routes'][0]['legs'][0]['duration']['text'])
-                context['walk_time'] = context['walk_time'].replace('mins', _('minute'))
-
-                context['walk_dist'] = str(context['directions']['routes'][0]['legs'][0]['distance']['text'])
-                context['walk_dist'] = context['walk_dist'].replace('mi', _('miles'))
-            except:
-                pass
-
-
-        # geocode residential address grid ref
-        location = geocode(address.postcode)
-
-        # assemble context variables
-        context['location'] = Point(location['wgs84_lon'], location['wgs84_lat'])
-        context['postcode'] = address.postcode
-        context['station'] = station
-        context['we_know_where_you_should_vote'] = station
-        context['council'] = council
-        self.log_postcode(address.postcode, context)
-        return context
+    def get_station(self):
+        return PollingStation.objects.get_polling_station_by_id(
+            self.address.polling_station_id,
+            self.address.council_id)
 
 
 class AddressFormView(FormView):
