@@ -23,7 +23,7 @@ class Command(BaseShpShpImporter):
     def station_record_to_dict(self, record):
         return {
             'internal_council_id': record[0],
-            'postcode'           : self.postcode_from_address(record[0]),
+            'postcode'           : self.postcode_from_address(record[0]).strip(),
             'address'            : self.string_to_newline_addr(record[0])
         }
     

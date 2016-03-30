@@ -16,8 +16,9 @@ class Command(BaseShpImporter):
     def district_record_to_dict(self, record):
         return {
             'council': self.council,
-            'internal_council_id': record[7],
+            'internal_council_id': record[3],
             'name': record[0],
+            'polling_station_id': record[3]
         }
 
     def station_record_to_dict(self, record):
@@ -27,10 +28,11 @@ class Command(BaseShpImporter):
             location = Point(float(record.easting), float(record.northing), srid=self.srid)
         return {
             'council': self.council,
-            'internal_council_id': record.u_polldid,
+            'internal_council_id': record.rec_pd,
             'postcode': record.postcode,
             'address': "\n".join([record.stat_title, record.stat_addr1]),
-            'location': location
+            'location': location,
+            'polling_district_id': record.rec_pd
         }
     
     def import_polling_stations(self):
