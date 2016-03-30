@@ -208,14 +208,15 @@ class BaseJasonImporter(BaseImporter):
 
         for district in districts['features']:
             district_info = self.district_record_to_dict(district)
-            if 'council' not in district_info:
-                district_info['council'] = self.council
+            if district_info is not None:
+                if 'council' not in district_info:
+                    district_info['council'] = self.council
 
-            if district_info is None:
-                continue
-            poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.get_srid('districts')))
-            district_info['area'] = poly
-            self.add_polling_district(district_info)
+                if district_info is None:
+                    continue
+                poly = self.clean_poly(GEOSGeometry(json.dumps(district['geometry']), srid=self.get_srid('districts')))
+                district_info['area'] = poly
+                self.add_polling_district(district_info)
 
 
 class BaseKamlImporter(BaseImporter):

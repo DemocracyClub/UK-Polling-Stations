@@ -16,12 +16,23 @@ class Command(BaseShpShpImporter):
         return {
             'internal_council_id': record[4],
             'name': record[2],
-            'polling_station_id': record[6]
+            'polling_station_id': record[4]
         }
 
     def station_record_to_dict(self, record):
+
+        address_parts = record[5].split(' ')
+        if address_parts[-1] != 'Newbury' and address_parts[-1] != 'Reading':
+            postcode = "%s %s" % (address_parts[-2], address_parts[-1])
+            del(address_parts[-1])
+            del(address_parts[-1])
+        else:
+            postcode = ''
+
+        address = " ".join(address_parts)
+
         return {
             'internal_council_id': record[4],
-            'postcode'           : record[5].split(',')[-1],
-            'address'            : "\n".join(record[5].split(',')[:-1]),
+            'postcode'           : postcode,
+            'address'            : address
         }

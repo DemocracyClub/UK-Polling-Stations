@@ -22,7 +22,8 @@ class Command(BaseKamlImporter):
             location = Point(float(record.point_x), float(record.point_y), srid=self.srid)
         return {
             'internal_council_id': record.polling_di,
-            'postcode': '(no postcode)',
+            'postcode': '',
             'address': "\n".join([record.building, record.road, record.town_villa]),
-            'location': location
+            'location': location,
+            'polling_district_id': record.polling_di
         }
