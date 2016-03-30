@@ -61,6 +61,7 @@ class Command(BaseAddressCsvImporter):
         else:
             location = None
 
+        self.known_stations.add(unique_station_id)
 
         return {
             'internal_council_id': record.polling_district,
