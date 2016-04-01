@@ -75,14 +75,8 @@ class Command(BaseAddressCsvImporter):
         postcode = address.split(',')[-1].strip()
         address = address.replace(postcode, '').strip(', ')
 
-        polling_station_id = "-".join((
-            record.polling_district,
-            record.polling_station_postcode,
-
-        ))
-
         return {
             'address'           : address,
             'postcode'          : postcode,
-            'polling_station_id': polling_station_id
+            'polling_station_id': record.polling_district
         }
