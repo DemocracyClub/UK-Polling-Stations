@@ -20,7 +20,8 @@
             "address": "1 Foo Street, Bar Town",
             "postcode": "AA11AA",
             "polling_station_id": "1",
-            "council": "X01000001"
+            "council": "X01000001",
+            "slug": "1"
         },
         "model": "pollingstations.residentialaddress",
         "pk": 1
@@ -30,7 +31,8 @@
             "address": "2 Foo Street, Bar Town",
             "postcode": "AA11AA",
             "polling_station_id": "1",
-            "council": "X01000001"
+            "council": "X01000001",
+            "slug": "2"
         },
         "model": "pollingstations.residentialaddress",
         "pk": 2
@@ -40,7 +42,8 @@
             "address": "1 Baz Street, Bar Town",
             "postcode": "BB11BB",
             "polling_station_id": "3",
-            "council": "X01000001"
+            "council": "X01000001",
+            "slug": "3"
         },
         "model": "pollingstations.residentialaddress",
         "pk": 3
@@ -50,7 +53,8 @@
             "address": "2 Baz Street, Bar Town",
             "postcode": "BB11BB",
             "polling_station_id": "4",
-            "council": "X01000001"
+            "council": "X01000001",
+            "slug": "4"
         },
         "model": "pollingstations.residentialaddress",
         "pk": 4
