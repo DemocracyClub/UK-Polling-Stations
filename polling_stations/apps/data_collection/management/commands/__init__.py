@@ -9,6 +9,7 @@ import re
 import shapefile
 import sys
 import tempfile
+import unicodedata
 import urllib.request
 import zipfile
 
@@ -18,6 +19,8 @@ from django.core.management.base import BaseCommand
 from django.contrib.gis import geos
 from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import Point, GEOSGeometry
+from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
 
 from councils.models import Council
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
@@ -331,6 +334,30 @@ class BaseApiKmlKmlImporter(BaseKamlImporter):
 
 class BaseAddressCsvImporter(BaseImporter):
 
+    def slugify(self, value):
+        """
+        Custom slugify function:
+
+        Convert to ASCII.
+        Convert characters that aren't alphanumerics, underscores, or hyphens to hyphens
+        Convert to lowercase.
+        Strip leading and trailing whitespace.
+
+        Unfortunately it is necessary to create wheel 2.0 in this situation
+        because using django's standard slugify() function means that
+        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
+        This ensures that
+        '1/2 Foo Street' becomes '1-2-foo-street' and
+        '12 Foo Street' becomes '12-foo-street'
+
+        This means we can avoid appending an arbitrary number and minimise
+        disruption to the public URL schema if a council provides updated data
+        """
+        value = force_text(value)
+        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = re.sub('[^\w\s-]', '-', value).strip().lower()
+        return mark_safe(re.sub('[-\s]+', '-', value))
+
     def add_residential_address(self, address_info):
 
         """
@@ -339,11 +366,22 @@ class BaseAddressCsvImporter(BaseImporter):
         """
         postcode = re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
 
+        # generate a unique slug so we can provide a consistent url
+        slug = self.slugify(
+            "%s-%s-%s-%s" % (
+                self.council.pk,
+                address_info['polling_station_id'],
+                address_info['address'],
+                postcode
+            )
+        )
+
         ResidentialAddress.objects.update_or_create(
             council=self.council,
             address=address_info['address'],
             postcode=postcode,
             polling_station_id=address_info['polling_station_id'],
+            slug=slug
         )
 
     def import_residential_addresses(self):
