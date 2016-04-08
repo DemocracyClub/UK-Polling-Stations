@@ -283,7 +283,7 @@ class BaseKamlImporter(BaseImporter):
             tmp.close()
 
 
-class BaseApiKmlKmlImporter(BaseKamlImporter):
+class BaseGenericApiImporter:
     srid             = 4326
     districts_srid   = 4326
     districts_url    = None
@@ -319,14 +319,27 @@ class BaseApiKmlKmlImporter(BaseKamlImporter):
     def import_polling_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
             req = urllib.request.urlretrieve(self.districts_url, tmp.name)
-            self.add_kml_district(tmp.name)
+            self.add_districts(tmp.name)
         return
 
     def import_polling_stations(self):
         with tempfile.NamedTemporaryFile() as tmp:
             req = urllib.request.urlretrieve(self.stations_url, tmp.name)
-            self.add_kml_station(tmp.name)
+            self.add_stations(tmp.name)
         return
+
+    def add_districts(self, filename):
+        raise NotImplementedError
+
+    def add_stations(self, filename):
+        raise NotImplementedError
+
+
+class BaseApiKmlKmlImporter(BaseGenericApiImporter, BaseKamlImporter):
+    def add_districts(self, filename):
+        self.add_kml_district(filename)
+    def add_stations(self, filename):
+        self.add_kml_station(filename)
 
 
 class BaseAddressCsvImporter(BaseImporter):
