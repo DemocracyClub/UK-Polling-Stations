@@ -358,28 +358,37 @@ class BaseAddressCsvImporter(BaseImporter):
         value = re.sub('[^\w\s-]', '-', value).strip().lower()
         return mark_safe(re.sub('[-\s]+', '-', value))
 
+    def get_slug(self, address_info):
+        # if we have a uprn, use that as the slug
+        if 'uprn' in address_info:
+            if address_info['uprn']:
+                return address_info['uprn']
+
+        # otherwise build a slug from the other data we have
+        return self.slugify(
+            "%s-%s-%s-%s" % (
+                self.council.pk,
+                address_info['polling_station_id'],
+                address_info['address'],
+                address_info['postcode']
+            )
+        )
+
     def add_residential_address(self, address_info):
 
         """
         strip all whitespace from postcode and convert to uppercase
         this will make it easier to query this based on user-supplied postcode
         """
-        postcode = re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
+        address_info['postcode'] = re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
 
         # generate a unique slug so we can provide a consistent url
-        slug = self.slugify(
-            "%s-%s-%s-%s" % (
-                self.council.pk,
-                address_info['polling_station_id'],
-                address_info['address'],
-                postcode
-            )
-        )
+        slug = self.get_slug(address_info)
 
         ResidentialAddress.objects.update_or_create(
             council=self.council,
             address=address_info['address'],
-            postcode=postcode,
+            postcode=address_info['postcode'],
             polling_station_id=address_info['polling_station_id'],
             slug=slug
         )
