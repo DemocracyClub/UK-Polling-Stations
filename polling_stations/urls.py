@@ -26,7 +26,7 @@ core_patterns = patterns(
     url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
-    url(r'^address/(?P<address_id>.+)/$',
+    url(r'^address/(?P<address_slug>.+)/$',
         AddressView.as_view(), name='address_view'),
     url(r'^address_select/(?P<postcode>.+)/$',
         AddressFormView.as_view(), name='address_select_view'),

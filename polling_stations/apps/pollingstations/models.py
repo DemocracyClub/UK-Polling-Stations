@@ -100,3 +100,4 @@ class ResidentialAddress(models.Model):
     postcode           = models.CharField(blank=True, null=True, max_length=100, db_index=True)
     council            = models.ForeignKey(Council, null=True)
     polling_station_id = models.CharField(blank=True, max_length=100)
+    slug               = models.SlugField(blank=False, null=False, db_index=True, unique=True, max_length=255)

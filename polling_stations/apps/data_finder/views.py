@@ -147,7 +147,7 @@ class AddressView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
         self.address = get_object_or_404(
             ResidentialAddress,
-            pk=self.kwargs['address_id']
+            slug=self.kwargs['address_slug']
         )
         self.postcode = self.address.postcode
         context = self.get_context_data(**kwargs)
@@ -179,7 +179,7 @@ class AddressFormView(FormView):
             postcode=self.kwargs['postcode']
         )
 
-        select_addresses = [(element.id, element.address) for element in addresses]
+        select_addresses = [(element.slug, element.address) for element in addresses]
         select_addresses = natural_sort(select_addresses, itemgetter(1))
 
         if not addresses:
@@ -190,7 +190,7 @@ class AddressFormView(FormView):
     def form_valid(self, form):
         self.success_url = reverse(
             'address_view',
-            kwargs={'address_id': form.cleaned_data['address']}
+            kwargs={'address_slug': form.cleaned_data['address']}
         )
         return super(AddressFormView, self).form_valid(form)
 

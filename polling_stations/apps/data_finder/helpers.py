@@ -197,7 +197,7 @@ class RoutingHelper():
             # map to one polling station
             return self.Endpoint(
                 'address_view',
-                {'address_id': self.addresses[0].id}
+                {'address_slug': self.addresses[0].slug}
             )
         if self.route_type == "multiple_addresses":
             # addresses in this postcode map to
