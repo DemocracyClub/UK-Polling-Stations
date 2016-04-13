@@ -23,8 +23,13 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
 from councils.models import Council
-from data_collection.data_quality_report import DataQualityReport
-from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
+from data_collection.data_quality_report import DataQualityReportBuilder
+from pollingstations.models import (
+    DataQualityReport,
+    PollingStation,
+    PollingDistrict,
+    ResidentialAddress
+)
 
 
 class CsvHelper:
@@ -129,8 +134,18 @@ class BaseImporter(BaseCommand):
         raise NotImplementedError
 
     def report(self):
-        report = DataQualityReport(self.council_id)
+        # build report
+        report = DataQualityReportBuilder(self.council_id)
         report.build_report()
+
+        # save a static copy in the DB that we can serve up on the website
+        record = DataQualityReport(
+            council_id=self.council_id,
+            report=report.generate_string_report()
+        )
+        record.save()
+
+        # output to console
         report.output_console_report()
 
     def handle(self, *args, **kwargs):
@@ -143,6 +158,7 @@ class BaseImporter(BaseCommand):
         PollingStation.objects.filter(council=self.council).delete()
         PollingDistrict.objects.filter(council=self.council).delete()
         ResidentialAddress.objects.filter(council=self.council).delete()
+        DataQualityReport.objects.filter(council=self.council).delete()
 
         if self.base_folder_path is None:
             self.base_folder_path = os.path.abspath(
@@ -312,6 +328,7 @@ class BaseGenericApiImporter:
         PollingStation.objects.filter(council=self.council).delete()
         PollingDistrict.objects.filter(council=self.council).delete()
         ResidentialAddress.objects.filter(council=self.council).delete()
+        DataQualityReport.objects.filter(council=self.council).delete()
 
         self.import_data()
 

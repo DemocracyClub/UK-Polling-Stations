@@ -290,7 +290,7 @@ class ResidentialAddressReport():
 
 
 # generate all the stats
-class DataQualityReport():
+class DataQualityReportBuilder():
 
     council_id = None
     report = []
