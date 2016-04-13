@@ -101,3 +101,8 @@ class ResidentialAddress(models.Model):
     council            = models.ForeignKey(Council, null=True)
     polling_station_id = models.CharField(blank=True, max_length=100)
     slug               = models.SlugField(blank=False, null=False, db_index=True, unique=True, max_length=255)
+
+
+class DataQualityReport(models.Model):
+    council            = models.OneToOneField(Council, primary_key=True)
+    report             = models.TextField(blank=False, null=False)
