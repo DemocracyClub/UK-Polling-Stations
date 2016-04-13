@@ -23,6 +23,7 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
 from councils.models import Council
+from data_collection.data_quality_report import DataQualityReport
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 
 
@@ -127,6 +128,11 @@ class BaseImporter(BaseCommand):
     def post_import(self):
         raise NotImplementedError
 
+    def report(self):
+        report = DataQualityReport(self.council_id)
+        report.build_report()
+        report.output_console_report()
+
     def handle(self, *args, **kwargs):
         if self.council_id is None:
             self.council_id = args[0]
@@ -150,6 +156,9 @@ class BaseImporter(BaseCommand):
             self.post_import()
         except NotImplementedError:
             pass
+
+        # save and output data quality report
+        self.report()
 
 
 class BaseShpImporter(BaseImporter):
@@ -311,6 +320,9 @@ class BaseGenericApiImporter:
             self.post_import()
         except NotImplementedError:
             pass
+
+        # save and output data quality report
+        self.report()
 
     def import_data(self):
         # deal with 'stations only' or 'districts only' data
