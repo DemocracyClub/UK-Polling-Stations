@@ -11,4 +11,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         report = DataQualityReport(kwargs['council_id'])
-        report.output_report()
+        report.build_report()
+        report.output_console_report()

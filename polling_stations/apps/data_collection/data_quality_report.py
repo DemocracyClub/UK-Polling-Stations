@@ -289,86 +289,194 @@ class ResidentialAddressReport():
         return results[0][0]
 
 
-# generate all the stats and output to console
+# generate all the stats
 class DataQualityReport():
 
     council_id = None
+    report = []
 
     def __init__(self, council_id):
         self.council_id = council_id
 
-    def output_header(self):
-        print("==================================")
-        OutputFormatter.print_bold("        DATA QUALITY REPORT")
-        print("==================================\n")
+    def build_header(self):
+        self.report.append({ 'style': None,
+            'text': "=================================="
+        })
+        self.report.append({ 'style': 'bold',
+            'text': "        DATA QUALITY REPORT"
+        })
+        self.report.append({ 'style': None,
+            'text': "==================================\n"
+        })
 
-    def output_station_report(self):
+    def build_station_report(self):
         stations_report = StationReport(self.council_id)
 
         stations_imported = stations_report.get_stations_imported()
         if stations_imported > 0:
-            OutputFormatter.print_bold("STATIONS IMPORTED                : %i" % (stations_imported))
-            print("----------------------------------")
+            self.report.append({ 'style': 'bold',
+                'text': "STATIONS IMPORTED                : %i" % (stations_imported)
+            })
+            self.report.append({ 'style': None,
+                'text': "----------------------------------"
+            })
+
             district_ids = stations_report.get_stations_with_district_id()
             if district_ids > 0:
-                OutputFormatter.print_ok_bold(" - with district id              : %i" % (district_ids))
-                OutputFormatter.print_ok("   - valid district id refs      : %i" % (stations_report.get_stations_with_valid_district_id_ref()))
-                OutputFormatter.print_warning("   - invalid district id refs    : %i" % (stations_report.get_stations_with_invalid_district_id_ref()))
+                self.report.append({ 'style': 'ok_bold',
+                    'text': " - with district id              : %i" % (district_ids)
+                })
+                self.report.append({ 'style': 'ok',
+                    'text': "   - valid district id refs      : %i" % (stations_report.get_stations_with_valid_district_id_ref())
+                })
+                self.report.append({ 'style': 'warning',
+                    'text': "   - invalid district id refs    : %i" % (stations_report.get_stations_with_invalid_district_id_ref())
+                })
             else:
-                OutputFormatter.print_ok(" - with district id              : %i" % (district_ids))
-            OutputFormatter.print_warning(" - without district id           : %i" % (stations_report.get_stations_without_district_id()))
-            OutputFormatter.print_ok(" - with point                    : %i" % (stations_report.get_stations_with_point()))
-            OutputFormatter.print_warning(" - without point                 : %i" % (stations_report.get_stations_without_point()))
-            OutputFormatter.print_ok(" - with address                  : %i" % (stations_report.get_stations_with_address()))
-            OutputFormatter.print_warning(" - without address               : %i" % (stations_report.get_stations_without_address()))
-            print("----------------------------------")
-            OutputFormatter.print_bold("POLYGON LOOKUPS")
-            OutputFormatter.print_warning("Stations in 0 districts          : %i" % (stations_report.get_stations_in_zero_districts()))
-            OutputFormatter.print_ok("Stations in 1 districts          : %i" % (stations_report.get_stations_in_one_districts()))
-            OutputFormatter.print_warning("Stations in >1 districts         : %i" % (stations_report.get_stations_in_more_districts()))
-            print("\n")
+                self.report.append({ 'style': 'ok',
+                    'text': " - with district id              : %i" % (district_ids)
+                })
 
-    def output_district_report(self):
+            self.report.append({ 'style': 'warning',
+                'text': " - without district id           : %i" % (stations_report.get_stations_without_district_id())
+            })
+            self.report.append({ 'style': 'ok',
+                'text': " - with point                    : %i" % (stations_report.get_stations_with_point())
+            })
+            self.report.append({ 'style': 'warning',
+                'text': " - without point                 : %i" % (stations_report.get_stations_without_point())
+            })
+            self.report.append({ 'style': 'ok',
+                'text': " - with address                  : %i" % (stations_report.get_stations_with_address())
+            })
+            self.report.append({ 'style': 'warning',
+                'text': " - without address               : %i" % (stations_report.get_stations_without_address())
+            })
+            self.report.append({ 'style': None,
+                'text': "----------------------------------"
+            })
+            self.report.append({ 'style': 'bold',
+                'text': "POLYGON LOOKUPS"
+            })
+            self.report.append({ 'style': 'warning',
+                'text': "Stations in 0 districts          : %i" % (stations_report.get_stations_in_zero_districts())
+            })
+            self.report.append({ 'style': 'ok',
+                'text': "Stations in 1 districts          : %i" % (stations_report.get_stations_in_one_districts())
+            })
+            self.report.append({ 'style': 'warning',
+                'text': "Stations in >1 districts         : %i" % (stations_report.get_stations_in_more_districts())
+            })
+            self.report.append({ 'style': None,
+                'text': "\n"
+            })
+
+    def build_district_report(self):
         districts_report = DistrictReport(self.council_id)
 
         districts_imported = districts_report.get_districts_imported()
         if districts_imported > 0:
-            OutputFormatter.print_bold("DISTRICTS IMPORTED               : %i" % (districts_imported))
-            print("----------------------------------")
+            self.report.append({ 'style': 'bold',
+                'text': "DISTRICTS IMPORTED               : %i" % (districts_imported)
+            })
+            self.report.append({ 'style': None,
+                'text': "----------------------------------"
+            })
+
             station_ids = districts_report.get_districts_with_station_id()
             if station_ids > 0:
-                OutputFormatter.print_ok_bold(" - with station id               : %i" % (station_ids))
-                OutputFormatter.print_ok("   - valid station id refs       : %i" % (districts_report.get_districts_with_valid_station_id_ref()))
-                OutputFormatter.print_warning("   - invalid station id refs     : %i" % (districts_report.get_districts_with_invalid_station_id_ref()))
+                self.report.append({ 'style': 'ok_bold',
+                    'text': " - with station id               : %i" % (station_ids)
+                })
+                self.report.append({ 'style': 'ok',
+                    'text': "   - valid station id refs       : %i" % (districts_report.get_districts_with_valid_station_id_ref())
+                })
+                self.report.append({ 'style': 'warning',
+                    'text': "   - invalid station id refs     : %i" % (districts_report.get_districts_with_invalid_station_id_ref())
+                })
             else:
-                OutputFormatter.print_ok(" - with station id               : %i" % (station_ids))
-            OutputFormatter.print_warning(" - without station id            : %i" % (districts_report.get_districts_without_station_id()))
-            print("----------------------------------")
-            OutputFormatter.print_bold("POLYGON LOOKUPS")
-            OutputFormatter.print_warning("Districts containing 0 stations  : %i" % (districts_report.get_districts_containing_zero_stations()))
-            OutputFormatter.print_ok("Districts containing 1 stations  : %i" % (districts_report.get_districts_containing_one_stations()))
-            OutputFormatter.print_warning("Districts containing >1 stations : %i" % (districts_report.get_districts_containing_more_stations()))
-            print("\n")
+                self.report.append({ 'style': 'ok',
+                    'text': " - with station id               : %i" % (station_ids)
+                })
 
-    def output_residential_address_report(self):
+            self.report.append({ 'style': 'warning',
+                'text': " - without station id            : %i" % (districts_report.get_districts_without_station_id())
+            })
+            self.report.append({ 'style': None,
+                'text': "----------------------------------"
+            })
+            self.report.append({ 'style': 'bold',
+                'text': "POLYGON LOOKUPS"
+            })
+            self.report.append({ 'style': 'warning',
+                'text': "Districts containing 0 stations  : %i" % (districts_report.get_districts_containing_zero_stations())
+            })
+            self.report.append({ 'style': 'ok',
+                'text': "Districts containing 1 stations  : %i" % (districts_report.get_districts_containing_one_stations())
+            })
+            self.report.append({ 'style': 'warning',
+                'text': "Districts containing >1 stations : %i" % (districts_report.get_districts_containing_more_stations())
+            })
+            self.report.append({ 'style': None,
+                'text': "\n"
+            })
+
+    def build_residential_address_report(self):
         address_report = ResidentialAddressReport(self.council_id)
 
         addresses_imported = address_report.get_addresses_imported()
         if addresses_imported > 0:
-            OutputFormatter.print_bold("ADDRESSES IMPORTED               : %i" % (addresses_imported))
-            print("----------------------------------")
+            self.report.append({ 'style': 'bold',
+                'text': "ADDRESSES IMPORTED               : %i" % (addresses_imported)
+            })
+            self.report.append({ 'style': None,
+                'text': "----------------------------------"
+            })
+
             station_ids = address_report.get_addresses_with_station_id()
             if station_ids > 0:
-                OutputFormatter.print_ok_bold(" - with station id               : %i" % (station_ids))
-                OutputFormatter.print_ok("   - valid station id refs       : %i" % (address_report.get_addresses_with_valid_station_id_ref()))
-                OutputFormatter.print_warning("   - invalid station id refs     : %i" % (address_report.get_addresses_with_invalid_station_id_ref()))
+                self.report.append({ 'style': 'ok_bold',
+                    'text': " - with station id               : %i" % (station_ids)
+                })
+                self.report.append({ 'style': 'ok',
+                    'text': "   - valid station id refs       : %i" % (address_report.get_addresses_with_valid_station_id_ref())
+                })
+                self.report.append({ 'style': 'warning',
+                    'text': "   - invalid station id refs     : %i" % (address_report.get_addresses_with_invalid_station_id_ref())
+                })
             else:
-                OutputFormatter.print_ok(" - with station id               : %i" % (station_ids))
-            OutputFormatter.print_warning(" - without station id            : %i" % (address_report.get_addresses_without_station_id()))
-            print("\n")
+                self.report.append({ 'style': 'ok',
+                    'text': " - with station id               : %i" % (station_ids)
+                })
 
-    def output_report(self):
-        self.output_header()
-        self.output_district_report()
-        self.output_station_report()
-        self.output_residential_address_report()
+            self.report.append({ 'style': 'warning',
+                'text': " - without station id            : %i" % (address_report.get_addresses_without_station_id())
+            })
+            self.report.append({ 'style': None,
+                'text': "\n"
+            })
+
+    def build_report(self):
+        self.build_header()
+        self.build_district_report()
+        self.build_station_report()
+        self.build_residential_address_report()
+
+    def output_console_report(self):
+        for line in self.report:
+            if line['style'] == 'ok':
+                OutputFormatter.print_ok(line['text'])
+            elif line['style'] == 'warning':
+                OutputFormatter.print_warning(line['text'])
+            elif line['style'] == 'ok_bold':
+                OutputFormatter.print_ok_bold(line['text'])
+            elif line['style'] == 'bold':
+                OutputFormatter.print_bold(line['text'])
+            elif line['style'] is None:
+                print(line['text'])
+
+    def generate_string_report(self):
+        out = ''
+        for line in self.report:
+            out = out + line['text'] + "\n"
+        return out.strip()
