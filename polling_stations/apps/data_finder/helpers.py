@@ -25,9 +25,14 @@ def geocode(postcode):
     if 'error' in res_json:
         raise PostcodeError("Mapit error {}: {}".format(res_json['code'], res_json['error']))
     else:
+        gss_codes = []
+        for area in res_json['areas']:
+            if 'gss' in res_json['areas'][area]['codes']:
+                gss_codes.append(res_json['areas'][area]['codes']['gss'])
         return {
             'wgs84_lon': res_json['wgs84_lon'],
             'wgs84_lat': res_json['wgs84_lat'],
+            'gss_codes': gss_codes,
         }
 
 
