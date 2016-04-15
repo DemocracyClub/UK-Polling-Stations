@@ -19,7 +19,12 @@
     {% for council in object_list %}
         <tr>
             <td>{{ council.council_id }}</td>
-            <td>{{ council.council.name }}</td>
+            <td>{% if council.has_report %}
+                <a href="{% url "data_quality" council_id=council.council_id %}">{{ council.council.name }}</a>
+                {% else %}
+                {{ council.council.name }}
+                {% endif %}
+            </td>
             <td>
             {% if council.council.postcode %}
             <a href="{% url "postcode_view" postcode=council.council.postcode %}">{{ council.council.postcode }}</a>
