@@ -4,7 +4,7 @@ from councils.models import Council
 
 
 class DataQuality(models.Model):
-    council = models.OneToOneField(Council)
+    council = models.OneToOneField(Council, primary_key=True)
     url = models.URLField(blank=True, verbose_name="URL to the data",
         help_text="(PDF, website, etc)")
     data_format = models.CharField(blank=True, max_length=100,
@@ -19,6 +19,7 @@ class DataQuality(models.Model):
         help_text="Have we heard from them directly?")
     rating = models.DecimalField(blank=True, null=True, max_digits=1,
         help_text="From 0 to 9", decimal_places=0)
+    report = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = "Data Quality"

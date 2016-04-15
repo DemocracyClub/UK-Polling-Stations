@@ -25,11 +25,11 @@ from django.utils.safestring import mark_safe
 from councils.models import Council
 from data_collection.data_quality_report import DataQualityReportBuilder
 from pollingstations.models import (
-    DataQualityReport,
     PollingStation,
     PollingDistrict,
     ResidentialAddress
 )
+from data_collection.models import DataQuality
 
 
 class CsvHelper:
@@ -139,11 +139,11 @@ class BaseImporter(BaseCommand):
         report.build_report()
 
         # save a static copy in the DB that we can serve up on the website
-        record = DataQualityReport(
+        record = DataQuality.objects.get_or_create(
             council_id=self.council_id,
-            report=report.generate_string_report()
         )
-        record.save()
+        record[0].report=report.generate_string_report()
+        record[0].save()
 
         # output to console
         report.output_console_report()
@@ -158,7 +158,6 @@ class BaseImporter(BaseCommand):
         PollingStation.objects.filter(council=self.council).delete()
         PollingDistrict.objects.filter(council=self.council).delete()
         ResidentialAddress.objects.filter(council=self.council).delete()
-        DataQualityReport.objects.filter(council=self.council).delete()
 
         if self.base_folder_path is None:
             self.base_folder_path = os.path.abspath(
@@ -328,7 +327,6 @@ class BaseGenericApiImporter:
         PollingStation.objects.filter(council=self.council).delete()
         PollingDistrict.objects.filter(council=self.council).delete()
         ResidentialAddress.objects.filter(council=self.council).delete()
-        DataQualityReport.objects.filter(council=self.council).delete()
 
         self.import_data()
 
