@@ -8,8 +8,9 @@
         <th>ID</th>
         <th>Council</th>
         <th>Example</th>
-        <th>Polling Stations?</th>
-        <th>Polling Districts?</th>
+        <th>Polling Stations</th>
+        <th>Polling Districts</th>
+        <th>Addresses</th>
         {% if request.user.is_staff %}
         <th>Edit</th>
         {% endif %}
@@ -33,10 +34,13 @@
             {% endif %}
             </td>
             <td>
-              {{ council.council.pollingstation_set.count }}
+              {{ council.num_stations }}
             </td>
             <td>
-              {{ council.council.pollingdistrict_set.count }}
+              {{ council.num_districts }}
+            </td>
+            <td>
+              {{ council.num_addresses }}
             </td>
             {% if request.user.is_staff %}
             <td>

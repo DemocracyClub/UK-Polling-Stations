@@ -20,6 +20,9 @@ class DataQuality(models.Model):
     rating = models.DecimalField(blank=True, null=True, max_digits=1,
         help_text="From 0 to 9", decimal_places=0)
     report = models.TextField(blank=True)
+    num_stations = models.IntegerField(default=0)
+    num_districts = models.IntegerField(default=0)
+    num_addresses = models.IntegerField(default=0)
 
     class Meta:
         verbose_name_plural = "Data Quality"
