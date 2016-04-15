@@ -101,3 +101,42 @@ class ResidentialAddress(models.Model):
     council            = models.ForeignKey(Council, null=True)
     polling_station_id = models.CharField(blank=True, max_length=100)
     slug               = models.SlugField(blank=False, null=False, db_index=True, unique=True, max_length=255)
+
+
+"""
+Store details of areas that have their own
+custom polling station finders
+and/or a message that we might want to show.
+
+
+Example content:
+
+record = CustomFinder(
+    area_code='E07000082'
+    base_url='https://stroud.maps.arcgis.com/apps/webappviewer/index.html?id=ea6bf4b3655542c1a05c8d7e87d32bb1'
+    can_pass_postcode=False
+    message="Stroud District Council has its' own polling station finder:"
+)
+record.save()
+
+record = CustomFinder(
+    area_code='W06000008'
+    base_url=''
+    can_pass_postcode=False
+    message='<h3>We're working on it!</h3>Ceredigion Council have provided polling station data. It will be available soon.'
+)
+record.save()
+
+record = CustomFinder(
+    area_code='N07000001'
+    base_url='http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode='
+    can_pass_postcode=True
+    message='The Electoral Office of Northern Ireland has its' own polling station finder:'
+)
+record.save()
+"""
+class CustomFinder(models.Model):
+    area_code = models.CharField(max_length=9, primary_key=True)
+    base_url = models.CharField(blank=True, max_length=255)
+    can_pass_postcode = models.BooleanField(default=False)
+    message = models.TextField(blank=True)
