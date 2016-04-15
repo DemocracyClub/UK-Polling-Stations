@@ -39,6 +39,11 @@ class StationReport():
 
     def __init__(self, council_id):
         self.council_id = council_id
+        self.counts = {
+            '0': 0,
+            '1': 0,
+            '>1': 0
+        }
         self.generate_counts()
 
     def get_stations_imported(self):
@@ -154,6 +159,11 @@ class DistrictReport():
 
     def __init__(self, council_id):
         self.council_id = council_id
+        self.counts = {
+            '0': 0,
+            '1': 0,
+            '>1': 0
+        }
         self.generate_counts()
 
     def get_districts_imported(self):
