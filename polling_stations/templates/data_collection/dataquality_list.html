@@ -4,7 +4,6 @@
 <table class="table table-striped">
     <thead>
       <tr>
-        <th>Rating</th>
         <th>ID</th>
         <th>Council</th>
         <th>Example</th>
@@ -19,13 +18,6 @@
     <tbody>
     {% for council in object_list %}
         <tr>
-            <td>
-              {% if council.rating == -1 %}
-                Unrated
-              {% else %}
-                {{ council.rating}}
-              {% endif %}
-            </td>
             <td>{{ council.council_id }}</td>
             <td>{{ council.council.name }}</td>
             <td>
