@@ -51,17 +51,21 @@
         {% if custom.base_url and custom.can_pass_postcode %}
 
             <p><a href="{{ custom.base_url }}{{ custom.encoded_postcode }}">{% trans "Find your polling station" %}</a></p>
-            {% blocktrans with council_phone=council.phone council_name=council.name %}
-            <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-            {% endblocktrans %}
+            {% if council.phone %}
+              {% blocktrans with council_phone=council.phone council_name=council.name %}
+              <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
+              {% endblocktrans %}
+            {% endif %}
 
         {% else %}
             {% if custom.base_url %}
 
                 <p><a href="{{ custom.base_url }}">{% trans "Find your polling station" %}</a></p>
-                {% blocktrans with council_phone=council.phone council_name=council.name %}
-                <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-                {% endblocktrans %}
+                {% if council.phone %}
+                  {% blocktrans with council_phone=council.phone council_name=council.name %}
+                  <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
+                  {% endblocktrans %}
+                {% endif %}
 
             {% endif %}
         {% endif %}
@@ -143,6 +147,7 @@
     </div>
 
 
+    {% if council.address or council.postcode or council.phone or council.email %}
     <div class="card">
       <h3>{% trans "Council Contact info" %}</h3>
       <address>
@@ -153,6 +158,7 @@
         <a href="mailto:{{ council.email }}">{{ council.email }}</a>
       </address>
     </div>
+    {% endif %}
 
   </div>
 </div>
