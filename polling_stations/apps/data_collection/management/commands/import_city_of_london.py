@@ -18,6 +18,12 @@ class Command(BaseApiKmlKmlImporter):
     These aren't actually KML - they're QML (hence use of SRID 27700)
     but gdal.DataSource will just deal with them for us :)
     """
+    elections = [
+        'gla.c.2016-05-05',
+        'gla.a.2016-05-05',
+        'mayor.london.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     def district_record_to_dict(self, record):
         geojson = record.geom.geojson
