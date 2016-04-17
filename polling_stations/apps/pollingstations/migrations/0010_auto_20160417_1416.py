@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pollingstations', '0006_residentialaddress_slug'),
+        ('pollingstations', '0009_customfinder'),
     ]
 
     operations = [
