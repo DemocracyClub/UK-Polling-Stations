@@ -13,6 +13,7 @@ class Command(BaseKamlImporter):
     council_id     = 'E07000228'
     districts_name = 'msdc_3830_pollingdistricts_polygon.kmz'
     stations_name  = 'R3900_pollingstations.csv'
+    elections      = ['parl.2015-05-07']
 
     def extract_msercode_from_description(self, description):
         html = etree.HTML(str(description).replace('&', '&amp;'))

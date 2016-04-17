@@ -11,6 +11,7 @@ class Command(BaseShpImporter):
     council_id     = 'E06000041'
     districts_name = ''
     stations_name  = 'POLLING_STATIONS_font_point.shp'
+    elections      = ['parl.2015-05-07']
 
     def import_polling_districts(self):
         # Because we don't have them :(

@@ -12,6 +12,7 @@ class Command(BaseJasonImporter):
     council_id     = 'S12000042'
     districts_name = 'polling_districts.bng.geo.json'
     stations_name  = 'SV_POLLING_STATIONS.csv'
+    elections      = ['parl.2015-05-07']
 
     def district_record_to_dict(self, record):
         properties = record['properties']

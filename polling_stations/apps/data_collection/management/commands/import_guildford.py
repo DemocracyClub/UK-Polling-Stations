@@ -19,6 +19,7 @@ class Command(BaseKamlImporter):
     # so we work with a version that has been repaired so it will parse properly
     districts_name = 'GuildfordBoroughCouncilPollingDistricts20150325-fixed.kml'
     stations_name  = 'GuildfordBoroughCouncilPollingPlaces20150325.csv'
+    elections      = ['parl.2015-05-07']
 
     def district_record_to_dict(self, record):
         # this kml has no altitude co-ordinates so the data is ok as it stands

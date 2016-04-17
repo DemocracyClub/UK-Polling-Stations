@@ -17,6 +17,7 @@ class Command(BaseKamlImporter):
     council_id     = 'E06000026'
     districts_name = 'Plymouth_Polling_Districts.kml'
     stations_name  = 'Plymouth Polling Stations.csv'
+    elections      = ['parl.2015-05-07']
 
     def district_record_to_dict(self, record):
         # this kml has no altitude co-ordinates so the data is ok as it stands

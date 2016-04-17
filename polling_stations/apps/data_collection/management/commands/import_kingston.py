@@ -14,7 +14,7 @@ class Command(BaseKamlImporter):
     council_id     = 'E09000021'
     districts_name = 'Polling_districts.kmz'
     stations_name  = 'Polling_stations.csv'
-
+    elections      = ['parl.2015-05-07']
     csv_encoding   = 'latin-1'
 
     def station_record_to_dict(self, record):
