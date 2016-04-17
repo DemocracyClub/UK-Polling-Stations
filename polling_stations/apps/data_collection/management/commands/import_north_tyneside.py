@@ -13,6 +13,7 @@ class Command(BaseShpImporter):
     council_id     = 'E08000022'
     districts_name = 'NT_Polling_Districts_2014'
     stations_name  = 'NT_Polling_Stations_2015.csv'
+    elections      = ['parl.2015-05-07']
 
     def district_record_to_dict(self, record):
         return {
@@ -41,7 +42,7 @@ class Command(BaseShpImporter):
         Insert them in the DB with address = "Address not supplied"
         on the basis we can still provide directions to the grid ref.
         """
-        if address = '' and postcode = '':
+        if address == '' and record.place_pcod == '':
             address = "Address not supplied"
 
         return {
