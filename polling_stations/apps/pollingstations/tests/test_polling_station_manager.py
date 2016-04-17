@@ -40,6 +40,9 @@ class PollingStationsTestBase:
 class PollingStationsStationIdTest(TestCase, PollingStationsTestBase):
     fixtures = ['test_polling_stations_station_id.json']
 
+    def test_multiple_matches(self):
+        pass
+
 # test lookup when PollingStation.district_id is set
 class PollingStationsDistrictIdTest(TestCase, PollingStationsTestBase):
     fixtures = ['test_polling_stations_district_id.json']
