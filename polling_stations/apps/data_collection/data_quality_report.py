@@ -307,6 +307,7 @@ class DataQualityReportBuilder():
 
     def __init__(self, council_id):
         self.council_id = council_id
+        self.report = []
 
     def build_header(self):
         self.report.append({ 'style': None,
