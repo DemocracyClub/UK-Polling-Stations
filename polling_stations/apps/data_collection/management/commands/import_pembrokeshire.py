@@ -14,6 +14,12 @@ class Command(BaseApiKmlKmlImporter):
     council_id       = 'W06000009'
     districts_url    = 'http://www.pembrokeshire.gov.uk/geoserver/maps/live/wms?LAYERS=tblPollingDistrict&FORMAT=application/vnd.google-earth.kml+xml&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG%3A27700&BBOX=162666.9591241047,187007.85481671634,234800.000001,260094.71375428123&WIDTH=256&HEIGHT=256'
     stations_url     = 'http://www.pembrokeshire.gov.uk/geoserver/maps/live/wms?LAYERS=tblPollingStation&FORMAT=application/vnd.google-earth.kml+xml&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG%3A27700&BBOX=162666.9591241047,187007.85481671634,234800.000001,260094.71375428123&WIDTH=256&HEIGHT=256'
+    elections        = [
+        'pcc.2016-05-05',
+        'naw.c.2016-05-05',
+        'naw.r.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     def extract_info_from_district_description(self, description):
         # lxml needs everything to be enclosed in one root element
