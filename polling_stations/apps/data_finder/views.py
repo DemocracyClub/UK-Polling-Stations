@@ -15,7 +15,8 @@ from councils.models import Council
 from data_finder.models import LoggedPostcode
 from pollingstations.models import (
     PollingStation,
-    ResidentialAddress
+    ResidentialAddress,
+    CustomFinder
 )
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
@@ -110,6 +111,12 @@ class BasePollingStationView(
         context['station'] = self.station
         context['directions'] = self.directions
         context['we_know_where_you_should_vote'] = self.station
+
+        if not context['we_know_where_you_should_vote']:
+            if l is None:
+                context['custom'] = None
+            else:
+                context['custom'] = CustomFinder.objects.get_custom_finder(l['gss_codes'], self.postcode)
 
         self.log_postcode(self.postcode, context)
         return context

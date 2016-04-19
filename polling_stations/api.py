@@ -6,7 +6,7 @@ from django.utils.encoding import smart_str
 from rest_framework import routers, serializers, viewsets, views
 from councils.models import Council
 from pollingstations.models import (PollingStation, PollingDistrict,
-    ResidentialAddress)
+    ResidentialAddress, CustomFinder)
 
 # Fields define serialization of complex field types (GEO)
 class PointField(serializers.Field):
@@ -148,6 +148,14 @@ class PostcodeViewSet(viewsets.ViewSet):
             ret['polling_station_known'] = True
             ret['polling_station'] = PollingStationSerializer(
                 polling_station, context={'request': self.request}).data
+
+        if not ret['polling_station_known']:
+            finder = CustomFinder.objects.get_custom_finder(l['gss_codes'], postcode)
+            if finder.base_url:
+                ret['custom_finder'] = {}
+                ret['custom_finder']['base_url'] = finder.base_url
+                ret['custom_finder']['can_pass_postcode'] = finder.can_pass_postcode
+                ret['custom_finder']['encoded_postcode'] = finder.encoded_postcode
 
         return Response(ret)
 
