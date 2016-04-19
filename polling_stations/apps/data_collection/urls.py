@@ -6,6 +6,7 @@ from .views import LeagueTable
 
 urlpatterns = patterns(
     '',
-    url(r'^$',  cache_page(60 * 15)(LeagueTable.as_view()), name='league_table'),
+    url(r'^/$', LeagueTable.as_view(), name='league_table'),
+    url(r'/data_quality/(?P<council_id>.+)/$', 'data_collection.views.data_quality', name='data_quality'),
 )
 

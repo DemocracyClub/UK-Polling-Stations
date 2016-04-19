@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from data_collection.data_quality_report import DataQualityReport
+from data_collection.data_quality_report import DataQualityReportBuilder
 
 class Command(BaseCommand):
 
@@ -10,5 +10,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-        report = DataQualityReport(kwargs['council_id'])
-        report.output_report()
+        report = DataQualityReportBuilder(kwargs['council_id'])
+        report.build_report()
+        report.output_console_report()

@@ -23,7 +23,18 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
 from councils.models import Council
-from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
+from data_collection.data_quality_report import (
+    DataQualityReportBuilder,
+    StationReport,
+    DistrictReport,
+    ResidentialAddressReport
+)
+from pollingstations.models import (
+    PollingStation,
+    PollingDistrict,
+    ResidentialAddress
+)
+from data_collection.models import DataQuality
 
 
 class CsvHelper:
@@ -127,6 +138,27 @@ class BaseImporter(BaseCommand):
     def post_import(self):
         raise NotImplementedError
 
+    def report(self):
+        # build report
+        report = DataQualityReportBuilder(self.council_id)
+        station_report = StationReport(self.council_id)
+        district_report = DistrictReport(self.council_id)
+        address_report = ResidentialAddressReport(self.council_id)
+        report.build_report()
+
+        # save a static copy in the DB that we can serve up on the website
+        record = DataQuality.objects.get_or_create(
+            council_id=self.council_id,
+        )
+        record[0].report = report.generate_string_report()
+        record[0].num_stations = station_report.get_stations_imported()
+        record[0].num_districts = district_report.get_districts_imported()
+        record[0].num_addresses = address_report.get_addresses_imported()
+        record[0].save()
+
+        # output to console
+        report.output_console_report()
+
     def handle(self, *args, **kwargs):
         if self.council_id is None:
             self.council_id = args[0]
@@ -150,6 +182,9 @@ class BaseImporter(BaseCommand):
             self.post_import()
         except NotImplementedError:
             pass
+
+        # save and output data quality report
+        self.report()
 
 
 class BaseShpImporter(BaseImporter):
@@ -311,6 +346,9 @@ class BaseGenericApiImporter:
             self.post_import()
         except NotImplementedError:
             pass
+
+        # save and output data quality report
+        self.report()
 
     def import_data(self):
         # deal with 'stations only' or 'districts only' data

@@ -4,12 +4,12 @@
 <table class="table table-striped">
     <thead>
       <tr>
-        <th>Rating</th>
         <th>ID</th>
         <th>Council</th>
         <th>Example</th>
-        <th>Polling Stations?</th>
-        <th>Polling Districts?</th>
+        <th>Polling Stations</th>
+        <th>Polling Districts</th>
+        <th>Addresses</th>
         {% if request.user.is_staff %}
         <th>Edit</th>
         {% endif %}
@@ -18,25 +18,26 @@
     <tbody>
     {% for council in object_list %}
         <tr>
-            <td>
-              {% if council.rating == -1 %}
-                Unrated
-              {% else %}
-                {{ council.rating}}
-              {% endif %}
-            </td>
             <td>{{ council.council_id }}</td>
-            <td>{{ council.council.name }}</td>
+            <td>{% if council.has_report %}
+                <a href="{% url "data_quality" council_id=council.council_id %}">{{ council.council.name }}</a>
+                {% else %}
+                {{ council.council.name }}
+                {% endif %}
+            </td>
             <td>
             {% if council.council.postcode %}
             <a href="{% url "postcode_view" postcode=council.council.postcode %}">{{ council.council.postcode }}</a>
             {% endif %}
             </td>
             <td>
-              {{ council.council.pollingstation_set.count }}
+              {{ council.num_stations }}
             </td>
             <td>
-              {{ council.council.pollingdistrict_set.count }}
+              {{ council.num_districts }}
+            </td>
+            <td>
+              {{ council.num_addresses }}
             </td>
             {% if request.user.is_staff %}
             <td>
