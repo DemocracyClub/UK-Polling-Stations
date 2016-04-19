@@ -16,6 +16,7 @@ class Command(BaseShpShpImporter):
     council_id     = 'E07000108'
     districts_name = 'Dover_Polling_Boundaries'
     stations_name  = 'Dover_Polling_Stations.shp'
+    elections      = ['parl.2015-05-07']
 
     def district_record_to_dict(self, record):
         return {

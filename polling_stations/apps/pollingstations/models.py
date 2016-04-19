@@ -19,6 +19,9 @@ class PollingDistrict(models.Model):
     # the point of import
     polling_station_id  = models.CharField(blank=True, max_length=255)
 
+    class Meta:
+        unique_together = (("council", "internal_council_id"))
+
     objects = models.GeoManager()
 
     def __unicode__(self):
@@ -84,6 +87,9 @@ class PollingStation(models.Model):
     # This is NOT a FK, as we might not have the polling district at
     # the point of import
     polling_district_id  = models.CharField(blank=True, max_length=255)
+
+    class Meta:
+        unique_together = (("council", "internal_council_id"))
 
     objects = PollingStationManager()
 

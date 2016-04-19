@@ -58,18 +58,6 @@
     {
         "fields": {
             "location": "",
-            "address": "Baz Community Centre, Bar Town",
-            "internal_council_id": "2",
-            "council": "X01000001",
-            "postcode": "",
-            "polling_district_id": ""
-        },
-        "model": "pollingstations.pollingstation",
-        "pk": 3
-    },
-    {
-        "fields": {
-            "location": "",
             "address": "St Norf's Church Hall, Qux Town",
             "internal_council_id": "1",
             "council": "X01000002",
@@ -77,7 +65,7 @@
             "polling_district_id": ""
         },
         "model": "pollingstations.pollingstation",
-        "pk": 4
+        "pk": 3
     },
     {
         "fields": {

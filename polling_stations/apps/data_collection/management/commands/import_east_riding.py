@@ -12,6 +12,7 @@ class Command(BaseShpImporter):
     council_id     = 'E06000011'
     districts_name = 'Polling_Districts.shpn'
     stations_name  = 'FOI6287_polling-stations.csv'
+    elections      = ['parl.2015-05-07']
 
     def district_record_to_dict(self, record):
         return {

@@ -19,6 +19,12 @@ class Command(BaseAddressCsvImporter):
     council_id      = 'W06000016'
     addresses_name  = 'PROPERTYLISTINGFORDEMOCRACYCLUB.csv'
     stations_name   = 'POLLINGSTATIONS8MARCH2016.csv'
+    elections       = [
+        'pcc.2016-05-05',
+        'naw.c.2016-05-05',
+        'naw.r.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     def station_record_to_dict(self, record):
 

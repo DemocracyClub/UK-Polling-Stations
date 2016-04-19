@@ -12,6 +12,7 @@ class Command(BaseShpShpImporter):
     council_id     = 'E07000234'
     districts_name = 'Electoral Boundaries 2'
     stations_name  = 'Bromsgrove DC and Redditch BC Polling Stations - May 2015 Elections.shp'
+    elections      = ['parl.2015-05-07']
 
     def district_record_to_dict(self, record):
         return {

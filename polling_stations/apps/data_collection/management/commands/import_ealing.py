@@ -19,6 +19,12 @@ class Command(BaseApiKmlKmlImporter):
     because it is made from magic and awesome! :D
     """
     stations_url     = 'http://inspire.misoportal.com/geoserver/london_borough_of_ealing_polling_station_location_point/ows?VERSION=1.1.1&REQUEST=GetMap&SERVICE=WMS&LAYERS=london_borough_of_ealing_polling_station_location_point&STYLES=&BBOX=-0.61059285604864,51.410208305472,0.022513608765178,51.630693143964&SRS=EPSG%3A4258&WIDTH=1005&HEIGHT=349&FORMAT=application/vnd.google-earth.kml+xml&TRANSPARENT=TRUE'
+    elections        = [
+        'gla.c.2016-05-05',
+        'gla.a.2016-05-05',
+        'mayor.london.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     def extract_info_from_district_description(self, description):
         # lxml needs everything to be enclosed in one root element

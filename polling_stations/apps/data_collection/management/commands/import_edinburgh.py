@@ -22,6 +22,11 @@ class Command(BaseShpShpImporter):
     This will provide coverage for all but one of the districts.
     """
     stations_name  = 'rev02-2016/polling district boundaries 2016.shp'
+    elections      = [
+        'sp.c.2016-05-05',
+        'sp.r.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     def district_record_to_dict(self, record):
         return {

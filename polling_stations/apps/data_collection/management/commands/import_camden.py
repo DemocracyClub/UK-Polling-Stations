@@ -26,6 +26,12 @@ class Command(BaseGenericApiImporter, BaseImporter):
     districts_url    = 'https://opendata.camden.gov.uk/api/views/ta65-2szc/rows.json?accessType=DOWNLOAD'
     # This is just a bespoke XML format
     stations_url     = 'https://opendata.camden.gov.uk/api/views/5rhh-fxna/rows.xml?accessType=DOWNLOAD'
+    elections        = [
+        'gla.c.2016-05-05',
+        'gla.a.2016-05-05',
+        'mayor.london.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     def convert_linestring_to_multiploygon(self, linestring):
         points = linestring.coords
