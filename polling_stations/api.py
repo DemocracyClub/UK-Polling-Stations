@@ -151,7 +151,7 @@ class PostcodeViewSet(viewsets.ViewSet):
 
         if not ret['polling_station_known']:
             finder = CustomFinder.objects.get_custom_finder(l['gss_codes'], postcode)
-            if finder.base_url:
+            if finder and finder.base_url:
                 ret['custom_finder'] = {}
                 ret['custom_finder']['base_url'] = finder.base_url
                 ret['custom_finder']['can_pass_postcode'] = finder.can_pass_postcode
