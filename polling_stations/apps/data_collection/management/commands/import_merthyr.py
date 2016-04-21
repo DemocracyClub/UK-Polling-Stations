@@ -19,6 +19,12 @@ class Command(BaseAddressCsvImporter):
     council_id      = 'W06000024'
     addresses_name  = 'Merthyr Tydfil UPRN Numbers.csv'
     stations_name   = 'Merthyr Tydfil UPRN Numbers.csv'
+    elections       = [
+        'pcc.2016-05-05',
+        'naw.c.2016-05-05',
+        'naw.r.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     known_stations = set()
 
