@@ -6,7 +6,7 @@ note: this script takes quite a long time to run
 from time import sleep
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseAddressCsvImporter
-from data_finder.helpers import geocode
+from data_finder.helpers import geocode, PostcodeError
 from data_collection.google_geocoding_api_wrapper import (
     GoogleGeocodingApiWrapper,
     PostcodeNotFoundException
@@ -56,7 +56,7 @@ class Command(BaseAddressCsvImporter):
                     gridref['wgs84_lat'],
                     srid=4326
                 )
-            except KeyError:
+            except PostcodeError:
                 location = None
         else:
             location = None
