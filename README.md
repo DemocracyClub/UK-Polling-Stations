@@ -29,7 +29,7 @@ brew install gdal
 ```
 From a clean install of Ubuntu 14 (Trusty), the command:
 ```
-sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1
+sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1 libxml2-dev libxslt-dev
 ```
 will install all of the necessary dependencies.
 
