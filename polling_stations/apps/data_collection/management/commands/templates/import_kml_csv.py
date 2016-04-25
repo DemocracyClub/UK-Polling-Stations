@@ -14,6 +14,11 @@ class Command(BaseKamlImporter):
     council_id     = 'COUNCIL_ID'
     districts_name = 'DISTRICT_FILE.kmz'
     stations_name  = 'STATION_FILE.csv'
+    """
+    List of Election IDs the data imported by this script relates to
+    https://democracyclub.org.uk/projects/election-ids/
+    """
+    elections      = []
 
     # we must always implement station_record_to_dict()
     def station_record_to_dict(self, record):

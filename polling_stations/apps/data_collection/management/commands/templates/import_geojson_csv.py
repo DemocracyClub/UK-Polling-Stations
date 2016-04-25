@@ -19,6 +19,11 @@ class Command(BaseJasonImporter):
     if geojson uses UK national grid, remove this
     """
     districts_srid = 4326
+    """
+    List of Election IDs the data imported by this script relates to
+    https://democracyclub.org.uk/projects/election-ids/
+    """
+    elections      = []
 
     def district_record_to_dict(self, record):
         properties = record['properties']
