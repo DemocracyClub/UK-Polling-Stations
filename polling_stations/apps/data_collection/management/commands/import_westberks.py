@@ -9,14 +9,17 @@ class Command(BaseShpShpImporter):
     Imports the Polling Station data from West Berkshire Council
     """
     council_id     = 'E06000037'
-    districts_name = 'polling_districts'
-    stations_name  = 'polling_places.shp'
-    elections      = ['parl.2015-05-07']
+    districts_name = 'rev02-2016/PollingDistricts'
+    stations_name  = 'rev02-2016/PollingStations.shp'
+    elections      = [
+        'pcc.2016-05-05',
+        'ref.2016-06-23'
+    ]
 
     def district_record_to_dict(self, record):
         return {
             'internal_council_id': record[4],
-            'name': record[2],
+            'name': "%s - %s" % (record[2], record[4]),
             'polling_station_id': record[4]
         }
 
