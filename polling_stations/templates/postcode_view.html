@@ -229,7 +229,7 @@
       {% if directions.route %}
       var pointList = [
       {% for p in directions.route %}
-          new L.LatLng({{p.1}}, {{p.0}}){% if not loop.last %},{% endif %}
+          new L.LatLng({{p.1}}, {{p.0}}){% if not forloop.last %},{% endif %}
       {% endfor %}
       ];
 
