@@ -5,6 +5,7 @@
 
 {% block extra_page_css %}
 <link rel="stylesheet" href="{% static "css/map.css" %}" />
+<link rel="stylesheet" href="{% static "Leaflet.ExtraMarkers/css/leaflet.extra-markers.min.css" %}">
 <style>
   .council_location_icon {
     background-color:black;
@@ -172,6 +173,21 @@
 
     // Maps
     window.create_area_map = function(point) {
+
+      var homeMarker = L.ExtraMarkers.icon({
+          icon: 'fa-home',
+          markerColor: 'purple',
+          iconColor: 'white',
+          shape: 'circle',
+          prefix: 'fa'
+      });
+      var stationMarker = L.ExtraMarkers.icon({
+          icon: 'fa-check-square',
+          markerColor: 'purple',
+          iconColor: 'white',
+          shape: 'circle',
+          prefix: 'fa'
+      });
       // var council_location = L.geoJson(point);
       var polling_station_location = point;
 
@@ -224,8 +240,16 @@
       window.map = map;
       window.polling_station_location = polling_station_location;
 
+      // polling station
       L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
         'clickable': true,
+        'icon': stationMarker
+      }).addTo(map);
+
+      // home
+      L.marker(pointList[0], {
+        'clickable': true,
+        'icon': homeMarker
       }).addTo(map);
 
       {% if directions.route %}
@@ -238,7 +262,7 @@
     var point = [{{ location.1 }}, {{ location.0 }}];
 
     {% if we_know_where_you_should_vote and station.location %}
-    fallback.ready(['L'], function() {
+    fallback.ready(['L.ExtraMarkers'], function() {
         create_area_map(point);
     });
     {% endif %}
@@ -250,12 +274,20 @@
 {% block extra_javascript %}
 <script type="text/javascript">
         fallback.load({
+          'css$font-awesome': [
+              '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css',
+              '{% static 'css/font-awesome.min.css' %}'
+          ],
           L: [
               '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
               '{% static 'js/leaflet.js' %}'
+          ],
+          'L.ExtraMarkers': [
+              '{% static "Leaflet.ExtraMarkers/js/leaflet.extra-markers.min.js" %}'
           ]}, {
             shim: {
-              'L': 'jQuery'
+              'L': ['jQuery'],
+              'L.ExtraMarkers': ['L']
             }
           }
         );
