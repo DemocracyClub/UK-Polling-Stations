@@ -211,16 +211,23 @@ LOGGING = {
 }
 
 """
+Map config:
+-----------
+
 Set a shell environment variable TILE_LAYER
 to configure which tile layer is used by leaflet.
 
-Default to map quest tiles.
-
 Supported values are:
 'MapQuestOpen' (default)
+'MapQuestSDK'
 'OpenStreetMap'
 """
 TILE_LAYER = os.environ.get('TILE_LAYER', 'MapQuestOpen')
+"""
+Set a shell environment variable MQ_KEY
+to specify MapQuestSDK API key.
+"""
+MQ_KEY = os.environ.get('MQ_KEY', None)
 
 
 from django.utils.translation import ugettext_lazy as _
