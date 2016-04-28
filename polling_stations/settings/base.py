@@ -1,4 +1,4 @@
-import sys
+import os, sys
 from os.path import join, abspath, dirname
 
 # PATH vars
@@ -209,6 +209,19 @@ LOGGING = {
         },
     }
 }
+
+"""
+Set a shell environment variable TILE_LAYER
+to configure which tile layer is used by leaflet.
+
+Default to map quest tiles.
+
+Supported values are:
+'MapQuestOpen' (default)
+'OpenStreetMap'
+"""
+TILE_LAYER = os.environ.get('TILE_LAYER', 'MapQuestOpen')
+
 
 from django.utils.translation import ugettext_lazy as _
 LANGUAGE_CODE = 'en'
