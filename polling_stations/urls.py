@@ -13,7 +13,8 @@ from data_finder.views import (
     PostcodeView,
     CoverageView,
     AddressView,
-    AddressFormView
+    AddressFormView,
+    campaign_signup
 )
 
 # Uncomment the next two lines to enable the admin:
@@ -22,7 +23,7 @@ admin.autodiscover()
 
 
 core_patterns = patterns(
-
+    '',
     url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
@@ -30,6 +31,8 @@ core_patterns = patterns(
         AddressView.as_view(), name='address_view'),
     url(r'^address_select/(?P<postcode>.+)/$',
         AddressFormView.as_view(), name='address_select_view'),
+    url(r'^campaign_signup/(?P<postcode>.+)/$',
+        'data_finder.views.campaign_signup', name='campaign_signup'),
     url(r'^$', HomeView.as_view(), name='home'),
 )
 

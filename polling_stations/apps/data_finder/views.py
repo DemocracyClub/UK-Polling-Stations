@@ -1,4 +1,5 @@
 import abc
+import json
 import re
 import requests
 
@@ -6,13 +7,15 @@ from operator import itemgetter
 
 from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.core.validators import validate_email
+from django.forms import ValidationError
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, DetailView, TemplateView
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
-from data_finder.models import LoggedPostcode
+from data_finder.models import LoggedPostcode, CampaignSignup
 from pollingstations.models import (
     PollingStation,
     ResidentialAddress,
@@ -119,6 +122,7 @@ class BasePollingStationView(
                 context['custom'] = CustomFinder.objects.get_custom_finder(l['gss_codes'], self.postcode)
 
         self.log_postcode(self.postcode, context)
+
         return context
 
 
@@ -175,6 +179,40 @@ class AddressView(BasePollingStationView):
         return PollingStation.objects.get_polling_station_by_id(
             self.address.polling_station_id,
             self.address.council_id)
+
+
+def campaign_signup(request, postcode):
+    if request.POST.get('join', 'false') == 'true':
+        join_list = True
+    else:
+        join_list = False
+    name = request.POST.get('name', '')
+    email = request.POST.get('email', '')
+
+    errors = { 'errors': { 'name': 0, 'email': 0 } }
+    if not name or len(name) > 100:
+        errors['errors']['name'] = 1
+    if not email or len(email) > 100:
+        errors['errors']['email'] = 1
+    try:
+        validate_email(email)
+    except ValidationError:
+        errors['errors']['email'] = 1
+
+    if errors['errors']['name'] == 1 or errors['errors']['email'] == 1:
+        return HttpResponse(json.dumps(errors),
+            status=400, content_type='application/json')
+
+    kwargs = {
+        'postcode': postcode,
+        'name': name,
+        'email': email,
+        'join_list': join_list
+    }
+    CampaignSignup.objects.create(**kwargs)
+
+    return HttpResponse(json.dumps(errors),
+        status=200, content_type='application/json')
 
 
 class AddressFormView(FormView):
