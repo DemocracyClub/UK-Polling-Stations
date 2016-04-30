@@ -8,8 +8,6 @@ import django_extensions.db.fields
 
 class Migration(migrations.Migration):
 
-    replaces = [('data_finder', '0001_initial'), ('data_finder', '0002_auto_20160315_2020'), ('data_finder', '0003_auto_20160315_2053')]
-
     dependencies = [
         ('councils', '0002_auto_20160121_1522'),
     ]
