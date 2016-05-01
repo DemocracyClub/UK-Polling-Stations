@@ -14,12 +14,24 @@ from pollingstations.models import ResidentialAddress
 class PostcodeError(Exception):
     pass
 
+class RateLimitError(Exception):
+    pass
+
 
 def geocode(postcode):
     """
     Use MaPit to convert the postcode to a location and constituency
     """
-    res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
+    headers = {}
+    if constants.MAPIT_UA:
+        headers['User-Agent'] = constants.MAPIT_UA
+
+    res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode), headers=headers)
+
+    if res.status_code == 403:
+        # we hit MapIt's rate limit
+        raise RateLimitError("Mapit error 403: Rate limit exceeded")
+
     res_json = res.json()
 
     if 'error' in res_json:

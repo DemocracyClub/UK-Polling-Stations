@@ -91,7 +91,12 @@ class PollingDistrictViewSet(viewsets.ModelViewSet):
     serializer_class = PollingDistrictSerializer
 
 from rest_framework.response import Response
-from data_finder.helpers import PostcodeError, geocode, RoutingHelper
+from data_finder.helpers import (
+    geocode,
+    PostcodeError,
+    RateLimitError,
+    RoutingHelper
+)
 from django.contrib.gis.geos import Point
 
 
@@ -114,7 +119,7 @@ class PostcodeViewSet(viewsets.ViewSet):
 
         try:
             l = geocode(pk)
-        except PostcodeError as e:
+        except (PostcodeError, RateLimitError) as e:
             ret['error'] = e.args[0]
             return Response(ret)
 
