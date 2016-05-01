@@ -31,11 +31,15 @@
     {% if error %}
 
       {% if error == 'Mapit error 403: Rate limit exceeded' %}
+      {% blocktrans %}
       <h2>Sorry, we're a bit busy right now!</h2>
       <p>Try again in a few minutes.</p>
+      {% endblocktrans %}
       {% else %}
+      {% blocktrans %}
       <h2>Sorry, we can't find {{ postcode }}</h2>
       <p>This doesn't appear to be a valid postcode.</p>
+      {% endblocktrans %}
       <form method="post" action="{% url 'home' %}" class="form form-inline">
           {% csrf_token %}
           <label class="card_header">{% trans "Enter Your Postcode" %}
