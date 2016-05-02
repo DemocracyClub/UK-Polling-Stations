@@ -1,5 +1,6 @@
 import requests
 import re
+import logging
 import lxml.etree
 from collections import namedtuple
 
@@ -10,12 +11,13 @@ from data_collection import constants
 
 from pollingstations.models import ResidentialAddress
 
-
 class PostcodeError(Exception):
     pass
 
 class RateLimitError(Exception):
-    pass
+    def __init__(self, message):
+        logger = logging.getLogger('django.request')
+        logger.error(message)
 
 
 def geocode(postcode):
