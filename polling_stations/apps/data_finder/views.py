@@ -4,6 +4,7 @@ import requests
 
 from operator import itemgetter
 
+from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
@@ -89,6 +90,9 @@ class BasePollingStationView(
             return None
 
     def get_context_data(self, **context):
+        context['tile_layer'] = settings.TILE_LAYER
+        context['mq_key'] = settings.MQ_KEY
+
         try:
             l = self.get_location()
         except PostcodeError as e:
