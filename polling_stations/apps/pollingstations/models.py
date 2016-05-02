@@ -94,6 +94,10 @@ class PollingStation(models.Model):
 
     class Meta:
         unique_together = (("council", "internal_council_id"))
+        index_together = [
+            ["council", "internal_council_id"],
+            ["council", "polling_district_id"]
+        ]
 
     objects = PollingStationManager()
 
