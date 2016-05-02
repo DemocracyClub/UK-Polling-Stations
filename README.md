@@ -29,7 +29,7 @@ brew install gdal
 ```
 From a clean install of Ubuntu 14 (Trusty), the command:
 ```
-sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1
+sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1 libxml2-dev libxslt-dev
 ```
 will install all of the necessary dependencies.
 
@@ -62,10 +62,33 @@ python manage.py migrate
 ```
 
 ### Import initial data
+
+#### Import Councils
+
 ```
 python manage.py import_councils
-python manage.py loaddata polling_stations/apps/pollingstations/fixtures/initial_data.json
 ```
+
+#### Import some Polling District/Station data
+
+To populate your database, pass `manage.py import -e` a list of [Election IDs](https://democracyclub.org.uk/projects/election-ids/) to run all of the import scripts relating to a particular election or elections. For example:
+
+```
+python manage.py import -e parl.2015-05-07
+```
+will run all of the import scripts relating to the 2015 general election.
+
+```
+python manage.py import -e naw.c.2016-05-05 naw.r.2016-05-05
+```
+will run all of the import scripts relating to the 2016 Welsh Assembly elections.
+
+```
+python manage.py import -e ref.2016-06-23
+```
+
+will run all of the import scripts relating to the 2016 EU Referendum.
+
 
 ## Importing the data we have from councils
 
@@ -76,5 +99,3 @@ You can see the current status in [the Waffle Board](https://waffle.io/Democracy
 Data lives in ./data/[council.id]-[council.name]/*
 
 We make a Django manage.py command in the data_collection app for each council which imports the raw data. There are some base importer command classes in the `__init__.py` of `data_collection.management.commands` and some template import scripts in `polling_stations/apps/data_collection/management/commands/templates/` to use as a starting point.
-
-We then serialize the imported data to `polling_stations/apps/pollingstations/fixtures/initial_data.json`
