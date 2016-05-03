@@ -29,6 +29,7 @@ from .helpers import (
     DirectionsHelper,
     natural_sort,
     PostcodeError,
+    RateLimitError,
     RoutingHelper
 )
 
@@ -98,8 +99,8 @@ class BasePollingStationView(
 
         try:
             l = self.get_location()
-        except PostcodeError as e:
-            context['error'] = e
+        except (PostcodeError, RateLimitError) as e:
+            context['error'] = str(e)
             return context
 
         if l is None:
