@@ -14,6 +14,11 @@ class Command(BaseShpImporter):
     council_id     = 'COUNCIL_ID'
     districts_name = 'name_without_.shp'
     stations_name  = 'STATION_FILE.csv'
+    """
+    List of Election IDs the data imported by this script relates to
+    https://democracyclub.org.uk/projects/election-ids/
+    """
+    elections      = []
 
     def district_record_to_dict(self, record):
         print('District: ', record)

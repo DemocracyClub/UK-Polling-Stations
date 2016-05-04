@@ -5,6 +5,7 @@
 
 {% block extra_page_css %}
 <link rel="stylesheet" href="{% static "css/map.css" %}" />
+<link rel="stylesheet" href="{% static "Leaflet.ExtraMarkers/css/leaflet.extra-markers.min.css" %}">
 <style>
   .council_location_icon {
     background-color:black;
@@ -30,8 +31,16 @@
     <div class="card">
     {% if error %}
 
+      {% if error == 'Mapit error 403: Rate limit exceeded' %}
+      {% blocktrans %}
+      <h2>Sorry, we're a bit busy right now!</h2>
+      <p>Try again in a few minutes.</p>
+      {% endblocktrans %}
+      {% else %}
+      {% blocktrans %}
       <h2>Sorry, we can't find {{ postcode }}</h2>
       <p>This doesn't appear to be a valid postcode.</p>
+      {% endblocktrans %}
       <form method="post" action="{% url 'home' %}" class="form form-inline">
           {% csrf_token %}
           <label class="card_header">{% trans "Enter Your Postcode" %}
@@ -42,6 +51,7 @@
           </p>
           <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
       </form>
+      {% endif %}
 
     {% else %}
 
@@ -120,6 +130,9 @@
 
     {% endif %}
     </div>
+    {% if not we_know_where_you_should_vote and not custom %}
+    {% include "campaign_signup.html" %}
+    {% endif %}
   </div>
 
 
@@ -169,6 +182,21 @@
 
     // Maps
     window.create_area_map = function(point) {
+
+      var homeMarker = L.ExtraMarkers.icon({
+          icon: 'fa-home',
+          markerColor: 'purple',
+          iconColor: 'white',
+          shape: 'circle',
+          prefix: 'fa'
+      });
+      var stationMarker = L.ExtraMarkers.icon({
+          icon: 'fa-check-square',
+          markerColor: 'purple',
+          iconColor: 'white',
+          shape: 'circle',
+          prefix: 'fa'
+      });
       // var council_location = L.geoJson(point);
       var polling_station_location = point;
 
@@ -178,19 +206,47 @@
       // map.doubleClickZoom.disable();
       map.scrollWheelZoom.disable();
 
-      L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
-        type: 'map',
-        ext: 'jpg',
-        attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        subdomains: '1234'
-      }).addTo(map); 
+      var tiles;
+      {% if tile_layer == 'MapQuestSDK' and mq_key %}
+        $.getScript("http://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key={{ mq_key }}").done(function() {
+          tiles = MQ.tileLayer();
+          tiles.addTo(map);
+        });
+      {% else %}
+        {% if tile_layer == 'OpenStreetMap' %}
+        tiles = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            subdomains: 'abc'
+        });
+        {% else %}
+        tiles = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+            type: 'map',
+            ext: 'jpg',
+            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: '1234'
+        });
+        {% endif %}
+        tiles.addTo(map);
+      {% endif %}
+
+      // polling station
+      L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
+        'clickable': true,
+        'icon': stationMarker
+      }).addTo(map);
 
       {% if directions.route %}
       var pointList = [
       {% for p in directions.route %}
-          new L.LatLng({{p.1}}, {{p.0}}){% if not loop.last %},{% endif %}
+          new L.LatLng({{p.1}}, {{p.0}}){% if not forloop.last %},{% endif %}
       {% endfor %}
       ];
+
+      // home
+      L.marker(pointList[0], {
+        'clickable': true,
+        'icon': homeMarker
+      }).addTo(map);
 
       var firstpolyline = new L.Polyline(pointList, {
         color: 'red',
@@ -205,10 +261,6 @@
       window.map = map;
       window.polling_station_location = polling_station_location;
 
-      L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-        'clickable': true,
-      }).addTo(map);
-
       {% if directions.route %}
       map.fitBounds(firstpolyline.getBounds(), {maxZoom: 16});
       {% else %}
@@ -218,9 +270,11 @@
 
     var point = [{{ location.1 }}, {{ location.0 }}];
 
-    fallback.ready(['L'], function() {
+    {% if we_know_where_you_should_vote and station.location %}
+    fallback.ready(['L.ExtraMarkers'], function() {
         create_area_map(point);
     });
+    {% endif %}
 
   </script>
 {% endblock in_page_javascript %}
@@ -229,14 +283,63 @@
 {% block extra_javascript %}
 <script type="text/javascript">
         fallback.load({
+          'css$font-awesome': [
+              '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css',
+              '{% static 'css/font-awesome.min.css' %}'
+          ],
           L: [
               '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
               '{% static 'js/leaflet.js' %}'
+          ],
+          'L.ExtraMarkers': [
+              '{% static "Leaflet.ExtraMarkers/js/leaflet.extra-markers.min.js" %}'
           ]}, {
             shim: {
-              'L': 'jQuery'
+              'L': ['jQuery'],
+              'L.ExtraMarkers': ['L']
             }
           }
         );
+
+{% if not we_know_where_you_should_vote and not custom %}
+fallback.ready(['jQuery'], function() {
+
+    $(document).ready(function() {
+
+        $('#submit').on('click', function() {
+            // submit email signup form
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '{% url "campaign_signup" postcode=postcode %}',
+                data: {
+                    'name': $('#name').val(),
+                    'email': $('#email').val(),
+                    'join': $('#join').is(':checked')
+                }
+            }).done(function() {
+                // sucessful signup
+                $('#campaign_form').html(
+                    '<h2>{% trans "Thanks" %}</h2>' +
+                    '<p>{% trans "Thanks for signing up. If enough people in your local area sign up, " %}' +
+                    '{% trans "we will contact the head of your council on your behalf. " %}' +
+                    '{% trans "We won’t share your email address with them or anyone else." %}</p>');
+                $('#campaign_form').focus();
+            }).fail(function(err) {
+                // validation error
+                for (var field in err.responseJSON.errors) {
+                    if (err.responseJSON.errors[field] === 1) {
+                        $('#' + field + '_error').addClass('is-visible');
+                    } else {
+                        $('#' + field + '_error').removeClass('is-visible');
+                    }
+                }
+            });
+        });
+
+    });
+
+});
+{% endif %}
 </script>
 {% endblock extra_javascript %}

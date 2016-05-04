@@ -21,3 +21,9 @@ class LoggedPostcode(TimeStampedModel):
             self.postcode,
             self.brand,
         )
+
+class CampaignSignup(TimeStampedModel):
+    postcode = models.CharField(max_length=100, blank=False)
+    name = models.CharField(max_length=100, blank=False)
+    email = models.EmailField(blank=False)
+    join_list = models.BooleanField(default=False)

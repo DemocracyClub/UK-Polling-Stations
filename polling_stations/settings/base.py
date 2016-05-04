@@ -1,4 +1,4 @@
-import sys
+import os, sys
 from os.path import join, abspath, dirname
 
 # PATH vars
@@ -105,6 +105,9 @@ STATIC_PRECOMPILER_COMPILERS = (
 )
 
 
+# Use write-through cache for sessions
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -209,6 +212,26 @@ LOGGING = {
         },
     }
 }
+
+"""
+Map config:
+-----------
+
+Set a shell environment variable TILE_LAYER
+to configure which tile layer is used by leaflet.
+
+Supported values are:
+'MapQuestOpen' (default)
+'MapQuestSDK'
+'OpenStreetMap'
+"""
+TILE_LAYER = os.environ.get('TILE_LAYER', 'MapQuestOpen')
+"""
+Set a shell environment variable MQ_KEY
+to specify MapQuestSDK API key.
+"""
+MQ_KEY = os.environ.get('MQ_KEY', None)
+
 
 from django.utils.translation import ugettext_lazy as _
 LANGUAGE_CODE = 'en'
