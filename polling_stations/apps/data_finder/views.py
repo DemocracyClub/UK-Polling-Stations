@@ -107,7 +107,9 @@ class BasePollingStationView(
             return None
 
     def get_language(self):
-        if self.request.session and translation.LANGUAGE_SESSION_KEY in self.request.session:
+        if self.request.session and\
+            translation.LANGUAGE_SESSION_KEY in self.request.session and\
+            self.request.session[translation.LANGUAGE_SESSION_KEY]:
             return self.request.session[translation.LANGUAGE_SESSION_KEY]
         else:
             return ''
