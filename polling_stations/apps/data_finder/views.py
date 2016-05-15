@@ -13,6 +13,7 @@ from django.forms import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, DetailView, TemplateView
+from django.utils import translation
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
@@ -35,13 +36,14 @@ from .helpers import (
 
 
 class LogLookUpMixin(object):
-    def log_postcode(self, postcode, context):
+    def log_postcode(self, postcode, context, language):
         kwargs = {
             'postcode': postcode,
             'had_data': bool(context['we_know_where_you_should_vote']),
             'location': context['location'],
             'council': context['council'],
             'brand': self.request.brand,
+            'language': language,
         }
         kwargs.update(self.request.session['utm_data'])
         LoggedPostcode.objects.create(**kwargs)
@@ -93,6 +95,12 @@ class BasePollingStationView(
         else:
             return None
 
+    def get_language(self):
+        if self.request.session and translation.LANGUAGE_SESSION_KEY in self.request.session:
+            return self.request.session[translation.LANGUAGE_SESSION_KEY]
+        else:
+            return ''
+
     def get_context_data(self, **context):
         context['tile_layer'] = settings.TILE_LAYER
         context['mq_key'] = settings.MQ_KEY
@@ -126,7 +134,7 @@ class BasePollingStationView(
             else:
                 context['custom'] = CustomFinder.objects.get_custom_finder(l['gss_codes'], self.postcode)
 
-        self.log_postcode(self.postcode, context)
+        self.log_postcode(self.postcode, context, self.get_language())
 
         return context
 
