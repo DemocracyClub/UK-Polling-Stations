@@ -5,6 +5,7 @@ Polling Stations Open Data API
 from django.utils.encoding import smart_str
 from rest_framework import routers, serializers, viewsets, views
 from councils.models import Council
+from data_finder.views import LogLookUpMixin
 from pollingstations.models import (PollingStation, PollingDistrict,
     ResidentialAddress, CustomFinder)
 
@@ -100,7 +101,7 @@ from data_finder.helpers import (
 from django.contrib.gis.geos import Point
 
 
-class PostcodeViewSet(viewsets.ViewSet):
+class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
     def get_queryset(self, **kwargs):
         if not kwargs:
             return PollingStation.objects.all()
@@ -127,8 +128,8 @@ class PostcodeViewSet(viewsets.ViewSet):
         ret['postcode_location'] = PointField().to_representation(
             location)
 
-        ret['council'] = CouncilSerializer(Council.objects.get(
-            area__covers=location)).data
+        council = Council.objects.get(area__covers=location)
+        ret['council'] = CouncilSerializer(council).data
 
         rh = RoutingHelper(postcode)
 
@@ -161,6 +162,14 @@ class PostcodeViewSet(viewsets.ViewSet):
                 ret['custom_finder']['base_url'] = finder.base_url
                 ret['custom_finder']['can_pass_postcode'] = finder.can_pass_postcode
                 ret['custom_finder']['encoded_postcode'] = finder.encoded_postcode
+
+        log_data = {}
+        log_data['we_know_where_you_should_vote'] = ret['polling_station_known']
+        log_data['location'] = location
+        log_data['council'] = council
+        log_data['brand'] = 'api'
+        log_data['language'] = ''
+        self.log_postcode(postcode, log_data)
 
         return Response(ret)
 
