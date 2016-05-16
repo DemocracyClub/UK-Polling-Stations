@@ -460,3 +460,49 @@ class BaseAddressCsvImporter(BaseImporter):
     def import_data(self):
         self.import_residential_addresses()
         self.import_polling_stations()
+
+
+class StationsOnlyCsvImporter(BaseImporter):
+
+    csv_encoding = 'utf-8'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            'council_id',
+            help='Council ID to report on in the format X01000001'
+        )
+        parser.add_argument(
+            'input_file',
+            help="""Path to CSV file to import e.g:
+            '/home/user/ukpollingstations/UK-Polling-Stations/data/crowdsourcing/ref.2016-06-23/X01000001.csv'
+            """
+        )
+        parser.add_argument(
+            '-c',
+            '--character-encoding',
+            help='<Optional> Character encoding of the CSV',
+            required=False
+        )
+
+    def handle(self, *args, **kwargs):
+
+        if not os.path.exists(os.path.abspath(kwargs['input_file'])):
+            self.stdout.write(self.style.ERROR('Input file does not exist'))
+            quit()
+
+        self.council_id = kwargs['council_id']
+        head, tail = os.path.split(os.path.abspath(kwargs['input_file']))
+        self.base_folder_path = head
+        self.stations_name = tail
+        if kwargs['character_encoding']:
+            self.csv_encoding = kwargs['character_encoding']
+
+        self.council = Council.objects.get(pk=self.council_id)
+
+        # Delete old data for this council
+        PollingStation.objects.filter(council=self.council).delete()
+
+        self.import_polling_stations()
+
+        # save and output data quality report
+        self.report()

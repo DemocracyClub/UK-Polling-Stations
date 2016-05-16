@@ -11,31 +11,11 @@ import os
 from time import sleep
 from django.contrib.gis.geos import Point
 from councils.models import Council
-from data_collection.management.commands import BaseImporter
+from data_collection.management.commands import StationsOnlyCsvImporter
 from data_finder.helpers import geocode, PostcodeError
 from pollingstations.models import PollingStation
 
-class Command(BaseImporter):
-
-    csv_encoding = 'utf-8'
-
-    def add_arguments(self, parser):
-        parser.add_argument(
-            'council_id',
-            help='Council ID to report on in the format X01000001'
-        )
-        parser.add_argument(
-            'input_file',
-            help="""Path to CSV file to import e.g:
-            '/home/user/ukpollingstations/UK-Polling-Stations/data/crowdsourcing/ref.2016-06-23/X01000001.csv'
-            """
-        )
-        parser.add_argument(
-            '-c',
-            '--character-encoding',
-            help='<Optional> Character encoding of the CSV',
-            required=False
-        )
+class Command(StationsOnlyCsvImporter):
 
     def station_record_to_dict(self, record):
 
@@ -64,26 +44,3 @@ class Command(BaseImporter):
             'polling_district_id': record.polling_district_id.strip(),
             'location'           : location
         }
-
-    def handle(self, *args, **kwargs):
-
-        if not os.path.exists(os.path.abspath(kwargs['input_file'])):
-            self.stdout.write(self.style.ERROR('Input file does not exist'))
-            quit()
-
-        self.council_id = kwargs['council_id']
-        head, tail = os.path.split(os.path.abspath(kwargs['input_file']))
-        self.base_folder_path = head
-        self.stations_name = tail
-        if kwargs['character_encoding']:
-            self.csv_encoding = kwargs['character_encoding']
-
-        self.council = Council.objects.get(pk=self.council_id)
-
-        # Delete old data for this council
-        PollingStation.objects.filter(council=self.council).delete()
-
-        self.import_polling_stations()
-
-        # save and output data quality report
-        self.report()
