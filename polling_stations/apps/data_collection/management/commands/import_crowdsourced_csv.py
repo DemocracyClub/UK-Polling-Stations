@@ -40,6 +40,10 @@ class Command(BaseImporter):
     def station_record_to_dict(self, record):
 
         postcode = record.postcode.strip()
+        address = record.address.strip()
+
+        if not address and not postcode:
+            return None
 
         # if we have a postcode, attempt to attach a grid ref
         # so we can show the user a map and provide directions
@@ -56,7 +60,7 @@ class Command(BaseImporter):
         return {
             'internal_council_id': record.polling_district_id.strip(),
             'postcode'           : postcode,
-            'address'            : record.address.strip(),
+            'address'            : address,
             'polling_district_id': record.polling_district_id.strip(),
             'location'           : location
         }
