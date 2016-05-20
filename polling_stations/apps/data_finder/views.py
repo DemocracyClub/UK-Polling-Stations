@@ -126,7 +126,8 @@ class BasePollingStationView(
             else:
                 context['custom'] = CustomFinder.objects.get_custom_finder(l['gss_codes'], self.postcode)
 
-        self.log_postcode(self.postcode, context)
+        if not self.do_not_log:
+            self.log_postcode(self.postcode, context)
 
         return context
 
@@ -135,6 +136,7 @@ class PostcodeView(BasePollingStationView):
 
     def get(self, request, *args, **kwargs):
         rh = RoutingHelper(self.kwargs['postcode'])
+        self.do_not_log = request.GET.get('no-log') is not None
         endpoint = rh.get_endpoint()
         if endpoint.view != 'postcode_view':
             return HttpResponseRedirect(
