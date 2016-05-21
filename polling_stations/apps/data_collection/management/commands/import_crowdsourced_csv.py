@@ -18,6 +18,11 @@ from pollingstations.models import PollingStation
 
 class Command(StationsOnlyCsvImporter):
 
+    def add_polling_station(self, station_info):
+        station_info['council'] = self.council
+        record = PollingStation(**station_info)
+        record.save(force_insert=True)
+
     def station_record_to_dict(self, record):
 
         postcode = record.postcode.strip()
