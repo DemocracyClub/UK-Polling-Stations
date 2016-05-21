@@ -471,10 +471,21 @@ class StationsOnlyCsvImporter(BaseImporter):
             'council_id',
             help='Council ID to report on in the format X01000001'
         )
-        parser.add_argument(
-            'input_file',
+        group = parser.add_mutually_exclusive_group(required=True)
+        group.add_argument(
+            '-f',
+            '--file',
+            nargs=1,
             help="""Path to CSV file to import e.g:
             '/home/user/ukpollingstations/UK-Polling-Stations/data/crowdsourcing/ref.2016-06-23/X01000001.csv'
+            """
+        )
+        group.add_argument(
+            '-u',
+            '--url',
+            nargs=1,
+            help="""URL to CSV file to import e.g:
+            'https://docs.google.com/spreadsheet/ccc?key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&output=csv'
             """
         )
         parser.add_argument(
@@ -486,14 +497,23 @@ class StationsOnlyCsvImporter(BaseImporter):
 
     def handle(self, *args, **kwargs):
 
-        if not os.path.exists(os.path.abspath(kwargs['input_file'])):
-            self.stdout.write(self.style.ERROR('Input file does not exist'))
-            quit()
+        if 'file' in kwargs and kwargs['file'] is not None:
+            input_file = kwargs['file'][0]
+            if not os.path.exists(os.path.abspath(input_file)):
+                self.stdout.write(self.style.ERROR('Input file does not exist'))
+                quit()
 
-        self.council_id = kwargs['council_id']
-        head, tail = os.path.split(os.path.abspath(kwargs['input_file']))
+        if 'url' in kwargs and kwargs['url'] is not None:
+            url = kwargs['url'][0]
+            tmp = tempfile.NamedTemporaryFile()
+            req = urllib.request.urlretrieve(url, tmp.name)
+            input_file = tmp.name
+
+        head, tail = os.path.split(os.path.abspath(input_file))
         self.base_folder_path = head
         self.stations_name = tail
+
+        self.council_id = kwargs['council_id']
         if kwargs['character_encoding']:
             self.csv_encoding = kwargs['character_encoding']
 
@@ -503,6 +523,12 @@ class StationsOnlyCsvImporter(BaseImporter):
         PollingStation.objects.filter(council=self.council).delete()
 
         self.import_polling_stations()
+
+        # close handle + clean up temp file (if we created one)
+        try:
+            tmp.close()
+        except UnboundLocalError:
+            pass
 
         # save and output data quality report
         self.report()

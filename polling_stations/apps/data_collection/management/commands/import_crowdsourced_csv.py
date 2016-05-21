@@ -1,10 +1,11 @@
 """
 Import crowd sourced polling
-station data from CSV file
+station data from CSV file or URL
 
 example usage:
-./manage.py import_crowdsourced_csv X01000001 /home/user/ukpollingstations/UK-Polling-Stations/data/crowdsourcing/ref.2016-06-23/X01000001.csv
-./manage.py import_crowdsourced_csv X01000001 /home/user/ukpollingstations/UK-Polling-Stations/data/crowdsourcing/pilot/X01000001.csv -c 'latin-1'
+./manage.py import_crowdsourced_csv X01000001 -f data/crowdsourcing/ref.2016-06-23/X01000001.csv
+./manage.py import_crowdsourced_csv X01000001 -f data/crowdsourcing/pilot/X01000001.csv -c 'latin-1'
+./manage.py import_crowdsourced_csv X01000001 -u 'https://docs.google.com/spreadsheet/ccc?key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&output=csv'
 """
 
 import os
