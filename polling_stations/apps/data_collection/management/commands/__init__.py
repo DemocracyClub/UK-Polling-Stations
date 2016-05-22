@@ -453,6 +453,8 @@ class BaseAddressCsvImporter(BaseImporter):
         data = helper.parseCsv()
         for row in data:
             address_info = self.address_record_to_dict(row)
+            if address_info is None:
+                continue
             if 'council' not in address_info:
                 address_info['council'] = self.council
             self.add_residential_address(address_info)
