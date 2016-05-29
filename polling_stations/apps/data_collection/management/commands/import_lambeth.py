@@ -53,6 +53,8 @@ class Command(BaseAddressCsvImporter):
         }
 
     def address_record_to_dict(self, record):
+        postcode = record.postcode.strip()
+
         if record.propertynumber.strip() == '0':
             address = record.streetname.strip()
 
@@ -61,7 +63,8 @@ class Command(BaseAddressCsvImporter):
             different polling stations due to incomplete data.
             We will just exclude them for convenience - its a drop in the ocean.
             """
-            if address == 'Rectory Grove' or address == 'Kennington Oval':
+            if (address == 'Rectory Grove' and postcode == 'SW4 0DX') or\
+               (address == 'Kennington Oval' and postcode == 'SE11 5SW'):
                 return None
 
         else:
@@ -69,6 +72,6 @@ class Command(BaseAddressCsvImporter):
 
         return {
             'address'           : address,
-            'postcode'          : record.postcode.strip(),
+            'postcode'          : postcode,
             'polling_station_id': record.pollingplaceid
         }
