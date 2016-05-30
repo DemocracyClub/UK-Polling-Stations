@@ -89,7 +89,6 @@ msgid ""
 "        "
 msgstr "\n<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi gysylltu a'r cyngor.</p>\n<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">%(council_phone)s</a></strong></p>"
 
-#: polling_stations/templates/postcode_view.html:65
 msgid ""
 "\n"
 "        <h3>You don't need your poll card to vote</h3>\n"
@@ -97,12 +96,24 @@ msgid ""
 "            station and give them your name and address.</p>\n"
 "        <p>You don't need any other form of ID.</p>\n"
 "        <p>If you haven’t received a polling card but think you should have done, contact your council</p>\n"
+"        "
+msgstr "\n<h3>Nid yw cerdyn pleidleisio yn angenrheidiol er mwyn pleidleisio</h3>\n<p>Os nad oes gennych gerdyn pleidleisio, gallwch fynd \ni'ch gorsaf bleidleisio a dweud eich enw a chyfeiriad.</p>\n<p>Nid oes angen cerdyn adnabod arnoch .</p>\n<p>Cysyllwch gyda'r cyngor os nad ydych wedi derbyn cerdyn pleidleisio</p>\n        "
+
+msgid ""
+"\n"
 "        <p><strong>Polling stations are open from 7am to 10pm on polling day.</strong></p>\n"
+"        "
+msgstr
+""
+
+msgid ""
+"\n"
 "        <p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" target=\"_blank\">\n"
 "          Read more about voting in the UK\n"
 "        </a></p>\n"
 "        "
-msgstr "\n<h3>Nid yw cerdyn pleidleisio yn angenrheidiol er mwyn pleidleisio</h3>\n<p>Os nad oes gennych gerdyn pleidleisio, gallwch fynd \ni'ch gorsaf bleidleisio a dweud eich enw a chyfeiriad.</p>\n<p>Nid oes angen cerdyn adnabod arnoch .</p>\n<p>Cysyllwch gyda'r cyngor os nad ydych wedi derbyn cerdyn pleidleisio</p>\n<p><strong>Mae gorsafoedd pleidleisio ar agor o 7y.b tan 10 y.h. ar ddiwrnod y bleidlais.</strong></p>\n<p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" target=\"_blank\">\nDarllen mwy am bleidleisio yn y D.U. \n</a></p>"
+msgstr
+"\n<p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" target=\"_blank\">\nDarllen mwy am bleidleisio yn y D.U. \n</a></p>\n        "
 
 #: polling_stations/templates/postcode_view.html:79
 msgid ""
