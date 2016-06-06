@@ -1,0 +1,95 @@
+DISTRICT,POLLING_PLACE_NAME,STATION_CARD_NUMBERS,UPRN,ADDRESS,EASTING,NORTHING,COORD_SOURCE,LAST_CHECK_DATE
+CAA,"Hadley Memorial Hall, 29 Hadley Highstone Barnet EN5 4PU",1,200054141,"29 Hadley Highstone, BARNET, EN5 4PU",524607,197729,NLPG BLPU,3/30/16
+CAB,"St Marks Church Hall, Potters Road, New Barnet Herts EN5 5HY","02, 03, 04",200150845,"St Marks Church, Potters Road, Barnet",525649,196480,NLPG BLPU,3/30/16
+CAC,"Arkley Club, 64 Barnet Road Arkley EN5 3EY",5,200148220,"Arkley Mens Club, 64 Barnet Road, BARNET, EN5 3EY",524281,196788,NLPG BLPU,3/30/16
+CAD,"Q.E Boy’s School, Queen’s Road, Barnet EN5 4DQ",6,200096027,"Queen Elizabeths School, Queens Road, BARNET, EN5 4DQ",523006,196121,NLPG BLPU,3/30/16
+CAE,"The Hyde Room, Chipping Barnet Library, 3 Stapylton Road, Barnet EN5 4QT","07, 08",200107378,"Chipping Barnet Library, 3 Stapylton Road, BARNET, EN5 4QT",523688,196741,NLPG BLPU,3/30/16
+CBA,"New Bevan Baptist Church Hall, Grove Road, Barnet Herts EN4 9DF",9,200053598,"New Bevan Baptist Church, Grove Road, BARNET, EN4 9DF",527290,196510,NLPG BLPU,3/30/16
+CBB,"Trent (CE) Primary School, Church Way, off Chalk Lane, Cockfosters, EN4 9JH","10, 11",200023032,"Trent Church Of England Primary School, Church Way, BARNET, EN4 9JH",527890,196229,NLPG BLPU,3/30/16
+CBC,"Danegrove Primary School, Cat Hill entrance, East Barnet, Herts EN4 8UD",12,200127374,"Danegrove Primary School, Windsor Drive, BARNET, EN4 8UD",527498,195474,NLPG BLPU,3/30/16
+CBD,"Brookside Methodist Church, Cat Hill, Barnet EN4 8JB","13, 14",200019675,"East Barnet Methodist Church, 2 Cat Hill, BARNET, EN4 8JB",527245,195345,NLPG BLPU,3/30/16
+CBE,"New Barnet Community Centre 48/50 Victoria Road, New Barnet EN4 9PF","15, 16",200120427,"50 Victoria Road, BARNET, EN4 9PF",526771,196228,NLPG BLPU,3/30/16
+CCA,"Monkfrith Primary School, Knoll Drive, Southgate N14 5NG",17,200070370,"Monkfrith Primary School, Knoll Drive, LONDON, N14 5NG",528378,194733,NLPG BLPU,3/30/16
+CCB,"Osidge Primary School, Chase Side, Southgate N14 5HD","18, 19",200021060,"Osidge Primary School, Chase Side, LONDON, N14 5HD",529136,194409,NLPG BLPU,3/30/16
+CCC,"Portable Office in the Car Park at Brunswick Park Road, Southgate N11","20, 21",200151639,"Brunswick Park Road Car Park, Brunswick Park Road, London",528345,193175,NLPG BLPU,3/30/16
+CCD,"Brunswick Park Primary School, Osidge Lane, Southgate London N14 5DU","22, 23",200221915,"Brunswick Park JMI School, Osidge Lane, LONDON, N14 5DU",528300,194003,NLPG BLPU,3/30/16
+CDA,"Scout and Guide Hall, Stanford Road, Friern Barnet N11 3HX","24, 25",200222449,"Scout Hall, Stanford Road, LONDON, N11 3HX",527954,192381,NLPG BLPU,3/30/16
+CDB,Portable Office at Junction of Balmoral Avenue/ Regal Drive N11 ,"26, 27",,,528659,192134,digitised over OS MasterMap,3/30/16
+CDC,"St Peter Le Poer Church Hall, Albion Avenue London N10 1AE",28,200150857,"St Peter Le Poer Church Of England Church, Albion Avenue, LONDON, N10 1AQ",528319,190887,NLPG BLPU,3/30/16
+CDD,"Hindu Cultural Society 3 Lyndhurst Avenue, London N12 0NE",29,200150909,"3 Lyndhurst Avenue, LONDON, N12 0LX",527549,191963,NLPG BLPU,3/30/16
+CDE,"Freehold Community Centre 9 Alexandra Road, Muswell Hill N10 2EY",30,10003975973,"Freehold Community Centre, 9 Alexandra Road, LONDON, N10 2EY",528691,191534,NLPG BLPU,3/30/16
+CEA,"Barnet Lawn Tennis Club, Gloucester Road New Barnet EN5 1RS",31,200048096,"Barnet Lawn Tennis Club, Gloucester Road, BARNET, EN5 1RS",525814,195773,NLPG BLPU,3/30/16
+CEB,"Lyonsdown Main Hall, 3 Lyonsdown Road New Barnet EN5 1JB","32, 33",200152283,"3 Lyonsdown Road, BARNET, EN5 1JB",526380,196031,NLPG BLPU,3/30/16
+CEC,"St Mary Magdelen Parish Centre, 6 Athenaeum Road, Whetstone N20 9AE","34, 35",200005271,"St Mary Magdalen Church, Athenaeum Road, LONDON, N20 9AE",526489,194015,NLPG BLPU,3/30/16
+CED,"Manor Drive Methodist Church Hall, Manor Drive Whetstone N20 0DZ","36, 37",200219082,"Manor Drive Methodist Church, Manor Drive, LONDON, N20 0DZ",527523,193248,NLPG BLPU,3/30/16
+CFA,"St Andrew’s JMI School, The Green Totteridge N20 8NX",38,200118627,"St Andrews Church of England Primary School, Totteridge Village, LONDON, N20 8NX",524929,193884,NLPG BLPU,3/30/16
+CFB,"Totteridge Tennis Club, Great Bushey Drive N20 8QL",39,200051104,"Totteridge Tennis Club, Great Bushey Drive, LONDON, N20 8QL",525761,194323,NLPG BLPU,3/30/16
+CFC,"St Johns Church Hall Friern Barnet Lane, Whetstone N20 0LP","40, 41",200157009,"St Johns Church Hall, Friern Barnet Lane, London",526496,193616,NLPG BLPU,3/30/16
+CFD,"Finchley Catholic High School, Woodside Lane, Finchley N12 8TA","42, 43",200130305,"Finchley Catholic High School, Woodside Lane, LONDON, N12 8TA",525975,193054,NLPG BLPU,3/30/16
+CFE,"Woodside Park Social Club, Southover, Finchley N12 7JG","44, 45",200219079,"Woodside Park Club, Southover, LONDON, N12 7JG",525222,192772,NLPG BLPU,3/30/16
+CGA,"Hope Corner Community Centre, 185 Mays Lane, Barnet, Herts EN5 2DY","46, 47",10091041141,"185 Mays Lane, Barnet, EN5 2DY",524437,195638,NLPG BLPU,3/30/16
+CGB,"Underhill Baptist Church Hall, Elton Avenue, Barnet, Herts EN5 2EA",48,200150818,"Underhill Baptist Church, 42 Elton Avenue, BARNET, EN5 2EA",524875,195786,NLPG BLPU,3/30/16
+CGC,"St Stephens Church Hall, 1 Spring Close, Bells Hill, Barnet EN5 2UR","49, 50",200150842,"Church Hall, St Stephens Church Of England Church, Bells Hill, Barnet",523608,195859,NLPG BLPU,3/30/16
+CGD,"The Pavilion, Brickfield Lane, Barnet EN5 3LD",51,200157079,"Tennis Pavilion, Brickfield Lane, Barnet",521592,195282,NLPG BLPU,3/30/16
+CGE,Grasvenor Avenue School Grasvenor Avenue Barnet Herts EN5 2BY,"52, 53",200050909,"Grasvenor Avenue Infant School, Grasvenor Avenue, BARNET, EN5 2BY",525423,195264,NLPG BLPU,3/30/16
+FHA,"North Finchley Library, Ravensdale Avenue, North Finchley, N12 9HP","54, 55",200097082,"North Finchley Library, Ravensdale Avenue, LONDON, N12 9HP",526381,192659,NLPG BLPU,3/30/16
+FHB,"15th Finchley Scout Group , 104 Grove Road, North Finchley, London N12 9EA","56, 57",200147922,"102-104 Grove Road, LONDON, N12 9EA",526631,192265,NLPG BLPU,3/30/16
+FHC,"Summerside School, Crossway, Finchley N12 0QU","58, 59",200029817,"Summerside Primary School, Crossway, LONDON, N12 0QU",526933,191578,NLPG BLPU,3/30/16
+FHD,"Our Lady of Lourdes RC Primary School, Bow Lane, Finchley N12 0JP","60, 61",200012852,"Our Lady Of Lourdes Catholic Primary School, Bow Lane, LONDON, N12 0JP",526414,190974,NLPG BLPU,3/30/16
+FIA,The Green Man Community Centre at Strawberry Vale Estate Finchley N2 9BA,"62, 63",200195077,"Green Man Community Centre, Strawberry Vale, LONDON, N2 9BA",526657,190704,NLPG BLPU,3/30/16
+FIB,"East Finchley Library, 226 High Road, London N2 9BB",64,200061457,"East Finchley Library, 226 High Road, LONDON, N2 9BB",527027,189932,NLPG BLPU,3/30/16
+FIC,"Finchley Youth Centre, 142 High Road East Finchley N2 9ED","65, 66",200061427,"Finchley Youth Theatre, 142 High Road, LONDON, N2 9ED",527242,189640,NLPG BLPU,3/30/16
+FID,"Bishop Douglass RC High School, Hamilton Road East Finchley N2 0SQ","67, 68",200055606,"Bishop Douglass School, Hamilton Road, LONDON, N2 0SQ",526198,189974,NLPG BLPU,3/30/16
+FJA,"Brookland Infants School, Hill Top Hampstead Garden Suburb NW11 6EJ ",69,200063516,"Brookland Infant and Nursery School, Hill Top, LONDON, NW11 6EJ",525605,189468,NLPG BLPU,3/30/16
+FJB,"Portable Office, The Green Widecombe Way/Vivian Way N2",70,,,526690,188930,digitised over OS MasterMap,3/30/16
+FJC,"Portable Office, in Car Park, The Synagogue, Norrice Lea, Garden Suburb      N2 0RE",71,200085724,"Hampstead Garden Suburb Synagogue, Norrice Lea, LONDON, N2 0RE",526632,188831,NLPG BLPU,3/30/16
+FJD,"St Jude’s Church Hall, 1 South Square London NW11 7AH","72, 73",200020344,"St Judes Church, Central Square, London",525518,188362,NLPG BLPU,3/30/16
+FJE,"St Edward the Confessor Church Hall, Hoop Lane Golders Green, NW11 7NH ",74,200150855,"Church Hall, St Edward The Confessor Roman Catholic Church, 700 Finchley Road, London",525094,187972,NLPG BLPU,3/30/16
+FJF,"Fellowship House, 136A Willifield Way, London NW11 6YD",75,200153959,"136A Willifield Way, LONDON, NW11 6YD",525093,188917,NLPG BLPU,3/30/16
+FKA,"Harris Room, Trinity Church, Rodborough Road Childs Hill NW11 8NH","76, 77",200228398,"Trinity Methodist Church Hall, 92 Hodford Road, LONDON, NW11 8EG",525053,187323,NLPG BLPU,3/30/16
+FKB,"All Saints Church of England School, Cricklewood Lane, London NW2 2TH","78, 79",200028892,"All Saints Church Of England Primary School, Cricklewood Lane, LONDON, NW2 2TH",524860,186352,NLPG BLPU,3/30/16
+FKC,"St Agnes Centre, corner of Gillingham Road and Cricklewood Lane Cricklewood NW2 1HR","80, 81",200157000,"St Agnes Centre, Gillingham Road, LONDON, NW2 1DQ",524236,186187,NLPG BLPU,3/30/16
+FKD,"Trading Hut, Rear of 22-23 Needham Terrace, Cricklewood NW2 6QL",82,200157002,"Trading Hut, Allotment Gardens, Allotment Way, London",523657,186124,NLPG BLPU,3/30/16
+FLA,St Mary & Archangel Michael Coptic Orthodox Church Hall Cranbourne Gardens Golders Green NW11 0HU,"83, 84, 85",200157003,"Church Hall, St Mary And Archangel Michael Coptic Orthodox Church, Cranbourne Gardens, LONDON, NW11 0HS",524565,188645,NLPG BLPU,3/30/16
+FLB,Menorah Primary School 1-3 The Drive Golders Green NW11 9SP,"86, 87",200148669,"Menorah Primary School, 1-3 The Drive, LONDON, NW11 9SP",524348,187711,NLPG BLPU,3/30/16
+FLC,"Claremont Primary School Claremont Road, Cricklewood NW2 1AB","88, 89",200023491,"Claremont Primary School, Claremont Road, LONDON, NW2 1AB",523635,186707,NLPG BLPU,3/30/16
+FMA,St Philip The Apostle Parish Centre Gravel Hill Finchley N3 3RJ,"90, 91",200157004,"Church Hall, Saint Philip The Apostle Roman Catholic Church, Gravel Hill, LONDON, N3 3RJ",524884,190310,NLPG BLPU,3/30/16
+FMB,"The Dining Room, Avenue House East End Road Finchley N3 3QE",92,200035697,"Avenue House, 17 East End Road, LONDON, N3 3QE",525209,190271,NLPG BLPU,3/30/16
+FMC,"Finchley Baptist Church Hall, Stanhope Avenue Finchley N3 3QL","93, 94",200035598,"Church End Baptist Church, East End Road, LONDON, N3 3QL",525013,190165,NLPG BLPU,3/30/16
+FMD,"Chalgrove School, Chalgrove Gardens, Finchley N3 3PL","95, 96",200020379,"Chalgrove Primary School, Chalgrove Gardens, LONDON, N3 3PL",524338,189534,NLPG BLPU,3/30/16
+FME,"Portable Office at Hendon Cemetery, Holders Hill Road Hendon NW4",97,,,524081,190677,digitised over OS MasterMap,3/30/16
+FNA,"Carey Room Trinity Church Centre, 15 Nether Street Finchley N12 7NN ","98, 99",200157005,"Hall, Trinity Church, 15 Nether Street, London, N12 7NN",526192,192072,NLPG BLPU,3/30/16
+FNB,"St Paul's Centre, 50 Long Lane, London N3 2PU","100, 101",200150901,"St Pauls Church, Long Lane, London",525678,190898,NLPG BLPU,3/30/16
+FND,"Essex Hall, 5 Essex Park London N3 1ND","102, 103",200038493,"Essex Hall, 5 Essex Park, LONDON, N3 1ND",525724,191423,NLPG BLPU,3/30/16
+HOA,"Fairway Primary School, The Fairway, Mill Hill, NW7 3HS",104,200159112,"Fairway Primary School and Children's Centre, The Fairway, LONDON, NW7 3HS",520783,193503,NLPG BLPU,3/30/16
+HOB,"Courtland School, Courtland Avenue Mill Hill NW7 3BG",105,200027767,"Courtland School, Courtland Avenue, LONDON, NW7 3BG",521066,193508,NLPG BLPU,3/30/16
+HOC,Deansbrook School Hale Drive NW7 3ED,"106, 107",200054548,"Deansbrook Junior School, Hale Drive, LONDON, NW7 3ED",520410,191927,NLPG BLPU,3/30/16
+HOD ,Portable Office at Harvester Car Park Selvage Lane Edgware Middlesex HA8 9RZ,"108, 109",200220767,"128 Hale Lane, EDGWARE, HA8 9RZ",520537,192357,NLPG BLPU,3/30/16
+HOE,The Royal British Legion New Edgware Branch Parnell Close HA8 8YE,110,200091813,"New Edgware Royal British Legion Club, Parnell Close, EDGWARE, HA8 8YE",519970,192958,NLPG BLPU,3/30/16
+HOF,"The Annunciation Catholic Junior School, The Meads, Edgware, Middlesex HA8 9HQ",111,200116457,"The Annunciation Roman Catholic Junior School, The Meads, EDGWARE, HA8 9HQ",520699,191775,NLPG BLPU,3/30/16
+HPA,"Etz Chaim Jewish School, 20 Daws Lane, Mill Hill NW7 4SL","112, 113",200030945,"14-20 Daws Lane, LONDON, NW7 4SL",521910,192165,NLPG BLPU,3/30/16
+HPB,"St Paul’s Church Hall, The Ridgeway Mill Hill NW7 1QU",114,200157006,"St Pauls Church Hall, The Ridgeway, London",522497,192819,NLPG BLPU,3/30/16
+HPC,"Portable Offices, Bittacy Road NW7 1BP","115, 116",,,523911,191502,digitised over OS MasterMap,3/30/16
+HPD,Dollis Infants School Pursley Road Mill Hill NW7 2BU,"117, 118, 119",200095610,"Dollis Infant School, Pursley Road, LONDON, NW7 2BU",523025,191437,NLPG BLPU,3/30/16
+HPE,"Mill Hill Library. Hartley Avenue, Mill Hill NW7 2HX",120,200057669,"Mill Hill Library, Hartley Avenue, LONDON, NW7 2HX",521740,192190,NLPG BLPU,3/30/16
+HQA,"Sunnyfields School, Greyhound Hill, London NW4 4JH",121,200057880,"Sunnyfields Primary School, Hatchcroft, LONDON, NW4 4JH",522584,189522,NLPG BLPU,3/30/16
+HQB,"St Mary & St John CE School, Bennett House, Sunningfield Road, Hendon NW4 4QR","122, 123",200110589,"St Marys Church Of England High School, Sunningfields Road, LONDON, NW4 4QR",522991,189570,NLPG BLPU,3/30/16
+HQC,"Bell Lane School, Bell Lane Hendon NW4  2AS","124, 125",200219401,"Bell Lane Primary School and Childrens Centre, Bell Lane, LONDON, NW4 2AS",523659,189134,NLPG BLPU,3/30/16
+HQD,"Hendon School Green Lane entrance, Hendon NW4 2HP ","126, 127",200049286,"Hendon School, Golders Rise, LONDON, NW4 2HP",523568,188932,NLPG BLPU,3/30/16
+HRA,Barnet Multi- Cultural Community Centre Algernon Road Hendon NW4 3TA,"128, 129",200166018,"Barnet Multi Cultural Community Centre, Algernon Road, LONDON, NW4 3TA",522300,188162,NLPG BLPU,3/30/16
+HRB,"Hasmonean Primary School, 8-10 Shirehall Lane Hendon NW4 2PD",130,200222373,"Hasmonean Primary School, 8-10 Shirehall Lane, LONDON, NW4 2PD",523684,188580,NLPG BLPU,3/30/16
+HRC,"Parkfield Primary School, St David’s Place Park Road Hendon NW4 3PJ",131,200152522,"Parkfield Primary School, 17 St Davids Place, LONDON, NW4 3PJ",522574,187887,NLPG BLPU,3/30/16
+HRD,West Hendon Community Centre Marsh Drive West Hendon NW9 7QE,"132, 133",200156706,"West Hendon Community Centre, Marsh Drive, LONDON, NW9 7QE",521764,188205,NLPG BLPU,3/30/16
+HRE,The Hyde School Hyde Crescent/ Edgware Road Hendon NW9 7EY,134,200151622,"The Hyde Primary School and Childrens Centre, Hyde Crescent, LONDON, NW9 7EY",521503,188578,NLPG BLPU,3/30/16
+HSA ,"BEST Hub, Lanacre Avenue, Colindale, London NW9 5FN","135, 136",200166605,"The Orion Primary School, Lanacre Avenue, London, NW9 5FN",521521,190528,NLPG BLPU,3/30/16
+HSB,"Grahame Park Community Centre, The Concourse Grahame Park NW9 5UY",137,200114477,"Community Centre, The Concourse, LONDON, NW9 5UY",521662,190640,NLPG BLPU,3/30/16
+HSC,"The Hyde United Reform Church Hall, Colin Close,  Colindale NW9 6RR","138, 139, 140",200152285,"The Hyde Church Hall, Colin Close, London",521263,189146,NLPG BLPU,3/30/16
+HSD,"Estate Management Suite, 16 Heritage Avenue, Beaufort Park NW9 5EN",141,200140038,"16 Heritage Avenue, LONDON, NW9 5EN",521794,190011,NLPG BLPU,3/30/16
+HTA ,"The Eversfield Centre, 11 Eversfield Gardens Mill Hill NW7 2AE","142, 143",200151015,"Trinity Church and Eversfield Centre, 11 Eversfield Gardens, LONDON, NW7 2AE",521174,191485,NLPG BLPU,3/30/16
+HTB,"Our Lady of the Annunciation Church Hall, Cnr Thirleby Road and Gervase Road Burnt Oak HA8 0HQ","144, 145",200157007,"Hall, Church Of The Annunciation, Thirleby Road, Edgware, HA8 0HQ",520539,190712,NLPG BLPU,3/30/16
+HTC,"Barnfield School Silkstream Road , Burnt Oak HA8 0DA","146, 147",200103656,"Barnfield Road School, Silkstream Road, EDGWARE, HA8 0DA",520332,190520,NLPG BLPU,3/30/16
+HTD ,Watling Community Association 145 Orange Hill Road Edgware HA8 0TR,148,200089525,"145 Orange Hill Road, EDGWARE, HA8 0TR",520164,191430,NLPG BLPU,3/30/16
+HUA,"Broadfields School, Roseberry Drive, Off Broadfields Avenue, Edgware, HA8 8JP","149, 150",200154397,"Broadfields Primary School, Roseberry Drive, EDGWARE, HA8 8JP",519584,193723,NLPG BLPU,3/30/16
+HUB,Edgware Parish Hall Rectory Lane Station Road Edgware HA8 7LG,"151, 152, 153",200157008,"Edgware Parish Hall, Rectory Lane, EDGWARE, HA8 7LG",519406,192073,NLPG BLPU,3/30/16
+HUC,"New Stonegrove Community Centre, 5 Hayling Way, Edgware HA8 8BN
+","154, 155",10093299328,"Community Centre, 5 Hayling Way, EDGWARE, HA8 8BN",518645,192796,NLPG BLPU,3/30/16
