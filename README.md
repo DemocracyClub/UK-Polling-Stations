@@ -40,21 +40,23 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/
 pip install -r requirements/base.txt
 ```
 
+### Create local config
+```
+cp polling_stations/settings/local.example.py polling_stations/settings/local.py
+```
+
 ### Create database
 ```
-sudo -u postgres createdb pollingstations
+sudo -u postgres createdb polling_stations
 sudo -u postgres createuser dc -P -s
-sudo -u postgres psql pollingstations
+sudo -u postgres psql polling_stations
 psql (9.3.6)
 Type "help" for help.
 
-pollingstations=# CREATE EXTENSION postgis;
+polling_stations=# CREATE EXTENSION postgis;
 CREATE EXTENSION
-pollingstations=#
+polling_stations=#
 ```
-
-### Define database connection
-UK-Polling-Stations uses [dj-database-url](https://github.com/kennethreitz/dj-database-url) to manage database connection. To set up a db connection, define an environment variable `DATABASE_URL` of the form `postgis://dc:password@127.0.0.1:5432/pollingstations`
 
 ### Run migrations
 ```
