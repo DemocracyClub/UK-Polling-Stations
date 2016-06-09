@@ -1,36 +1,77 @@
 """
-Import Lambeth Council
+Import Lambeth
+
+note: this script takes quite a long time to run
 """
+from time import sleep
 from django.contrib.gis.geos import Point
+from data_collection.management.commands import BaseAddressCsvImporter
+from data_finder.helpers import geocode, PostcodeError
 
-from data_collection.management.commands import BaseJasonImporter
-
-class Command(BaseJasonImporter):
+class Command(BaseAddressCsvImporter):
     """
-    Imports the Polling station/district data from Lambeth Council
+    Imports the Polling Station data from Lambeth Council
     """
-    council_id     = 'E09000022'
-    districts_name = 'LambethPollingDistricts.json'
-    stations_name  = 'LambethPollingStations_0.csv'
-    elections      = ['parl.2015-05-07']
-
-    def district_record_to_dict(self, record):
-        properties = record['properties']
-        return dict(
-            council=self.council,
-            internal_council_id=properties['DISTRICT_C'],
-            extra_id=properties['OBJECTID'],
-            name="%s - %s" % (properties['WARD'], properties['DISTRICT_C']),
-            polling_station_id=properties['DISTRICT_C']
-        )
+    council_id      = 'E09000022'
+    addresses_name  = 'rev02-2016/Lambeth PropertyPostCodePollingStationWebLookup-2016-05-26.TSV'
+    stations_name   = 'rev02-2016/PollingStations-2016-05-26.tsv'
+    csv_delimiter   = '\t'
+    elections       = [
+        'ref.2016-06-23'
+    ]
 
     def station_record_to_dict(self, record):
-        location = Point(int(record.easting), int(record.northing), srid=self.srid)
-        return dict(
-            council=self.council,
-            internal_council_id=record.district_code,
-            postcode=record.postcode,
-            address="\n".join([record.venue, record.address]),
-            location=location,
-            polling_district_id=record.district_code
-        )
+
+        # format address
+        address = "\n".join([
+            record.pollingplaceaddress1,
+            record.pollingplaceaddress2,
+            record.pollingplaceaddress3,
+            record.pollingplaceaddress4,
+            record.pollingplaceaddress5,
+            record.pollingplaceaddress6,
+        ])
+        while "\n\n" in address:
+            address = address.replace("\n\n", "\n").strip()
+
+        # no points supplied, so attempt to attach them by geocoding
+        sleep(1.3) # ensure we don't hit mapit's usage limit
+        if len(record.pollingplaceaddress7) <= 5:
+            location = None
+        else:
+            try:
+                gridref = geocode(record.pollingplaceaddress7)
+                location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
+            except PostcodeError:
+                location = None
+
+        return {
+            'internal_council_id': record.pollingplaceid,
+            'postcode'           : record.pollingplaceaddress7,
+            'address'            : address,
+            'location'           : location
+        }
+
+    def address_record_to_dict(self, record):
+        postcode = record.postcode.strip()
+
+        if record.propertynumber.strip() == '0':
+            address = record.streetname.strip()
+
+            """
+            There are 2 cases where the same "address" maps to 2
+            different polling stations due to incomplete data.
+            We will just exclude them for convenience - its a drop in the ocean.
+            """
+            if (address == 'Rectory Grove' and postcode == 'SW4 0DX') or\
+               (address == 'Kennington Oval' and postcode == 'SE11 5SW'):
+                return None
+
+        else:
+            address = '%s %s' % (record.propertynumber.strip(), record.streetname.strip())
+
+        return {
+            'address'           : address,
+            'postcode'          : postcode,
+            'polling_station_id': record.pollingplaceid
+        }
