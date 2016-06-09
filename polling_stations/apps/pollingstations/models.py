@@ -64,7 +64,7 @@ class PollingStationManager(models.GeoManager):
             # only try a point within polygon lookup
             # if polling_station_id is not set
             station = self.filter(
-                location__within=polling_district.area)
+                location__within=polling_district.area, council_id=council_id)
             if len(station) == 1:
                 return station[0]
             else:
