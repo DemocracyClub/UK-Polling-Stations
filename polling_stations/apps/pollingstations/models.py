@@ -106,6 +106,8 @@ class PollingStation(models.Model):
 
     @property
     def formatted_address(self):
+        if not self.address:
+            return None
         return "\n".join([x[0] for x in groupby(self.address.split(','))])
 
 
