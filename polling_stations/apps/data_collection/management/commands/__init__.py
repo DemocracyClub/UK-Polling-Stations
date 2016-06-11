@@ -17,7 +17,7 @@ from collections import namedtuple
 
 from django.core.management.base import BaseCommand
 from django.contrib.gis import geos
-from django.contrib.gis.gdal import DataSource
+from django.contrib.gis.gdal import DataSource, GDALException
 from django.contrib.gis.geos import Point, GEOSGeometry
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
@@ -285,7 +285,14 @@ class BaseKamlImporter(BaseImporter):
         }
 
     def add_kml_district(self, kml):
-        ds = DataSource(kml)
+
+        try:
+            ds = DataSource(kml)
+        except GDALException:
+            # This is very strainge – sometimes the above will fail the first
+            # time, but not the second. Seen on OS X with GDAL 2.2.0
+            ds = DataSource(kml)
+
         lyr = ds[0]
         for feature in lyr:
             district_info = self.district_record_to_dict(feature)
