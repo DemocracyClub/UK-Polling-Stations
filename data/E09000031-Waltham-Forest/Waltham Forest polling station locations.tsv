@@ -29,7 +29,7 @@ DB	"Leytonstone Learning Link (Adult traning Centre, 23 North Birkbeck Rd)"	"Nor
 CA	Leytonstone Library Hall	"6 Church Lane, London, E11 1HG"	E11 1HG	100023583898	020 8496 1190/1189	539430	187392	0.011976	51.567663
 IB	Longshaw Primary School	"Longshaw Road, London, E4 6LH"	E4 6LH	100022564408	020 8529 5693	538891	193249	0.006522	51.620432
 QA	Low Hall Nursery School	"Low Hall Lane, London, E17 8BE"	E17 8BE	100022985098	020 8520 1689	536563	188420	-0.028968	51.577604
-QB	Mission Grove South Site (site 2)	Netley Road	E17 7QB	100022983050	2085096200	536976	188801	-0.022863	51.580928
+QB	Mission Grove South Site (site 2)	Netley Road	E17 7QB	100022983050	2085096200	536913	188843		
 EC	Newport School	"Newport Road, London, E10 6PJ"	E10 6PJ	100023584907	020 8539 4552	538481	186858	-0.001919	51.563098
 JC	North Chingford Methodist Church	"Station Road, Waltham Forest, London, E4 7BJ"	E4 7BJ	200001426912		538814	194374	0.005857	51.630561
 GB	Oakhill Primary School	"Alders Avenue, Woodford Green, Essex, IG8 9PY"	IG8 9PY	200001413368	2085273309	539109.211	191623.127	0.009027	51.605767
@@ -42,7 +42,7 @@ JA	Scout Group Hall	"Whitehall Gardens, London, E4 6EH"	E4 6EH	100023585283	020 
 GC	Selwyn Infants` School	"Selwyn Avenue, London, E4 9NF"	E4 9NF	100022583244	020 8527 3814	538136	191542	-0.005051	51.605278
 MD	Shern Hall Methodist Church	"Shern Hall Street, London, E17 9HX"	E17 9HX	200001426519	7982419121	538426	188969	-0.001881	51.582083
 TD	Sir George Monoux	"George Monoux, 190 Chingford Rd, London, E17 5AA"	E17 5AA	200001415892	020 8523 3544	537680	190387	-0.012085	51.595009
-TA	Walthamstow Assembly Hall  	"Forest Road, London, E17 4JF"	E17 4JF	200001418720	2085273944	537788.8	189918.114	-0.0107	51.590769
+TA	Walthamstow Assembly Hall  	"Forest Road, London, E17 4JF"	E17 4JF	200001418720	2085273944	537790	189870		
 KC	South Chingford Congregation Church	161 Chingford Mount Road	E4 8LT	200001415661	0208524 6753	537304	192369	51.612377  	-0.018374
 KB	South Chingford Methodist Church Hall	"New Road, Chingford, E4 9EU"	E4 9EU	100023001509	020 8531 3197	537436	192733	-0.014686	51.616152
 TB	Spruce Hill Baptist Church Hall	"155 Brookscroft Road, London, E17 4JP"	E17 4JP	100022980904	020 8531 2056	538004	190524	-0.007356	51.596161
@@ -51,7 +51,7 @@ KD	St Anne`s Church Main Hall	"Larkshall Road, London, E4 6NP"	E4 6NP	1000229979
 CB	St John Ambulance Hall	"66 Queens Road, LONDON, E11 1BB"	E11 1BB	200001431203		539171	187558	0.008307	51.569219
 NA	St Michael and All Angels Church Hall	"Northcote Road, Walthamstow, London, E17 6PQ"	E17 6PQ	200001454202	020 8521 9345	536585	189188	-0.028352	51.5845
 RD	St Stephen`s Church Hall 	"Copeland Road, London, E17 9DP"	E17 9DP	100022985167	2088872895	537881	188499	-0.009927	51.577993
-OA	Stoneydown Park Primary School Infant Site	Warner Road	 E17 7DY	 	 				
+OA	Stoneydown Park Primary School Infant Site	Warner Road	 E17 7DY	 	 	536243	189203		
 SB	Sybourn Nursery Unit (Sybourn Childrens Centre)	"Perth Road, London, E10 7PB"	E10 7PB	10009143654		536467	187150	-0.030847	51.566213
 FA	The Cornerstone Community Centre	"149 Canterbury Road, London, Leyton, E10 6EH"	E10 6EH	200001438542	0208 5582 121	538555	188144.3	-0.000345	51.57464
 DA	The Epicentre	"41 West Street, London, E11 4LJ"	E11 4LJ	100022963781	020 8539 2432	539115	186441	0.007057	51.559195
