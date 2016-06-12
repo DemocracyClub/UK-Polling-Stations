@@ -21,3 +21,28 @@
 </script>
 {% endif %}
 {% endblock ga_tracking_code %}
+
+
+{% block site_footer %}
+</section>
+<footer class="footer">
+  <div class="row">
+    <div class="small-12 medium-7 columns">
+      <p class="footer-links">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="https://democracyclub.org.uk/projects/polling-stations/">About</a>
+        <a href="{% url 'privacy_view' %}">Privacy</a>
+        <a href="https://democracyclub.org.uk/blog/">Blog</a>
+        <a href="https://democracyclub.org.uk/contact/">Contact</a>
+      </p>
+      <p>Democracy Club is a UK based Community Interest Company that builds
+        the digital infrastructure needed for a 21st century democracy</p>
+      <ul class="inline-list social">
+        <a href="https://www.facebook.com/democracyclub/"><i class="fi-social-facebook"></i></a>
+        <a href="https://twitter.com/democlub"><i class="fi-social-twitter"></i></a>
+        <a href="https://github.com/DemocracyClub/WhoCanIVoteFor"><i class="fi-social-github"></i></a>
+      </ul>
+    </div>
+  </div>
+</footer>
+{% endblock site_footer %}
