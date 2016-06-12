@@ -40,6 +40,26 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/
 pip install -r requirements/base.txt
 ```
 
+### Install testing dependencies
+The integration tests require [PhantomJS](http://phantomjs.org/).
+
+On Mac OSX, this can be installed by running
+```
+brew install phantomjs
+```
+
+On Ubunutu, run:
+```
+sudo apt-get install nodejs npm
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo npm install -g phantomjs-prebuilt
+```
+
+### Install testing requirements
+```
+pip install -r requirements/testing.txt
+```
+
 ### Create local config
 ```
 cp polling_stations/settings/local.example.py polling_stations/settings/local.py
