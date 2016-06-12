@@ -3,3 +3,7 @@
 mock
 model-mommy
 python-Levenshtein
+aloe
+aloe_django
+aloe_webdriver
+vcrpy==1.7.4

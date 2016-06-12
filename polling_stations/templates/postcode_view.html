@@ -94,11 +94,14 @@
         {% blocktrans %}The polling station for <strong>{{ postcode }}</strong> is:{% endblocktrans %}
             <div>
             <address>
+                {% if station.formatted_address %}
                 {{ station.formatted_address|linebreaksbr }}<br />
-                {% if station.postcode %}
-                {% if not station.postcode in station.address %}
-                    {{ station.postcode }}
                 {% endif %}
+
+                {% if station.postcode %}
+                  {% if not station.postcode in station.address %}
+                      {{ station.postcode }}
+                  {% endif %}
                 {% endif %}
             </address>
             </div>

@@ -145,7 +145,8 @@ class BasePollingStationView(
             if l is None:
                 context['custom'] = None
             else:
-                context['custom'] = CustomFinder.objects.get_custom_finder(l['gss_codes'], self.postcode)
+                context['custom'] = CustomFinder.objects.get_custom_finder(
+                    l['gss_codes'], self.postcode)
 
         self.log_postcode(self.postcode, context)
 

@@ -17,6 +17,22 @@
     },
     {
         "fields": {
+            "council_type": "",
+            "mapit_id": "",
+            "name": "Newport Council",
+            "email": "",
+            "phone": "",
+            "website": "",
+            "postcode": "",
+            "address": "",
+            "location": null,
+            "area": "SRID=4326;MULTIPOLYGON (((-2.9787111278202683 51.6086311168530472, -3.0140733714677026 51.6099103806234538, -3.0272912974912098 51.5917841149768108, -3.0108118053059938 51.5810115542275724, -2.9718446727430576 51.5805848655760144, -2.9630899425196695 51.5962630418120298, -2.9787111278202683 51.6086311168530472)))"
+        },
+        "model": "councils.council",
+        "pk": "W06000022"
+    },
+    {
+        "fields": {
             "address": "1 Foo Street, Bar Town",
             "postcode": "AA11AA",
             "polling_station_id": "1",
@@ -58,5 +74,37 @@
         },
         "model": "pollingstations.residentialaddress",
         "pk": 4
+    },
+    {
+        "fields": {
+            "council": "X01000001",
+            "internal_council_id": "4",
+            "postcode": "BB11BD",
+            "address": "", "location": "SRID=4326;POINT (-2.9951477046612269 51.5958148357632140)"
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "council": "W06000022",
+            "internal_council_id": "5",
+            "postcode": "NP205GN",
+            "address": "", "location": "SRID=4326;POINT (-2.9951477046612269 51.5958148357632140)"
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "council": "W06000022",
+            "area": "SRID=4326;MULTIPOLYGON (((-2.9875946040763401 51.5991454508614424, -3.0029582973114812 51.6011180461782502, -3.0100822444540594 51.5950933646902286, -3.0031299586884228 51.5914141838640816, -2.9865646358146911 51.5892811889598448, -2.9816722865722625 51.5956265545788213, -2.9875946040763401 51.5991454508614424)))",
+            "internal_council_id": "5",
+            "extra_id": "",
+            "name": "Example District",
+            "polling_station_id": "5"
+        },
+        "pk": 1,
+        "model": "pollingstations.pollingdistrict"
     }
 ]

@@ -1,0 +1,94 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
+    method: GET
+    uri: http://mapit.mysociety.org//postcode/NP205GN
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA8VXTW/iMBD9K1ZOXWnbtR0nOHtjEWWlBYraRTmiFFyIFGIUO4tQ1f++Y6d8BAKF
+        EqkcIB7b4zePN+PJq7OcKs5GSaSdn8gjd17guT7FhPEGxp73HTljKbOJWimzwOk4YFEzmelxrhVY
+        Xp2w14Jf38dBAHPLKJvAkFCCid2cp+M4AQv1vODNLCjOkynYbuldEAS04RKGMSM4IA1YsZBKj+VE
+        mPP6A4qR1+mbY0WkdJxOwey6mHPjPsrAaFEE2Hzs4wKsqR6ZORineZLAyqlIRRbpWKajWTydGYgG
+        bpQkozSaC+vEwIsN+sKZhT/ZTpl1BtNvmSuB5Atqyflcpsp5j1NnKzNthnq1EKP1+uEfNIiyJIZh
+        qp0ylkQuDZSth82u27UfMwh7A8dAsMDIJVFSfjpKcizKdp7JhYjSPeynAj2y5fJw28MiXJ81GlXR
+        Gi1dGq31tRusY/46OAzjwSOmnkWqrCXEIEfMXWpseRrrkfXgkAbnzi5HT7PoRQv1nGcrKwazdrXH
+        UnhAUyv+FycIIorV7Md4d9shU7SCqjBKhNqlqzVobdXB6lQHO6aOvnUTJaiplJg/Jyv0IjO0QXYy
+        /lAkarbZeLZCDsIOm082bFtralLJtm5VqKQ/KInEMyJhwaFIgmMi+ZCaIfiJQEzNXEONBVUgkYix
+        lhkwPQHZKIgC3Qz/tr99njbYXdBGOHFrEov1VUUbwSXKOC4KWJkyRhhlJc7OE9Km3mRiCjg/T0l7
+        +GiPZ5xivyZKrK8qSkJMgQPXo6WI+2K5gFsVYQDwUdywn6BePJkkAnWjlcjQU76A74dcL3KNmgAa
+        3XQs2CRWYnJELO451Dz0OoVaAHJttaVwVk0OzBGfk2Pk/DqPna5cAiFHybkH0Fex0r0vWGHMrU0x
+        hbMSK+vEITZvMD9IHM91y8VGQuUo6jBqQ790YTE+lUkW+RlFuaguth+siZh1b3nIC24YWjx/jxfK
+        oJOsVFAozuCk1LChMUhTxzoX6fjIZXWWZEybbGsMXDC0rhpjfH1hjbk6jXrrNOKYVt1Fm5S4MJGM
+        u2rB2LbG3b+04QbCVwhmL4k+VAz1z0ulQjHEZT6vSzKFsy8svXXdS93iXjJNXk3UvPeLla1fqYvx
+        jYbo/tsBY4z6ldy13l+CL+7+rmnyms6bxQIAZsVbM+E84PjtP1UoPHPzDwAA
+    headers:
+      Accept-Ranges: [bytes, bytes]
+      Access-Control-Allow-Origin: ['*']
+      Age: ['69165', '69165']
+      Cache-Control: [max-age=2419200]
+      Connection: [keep-alive]
+      Content-Encoding: [gzip]
+      Content-Length: ['900']
+      Content-Type: [application/json; charset=utf-8]
+      Date: ['Sat, 11 Jun 2016 10:31:31 GMT']
+      x-url: [//postcode/NP205GN]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
+    method: GET
+    uri: https://maps.googleapis.com/maps/api/directions/json?mode=walking&units=imperial&origin=NP205GN&destination=51.595814835763214,-2.995147704661227
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/82a4XKqRhSA/9+n2OFP/ySpCBi4M52AhhpzY6wxuZk7Nxm6gVV3gmB2F700N52+
+        Q5+ir9FH6ZN0AZOIYIRUrfhDZQ97zmHPdzi7y+MHAIAwQL7tO8ixpjAc+9hjVAAfwdeojR+Ps+85
+        SWJRBlkQiwmdT8LenMjYhTaysBO3NYat03NkfW6wk5F9Nbho9Hqmpzyo42s/dRELxyhRyjvweeeu
+        FekRwO1M6GlvDdaY2A5bP1+4TvNUtL37Qbc6pS1TcR2pPrG97vzvwaVrhO3GdPD5ii61lDKCELOg
+        4xBE6Zyx0fdtfJVA/IChpffzzg88J26dOxs1eD5hQwQpy7ZFzS6MGxTxQNEU9fBQ0ZJjLyvpDSLJ
+        /eqBpsmqLCkpiaf0BQLl1g6nqIhauaaJ6tv6tJqmLuh7/TevWrD9cUjwYJhEntCGY+BABsHff1Ur
+        Yg00fX/gotQ4uGiQuqvJkTXZwTw4PBvlOhQJMPQtdkqoHEhghIWMS5HQBLpB3IWsiYvtT9mb4AQE
+        Mux7q5XWuEqPrlAqKWoBpchzXkORd10Fl4jdBSQEDXcPnKPpmMfUyw9w/ku1sgeuPmV1xz25vv22
+        C4VDECxEhSLKilbAHz5uhKU8yvUBKM3zJX4kPZTzpKpmg3rRg2xcL/MAjXOCNDnyTAEFAnYm9hJB
+        oiaDPsuNoJnoSxxlb/sy059tWRHHGVuiaC5kilwraUqRmJyJprKUWpGlNwxKDatUkzOgrTBryEau
+        xQlmJLAj05JAPUHQATdBpSLZd/EXihNrcubH2Snge2mZOiQE2vfgBLvugijzp5AsdHkCiYseAuyB
+        Y5IWXzYC/NHqhi72VsXWaw0gPKDv4cnd47B7Zn5uHpt9/fasK5S8R8UwnAkXgfFZdBWSK+xiBE6Q
+        a43iQoP7em2cfWqdN/Pcy+1jXQTXakUBrlZ2BmBR3hLAhxVJLBoEYrVSNsXlA9xzo2IkzZuL+iyD
+        JeBDHZYgeSmaI+ihYIJIrJ4FxNunsQ37kdo1Au3fcaB//zbsHnfOLH1rKG86D+8Ky1VVKwqzWtbH
+        zcGcrS9XmPJemDVJKRoFh5okl83o+TAbDPC5FCDRXAvyGRcvIBm8R/HJFLYiXQQcfcOM0805Twl2
+        A4S8H+i7+X41Zd14P0KOtzcddo2m3tRN82t7ZJi23vximI1O68v2eN9w2t4V3iVRKcq7Vrbk3Rzv
+        atk64p28K3z2XjQKaoeSmplbrzDrP/IuEacY72ehh8CFs1uo39sc9V/Hw67ZMJvNTrNndo+MRsdo
+        HbWM9lGHf3p6i394GujCLT7pN5zjd4V8Wa4UJV+UyhbLZdGvLl9GWjRG2xb7Yq1wHGQXJleblc/+
+        Ja+c0+zGy4qZmfci4eYEehT02Lur9VjNGum2ook3GfKJN9TrHb1zdN1ARuvR3OLke7O5e1c4riqF
+        p9+HO1Sxly2Y3kuxWtMqyVE0GGRNLL0UUxTmnDl4ztMaOfGyd+FlsSzNa35Uhw6HefJ90IVGHRun
+        22N4wzl4VxhWqoUfxbtThItlM+a7EX57c+b5klVbNCusWyvCrztXadHkn4MngLLQRT/dCH1+8T7F
+        v6GPlQMNjW6ERPAYUYa9+FaBKZ+lg7t4vT2aAswZwDv6v1MDwjw19J8GXeP86OZme5lhO3m9TIJY
+        PHeb3VDj3fX72LboGCHHQh4jYby9liM6wfDldYZEJiUyp23+YsHnYz3BaGotH8nc7RFHb7u6rV9A
+        /czSjWa93cP1HjVaX8xG+7o71RsPen2q19t8JsYLumNLbzxF1VzyPFgc+tTWOA1GI5j4KTxXqamd
+        8CkkHvbydsOFa+je8ybgYIISKAEkCGCP48DgQSRzRRGwYRCD8s8ff4LLIaYgfmkBjGAYYTPClEad
+        UOygKe+QAp+AMXI4YQRDD4whG9IDYckNfR4DyydOgtHXvNck0m9wfHj68C9kg4NZmiIAAA==
+    headers:
+      Alt-Svc: ['quic=":443"; ma=2592000; v="34,33,32,31,30,29,28,27,26,25"']
+      Alternate-Protocol: ['443:quic']
+      Cache-Control: ['public, max-age=86400']
+      Content-Encoding: [gzip]
+      Content-Length: ['1477']
+      Content-Type: [application/json; charset=UTF-8]
+      Date: ['Sat, 11 Jun 2016 10:31:31 GMT']
+      Expires: ['Sun, 12 Jun 2016 10:31:31 GMT']
+      Server: [mafe]
+      Vary: [Accept-Language]
+      X-Frame-Options: [SAMEORIGIN]
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
