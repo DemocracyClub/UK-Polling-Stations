@@ -2,9 +2,9 @@
 Models for actual Polling Stations and Polling Districts!
 """
 
-import urllib.parse
-
 from itertools import groupby
+import re
+import urllib.parse
 
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
@@ -117,6 +117,15 @@ class ResidentialAddress(models.Model):
     council            = models.ForeignKey(Council, null=True)
     polling_station_id = models.CharField(blank=True, max_length=100)
     slug               = models.SlugField(blank=False, null=False, db_index=True, unique=True, max_length=255)
+
+    def save(self, *args, **kwargs):
+        """
+        strip all whitespace from postcode and convert to uppercase
+        this will make it easier to query based on user-supplied postcode
+        """
+        self.postcode = re.sub('[^A-Z0-9]', '', self.postcode.upper())
+        super().save(*args, **kwargs)
+
 
 
 class CustomFinderManager(models.Manager):
