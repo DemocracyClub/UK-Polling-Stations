@@ -187,10 +187,11 @@ class BaseImporter(BaseCommand):
         PollingDistrict.objects.filter(council=self.council).delete()
         ResidentialAddress.objects.filter(council=self.council).delete()
 
-        if self.base_folder_path is None:
-            self.base_folder_path = os.path.abspath(
-                glob.glob('data/{0}-*'.format(self.council_id))[0]
-            )
+        if getattr(self, 'local_files', True):
+            if self.base_folder_path is None:
+                self.base_folder_path = os.path.abspath(
+                    glob.glob('data/{0}-*'.format(self.council_id))[0]
+                )
 
         self.import_data()
 
@@ -354,29 +355,7 @@ class BaseGenericApiImporter:
     districts_srid = 4326
     districts_url = None
     stations_url = None
-
-    # override handle because we aren't using files in this situation
-    def handle(self, *args, **kwargs):
-        if self.council_id is None:
-            self.council_id = args[0]
-
-        self.council = Council.objects.get(pk=self.council_id)
-
-        # Delete old data for this council
-        PollingStation.objects.filter(council=self.council).delete()
-        PollingDistrict.objects.filter(council=self.council).delete()
-        ResidentialAddress.objects.filter(council=self.council).delete()
-
-        self.import_data()
-
-        # Optional step for post import tasks
-        try:
-            self.post_import()
-        except NotImplementedError:
-            pass
-
-        # save and output data quality report
-        self.report()
+    local_files = False
 
     def import_data(self):
         # deal with 'stations only' or 'districts only' data
