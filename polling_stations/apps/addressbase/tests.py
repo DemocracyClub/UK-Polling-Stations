@@ -97,15 +97,18 @@ class PostcodeBoundaryFixerTestCase(TestCase):
     def test_postcodes_not_contained_by_district(self):
         district = PollingDistrict.objects.get(pk=117)
         postcodes = postcodes_not_contained_by_district(district)
-        self.assertEqual(postcodes, [])
+        self.assertEqual(postcodes['not_contained'], [])
+        self.assertEqual(postcodes['total'], 1)
 
         district = PollingDistrict.objects.get(pk=118)
         postcodes = postcodes_not_contained_by_district(district)
-        self.assertEqual(postcodes, ['KW15 88TF'])
+        self.assertEqual(postcodes['not_contained'], ['KW15 88TF'])
+        self.assertEqual(postcodes['total'], 1)
 
     def test_districts_requiring_address_lookup(self):
         council = Council.objects.get(pk='X01000001')
         postcode_report = districts_requiring_address_lookup(council)
+
         self.assertEqual(postcode_report['no_attention_needed'], 1)
         self.assertTrue(
             ['KW15 88TF'] in postcode_report['address_lookup_needed'].values())
