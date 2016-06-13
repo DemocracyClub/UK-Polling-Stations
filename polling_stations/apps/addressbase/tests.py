@@ -40,7 +40,7 @@ from addressbase.models import Address
 from addressbase.helpers import (postcodes_not_contained_by_district,
                                  district_contains_all_points,
                                  make_addresses_for_postcode,
-                                 districts_requiring_address_lookup)
+                                 create_address_records_for_council)
 from pollingstations.models import PollingStation, PollingDistrict
 from councils.models import Council
 from data_finder.helpers import RoutingHelper
@@ -105,16 +105,15 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         self.assertEqual(postcodes['not_contained'], ['KW15 88TF'])
         self.assertEqual(postcodes['total'], 1)
 
-    def test_districts_requiring_address_lookup(self):
+    def test_create_address_records_for_council(self):
         council = Council.objects.get(pk='X01000001')
-        postcode_report = districts_requiring_address_lookup(council)
+        postcode_report = create_address_records_for_council(council)
 
         self.assertEqual(postcode_report['no_attention_needed'], 1)
-        self.assertTrue(
-            ['KW15 88TF'] in postcode_report['address_lookup_needed'].values())
-        self.assertFalse(
-            ['KW15 88LM'] in postcode_report['address_lookup_needed'].values())
-
+        self.assertTrue('KW15 88TF' in
+                        postcode_report['postcodes_needing_address_lookup'])
+        self.assertFalse('KW15 88LM' in
+                         postcode_report['postcodes_needing_address_lookup'])
 
     def test_make_addresses_for_postcode(self):
         # Before the fix, we wrongly assume that we know the polling station

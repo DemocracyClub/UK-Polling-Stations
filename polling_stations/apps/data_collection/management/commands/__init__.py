@@ -34,6 +34,7 @@ from pollingstations.models import (
     ResidentialAddress
 )
 from data_collection.models import DataQuality
+from addressbase.helpers import create_address_records_for_council
 
 
 class CsvHelper:
@@ -155,6 +156,12 @@ class BaseImporter(BaseCommand):
     def post_import(self):
         raise NotImplementedError
 
+    def clean_postcodes_overlapping_districts(self):
+        data = create_address_records_for_council(self.council)
+        self.postcodes_contained_by_district = data['no_attention_needed']
+        self.postcodes_with_addresses_generated = data['addresses_created']
+
+
     def report(self):
         # build report
         report = DataQualityReportBuilder(self.council_id)
@@ -200,6 +207,10 @@ class BaseImporter(BaseCommand):
             self.post_import()
         except NotImplementedError:
             pass
+
+        # For areas with shape data, use AddressBase to clean up overlapping
+        # postcode
+        self.clean_postcodes_overlapping_districts()
 
         # save and output data quality report
         self.report()
