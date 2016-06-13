@@ -1,4 +1,5 @@
-from pollingstations.models import PollingDistrict, ResidentialAddress
+from pollingstations.models import (PollingDistrict, ResidentialAddress,
+                                    PollingStation)
 from addressbase.models import Address
 
 def district_contains_all_points(district, points):
@@ -31,13 +32,17 @@ def make_addresses_for_postcode(postcode):
     addresses = Address.objects.filter(postcode=postcode)
     for address in addresses:
         district = PollingDistrict.objects.get(area__covers=address.location)
-        polling_station_id = district.polling_station_id
+
+        polling_station = PollingStation.objects.get_polling_station(
+            district.council.pk,
+            polling_district=district)
+
         residential_address, _ = ResidentialAddress.objects.get_or_create(
             slug=address.uprn,
             defaults={
                 'address': address.address,
                 'postcode': postcode,
                 'council': district.council,
-                'polling_station_id': polling_station_id,
+                'polling_station_id': polling_station.id,
             }
         )
