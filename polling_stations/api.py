@@ -108,8 +108,8 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
         assert 'location' in kwargs
         assert 'council' in kwargs
         return PollingStation.objects.get_polling_station(
-            kwargs['location'],
-            kwargs['council']['council_id']
+            kwargs['council']['council_id'],
+            location=kwargs['location']
         )
 
     def retrieve(self, requst, pk=None, format=None):

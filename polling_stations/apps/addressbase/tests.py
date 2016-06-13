@@ -55,7 +55,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
             BS_district = PollingDistrict.objects.get(pk=id1)
             BS_station = PollingStation.objects.get_polling_station_by_id(
                 BS_district.polling_station_id,
-                council_id=BS_district.council.pk
+                BS_district.council.pk
             )
 
             self.assertEqual(BS_station.pk, id2)

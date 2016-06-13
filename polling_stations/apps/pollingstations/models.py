@@ -34,12 +34,16 @@ class PollingDistrict(models.Model):
 
 
 class PollingStationManager(models.GeoManager):
-    def get_polling_station(self, location, council_id):
-        try:
-            polling_district = PollingDistrict.objects.get(
-                area__covers=location)
-        except PollingDistrict.DoesNotExist:
-            return None
+    def get_polling_station(self, council_id,
+                            location=None, polling_district=None):
+        assert any((polling_district, location))
+
+        if not polling_district:
+            try:
+                polling_district = PollingDistrict.objects.get(
+                    area__covers=location)
+            except PollingDistrict.DoesNotExist:
+                return None
 
         if polling_district.internal_council_id:
             # always attempt to look up district id in stations table
