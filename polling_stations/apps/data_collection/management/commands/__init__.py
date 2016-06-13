@@ -60,7 +60,7 @@ class CsvHelper:
         clean = []
         for s in header:
             s = s.strip().lower()
-            for k, v in replace:
+            for k, v in replace.items():
                 s = s.replace(k, v)
             clean.append(s)
         RowKlass = namedtuple('RowKlass', clean)
