@@ -145,42 +145,46 @@ class CustomFinderManager(models.Manager):
             return None
 
 
-"""
-Store details of areas that have their own
-custom polling station finders
-and/or a message that we might want to show.
-
-
-Example content:
-
-record = CustomFinder(
-    area_code='E07000082'
-    base_url='https://stroud.maps.arcgis.com/apps/webappviewer/index.html?id=ea6bf4b3655542c1a05c8d7e87d32bb1'
-    can_pass_postcode=False
-    message="Stroud District Council has its' own polling station finder:"
-)
-record.save()
-
-record = CustomFinder(
-    area_code='W06000008'
-    base_url=''
-    can_pass_postcode=False
-    message='<h2>We're working on it!</h2>Ceredigion Council have provided polling station data. It will be available soon.'
-)
-record.save()
-
-record = CustomFinder(
-    area_code='N07000001'
-    base_url='http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode='
-    can_pass_postcode=True
-    message='The Electoral Office of Northern Ireland has its' own polling station finder:'
-)
-record.save()
-"""
 class CustomFinder(models.Model):
-    area_code = models.CharField(max_length=9, primary_key=True)
-    base_url = models.CharField(blank=True, max_length=255)
-    can_pass_postcode = models.BooleanField(default=False)
-    message = models.TextField(blank=True)
+    """
+    Store details of areas that have their own
+    custom polling station finders
+    and/or a message that we might want to show.
+
+
+    Example content:
+
+    record = CustomFinder(
+        area_code='E07000082'
+        base_url='https://stroud.maps.arcgis.com/apps/webappviewer/index.html?id=ea6bf4b3655542c1a05c8d7e87d32bb1'
+        can_pass_postcode=False
+        message="Stroud District Council has its own polling station finder:"
+    )
+    record.save()
+
+    record = CustomFinder(
+        area_code='W06000008'
+        base_url=''
+        can_pass_postcode=False
+        message='<h2>We're working on it!</h2>Ceredigion Council have provided polling station data. It will be available soon.'
+    )
+    record.save()
+
+    record = CustomFinder(
+        area_code='N07000001'
+        base_url='http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode='
+        can_pass_postcode=True
+        message='The Electoral Office of Northern Ireland has its own polling station finder:'
+    )
+    record.save()
+    """
+    area_code = models.CharField(max_length=9, primary_key=True,
+        help_text="The GSS code for this area")
+    base_url = models.CharField(blank=True, max_length=255,
+        help_text="The landing page for the polling station finder")
+    can_pass_postcode = models.BooleanField(default=False,
+        help_text="Does the URL have '?postcode=' in it?")
+    message = models.TextField(blank=True,
+        default="This council has its own polling station finder:")
 
     objects = CustomFinderManager()

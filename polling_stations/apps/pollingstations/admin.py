@@ -9,6 +9,10 @@ class PollingDistrictAdmin(admin.OSMGeoAdmin):
     list_filter = ('council',)
     pass
 
+class CustomFinderAdmin(admin.ModelAdmin):
+    pass
+
 
 admin.site.register(models.PollingStation, PollingStationAdmin)
 admin.site.register(models.PollingDistrict, PollingDistrictAdmin)
+admin.site.register(models.CustomFinder, CustomFinderAdmin)
