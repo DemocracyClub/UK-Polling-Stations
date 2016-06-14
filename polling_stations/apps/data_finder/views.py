@@ -77,6 +77,9 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 
         return super(HomeView, self).form_valid(form)
 
+class PrivacyView(WhiteLabelTemplateOverrideMixin, TemplateView):
+    template_name = "privacy.html"
+
 
 class BasePollingStationView(
     TemplateView, LogLookUpMixin, metaclass=abc.ABCMeta):

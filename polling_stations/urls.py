@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from polling_stations.api import router
 from data_finder.views import (
     HomeView,
+    PrivacyView,
     CouncilView,
     PostcodeView,
     CoverageView,
@@ -34,6 +35,7 @@ core_patterns = patterns(
     url(r'^campaign_signup/(?P<postcode>.+)/$',
         'data_finder.views.campaign_signup', name='campaign_signup'),
     url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^privacy/$', PrivacyView.as_view(), name='privacy_view'),
 )
 
 extra_patterns = patterns(

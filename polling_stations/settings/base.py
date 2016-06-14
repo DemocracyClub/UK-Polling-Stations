@@ -146,6 +146,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.contrib.auth.context_processors.auth",
     "whitelabel.context_processors.base_template",
+    'dc_theme.context_processors.dc_theme_context'
 )
 
 
@@ -266,6 +267,7 @@ WHITELABEL_PREFIXES = (
 
 
 INTERNAL_IPS = ('127.0.0.1')
+SITE_TITLE = "Where Do I Vote?"
 
 # .local.py overrides all the common settings.
 try:

@@ -7552,8 +7552,8 @@ table.hover tr:nth-of-type(even):hover {
 
 @font-face {
   font-family: 'BrandonText';
-  src: url('/static/dc_theme/fonts/BrandonText.eot');
-  src: url('/static/dc_theme/fonts/BrandonText.eot#iefix') format("embedded-opentype"), url('/static/dc_theme/fonts/BrandonText.woff') format("woff"), url('/static/dc_theme/fonts/BrandonText.ttf') format("truetype"), url('/static/dc_theme/fonts/BrandonText.svg#wf') format("svg");
+  src: url('/static/dc_theme/dc_theme/fonts/BrandonText.eot');
+  src: url('/static/dc_theme/dc_theme/fonts/BrandonText.eot#iefix') format("embedded-opentype"), url('/static/dc_theme/dc_theme/fonts/BrandonText.woff') format("woff"), url('/static/dc_theme/dc_theme/fonts/BrandonText.ttf') format("truetype"), url('/static/dc_theme/dc_theme/fonts/BrandonText.svg#wf') format("svg");
   font-weight: normal;
   font-style: normal; }
 body {
@@ -7696,23 +7696,4 @@ body > header {
   .breadcrumbs li {
     font-size: 1rem; }
 
-body {
-  background: #eee; }
-
-body.embed {
-  padding-top: 0px;
-  margin-top: 0px; }
-
-footer {
-  margin-top: 2em; }
-  footer .dc-logo {
-    height: 45px;
-    margin-left: .5em; }
-
-select.select_multirow {
-  height: auto; }
-
-select[size], select[multiple] {
-  background-image: none; }
-
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=dc_base.css.map */
