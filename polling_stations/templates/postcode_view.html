@@ -158,23 +158,24 @@
         {% endblocktrans %}
     </div>
 
+    <div class="card">
+        {% blocktrans %}
+        <h3>You need to be registered in order to vote</h3>
+        <p>If you aren’t registered to vote visit <a href="https://www.gov.uk/register-to-vote">https://www.gov.uk/register-to-vote</a>{% endblocktrans %}
+        {% blocktrans %}
+        <strong>before 7 June</strong>.</p>
+        {% endblocktrans %}
+    </div>
+
     {# <div class="card"> #}
     {#     {% blocktrans %} #}
-    {#     <h3>You need to be registered in order to vote</h3> #}
-    {#     <p>If you aren’t registered to vote visit <a href="https://www.gov.uk/register-to-vote">https://www.gov.uk/register-to-vote</a> <strong>before the 18th of April</strong>.</p> #}
+    {#     <h3>Information on your candidates</h3> #}
+    {#     <p>You can find information on your candidates at <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}"> #}
+    {#       WhoCanIVoteFor.co.uk #}
+    {#     </a></p> #}
     {#  #}
     {#     {% endblocktrans %} #}
     {# </div> #}
-
-    <div class="card">
-        {% blocktrans %}
-        <h3>Information on your candidates</h3>
-        <p>You can find information on your candidates at <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}">
-          WhoCanIVoteFor.co.uk
-        </a></p>
-
-        {% endblocktrans %}
-    </div>
 
 
     {% if council.address or council.postcode or council.phone or council.email %}
