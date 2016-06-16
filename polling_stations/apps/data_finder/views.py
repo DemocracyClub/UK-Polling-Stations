@@ -132,6 +132,7 @@ class BasePollingStationView(
             self.location = None
         else:
             self.location = Point(l['wgs84_lon'], l['wgs84_lat'])
+            self.gss_codes = l['gss_codes']
 
         self.council = self.get_council()
         self.station = self.get_station()
@@ -175,6 +176,10 @@ class PostcodeView(BasePollingStationView):
         return geocode(self.postcode)
 
     def get_council(self):
+        if getattr(self, 'gss_codes'):
+            return Council.objects.get(
+                council_id__in=self.gss_codes)
+
         return Council.objects.get(
             area__covers=self.location)
 
