@@ -186,7 +186,7 @@ class PostcodeView(BasePollingStationView):
 
         if getattr(self, 'gss_codes'):
             try:
-                return Council.objects.get(
+                return Council.objects.defer("area", "location").get(
                     council_id__in=self.gss_codes)
             except Council.DoesNotExist:
                 pass
@@ -218,7 +218,7 @@ class AddressView(BasePollingStationView):
             return None
 
     def get_council(self):
-        return Council.objects.get(
+        return Council.objects.defer("area", "location").get(
             pk=self.address.council_id)
 
     def get_station(self):
