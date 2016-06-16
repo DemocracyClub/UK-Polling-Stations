@@ -83,14 +83,15 @@ class PollingStationManager(models.GeoManager):
 
 
 class PollingStation(models.Model):
-    council             = models.ForeignKey(Council, null=True)
-    internal_council_id = models.CharField(blank=True, max_length=100)
-    postcode            = models.CharField(blank=True, null=True, max_length=100)
-    address             = models.TextField(blank=True, null=True)
-    location            = models.PointField(null=True, blank=True)
+    council = models.ForeignKey(Council, null=True, db_index=True)
+    internal_council_id = models.CharField(
+        blank=True, max_length=100, db_index=True)
+    postcode = models.CharField(blank=True, null=True, max_length=100)
+    address = models.TextField(blank=True, null=True)
+    location = models.PointField(null=True, blank=True)
     # This is NOT a FK, as we might not have the polling district at
     # the point of import
-    polling_district_id  = models.CharField(blank=True, max_length=255)
+    polling_district_id = models.CharField(blank=True, max_length=255)
 
     class Meta:
         unique_together = (("council", "internal_council_id"))
