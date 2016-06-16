@@ -82,9 +82,9 @@ class Command(BaseCommand):
             line['BUILDING_NUMBER'],
             line['DEPENDENT_THOROUGHFARE'],
             line['THOROUGHFARE'],
-            line['POST_TOWN'],
             line['DOUBLE_DEPENDENT_LOCALITY'],
             line['DEPENDENT_LOCALITY'],
+            line['POST_TOWN'],
         ]
         return ", ".join([f for f in address_fields if f])
 
