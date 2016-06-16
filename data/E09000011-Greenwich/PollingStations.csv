@@ -1,0 +1,121 @@
+StationCode,PollingStation,lat,lng
+AW1,"Abbey Wood Community Centre, Penmon Road SE2 9PH",51.49320933,0.108974788
+AW2,"De Lucy Infants School, Cookhill Road SE2 9PD",51.49588284,0.110827046
+AW3,"Boxgrove Primary School, Boxgrove Road SE2 9JP",51.49331279,0.117205527
+AW4,"St. Michael&rsquo;s Hall, Abbey Wood Road SE2 9DZ",51.48973314,0.117731116
+AW5,"Alexander McLeod Infants School, Fuchsia Street SE2 0QS",51.48528736,0.112930324
+BW1,"St. Michael&rsquo;s Church Hall, 1 Pond Road SE3 9JL",51.46503186,0.013503038
+BW2,"St. James&rsquo; Church Hall, Kidbrooke Park Road SE3 0DU",51.46952839,0.023938377
+BW3,"St. John&rsquo;s Memorial Hall, Vicarage Avenue SE3 7JH",51.47569509,0.020424014
+BW4,"St. George&rsquo;s Church, Glenluce Road SE3 7SB",51.48122347,0.018983289
+BW5,"Mycenae House Community Centre, 90 Mycenae Road SE3 7SE",51.47966626,0.015933354
+BW6,"John Roan School, Vanbrugh Park Road West Entrance, Blackheath SE3 7QR",51.47878464,0.010191501
+BW7,"Community Centre, Tom Smith Close SE10 9XJ",51.48230524,0.003101835
+BW8,"Portacabin, opposite 36 & 38 Humber Road SE3 7LS",51.48269847,0.01007556
+CH1,"Mascalls Meeting Room, r/o Harold Gibbons Court, Victoria Way SE7 7DZ",51.48025886,0.031095928
+CH2,"The Nursery Building, Cherry Orchard School, The Glade SE7 7DG",51.47663135,0.03285008
+CH3,"Boys&rsquo; Brigade School, Reynolds Place SE3 8SX",51.47638206,0.026992298
+CH4,"Charlton United Reformed Church, 109A Bramshot Avenue SE7 7HX",51.48162272,0.025554001
+CH5,"St. Richard&rsquo;s Church Hall, Swallowfield Road SE7 7NS",51.4851129,0.029136701
+CH6,"Pound Park Childrens Centre, Pound Park Road, SE7 8AF",51.48821438,0.04007776
+CH7,"Charlton Park Academy, Charlton Park Road, Charlton, London SE7 8HX",51.48193527,0.046393859
+CH8,"Charlton Assembly Rooms, The Village SE7 8UD",51.48184826,0.038483002
+CN1,"St. Andrew&rsquo;s Church Hall, Court Road SE9 4TQ",51.43750576,0.049256304
+CN2,Portacabin next to 46 Broad Lawn SE9 3XD,51.43855015,0.059447205
+CN3,"All Saints&rsquo; Church Hall, Bishops Close, Bercta Road SE9 3UT",51.43589888,0.071600963
+CN4,"Montbelle Primary School, Milverton Way SE9 3EY",51.42759027,0.062378074
+CN5,"Coldharbour Community Hall, William Barefoot Drive SE9 3JD",51.43087148,0.058353767
+CN6,"Greenacres School, Witherston Way SE9 3JN",51.43434558,0.056653942
+CN7,"Maryfield Hall, Our Lady Help of Christians RC Church, Leysdown Road, SE9 4UB",51.43494052,0.04732864
+EN1,"St. John Fisher & St. Thomas More Church, Arbroath Road SE9 6RR",51.46358627,0.050208588
+EN2,"Portacabin, Lovelace Green SE9 1LF",51.46240699,0.052847853
+EN3,Portacabin opposite 400 Westmount Road SE9 1NP,51.46769068,0.054107273
+EN4,"Deansfield School, Dairsie Road SE9 1XP",51.46230424,0.062287249
+EN5,"St. Luke&rsquo;s Church Hall, Westmount Road SE9 1XQ",51.46079875,0.058404468
+EN6,"Eltham Park Methodist Church Hall, Westmount Road SE9 1XX",51.45903932,0.058224535
+EN7,"Progress Hall, Admiral Seymour Road SE9 1SL",51.45875944,0.051618927
+EN8,"The Eltham Centre, Archery Road SE9 1HA",51.45154926,0.057657339
+EN9,"Eltham Park Baptist Friendship Centre, Glenure Road SE9 1JE",51.45342802,0.062304583
+ES1,"Sherard Hall, r/o Eltham United Reformed Church, 1 Court Road SE9 5AD",51.44928921,0.05269114
+ES2,"Holy Trinity Church Hall, Southend Crescent SE9 2SD",51.44835349,0.064493755
+ES3,Portacabin adjacent 50 Fairoak Drive SE9 2QH,51.45451145,0.08190037
+ES4,"Anstridge Community Centre, Anstridge Road SE9 2LL",51.44776285,0.082629572
+ES5,"Royal Greenwich District Scouts Avery Hill Activity Centre, Avery Hill Road, New Eltham, SE9 2HE",51.44078812,0.076844186
+ES6,"Wyborne Primary School, Nursery Building, Ivor Grove entrance SE9 2EH",51.44005395,0.069544241
+EW1,"Henwick Primary School, Henwick Road SE9 6NZ",51.46238522,0.042769425
+EW2,"Turning Pages Community Centre, Nesbit Road SE9 6HS",51.46014446,0.039243202
+EW3,"Sherard Day Centre, Tattersall Close SE9 6ET",51.4542096,0.047989193
+EW4,"Lionel Road Community Hall, Westhorne Avenue SE9 6DH",51.45503598,0.039792793
+EW5,"Ealdham Primary School, Ealdham Square SE9 6BP",51.4573295,0.035115991
+EW6,"Holy Family School, Tudway Road, SE3 9YX",51.46004093,0.030183758
+EW7,"The Village Hall, Halton Court, 1 Cranfield Walk, SE3 9EX",51.46167769,0.023418254
+GL1,"Broadwater Community Hall, osander Way SE28 0ER",51.49319469,0.082121016
+GL2,"Heronsgate Primary School, Burrage Grove SE18 7LJ",51.49026398,0.073949371
+GL3,"Polthorne Tenants&rsquo; Meeting Room, Polthorne Grove SE18",51.49026511,0.081497751
+GL4,"South Rise School, Brewery Road SE18 7PX",51.48620376,0.082825188
+GL5,"Glyndon Community Centre, Raglan Road SE18 7LB",51.48634961,0.077646403
+GL6,"St. Margaret&rsquo;s School, Nursery Building, St. Margaret&rsquo;s Grove SE18 7RL",51.48337781,0.076359074
+GL7,"St. Mark&rsquo;s Church Hall, Old Mill Road SE18 1QE",51.4816576,0.087644507
+GW1,"Invicta Primary School, Benbow Street, Deptford, SE8 3HD",51.48346578,-0.024486445
+GW2,"Meridian Adventure Play Centre, Thames Street SE10 9BX",51.48249263,-0.01372658
+GW3,"James Wolfe Primary School, Randall Place SE10 9LA",51.47934572,-0.012696782
+GW4,"James Wolfe Primary School, (Royal Hill Campus), The Annex, Royal Hill Road, SE10 8RZ",51.47684267,-0.009334991
+GW5,"St. Mark&rsquo;s Community Centre, Greenwich South Street SE10 8TY",51.47606437,-0.013285827
+GW6,"Devonshire Drive Baptist Church, Devonshire Drive SE10 8LA",51.47578433,-0.017992544
+GW7,"Jubilee Club Room, Woodville Court, 1 Blissett Street SE10 8UU",51.47443207,-0.013543952
+GW8,"Morden Mount School, Lewisham Road SE13 7QP",51.47073401,-0.015014891
+KH1,"Charlton Manor Primary School, Indus Road SE7 7EF",51.47746175,0.036818499
+KH2,"Portacabin, opposite 27 Stane Way SE18 4PE",51.47429594,0.042523909
+KH3,"Blackheath & Charlton Baptist Church, Marlborough Lane, SE7 7DF",51.47526176,0.033005192
+KH4,"St. Nicholas Church Hall, Whetstone Road SE3 8PZ",51.46986993,0.037963411
+KH5,"Corelli College, Corelli Road SE3 8EP",51.46942929,0.043645605
+KH6,"Former Orchards Youth Club Carnbrooke Road, SE3 8AE",51.46421308,0.038503187
+MS1,"Brooklands Primary School, Medebourne Close SE3 9AB",51.46400868,0.018093768
+MS2,"St. Peter&rsquo;s Church, Weigall Road SE12 8HG",51.45507399,0.018376187
+MS3,"Horn Park Sports and Social Club, Entrance between 74 - 76 Eltham Road, Lee, London, SE12 8UE",51.45349533,0.019184555
+MS4,"Moatbridge School, Eltham Palace Road SE9 5LX",51.4491438,0.038868119
+MS5,"Middle Park Community Centre, Middle Park Avenue SE9 5SD",51.44565278,0.038971645
+MS6,"Horn Park Community Centre, Sibthorpe Road SE12 9DR",51.44688219,0.026678552
+MS7,Portacabin next to 38 Alwold Crescent SE12 9AF,51.44831776,0.027907866
+PA1,"Meridian Primary School, Old Woolwich Road SE10 9NY",51.48391317,-0.001537497
+PA2,"Sherard Hall Forum @ Greenwich, Christchurch Way SE10 9AL",51.48566959,0.004617622
+PA3,"The Greenwich Centre, 12 Lambarde Square, Greenwich, London, SE10 9GB",51.48570157,0.008003876
+PA4,"Halstow Primary School, Halstow Road SE10 0LD",51.48498287,0.015822159
+PA5,"Rathmore Youth Centre, Troughton Road SE7 7QP",51.48686005,0.026909625
+PA6,"Millennium School, 50 John Harrison Way SE10 0BG",51.49362977,0.011348747
+PA7,"St. Joseph&rsquo;s R.C. Primary School, Commerell Street SE10 9AN",51.4869563,0.006676217
+PA8,"Portacabin, next to 54 Armitage Road SE10 0HG",51.4882422,0.009829631
+PL1,"Conway Primary School, Gallosson Road SE18 1QY",51.48734546,0.088912623
+PL2,"Bannockburn School, Plumstead High Street SE18 1HE",51.48719012,0.094595208
+PL3,"St. Nicholas Social Centre, St. Nicholas Road SE18 1HJ",51.48727478,0.100418427
+PL4,"Willow Dene School (Former St Paul's School), Oakmere Road, SE2 0XX",51.4796874,0.10378548
+PL5,"Rockliffe Manor School, Bassant Road SE18 2NP",51.47819565,0.094183074
+SH1,"Shrewsbury House Community Centre, Bushmoor Crescent SE18 3EG",51.473456,0.072956505
+SH2,"Portacabin next to 1A Donaldson Road, Shooters Hill SE18 3JX",51.47000294,0.063771924
+SH3,"St. Joseph&rsquo;s RC Church Hall, Paget Rise SE18 3QQ",51.47704554,0.064723464
+SH4,"Plumcroft Primary School, Nithdale Road SE18 3PE",51.47804373,0.074403039
+SH5,"Slade Hall, Pendrell Street SE18 3PJ",51.47878136,0.08503608
+SH6,"Timbercroft Primary School - Nursery Entrance, Foundation Stage, Timbercroft Lane SE18 2SG",51.47716671,0.090362851
+SH7,"Willow Dene School, Swingate Lane SE18 2JD",51.47295867,0.090832858
+TM1,"Heronsgate Primary School Youth Club Room (Thamesmead), 1c osander Way, Thamesmead, SE28 0DW",51.49286438,0.083503349
+TM2,"Discovery Children&rsquo;s Centre, Battery Road SE28 0JN",51.50076817,0.095160137
+TM3,"St. Margaret Clitherow School, Cole Close SE28 8GB",51.50107264,0.113271394
+TM4,"Windrush Primary School, Bentham Road SE28 8AR",51.50284235,0.115370569
+TM5,"Bishop John Robinson School, Hoveton Road, SE28 8LW",51.50827753,0.118663047
+TM6,"Titmus Avenue Baptist Church, 85 Titmuss Avenue SE28 8DJ",51.50636886,0.114798983
+TM7,"Woolwich Polytechnic College, Hutchins Road SE28 8AT",51.50358293,0.10870446
+WC1,"St. Peter&rsquo;s Community Centre, 107 Woolwich New Road SE18 6EF",51.48803988,0.066473337
+WC2,"Nightingale Primary School, Sandy Hill Road Entrance, Bloomfield Road SE18 7JJ",51.48299389,0.070609277
+WC3,"Woolwich Common Community Centre, 16 Leslie Smith Square SE18 4DW",51.48034964,0.062467555
+WC4,"Eglinton Primary School, Paget Rise SE18 3PY",51.47846757,0.063635571
+WC5,"The Barnfield Project, Oak House, Barnfield Road SE18 3UH",51.48059974,0.071235338
+WC6,"Plumcroft Primary School, Genesta Road SE18 3EU",51.4783583,0.074921363
+WR1,"Boyle House, 1 Gallon Close SE7 8SY",51.48831716,0.034680657
+WR2,"YMCA Thames Gateway (Greenwich), Antelope Road, Woolwich, SE18 5QG",51.4936139,0.052736978
+WR3,"Woolwich Adventure Play Centre, Pett Street SE18 5NZ",51.49208066,0.048879393
+WR4,"New Charlton Community Centre, 217 Maryon Road SE7 8DB",51.48924162,0.047181977
+WR5,"Woolwich Evangelical Church, between 131 & 143 Woodhill SE18 5HW",51.48865681,0.050800154
+WR6,"Cardwell Primary School, Frances Street SE18 5LP",51.49085293,0.053261189
+WR7,"St. Mary Magdalene School, Kingsman Street SE18 5PW",51.49118951,0.06124253
+WR8,"The Woolwich Centre, 35 Wellington Street SE18 6HQ",51.48927247,0.065419899
+WR9,"Berkeley Gallery, Greenwich Heritage Centre, Artillery Square SE18 4DX",51.49431005,0.069407703
