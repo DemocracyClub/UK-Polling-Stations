@@ -133,6 +133,7 @@ class BasePollingStationView(
         else:
             self.location = Point(l['wgs84_lon'], l['wgs84_lat'])
             self.gss_codes = l['gss_codes']
+            self.council_gss = l['council_gss']
 
         self.council = self.get_council()
         self.station = self.get_station()
@@ -176,9 +177,19 @@ class PostcodeView(BasePollingStationView):
         return geocode(self.postcode)
 
     def get_council(self):
+        if getattr(self, 'council_gss'):
+            try:
+                return Council.objects.defer("area", "location").get(
+                    council_id=self.council_gss)
+            except Council.DoesNotExist:
+                pass
+
         if getattr(self, 'gss_codes'):
-            return Council.objects.get(
-                council_id__in=self.gss_codes)
+            try:
+                return Council.objects.get(
+                    council_id__in=self.gss_codes)
+            except Council.DoesNotExist:
+                pass
 
         return Council.objects.get(
             area__covers=self.location)
