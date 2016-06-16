@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             'cleaned_ab_path',
-            help='The path to the cleaned AddressBase file'
+            help='The path to the folder containing the cleaned AddressBase CSVs'
         )
 
 
