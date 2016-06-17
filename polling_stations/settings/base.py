@@ -127,8 +127,8 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'data_finder.middleware.UTMTrackerModdleware',
-    'whitelabel.middleware.WhiteLabelModdleware',
+    'data_finder.middleware.UTMTrackerMiddleware',
+    'whitelabel.middleware.WhiteLabelMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 

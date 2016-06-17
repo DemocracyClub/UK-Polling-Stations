@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.urlresolvers import set_script_prefix
 
 
-class UTMTrackerModdleware(object):
+class UTMTrackerMiddleware(object):
     def process_request(self, request):
         def _get_value_from_req(key):
             return (key, request.GET.get(key, None))
