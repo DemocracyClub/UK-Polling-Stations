@@ -113,6 +113,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder',
 )
 
 # Make this unique, and don't share it with anybody.
