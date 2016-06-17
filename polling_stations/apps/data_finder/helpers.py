@@ -29,7 +29,7 @@ def geocode_point_only(postcode):
     """
     addresses = Address.objects.filter(postcode=postcode)
     if not addresses:
-        sleep(1.3)
+        time.sleep(1.3)
         return geocode(postcode)
 
     centre = centre_from_points_qs(addresses)
