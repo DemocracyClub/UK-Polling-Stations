@@ -51,8 +51,13 @@ class PollingStationManager(models.GeoManager):
                 polling_district_id=polling_district.internal_council_id,
                 council_id=council_id
             )
+
             if len(station) == 1:
                 return station[0]
+            else:
+                addresses = set([s.address for s in station])
+                if len(addresses) == 1:
+                    return station[0]
 
         if polling_district.polling_station_id:
             # only try to look up station id if it is a sensible value
