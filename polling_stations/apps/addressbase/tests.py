@@ -40,7 +40,8 @@ from addressbase.models import Address
 from addressbase.helpers import (postcodes_not_contained_by_district,
                                  district_contains_all_points,
                                  make_addresses_for_postcode,
-                                 create_address_records_for_council)
+                                 create_address_records_for_council,
+                                 centre_from_points_qs)
 from pollingstations.models import PollingStation, PollingDistrict
 from councils.models import Council
 from data_finder.helpers import RoutingHelper
@@ -129,3 +130,11 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         rh = RoutingHelper(postcode)
         endpoint = rh.get_endpoint()
         self.assertEqual('address_select_view', endpoint.view)
+
+    def test_center_from_points_qs(self):
+        qs = Address.objects.all()
+        centre = centre_from_points_qs(qs)
+        self.assertEqual(
+            centre.wkt,
+            "POINT (0.7195476867864934 52.0965233704130242)"
+        )

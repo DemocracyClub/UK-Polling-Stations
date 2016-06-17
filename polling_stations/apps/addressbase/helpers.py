@@ -3,6 +3,21 @@ from pollingstations.models import (PollingDistrict, ResidentialAddress,
 from addressbase.models import Address
 
 
+def centre_from_points_qs(qs):
+    if not qs:
+        return None
+
+    if len(qs) == 1:
+        return qs[0].location
+
+    base_point = qs[0].location
+    poly = base_point.union(qs[1].location)
+    for m in qs:
+        poly = poly.union(m.location)
+
+    return poly.centroid
+
+
 def district_contains_all_points(district, points):
     return all([district.area.contains(p) for p in points])
 
