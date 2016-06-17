@@ -144,13 +144,22 @@ class BaseImporter(BaseCommand):
 
         helper = CsvHelper(stations, self.csv_encoding, self.csv_delimiter)
         data = helper.parseCsv()
+        seen = set()
         for row in data:
-            station_info = self.station_record_to_dict(row)
+            if hasattr(self, 'get_station_hash'):
+                station_hash = self.get_station_hash(row)
+                if station_hash in seen:
+                    continue
+                else:
+                    station_info = self.station_record_to_dict(row)
+                    seen.add(station_hash)
+            else:
+                station_info = self.station_record_to_dict(row)
+
             if station_info is None:
                 continue
             if 'council' not in station_info:
                 station_info['council'] = self.council
-
             self.add_polling_station(station_info)
 
     def post_import(self):
