@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 .sass-cache
+COMPILED/
 
 # C extensions
 *.so
