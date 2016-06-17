@@ -21,12 +21,13 @@ def postcodes_not_contained_by_district(district):
     return data
 
 
-def make_addresses_for_postcode(postcode):
+def make_addresses_for_postcode(postcode, council_id):
     addresses = Address.objects.filter(postcode=postcode)
     created = 0
     for address in addresses:
         try:
-            district = PollingDistrict.objects.get(area__covers=address.location)
+            district = PollingDistrict.objects.get(
+                area__covers=address.location, council_id=council_id)
         except PollingDistrict.DoesNotExist:
             # Chances are this is on the edge of the council area, and
             # we don't have data for the are the property is in
@@ -63,7 +64,7 @@ def create_address_records_for_council(council):
 
         for postcode in data['not_contained']:
             postcode_report['postcodes_needing_address_lookup'].add(postcode)
-            created = make_addresses_for_postcode(postcode)
+            created = make_addresses_for_postcode(postcode, council.pk)
             postcode_report['addresses_created'] = created
 
     return postcode_report
