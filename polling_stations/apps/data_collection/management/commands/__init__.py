@@ -459,11 +459,13 @@ class BaseAddressCsvImporter(BaseImporter):
         slug = self.get_slug(address_info)
 
         ResidentialAddress.objects.update_or_create(
-            council=self.council,
-            address=address_info['address'],
-            postcode=address_info['postcode'],
-            polling_station_id=address_info['polling_station_id'],
-            slug=slug
+            slug=slug,
+            defaults={
+                'council': self.council,
+                'address': address_info['address'],
+                'postcode': address_info['postcode'],
+                'polling_station_id': address_info['polling_station_id'],
+            }
         )
 
     def import_residential_addresses(self):
