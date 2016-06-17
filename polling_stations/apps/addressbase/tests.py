@@ -123,7 +123,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         self.assertEqual('postcode_view', endpoint.view)
 
         # Fix the addresses outside of the districts
-        make_addresses_for_postcode(postcode)
+        make_addresses_for_postcode(postcode, council_id="X01000001")
 
         # Now we should get offered an address lookup
         rh = RoutingHelper(postcode)
