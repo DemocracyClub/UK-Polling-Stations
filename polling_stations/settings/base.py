@@ -104,10 +104,6 @@ STATIC_PRECOMPILER_COMPILERS = (
     }),
 )
 
-
-# Use write-through cache for sessions
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
