@@ -47,6 +47,11 @@ def make_addresses_for_postcode(postcode, council_id):
             # Chances are this is on the edge of the council area, and
             # we don't have data for the are the property is in
             continue
+        except PollingDistrict.MultipleObjectsReturned:
+            # This is normally causes by districts the overlap
+            # Because we have no way of knowing what the correct district is,
+            # we need to ignore this address
+            continue
 
         polling_station = PollingStation.objects.get_polling_station(
             district.council.pk,
