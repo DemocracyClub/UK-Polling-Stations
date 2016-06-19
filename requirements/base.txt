@@ -23,4 +23,5 @@ requests==2.7.0
 
 
 git+https://github.com/DemocracyClub/django-static-precompiler
+libsass
 git+git://github.com/DemocracyClub/dc_base_theme.git

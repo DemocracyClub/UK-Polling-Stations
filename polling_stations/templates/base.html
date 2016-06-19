@@ -1,6 +1,6 @@
 {% extends base_template|default:"base_full.html" %}
 {% load compile_static %}
-{% load static %}
+{% load static from staticfiles %}
 {% block extra_site_css %}
     <link rel="stylesheet" href="{% static "css/style.scss"|compile %}" />
 {% endblock extra_site_css %}

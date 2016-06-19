@@ -92,7 +92,7 @@ import os
 import dc_theme
 root_path = os.path.dirname(dc_theme.__file__)
 STATIC_PRECOMPILER_COMPILERS = (
-    ('static_precompiler.compilers.scss.SCSS', {
+    ('static_precompiler.compilers.libsass.SCSS', {
         "sourcemap_enabled": True,
         # "output_style": "compressed",
         "load_paths": [
@@ -113,6 +113,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder',
 )
 
 # Make this unique, and don't share it with anybody.
