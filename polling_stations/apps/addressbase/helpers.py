@@ -57,6 +57,10 @@ def make_addresses_for_postcode(postcode, council_id):
             district.council.pk,
             polling_district=district)
 
+        if not polling_station:
+            # This station doesn't fall inside a district, ignore it
+            continue
+
         residential_address, _ = ResidentialAddress.objects.get_or_create(
             slug=address.uprn,
             defaults={
