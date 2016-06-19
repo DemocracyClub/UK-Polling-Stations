@@ -42,7 +42,8 @@ from addressbase.helpers import (postcodes_not_contained_by_district,
                                  make_addresses_for_postcode,
                                  create_address_records_for_council,
                                  centre_from_points_qs)
-from pollingstations.models import PollingStation, PollingDistrict
+from pollingstations.models import (PollingStation, PollingDistrict,
+                                    ResidentialAddress)
 from councils.models import Council
 from data_finder.helpers import RoutingHelper
 
@@ -130,6 +131,23 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         rh = RoutingHelper(postcode)
         endpoint = rh.get_endpoint()
         self.assertEqual('address_select_view', endpoint.view)
+
+    def test_make_addresses_cross_boarders(self):
+        """
+        Ensure that we make addresses for both sides of a district.
+
+        We should see 2 ResidentialAddress after calling
+        make_addresses_for_postcode.
+        """
+
+        # We don't have any addresses yet
+        self.assertEqual(ResidentialAddress.objects.all().count(), 0)
+
+        # Fix the addresses outside of the districts
+        postcode = 'KW15 88TF'
+        make_addresses_for_postcode(postcode, council_id="X01000001")
+
+        self.assertEqual(ResidentialAddress.objects.all().count(), 2)
 
     def test_center_from_points_qs(self):
         qs = Address.objects.all()
