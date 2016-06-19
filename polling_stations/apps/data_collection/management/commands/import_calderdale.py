@@ -3,8 +3,14 @@ Import Calderdale
 """
 import json
 import shapefile
+
 from django.contrib.gis.geos import GEOSGeometry, Point
+from django.db import transaction
+from django.db import connection
+
 from data_collection.management.commands import BaseShpImporter
+from pollingstations.models import PollingDistrict
+
 
 class Command(BaseShpImporter):
     """
@@ -104,3 +110,22 @@ class Command(BaseShpImporter):
                 'address'            : address_parts['address'],
                 'location'           : None
             })
+
+
+        """
+        This data isn't great – the polygons seem to be corrupt in some way.
+
+        PostGIS can fix them though!
+        """
+        print("running fixup SQL")
+        table_name = PollingDistrict()._meta.db_table
+
+        cursor = connection.cursor()
+        cursor.execute("""
+        UPDATE {0}
+         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
+         WHERE NOT ST_IsValid(area);
+        """.format(table_name))
+        # Note the delibarate use of `.format` above – we don't want the table
+        # names in quotes.  Use `%s` and a list as a 2nd arg to execute
+        # if you're adding values at all.
