@@ -2,9 +2,9 @@
 Models for actual Polling Stations and Polling Districts!
 """
 
-import urllib.parse
-
 from itertools import groupby
+import re
+import urllib.parse
 
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
@@ -34,12 +34,16 @@ class PollingDistrict(models.Model):
 
 
 class PollingStationManager(models.GeoManager):
-    def get_polling_station(self, location, council_id):
-        try:
-            polling_district = PollingDistrict.objects.get(
-                area__covers=location)
-        except PollingDistrict.DoesNotExist:
-            return None
+    def get_polling_station(self, council_id,
+                            location=None, polling_district=None):
+        assert any((polling_district, location))
+
+        if not polling_district:
+            try:
+                polling_district = PollingDistrict.objects.get(
+                    area__covers=location)
+            except PollingDistrict.DoesNotExist:
+                return None
 
         if polling_district.internal_council_id:
             # always attempt to look up district id in stations table
@@ -47,8 +51,13 @@ class PollingStationManager(models.GeoManager):
                 polling_district_id=polling_district.internal_council_id,
                 council_id=council_id
             )
+
             if len(station) == 1:
                 return station[0]
+            else:
+                addresses = set([s.address for s in station])
+                if len(addresses) == 1:
+                    return station[0]
 
         if polling_district.polling_station_id:
             # only try to look up station id if it is a sensible value
@@ -118,6 +127,15 @@ class ResidentialAddress(models.Model):
     council            = models.ForeignKey(Council, null=True)
     polling_station_id = models.CharField(blank=True, max_length=100)
     slug               = models.SlugField(blank=False, null=False, db_index=True, unique=True, max_length=255)
+
+    def save(self, *args, **kwargs):
+        """
+        strip all whitespace from postcode and convert to uppercase
+        this will make it easier to query based on user-supplied postcode
+        """
+        self.postcode = re.sub('[^A-Z0-9]', '', self.postcode.upper())
+        super().save(*args, **kwargs)
+
 
 
 class CustomFinderManager(models.Manager):

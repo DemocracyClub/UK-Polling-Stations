@@ -2,4 +2,4 @@
 
 ipdb
 django-debug-toolbar
-
+django-extensions

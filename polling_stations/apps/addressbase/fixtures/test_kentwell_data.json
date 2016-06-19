@@ -1,0 +1,120 @@
+[
+{
+    "pk": "X01000001",
+    "model": "councils.council",
+    "fields": {
+        "location": null,
+        "area": null,
+        "website": "",
+        "mapit_id": "",
+        "address": "",
+        "council_type": "",
+        "postcode": "",
+        "name": "Kentwell Hall",
+        "email": "",
+        "phone": ""
+    }
+},
+{
+    "model": "pollingstations.pollingdistrict",
+    "pk": 117,
+    "fields": {
+        "polling_station_id": "1",
+        "area": "SRID=4326;MULTIPOLYGON (((0.7159137724833404 52.0963887902320408, 0.7158064841227768 52.0966656155218288, 0.7150447367626540 52.0965997048947216, 0.7150232790905341 52.0964283368071861, 0.7148623465496525 52.0960855986576377, 0.7145833968121562 52.0957428578754786, 0.7144439219433946 52.0956110337960325, 0.7143044470746330 52.0954001144594159, 0.7143044470746330 52.0952089679492687, 0.7142508028943422 52.0950178206195460, 0.7141757010419404 52.0949321336202118, 0.7140576838452987 52.0948794030766749, 0.7142400740583001 52.0946487062176971, 0.7143795489270348 52.0945366530267151, 0.7147979735333286 52.0944905133962024, 0.7153666018443900 52.0946552975732686, 0.7156991957622041 52.0946157494263247, 0.7159352301554605 52.0950639597052572, 0.7162570952371966 52.0955714864963397, 0.7159137724833404 52.0963887902320408)))",
+        "council": "X01000001",
+        "internal_council_id": "1",
+        "name": "Little Melford",
+        "extra_id": "1"
+    }
+},
+{
+    "model": "pollingstations.pollingdistrict",
+    "pk": 118,
+    "fields": {
+        "polling_station_id": "2",
+        "area": "SRID=4326;MULTIPOLYGON (((0.7216429709382847 52.0976938087004839, 0.7218146323152173 52.0978322175108843, 0.7222545145935950 52.0979047171923710, 0.7229304312652651 52.0980101710646437, 0.7232522963470014 52.0980628979070133, 0.7232952116912411 52.0971533511376492, 0.7229089735931452 52.0970808502349669, 0.7222008704133132 52.0970017582065452, 0.7217609881349354 52.0970874412311957, 0.7218790053315770 52.0972456248439713, 0.7217073439546445 52.0972983525900517, 0.7215893267580028 52.0973774440925936, 0.7216429709382847 52.0976938087004839)))",
+        "council": "X01000001",
+        "internal_council_id": "2",
+        "name": "Barns Sward",
+        "extra_id": "2"
+    }
+},
+{
+    "model": "pollingstations.pollingdistrict",
+    "pk": 119,
+    "fields": {
+        "polling_station_id": "3",
+        "area": "SRID=4326;MULTIPOLYGON (((0.7199800013493582 52.0969094839963276, 0.7198405264805966 52.0967051618510126, 0.7201516627262907 52.0960790075134526, 0.7220184802004105 52.0962569680613257, 0.7216000555941527 52.0970874412311957, 0.7199800013493582 52.0969094839963276)))",
+        "council": "X01000001",
+        "internal_council_id": "3",
+        "name": "Tourney Field",
+        "extra_id": "3"
+    }
+},
+{
+    "pk": 119,
+    "model": "pollingstations.pollingstation",
+    "fields": {
+        "postcode": "KW15 88TF",
+        "location": "SRID=4326;POINT (0.7208994610313341 52.0965737442737549)",
+        "polling_district_id": "TF1",
+        "council": "X01000001",
+        "internal_council_id": "3",
+        "polling_district_id": "3",
+        "address": "By the gate"
+    }
+},
+{
+    "pk": 118,
+    "model": "pollingstations.pollingstation",
+    "fields": {
+        "postcode": "KW15 88TF",
+        "location": "SRID=4326;POINT (0.7222083790304389 52.0978388001128465)",
+        "polling_district_id": "BS1",
+        "council": "X01000001",
+        "internal_council_id": "2",
+        "polling_district_id": "2",
+        "address": "In the woolshed"
+    }
+},
+{
+    "pk": 117,
+    "model": "pollingstations.pollingstation",
+    "fields": {
+        "postcode": "KW15 88LM",
+        "location": "SRID=4326;POINT (0.7151917202484516 52.0963096886925001)",
+        "polling_district_id": "LM1",
+        "council": "X01000001",
+        "internal_council_id": "1",
+        "polling_district_id": "1",
+        "address": "Tissy's caravan"
+    }
+},
+{
+    "pk": "9999991",
+    "fields": {
+        "postcode": "KW15 88TF",
+        "address": "In the middle of the field",
+        "location": "SRID=4326;POINT (0.7208994610313337 52.0965737442737833)"
+    },
+    "model": "addressbase.address"
+},
+{
+    "pk": "9999992",
+    "fields": {
+        "postcode": "KW15 88TF",
+        "address": "The Cott",
+        "location": "SRID=4326;POINT (0.7225083308451804 52.0975051994085803)"
+    },
+    "model": "addressbase.address"
+},
+{
+    "pk": "9999993",
+    "fields": {
+        "postcode": "KW15 88LM",
+        "address": "Sym's Caravan",
+        "location": "SRID=4326;POINT (0.7152352684829660 52.0954911675566947)"
+    },
+    "model": "addressbase.address"
+}
+]

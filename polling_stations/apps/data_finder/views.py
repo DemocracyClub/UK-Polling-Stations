@@ -196,7 +196,7 @@ class PostcodeView(BasePollingStationView):
 
     def get_station(self):
         return PollingStation.objects.get_polling_station(
-            self.location, self.council.council_id)
+            self.council.council_id, location=self.location)
 
 
 class AddressView(BasePollingStationView):

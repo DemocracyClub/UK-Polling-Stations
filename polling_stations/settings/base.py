@@ -170,14 +170,15 @@ INSTALLED_APPS = (
 )
 
 PROJECT_APPS = (
-    'pollingstations',
+    'addressbase',
     'councils',
-    'data_finder',
     'data_collection',
-    'whitelabel',
-    'nus_wales',
+    'data_finder',
     'dc_theme',
+    'nus_wales',
+    'pollingstations',
     'static_precompiler',
+    'whitelabel',
 )
 
 INSTALLED_APPS += PROJECT_APPS

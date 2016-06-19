@@ -1,13 +1,16 @@
-import requests
-import re
 import logging
 import lxml.etree
+import re
+import requests
+import time
 from collections import namedtuple
 
 from django.utils.translation import ugettext as _
 from django.contrib.gis.geos import Point
 
 from data_collection import constants
+from addressbase.helpers import centre_from_points_qs
+from addressbase.models import Address
 
 from pollingstations.models import ResidentialAddress
 
@@ -19,6 +22,21 @@ class RateLimitError(Exception):
         logger = logging.getLogger('django.request')
         logger.error(message)
 
+
+def geocode_point_only(postcode):
+    """
+    Try to get centre of the point from AddressBase, fall back to MapIt
+    """
+    addresses = Address.objects.filter(postcode=postcode)
+    if not addresses:
+        time.sleep(1.3)
+        return geocode(postcode)
+
+    centre = centre_from_points_qs(addresses)
+    return {
+        'wgs84_lon': centre.x,
+        'wgs84_lat': centre.y,
+    }
 
 def geocode(postcode):
     """
