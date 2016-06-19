@@ -104,10 +104,6 @@ STATIC_PRECOMPILER_COMPILERS = (
     }),
 )
 
-
-# Use write-through cache for sessions
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -132,8 +128,8 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'data_finder.middleware.UTMTrackerModdleware',
-    'whitelabel.middleware.WhiteLabelModdleware',
+    'data_finder.middleware.UTMTrackerMiddleware',
+    'whitelabel.middleware.WhiteLabelMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
@@ -185,6 +181,8 @@ PROJECT_APPS = (
 )
 
 INSTALLED_APPS += PROJECT_APPS
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

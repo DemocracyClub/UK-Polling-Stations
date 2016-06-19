@@ -3,7 +3,7 @@ from django.core.urlresolvers import set_script_prefix
 from django.utils import translation
 
 
-class WhiteLabelModdleware(object):
+class WhiteLabelMiddleware(object):
     def process_request(self, request):
         base_path = request.path.split('/')[1]
         request.brand = "democracyclub"

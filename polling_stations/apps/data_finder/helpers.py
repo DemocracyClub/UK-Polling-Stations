@@ -24,6 +24,16 @@ def geocode(postcode):
     """
     Use MaPit to convert the postcode to a location and constituency
     """
+
+    COUNCIL_TYPES = [
+        "LBO",
+        "DIS",
+        "MTD",
+        "LGD",
+        "UTA",
+    ]
+
+
     headers = {}
     if constants.MAPIT_UA:
         headers['User-Agent'] = constants.MAPIT_UA
@@ -40,13 +50,19 @@ def geocode(postcode):
         raise PostcodeError("Mapit error {}: {}".format(res_json['code'], res_json['error']))
     else:
         gss_codes = []
+        council_gss = None
         for area in res_json['areas']:
             if 'gss' in res_json['areas'][area]['codes']:
-                gss_codes.append(res_json['areas'][area]['codes']['gss'])
+                gss = res_json['areas'][area]['codes']['gss']
+                gss_codes.append(gss)
+                if res_json['areas'][area]['type'] in COUNCIL_TYPES:
+                    council_gss = gss
+
         return {
             'wgs84_lon': res_json['wgs84_lon'],
             'wgs84_lat': res_json['wgs84_lat'],
             'gss_codes': gss_codes,
+            'council_gss': council_gss,
         }
 
 
