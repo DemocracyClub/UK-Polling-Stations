@@ -18,6 +18,8 @@ from django.core.management.base import BaseCommand
 from django.contrib.gis import geos
 from django.contrib.gis.gdal import DataSource, GDALException
 from django.contrib.gis.geos import Point, GEOSGeometry
+from django.db import connection
+from django.db import transaction
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
@@ -170,6 +172,23 @@ class BaseImporter(BaseCommand):
         self.postcodes_contained_by_district = data['no_attention_needed']
         self.postcodes_with_addresses_generated = data['addresses_created']
 
+    @transaction.atomic
+    def clean_ambiguous_addresses(self):
+        table_name = ResidentialAddress()._meta.db_table
+        cursor = connection.cursor()
+        cursor.execute("""
+        DELETE FROM {0} WHERE CONCAT(address, postcode) IN (
+         SELECT concat_address FROM (
+             SELECT CONCAT(address, postcode) AS concat_address, COUNT(*) AS c
+             FROM {0}
+             WHERE council_id='E09000028'
+             GROUP BY CONCAT(address, postcode)
+            ) as dupes
+            WHERE dupes.c > 1
+        )
+        """.format(table_name))
+
+
 
     def report(self):
         # build report
@@ -216,6 +235,8 @@ class BaseImporter(BaseCommand):
             self.post_import()
         except NotImplementedError:
             pass
+
+        self.clean_ambiguous_addresses()
 
         # For areas with shape data, use AddressBase to clean up overlapping
         # postcode
