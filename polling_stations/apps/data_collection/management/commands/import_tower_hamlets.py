@@ -1,42 +1,72 @@
 """
 Import Tower Hamlets
 """
-import sys
+from time import sleep
 
-from data_collection.management.commands import BaseShpShpImporter
+from django.contrib.gis.geos import Point
 
-class Command(BaseShpShpImporter):
+from data_collection.management.commands import BaseAddressCsvImporter
+from data_finder.helpers import geocode, geocode_point_only, PostcodeError
+from addressbase.models import Address
+
+
+class Command(BaseAddressCsvImporter):
     """
-    Imports the Polling Station data from Tower Hamlets
+    Imports the Polling Station data from Tower Hamlets Council
     """
-    council_id     = 'E09000030'
-    districts_name = 'Polling_Districts_2015'
-    stations_name  = 'Polling_Stations_2015.shp'
-    elections      = ['parl.2015-05-07']
+    council_id      = 'E09000030'
+    addresses_name  = '2016/Polling Stations with Addresses.csv'
+    stations_name   = '2016/Polling Stations with Addresses.csv'
+    csv_delimiter   = ','
+    elections       = [
+        'ref.2016-06-23'
+    ]
 
-    def district_record_to_dict(self, record):
-        return {
-            'internal_council_id': record[3],
-            'name': record[4],
-            'extra_id': record[0],
-            'polling_station_id': record[3]
-        }
+    def get_station_hash(self, record):
+        return "-".join([
+            record.station_na,
+            record.code,
+            record.polling_na,
+        ])
 
     def station_record_to_dict(self, record):
+        if not record.polling_na:
+            return
+        # format address
+        address = record.station_na
+        while "\n\n" in address:
+            address = address.replace("\n\n", "\n").strip()
+        postcode = " ".join(address.split(' ')[-2:]).strip().split('\n')[-1]
 
-        address_parts = [x.strip() for x in record[5].split(',')]
-        address = "\n".join(address_parts[:-1])
-        postcode = address_parts[-1]
-        if postcode == 'Blackwall Way':
-            address = "%s\n%s" % (address, postcode)
-            postcode = ''
-        if postcode[:6] == 'London':
-            address = "%s\n%s" % (address, 'London')
-            postcode = "%s %s" % (postcode.split(' ')[-2], postcode.split(' ')[-1])
+        location = None
+        if float(record.polling_station_x) and float(record.polling_station_y):
+            location = Point(
+                float(record.polling_station_x),
+                float(record.polling_station_y),
+                srid=27700)
+        else:
+            # no points supplied, so attempt to attach them by geocoding
+            try:
+                location_data = geocode_point_only(postcode)
+            except PostcodeError:
+                pass
+
+            if location_data:
+                location = Point(
+                    location_data['wgs84_lon'],
+                    location_data['wgs84_lat'],
+                    srid=4326)
 
         return {
-            'internal_council_id': record[3],
+            'internal_council_id': record.code,
             'postcode'           : postcode,
             'address'            : address,
-            'polling_district_id': record[3]
+            'location'           : location
+        }
+
+    def address_record_to_dict(self, record):
+        return {
+            'address'           : record.fulladdress.strip(),
+            'postcode'          : record.postcode.strip(),
+            'polling_station_id': record.code
         }
