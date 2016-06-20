@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos import Point
+from django.conf import settings
 
 from councils.models import Council
 from data_collection import constants
@@ -16,6 +17,10 @@ class Command(BaseCommand):
     def handle(self, **options):
         for council_type in constants.COUNCIL_TYPES:
             self.get_type_from_mapit(council_type)
+
+    def _save_council(self, council):
+        for db in settings.DATABASES.keys():
+            council.save(using=db)
 
     def get_wkt_from_mapit(self, area_id):
         req = requests.get('%sarea/%s.wkt' % (constants.MAPIT_URL, area_id))
@@ -59,9 +64,13 @@ class Command(BaseCommand):
                 council_type=council_type,
                 defaults=contact_info,
             )
+
+            # Call _save here to ensure it gets written to all databases
+            self._save_council(council)
+
             if not council.area:
                 council.area = self.get_wkt_from_mapit(mapit_id)
-                council.save()
+                self._save_council(council)
                 time.sleep(1)
             if not council.location:
                 print(council.postcode)
@@ -71,4 +80,4 @@ class Command(BaseCommand):
                     continue
                 time.sleep(1)
                 council.location = Point(l['wgs84_lon'], l['wgs84_lat'])
-                council.save()
+                self._save_council(council)
