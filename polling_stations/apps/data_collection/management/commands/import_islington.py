@@ -1,45 +1,86 @@
 """
 Import Islington
 """
-import os
+from time import sleep
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseShpImporter, CsvHelper
+from data_collection.management.commands import BaseAddressCsvImporter
+from data_finder.helpers import geocode, geocode_point_only, PostcodeError
 
-class Command(BaseShpImporter):
+class Command(BaseAddressCsvImporter):
     """
     Imports the Polling Station data from Islington Council
     """
-    council_id = 'E09000019'
-    districts_name = 'POLLING_AREA'
-    stations_name = 'PollingStations.csv'
-    elections = ['parl.2015-05-07']
+    council_id      = 'E09000019'
+    addresses_name  = '2016/PropertyPostCodePollingStationWebLookup-2016-06-13 2.TSV'
+    stations_name   = '2016/PropertyPostCodePollingStationWebLookup-2016-06-13 2.TSV'
+    csv_delimiter   = '\t'
+    elections       = [
+        'ref.2016-06-23'
+    ]
 
-    def district_record_to_dict(self, record):
-        return {
-            'council': self.council,
-            'internal_council_id': record[3],
-            'name': record[0],
-            'polling_station_id': record[3]
-        }
+    def get_station_hash(self, record):
+            return "-".join([
+                record.pollingplaceaddress7,
+                record.pollingplaceid,
+                record.pollingdistrictreference,
+            ])
+
 
     def station_record_to_dict(self, record):
-        try:
-            location = Point(int(record.easting), int(record.northing), srid=self.srid)
-        except ValueError:
-            location = Point(float(record.easting), float(record.northing), srid=self.srid)
+
+        # format address
+        address = "\n".join([
+            record.pollingplaceaddress1,
+            record.pollingplaceaddress2,
+            record.pollingplaceaddress3,
+            record.pollingplaceaddress4,
+            record.pollingplaceaddress5,
+            record.pollingplaceaddress6,
+        ])
+        while "\n\n" in address:
+            address = address.replace("\n\n", "\n").strip()
+
+
+        location = None
+        location_data = None
+        if int(record.pollingplaceeasting) and int(record.pollingplacenorthing):
+            location = Point(
+                float(record.pollingplaceeasting),
+                float(record.pollingplacenorthing),
+                srid=27700)
+        else:
+            # no points supplied, so attempt to attach them by geocoding
+            try:
+                location_data = geocode_point_only(record.pollingplaceaddress7)
+            except PostcodeError:
+                pass
+
+            if location_data:
+                location = Point(
+                    location_data['wgs84_lon'],
+                    location_data['wgs84_lat'],
+                    srid=4326)
+
         return {
-            'council': self.council,
-            'internal_council_id': record.rec_pd,
-            'postcode': record.postcode,
-            'address': "\n".join([record.stat_title, record.stat_addr1]),
-            'location': location,
-            'polling_district_id': record.rec_pd
+            'internal_council_id': record.pollingplaceid,
+            'postcode'           : record.pollingplaceaddress7,
+            'address'            : address,
+            'location'           : location
         }
-    
-    def import_polling_stations(self):
-        stations = os.path.join(self.base_folder_path, self.stations_name)
-        helper = CsvHelper(stations)
-        data = helper.parseCsv()
-        for row in data:
-            station_info = self.station_record_to_dict(row)
-            self.add_polling_station(station_info)
+
+    def address_record_to_dict(self, record):
+        postcode = record.postcode.strip()
+
+        if record.propertynumber.strip() == '0':
+            address = record.streetname.strip()
+        else:
+            address = ' '.join([
+                record.propertynumber.strip(),
+                record.streetname.strip()
+            ])
+
+        return {
+            'address'           : address,
+            'postcode'          : postcode,
+            'polling_station_id': record.pollingplaceid
+        }
