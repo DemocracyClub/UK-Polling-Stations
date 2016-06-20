@@ -2,10 +2,9 @@
 Import Gwynedd
 """
 import shapefile
-from time import sleep
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseShpShpImporter
-from data_finder.helpers import geocode, PostcodeError
+from data_finder.helpers import geocode_point_only, PostcodeError
 
 class Command(BaseShpShpImporter):
     """
@@ -60,9 +59,8 @@ class Command(BaseShpShpImporter):
 
         # No grid references were supplied,
         # so attempt to derive a grid ref from postcode
-        sleep(1.3) # ensure we don't hit mapit's usage limit
         try:
-            gridref = geocode(record[6])
+            gridref = geocode_point_only(record[6])
             location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
         except PostcodeError:
             location = None

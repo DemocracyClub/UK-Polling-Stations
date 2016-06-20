@@ -3,10 +3,9 @@ Import Coventry
 
 note: this script takes quite a long time to run
 """
-from time import sleep
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseAddressCsvImporter
-from data_finder.helpers import geocode, PostcodeError
+from data_finder.helpers import geocode_point_only, PostcodeError
 
 class Command(BaseAddressCsvImporter):
     """
@@ -35,12 +34,11 @@ class Command(BaseAddressCsvImporter):
             address = address.replace("\n\n", "\n").strip()
 
         # no points supplied, so attempt to attach them by geocoding
-        sleep(1.3) # ensure we don't hit mapit's usage limit
         if len(record.pollingplaceaddress7) <= 5:
             location = None
         else:
             try:
-                gridref = geocode(record.pollingplaceaddress7)
+                gridref = geocode_point_only(record.pollingplaceaddress7)
                 location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
             except PostcodeError:
                 location = None

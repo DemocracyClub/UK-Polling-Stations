@@ -3,10 +3,9 @@ Import Waltham Forest
 
 note: this script takes quite a long time to run
 """
-from time import sleep
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseAddressCsvImporter
-from data_finder.helpers import geocode, PostcodeError
+from data_finder.helpers import geocode_point_only, PostcodeError
 
 class Command(BaseAddressCsvImporter):
     """
@@ -33,9 +32,8 @@ class Command(BaseAddressCsvImporter):
             location = Point(float(record.easting), float(record.northing), srid=27700)
         else:
             # no points supplied, so attempt to attach one by geocoding
-            sleep(1.3) # ensure we don't hit mapit's usage limit
             try:
-                gridref = geocode(postcode)
+                gridref = geocode_point_only(postcode)
                 location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
             except PostcodeError:
                 location = None

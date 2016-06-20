@@ -1,7 +1,6 @@
 """
 Import Southwark
 """
-from time import sleep
 
 from django.contrib.gis.geos import Point
 

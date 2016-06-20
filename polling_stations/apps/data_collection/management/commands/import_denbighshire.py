@@ -1,10 +1,9 @@
 """
 Import Denbighshire
 """
-from time import sleep
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseAddressCsvImporter
-from data_finder.helpers import geocode, PostcodeError
+from data_finder.helpers import geocode_point_only, PostcodeError
 
 class Command(BaseAddressCsvImporter):
     """
@@ -38,14 +37,13 @@ class Command(BaseAddressCsvImporter):
         """
         No grid references were supplied,
         so attempt to derive a grid ref from postcode
-        
+
         Unfortunately some of these postcodes cover
         quite large areas, so the postcode centroid may
         be some distance from the polling station :(
         """
-        sleep(1.3) # ensure we don't hit mapit's usage limit
         try:
-            gridref = geocode(record.pollingplaceaddress7)
+            gridref = geocode_point_only(record.pollingplaceaddress7)
             location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
         except PostcodeError:
             location = None
