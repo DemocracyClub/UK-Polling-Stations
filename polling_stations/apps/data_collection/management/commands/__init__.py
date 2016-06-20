@@ -15,6 +15,7 @@ import zipfile
 from collections import namedtuple
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from django.contrib.gis import geos
 from django.contrib.gis.gdal import DataSource, GDALException
 from django.contrib.gis.geos import Point, GEOSGeometry
@@ -214,6 +215,18 @@ class BaseImporter(BaseCommand):
         # output to console
         report.output_console_report()
 
+    @property
+    def data_path(self):
+        data_private = getattr(self, 'private', False)
+        if data_private:
+            path = getattr(
+                settings,
+                'PRIVATE_DATA_PATH',
+                '../polling_station_data/')
+        else:
+            path = "./"
+        return os.path.abspath(path)
+
     def handle(self, *args, **kwargs):
         if self.council_id is None:
             self.council_id = args[0]
@@ -227,9 +240,10 @@ class BaseImporter(BaseCommand):
 
         if getattr(self, 'local_files', True):
             if self.base_folder_path is None:
-                self.base_folder_path = os.path.abspath(
-                    glob.glob('data/{0}-*'.format(self.council_id))[0]
-                )
+                path = os.path.join(
+                    self.data_path,
+                    'data/{0}-*'.format(self.council_id))
+                self.base_folder_path = glob.glob(path)[0]
 
         self.import_data()
 
