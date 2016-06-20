@@ -55,6 +55,7 @@ class CsvHelper:
         # scripts don't break
         replace = {
             ' ': '_',
+            '-': '_',
             '.': '_',
             '(': '',
             ')': '',
@@ -64,6 +65,8 @@ class CsvHelper:
             s = s.strip().lower()
             for k, v in replace.items():
                 s = s.replace(k, v)
+            while '__' in s:
+                s = s.replace('__', '_')
             clean.append(s)
         RowKlass = namedtuple('RowKlass', clean)
 
