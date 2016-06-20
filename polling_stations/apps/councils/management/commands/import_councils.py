@@ -32,11 +32,17 @@ class Command(BaseCommand):
         return area
 
     def get_contact_info_from_gov_uk(self, council_id):
+        if council_id.startswith('N'):
+            # GOV.UK returns a 500 for any id in Northen Ireland
+            return {}
         req = requests.get("%s%s" % (constants.GOV_UK_LA_URL, council_id))
-        soup = BeautifulSoup(req.text)
+        soup = BeautifulSoup(req.text, "lxml")
         info = {}
         article = soup.findAll('article')[0]
-        info['website'] = article.find(id='url')['href'].strip()
+        try:
+            info['website'] = article.find(id='url')['href'].strip()
+        except TypeError:
+            pass
         info['email'] = article.find(
             id='authority_email').a['href'].strip()[7:]
         info['phone'] = article.find(id='authority_phone').text.strip()[7:]
@@ -52,17 +58,19 @@ class Command(BaseCommand):
             if not council_id:
                 council_id = council['codes'].get('ons')
             print(council_id)
-            contact_info = {
+            defaults = {
                 'name': council['name'],
             }
-            if council_type != "LGD":
-                contact_info.update(
+            if defaults != "LGD":
+                defaults.update(
                     self.get_contact_info_from_gov_uk(council_id))
+
+            defaults['council_type'] = council_type
+            defaults['mapit_id']= mapit_id
+
             council, created = Council.objects.update_or_create(
                 pk=council_id,
-                mapit_id=mapit_id,
-                council_type=council_type,
-                defaults=contact_info,
+                defaults=defaults,
             )
 
             # Call _save here to ensure it gets written to all databases
