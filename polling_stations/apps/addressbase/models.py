@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.gis.db import models
 
 
@@ -18,5 +19,8 @@ class Address(models.Model):
     address = models.TextField(blank=True)
     postcode = models.CharField(blank=True, max_length=15, db_index=True)
     location = models.PointField(null=True, blank=True)
+
+    class Meta:
+        managed = getattr(settings, 'MANAGE_ADDRESSBASE_MODEL', True)
 
     objects = AddressManager()

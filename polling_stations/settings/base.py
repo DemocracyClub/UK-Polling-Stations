@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from os.path import join, abspath, dirname
 
 # PATH vars
@@ -268,6 +269,12 @@ WHITELABEL_PREFIXES = (
 
 INTERNAL_IPS = ('127.0.0.1')
 SITE_TITLE = "Where Do I Vote?"
+
+
+MANAGE_ADDRESSBASE_MODEL = os.environ.get('MANAGE_ADDRESSBASE_MODEL', True)
+if type(MANAGE_ADDRESSBASE_MODEL) == str \
+        and MANAGE_ADDRESSBASE_MODEL.lower() in ['0', 'false']:
+    MANAGE_ADDRESSBASE_MODEL = False
 
 # .local.py overrides all the common settings.
 try:
