@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos import Point
+from django.conf import settings
 
 from councils.models import Council
 from data_collection import constants
@@ -17,6 +18,10 @@ class Command(BaseCommand):
         for council_type in constants.COUNCIL_TYPES:
             self.get_type_from_mapit(council_type)
 
+    def _save_council(self, council):
+        for db in settings.DATABASES.keys():
+            council.save(using=db)
+
     def get_wkt_from_mapit(self, area_id):
         req = requests.get('%sarea/%s.wkt' % (constants.MAPIT_URL, area_id))
         area = req.text
@@ -27,11 +32,17 @@ class Command(BaseCommand):
         return area
 
     def get_contact_info_from_gov_uk(self, council_id):
+        if council_id.startswith('N'):
+            # GOV.UK returns a 500 for any id in Northen Ireland
+            return {}
         req = requests.get("%s%s" % (constants.GOV_UK_LA_URL, council_id))
-        soup = BeautifulSoup(req.text)
+        soup = BeautifulSoup(req.text, "lxml")
         info = {}
         article = soup.findAll('article')[0]
-        info['website'] = article.find(id='url')['href'].strip()
+        try:
+            info['website'] = article.find(id='url')['href'].strip()
+        except TypeError:
+            pass
         info['email'] = article.find(
             id='authority_email').a['href'].strip()[7:]
         info['phone'] = article.find(id='authority_phone').text.strip()[7:]
@@ -47,21 +58,27 @@ class Command(BaseCommand):
             if not council_id:
                 council_id = council['codes'].get('ons')
             print(council_id)
-            contact_info = {
+            defaults = {
                 'name': council['name'],
             }
-            if council_type != "LGD":
-                contact_info.update(
+            if defaults != "LGD":
+                defaults.update(
                     self.get_contact_info_from_gov_uk(council_id))
+
+            defaults['council_type'] = council_type
+            defaults['mapit_id']= mapit_id
+
             council, created = Council.objects.update_or_create(
                 pk=council_id,
-                mapit_id=mapit_id,
-                council_type=council_type,
-                defaults=contact_info,
+                defaults=defaults,
             )
+
+            # Call _save here to ensure it gets written to all databases
+            self._save_council(council)
+
             if not council.area:
                 council.area = self.get_wkt_from_mapit(mapit_id)
-                council.save()
+                self._save_council(council)
                 time.sleep(1)
             if not council.location:
                 print(council.postcode)
@@ -71,4 +88,4 @@ class Command(BaseCommand):
                     continue
                 time.sleep(1)
                 council.location = Point(l['wgs84_lon'], l['wgs84_lat'])
-                council.save()
+                self._save_council(council)
