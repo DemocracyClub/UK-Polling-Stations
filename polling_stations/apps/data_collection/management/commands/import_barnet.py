@@ -26,6 +26,16 @@ class Command(BaseAddressCsvImporter):
             record.polling_place_address_1,
         ])
 
+    def _mk_place_id(self, record):
+        """
+        This data doesn't have IDs in, so we'll make them :/
+        """
+        return self.slugify(" ".join([
+            record.polling_place_name,
+            record.polling_place_address_1,
+        ]))
+
+
     def station_record_to_dict(self, record):
         # format address
         address = "\n".join([
@@ -55,22 +65,21 @@ class Command(BaseAddressCsvImporter):
                 srid=4326)
 
         return {
-            'internal_council_id': self.get_station_hash(record),
+            'internal_council_id': self._mk_place_id(record),
             'postcode' : postcode,
             'address' : address,
             'location' : location,
         }
 
     def address_record_to_dict(self, record):
-        return
-        if record.propertynumber.strip() == '0':
-            address = record.streetname.strip()
-        else:
-            address = '%s %s' % (
-                record.propertynumber.strip(), record.streetname.strip())
+        address = ", ".join([f.strip() for f in [
+            record.property_number,
+            record.property_name,
+        ] if f])
+
 
         return {
             'address'           : address,
-            'postcode'          : record.postcode.strip(),
-            'polling_station_id': record.pollingplaceid
+            'postcode'          : record.post_code.strip(),
+            'polling_station_id': self._mk_place_id(record)
         }
