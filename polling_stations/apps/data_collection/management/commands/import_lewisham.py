@@ -38,6 +38,7 @@ class Command(BaseAddressCsvImporter):
 
         postcode = " ".join(address.split(' ')[-2:]).strip().split('\n')[-1]
 
+        location = None
         location_data = None
         # no points supplied, so attempt to attach them by geocoding
         try:
