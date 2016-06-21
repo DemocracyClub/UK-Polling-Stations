@@ -2,6 +2,8 @@ import glob, os
 from importlib.machinery import SourceFileLoader
 from django.core.management.base import BaseCommand
 
+from pollingstations.models import PollingStation
+
 """
 Run all of the import scripts relating to a particular election or elections
 """
@@ -16,6 +18,15 @@ class Command(BaseCommand):
             nargs='+',
             help='<Required> List of one or more election ids to import data for',
             required=True
+        )
+
+        parser.add_argument(
+            '-o',
+            '--overwrite',
+            help='<Optional> Force deleting of existing data',
+            action='store_true',
+            required=False,
+            default=False
         )
 
     def importer_covers_these_elections(self, args_elections, importer_elections):
@@ -54,9 +65,15 @@ class Command(BaseCommand):
             if hasattr(cmd, 'elections'):
                 if self.importer_covers_these_elections(kwargs['elections'], cmd.elections):
                     # run the import script
-                    self.summary.append(('INFO', "Ran import script %s" % tail))
-                    opts = {}
-                    cmd.handle(**opts)
+
+                    # Only run if
+                    existing_data = PollingStation.objects.filter(
+                        council_id=cmd.council_id).exists()
+                    if not existing_data or kwargs.get('overwrite'):
+                        self.summary.append(
+                            ('INFO', "Ran import script %s" % tail))
+                        opts = {}
+                        cmd.handle(**opts)
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
 
