@@ -14,6 +14,10 @@ class Command(BaseApiKmlKmlImporter):
     council_id       = 'E06000045'
     districts_url    = 'http://www.southampton.gov.uk/geoserver/wms?LAYERS=SCC%3APOLLING_DISTRICTS&TRANSPARENT=TRUE&STYLES=Polling_Districts_Labelled&HOVER=false&FORMAT=kml&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A27700&BBOX=436000.0,108500.0,448000.0,118000.0&WIDTH=867&HEIGHT=426'
     stations_url     = 'http://www.southampton.gov.uk/geoserver/wms?LAYERS=SCC%3APOLLING_STATIONS&TRANSPARENT=TRUE&STYLES=Polling_Stations_Labelled&HOVER=false&FORMAT=kml&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A27700&BBOX=436000.0,108500.0,448000.0,118000.0&WIDTH=867&HEIGHT=426'
+    elections        = [
+        'ref.2016-06-23'
+    ]
+
 
     def extract_info_from_district_description(self, description):
         # lxml needs everything to be enclosed in one root element
