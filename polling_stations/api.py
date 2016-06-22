@@ -142,7 +142,10 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
             ]
 
         if rh.route_type == "single_address":
-            polling_station = rh.addresses[0]
+            polling_station = PollingStation.objects.get_polling_station_by_id(
+                rh.addresses[0].polling_station_id,
+                council_id=rh.addresses[0].council_id
+                )
 
         if rh.route_type == "postcode":
             polling_station = self.get_queryset(
