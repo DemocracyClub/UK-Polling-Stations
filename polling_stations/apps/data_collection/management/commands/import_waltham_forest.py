@@ -27,9 +27,21 @@ class Command(BaseAddressCsvImporter):
         else:
             postcode = record.postcode.strip()
 
+
         # point
         if record.easting and record.northing:
-            location = Point(float(record.easting), float(record.northing), srid=27700)
+            if 'connaught' in record.name.lower():
+                location = Point(
+                    0.004481,
+                    51.564568,
+                    srid=4326
+                )
+            else:
+                location = Point(
+                    float(record.easting),
+                    float(record.northing),
+                    srid=27700
+                )
         else:
             # no points supplied, so attempt to attach one by geocoding
             try:

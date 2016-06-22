@@ -15,7 +15,7 @@ class Command(BaseAddressCsvImporter):
     """
     council_id       = 'W06000012'
     addresses_name   = 'polling_properties.csv'
-    stations_name    = 'polling_stations.shp'
+    stations_name    = 'polling_stations_updated.shp'
     srid             = 27700
     elections        = [
         'pcc.2016-05-05',
