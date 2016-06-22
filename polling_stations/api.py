@@ -112,26 +112,50 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
             location=kwargs['location']
         )
 
+    def get_council(self, location_dict):
+        if 'council_gss' in location_dict:
+            try:
+                return Council.objects.defer("area", "location").get(
+                    council_id=location_dict['council_gss'])
+            except Council.DoesNotExist:
+                pass
+
+        if 'gss_codes' in location_dict:
+            try:
+                return Council.objects.defer("area", "location").get(
+                    council_id__in=location_dict['gss_codes'])
+            except Council.DoesNotExist:
+                pass
+
+        return Council.objects.get(
+            area__covers=location_dict['location_point'])
+
+
     def retrieve(self, requst, pk=None, format=None):
-        postcode = pk.replace(' ', '')
+        postcode = pk.replace(' ', '').upper()
         ret = {}
         ret['polling_station_known'] = False
         polling_station = None
 
         try:
-            l = geocode(pk)
+            location_dict = geocode(pk)
         except (PostcodeError, RateLimitError) as e:
             ret['error'] = e.args[0]
             return Response(ret)
 
-        location = Point(l['wgs84_lon'], l['wgs84_lat'])
+        location = Point(
+            location_dict['wgs84_lon'],
+            location_dict['wgs84_lat'])
+
         ret['postcode_location'] = PointField().to_representation(
             location)
 
-        council = Council.objects.get(area__covers=location)
+        location_dict['location_point'] = location
+        council = self.get_council(location_dict)
         ret['council'] = CouncilSerializer(council).data
 
         rh = RoutingHelper(postcode)
+        ret['response_type'] = rh.route_type
 
         if rh.route_type == "multiple_addresses":
             ret['addresses'] = [
@@ -142,12 +166,14 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
             ]
 
         if rh.route_type == "single_address":
-            polling_station = rh.addresses[0]
+            polling_station = PollingStation.objects.get_polling_station_by_id(
+                rh.addresses[0].polling_station_id,
+                rh.addresses[0].council_id)
 
         if rh.route_type == "postcode":
-            polling_station = self.get_queryset(
+            polling_station = PollingStation.objects.get_polling_station(
                 location=location,
-                council=ret['council'],
+                council_id=ret['council']['council_id'],
                 )
 
         if polling_station:
@@ -156,15 +182,19 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
                 polling_station, context={'request': self.request}).data
 
         if not ret['polling_station_known']:
-            finder = CustomFinder.objects.get_custom_finder(l['gss_codes'], postcode)
+            finder = CustomFinder.objects.get_custom_finder(
+                location_dict['gss_codes'], postcode)
             if finder and finder.base_url:
                 ret['custom_finder'] = {}
                 ret['custom_finder']['base_url'] = finder.base_url
-                ret['custom_finder']['can_pass_postcode'] = finder.can_pass_postcode
-                ret['custom_finder']['encoded_postcode'] = finder.encoded_postcode
+                ret['custom_finder']['can_pass_postcode'] = \
+                    finder.can_pass_postcode
+                ret['custom_finder']['encoded_postcode'] = \
+                    finder.encoded_postcode
 
         log_data = {}
-        log_data['we_know_where_you_should_vote'] = ret['polling_station_known']
+        log_data['we_know_where_you_should_vote'] = \
+            ret['polling_station_known']
         log_data['location'] = location
         log_data['council'] = council
         log_data['brand'] = 'api'
