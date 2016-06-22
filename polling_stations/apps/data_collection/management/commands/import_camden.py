@@ -80,11 +80,23 @@ class Command(BaseGenericApiImporter, BaseImporter):
         info = {}
         for tag in record:
             info[tag.tag] = tag.text
-        location = Point(float(info['longitude']), float(info['latitude']), srid=self.get_srid())
+
+        address = "\n".join([info['organisation'], info['street']])
+
+        if info['polling_district_name'] == "JA":
+            info['postcode'] = "NW5 2HY"
+            address = "Rainbow Nursery, St. Benet's Church Hall, Lupton Street London"
+            info['longitude'] = "-0.1381025"
+            info['latitude'] = "51.554399"
+
+        location = Point(
+            float(info['longitude']),
+            float(info['latitude']),
+            srid=self.get_srid())
 
         return {
             'internal_council_id': info['polling_district_name'],
             'postcode': info['postcode'],
-            'address': "\n".join([info['organisation'], info['street']]),
+            'address': address,
             'location': location
         }
