@@ -180,6 +180,7 @@ class DirectionsHelper():
         try:
             directions = self.get_google_route(kwargs['start_postcode'], kwargs['end_location'])
         except GoogleDirectionsApiError as e1:
+            return None
             # Should log error here
 
             if kwargs['start_location']:
