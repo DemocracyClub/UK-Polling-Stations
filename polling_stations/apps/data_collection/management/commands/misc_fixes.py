@@ -45,12 +45,39 @@ class Command(BaseCommand):
             ps.address = ps.address.replace('&rsquo;', "’")
             ps.save()
 
+        try:
+            ps = PollingStation.objects.get(
+                postcode='N1 2PY', council_id='E09000019')
+            ps.postcode = "N1 2SX"
+            ps.location = Point(
+                -0.090005,
+                51.545168,
+                srid=4326
+            )
+            ps.save()
+        except PollingStation.DoesNotExist:
+            pass
+
         ps = PollingStation.objects.get(
-            postcode='N1 2PY', council_id='E09000019')
-        ps.postcode = "N1 2SX"
+            internal_council_id='C', council_id='E09000021')
+        ps.address = "Hook Centre, Hook Road"
+        ps.postcode = "KT9 1EJ"
         ps.location = Point(
-            -0.090005,
-            51.545168,
+            -0.306091,
+            51.368013,
             srid=4326
         )
         ps.save()
+
+        ps = PollingStation.objects.get(
+            internal_council_id='KB', council_id='E09000021')
+        ps.address = "Malden Manor Children's centre, Lawrence Avenue"
+        ps.postcode = "KT3 5PF"
+        ps.location = Point(
+            -0.262148,
+            51.386151,
+            srid=4326
+        )
+        ps.save()
+
+
