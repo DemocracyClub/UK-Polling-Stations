@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.contrib.gis.geos import Point
 
 from pollingstations.models import PollingStation, PollingDistrict
 from councils.models import Council
@@ -33,3 +34,8 @@ class Command(BaseCommand):
         c = Council.objects.get(council_id='E09000014')
         c.phone = "0208 489 1000"
         c.save()
+
+        ps = PollingStation.objects.get(internal_council_id='WH4P',
+            council_id='E09000030')
+        ps.location = Point(-0.066990,51.510020,srid=4326)
+        ps.save()

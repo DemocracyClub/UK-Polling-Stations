@@ -40,10 +40,17 @@ class Command(BaseAddressCsvImporter):
 
         location = None
         if float(record.polling_station_x) and float(record.polling_station_y):
-            location = Point(
-                float(record.polling_station_x),
-                float(record.polling_station_y),
-                srid=27700)
+            if "Shapla Primary School" in address:
+                location = Point(
+                    -0.066990,
+                    51.510020,
+                    srid=4326
+                )
+            else:
+                location = Point(
+                    float(record.polling_station_x),
+                    float(record.polling_station_y),
+                    srid=27700)
         else:
             # no points supplied, so attempt to attach them by geocoding
             try:
