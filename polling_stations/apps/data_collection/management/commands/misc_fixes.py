@@ -81,3 +81,15 @@ class Command(BaseCommand):
         ps.save()
 
 
+        ps = PollingStation.objects.get(
+            internal_council_id="BD16", council_id='E09000002')
+        ps.address = "Erkenwald Tuition Centre, Marlborough Road"
+        ps.postcode = "RM8 2HU"
+        ps.location = Point(
+            0.127899,
+            51.536587,
+            srid=4326
+        )
+        ps.save()
+
+
