@@ -39,3 +39,8 @@ class Command(BaseCommand):
             council_id='E09000030')
         ps.location = Point(-0.066990,51.510020,srid=4326)
         ps.save()
+
+        ps_qs = PollingStation.objects.filter(council_id='E09000011')
+        for ps in ps_qs:
+            ps.address = ps.address.replace('&rsquo;', "’")
+            ps.save()
