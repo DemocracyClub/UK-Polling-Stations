@@ -1,1 +1,20 @@
-[{"fields": {"message": "The Electoral Office of Northern Ireland has its own polling station finder:", "can_pass_postcode": true, "base_url": "http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode="}, "model": "pollingstations.customfinder", "pk": "N07000001"}]
+[
+{
+    "model": "pollingstations.customfinder",
+    "pk": "E08000034",
+    "fields": {
+        "message": "This council has its own polling station finder:",
+        "can_pass_postcode": false,
+        "base_url": "https://www.kirklees.gov.uk/beta/PollingStation/default.aspx"
+    }
+},
+{
+    "model": "pollingstations.customfinder",
+    "pk": "N07000001",
+    "fields": {
+        "message": "The Electoral Office of Northern Ireland has its own polling station finder:",
+        "can_pass_postcode": true,
+        "base_url": "http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode="
+    }
+}
+]
