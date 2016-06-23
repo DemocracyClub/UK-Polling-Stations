@@ -35,6 +35,10 @@ class Command(BaseCommand):
         c.phone = "0208 489 1000"
         c.save()
 
+        c = Council.objects.get(council_id='E06000006')
+        c.phone = "0303 333 4300"
+        c.save()
+
         ps = PollingStation.objects.get(internal_council_id='WH4P',
             council_id='E09000030')
         ps.location = Point(-0.066990,51.510020,srid=4326)
