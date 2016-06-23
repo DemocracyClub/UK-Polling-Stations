@@ -44,3 +44,13 @@ class Command(BaseCommand):
         for ps in ps_qs:
             ps.address = ps.address.replace('&rsquo;', "’")
             ps.save()
+
+        ps = PollingStation.objects.get(
+            postcode='N1 2PY', council_id='E09000019')
+        ps.postcode = "N1 2SX"
+        ps.location = Point(
+            -0.090005,
+            51.545168,
+            srid=4326
+        )
+        ps.save()
