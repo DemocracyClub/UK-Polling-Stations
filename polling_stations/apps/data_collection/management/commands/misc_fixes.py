@@ -115,3 +115,7 @@ class Command(BaseCommand):
             srid=4326
         )
         ps.save()
+
+        ps = PollingStation.objects.get(
+            council_id='E09000023', internal_council_id="DTE3")
+        ps.delete()
