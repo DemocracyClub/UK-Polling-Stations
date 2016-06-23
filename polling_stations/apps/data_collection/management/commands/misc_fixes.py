@@ -97,3 +97,12 @@ class Command(BaseCommand):
         ps.save()
 
 
+
+        ps = PollingStation.objects.get(
+            council_id='E09000029', internal_council_id="EA")
+        ps.location = Point(
+            -0.196271,
+            51.371643,
+            srid=4326
+        )
+        ps.save()
