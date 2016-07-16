@@ -18,7 +18,9 @@ class AddressSelectForm(forms.Form):
         }),
         required=True
     )
+    postcode = None
 
-    def __init__(self, choices, *args, **kwargs):
+    def __init__(self, choices, postcode, *args, **kwargs):
         super(AddressSelectForm, self).__init__(*args, **kwargs)
         self.fields['address'].choices = choices
+        self.postcode = postcode

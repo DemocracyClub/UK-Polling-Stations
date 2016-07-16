@@ -287,7 +287,7 @@ class AddressFormView(FormView):
         if not addresses:
             raise Http404
         else:
-            return form_class(select_addresses, **self.get_form_kwargs())
+            return form_class(select_addresses, self.kwargs['postcode'], **self.get_form_kwargs())
 
     def form_valid(self, form):
         self.success_url = reverse(
