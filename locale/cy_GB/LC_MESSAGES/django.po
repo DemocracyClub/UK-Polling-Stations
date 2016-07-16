@@ -119,10 +119,10 @@ msgstr
 msgid ""
 "\n"
 "        <h3>You need to be registered in order to vote</h3>\n"
-"        <p>If you aren’t registered to vote visit <a href=\"https://www.gov.uk/register-to-vote\">https://www.gov.uk/register-to-vote</a> <strong>before the 18th of April</strong>.</p>\n"
+"        <p>If you aren’t registered to vote visit <a href=\"https://www.gov.uk/register-to-vote\">https://www.gov.uk/register-to-vote</a>.</p>\n"
 "\n"
 "        "
-msgstr "\n<h3>Rhaid eich bod wedi cofrestru i bleidleisio</h3>\n<p>Os nad ydych wedi cofrestru i bleidleisio ewch i <a href=\"https://www.gov.uk/cofrestru-i-bleidleisio\">https://www.gov.uk/cofrestru-i-bleidleisio</a> <strong>cyn y 18fed o Ebrill 2016</strong>.</p>"
+msgstr "\n<h3>Rhaid eich bod wedi cofrestru i bleidleisio</h3>\n<p>Os nad ydych wedi cofrestru i bleidleisio ewch i <a href=\"https://www.gov.uk/cofrestru-i-bleidleisio\">https://www.gov.uk/cofrestru-i-bleidleisio</a>.</p>"
 
 #: polling_stations/templates/postcode_view.html:88
 msgid "Council Contact info"
