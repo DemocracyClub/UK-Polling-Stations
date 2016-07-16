@@ -227,6 +227,17 @@ class AddressView(BasePollingStationView):
             self.address.council_id)
 
 
+class WeDontKnowView(PostcodeView):
+
+    def get(self, request, *args, **kwargs):
+        self.postcode = kwargs['postcode']
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_station(self):
+        return None
+
+
 def campaign_signup(request, postcode):
     if request.POST.get('join', 'false') == 'true':
         join_list = True
