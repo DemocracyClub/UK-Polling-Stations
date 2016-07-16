@@ -227,7 +227,7 @@ Supported values are:
 'MapQuestSDK'
 'OpenStreetMap'
 """
-TILE_LAYER = os.environ.get('TILE_LAYER', 'MapQuestOpen')
+TILE_LAYER = os.environ.get('TILE_LAYER', 'OpenStreetMap')
 """
 Set a shell environment variable MQ_KEY
 to specify MapQuestSDK API key.
