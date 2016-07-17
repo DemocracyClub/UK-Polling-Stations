@@ -286,9 +286,6 @@ class AddressFormView(FormView):
         return super(AddressFormView, self).form_valid(form)
 
 
-class CouncilView(DetailView):
-    model = Council
-
 class CoverageView(TemplateView):
     template_name = 'coverage.html'
 

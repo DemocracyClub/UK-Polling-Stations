@@ -10,7 +10,6 @@ from polling_stations.api import router
 from data_finder.views import (
     HomeView,
     PrivacyView,
-    CouncilView,
     PostcodeView,
     CoverageView,
     AddressView,
@@ -25,7 +24,6 @@ admin.autodiscover()
 
 core_patterns = patterns(
     '',
-    url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
     url(r'^address/(?P<address_slug>.+)/$',
