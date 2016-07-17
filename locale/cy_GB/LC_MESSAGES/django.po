@@ -89,6 +89,7 @@ msgid ""
 "        "
 msgstr "\n<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi gysylltu a'r cyngor.</p>\n<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">%(council_phone)s</a></strong></p>"
 
+#: polling_stations/templates/postcode_view.html:65
 msgid ""
 "\n"
 "        <h3>You don't need your poll card to vote</h3>\n"
@@ -96,33 +97,21 @@ msgid ""
 "            station and give them your name and address.</p>\n"
 "        <p>You don't need any other form of ID.</p>\n"
 "        <p>If you haven’t received a polling card but think you should have done, contact your council</p>\n"
-"        "
-msgstr "\n<h3>Nid yw cerdyn pleidleisio yn angenrheidiol er mwyn pleidleisio</h3>\n<p>Os nad oes gennych gerdyn pleidleisio, gallwch fynd \ni'ch gorsaf bleidleisio a dweud eich enw a chyfeiriad.</p>\n<p>Nid oes angen cerdyn adnabod arnoch .</p>\n<p>Cysyllwch gyda'r cyngor os nad ydych wedi derbyn cerdyn pleidleisio</p>\n        "
-
-msgid ""
-"\n"
 "        <p><strong>Polling stations are open from 7am to 10pm on polling day.</strong></p>\n"
-"        "
-msgstr
-""
-
-msgid ""
-"\n"
 "        <p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" target=\"_blank\">\n"
 "          Read more about voting in the UK\n"
 "        </a></p>\n"
 "        "
-msgstr
-"\n<p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" target=\"_blank\">\nDarllen mwy am bleidleisio yn y D.U. \n</a></p>\n        "
+msgstr "\n<h3>Nid yw cerdyn pleidleisio yn angenrheidiol er mwyn pleidleisio</h3>\n<p>Os nad oes gennych gerdyn pleidleisio, gallwch fynd \ni'ch gorsaf bleidleisio a dweud eich enw a chyfeiriad.</p>\n<p>Nid oes angen cerdyn adnabod arnoch .</p>\n<p>Cysyllwch gyda'r cyngor os nad ydych wedi derbyn cerdyn pleidleisio</p>\n<p><strong>Mae gorsafoedd pleidleisio ar agor o 7y.b tan 10 y.h. ar ddiwrnod y bleidlais.</strong></p>\n<p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" target=\"_blank\">\nDarllen mwy am bleidleisio yn y D.U. \n</a></p>"
 
 #: polling_stations/templates/postcode_view.html:79
 msgid ""
 "\n"
 "        <h3>You need to be registered in order to vote</h3>\n"
-"        <p>If you aren’t registered to vote visit <a href=\"https://www.gov.uk/register-to-vote\">https://www.gov.uk/register-to-vote</a> <strong>before the 18th of April</strong>.</p>\n"
+"        <p>If you aren’t registered to vote visit <a href=\"https://www.gov.uk/register-to-vote\">https://www.gov.uk/register-to-vote</a>.</p>\n"
 "\n"
 "        "
-msgstr "\n<h3>Rhaid eich bod wedi cofrestru i bleidleisio</h3>\n<p>Os nad ydych wedi cofrestru i bleidleisio ewch i <a href=\"https://www.gov.uk/cofrestru-i-bleidleisio\">https://www.gov.uk/cofrestru-i-bleidleisio</a> <strong>cyn y 18fed o Ebrill 2016</strong>.</p>"
+msgstr "\n<h3>Rhaid eich bod wedi cofrestru i bleidleisio</h3>\n<p>Os nad ydych wedi cofrestru i bleidleisio ewch i <a href=\"https://www.gov.uk/cofrestru-i-bleidleisio\">https://www.gov.uk/cofrestru-i-bleidleisio</a>.</p>"
 
 #: polling_stations/templates/postcode_view.html:88
 msgid "Council Contact info"
