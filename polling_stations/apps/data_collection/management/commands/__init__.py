@@ -89,9 +89,6 @@ class BaseImporter(BaseCommand):
     csv_encoding = 'utf-8'
     csv_delimiter = ','
 
-    def postcode_from_address(self, address):
-        return address.split(',')[-1]
-
     def get_srid(self, type=None):
         if type == 'districts' and self.districts_srid is not None:
             return self.districts_srid
