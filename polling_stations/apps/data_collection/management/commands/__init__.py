@@ -185,12 +185,12 @@ class BaseImporter(BaseCommand):
          SELECT concat_address FROM (
              SELECT CONCAT(address, postcode) AS concat_address, COUNT(*) AS c
              FROM {0}
-             WHERE council_id='E09000028'
+             WHERE council_id=%s
              GROUP BY CONCAT(address, postcode)
             ) as dupes
             WHERE dupes.c > 1
         )
-        """.format(table_name))
+        """.format(table_name), [self.council_id])
 
 
 
