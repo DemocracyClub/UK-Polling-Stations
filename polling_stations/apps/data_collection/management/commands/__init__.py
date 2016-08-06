@@ -92,9 +92,6 @@ class BaseImporter(BaseCommand):
     def postcode_from_address(self, address):
         return address.split(',')[-1]
 
-    def string_to_newline_addr(self, string):
-        return "\n".join(string.split(',')[:-1])
-
     def get_srid(self, type=None):
         if type == 'districts' and self.districts_srid is not None:
             return self.districts_srid
