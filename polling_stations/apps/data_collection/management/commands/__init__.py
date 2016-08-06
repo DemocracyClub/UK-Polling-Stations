@@ -355,7 +355,7 @@ class BaseKamlImporter(BaseImporter):
             'area': poly
         }
 
-    def add_kml_district(self, kml):
+    def add_kml_districts(self, kml):
 
         try:
             ds = DataSource(kml)
@@ -372,7 +372,7 @@ class BaseKamlImporter(BaseImporter):
 
             self.add_polling_district(district_info)
 
-    def add_kml_station(self, kml):
+    def add_kml_stations(self, kml):
         ds = DataSource(kml)
         lyr = ds[0]
         for feature in lyr:
@@ -387,7 +387,7 @@ class BaseKamlImporter(BaseImporter):
             self.base_folder_path, self.districts_name)
 
         if not districtsfile.endswith('.kmz'):
-            self.add_kml_district(districtsfile)
+            self.add_kml_districts(districtsfile)
             return
 
         # It's a .kmz file !
@@ -398,7 +398,7 @@ class BaseKamlImporter(BaseImporter):
 
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(kmlfile.read())
-            self.add_kml_district(tmp.name)
+            self.add_kml_districts(tmp.name)
             tmp.close()
 
 
@@ -437,10 +437,10 @@ class BaseGenericApiImporter:
 
 class BaseApiKmlKmlImporter(BaseGenericApiImporter, BaseKamlImporter):
     def add_districts(self, filename):
-        self.add_kml_district(filename)
+        self.add_kml_districts(filename)
 
     def add_stations(self, filename):
-        self.add_kml_station(filename)
+        self.add_kml_stations(filename)
 
 
 class BaseAddressCsvImporter(BaseImporter):
