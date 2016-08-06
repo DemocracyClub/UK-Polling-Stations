@@ -1,6 +1,7 @@
 """
 Defines the base importer classes to override
 """
+import abc
 import csv
 import json
 import glob
@@ -96,7 +97,7 @@ class CsvHelper:
         return data
 
 
-class BaseImporter(BaseCommand):
+class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
     srid = 27700
     districts_srid = None
     council_id = None
@@ -155,6 +156,10 @@ class BaseImporter(BaseCommand):
             internal_council_id=station_info['internal_council_id'],
             defaults=station_info,
         )
+
+    @abc.abstractmethod
+    def station_record_to_dict(self, record):
+        pass
 
     def import_polling_stations(self):
         stations = os.path.join(self.base_folder_path, self.stations_name)
@@ -274,10 +279,15 @@ class BaseImporter(BaseCommand):
         self.report()
 
 
-class BaseShpImporter(BaseImporter):
+class BaseShpImporter(BaseImporter, metaclass=abc.ABCMeta):
     """
     Import data where districts are shapefiles and stations are csv
     """
+
+    @abc.abstractmethod
+    def district_record_to_dict(self, record):
+        pass
+
     def import_polling_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
             self.base_folder_path,
@@ -295,7 +305,7 @@ class BaseShpImporter(BaseImporter):
             self.add_polling_district(district_info)
 
 
-class BaseShpShpImporter(BaseShpImporter):
+class BaseShpShpImporter(BaseShpImporter, metaclass=abc.ABCMeta):
     """
     Import data where both stations and polling districts are
     shapefiles.
@@ -304,10 +314,14 @@ class BaseShpShpImporter(BaseShpImporter):
         import_polling_station_shapefiles(self)
 
 
-class BaseJasonImporter(BaseImporter):
+class BaseJasonImporter(BaseImporter, metaclass=abc.ABCMeta):
     """
     Import those councils whose data is JASON.
     """
+
+    @abc.abstractmethod
+    def district_record_to_dict(self, record):
+        pass
 
     def import_polling_districts(self):
         districtsfile = os.path.join(
@@ -443,7 +457,7 @@ class BaseApiKmlKmlImporter(BaseGenericApiImporter, BaseKamlImporter):
         self.add_kml_stations(filename)
 
 
-class BaseAddressCsvImporter(BaseImporter):
+class BaseAddressCsvImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def slugify(self, value):
         """
@@ -508,6 +522,10 @@ class BaseAddressCsvImporter(BaseImporter):
                 'polling_station_id': address_info['polling_station_id'],
             }
         )
+
+    @abc.abstractmethod
+    def address_record_to_dict(self, record):
+        pass
 
     def import_residential_addresses(self):
         addresses = os.path.join(self.base_folder_path, self.addresses_name)
