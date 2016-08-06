@@ -11,11 +11,10 @@ from django.contrib.gis.geos import (
     LinearRing
 )
 from data_collection.management.commands import (
-    BaseGenericApiImporter,
-    BaseImporter
+    BaseGenericApiImporter
 )
 
-class Command(BaseGenericApiImporter, BaseImporter):
+class Command(BaseGenericApiImporter):
     """
     Imports the Polling Station data from Camden Council
     """

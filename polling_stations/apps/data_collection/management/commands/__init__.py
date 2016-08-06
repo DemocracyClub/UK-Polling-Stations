@@ -1,5 +1,5 @@
 """
-Defines the base importer classes to override
+Defines the base importer classes to implement
 """
 import abc
 import csv
@@ -97,50 +97,39 @@ class CsvHelper:
         return data
 
 
-class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
-    srid = 27700
-    districts_srid = None
-    council_id = None
-    base_folder_path = None
-    stations_name = "polling_places"
-    districts_name = "polling_districts"
-    csv_encoding = 'utf-8'
-    csv_delimiter = ','
+class BaseStationsImporter(metaclass=abc.ABCMeta):
 
-    def get_srid(self, type=None):
-        if type == 'districts' and self.districts_srid is not None:
-            return self.districts_srid
-        else:
-            return self.srid
+    @abc.abstractmethod
+    def station_record_to_dict(self, record):
+        pass
+
+    @abc.abstractmethod
+    def import_polling_stations(self):
+        pass
+
+    def add_polling_station(self, station_info):
+        PollingStation.objects.update_or_create(
+            council=self.council,
+            internal_council_id=station_info['internal_council_id'],
+            defaults=station_info,
+        )
+
+
+class BaseDistrictsImporter(metaclass=abc.ABCMeta):
 
     def clean_poly(self, poly):
         if isinstance(poly, geos.Polygon):
             poly = geos.MultiPolygon(poly, srid=self.get_srid('districts'))
             return poly
-        # try:
-        #     polygons = wkt[18:-3].split(')), ((')
-        #     WKT = ""
-        #     for polygon in polygons:
-        #         points = polygon.split(',')
-        #         cleaned_points = ""
-        #         for point in points:
-        #             split_points = point.strip().split(' ')
-        #             x = split_points[0]
-        #             y = split_points[1]
-        #             cleaned_points += "%s %s, " % (x,y)
-        #         cleaned_points = "((%s))," % cleaned_points[:-2]
-        #
-        #         WKT += cleaned_points
-        # except:
-        #     WKT = wkt
         return poly
 
-    def import_data(self):
-        """
-        There are two types of import - districts and stations.
-        """
-        self.import_polling_districts()
-        self.import_polling_stations()
+    @abc.abstractmethod
+    def district_record_to_dict(self, record):
+        pass
+
+    @abc.abstractmethod
+    def import_polling_districts(self, record):
+        pass
 
     def add_polling_district(self, district_info):
         PollingDistrict.objects.update_or_create(
@@ -150,42 +139,83 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
             defaults=district_info,
         )
 
-    def add_polling_station(self, station_info):
-        PollingStation.objects.update_or_create(
-            council=self.council,
-            internal_council_id=station_info['internal_council_id'],
-            defaults=station_info,
+
+class BaseAddressesImporter(metaclass=abc.ABCMeta):
+
+    def slugify(self, value):
+        """
+        Custom slugify function:
+
+        Convert to ASCII.
+        Convert characters that aren't alphanumerics, underscores,
+        or hyphens to hyphens
+        Convert to lowercase.
+        Strip leading and trailing whitespace.
+
+        Unfortunately it is necessary to create wheel 2.0 in this situation
+        because using django's standard slugify() function means that
+        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
+        This ensures that
+        '1/2 Foo Street' becomes '1-2-foo-street' and
+        '12 Foo Street' becomes '12-foo-street'
+
+        This means we can avoid appending an arbitrary number and minimise
+        disruption to the public URL schema if a council provides updated data
+        """
+        value = force_text(value)
+        value = unicodedata.normalize(
+            'NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = re.sub('[^\w\s-]', '-', value).strip().lower()
+        return mark_safe(re.sub('[-\s]+', '-', value))
+
+    def get_slug(self, address_info):
+        # if we have a uprn, use that as the slug
+        if 'uprn' in address_info:
+            if address_info['uprn']:
+                return address_info['uprn']
+
+        # otherwise build a slug from the other data we have
+        return self.slugify(
+            "%s-%s-%s-%s" % (
+                self.council.pk,
+                address_info['polling_station_id'],
+                address_info['address'],
+                address_info['postcode']
+            )
         )
 
     @abc.abstractmethod
-    def station_record_to_dict(self, record):
+    def address_record_to_dict(self, record):
         pass
 
-    def import_polling_stations(self):
-        stations = os.path.join(self.base_folder_path, self.stations_name)
+    @abc.abstractmethod
+    def import_residential_addresses(self):
+        pass
 
-        helper = CsvHelper(stations, self.csv_encoding, self.csv_delimiter)
-        data = helper.parseCsv()
-        seen = set()
-        for row in data:
-            if hasattr(self, 'get_station_hash'):
-                station_hash = self.get_station_hash(row)
-                if station_hash in seen:
-                    continue
-                else:
-                    station_info = self.station_record_to_dict(row)
-                    seen.add(station_hash)
-            else:
-                station_info = self.station_record_to_dict(row)
+    def add_residential_address(self, address_info):
 
-            if station_info is None:
-                continue
-            if 'council' not in station_info:
-                station_info['council'] = self.council
-            self.add_polling_station(station_info)
+        """
+        strip all whitespace from postcode and convert to uppercase
+        this will make it easier to query this based on user-supplied postcode
+        """
+        address_info['postcode'] =\
+            re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
 
-    def post_import(self):
-        raise NotImplementedError
+        # generate a unique slug so we can provide a consistent url
+        slug = self.get_slug(address_info)
+
+        ResidentialAddress.objects.update_or_create(
+            slug=slug,
+            defaults={
+                'council': self.council,
+                'address': address_info['address'],
+                'postcode': address_info['postcode'],
+                'polling_station_id': address_info['polling_station_id'],
+            }
+        )
+
+
+class PostProcessingMixin:
 
     def clean_postcodes_overlapping_districts(self):
         data = create_address_records_for_council(self.council)
@@ -209,6 +239,28 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         """.format(table_name), [self.council_id])
 
 
+class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
+    srid = 27700
+    districts_srid = None
+    council_id = None
+    base_folder_path = None
+    stations_name = "polling_places"
+    districts_name = "polling_districts"
+    csv_encoding = 'utf-8'
+    csv_delimiter = ','
+
+    def get_srid(self, type=None):
+        if type == 'districts' and self.districts_srid is not None:
+            return self.districts_srid
+        else:
+            return self.srid
+
+    @abc.abstractmethod
+    def import_data(self):
+        pass
+
+    def post_import(self):
+        raise NotImplementedError
 
     def report(self):
         # build report
@@ -271,22 +323,80 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
 
         self.clean_ambiguous_addresses()
 
-        # For areas with shape data, use AddressBase to clean up overlapping
-        # postcode
+        # For areas with shape data, use AddressBase
+        # to clean up overlapping postcode
         self.clean_postcodes_overlapping_districts()
 
         # save and output data quality report
         self.report()
 
 
-class BaseShpImporter(BaseImporter, metaclass=abc.ABCMeta):
-    """
-    Import data where districts are shapefiles and stations are csv
-    """
+class BaseStationsDistrictsImporter(
+    BaseImporter, BaseStationsImporter, BaseDistrictsImporter):
 
-    @abc.abstractmethod
-    def district_record_to_dict(self, record):
-        pass
+    def import_data(self):
+        self.import_polling_districts()
+        self.import_polling_stations()
+
+
+class BaseStationsAddressesImporter(
+    BaseImporter, BaseStationsImporter, BaseAddressesImporter):
+
+    def import_data(self):
+        self.import_residential_addresses()
+        self.import_polling_stations()
+
+
+class BaseCsvStationsImporter(BaseStationsImporter):
+
+    def import_polling_stations(self):
+        stations = os.path.join(self.base_folder_path, self.stations_name)
+
+        helper = CsvHelper(stations, self.csv_encoding, self.csv_delimiter)
+        data = helper.parseCsv()
+        seen = set()
+        for row in data:
+            if hasattr(self, 'get_station_hash'):
+                station_hash = self.get_station_hash(row)
+                if station_hash in seen:
+                    continue
+                else:
+                    station_info = self.station_record_to_dict(row)
+                    seen.add(station_hash)
+            else:
+                station_info = self.station_record_to_dict(row)
+
+            if station_info is None:
+                continue
+            if 'council' not in station_info:
+                station_info['council'] = self.council
+            self.add_polling_station(station_info)
+
+
+class BaseShpStationsImporter(BaseStationsImporter):
+
+    def import_polling_stations(self):
+        import_polling_station_shapefiles(self)
+
+
+class BaseKmlStationsImporter(BaseStationsImporter):
+
+    def add_kml_stations(self, kml):
+        ds = DataSource(kml)
+        lyr = ds[0]
+        for feature in lyr:
+            station_info = self.station_record_to_dict(feature)
+            if 'council' not in station_info:
+                station_info['council'] = self.council
+
+            self.add_polling_station(station_info)
+
+    def import_polling_stations(self):
+        # if we ever need it, implement this
+        raise NotImplementedError
+
+
+class BaseShpDistrictsImporter(BaseDistrictsImporter):
 
     def import_polling_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
@@ -305,23 +415,7 @@ class BaseShpImporter(BaseImporter, metaclass=abc.ABCMeta):
             self.add_polling_district(district_info)
 
 
-class BaseShpShpImporter(BaseShpImporter, metaclass=abc.ABCMeta):
-    """
-    Import data where both stations and polling districts are
-    shapefiles.
-    """
-    def import_polling_stations(self):
-        import_polling_station_shapefiles(self)
-
-
-class BaseJasonImporter(BaseImporter, metaclass=abc.ABCMeta):
-    """
-    Import those councils whose data is JASON.
-    """
-
-    @abc.abstractmethod
-    def district_record_to_dict(self, record):
-        pass
+class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 
     def import_polling_districts(self):
         districtsfile = os.path.join(
@@ -343,12 +437,7 @@ class BaseJasonImporter(BaseImporter, metaclass=abc.ABCMeta):
                 self.add_polling_district(district_info)
 
 
-class BaseKamlImporter(BaseImporter):
-    """
-    Import those councils whose data is KML
-    """
-
-    districts_srid = 4326
+class BaseKmlDistrictsImporter(BaseDistrictsImporter):
 
     def strip_z_values(self, geojson):
         districts = json.loads(geojson)
@@ -359,18 +448,7 @@ class BaseKamlImporter(BaseImporter):
         districts['coordinates'] = districts['coordinates'][0]
         return json.dumps(districts)
 
-    def district_record_to_dict(self, record):
-        geojson = self.strip_z_values(record.geom.geojson)
-        poly = self.clean_poly(
-            GEOSGeometry(geojson, srid=self.get_srid('districts')))
-        return {
-            'internal_council_id': record['Name'].value,
-            'name': record['Name'].value,
-            'area': poly
-        }
-
     def add_kml_districts(self, kml):
-
         try:
             ds = DataSource(kml)
         except GDALException:
@@ -385,16 +463,6 @@ class BaseKamlImporter(BaseImporter):
                 district_info['council'] = self.council
 
             self.add_polling_district(district_info)
-
-    def add_kml_stations(self, kml):
-        ds = DataSource(kml)
-        lyr = ds[0]
-        for feature in lyr:
-            station_info = self.station_record_to_dict(feature)
-            if 'council' not in station_info:
-                station_info['council'] = self.council
-
-            self.add_polling_station(station_info)
 
     def import_polling_districts(self):
         districtsfile = os.path.join(
@@ -416,7 +484,65 @@ class BaseKamlImporter(BaseImporter):
             tmp.close()
 
 
-class BaseGenericApiImporter:
+class BaseCsvAddressesImporter(BaseAddressesImporter):
+
+    def import_residential_addresses(self):
+        addresses = os.path.join(self.base_folder_path, self.addresses_name)
+
+        helper = CsvHelper(addresses, self.csv_encoding, self.csv_delimiter)
+        data = helper.parseCsv()
+        for row in data:
+            address_info = self.address_record_to_dict(row)
+            if address_info is None:
+                continue
+            if 'council' not in address_info:
+                address_info['council'] = self.council
+            self.add_residential_address(address_info)
+
+
+# rename to class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter, BaseCsvStationsImporter, BaseShpDistrictsImporter):
+class BaseShpImporter(BaseStationsDistrictsImporter,
+                      BaseCsvStationsImporter, BaseShpDistrictsImporter):
+    pass
+
+
+# rename to class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter, BaseShpStationsImporter, BaseShpDistrictsImporter):
+class BaseShpShpImporter(BaseStationsDistrictsImporter,
+                         BaseShpStationsImporter, BaseShpDistrictsImporter):
+    pass
+
+
+# rename to BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter, BaseCsvStationsImporter, BaseJsonDistrictsImporter):
+class BaseJasonImporter(BaseStationsDistrictsImporter,
+                        BaseCsvStationsImporter, BaseJsonDistrictsImporter):
+    pass
+
+
+# rename to BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter, BaseCsvStationsImporter, BaseKmlDistrictsImporter):
+class BaseKamlImporter(BaseStationsDistrictsImporter,
+                       BaseCsvStationsImporter, BaseKmlDistrictsImporter):
+
+    districts_srid = 4326
+
+    # this is mainly here for legacy compatibility
+    def district_record_to_dict(self, record):
+        geojson = self.strip_z_values(record.geom.geojson)
+        poly = self.clean_poly(
+            GEOSGeometry(geojson, srid=self.get_srid('districts')))
+        return {
+            'internal_council_id': record['Name'].value,
+            'name': record['Name'].value,
+            'area': poly
+        }
+
+
+# rename to BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, BaseCsvStationsImporter, BaseCsvAddressesImporter):
+class BaseAddressCsvImporter(BaseStationsAddressesImporter,
+                             BaseCsvStationsImporter, BaseCsvAddressesImporter):
+    pass
+
+
+class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     srid = 4326
     districts_srid = 4326
     districts_url = None
@@ -449,97 +575,11 @@ class BaseGenericApiImporter:
         raise NotImplementedError
 
 
-class BaseApiKmlKmlImporter(BaseGenericApiImporter, BaseKamlImporter):
+# rename to BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter, BaseKmlStationsImporter, BaseKmlDistrictsImporter):
+class BaseApiKmlKmlImporter(BaseGenericApiImporter,
+                            BaseKmlStationsImporter, BaseKmlDistrictsImporter):
     def add_districts(self, filename):
         self.add_kml_districts(filename)
 
     def add_stations(self, filename):
         self.add_kml_stations(filename)
-
-
-class BaseAddressCsvImporter(BaseImporter, metaclass=abc.ABCMeta):
-
-    def slugify(self, value):
-        """
-        Custom slugify function:
-
-        Convert to ASCII.
-        Convert characters that aren't alphanumerics, underscores,
-        or hyphens to hyphens
-        Convert to lowercase.
-        Strip leading and trailing whitespace.
-
-        Unfortunately it is necessary to create wheel 2.0 in this situation
-        because using django's standard slugify() function means that
-        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
-        This ensures that
-        '1/2 Foo Street' becomes '1-2-foo-street' and
-        '12 Foo Street' becomes '12-foo-street'
-
-        This means we can avoid appending an arbitrary number and minimise
-        disruption to the public URL schema if a council provides updated data
-        """
-        value = force_text(value)
-        value = unicodedata.normalize(
-            'NFKD', value).encode('ascii', 'ignore').decode('ascii')
-        value = re.sub('[^\w\s-]', '-', value).strip().lower()
-        return mark_safe(re.sub('[-\s]+', '-', value))
-
-    def get_slug(self, address_info):
-        # if we have a uprn, use that as the slug
-        if 'uprn' in address_info:
-            if address_info['uprn']:
-                return address_info['uprn']
-
-        # otherwise build a slug from the other data we have
-        return self.slugify(
-            "%s-%s-%s-%s" % (
-                self.council.pk,
-                address_info['polling_station_id'],
-                address_info['address'],
-                address_info['postcode']
-            )
-        )
-
-    def add_residential_address(self, address_info):
-
-        """
-        strip all whitespace from postcode and convert to uppercase
-        this will make it easier to query this based on user-supplied postcode
-        """
-        address_info['postcode'] =\
-            re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
-
-        # generate a unique slug so we can provide a consistent url
-        slug = self.get_slug(address_info)
-
-        ResidentialAddress.objects.update_or_create(
-            slug=slug,
-            defaults={
-                'council': self.council,
-                'address': address_info['address'],
-                'postcode': address_info['postcode'],
-                'polling_station_id': address_info['polling_station_id'],
-            }
-        )
-
-    @abc.abstractmethod
-    def address_record_to_dict(self, record):
-        pass
-
-    def import_residential_addresses(self):
-        addresses = os.path.join(self.base_folder_path, self.addresses_name)
-
-        helper = CsvHelper(addresses, self.csv_encoding, self.csv_delimiter)
-        data = helper.parseCsv()
-        for row in data:
-            address_info = self.address_record_to_dict(row)
-            if address_info is None:
-                continue
-            if 'council' not in address_info:
-                address_info['council'] = self.council
-            self.add_residential_address(address_info)
-
-    def import_data(self):
-        self.import_residential_addresses()
-        self.import_polling_stations()
