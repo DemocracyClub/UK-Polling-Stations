@@ -3,13 +3,13 @@ Import Dover
 """
 import shapefile
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseShpShpImporter
+from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
 from data_collection.google_geocoding_api_wrapper import (
     GoogleGeocodingApiWrapper,
     PostcodeNotFoundException
 )
 
-class Command(BaseShpShpImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Dover
     """

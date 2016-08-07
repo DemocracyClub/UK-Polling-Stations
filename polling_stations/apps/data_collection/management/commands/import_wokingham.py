@@ -2,9 +2,12 @@
 Import Wokingham Polling stations
 """
 
-from data_collection.management.commands import BaseShpImporter, import_polling_station_shapefiles
+from data_collection.management.commands import (
+    BaseCsvStationsShpDistrictsImporter,
+    import_polling_station_shapefiles
+)
 
-class Command(BaseShpImporter):
+class Command(BaseCsvStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Wokingham Council
     """

@@ -4,11 +4,11 @@ Import Cardiff
 from django.db import transaction
 from django.db import connection
 
-from data_collection.management.commands import BaseShpShpImporter
+from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
 from pollingstations.models import PollingDistrict
 
 
-class Command(BaseShpShpImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Braintree
     """

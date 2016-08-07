@@ -3,9 +3,9 @@ Imports Ealing
 """
 from lxml import etree
 from django.contrib.gis.geos import GEOSGeometry
-from data_collection.management.commands import BaseApiKmlKmlImporter
+from data_collection.management.commands import BaseApiKmlStationsKmlDistrictsImporter
 
-class Command(BaseApiKmlKmlImporter):
+class Command(BaseApiKmlStationsKmlDistrictsImporter):
     """
     Imports the Polling Station data from Ealing Council
     """

@@ -1,13 +1,13 @@
 import os
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseJasonImporter
+from data_collection.management.commands import BaseCsvStationsJsonDistrictsImporter
 
 
 """
 Define a stub implementation of json importer we can run tests against
 csv and geojson both use srid 4326
 """
-class Command(BaseJasonImporter):
+class Command(BaseCsvStationsJsonDistrictsImporter):
 
     srid             = 4326
     council_id       = 'X01000000'

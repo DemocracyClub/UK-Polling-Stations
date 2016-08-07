@@ -5,9 +5,9 @@ import sys
 
 from django.contrib.gis.geos import Point, GEOSGeometry
 
-from data_collection.management.commands import BaseKamlImporter
+from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
 
-class Command(BaseKamlImporter):
+class Command(BaseCsvStationsKmlDistrictsImporter):
     """
     Imports the Polling Station data from Chorley
     """

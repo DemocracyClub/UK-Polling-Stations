@@ -5,9 +5,9 @@ import json
 
 from django.contrib.gis.geos import GEOSGeometry, Point
 
-from data_collection.management.commands import BaseKamlImporter
+from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
 
-class Command(BaseKamlImporter):
+class Command(BaseCsvStationsKmlDistrictsImporter):
     council_id = 'E07000109'
     districts_name = 'PollingDistricts2015.kml'
     stations_name  = 'Polling Stations 2015.csv'

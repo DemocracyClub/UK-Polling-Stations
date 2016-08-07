@@ -3,9 +3,12 @@ Import East Riding
 """
 import os
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseShpImporter, CsvHelper
+from data_collection.management.commands import (
+    BaseCsvStationsShpDistrictsImporter,
+    CsvHelper
+)
 
-class Command(BaseShpImporter):
+class Command(BaseCsvStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from East Riding of Yorkshire Council
     """

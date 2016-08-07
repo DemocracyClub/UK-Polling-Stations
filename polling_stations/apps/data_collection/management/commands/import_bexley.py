@@ -5,12 +5,12 @@ from time import sleep
 
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseAddressCsvImporter
+from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode, geocode_point_only, PostcodeError
 from addressbase.models import Address
 
 
-class Command(BaseAddressCsvImporter):
+class Command(BaseCsvStationsCsvAddressesImporter):
     """
     Imports the Polling Station data from Bexley Council
     """

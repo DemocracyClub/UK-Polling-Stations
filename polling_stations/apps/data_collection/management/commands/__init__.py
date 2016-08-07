@@ -500,27 +500,50 @@ class BaseCsvAddressesImporter(BaseAddressesImporter):
             self.add_residential_address(address_info)
 
 
-# rename to class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter, BaseCsvStationsImporter, BaseShpDistrictsImporter):
-class BaseShpImporter(BaseStationsDistrictsImporter,
-                      BaseCsvStationsImporter, BaseShpDistrictsImporter):
+"""
+Stations in CSV format
+Districts in SHP format
+"""
+class BaseCsvStationsShpDistrictsImporter(
+    BaseStationsDistrictsImporter,
+    BaseCsvStationsImporter,
+    BaseShpDistrictsImporter):
+
     pass
 
 
-# rename to class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter, BaseShpStationsImporter, BaseShpDistrictsImporter):
-class BaseShpShpImporter(BaseStationsDistrictsImporter,
-                         BaseShpStationsImporter, BaseShpDistrictsImporter):
+"""
+Stations in SHP format
+Districts in SHP format
+"""
+class BaseShpStationsShpDistrictsImporter(
+    BaseStationsDistrictsImporter,
+    BaseShpStationsImporter,
+    BaseShpDistrictsImporter):
+
     pass
 
 
-# rename to BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter, BaseCsvStationsImporter, BaseJsonDistrictsImporter):
-class BaseJasonImporter(BaseStationsDistrictsImporter,
-                        BaseCsvStationsImporter, BaseJsonDistrictsImporter):
+"""
+Stations in CSV format
+Districts in JSON format
+"""
+class BaseCsvStationsJsonDistrictsImporter(
+    BaseStationsDistrictsImporter,
+    BaseCsvStationsImporter,
+    BaseJsonDistrictsImporter):
+
     pass
 
 
-# rename to BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter, BaseCsvStationsImporter, BaseKmlDistrictsImporter):
-class BaseKamlImporter(BaseStationsDistrictsImporter,
-                       BaseCsvStationsImporter, BaseKmlDistrictsImporter):
+"""
+Stations in CSV format
+Districts in KML format
+"""
+class BaseCsvStationsKmlDistrictsImporter(
+    BaseStationsDistrictsImporter,
+    BaseCsvStationsImporter,
+    BaseKmlDistrictsImporter):
 
     districts_srid = 4326
 
@@ -536,9 +559,15 @@ class BaseKamlImporter(BaseStationsDistrictsImporter,
         }
 
 
-# rename to BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, BaseCsvStationsImporter, BaseCsvAddressesImporter):
-class BaseAddressCsvImporter(BaseStationsAddressesImporter,
-                             BaseCsvStationsImporter, BaseCsvAddressesImporter):
+"""
+Stations in CSV format
+Addresses in CSV format
+"""
+class BaseCsvStationsCsvAddressesImporter(
+    BaseStationsAddressesImporter,
+    BaseCsvStationsImporter,
+    BaseCsvAddressesImporter):
+
     pass
 
 
@@ -575,9 +604,15 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
         raise NotImplementedError
 
 
-# rename to BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter, BaseKmlStationsImporter, BaseKmlDistrictsImporter):
-class BaseApiKmlKmlImporter(BaseGenericApiImporter,
-                            BaseKmlStationsImporter, BaseKmlDistrictsImporter):
+"""
+Stations in KML format
+Districts in KML format
+"""
+class BaseApiKmlStationsKmlDistrictsImporter(
+    BaseGenericApiImporter,
+    BaseKmlStationsImporter,
+    BaseKmlDistrictsImporter):
+
     def add_districts(self, filename):
         self.add_kml_districts(filename)
 

@@ -1,13 +1,13 @@
 import os
 from django.contrib.gis.geos import Point, GEOSGeometry
-from data_collection.management.commands import BaseKamlImporter
+from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
 
 
 """
 Define a stub implementation of kml importer we can run tests against
 csv and kml both use srid 4326
 """
-class Command(BaseKamlImporter):
+class Command(BaseCsvStationsKmlDistrictsImporter):
 
     srid             = 4326
     council_id       = 'X01000000'

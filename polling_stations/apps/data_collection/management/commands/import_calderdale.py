@@ -8,11 +8,11 @@ from django.contrib.gis.geos import GEOSGeometry, Point
 from django.db import transaction
 from django.db import connection
 
-from data_collection.management.commands import BaseShpImporter
+from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 from pollingstations.models import PollingDistrict
 
 
-class Command(BaseShpImporter):
+class Command(BaseCsvStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Calderdale
     """
