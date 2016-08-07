@@ -571,6 +571,18 @@ class BaseCsvStationsCsvAddressesImporter(
     pass
 
 
+"""
+Stations in SHP format
+Addresses in CSV format
+"""
+class BaseShpStationsCsvAddressesImporter(
+    BaseStationsAddressesImporter,
+    BaseShpStationsImporter,
+    BaseCsvAddressesImporter):
+
+    pass
+
+
 class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     srid = 4326
     districts_srid = 4326
