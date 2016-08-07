@@ -41,23 +41,6 @@ from data_collection.models import DataQuality
 from addressbase.helpers import create_address_records_for_council
 
 
-def import_polling_station_shapefiles(importer):
-    sf = shapefile.Reader("{0}/{1}".format(
-        importer.base_folder_path,
-        importer.stations_name)
-    )
-    for station in sf.shapeRecords():
-        station_info = importer.station_record_to_dict(station.record)
-        if station_info is not None:
-            if 'council' not in station_info:
-                station_info['council'] = importer.council
-
-            station_info['location'] = Point(
-                *station.shape.points[0],
-                srid=importer.get_srid())
-            importer.add_polling_station(station_info)
-
-
 class CsvHelper:
 
     def __init__(self, filepath, encoding='utf-8', delimiter=','):
@@ -376,7 +359,20 @@ class BaseCsvStationsImporter(BaseStationsImporter):
 class BaseShpStationsImporter(BaseStationsImporter):
 
     def import_polling_stations(self):
-        import_polling_station_shapefiles(self)
+        sf = shapefile.Reader("{0}/{1}".format(
+            self.base_folder_path,
+            self.stations_name)
+        )
+        for station in sf.shapeRecords():
+            station_info = self.station_record_to_dict(station.record)
+            if station_info is not None:
+                if 'council' not in station_info:
+                    station_info['council'] = self.council
+
+                station_info['location'] = Point(
+                    *station.shape.points[0],
+                    srid=self.get_srid())
+                self.add_polling_station(station_info)
 
 
 class BaseKmlStationsImporter(BaseStationsImporter):
