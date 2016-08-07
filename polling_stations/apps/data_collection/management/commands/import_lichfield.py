@@ -4,11 +4,10 @@ Import Lichfield
 from django.contrib.gis.geos import Point
 
 from data_collection.management.commands import (
-    BaseCsvStationsShpDistrictsImporter,
-    import_polling_station_shapefiles
+    BaseShpStationsShpDistrictsImporter
 )
 
-class Command(BaseCsvStationsShpDistrictsImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Lichfield Council
     """
@@ -34,6 +33,3 @@ class Command(BaseCsvStationsShpDistrictsImporter):
             'postcode'           : record[5],
             'address'            : "\n".join([record[1], record[4]]),
         }
-    
-    def import_polling_stations(self):
-        import_polling_station_shapefiles(self)
