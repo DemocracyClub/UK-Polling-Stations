@@ -365,14 +365,16 @@ class BaseShpStationsImporter(BaseStationsImporter):
         )
         for station in sf.shapeRecords():
             station_info = self.station_record_to_dict(station.record)
-            if station_info is not None:
-                if 'council' not in station_info:
-                    station_info['council'] = self.council
 
-                station_info['location'] = Point(
-                    *station.shape.points[0],
-                    srid=self.get_srid())
-                self.add_polling_station(station_info)
+            if station_info is None:
+                continue
+            if 'council' not in station_info:
+                station_info['council'] = self.council
+
+            station_info['location'] = Point(
+                *station.shape.points[0],
+                srid=self.get_srid())
+            self.add_polling_station(station_info)
 
 
 class BaseKmlStationsImporter(BaseStationsImporter):
@@ -382,6 +384,9 @@ class BaseKmlStationsImporter(BaseStationsImporter):
         lyr = ds[0]
         for feature in lyr:
             station_info = self.station_record_to_dict(feature)
+
+            if station_info is None:
+                continue
             if 'council' not in station_info:
                 station_info['council'] = self.council
 
@@ -401,6 +406,9 @@ class BaseShpDistrictsImporter(BaseDistrictsImporter):
         )
         for district in sf.shapeRecords():
             district_info = self.district_record_to_dict(district.record)
+
+            if district_info is None:
+                continue
             if 'council' not in district_info:
                 district_info['council'] = self.council
 
@@ -420,17 +428,17 @@ class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 
         for district in districts['features']:
             district_info = self.district_record_to_dict(district)
-            if district_info is not None:
-                if 'council' not in district_info:
-                    district_info['council'] = self.council
 
-                if district_info is None:
-                    continue
-                poly = self.clean_poly(
-                    GEOSGeometry(json.dumps(district['geometry']),
-                                 srid=self.get_srid('districts')))
-                district_info['area'] = poly
-                self.add_polling_district(district_info)
+            if district_info is None:
+                continue
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+
+            poly = self.clean_poly(
+                GEOSGeometry(json.dumps(district['geometry']),
+                                srid=self.get_srid('districts')))
+            district_info['area'] = poly
+            self.add_polling_district(district_info)
 
 
 class BaseKmlDistrictsImporter(BaseDistrictsImporter):
@@ -455,6 +463,9 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
         lyr = ds[0]
         for feature in lyr:
             district_info = self.district_record_to_dict(feature)
+
+            if district_info is None:
+                continue
             if 'council' not in district_info:
                 district_info['council'] = self.council
 
