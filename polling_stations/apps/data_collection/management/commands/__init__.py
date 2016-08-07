@@ -352,22 +352,25 @@ class BaseStationsAddressesImporter(
 
 class BaseCsvStationsImporter(BaseStationsImporter):
 
-    def import_polling_stations(self):
-        stations = os.path.join(self.base_folder_path, self.stations_name)
-
-        helper = CsvHelper(stations, self.csv_encoding, self.csv_delimiter)
+    def get_stations(self):
+        stations_file = os.path.join(self.base_folder_path, self.stations_name)
+        helper = CsvHelper(stations_file, self.csv_encoding, self.csv_delimiter)
         data = helper.parseCsv()
+        return data
+
+    def import_polling_stations(self):
+        stations = self.get_stations()
         seen = set()
-        for row in data:
+        for station in stations:
             if hasattr(self, 'get_station_hash'):
-                station_hash = self.get_station_hash(row)
+                station_hash = self.get_station_hash(station)
                 if station_hash in seen:
                     continue
                 else:
-                    station_info = self.station_record_to_dict(row)
+                    station_info = self.station_record_to_dict(station)
                     seen.add(station_hash)
             else:
-                station_info = self.station_record_to_dict(row)
+                station_info = self.station_record_to_dict(station)
 
             if station_info is None:
                 continue
@@ -378,12 +381,16 @@ class BaseCsvStationsImporter(BaseStationsImporter):
 
 class BaseShpStationsImporter(BaseStationsImporter):
 
-    def import_polling_stations(self):
+    def get_stations(self):
         sf = shapefile.Reader("{0}/{1}".format(
             self.base_folder_path,
             self.stations_name)
         )
-        for station in sf.shapeRecords():
+        return sf.shapeRecords()
+
+    def import_polling_stations(self):
+        stations = self.get_stations()
+        for station in stations:
             station_info = self.station_record_to_dict(station.record)
 
             if station_info is None:
@@ -399,11 +406,14 @@ class BaseShpStationsImporter(BaseStationsImporter):
 
 class BaseKmlStationsImporter(BaseStationsImporter):
 
-    def add_kml_stations(self, kml):
+    def get_stations(self, kml):
         ds = DataSource(kml)
-        lyr = ds[0]
-        for feature in lyr:
-            station_info = self.station_record_to_dict(feature)
+        return ds[0]
+
+    def add_kml_stations(self, kml):
+        stations = self.get_stations(kml)
+        for station in stations:
+            station_info = self.station_record_to_dict(station)
 
             if station_info is None:
                 continue
@@ -419,12 +429,16 @@ class BaseKmlStationsImporter(BaseStationsImporter):
 
 class BaseShpDistrictsImporter(BaseDistrictsImporter):
 
-    def import_polling_districts(self):
+    def get_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
             self.base_folder_path,
             self.districts_name)
         )
-        for district in sf.shapeRecords():
+        return sf.shapeRecords()
+
+    def import_polling_districts(self):
+        districts = self.get_districts()
+        for district in districts:
             district_info = self.district_record_to_dict(district.record)
 
             if district_info is None:
@@ -441,12 +455,16 @@ class BaseShpDistrictsImporter(BaseDistrictsImporter):
 
 class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 
-    def import_polling_districts(self):
+    def get_districts(self):
         districtsfile = os.path.join(
             self.base_folder_path, self.districts_name)
         districts = json.load(open(districtsfile))
+        return districts['features']
 
-        for district in districts['features']:
+    def import_polling_districts(self):
+        districts = self.get_districts()
+
+        for district in districts:
             district_info = self.district_record_to_dict(district)
 
             if district_info is None:
@@ -472,17 +490,19 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
         districts['coordinates'] = districts['coordinates'][0]
         return json.dumps(districts)
 
-    def add_kml_districts(self, kml):
+    def get_districts(self, kml):
         try:
             ds = DataSource(kml)
         except GDALException:
             # This is very strainge – sometimes the above will fail the first
             # time, but not the second. Seen on OS X with GDAL 2.2.0
             ds = DataSource(kml)
+        return ds[0]
 
-        lyr = ds[0]
-        for feature in lyr:
-            district_info = self.district_record_to_dict(feature)
+    def add_kml_districts(self, kml):
+        districts = self.get_districts(kml)
+        for district in districts:
+            district_info = self.district_record_to_dict(district)
 
             if district_info is None:
                 continue
@@ -513,13 +533,16 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
 
 class BaseCsvAddressesImporter(BaseAddressesImporter):
 
-    def import_residential_addresses(self):
-        addresses = os.path.join(self.base_folder_path, self.addresses_name)
-
-        helper = CsvHelper(addresses, self.csv_encoding, self.csv_delimiter)
+    def get_addresses(self):
+        addresses_file = os.path.join(self.base_folder_path, self.addresses_name)
+        helper = CsvHelper(addresses_file, self.csv_encoding, self.csv_delimiter)
         data = helper.parseCsv()
-        for row in data:
-            address_info = self.address_record_to_dict(row)
+        return data
+
+    def import_residential_addresses(self):
+        addresses = self.get_addresses()
+        for address in addresses:
+            address_info = self.address_record_to_dict(address)
             if address_info is None:
                 continue
             if 'council' not in address_info:
