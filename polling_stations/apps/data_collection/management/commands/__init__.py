@@ -80,6 +80,43 @@ class CsvHelper:
         return data
 
 
+class Database:
+
+    def save_station_record(self, record):
+        PollingStation.objects.update_or_create(
+            council=record['council'],
+            internal_council_id=record['internal_council_id'],
+            defaults=record,
+        )
+
+    def save_district_record(self, record):
+        PollingDistrict.objects.update_or_create(
+            council=record['council'],
+            internal_council_id=record.get(
+                'internal_council_id', 'none'),
+            defaults=record,
+        )
+
+    def save_address_record(self, record):
+        ResidentialAddress.objects.update_or_create(
+            slug=record['slug'],
+            defaults={
+                'council': record['council'],
+                'address': record['address'],
+                'postcode': record['postcode'],
+                'polling_station_id': record['polling_station_id'],
+            }
+        )
+
+    def teardown(self, council):
+        PollingStation.objects.filter(council=council).delete()
+        PollingDistrict.objects.filter(council=council).delete()
+        ResidentialAddress.objects.filter(council=council).delete()
+
+    def get_council(self, council_id):
+        return Council.objects.get(pk=council_id)
+
+
 class BaseStationsImporter(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
@@ -91,11 +128,7 @@ class BaseStationsImporter(metaclass=abc.ABCMeta):
         pass
 
     def add_polling_station(self, station_info):
-        PollingStation.objects.update_or_create(
-            council=self.council,
-            internal_council_id=station_info['internal_council_id'],
-            defaults=station_info,
-        )
+        self.db.save_station_record(station_info)
 
 
 class BaseDistrictsImporter(metaclass=abc.ABCMeta):
@@ -115,12 +148,7 @@ class BaseDistrictsImporter(metaclass=abc.ABCMeta):
         pass
 
     def add_polling_district(self, district_info):
-        PollingDistrict.objects.update_or_create(
-            council=self.council,
-            internal_council_id=district_info.get(
-                'internal_council_id', 'none'),
-            defaults=district_info,
-        )
+        self.db.save_district_record(district_info)
 
 
 class BaseAddressesImporter(metaclass=abc.ABCMeta):
@@ -186,16 +214,9 @@ class BaseAddressesImporter(metaclass=abc.ABCMeta):
 
         # generate a unique slug so we can provide a consistent url
         slug = self.get_slug(address_info)
+        address_info['slug'] = slug
 
-        ResidentialAddress.objects.update_or_create(
-            slug=slug,
-            defaults={
-                'council': self.council,
-                'address': address_info['address'],
-                'postcode': address_info['postcode'],
-                'polling_station_id': address_info['polling_station_id'],
-            }
-        )
+        self.db.save_address_record(address_info)
 
 
 class PostProcessingMixin:
@@ -231,6 +252,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     districts_name = "polling_districts"
     csv_encoding = 'utf-8'
     csv_delimiter = ','
+    db = Database()
 
     def get_srid(self, type=None):
         if type == 'districts' and self.districts_srid is not None:
@@ -282,12 +304,10 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         if self.council_id is None:
             self.council_id = args[0]
 
-        self.council = Council.objects.get(pk=self.council_id)
+        self.council = self.db.get_council(self.council_id)
 
         # Delete old data for this council
-        PollingStation.objects.filter(council=self.council).delete()
-        PollingDistrict.objects.filter(council=self.council).delete()
-        ResidentialAddress.objects.filter(council=self.council).delete()
+        self.db.teardown(self.council)
 
         if getattr(self, 'local_files', True):
             if self.base_folder_path is None:
