@@ -82,32 +82,6 @@ class CsvHelper:
 
 class Database:
 
-    def save_station_record(self, record):
-        PollingStation.objects.update_or_create(
-            council=record['council'],
-            internal_council_id=record['internal_council_id'],
-            defaults=record,
-        )
-
-    def save_district_record(self, record):
-        PollingDistrict.objects.update_or_create(
-            council=record['council'],
-            internal_council_id=record.get(
-                'internal_council_id', 'none'),
-            defaults=record,
-        )
-
-    def save_address_record(self, record):
-        ResidentialAddress.objects.update_or_create(
-            slug=record['slug'],
-            defaults={
-                'council': record['council'],
-                'address': record['address'],
-                'postcode': record['postcode'],
-                'polling_station_id': record['polling_station_id'],
-            }
-        )
-
     def teardown(self, council):
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
@@ -117,7 +91,71 @@ class Database:
         return Council.objects.get(pk=council_id)
 
 
+class StationList:
+
+    stations = []
+
+    def __init__(self):
+        self.stations = []
+
+    def add(self, station):
+        self.stations.append(station)
+
+    def save(self):
+        # make this more efficient
+        for station in self.stations:
+            PollingStation.objects.update_or_create(
+                council=station['council'],
+                internal_council_id=station['internal_council_id'],
+                defaults=station,
+            )
+
+class DistrictList:
+
+    districts = []
+
+    def __init__(self):
+        self.districts = []
+
+    def add(self, district):
+        self.districts.append(district)
+
+    def save(self):
+        # make this more efficient
+        for district in self.districts:
+            PollingDistrict.objects.update_or_create(
+                council=district['council'],
+                internal_council_id=district.get(
+                    'internal_council_id', 'none'),
+                defaults=district,
+            )
+
+class AddressList:
+
+    addresses = []
+
+    def __init__(self):
+        self.addresses = []
+
+    def add(self, address):
+        self.addresses.append(address)
+
+    def save(self):
+        # make this more efficient
+        for address in self.addresses:
+            ResidentialAddress.objects.update_or_create(
+                slug=address['slug'],
+                defaults={
+                    'council': address['council'],
+                    'address': address['address'],
+                    'postcode': address['postcode'],
+                    'polling_station_id': address['polling_station_id'],
+                }
+            )
+
 class BaseStationsImporter(metaclass=abc.ABCMeta):
+
+    stations = StationList()
 
     @abc.abstractmethod
     def station_record_to_dict(self, record):
@@ -128,10 +166,12 @@ class BaseStationsImporter(metaclass=abc.ABCMeta):
         pass
 
     def add_polling_station(self, station_info):
-        self.db.save_station_record(station_info)
+        self.stations.add(station_info)
 
 
 class BaseDistrictsImporter(metaclass=abc.ABCMeta):
+
+    districts = DistrictList()
 
     def clean_poly(self, poly):
         if isinstance(poly, geos.Polygon):
@@ -148,10 +188,12 @@ class BaseDistrictsImporter(metaclass=abc.ABCMeta):
         pass
 
     def add_polling_district(self, district_info):
-        self.db.save_district_record(district_info)
+        self.districts.add(district_info)
 
 
 class BaseAddressesImporter(metaclass=abc.ABCMeta):
+
+    addresses = AddressList()
 
     def slugify(self, value):
         """
@@ -216,7 +258,7 @@ class BaseAddressesImporter(metaclass=abc.ABCMeta):
         slug = self.get_slug(address_info)
         address_info['slug'] = slug
 
-        self.db.save_address_record(address_info)
+        self.addresses.add(address_info)
 
 
 class PostProcessingMixin:
@@ -338,16 +380,24 @@ class BaseStationsDistrictsImporter(
     BaseImporter, BaseStationsImporter, BaseDistrictsImporter):
 
     def import_data(self):
+        self.stations = StationList()
+        self.districts = DistrictList()
         self.import_polling_districts()
         self.import_polling_stations()
+        self.districts.save()
+        self.stations.save()
 
 
 class BaseStationsAddressesImporter(
     BaseImporter, BaseStationsImporter, BaseAddressesImporter):
 
     def import_data(self):
+        self.stations = StationList()
+        self.addresses = AddressList()
         self.import_residential_addresses()
         self.import_polling_stations()
+        self.addresses.save()
+        self.stations.save()
 
 
 class BaseCsvStationsImporter(BaseStationsImporter):
@@ -642,10 +692,14 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
 
     def import_data(self):
         # deal with 'stations only' or 'districts only' data
+        self.districts = DistrictList()
+        self.stations = StationList()
         if self.districts_url is not None:
             self.import_polling_districts()
         if self.stations_url is not None:
             self.import_polling_stations()
+        self.districts.save()
+        self.stations.save()
 
     def import_polling_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
