@@ -80,6 +80,57 @@ class CsvHelper:
         return data
 
 
+class ShpHelper:
+
+    def __init__(self, filepath):
+        self.filepath = filepath
+
+    def get_features(self):
+        sf = shapefile.Reader(self.filepath)
+        return sf.shapeRecords()
+
+
+class JsonHelper:
+
+    def __init__(self, filepath):
+        self.filepath = filepath
+
+    def get_features(self):
+        geometies = json.load(open(self.filepath))
+        return geometies['features']
+
+
+class KmlHelper:
+
+    def __init__(self, filepath):
+        self.filepath = filepath
+
+    def parse_features(self, kml):
+        try:
+            ds = DataSource(kml)
+        except GDALException:
+            # This is very strange – sometimes the above will fail the first
+            # time, but not the second. Seen on OS X with GDAL 2.2.0
+            ds = DataSource(kml)
+        return ds[0]
+
+    def get_features(self):
+        if not self.filepath.endswith('.kmz'):
+            return self.parse_features(self.filepath)
+
+        # It's a .kmz file
+        # Because the C lib that the Django DataSource is wrapping
+        # expects a file on disk, let's extract the KML to a tmpfile
+        kmz = zipfile.ZipFile(self.filepath, 'r')
+        kmlfile = kmz.open('doc.kml', 'r')
+
+        with tempfile.NamedTemporaryFile() as tmp:
+            tmp.write(kmlfile.read())
+            data = self.parse_features(tmp.name)
+            tmp.close()
+            return data
+
+
 class Database:
 
     def teardown(self, council):
@@ -432,11 +483,10 @@ class BaseCsvStationsImporter(BaseStationsImporter):
 class BaseShpStationsImporter(BaseStationsImporter):
 
     def get_stations(self):
-        sf = shapefile.Reader("{0}/{1}".format(
-            self.base_folder_path,
-            self.stations_name)
-        )
-        return sf.shapeRecords()
+        stations_file = "{0}/{1}".format(self.base_folder_path, self.stations_name)
+        helper = ShpHelper(stations_file)
+        data = helper.get_features()
+        return data
 
     def import_polling_stations(self):
         stations = self.get_stations()
@@ -456,12 +506,16 @@ class BaseShpStationsImporter(BaseStationsImporter):
 
 class BaseKmlStationsImporter(BaseStationsImporter):
 
-    def get_stations(self, kml):
-        ds = DataSource(kml)
-        return ds[0]
+    srid = 4326
 
-    def add_kml_stations(self, kml):
-        stations = self.get_stations(kml)
+    def get_stations(self):
+        districts_file = os.path.join(self.base_folder_path, self.stations_name)
+        helper = KmlHelper(districts_file)
+        data = helper.get_features()
+        return data
+
+    def import_polling_stations(self):
+        stations = self.get_stations()
         for station in stations:
             station_info = self.station_record_to_dict(station)
 
@@ -472,19 +526,14 @@ class BaseKmlStationsImporter(BaseStationsImporter):
 
             self.add_polling_station(station_info)
 
-    def import_polling_stations(self):
-        # if we ever need it, implement this
-        raise NotImplementedError
-
 
 class BaseShpDistrictsImporter(BaseDistrictsImporter):
 
     def get_districts(self):
-        sf = shapefile.Reader("{0}/{1}".format(
-            self.base_folder_path,
-            self.districts_name)
-        )
-        return sf.shapeRecords()
+        districts_file = "{0}/{1}".format(self.base_folder_path, self.districts_name)
+        helper = ShpHelper(districts_file)
+        data = helper.get_features()
+        return data
 
     def import_polling_districts(self):
         districts = self.get_districts()
@@ -506,10 +555,10 @@ class BaseShpDistrictsImporter(BaseDistrictsImporter):
 class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 
     def get_districts(self):
-        districtsfile = os.path.join(
-            self.base_folder_path, self.districts_name)
-        districts = json.load(open(districtsfile))
-        return districts['features']
+        districts_file = "{0}/{1}".format(self.base_folder_path, self.districts_name)
+        helper = JsonHelper(districts_file)
+        data = helper.get_features()
+        return data
 
     def import_polling_districts(self):
         districts = self.get_districts()
@@ -531,6 +580,8 @@ class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 
 class BaseKmlDistrictsImporter(BaseDistrictsImporter):
 
+    districts_srid = 4326
+
     def strip_z_values(self, geojson):
         districts = json.loads(geojson)
         districts['type'] = 'Polygon'
@@ -540,17 +591,14 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
         districts['coordinates'] = districts['coordinates'][0]
         return json.dumps(districts)
 
-    def get_districts(self, kml):
-        try:
-            ds = DataSource(kml)
-        except GDALException:
-            # This is very strainge – sometimes the above will fail the first
-            # time, but not the second. Seen on OS X with GDAL 2.2.0
-            ds = DataSource(kml)
-        return ds[0]
+    def get_districts(self):
+        districts_file = os.path.join(self.base_folder_path, self.districts_name)
+        helper = KmlHelper(districts_file)
+        data = helper.get_features()
+        return data
 
-    def add_kml_districts(self, kml):
-        districts = self.get_districts(kml)
+    def import_polling_districts(self):
+        districts = self.get_districts()
         for district in districts:
             district_info = self.district_record_to_dict(district)
 
@@ -560,25 +608,6 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
                 district_info['council'] = self.council
 
             self.add_polling_district(district_info)
-
-    def import_polling_districts(self):
-        districtsfile = os.path.join(
-            self.base_folder_path, self.districts_name)
-
-        if not districtsfile.endswith('.kmz'):
-            self.add_kml_districts(districtsfile)
-            return
-
-        # It's a .kmz file !
-        # Because the C lib that the django DataSource is wrapping
-        # expects a file on disk, let's extract the actual KML to a tmpfile.
-        kmz = zipfile.ZipFile(districtsfile, 'r')
-        kmlfile = kmz.open('doc.kml', 'r')
-
-        with tempfile.NamedTemporaryFile() as tmp:
-            tmp.write(kmlfile.read())
-            self.add_kml_districts(tmp.name)
-            tmp.close()
 
 
 class BaseCsvAddressesImporter(BaseAddressesImporter):
@@ -701,23 +730,35 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
         self.districts.save()
         self.stations.save()
 
+    def get_districts(self):
+        raise NotImplementedError
+
+    def get_stations(self):
+        raise NotImplementedError
+
     def import_polling_districts(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
-            self.add_districts(tmp.name)
-        return
+        districts = self.get_districts()
+        for district in districts:
+            district_info = self.district_record_to_dict(district)
+
+            if district_info is None:
+                continue
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+
+            self.add_polling_district(district_info)
 
     def import_polling_stations(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
-            self.add_stations(tmp.name)
-        return
+        stations = self.get_stations()
+        for station in stations:
+            station_info = self.station_record_to_dict(station)
 
-    def add_districts(self, filename):
-        raise NotImplementedError
+            if station_info is None:
+                continue
+            if 'council' not in station_info:
+                station_info['council'] = self.council
 
-    def add_stations(self, filename):
-        raise NotImplementedError
+            self.add_polling_station(station_info)
 
 
 """
@@ -729,8 +770,16 @@ class BaseApiKmlStationsKmlDistrictsImporter(
     BaseKmlStationsImporter,
     BaseKmlDistrictsImporter):
 
-    def add_districts(self, filename):
-        self.add_kml_districts(filename)
+    def get_districts(self):
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
+            helper = KmlHelper(tmp.name)
+            data = helper.get_features()
+            return data
 
-    def add_stations(self, filename):
-        self.add_kml_stations(filename)
+    def get_stations(self):
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
+            helper = KmlHelper(tmp.name)
+            data = helper.get_features()
+            return data
