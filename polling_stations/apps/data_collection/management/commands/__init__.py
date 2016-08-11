@@ -79,6 +79,10 @@ class CsvHelper:
         file.close()
         return data
 
+    # convenience alias for parseCsv()
+    def get_features(self):
+        return self.parseCsv()
+
 
 class ShpHelper:
 
@@ -129,6 +133,20 @@ class KmlHelper:
             data = self.parse_features(tmp.name)
             tmp.close()
             return data
+
+
+class FileHelperFactory():
+
+    @staticmethod
+    def create(filetype, filepath, options):
+        if (filetype == 'shp'):
+            return ShpHelper(filepath)
+        elif (filetype == 'kml'):
+            return KmlHelper(filepath)
+        elif (filetype == 'json'):
+            return JsonHelper(filepath)
+        elif (filetype == 'csv'):
+            return CsvHelper(filepath, options['encoding'], options['delimiter'])
 
 
 class Database:
@@ -203,113 +221,6 @@ class AddressList:
                     'polling_station_id': address['polling_station_id'],
                 }
             )
-
-class BaseStationsImporter(metaclass=abc.ABCMeta):
-
-    stations = StationList()
-
-    @abc.abstractmethod
-    def station_record_to_dict(self, record):
-        pass
-
-    @abc.abstractmethod
-    def import_polling_stations(self):
-        pass
-
-    def add_polling_station(self, station_info):
-        self.stations.add(station_info)
-
-
-class BaseDistrictsImporter(metaclass=abc.ABCMeta):
-
-    districts = DistrictList()
-
-    def clean_poly(self, poly):
-        if isinstance(poly, geos.Polygon):
-            poly = geos.MultiPolygon(poly, srid=self.get_srid('districts'))
-            return poly
-        return poly
-
-    @abc.abstractmethod
-    def district_record_to_dict(self, record):
-        pass
-
-    @abc.abstractmethod
-    def import_polling_districts(self, record):
-        pass
-
-    def add_polling_district(self, district_info):
-        self.districts.add(district_info)
-
-
-class BaseAddressesImporter(metaclass=abc.ABCMeta):
-
-    addresses = AddressList()
-
-    def slugify(self, value):
-        """
-        Custom slugify function:
-
-        Convert to ASCII.
-        Convert characters that aren't alphanumerics, underscores,
-        or hyphens to hyphens
-        Convert to lowercase.
-        Strip leading and trailing whitespace.
-
-        Unfortunately it is necessary to create wheel 2.0 in this situation
-        because using django's standard slugify() function means that
-        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
-        This ensures that
-        '1/2 Foo Street' becomes '1-2-foo-street' and
-        '12 Foo Street' becomes '12-foo-street'
-
-        This means we can avoid appending an arbitrary number and minimise
-        disruption to the public URL schema if a council provides updated data
-        """
-        value = force_text(value)
-        value = unicodedata.normalize(
-            'NFKD', value).encode('ascii', 'ignore').decode('ascii')
-        value = re.sub('[^\w\s-]', '-', value).strip().lower()
-        return mark_safe(re.sub('[-\s]+', '-', value))
-
-    def get_slug(self, address_info):
-        # if we have a uprn, use that as the slug
-        if 'uprn' in address_info:
-            if address_info['uprn']:
-                return address_info['uprn']
-
-        # otherwise build a slug from the other data we have
-        return self.slugify(
-            "%s-%s-%s-%s" % (
-                self.council.pk,
-                address_info['polling_station_id'],
-                address_info['address'],
-                address_info['postcode']
-            )
-        )
-
-    @abc.abstractmethod
-    def address_record_to_dict(self, record):
-        pass
-
-    @abc.abstractmethod
-    def import_residential_addresses(self):
-        pass
-
-    def add_residential_address(self, address_info):
-
-        """
-        strip all whitespace from postcode and convert to uppercase
-        this will make it easier to query this based on user-supplied postcode
-        """
-        address_info['postcode'] =\
-            re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
-
-        # generate a unique slug so we can provide a consistent url
-        slug = self.get_slug(address_info)
-        address_info['slug'] = slug
-
-        self.addresses.add(address_info)
 
 
 class PostProcessingMixin:
@@ -427,8 +338,153 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         self.report()
 
 
+class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
+
+    stations = StationList()
+    stations_filetype = None
+
+    def get_stations(self):
+        if self.stations_filetype is None:
+            raise NotImplementedError("stations_filetype must be defined")
+        stations_file = os.path.join(self.base_folder_path, self.stations_name)
+        options = {
+            'encoding': self.csv_encoding,
+            'delimiter': self.csv_delimiter
+        }
+        helper = FileHelperFactory.create(self.stations_filetype, stations_file, options)
+        data = helper.get_features()
+        return data
+
+    @abc.abstractmethod
+    def station_record_to_dict(self, record):
+        pass
+
+    @abc.abstractmethod
+    def import_polling_stations(self):
+        pass
+
+    def add_polling_station(self, station_info):
+        self.stations.add(station_info)
+
+
+class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
+
+    districts = DistrictList()
+    districts_filetype = None
+
+    def get_districts(self):
+        if self.districts_filetype is None:
+            raise NotImplementedError("districts_filetype must be defined")
+        districts_file = os.path.join(self.base_folder_path, self.districts_name)
+        options = {}
+        helper = FileHelperFactory.create(self.districts_filetype, districts_file, options)
+        data = helper.get_features()
+        return data
+
+    def clean_poly(self, poly):
+        if isinstance(poly, geos.Polygon):
+            poly = geos.MultiPolygon(poly, srid=self.get_srid('districts'))
+            return poly
+        return poly
+
+    @abc.abstractmethod
+    def district_record_to_dict(self, record):
+        pass
+
+    @abc.abstractmethod
+    def import_polling_districts(self, record):
+        pass
+
+    def add_polling_district(self, district_info):
+        self.districts.add(district_info)
+
+
+class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
+
+    addresses = AddressList()
+    addresses_filetype = None
+
+    def get_addresses(self):
+        if self.addresses_filetype is None:
+            raise NotImplementedError("addresses_filetype must be defined")
+        addresses_file = os.path.join(self.addresses_filetype, self.base_folder_path, self.addresses_name)
+        options = {
+            'encoding': self.csv_encoding,
+            'delimiter': self.csv_delimiter
+        }
+        helper = FileHelperFactory.create(addresses_file, options)
+        data = helper.get_features()
+        return data
+
+    def slugify(self, value):
+        """
+        Custom slugify function:
+
+        Convert to ASCII.
+        Convert characters that aren't alphanumerics, underscores,
+        or hyphens to hyphens
+        Convert to lowercase.
+        Strip leading and trailing whitespace.
+
+        Unfortunately it is necessary to create wheel 2.0 in this situation
+        because using django's standard slugify() function means that
+        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
+        This ensures that
+        '1/2 Foo Street' becomes '1-2-foo-street' and
+        '12 Foo Street' becomes '12-foo-street'
+
+        This means we can avoid appending an arbitrary number and minimise
+        disruption to the public URL schema if a council provides updated data
+        """
+        value = force_text(value)
+        value = unicodedata.normalize(
+            'NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = re.sub('[^\w\s-]', '-', value).strip().lower()
+        return mark_safe(re.sub('[-\s]+', '-', value))
+
+    def get_slug(self, address_info):
+        # if we have a uprn, use that as the slug
+        if 'uprn' in address_info:
+            if address_info['uprn']:
+                return address_info['uprn']
+
+        # otherwise build a slug from the other data we have
+        return self.slugify(
+            "%s-%s-%s-%s" % (
+                self.council.pk,
+                address_info['polling_station_id'],
+                address_info['address'],
+                address_info['postcode']
+            )
+        )
+
+    @abc.abstractmethod
+    def address_record_to_dict(self, record):
+        pass
+
+    @abc.abstractmethod
+    def import_residential_addresses(self):
+        pass
+
+    def add_residential_address(self, address_info):
+
+        """
+        strip all whitespace from postcode and convert to uppercase
+        this will make it easier to query this based on user-supplied postcode
+        """
+        address_info['postcode'] =\
+            re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
+
+        # generate a unique slug so we can provide a consistent url
+        slug = self.get_slug(address_info)
+        address_info['slug'] = slug
+
+        self.addresses.add(address_info)
+
+
+
 class BaseStationsDistrictsImporter(
-    BaseImporter, BaseStationsImporter, BaseDistrictsImporter):
+    BaseStationsImporter, BaseDistrictsImporter):
 
     def import_data(self):
         self.stations = StationList()
@@ -440,7 +496,7 @@ class BaseStationsDistrictsImporter(
 
 
 class BaseStationsAddressesImporter(
-    BaseImporter, BaseStationsImporter, BaseAddressesImporter):
+    BaseStationsImporter, BaseAddressesImporter):
 
     def import_data(self):
         self.stations = StationList()
@@ -453,11 +509,7 @@ class BaseStationsAddressesImporter(
 
 class BaseCsvStationsImporter(BaseStationsImporter):
 
-    def get_stations(self):
-        stations_file = os.path.join(self.base_folder_path, self.stations_name)
-        helper = CsvHelper(stations_file, self.csv_encoding, self.csv_delimiter)
-        data = helper.parseCsv()
-        return data
+    stations_filetype = 'csv'
 
     def import_polling_stations(self):
         stations = self.get_stations()
@@ -482,11 +534,7 @@ class BaseCsvStationsImporter(BaseStationsImporter):
 
 class BaseShpStationsImporter(BaseStationsImporter):
 
-    def get_stations(self):
-        stations_file = "{0}/{1}".format(self.base_folder_path, self.stations_name)
-        helper = ShpHelper(stations_file)
-        data = helper.get_features()
-        return data
+    stations_filetype = 'shp'
 
     def import_polling_stations(self):
         stations = self.get_stations()
@@ -507,12 +555,7 @@ class BaseShpStationsImporter(BaseStationsImporter):
 class BaseKmlStationsImporter(BaseStationsImporter):
 
     srid = 4326
-
-    def get_stations(self):
-        districts_file = os.path.join(self.base_folder_path, self.stations_name)
-        helper = KmlHelper(districts_file)
-        data = helper.get_features()
-        return data
+    stations_filetype = 'kml'
 
     def import_polling_stations(self):
         stations = self.get_stations()
@@ -529,11 +572,7 @@ class BaseKmlStationsImporter(BaseStationsImporter):
 
 class BaseShpDistrictsImporter(BaseDistrictsImporter):
 
-    def get_districts(self):
-        districts_file = "{0}/{1}".format(self.base_folder_path, self.districts_name)
-        helper = ShpHelper(districts_file)
-        data = helper.get_features()
-        return data
+    districts_filetype = 'shp'
 
     def import_polling_districts(self):
         districts = self.get_districts()
@@ -554,11 +593,7 @@ class BaseShpDistrictsImporter(BaseDistrictsImporter):
 
 class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 
-    def get_districts(self):
-        districts_file = "{0}/{1}".format(self.base_folder_path, self.districts_name)
-        helper = JsonHelper(districts_file)
-        data = helper.get_features()
-        return data
+    districts_filetype = 'json'
 
     def import_polling_districts(self):
         districts = self.get_districts()
@@ -581,6 +616,7 @@ class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 class BaseKmlDistrictsImporter(BaseDistrictsImporter):
 
     districts_srid = 4326
+    districts_filetype = 'kml'
 
     def strip_z_values(self, geojson):
         districts = json.loads(geojson)
@@ -590,12 +626,6 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
                 points.pop()
         districts['coordinates'] = districts['coordinates'][0]
         return json.dumps(districts)
-
-    def get_districts(self):
-        districts_file = os.path.join(self.base_folder_path, self.districts_name)
-        helper = KmlHelper(districts_file)
-        data = helper.get_features()
-        return data
 
     def import_polling_districts(self):
         districts = self.get_districts()
@@ -612,11 +642,7 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
 
 class BaseCsvAddressesImporter(BaseAddressesImporter):
 
-    def get_addresses(self):
-        addresses_file = os.path.join(self.base_folder_path, self.addresses_name)
-        helper = CsvHelper(addresses_file, self.csv_encoding, self.csv_delimiter)
-        data = helper.parseCsv()
-        return data
+    addresses_filetype = 'csv'
 
     def import_residential_addresses(self):
         addresses = self.get_addresses()
