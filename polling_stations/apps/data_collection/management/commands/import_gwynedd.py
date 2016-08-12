@@ -41,17 +41,6 @@ class Command(BaseShpStationsShpDistrictsImporter):
             'polling_station_id': self.district_count
         }
 
-    def import_polling_stations(self):
-        sf = shapefile.Reader("{0}/{1}".format(
-            self.base_folder_path,
-            self.stations_name)
-        )
-        for station in sf.shapeRecords():
-            station_info = self.station_record_to_dict(station.record)
-            if station_info is not None:
-                station_info['council'] = self.council
-                self.add_polling_station(station_info)
-
     def station_record_to_dict(self, record):
         # No IDs/codes were supplied, so we'll just assign each
         # district/station a sequential ID as we parse the file

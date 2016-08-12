@@ -246,9 +246,37 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def station_record_to_dict(self, record):
         pass
 
-    @abc.abstractmethod
     def import_polling_stations(self):
-        pass
+        stations = self.get_stations()
+        for station in stations:
+            if self.stations_filetype == 'shp':
+                station_info = self.station_record_to_dict(station.record)
+            else:
+                station_info = self.station_record_to_dict(station)
+
+            """
+            station_record_to_dict() may optionally return None
+            if we want to exclude a particular station record
+            from being imported
+            """
+            if station_info is None:
+                continue
+
+            if 'council' not in station_info:
+                station_info['council'] = self.council
+
+            """
+            If the file type is shp, we can usually derive 'location'
+            automatically, but we can return it if necessary.
+            For other file types, we must return the key
+            'location' from station_record_to_dict()
+            """
+            if self.stations_filetype == 'shp' and 'location' not in station_info:
+                station_info['location'] = Point(
+                    *station.shape.points[0],
+                    srid=self.get_srid())
+
+            self.add_polling_station(station_info)
 
     def add_polling_station(self, station_info):
         self.stations.add(station_info)
@@ -423,38 +451,11 @@ class BaseShpStationsImporter(BaseStationsImporter):
 
     stations_filetype = 'shp'
 
-    def import_polling_stations(self):
-        stations = self.get_stations()
-        for station in stations:
-            station_info = self.station_record_to_dict(station.record)
-
-            if station_info is None:
-                continue
-            if 'council' not in station_info:
-                station_info['council'] = self.council
-
-            station_info['location'] = Point(
-                *station.shape.points[0],
-                srid=self.get_srid())
-            self.add_polling_station(station_info)
-
 
 class BaseKmlStationsImporter(BaseStationsImporter):
 
     srid = 4326
     stations_filetype = 'kml'
-
-    def import_polling_stations(self):
-        stations = self.get_stations()
-        for station in stations:
-            station_info = self.station_record_to_dict(station)
-
-            if station_info is None:
-                continue
-            if 'council' not in station_info:
-                station_info['council'] = self.council
-
-            self.add_polling_station(station_info)
 
 
 class BaseShpDistrictsImporter(BaseDistrictsImporter):
@@ -644,10 +645,24 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
         self.stations.save()
 
     def get_districts(self):
-        raise NotImplementedError
+        if self.districts_filetype is None:
+            raise NotImplementedError("districts_filetype must be defined")
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
+            options = {}
+            helper = FileHelperFactory.create(self.districts_filetype, tmp.name, options)
+            data = helper.get_features()
+            return data
 
     def get_stations(self):
-        raise NotImplementedError
+        if self.stations_filetype is None:
+            raise NotImplementedError("stations_filetype must be defined")
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
+            options = {}
+            helper = FileHelperFactory.create(self.stations_filetype, tmp.name, options)
+            data = helper.get_features()
+            return data
 
     def import_polling_districts(self):
         districts = self.get_districts()
@@ -661,18 +676,6 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
 
             self.add_polling_district(district_info)
 
-    def import_polling_stations(self):
-        stations = self.get_stations()
-        for station in stations:
-            station_info = self.station_record_to_dict(station)
-
-            if station_info is None:
-                continue
-            if 'council' not in station_info:
-                station_info['council'] = self.council
-
-            self.add_polling_station(station_info)
-
 
 """
 Stations in KML format
@@ -683,16 +686,4 @@ class BaseApiKmlStationsKmlDistrictsImporter(
     BaseKmlStationsImporter,
     BaseKmlDistrictsImporter):
 
-    def get_districts(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
-            helper = KmlHelper(tmp.name)
-            data = helper.get_features()
-            return data
-
-    def get_stations(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
-            helper = KmlHelper(tmp.name)
-            data = helper.get_features()
-            return data
+    pass
