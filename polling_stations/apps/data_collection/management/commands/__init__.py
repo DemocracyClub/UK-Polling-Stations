@@ -496,89 +496,45 @@ class BaseStationsAddressesImporter(
         self.stations.save()
 
 
-class BaseCsvStationsImporter(BaseStationsImporter):
-
-    stations_filetype = 'csv'
-
-
-class BaseShpStationsImporter(BaseStationsImporter):
-
-    stations_filetype = 'shp'
-
-
-class BaseKmlStationsImporter(BaseStationsImporter):
-
-    srid = 4326
-    stations_filetype = 'kml'
-
-
-class BaseShpDistrictsImporter(BaseDistrictsImporter):
-
-    districts_filetype = 'shp'
-
-
-class BaseJsonDistrictsImporter(BaseDistrictsImporter):
-
-    districts_filetype = 'json'
-
-
-class BaseKmlDistrictsImporter(BaseDistrictsImporter):
-
-    districts_srid = 4326
-    districts_filetype = 'kml'
-
-
-class BaseCsvAddressesImporter(BaseAddressesImporter):
-
-    addresses_filetype = 'csv'
-
-
 """
 Stations in CSV format
 Districts in SHP format
 """
-class BaseCsvStationsShpDistrictsImporter(
-    BaseStationsDistrictsImporter,
-    BaseCsvStationsImporter,
-    BaseShpDistrictsImporter):
+class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter):
 
-    pass
+    stations_filetype = 'csv'
+    districts_filetype = 'shp'
 
 
 """
 Stations in SHP format
 Districts in SHP format
 """
-class BaseShpStationsShpDistrictsImporter(
-    BaseStationsDistrictsImporter,
-    BaseShpStationsImporter,
-    BaseShpDistrictsImporter):
+class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter):
 
-    pass
+    stations_filetype = 'shp'
+    districts_filetype = 'shp'
 
 
 """
 Stations in CSV format
 Districts in JSON format
 """
-class BaseCsvStationsJsonDistrictsImporter(
-    BaseStationsDistrictsImporter,
-    BaseCsvStationsImporter,
-    BaseJsonDistrictsImporter):
+class BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter):
 
-    pass
+    stations_filetype = 'csv'
+    districts_filetype = 'json'
 
 
 """
 Stations in CSV format
 Districts in KML format
 """
-class BaseCsvStationsKmlDistrictsImporter(
-    BaseStationsDistrictsImporter,
-    BaseCsvStationsImporter,
-    BaseKmlDistrictsImporter):
+class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter):
 
     districts_srid = 4326
+    stations_filetype = 'csv'
+    districts_filetype = 'kml'
 
     # this is mainly here for legacy compatibility
     # mostly we should override this
@@ -597,24 +553,20 @@ class BaseCsvStationsKmlDistrictsImporter(
 Stations in CSV format
 Addresses in CSV format
 """
-class BaseCsvStationsCsvAddressesImporter(
-    BaseStationsAddressesImporter,
-    BaseCsvStationsImporter,
-    BaseCsvAddressesImporter):
+class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter):
 
-    pass
+    stations_filetype = 'csv'
+    addresses_filetype = 'csv'
 
 
 """
 Stations in SHP format
 Addresses in CSV format
 """
-class BaseShpStationsCsvAddressesImporter(
-    BaseStationsAddressesImporter,
-    BaseShpStationsImporter,
-    BaseCsvAddressesImporter):
+class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter):
 
-    pass
+    stations_filetype = 'shp'
+    addresses_filetype = 'csv'
 
 
 class BaseGenericApiImporter(BaseStationsDistrictsImporter):
@@ -662,9 +614,7 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
 Stations in KML format
 Districts in KML format
 """
-class BaseApiKmlStationsKmlDistrictsImporter(
-    BaseGenericApiImporter,
-    BaseKmlStationsImporter,
-    BaseKmlDistrictsImporter):
+class BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter):
 
-    pass
+    stations_filetype = 'kml'
+    districts_filetype = 'kml'
