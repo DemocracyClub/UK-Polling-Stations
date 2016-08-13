@@ -136,14 +136,31 @@ class PostProcessingMixin:
         """.format(table_name), [self.council_id])
 
 
+class CsvMixin:
+    csv_encoding = 'utf-8'
+    csv_delimiter = ','
+
+    def get_file_options(self):
+        return {
+            'encoding': self.csv_encoding,
+            'delimiter': self.csv_delimiter
+        }
+
+
 class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     srid = 27700
     districts_srid = None
     council_id = None
     base_folder_path = None
-    csv_encoding = 'utf-8'
-    csv_delimiter = ','
     db = Database()
+
+    def get_data(self, filetype, filename):
+        if hasattr(self, 'get_file_options'):
+            options = self.get_file_options()
+        else:
+            options = {}
+        helper = FileHelperFactory.create(filetype, filename, options)
+        return helper.get_features()
 
     def get_srid(self, type=None):
         if type == 'districts' and self.districts_srid is not None:
@@ -241,13 +258,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def get_stations(self):
         stations_file = os.path.join(self.base_folder_path, self.stations_name)
-        options = {
-            'encoding': self.csv_encoding,
-            'delimiter': self.csv_delimiter
-        }
-        helper = FileHelperFactory.create(self.stations_filetype, stations_file, options)
-        data = helper.get_features()
-        return data
+        return self.get_data(self.stations_filetype, stations_file)
 
     @abc.abstractmethod
     def station_record_to_dict(self, record):
@@ -345,10 +356,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def get_districts(self):
         districts_file = os.path.join(self.base_folder_path, self.districts_name)
-        options = {}
-        helper = FileHelperFactory.create(self.districts_filetype, districts_file, options)
-        data = helper.get_features()
-        return data
+        return self.get_data(self.districts_filetype, districts_file)
 
     def clean_poly(self, poly):
         if isinstance(poly, geos.Polygon):
@@ -427,13 +435,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def get_addresses(self):
         addresses_file = os.path.join(self.base_folder_path, self.addresses_name)
-        options = {
-            'encoding': self.csv_encoding,
-            'delimiter': self.csv_delimiter
-        }
-        helper = FileHelperFactory.create(self.addresses_filetype, addresses_file, options)
-        data = helper.get_features()
-        return data
+        return self.get_data(self.addresses_filetype, addresses_file)
 
     def slugify(self, value):
         """
@@ -535,7 +537,7 @@ class BaseStationsAddressesImporter(
 Stations in CSV format
 Districts in SHP format
 """
-class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter):
+class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
 
     stations_filetype = 'csv'
     districts_filetype = 'shp'
@@ -555,7 +557,7 @@ class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter):
 Stations in CSV format
 Districts in JSON format
 """
-class BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter):
+class BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
 
     stations_filetype = 'csv'
     districts_filetype = 'json'
@@ -565,7 +567,7 @@ class BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter):
 Stations in CSV format
 Districts in KML format
 """
-class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter):
+class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
 
     districts_srid = 4326
     stations_filetype = 'csv'
@@ -588,7 +590,7 @@ class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter):
 Stations in CSV format
 Addresses in CSV format
 """
-class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter):
+class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixin):
 
     stations_filetype = 'csv'
     addresses_filetype = 'csv'
@@ -598,7 +600,7 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter):
 Stations in SHP format
 Addresses in CSV format
 """
-class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter):
+class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixin):
 
     stations_filetype = 'shp'
     addresses_filetype = 'csv'
@@ -607,8 +609,13 @@ class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter):
 class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     srid = 4326
     districts_srid = 4326
+
+    districts_name = None
     districts_url = None
+
+    stations_name = None
     stations_url = None
+
     local_files = False
 
     def import_data(self):
@@ -627,18 +634,12 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     def get_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
             req = urllib.request.urlretrieve(self.districts_url, tmp.name)
-            options = {}
-            helper = FileHelperFactory.create(self.districts_filetype, tmp.name, options)
-            data = helper.get_features()
-            return data
+            return self.get_data(self.districts_filetype, tmp.name)
 
     def get_stations(self):
         with tempfile.NamedTemporaryFile() as tmp:
             req = urllib.request.urlretrieve(self.stations_url, tmp.name)
-            options = {}
-            helper = FileHelperFactory.create(self.stations_filetype, tmp.name, options)
-            data = helper.get_features()
-            return data
+            return self.get_data(self.stations_filetype, tmp.name)
 
 
 """
