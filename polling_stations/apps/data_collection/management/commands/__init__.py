@@ -141,8 +141,6 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     districts_srid = None
     council_id = None
     base_folder_path = None
-    stations_name = "polling_places"
-    districts_name = "polling_districts"
     csv_encoding = 'utf-8'
     csv_delimiter = ','
     db = Database()
@@ -229,8 +227,9 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
 class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
-    stations = StationList()
+    stations = None
     stations_filetype = None
+    stations_name = None
 
     def get_stations(self):
         if self.stations_filetype is None:
@@ -326,8 +325,9 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
 class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
-    districts = DistrictList()
+    districts = None
     districts_filetype = None
+    districts_name = None
 
     def get_districts(self):
         if self.districts_filetype is None:
@@ -401,8 +401,9 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
 class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
 
-    addresses = AddressList()
+    addresses = None
     addresses_filetype = None
+    addresses_name = None
 
     def get_addresses(self):
         if self.addresses_filetype is None:
