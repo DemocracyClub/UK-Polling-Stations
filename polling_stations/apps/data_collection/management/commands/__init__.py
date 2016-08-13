@@ -448,7 +448,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.addresses.add(address_info)
 
 
-
 class BaseStationsDistrictsImporter(
     BaseStationsImporter, BaseDistrictsImporter):
 
@@ -578,6 +577,7 @@ class BaseCsvStationsKmlDistrictsImporter(
     districts_srid = 4326
 
     # this is mainly here for legacy compatibility
+    # mostly we should override this
     def district_record_to_dict(self, record):
         geojson = self.strip_z_values(record.geom.geojson)
         poly = self.clean_poly(
@@ -621,13 +621,15 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     local_files = False
 
     def import_data(self):
-        # deal with 'stations only' or 'districts only' data
         self.districts = DistrictList()
         self.stations = StationList()
+
+        # deal with 'stations only' or 'districts only' data
         if self.districts_url is not None:
             self.import_polling_districts()
         if self.stations_url is not None:
             self.import_polling_stations()
+
         self.districts.save()
         self.stations.save()
 
