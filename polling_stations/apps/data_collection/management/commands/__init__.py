@@ -372,7 +372,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
             'encoding': self.csv_encoding,
             'delimiter': self.csv_delimiter
         }
-        helper = FileHelperFactory.create(addresses_file, options)
+        helper = FileHelperFactory.create(self.addresses_filetype, addresses_file, options)
         data = helper.get_features()
         return data
 
