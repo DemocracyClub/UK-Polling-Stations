@@ -138,7 +138,6 @@ class CsvMixin:
 
 class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     srid = 27700
-    districts_srid = None
     council_id = None
     base_folder_path = None
 
@@ -159,7 +158,9 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         return helper.get_features()
 
     def get_srid(self, type=None):
-        if type == 'districts' and self.districts_srid is not None:
+        if hasattr(self, 'districts_srid') and\
+           type == 'districts' and\
+           self.districts_srid is not None:
             return self.districts_srid
         else:
             return self.srid
@@ -339,6 +340,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     districts = None
+    districts_srid = None
 
     @property
     @abc.abstractmethod
