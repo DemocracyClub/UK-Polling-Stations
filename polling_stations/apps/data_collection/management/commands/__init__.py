@@ -66,6 +66,7 @@ class StationList:
                 defaults=station,
             )
 
+
 class DistrictList:
 
     districts = []
@@ -85,6 +86,7 @@ class DistrictList:
                     'internal_council_id', 'none'),
                 defaults=district,
             )
+
 
 class AddressList:
 
@@ -306,9 +308,43 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def district_record_to_dict(self, record):
         pass
 
-    @abc.abstractmethod
-    def import_polling_districts(self, record):
-        pass
+    def import_polling_districts(self):
+        districts = self.get_districts()
+        for district in districts:
+            if self.districts_filetype == 'shp':
+                district_info = self.district_record_to_dict(district.record)
+            else:
+                district_info = self.district_record_to_dict(district)
+
+            """
+            district_record_to_dict() may optionally return None
+            if we want to exclude a particular district record
+            from being imported
+            """
+            if district_info is None:
+                continue
+
+            if 'council' not in district_info:
+                district_info['council'] = self.council
+
+            """
+            If the file type is shp or json, we can usually derive
+            'area' automatically, but we can return it if necessary.
+            For other file types, we must return the key
+            'area' from address_record_to_dict()
+            """
+            if self.districts_filetype == 'shp':
+                geojson = json.dumps(district.shape.__geo_interface__)
+            if self.districts_filetype == 'json':
+                geojson = json.dumps(district['geometry'])
+            if 'location' not in district_info and\
+                (self.districts_filetype == 'shp' or\
+                self.districts_filetype == 'json'):
+                poly = self.clean_poly(
+                    GEOSGeometry(geojson, srid=self.get_srid('districts')))
+                district_info['area'] = poly
+
+            self.add_polling_district(district_info)
 
     def add_polling_district(self, district_info):
         self.districts.add(district_info)
@@ -462,43 +498,10 @@ class BaseShpDistrictsImporter(BaseDistrictsImporter):
 
     districts_filetype = 'shp'
 
-    def import_polling_districts(self):
-        districts = self.get_districts()
-        for district in districts:
-            district_info = self.district_record_to_dict(district.record)
-
-            if district_info is None:
-                continue
-            if 'council' not in district_info:
-                district_info['council'] = self.council
-
-            geojson = json.dumps(district.shape.__geo_interface__)
-            poly = self.clean_poly(
-                GEOSGeometry(geojson, srid=self.get_srid('districts')))
-            district_info['area'] = poly
-            self.add_polling_district(district_info)
-
 
 class BaseJsonDistrictsImporter(BaseDistrictsImporter):
 
     districts_filetype = 'json'
-
-    def import_polling_districts(self):
-        districts = self.get_districts()
-
-        for district in districts:
-            district_info = self.district_record_to_dict(district)
-
-            if district_info is None:
-                continue
-            if 'council' not in district_info:
-                district_info['council'] = self.council
-
-            poly = self.clean_poly(
-                GEOSGeometry(json.dumps(district['geometry']),
-                                srid=self.get_srid('districts')))
-            district_info['area'] = poly
-            self.add_polling_district(district_info)
 
 
 class BaseKmlDistrictsImporter(BaseDistrictsImporter):
@@ -514,18 +517,6 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
                 points.pop()
         districts['coordinates'] = districts['coordinates'][0]
         return json.dumps(districts)
-
-    def import_polling_districts(self):
-        districts = self.get_districts()
-        for district in districts:
-            district_info = self.district_record_to_dict(district)
-
-            if district_info is None:
-                continue
-            if 'council' not in district_info:
-                district_info['council'] = self.council
-
-            self.add_polling_district(district_info)
 
 
 class BaseCsvAddressesImporter(BaseAddressesImporter):
@@ -663,18 +654,6 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
             helper = FileHelperFactory.create(self.stations_filetype, tmp.name, options)
             data = helper.get_features()
             return data
-
-    def import_polling_districts(self):
-        districts = self.get_districts()
-        for district in districts:
-            district_info = self.district_record_to_dict(district)
-
-            if district_info is None:
-                continue
-            if 'council' not in district_info:
-                district_info['council'] = self.council
-
-            self.add_polling_district(district_info)
 
 
 """
