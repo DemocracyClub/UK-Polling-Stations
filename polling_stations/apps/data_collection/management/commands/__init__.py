@@ -248,9 +248,33 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def station_record_to_dict(self, record):
         pass
 
+    def get_station_hash(self, station):
+        raise NotImplementedError
+
     def import_polling_stations(self):
         stations = self.get_stations()
+        seen = set()
         for station in stations:
+            """
+            We can optionally define a function get_station_hash()
+
+            This is useful if residential addresses and polling
+            station details are embedded in the same input file
+
+            We can use this to avoid calling station_record_to_dict()
+            (which is potentially quite a slow operation)
+            on a record where we have already processed the station data
+            to make the import process run more quickly.
+            """
+            try:
+                station_hash = self.get_station_hash(station)
+                if station_hash in seen:
+                    continue
+                else:
+                    seen.add(station_hash)
+            except NotImplementedError:
+                pass
+
             if self.stations_filetype == 'shp':
                 station_info = self.station_record_to_dict(station.record)
             else:
@@ -475,26 +499,6 @@ class BaseStationsAddressesImporter(
 class BaseCsvStationsImporter(BaseStationsImporter):
 
     stations_filetype = 'csv'
-
-    def import_polling_stations(self):
-        stations = self.get_stations()
-        seen = set()
-        for station in stations:
-            if hasattr(self, 'get_station_hash'):
-                station_hash = self.get_station_hash(station)
-                if station_hash in seen:
-                    continue
-                else:
-                    station_info = self.station_record_to_dict(station)
-                    seen.add(station_hash)
-            else:
-                station_info = self.station_record_to_dict(station)
-
-            if station_info is None:
-                continue
-            if 'council' not in station_info:
-                station_info['council'] = self.council
-            self.add_polling_station(station_info)
 
 
 class BaseShpStationsImporter(BaseStationsImporter):
