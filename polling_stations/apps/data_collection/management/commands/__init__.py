@@ -137,6 +137,7 @@ class CsvMixin:
 
 
 class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
+
     srid = 27700
     council_id = None
     base_folder_path = None
@@ -405,8 +406,8 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             if self.districts_filetype == 'json':
                 geojson = json.dumps(district['geometry'])
             if 'location' not in district_info and\
-                (self.districts_filetype == 'shp' or\
-                self.districts_filetype == 'json'):
+                    (self.districts_filetype == 'shp' or\
+                    self.districts_filetype == 'json'):
                 poly = self.clean_poly(
                     GEOSGeometry(geojson, srid=self.get_srid('districts')))
                 district_info['area'] = poly
@@ -508,7 +509,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
 
 
 class BaseStationsDistrictsImporter(
-    BaseStationsImporter, BaseDistrictsImporter):
+        BaseStationsImporter, BaseDistrictsImporter):
 
     def import_data(self):
         self.stations = StationList()
