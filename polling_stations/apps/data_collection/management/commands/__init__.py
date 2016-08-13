@@ -228,12 +228,18 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     stations = None
-    stations_filetype = None
-    stations_name = None
+
+    @property
+    @abc.abstractmethod
+    def stations_filetype(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def stations_name(self):
+        pass
 
     def get_stations(self):
-        if self.stations_filetype is None:
-            raise NotImplementedError("stations_filetype must be defined")
         stations_file = os.path.join(self.base_folder_path, self.stations_name)
         options = {
             'encoding': self.csv_encoding,
@@ -326,12 +332,18 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     districts = None
-    districts_filetype = None
-    districts_name = None
+
+    @property
+    @abc.abstractmethod
+    def districts_filetype(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def districts_name(self):
+        pass
 
     def get_districts(self):
-        if self.districts_filetype is None:
-            raise NotImplementedError("districts_filetype must be defined")
         districts_file = os.path.join(self.base_folder_path, self.districts_name)
         options = {}
         helper = FileHelperFactory.create(self.districts_filetype, districts_file, options)
@@ -402,13 +414,19 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     addresses = None
-    addresses_filetype = None
-    addresses_name = None
+
+    @property
+    @abc.abstractmethod
+    def addresses_filetype(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def addresses_name(self):
+        pass
 
     def get_addresses(self):
-        if self.addresses_filetype is None:
-            raise NotImplementedError("addresses_filetype must be defined")
-        addresses_file = os.path.join(self.addresses_filetype, self.base_folder_path, self.addresses_name)
+        addresses_file = os.path.join(self.base_folder_path, self.addresses_name)
         options = {
             'encoding': self.csv_encoding,
             'delimiter': self.csv_delimiter
@@ -607,8 +625,6 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
         self.stations.save()
 
     def get_districts(self):
-        if self.districts_filetype is None:
-            raise NotImplementedError("districts_filetype must be defined")
         with tempfile.NamedTemporaryFile() as tmp:
             req = urllib.request.urlretrieve(self.districts_url, tmp.name)
             options = {}
@@ -617,8 +633,6 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
             return data
 
     def get_stations(self):
-        if self.stations_filetype is None:
-            raise NotImplementedError("stations_filetype must be defined")
         with tempfile.NamedTemporaryFile() as tmp:
             req = urllib.request.urlretrieve(self.stations_url, tmp.name)
             options = {}
