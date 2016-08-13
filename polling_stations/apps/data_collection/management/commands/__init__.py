@@ -36,17 +36,6 @@ from data_collection.models import DataQuality
 from addressbase.helpers import create_address_records_for_council
 
 
-class Database:
-
-    def teardown(self, council):
-        PollingStation.objects.filter(council=council).delete()
-        PollingDistrict.objects.filter(council=council).delete()
-        ResidentialAddress.objects.filter(council=council).delete()
-
-    def get_council(self, council_id):
-        return Council.objects.get(pk=council_id)
-
-
 class StationList:
 
     stations = []
@@ -152,7 +141,14 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     districts_srid = None
     council_id = None
     base_folder_path = None
-    db = Database()
+
+    def teardown(self, council):
+        PollingStation.objects.filter(council=council).delete()
+        PollingDistrict.objects.filter(council=council).delete()
+        ResidentialAddress.objects.filter(council=council).delete()
+
+    def get_council(self, council_id):
+        return Council.objects.get(pk=council_id)
 
     def get_data(self, filetype, filename):
         if hasattr(self, 'get_file_options'):
@@ -212,10 +208,10 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         if self.council_id is None:
             self.council_id = args[0]
 
-        self.council = self.db.get_council(self.council_id)
+        self.council = self.get_council(self.council_id)
 
         # Delete old data for this council
-        self.db.teardown(self.council)
+        self.teardown(self.council)
 
         if getattr(self, 'local_files', True):
             if self.base_folder_path is None:
