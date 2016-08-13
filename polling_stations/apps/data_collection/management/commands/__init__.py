@@ -413,9 +413,15 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
     def address_record_to_dict(self, record):
         pass
 
-    @abc.abstractmethod
     def import_residential_addresses(self):
-        pass
+        addresses = self.get_addresses()
+        for address in addresses:
+            address_info = self.address_record_to_dict(address)
+            if address_info is None:
+                continue
+            if 'council' not in address_info:
+                address_info['council'] = self.council
+            self.add_residential_address(address_info)
 
     def add_residential_address(self, address_info):
 
@@ -522,16 +528,6 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
 class BaseCsvAddressesImporter(BaseAddressesImporter):
 
     addresses_filetype = 'csv'
-
-    def import_residential_addresses(self):
-        addresses = self.get_addresses()
-        for address in addresses:
-            address_info = self.address_record_to_dict(address)
-            if address_info is None:
-                continue
-            if 'council' not in address_info:
-                address_info['council'] = self.council
-            self.add_residential_address(address_info)
 
 
 """
