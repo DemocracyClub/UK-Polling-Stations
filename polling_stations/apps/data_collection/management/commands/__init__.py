@@ -304,6 +304,15 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             return poly
         return poly
 
+    def strip_z_values(self, geojson):
+        districts = json.loads(geojson)
+        districts['type'] = 'Polygon'
+        for points in districts['coordinates'][0][0]:
+            if len(points) == 3:
+                points.pop()
+        districts['coordinates'] = districts['coordinates'][0]
+        return json.dumps(districts)
+
     @abc.abstractmethod
     def district_record_to_dict(self, record):
         pass
@@ -514,15 +523,6 @@ class BaseKmlDistrictsImporter(BaseDistrictsImporter):
 
     districts_srid = 4326
     districts_filetype = 'kml'
-
-    def strip_z_values(self, geojson):
-        districts = json.loads(geojson)
-        districts['type'] = 'Polygon'
-        for points in districts['coordinates'][0][0]:
-            if len(points) == 3:
-                points.pop()
-        districts['coordinates'] = districts['coordinates'][0]
-        return json.dumps(districts)
 
 
 class BaseCsvAddressesImporter(BaseAddressesImporter):
