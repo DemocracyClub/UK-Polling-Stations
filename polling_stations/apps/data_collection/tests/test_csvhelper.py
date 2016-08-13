@@ -9,7 +9,7 @@ class CsvHelperTest(TestCase):
         helper = CsvHelper(
             os.path.join(os.path.dirname(__file__), 'fixtures/csv_helper/test.csv')
         )
-        data = helper.parseCsv()
+        data = helper.get_features()
 
         self.assertIsInstance(data[0], tuple)
         self.assertEqual('1', data[0].foo)

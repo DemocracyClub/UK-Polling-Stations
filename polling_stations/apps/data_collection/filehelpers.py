@@ -19,7 +19,7 @@ class CsvHelper:
         self.encoding = encoding
         self.delimiter = delimiter
 
-    def parseCsv(self):
+    def get_features(self):
         file = open(self.filepath, 'rt', encoding=self.encoding)
         reader = csv.reader(file, delimiter=self.delimiter)
         header = next(reader)
@@ -49,10 +49,6 @@ class CsvHelper:
 
         file.close()
         return data
-
-    # convenience alias for parseCsv()
-    def get_features(self):
-        return self.parseCsv()
 
 
 """
