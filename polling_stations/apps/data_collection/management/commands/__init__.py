@@ -288,21 +288,37 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             if station_info is None:
                 continue
 
-            if 'council' not in station_info:
-                station_info['council'] = self.council
-
             """
-            If the file type is shp, we can usually derive 'location'
-            automatically, but we can return it if necessary.
-            For other file types, we must return the key
-            'location' from station_record_to_dict()
-            """
-            if self.stations_filetype == 'shp' and 'location' not in station_info:
-                station_info['location'] = Point(
-                    *station.shape.points[0],
-                    srid=self.get_srid())
+            station_record_to_dict() will usually return a dict
+            but it may also optionally return a list of dicts.
 
-            self.add_polling_station(station_info)
+            This is helpful if we encounter a polling station record
+            with a delimited list of polling districts served by this
+            polling station: it allows us to add the same station
+            address/point many times with different district ids.
+            """
+            if isinstance(station_info, list):
+                station_records = station_info
+            else:
+                # If station_info is a dict, create a singleton list
+                station_records = [station_info]
+
+            for station_record in station_records:
+                if 'council' not in station_record:
+                    station_record['council'] = self.council
+
+                """
+                If the file type is shp, we can usually derive 'location'
+                automatically, but we can return it if necessary.
+                For other file types, we must return the key
+                'location' from station_record_to_dict()
+                """
+                if self.stations_filetype == 'shp' and 'location' not in station_record:
+                    station_record['location'] = Point(
+                        *station.shape.points[0],
+                        srid=self.get_srid())
+
+                self.add_polling_station(station_record)
 
     def add_polling_station(self, station_info):
         self.stations.add(station_info)

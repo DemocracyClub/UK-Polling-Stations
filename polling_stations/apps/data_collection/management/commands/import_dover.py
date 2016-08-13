@@ -25,22 +25,7 @@ class Command(BaseShpStationsShpDistrictsImporter):
             'polling_station_id':  record[1][:3]
         }
 
-    # station_record_to_dicts() returns an array of dicts in this script
-    def import_polling_stations(self):
-        sf = shapefile.Reader("{0}/{1}".format(
-            self.base_folder_path,
-            self.stations_name
-            ))
-        for station in sf.shapeRecords():
-            station_info = self.station_record_to_dicts(station.record)
-            if station_info is not None:
-                for station_record in station_info:
-                    station_record['location'] = Point(
-                        *station.shape.points[0],
-                        srid=self.get_srid())
-                    self.add_polling_station(station_record)
-
-    def station_record_to_dicts(self, record):
+    def station_record_to_dict(self, record):
 
         address = "\n".join([record[1]] + record[2].split(', '))
 
@@ -72,18 +57,18 @@ class Command(BaseShpStationsShpDistrictsImporter):
         return the same polling station address/point twice with 2 different IDs
         """
         internal_ids = record[4].split(", ")
-        if (len(internal_ids) == 2):
-            return [
-                { 'internal_council_id': internal_ids[0],
-                  'postcode'           : postcode,
-                  'address'            : address },
-                { 'internal_council_id': internal_ids[1],
-                  'postcode'           : postcode,
-                  'address'            : address }
-            ]
-        else:
-            return [{
+        if (len(internal_ids) == 1):
+            return {
                 'internal_council_id': internal_ids[0],
                 'postcode'           : postcode,
                 'address'            : address
-            }]
+            }
+        else:
+            stations = []
+            for id in internal_ids:
+                stations.append({
+                    'internal_council_id': id,
+                    'postcode'           : postcode,
+                    'address'            : address
+                })
+            return stations

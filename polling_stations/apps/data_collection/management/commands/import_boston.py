@@ -3,10 +3,7 @@ Import Boston
 """
 import os
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import (
-    BaseCsvStationsShpDistrictsImporter,
-    CsvHelper
-)
+from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 
 class Command(BaseCsvStationsShpDistrictsImporter):
     """
@@ -24,21 +21,7 @@ class Command(BaseCsvStationsShpDistrictsImporter):
             'polling_station_id': record[0]
         }
 
-    # station_record_to_dicts() returns an array of dicts in this script
-    def import_polling_stations(self):
-        stations_file = os.path.join(self.base_folder_path, self.stations_name)
-
-        helper = CsvHelper(stations_file, self.csv_encoding)
-        data = helper.parseCsv()
-        for row in data:
-            stations = self.station_record_to_dicts(row)
-            for station in stations:
-                if 'council' not in station:
-                    station['council'] = self.council
-
-                self.add_polling_station(station)
-
-    def station_record_to_dicts(self, record):
+    def station_record_to_dict(self, record):
         try:
             location = Point(int(record.easting), int(record.northing), srid=self.srid)
         except ValueError:
@@ -55,12 +38,12 @@ class Command(BaseCsvStationsShpDistrictsImporter):
         """
         internal_ids = record.internal_id.split(",")
         if (len(internal_ids) == 1):
-            return [{
+            return {
                 'internal_council_id': record.internal_id,
                 'postcode'           : postcode,
                 'address'            : address,
                 'location'           : location
-            }]
+            }
         else:
             stations = []
             for id in internal_ids:
