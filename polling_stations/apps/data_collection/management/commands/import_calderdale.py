@@ -108,9 +108,10 @@ class Command(BaseCsvStationsShpDistrictsImporter):
                 'internal_council_id': record[1],
                 'postcode'           : address_parts['postcode'],
                 'address'            : address_parts['address'],
-                'location'           : None
+                'location'           : None,
+                'council'            : self.council
             })
-
+        self.stations.save()
 
         """
         This data isn't great – the polygons seem to be corrupt in some way.
