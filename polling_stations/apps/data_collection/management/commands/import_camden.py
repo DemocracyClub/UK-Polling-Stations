@@ -20,6 +20,8 @@ class Command(BaseGenericApiImporter):
     """
     Imports the Polling Station data from Camden Council
     """
+    stations_filetype = None
+    districts_filetype = None
     srid             = 4326
     districts_srid   = 4326
     council_id       = 'E09000007'
