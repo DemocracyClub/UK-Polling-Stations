@@ -79,26 +79,31 @@ class DistrictList:
 
 class AddressList:
 
-    addresses = []
+    addresses_raw = []
+    addresses_db = []
+    seen = None
 
     def __init__(self):
-        self.addresses = []
+        self.addresses_raw = []
+        self.addresses_db = []
+        self.seen = set()
 
     def add(self, address):
-        self.addresses.append(address)
+        if address['slug'] not in self.seen:
+            self.addresses_raw.append(address)
+            self.seen.add(address['slug'])
 
     def save(self):
-        # make this more efficient
-        for address in self.addresses:
-            ResidentialAddress.objects.update_or_create(
-                slug=address['slug'],
-                defaults={
-                    'council': address['council'],
-                    'address': address['address'],
-                    'postcode': address['postcode'],
-                    'polling_station_id': address['polling_station_id'],
-                }
+        for address in self.addresses_raw:
+            record = ResidentialAddress(
+                address=address['address'],
+                postcode=address['postcode'],
+                polling_station_id=address['polling_station_id'],
+                council=address['council'],
+                slug=address['slug']
             )
+            self.addresses_db.append(record)
+        ResidentialAddress.objects.bulk_create(self.addresses_db, batch_size=3000)
 
 
 class PostProcessingMixin:
