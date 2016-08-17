@@ -38,43 +38,40 @@ from addressbase.helpers import create_address_records_for_council
 
 class StationList:
 
-    stations = []
+    stations_raw = []
+    stations_db = []
 
     def __init__(self):
-        self.stations = []
+        self.stations_raw = []
+        self.stations_db = []
 
     def add(self, station):
-        self.stations.append(station)
+        self.stations_raw.append(station)
 
     def save(self):
-        # make this more efficient
-        for station in self.stations:
-            PollingStation.objects.update_or_create(
-                council=station['council'],
-                internal_council_id=station['internal_council_id'],
-                defaults=station,
-            )
+        for station in self.stations_raw:
+            record = PollingStation(**station)
+            self.stations_db.append(record)
+        PollingStation.objects.bulk_create(self.stations_db)
 
 
 class DistrictList:
 
-    districts = []
+    districts_raw = []
+    districts_db = []
 
     def __init__(self):
-        self.districts = []
+        self.districts_raw = []
+        self.districts_db = []
 
     def add(self, district):
-        self.districts.append(district)
+        self.districts_raw.append(district)
 
     def save(self):
-        # make this more efficient
-        for district in self.districts:
-            PollingDistrict.objects.update_or_create(
-                council=district['council'],
-                internal_council_id=district.get(
-                    'internal_council_id', 'none'),
-                defaults=district,
-            )
+        for district in self.districts_raw:
+            record = PollingDistrict(**district)
+            self.districts_db.append(record)
+        PollingDistrict.objects.bulk_create(self.districts_db)
 
 
 class AddressList:

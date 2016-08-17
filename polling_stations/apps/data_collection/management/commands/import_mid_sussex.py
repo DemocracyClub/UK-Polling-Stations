@@ -15,6 +15,9 @@ class Command(BaseCsvStationsKmlDistrictsImporter):
     stations_name  = 'R3900_pollingstations.csv'
     elections      = ['parl.2015-05-07']
 
+    def get_station_hash(self, record):
+        return "-".join([record.msercode, record.uprn])
+
     def extract_msercode_from_description(self, description):
         html = etree.HTML(str(description).replace('&', '&amp;'))
         rows = html.xpath("//td")
@@ -31,6 +34,11 @@ class Command(BaseCsvStationsKmlDistrictsImporter):
         }
 
     def station_record_to_dict(self, record):
+
+        # KDA is ambiguous: split district?
+        if record.msercode == 'KDA':
+            return None
+
         location = Point(float(record.xcoord), float(record.ycoord), srid=self.srid)
         address = "\n".join([record.venue, record.street, record.town])
         return {

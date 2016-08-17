@@ -8,7 +8,10 @@ from django.contrib.gis.geos import GEOSGeometry, Point
 from django.db import transaction
 from django.db import connection
 
-from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
+from data_collection.management.commands import (
+    BaseCsvStationsShpDistrictsImporter,
+    StationList
+)
 from pollingstations.models import PollingDistrict
 
 
@@ -24,6 +27,15 @@ class Command(BaseCsvStationsShpDistrictsImporter):
         'ref.2016-06-23'
     ]
     missing_stations = []
+
+    def get_station_hash(self, record):
+        return "-".join([
+            record.address,
+            record.polling_district,
+            record.ward,
+            record.easting,
+            record.northing,
+        ])
 
     def import_polling_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
@@ -102,6 +114,7 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     def post_import(self):
         # iterate self.missing_stations + insert
         # points are missing and we have no postcodes to geocode
+        self.stations = StationList()
         for record in self.missing_stations:
             address_parts = self.split_address(record[2])
             self.add_polling_station({

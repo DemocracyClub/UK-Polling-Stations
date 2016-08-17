@@ -15,6 +15,17 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     stations_name  = 'NT_Polling_Stations_2015.csv'
     elections      = ['parl.2015-05-07']
 
+    def get_station_hash(self, record):
+        return "-".join([
+            record.pd,
+            record.place_desc,
+            record.place_pnam,
+            record.place_add1,
+            record.place_add2,
+            record.place_add3,
+            record.place_pcod,
+        ])
+
     def district_record_to_dict(self, record):
         return {
             'internal_council_id': record[-1],

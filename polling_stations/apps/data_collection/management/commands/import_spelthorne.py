@@ -16,6 +16,14 @@ class Command(BaseCsvStationsKmlDistrictsImporter):
     stations_name  = 'Polling_Stations.csv'
     elections      = ['parl.2015-05-07']
 
+    def get_station_hash(self, record):
+        return "-".join([
+            record.polling_di,
+            record.building,
+            record.road,
+            record.town_villa
+        ])
+
     def station_record_to_dict(self, record):
         try:
             location = Point(int(record.point_x), int(record.point_y), srid=self.srid)
