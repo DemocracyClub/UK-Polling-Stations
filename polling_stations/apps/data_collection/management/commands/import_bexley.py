@@ -25,7 +25,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     def get_station_hash(self, record):
         return "-".join([
             record.poll_stn_number,
-            record.polling_station_name,
+            record.polling_station_name.strip(),
             record.ps_postcode,
         ])
 

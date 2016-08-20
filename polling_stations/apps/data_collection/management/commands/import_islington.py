@@ -22,7 +22,6 @@ class Command(BaseCsvStationsCsvAddressesImporter):
             return "-".join([
                 record.pollingplaceaddress7,
                 record.pollingplaceid,
-                record.pollingdistrictreference,
             ])
 
 

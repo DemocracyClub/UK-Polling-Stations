@@ -25,8 +25,8 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     def get_station_hash(self, record):
         return "-".join([
             record.districtreference,
-            record.bs7666paonstartsuffix,
-            record.bs7666paonstartnumber,
+            record.name,
+            record.postcode,
         ])
 
     def station_record_to_dict(self, record):

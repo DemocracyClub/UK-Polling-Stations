@@ -26,7 +26,6 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         return "-".join([
             record.pollingplaceaddress7,
             record.pollingplaceid,
-            record.pollingdistrictreference,
         ])
 
     def station_record_to_dict(self, record):
@@ -64,7 +63,6 @@ class Command(BaseCsvStationsCsvAddressesImporter):
 
         return {
             'internal_council_id': record.pollingplaceid,
-            'polling_district_id': record.pollingdistrictreference,
             'postcode'           : record.pollingplaceaddress7,
             'address'            : address,
             'location'           : location
