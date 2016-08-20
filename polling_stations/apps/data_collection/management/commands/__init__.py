@@ -124,8 +124,9 @@ class AddressList:
             self.addresses_raw.append(address)
             self.seen.add(address['slug'])
         else:
-            self.logger.log_message(logging.DEBUG,
-                "Duplicate address found:\n%s", variable=address, pretty=True)
+            self.logger.log_message(
+                logging.DEBUG, "Duplicate address found:\n%s",
+                variable=address, pretty=True)
 
     def remove_ambiguous_addresses(self, in_addresses):
         tmp_addresses = in_addresses  # lists are passed by reference in python
@@ -135,10 +136,12 @@ class AddressList:
         # for each address, build a lookup of address -> list of station ids
         for i in range(0, len(tmp_addresses)):
             record = tmp_addresses[i]
-            address_slug = Slugger.slugify("-".join([record['address'], record['postcode']]))
+            address_slug = Slugger.slugify(
+                "-".join([record['address'], record['postcode']]))
             tmp_addresses[i]['address_slug'] = address_slug
             if address_slug in address_lookup:
-                address_lookup[address_slug].append(record['polling_station_id'])
+                address_lookup[address_slug].append(
+                    record['polling_station_id'])
             else:
                 address_lookup[address_slug] = [record['polling_station_id']]
 
@@ -148,8 +151,8 @@ class AddressList:
             if len(address_lookup[address_slug]) == 1:
                 out_addresses.append(record)
             else:
-                self.logger.log_message(logging.INFO,
-                    "Ambiguous addresses discarded: %s: %s",
+                self.logger.log_message(
+                    logging.INFO, "Ambiguous addresses discarded: %s: %s",
                     variable=(address_slug, address_lookup[address_slug]))
 
         return out_addresses
@@ -168,7 +171,8 @@ class AddressList:
             )
             self.addresses_db.append(record)
 
-        ResidentialAddress.objects.bulk_create(self.addresses_db, batch_size=3000)
+        ResidentialAddress.objects.bulk_create(
+            self.addresses_db, batch_size=3000)
 
 
 class PostProcessingMixin:
@@ -351,8 +355,8 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 if station_hash in seen:
                     continue
                 else:
-                    self.logger.log_message(logging.INFO,
-                        "Polling station added to set:\n%s",
+                    self.logger.log_message(
+                        logging.INFO, "Polling station added to set:\n%s",
                         variable=station, pretty=True)
                     seen.add(station_hash)
             except NotImplementedError:
@@ -370,7 +374,8 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             from being imported
             """
             if station_info is None:
-                self.logger.log_message(logging.INFO,
+                self.logger.log_message(
+                    logging.INFO,
                     "station_record_to_dict() returned None with input:\n%s",
                     variable=record, pretty=True)
                 continue
@@ -385,8 +390,8 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             address/point many times with different district ids.
             """
             if isinstance(station_info, list):
-                self.logger.log_message(logging.INFO,
-                    "station_record_to_dict() returned list with input:\n%s",
+                self.logger.log_message(
+                    logging.INFO, "station_record_to_dict() returned list with input:\n%s",
                     variable=record, pretty=True)
                 station_records = station_info
             else:
@@ -466,7 +471,8 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             from being imported
             """
             if district_info is None:
-                self.logger.log_message(logging.INFO,
+                self.logger.log_message(
+                    logging.INFO,
                     "district_record_to_dict() returned None with input:\n%s",
                     variable=district, pretty=True)
                 continue
@@ -486,7 +492,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 geojson = json.dumps(district['geometry'])
             if 'location' not in district_info and\
                     (self.districts_filetype == 'shp' or\
-                    self.districts_filetype == 'json'):
+                     self.districts_filetype == 'json'):
                 poly = self.clean_poly(
                     GEOSGeometry(geojson, srid=self.get_srid('districts')))
                 district_info['area'] = poly
@@ -542,7 +548,8 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         for address in addresses:
             address_info = self.address_record_to_dict(address)
             if address_info is None:
-                self.logger.log_message(logging.INFO,
+                self.logger.log_message(
+                    logging.INFO,
                     "address_record_to_dict() returned None with input:\n%s",
                     variable=address, pretty=True)
                 continue
@@ -566,8 +573,8 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.addresses.add(address_info)
 
 
-class BaseStationsDistrictsImporter(
-        BaseStationsImporter, BaseDistrictsImporter):
+class BaseStationsDistrictsImporter(BaseStationsImporter,
+                                    BaseDistrictsImporter):
 
     def import_data(self):
         self.stations = StationList()
@@ -578,8 +585,8 @@ class BaseStationsDistrictsImporter(
         self.stations.save()
 
 
-class BaseStationsAddressesImporter(
-    BaseStationsImporter, BaseAddressesImporter):
+class BaseStationsAddressesImporter(BaseStationsImporter,
+                                    BaseAddressesImporter):
 
     def import_data(self):
         self.stations = StationList()
@@ -590,41 +597,44 @@ class BaseStationsAddressesImporter(
         self.stations.save()
 
 
-"""
-Stations in CSV format
-Districts in SHP format
-"""
-class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
+class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter,
+                                          CsvMixin):
+    """
+    Stations in CSV format
+    Districts in SHP format
+    """
 
     stations_filetype = 'csv'
     districts_filetype = 'shp'
 
 
-"""
-Stations in SHP format
-Districts in SHP format
-"""
 class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter):
+    """
+    Stations in SHP format
+    Districts in SHP format
+    """
 
     stations_filetype = 'shp'
     districts_filetype = 'shp'
 
 
-"""
-Stations in CSV format
-Districts in JSON format
-"""
-class BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
+class BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter,
+                                           CsvMixin):
+    """
+    Stations in CSV format
+    Districts in JSON format
+    """
 
     stations_filetype = 'csv'
     districts_filetype = 'json'
 
 
-"""
-Stations in CSV format
-Districts in KML format
-"""
-class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
+class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter,
+                                          CsvMixin):
+    """
+    Stations in CSV format
+    Districts in KML format
+    """
 
     districts_srid = 4326
     stations_filetype = 'csv'
@@ -643,21 +653,23 @@ class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter, CsvMixi
         }
 
 
-"""
-Stations in CSV format
-Addresses in CSV format
-"""
-class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixin):
+class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter,
+                                          CsvMixin):
+    """
+    Stations in CSV format
+    Addresses in CSV format
+    """
 
     stations_filetype = 'csv'
     addresses_filetype = 'csv'
 
 
-"""
-Stations in SHP format
-Addresses in CSV format
-"""
-class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixin):
+class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter,
+                                          CsvMixin):
+    """
+    Stations in SHP format
+    Addresses in CSV format
+    """
 
     stations_filetype = 'shp'
     addresses_filetype = 'csv'
@@ -699,11 +711,11 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
             return self.get_data(self.stations_filetype, tmp.name)
 
 
-"""
-Stations in KML format
-Districts in KML format
-"""
 class BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter):
+    """
+    Stations in KML format
+    Districts in KML format
+    """
 
     stations_filetype = 'kml'
     districts_filetype = 'kml'
