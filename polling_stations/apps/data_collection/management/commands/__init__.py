@@ -197,6 +197,16 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     base_folder_path = None
     logger = None
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '-n',
+            '--noclean',
+            help='<Optional> Do not run clean_postcodes_overlapping_districts()',
+            action='store_true',
+            required=False,
+            default=False
+        )
+
     def teardown(self, council):
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
@@ -289,7 +299,8 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
         # For areas with shape data, use AddressBase
         # to clean up overlapping postcode
-        self.clean_postcodes_overlapping_districts()
+        if not kwargs.get('noclean'):
+            self.clean_postcodes_overlapping_districts()
 
         # save and output data quality report
         self.report()
