@@ -72,7 +72,10 @@ class Command(BaseCommand):
                     if not existing_data or kwargs.get('overwrite'):
                         self.summary.append(
                             ('INFO', "Ran import script %s" % tail))
-                        opts = {}
+                        opts = {
+                            'noclean': False,
+                            'verbosity': 1
+                        }
                         cmd.handle(**opts)
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
