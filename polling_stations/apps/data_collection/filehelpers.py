@@ -73,8 +73,8 @@ class JsonHelper:
         self.filepath = filepath
 
     def get_features(self):
-        geometies = json.load(open(self.filepath))
-        return geometies['features']
+        geometries = json.load(open(self.filepath))
+        return geometries['features']
 
 
 """
