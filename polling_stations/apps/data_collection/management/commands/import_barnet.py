@@ -5,7 +5,8 @@ note: this script takes quite a long time to run
 """
 
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
+from data_collection.management.commands import (Slugger,
+    BaseCsvStationsCsvAddressesImporter)
 from data_finder.helpers import geocode, geocode_point_only, PostcodeError
 
 class Command(BaseCsvStationsCsvAddressesImporter):
@@ -30,7 +31,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         """
         This data doesn't have IDs in, so we'll make them :/
         """
-        return self.slugify(" ".join([
+        return Slugger.slugify(" ".join([
             record.polling_place_name,
             record.polling_place_address_1,
         ]))
