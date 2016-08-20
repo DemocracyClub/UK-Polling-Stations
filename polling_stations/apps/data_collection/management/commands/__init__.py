@@ -36,6 +36,36 @@ from data_collection.models import DataQuality
 from addressbase.helpers import create_address_records_for_council
 
 
+class Slugger:
+
+    @staticmethod
+    def slugify(value):
+        """
+        Custom slugify function:
+
+        Convert to ASCII.
+        Convert characters that aren't alphanumerics, underscores,
+        or hyphens to hyphens
+        Convert to lowercase.
+        Strip leading and trailing whitespace.
+
+        Unfortunately it is necessary to create wheel 2.0 in this situation
+        because using django's standard slugify() function means that
+        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
+        This ensures that
+        '1/2 Foo Street' becomes '1-2-foo-street' and
+        '12 Foo Street' becomes '12-foo-street'
+
+        This means we can avoid appending an arbitrary number and minimise
+        disruption to the public URL schema if a council provides updated data
+        """
+        value = force_text(value)
+        value = unicodedata.normalize(
+            'NFKD', value).encode('ascii', 'ignore').decode('ascii')
+        value = re.sub('[^\w\s-]', '-', value).strip().lower()
+        return mark_safe(re.sub('[-\s]+', '-', value))
+
+
 class StationList:
 
     stations_raw = []
@@ -98,17 +128,17 @@ class AddressList:
         # for each address, build a lookup of address -> list of station ids
         for i in range(0, len(tmp_addresses)):
             record = tmp_addresses[i]
-            full_address = " ".join([record['address'], record['postcode']])
-            tmp_addresses[i]['full_address'] = full_address
-            if full_address in address_lookup:
-                address_lookup[full_address].append(record['polling_station_id'])
+            address_slug = Slugger.slugify("-".join([record['address'], record['postcode']]))
+            tmp_addresses[i]['address_slug'] = address_slug
+            if address_slug in address_lookup:
+                address_lookup[address_slug].append(record['polling_station_id'])
             else:
-                address_lookup[full_address] = [record['polling_station_id']]
+                address_lookup[address_slug] = [record['polling_station_id']]
 
         # discard any addresses which map to >1 polling station
         for record in tmp_addresses:
-            full_address = record['full_address']
-            if len(address_lookup[full_address]) == 1:
+            address_slug = record['address_slug']
+            if len(address_lookup[address_slug]) == 1:
                 out_addresses.append(record)
 
         return out_addresses
@@ -447,32 +477,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         addresses_file = os.path.join(self.base_folder_path, self.addresses_name)
         return self.get_data(self.addresses_filetype, addresses_file)
 
-    def slugify(self, value):
-        """
-        Custom slugify function:
-
-        Convert to ASCII.
-        Convert characters that aren't alphanumerics, underscores,
-        or hyphens to hyphens
-        Convert to lowercase.
-        Strip leading and trailing whitespace.
-
-        Unfortunately it is necessary to create wheel 2.0 in this situation
-        because using django's standard slugify() function means that
-        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
-        This ensures that
-        '1/2 Foo Street' becomes '1-2-foo-street' and
-        '12 Foo Street' becomes '12-foo-street'
-
-        This means we can avoid appending an arbitrary number and minimise
-        disruption to the public URL schema if a council provides updated data
-        """
-        value = force_text(value)
-        value = unicodedata.normalize(
-            'NFKD', value).encode('ascii', 'ignore').decode('ascii')
-        value = re.sub('[^\w\s-]', '-', value).strip().lower()
-        return mark_safe(re.sub('[-\s]+', '-', value))
-
     def get_slug(self, address_info):
         # if we have a uprn, use that as the slug
         if 'uprn' in address_info:
@@ -480,7 +484,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
                 return address_info['uprn']
 
         # otherwise build a slug from the other data we have
-        return self.slugify(
+        return Slugger.slugify(
             "%s-%s-%s-%s" % (
                 self.council.pk,
                 address_info['polling_station_id'],
