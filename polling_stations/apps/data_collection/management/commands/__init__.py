@@ -4,6 +4,7 @@ Defines the base importer classes to implement
 import abc
 import json
 import glob
+import logging
 import os
 import re
 import tempfile
@@ -27,6 +28,7 @@ from data_collection.data_quality_report import (
     ResidentialAddressReport
 )
 from data_collection.filehelpers import FileHelperFactory
+from data_collection.loghelper import LogHelper
 from pollingstations.models import (
     PollingStation,
     PollingDistrict,
@@ -109,16 +111,21 @@ class AddressList:
     addresses_raw = []
     addresses_db = []
     seen = None
+    logger = None
 
-    def __init__(self):
+    def __init__(self, logger):
         self.addresses_raw = []
         self.addresses_db = []
         self.seen = set()
+        self.logger = logger
 
     def add(self, address):
         if address['slug'] not in self.seen:
             self.addresses_raw.append(address)
             self.seen.add(address['slug'])
+        else:
+            self.logger.log_message(logging.DEBUG,
+                "Duplicate address found:\n%s", variable=address, pretty=True)
 
     def remove_ambiguous_addresses(self, in_addresses):
         tmp_addresses = in_addresses  # lists are passed by reference in python
@@ -140,6 +147,10 @@ class AddressList:
             address_slug = record['address_slug']
             if len(address_lookup[address_slug]) == 1:
                 out_addresses.append(record)
+            else:
+                self.logger.log_message(logging.INFO,
+                    "Ambiguous addresses discarded: %s: %s",
+                    variable=(address_slug, address_lookup[address_slug]))
 
         return out_addresses
 
@@ -184,6 +195,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     srid = 27700
     council_id = None
     base_folder_path = None
+    logger = None
 
     def teardown(self, council):
         PollingStation.objects.filter(council=council).delete()
@@ -250,6 +262,8 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         return os.path.abspath(path)
 
     def handle(self, *args, **kwargs):
+        self.logger = LogHelper(kwargs.get('verbosity'))
+
         if self.council_id is None:
             self.council_id = args[0]
 
@@ -326,14 +340,18 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 if station_hash in seen:
                     continue
                 else:
+                    self.logger.log_message(logging.INFO,
+                        "Polling station added to set:\n%s",
+                        variable=station, pretty=True)
                     seen.add(station_hash)
             except NotImplementedError:
                 pass
 
             if self.stations_filetype == 'shp':
-                station_info = self.station_record_to_dict(station.record)
+                record = station.record
             else:
-                station_info = self.station_record_to_dict(station)
+                record = station
+            station_info = self.station_record_to_dict(record)
 
             """
             station_record_to_dict() may optionally return None
@@ -341,6 +359,9 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             from being imported
             """
             if station_info is None:
+                self.logger.log_message(logging.INFO,
+                    "station_record_to_dict() returned None with input:\n%s",
+                    variable=record, pretty=True)
                 continue
 
             """
@@ -353,6 +374,9 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             address/point many times with different district ids.
             """
             if isinstance(station_info, list):
+                self.logger.log_message(logging.INFO,
+                    "station_record_to_dict() returned list with input:\n%s",
+                    variable=record, pretty=True)
                 station_records = station_info
             else:
                 # If station_info is a dict, create a singleton list
@@ -431,6 +455,9 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             from being imported
             """
             if district_info is None:
+                self.logger.log_message(logging.INFO,
+                    "district_record_to_dict() returned None with input:\n%s",
+                    variable=district, pretty=True)
                 continue
 
             if 'council' not in district_info:
@@ -481,9 +508,11 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         # if we have a uprn, use that as the slug
         if 'uprn' in address_info:
             if address_info['uprn']:
+                self.logger.log_message(logging.DEBUG, "Using UPRN as slug")
                 return address_info['uprn']
 
         # otherwise build a slug from the other data we have
+        self.logger.log_message(logging.DEBUG, "Generating custom slug")
         return Slugger.slugify(
             "%s-%s-%s-%s" % (
                 self.council.pk,
@@ -502,6 +531,9 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         for address in addresses:
             address_info = self.address_record_to_dict(address)
             if address_info is None:
+                self.logger.log_message(logging.INFO,
+                    "address_record_to_dict() returned None with input:\n%s",
+                    variable=address, pretty=True)
                 continue
             if 'council' not in address_info:
                 address_info['council'] = self.council
@@ -540,7 +572,7 @@ class BaseStationsAddressesImporter(
 
     def import_data(self):
         self.stations = StationList()
-        self.addresses = AddressList()
+        self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
         self.import_polling_stations()
         self.addresses.save()
