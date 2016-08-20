@@ -90,7 +90,33 @@ class AddressList:
             self.addresses_raw.append(address)
             self.seen.add(address['slug'])
 
+    def remove_ambiguous_addresses(self, in_addresses):
+        tmp_addresses = in_addresses  # lists are passed by reference in python
+        address_lookup = {}
+        out_addresses = []
+
+        # for each address, build a lookup of address -> list of station ids
+        for i in range(0, len(tmp_addresses)):
+            record = tmp_addresses[i]
+            full_address = " ".join([record['address'], record['postcode']])
+            tmp_addresses[i]['full_address'] = full_address
+            if full_address in address_lookup:
+                address_lookup[full_address].append(record['polling_station_id'])
+            else:
+                address_lookup[full_address] = [record['polling_station_id']]
+
+        # discard any addresses which map to >1 polling station
+        for record in tmp_addresses:
+            full_address = record['full_address']
+            if len(address_lookup[full_address]) == 1:
+                out_addresses.append(record)
+
+        return out_addresses
+
     def save(self):
+
+        self.addresses_raw = self.remove_ambiguous_addresses(self.addresses_raw)
+
         for address in self.addresses_raw:
             record = ResidentialAddress(
                 address=address['address'],
@@ -100,6 +126,7 @@ class AddressList:
                 slug=address['slug']
             )
             self.addresses_db.append(record)
+
         ResidentialAddress.objects.bulk_create(self.addresses_db, batch_size=3000)
 
 
@@ -109,22 +136,6 @@ class PostProcessingMixin:
         data = create_address_records_for_council(self.council)
         self.postcodes_contained_by_district = data['no_attention_needed']
         self.postcodes_with_addresses_generated = data['addresses_created']
-
-    @transaction.atomic
-    def clean_ambiguous_addresses(self):
-        table_name = ResidentialAddress()._meta.db_table
-        cursor = connection.cursor()
-        cursor.execute("""
-        DELETE FROM {0} WHERE CONCAT(address, postcode) IN (
-         SELECT concat_address FROM (
-             SELECT CONCAT(address, postcode) AS concat_address, COUNT(*) AS c
-             FROM {0}
-             WHERE council_id=%s
-             GROUP BY CONCAT(address, postcode)
-            ) as dupes
-            WHERE dupes.c > 1
-        )
-        """.format(table_name), [self.council_id])
 
 
 class CsvMixin:
@@ -231,8 +242,6 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             self.post_import()
         except NotImplementedError:
             pass
-
-        self.clean_ambiguous_addresses()
 
         # For areas with shape data, use AddressBase
         # to clean up overlapping postcode
