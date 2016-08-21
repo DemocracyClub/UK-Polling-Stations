@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from councils.models import Council
-from data_collection.tests import (
+from data_collection.tests.stubs import (
     stub_addressimport,
     stub_duplicatedistrict,
     stub_duplicatestation,

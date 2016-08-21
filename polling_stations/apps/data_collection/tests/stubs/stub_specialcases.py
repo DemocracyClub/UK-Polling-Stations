@@ -14,7 +14,7 @@ class Command(BaseCsvStationsJsonDistrictsImporter):
     council_id       = 'X01000000'
     districts_name   = 'test.geojson'
     stations_name    = 'test.csv'
-    base_folder_path = os.path.join(os.path.dirname(__file__), 'fixtures/special_cases')
+    base_folder_path = os.path.join(os.path.dirname(__file__), '../fixtures/special_cases')
 
     def district_record_to_dict(self, record):
 

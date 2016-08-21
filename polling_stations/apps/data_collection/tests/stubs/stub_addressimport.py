@@ -11,7 +11,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     council_id       = 'X01000000'
     addresses_name   = 'addresses.csv'
     stations_name    = 'stations.csv'
-    base_folder_path = os.path.join(os.path.dirname(__file__), 'fixtures/address_importer')
+    base_folder_path = os.path.join(os.path.dirname(__file__), '../fixtures/address_importer')
 
     def address_record_to_dict(self, record):
         return {
