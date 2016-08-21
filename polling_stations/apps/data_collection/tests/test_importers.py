@@ -109,16 +109,20 @@ class ImporterTest(TestCase):
         cmd = stub_specialcases.Command()
         cmd.handle(**self.opts)
 
-        districts = PollingDistrict.objects.filter(council_id='X01000000')
+        districts = PollingDistrict.objects\
+                                   .filter(council_id='X01000000')\
+                                   .order_by('internal_council_id')
         self.assertEqual(2, len(districts))
-        self.assertEqual('AB', districts[0].internal_council_id)
-        self.assertEqual('AA', districts[1].internal_council_id)
+        self.assertEqual('AA', districts[0].internal_council_id)
+        self.assertEqual('AB', districts[1].internal_council_id)
 
-        stations = PollingStation.objects.filter(council_id='X01000000')
+        stations = PollingStation.objects\
+                                 .filter(council_id='X01000000')\
+                                 .order_by('internal_council_id')
         self.assertEqual(2, len(stations))
-        self.assertEqual('AB', stations[0].internal_council_id)
+        self.assertEqual('AA', stations[0].internal_council_id)
         self.assertEqual('1 Foo Street', stations[0].address)
-        self.assertEqual('AA', stations[1].internal_council_id)
+        self.assertEqual('AB', stations[1].internal_council_id)
         self.assertEqual('1 Foo Street', stations[1].address)
 
     def test_duplicate_stations(self):
