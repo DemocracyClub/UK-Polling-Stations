@@ -276,7 +276,8 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         return os.path.abspath(path)
 
     def handle(self, *args, **kwargs):
-        self.logger = LogHelper(kwargs.get('verbosity'))
+        verbosity = kwargs.get('verbosity')
+        self.logger = LogHelper(verbosity)
 
         if self.council_id is None:
             self.council_id = args[0]
@@ -307,7 +308,8 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             self.clean_postcodes_overlapping_districts()
 
         # save and output data quality report
-        self.report()
+        if verbosity > 0:
+            self.report()
 
 
 class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):

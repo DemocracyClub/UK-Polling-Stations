@@ -23,7 +23,7 @@ class ImporterTest(TestCase):
 
     opts = {
         'noclean': False,
-        'verbosity': 1
+        'verbosity': 0
     }
 
     # create a dummy council which we're going to import data for
