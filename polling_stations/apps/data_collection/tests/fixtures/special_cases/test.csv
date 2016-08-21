@@ -1,0 +1,3 @@
+internal_council_id, address, postcode, lng, lat, districts
+1,1 Foo Street,XX1 1XX,-2.1588134765625,52.819363001597885,AA/AB
+2,1 Bar Street,YY1 1YY,0.76904296875,53.143475584594526,invalid
