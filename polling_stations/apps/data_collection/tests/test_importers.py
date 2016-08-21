@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from councils.models import Council
 from data_collection.tests import (
+    stub_addressimport,
     stub_duplicatedistrict,
     stub_duplicatestation,
     stub_jsonimport,
@@ -13,7 +14,8 @@ from data_collection.tests import (
     stub_kmlimport_different_srids,
     stub_specialcases,
 )
-from pollingstations.models import PollingDistrict, PollingStation
+from pollingstations.models import (
+    PollingDistrict, PollingStation, ResidentialAddress)
 
 
 # High-level functional tests for import scripts
@@ -148,3 +150,17 @@ class ImporterTest(TestCase):
             exception_thrown = True
 
         self.assertTrue(exception_thrown)
+
+    def test_address_import(self):
+        self.create_dummy_council()
+        cmd = stub_addressimport.Command()
+        cmd.handle(**self.opts)
+
+        addresses = ResidentialAddress.objects\
+                                      .filter(council_id='X01000000')\
+                                      .order_by('address')
+
+        self.assertEqual(3, len(addresses))
+        self.assertEqual('36 Abbots Park, London', addresses[0].address)
+        self.assertEqual('3 Factory Rd, Poole', addresses[1].address)
+        self.assertEqual('80 Pine Vale Cres, Bournemouth', addresses[2].address)
