@@ -15,6 +15,11 @@ from pollingstations.models import PollingDistrict, PollingStation
 # High-level functional tests for import scripts
 class ImporterTest(TestCase):
 
+    opts = {
+        'noclean': False,
+        'verbosity': 1
+    }
+
     # create a dummy council which we're going to import data for
     def create_dummy_council(self):
         Council.objects.update_or_create(
@@ -57,8 +62,7 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_jsonimport.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
 
@@ -67,8 +71,7 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_jsonimport_different_srids.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
 
@@ -77,8 +80,7 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_kmlimport.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
 
@@ -87,7 +89,6 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_kmlimport_different_srids.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
