@@ -4,13 +4,12 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.views.generic.base import RedirectView
 
 from polling_stations.api import router
 from data_finder.views import (
     HomeView,
     PrivacyView,
-    CouncilView,
     PostcodeView,
     CoverageView,
     AddressView,
@@ -25,7 +24,6 @@ admin.autodiscover()
 
 core_patterns = patterns(
     '',
-    url(r'^council/(?P<pk>.+)/$', CouncilView.as_view(), name='council'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
     url(r'^address/(?P<address_slug>.+)/$',
@@ -49,7 +47,11 @@ extra_patterns = patterns(
     url(r'^league_table', include('data_collection.urls')),
     url(r'^coverage$', CoverageView.as_view(), name='coverage'),
 
-    url(r'^about$', TemplateView.as_view(template_name='about.html'), name='about'),
+    url(r'^about$',
+        RedirectView.as_view(
+            url='https://democracyclub.org.uk/projects/polling-stations/',
+            permanent=True
+        ), name='about'),
 )
 
 PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
