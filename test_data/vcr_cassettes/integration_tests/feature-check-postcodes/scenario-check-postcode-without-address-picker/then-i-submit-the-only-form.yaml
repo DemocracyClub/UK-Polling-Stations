@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
     method: GET
-    uri: http://mapit.mysociety.org//postcode/NP205GN
+    uri: http://mapit.democracyclub.org.uk//postcode/NP205GN
   response:
     body:
       string: !!binary |

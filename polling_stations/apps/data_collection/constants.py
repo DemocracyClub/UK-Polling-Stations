@@ -2,7 +2,7 @@ import os
 
 from django.conf import settings
 
-MAPIT_URL = os.environ.get('MAPIT_URL', "http://mapit.mysociety.org/")
+MAPIT_URL = os.environ.get('MAPIT_URL', "http://mapit.democracyclub.org.uk/")
 MAPIT_UA = os.environ.get('MAPIT_UA', None)
 
 GOV_UK_LA_URL = "https://www.registertovote.service.gov.uk/register-to-vote/local-authority/"
