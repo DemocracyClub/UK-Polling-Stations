@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ summary.council.name }}</h1>
-<pre>
-{{ summary.report }}
-</pre>
+<div class="columns large-centered columns large-9 card">
+    <h1>{{ summary.council.name }}</h1>
+    <pre>{{ summary.report }}</pre>
+</div>
 {% endblock content %}

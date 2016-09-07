@@ -1,51 +1,53 @@
 {% extends "base.html" %}
 
 {% block content %}
-<table class="table table-striped">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Council</th>
-        <th>Example</th>
-        <th>Polling Stations</th>
-        <th>Polling Districts</th>
-        <th>Addresses</th>
-        {% if request.user.is_staff %}
-        <th>Edit</th>
-        {% endif %}
-      </tr>
-    </thead>
-    <tbody>
-    {% for council in object_list %}
+<div class="columns large-centered columns large-9 card">
+    <table class="table table-striped">
+        <thead>
         <tr>
-            <td>{{ council.council_id }}</td>
-            <td>{% if council.has_report %}
-                <a href="{% url "data_quality" council_id=council.council_id %}">{{ council.council.name }}</a>
-                {% else %}
-                {{ council.council.name }}
-                {% endif %}
-            </td>
-            <td>
-            {% if council.council.postcode %}
-            <a href="{% url "postcode_view" postcode=council.council.postcode %}">{{ council.council.postcode }}</a>
-            {% endif %}
-            </td>
-            <td>
-              {{ council.num_stations }}
-            </td>
-            <td>
-              {{ council.num_districts }}
-            </td>
-            <td>
-              {{ council.num_addresses }}
-            </td>
+            <th>ID</th>
+            <th>Council</th>
+            <th>Example</th>
+            <th>Polling Stations</th>
+            <th>Polling Districts</th>
+            <th>Addresses</th>
             {% if request.user.is_staff %}
-            <td>
-                <a href="{% url "admin:councils_council_change" council.council.pk %}">Edit</a>
-            </td>
+            <th>Edit</th>
             {% endif %}
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for council in object_list %}
+            <tr>
+                <td>{{ council.council_id }}</td>
+                <td>{% if council.has_report %}
+                    <a href="{% url "data_quality" council_id=council.council_id %}">{{ council.council.name }}</a>
+                    {% else %}
+                    {{ council.council.name }}
+                    {% endif %}
+                </td>
+                <td>
+                {% if council.council.postcode %}
+                <a href="{% url "postcode_view" postcode=council.council.postcode %}">{{ council.council.postcode }}</a>
+                {% endif %}
+                </td>
+                <td>
+                {{ council.num_stations }}
+                </td>
+                <td>
+                {{ council.num_districts }}
+                </td>
+                <td>
+                {{ council.num_addresses }}
+                </td>
+                {% if request.user.is_staff %}
+                <td>
+                    <a href="{% url "admin:councils_council_change" council.council.pk %}">Edit</a>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock content %}
