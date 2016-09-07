@@ -24,7 +24,6 @@
 
 
 {% block site_footer %}
-</section>
 <footer class="footer">
   <div class="row">
     <div class="small-12 medium-7 columns">
@@ -37,12 +36,29 @@
       </p>
       <p>Democracy Club is a UK based Community Interest Company that builds
         the digital infrastructure needed for a 21st century democracy</p>
-      <ul class="inline-list social">
-        <a href="https://www.facebook.com/democracyclub/"><i class="fi-social-facebook"></i></a>
-        <a href="https://twitter.com/democlub"><i class="fi-social-twitter"></i></a>
-        <a href="https://github.com/DemocracyClub/WhoCanIVoteFor"><i class="fi-social-github"></i></a>
-      </ul>
+      <p class="inline-list social">
+        <a href="https://www.facebook.com/democracyclub/">
+            <i class="fa fa-facebook-square" aria-hidden="true" style="color: white"></i>
+        </a>
+        <a href="https://twitter.com/democlub">
+            <i class="fa fa-twitter-square" aria-hidden="true" style="color: white"></i>
+        </a>
+        <a href="https://github.com/DemocracyClub/UK-Polling-Stations">
+            <i class="fa fa-github" aria-hidden="true" style="color: white"></i>
+        </a>
+      </p>
     </div>
   </div>
 </footer>
 {% endblock site_footer %}
+
+{% block extra_javascript %}
+<script type="text/javascript">
+    fallback.load({
+        'css$font-awesome': [
+            '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css',
+            '{% static 'css/font-awesome.min.css' %}'
+        ]}
+    );
+</script>
+{% endblock extra_javascript %}
