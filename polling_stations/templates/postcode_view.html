@@ -133,7 +133,7 @@
 
     {% endif %}
     </div>
-    {% if not we_know_where_you_should_vote and not custom %}
+    {% if not we_know_where_you_should_vote and not custom and not error %}
     {% include "campaign_signup.html" %}
     {% endif %}
   </div>
