@@ -70,9 +70,6 @@ class Slugger:
 
 class StationList:
 
-    stations_raw = []
-    stations_db = []
-
     def __init__(self):
         self.stations_raw = []
         self.stations_db = []
@@ -89,9 +86,6 @@ class StationList:
 
 class DistrictList:
 
-    districts_raw = []
-    districts_db = []
-
     def __init__(self):
         self.districts_raw = []
         self.districts_db = []
@@ -107,11 +101,6 @@ class DistrictList:
 
 
 class AddressList:
-
-    addresses_raw = []
-    addresses_db = []
-    seen = None
-    logger = None
 
     def __init__(self, logger):
         self.addresses_raw = []
