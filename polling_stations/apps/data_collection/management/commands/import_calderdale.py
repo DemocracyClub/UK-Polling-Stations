@@ -8,10 +8,8 @@ from django.contrib.gis.geos import GEOSGeometry, Point
 from django.db import transaction
 from django.db import connection
 
-from data_collection.management.commands import (
-    BaseCsvStationsShpDistrictsImporter,
-    StationList
-)
+from data_collection.custom_lists import StationList
+from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 from pollingstations.models import PollingDistrict
 
 

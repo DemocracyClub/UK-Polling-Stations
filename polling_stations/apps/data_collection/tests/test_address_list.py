@@ -1,4 +1,4 @@
-from data_collection.management.commands import AddressList
+from data_collection.custom_lists import AddressList
 from django.test import TestCase
 
 
