@@ -8,7 +8,6 @@ import logging
 import os
 import re
 import tempfile
-import unicodedata
 import urllib.request
 
 from argparse import ArgumentTypeError
@@ -18,8 +17,6 @@ from django.contrib.gis import geos
 from django.contrib.gis.geos import Point, GEOSGeometry
 from django.db import connection
 from django.db import transaction
-from django.utils.encoding import force_text
-from django.utils.safestring import mark_safe
 
 from councils.models import Council
 from data_collection.data_quality_report import (
@@ -30,6 +27,7 @@ from data_collection.data_quality_report import (
 )
 from data_collection.filehelpers import FileHelperFactory
 from data_collection.loghelper import LogHelper
+from data_collection.slugger import Slugger
 from pollingstations.models import (
     PollingStation,
     PollingDistrict,
@@ -37,36 +35,6 @@ from pollingstations.models import (
 )
 from data_collection.models import DataQuality
 from addressbase.helpers import create_address_records_for_council
-
-
-class Slugger:
-
-    @staticmethod
-    def slugify(value):
-        """
-        Custom slugify function:
-
-        Convert to ASCII.
-        Convert characters that aren't alphanumerics, underscores,
-        or hyphens to hyphens
-        Convert to lowercase.
-        Strip leading and trailing whitespace.
-
-        Unfortunately it is necessary to create wheel 2.0 in this situation
-        because using django's standard slugify() function means that
-        '1/2 Foo Street' and '12 Foo Street' both slugify to '12-foo-street'.
-        This ensures that
-        '1/2 Foo Street' becomes '1-2-foo-street' and
-        '12 Foo Street' becomes '12-foo-street'
-
-        This means we can avoid appending an arbitrary number and minimise
-        disruption to the public URL schema if a council provides updated data
-        """
-        value = force_text(value)
-        value = unicodedata.normalize(
-            'NFKD', value).encode('ascii', 'ignore').decode('ascii')
-        value = re.sub('[^\w\s-]', '-', value).strip().lower()
-        return mark_safe(re.sub('[-\s]+', '-', value))
 
 
 class CustomList:

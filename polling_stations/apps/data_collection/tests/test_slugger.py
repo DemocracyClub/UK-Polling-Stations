@@ -1,5 +1,5 @@
 from django.test import TestCase
-from data_collection.management.commands import Slugger
+from data_collection.slugger import Slugger
 
 
 class SluggerTest(TestCase):
