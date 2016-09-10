@@ -36,7 +36,7 @@ from .helpers import (
 
 
 class LogLookUpMixin(object):
-    def log_postcode(self, postcode, context):
+    def log_postcode(self, postcode, context, view_used):
 
         if 'language' in context:
             language = context['language']
@@ -55,6 +55,7 @@ class LogLookUpMixin(object):
             'council': context['council'],
             'brand': brand,
             'language': language,
+            'view_used': view_used,
         }
         kwargs.update(self.request.session['utm_data'])
         LoggedPostcode.objects.create(**kwargs)
@@ -153,7 +154,7 @@ class BasePollingStationView(
                 context['custom'] = CustomFinder.objects.get_custom_finder(
                     l['gss_codes'], self.postcode)
 
-        self.log_postcode(self.postcode, context)
+        self.log_postcode(self.postcode, context, type(self).__name__)
 
         return context
 
