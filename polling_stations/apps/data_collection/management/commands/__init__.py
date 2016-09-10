@@ -11,6 +11,7 @@ import tempfile
 import unicodedata
 import urllib.request
 
+from argparse import ArgumentTypeError
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.gis import geos
@@ -141,7 +142,7 @@ class AddressList(CustomList):
 
         return out_addresses
 
-    def save(self):
+    def save(self, batch_size):
 
         self.elements = self.remove_ambiguous_addresses(self.elements)
         addresses_db = []
@@ -157,7 +158,7 @@ class AddressList(CustomList):
             addresses_db.append(record)
 
         ResidentialAddress.objects.bulk_create(
-            addresses_db, batch_size=3000)
+            addresses_db, batch_size=batch_size)
 
 
 class PostProcessingMixin:
@@ -185,6 +186,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     council_id = None
     base_folder_path = None
     logger = None
+    batch_size = None
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -194,6 +196,21 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             action='store_true',
             required=False,
             default=False
+        )
+
+        def check_positive(value):
+            ivalue = int(value)
+            if ivalue < 1:
+                raise ArgumentTypeError("%s is an invalid positive int value" % value)
+            return ivalue
+
+        parser.add_argument(
+            '-b',
+            '--batch_size',
+            help='<Optional> Number of records to insert in each batch when importing addresses',
+            type=check_positive,
+            required=False,
+            default=3000
         )
 
     def teardown(self, council):
@@ -263,6 +280,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     def handle(self, *args, **kwargs):
         verbosity = kwargs.get('verbosity')
         self.logger = LogHelper(verbosity)
+        self.batch_size = kwargs.get('batch_size')
 
         if self.council_id is None:
             self.council_id = args[0]
@@ -580,7 +598,7 @@ class BaseStationsAddressesImporter(BaseStationsImporter,
         self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
         self.import_polling_stations()
-        self.addresses.save()
+        self.addresses.save(self.batch_size)
         self.stations.save()
 
 
