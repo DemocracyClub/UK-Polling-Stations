@@ -23,9 +23,9 @@ class AddressListTest(TestCase):
 
         address_list = AddressList(MockLogger())
         for el in in_list:
-            address_list.add(el)
+            address_list.append(el)
 
-        self.assertEqual(expected, address_list.addresses_raw)
+        self.assertEqual(expected, address_list.elements)
 
     def test_remove_ambiguous_addresses_exactmatch(self):
         in_list = [

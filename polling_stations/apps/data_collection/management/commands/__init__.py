@@ -68,49 +68,44 @@ class Slugger:
         return mark_safe(re.sub('[-\s]+', '-', value))
 
 
-class StationList:
-
+class CustomList:
     def __init__(self):
-        self.stations_raw = []
-        self.stations_db = []
+        self.elements = []
 
-    def add(self, station):
-        self.stations_raw.append(station)
+    def append(self, element):
+        self.elements.append(element)
+
+
+class StationList(CustomList):
 
     def save(self):
-        for station in self.stations_raw:
+        stations_db = []
+        for station in self.elements:
             record = PollingStation(**station)
-            self.stations_db.append(record)
-        PollingStation.objects.bulk_create(self.stations_db)
+            stations_db.append(record)
+        PollingStation.objects.bulk_create(stations_db)
 
 
-class DistrictList:
-
-    def __init__(self):
-        self.districts_raw = []
-        self.districts_db = []
-
-    def add(self, district):
-        self.districts_raw.append(district)
+class DistrictList(CustomList):
 
     def save(self):
-        for district in self.districts_raw:
+        districts_db = []
+        for district in self.elements:
             record = PollingDistrict(**district)
-            self.districts_db.append(record)
-        PollingDistrict.objects.bulk_create(self.districts_db)
+            districts_db.append(record)
+        PollingDistrict.objects.bulk_create(districts_db)
 
 
-class AddressList:
+class AddressList(CustomList):
 
     def __init__(self, logger):
-        self.addresses_raw = []
-        self.addresses_db = []
+        super().__init__()
         self.seen = set()
         self.logger = logger
 
-    def add(self, address):
+    def append(self, address):
         if address['slug'] not in self.seen:
-            self.addresses_raw.append(address)
+            self.elements.append(address)
             self.seen.add(address['slug'])
         else:
             self.logger.log_message(
@@ -148,9 +143,10 @@ class AddressList:
 
     def save(self):
 
-        self.addresses_raw = self.remove_ambiguous_addresses(self.addresses_raw)
+        self.elements = self.remove_ambiguous_addresses(self.elements)
+        addresses_db = []
 
-        for address in self.addresses_raw:
+        for address in self.elements:
             record = ResidentialAddress(
                 address=address['address'],
                 postcode=address['postcode'],
@@ -158,10 +154,10 @@ class AddressList:
                 council=address['council'],
                 slug=address['slug']
             )
-            self.addresses_db.append(record)
+            addresses_db.append(record)
 
         ResidentialAddress.objects.bulk_create(
-            self.addresses_db, batch_size=3000)
+            addresses_db, batch_size=3000)
 
 
 class PostProcessingMixin:
@@ -407,7 +403,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 self.add_polling_station(station_record)
 
     def add_polling_station(self, station_info):
-        self.stations.add(station_info)
+        self.stations.append(station_info)
 
 
 class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
@@ -491,7 +487,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             self.add_polling_district(district_info)
 
     def add_polling_district(self, district_info):
-        self.districts.add(district_info)
+        self.districts.append(district_info)
 
 
 class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
@@ -561,7 +557,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         slug = self.get_slug(address_info)
         address_info['slug'] = slug
 
-        self.addresses.add(address_info)
+        self.addresses.append(address_info)
 
 
 class BaseStationsDistrictsImporter(BaseStationsImporter,
