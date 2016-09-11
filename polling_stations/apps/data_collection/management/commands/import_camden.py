@@ -12,9 +12,7 @@ from django.contrib.gis.geos import (
     Polygon,
     LinearRing
 )
-from data_collection.management.commands import (
-    BaseGenericApiImporter
-)
+from data_collection.base_importers import BaseGenericApiImporter
 
 class Command(BaseGenericApiImporter):
     """

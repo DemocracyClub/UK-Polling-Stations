@@ -5,8 +5,8 @@ note: this script takes quite a long time to run
 """
 
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import (Slugger,
-    BaseCsvStationsCsvAddressesImporter)
+from data_collection.slugger import Slugger
+from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode, geocode_point_only, PostcodeError
 
 class Command(BaseCsvStationsCsvAddressesImporter):
