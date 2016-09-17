@@ -15,9 +15,6 @@ class Command(BaseCsvStationsKmlDistrictsImporter):
     stations_name  = 'R3900_pollingstations.csv'
     elections      = ['parl.2015-05-07']
 
-    def get_station_hash(self, record):
-        return "-".join([record.msercode, record.uprn])
-
     def extract_msercode_from_description(self, description):
         html = etree.HTML(str(description).replace('&', '&amp;'))
         rows = html.xpath("//td")

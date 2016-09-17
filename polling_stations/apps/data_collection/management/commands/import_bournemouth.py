@@ -13,17 +13,10 @@ class Command(BaseCsvStationsJsonDistrictsImporter):
     districts_name = 'Bournemouth_Polling_Districts.geojson'
     stations_name  = 'Polling Stations.csv'
     elections      = ['parl.2015-05-07']
-    seen_districts = set()
 
     def district_record_to_dict(self, record):
 
         properties = record['properties']
-
-        # This file contains duplicates: discard them
-        if properties['Polling_Districts'] in self.seen_districts:
-            return None
-
-        self.seen_districts.add(properties['Polling_Districts'])
 
         if properties['Polling_Districts'] is None:
             return None
