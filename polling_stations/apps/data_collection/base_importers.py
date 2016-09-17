@@ -19,10 +19,10 @@ from django.db import connection
 from django.db import transaction
 
 from councils.models import Council
-from data_collection.custom_lists import (
-    AddressList,
-    DistrictList,
-    StationList
+from data_collection.data_types import (
+    AddressSet,
+    DistrictSet,
+    StationSet
 )
 from data_collection.data_quality_report import (
     DataQualityReportBuilder,
@@ -302,7 +302,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 self.add_polling_station(station_record)
 
     def add_polling_station(self, station_info):
-        self.stations.append(station_info)
+        self.stations.add(station_info)
 
 
 class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
@@ -386,7 +386,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             self.add_polling_district(district_info)
 
     def add_polling_district(self, district_info):
-        self.districts.append(district_info)
+        self.districts.add(district_info)
 
 
 class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
@@ -456,15 +456,15 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         slug = self.get_slug(address_info)
         address_info['slug'] = slug
 
-        self.addresses.append(address_info)
+        self.addresses.add(address_info)
 
 
 class BaseStationsDistrictsImporter(BaseStationsImporter,
                                     BaseDistrictsImporter):
 
     def import_data(self):
-        self.stations = StationList()
-        self.districts = DistrictList()
+        self.stations = StationSet()
+        self.districts = DistrictSet()
         self.import_polling_districts()
         self.import_polling_stations()
         self.districts.save()
@@ -475,8 +475,8 @@ class BaseStationsAddressesImporter(BaseStationsImporter,
                                     BaseAddressesImporter):
 
     def import_data(self):
-        self.stations = StationList()
-        self.addresses = AddressList(self.logger)
+        self.stations = StationSet()
+        self.addresses = AddressSet(self.logger)
         self.import_residential_addresses()
         self.import_polling_stations()
         self.addresses.save(self.batch_size)
@@ -574,8 +574,8 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     local_files = False
 
     def import_data(self):
-        self.districts = DistrictList()
-        self.stations = StationList()
+        self.districts = DistrictSet()
+        self.stations = StationSet()
 
         # deal with 'stations only' or 'districts only' data
         if self.districts_url is not None:

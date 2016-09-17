@@ -39,12 +39,12 @@ Address = namedtuple('Address', [
     'slug'])
 
 
-class CustomList(metaclass=abc.ABCMeta):
+class CustomSet(metaclass=abc.ABCMeta):
 
     def __init__(self):
         self.elements = set()
 
-    def append(self, element):
+    def add(self, element):
         self.elements.add(self.build_namedtuple(element))
 
     @abc.abstractmethod
@@ -52,7 +52,7 @@ class CustomList(metaclass=abc.ABCMeta):
         pass
 
 
-class StationList(CustomList):
+class StationSet(CustomSet):
 
     def build_namedtuple(self, element):
 
@@ -86,7 +86,7 @@ class StationList(CustomList):
         PollingStation.objects.bulk_create(stations_db)
 
 
-class DistrictList(CustomList):
+class DistrictSet(CustomSet):
 
     def build_namedtuple(self, element):
 
@@ -117,7 +117,7 @@ class DistrictList(CustomList):
         PollingDistrict.objects.bulk_create(districts_db)
 
 
-class AddressList(CustomList):
+class AddressSet(CustomSet):
 
     def __init__(self, logger):
         super().__init__()
@@ -133,7 +133,7 @@ class AddressList(CustomList):
             element['slug'],
         )
 
-    def append(self, address):
+    def add(self, address):
         if address['slug'] not in self.seen:
             self.elements.add(self.build_namedtuple(address))
             self.seen.add(address['slug'])
