@@ -30,13 +30,6 @@ class OutputFormatter:
 # data quality stats for polling stations
 class StationReport():
 
-    council_id = None
-    counts = {
-        '0': 0,
-        '1': 0,
-        '>1': 0
-    }
-
     def __init__(self, council_id):
         self.council_id = council_id
         self.counts = {
@@ -150,13 +143,6 @@ class StationReport():
 # data quality stats for polling districts
 class DistrictReport():
 
-    council_id = None
-    counts = {
-        '0': 0,
-        '1': 0,
-        '>1': 0
-    }
-
     def __init__(self, council_id):
         self.council_id = council_id
         self.counts = {
@@ -246,8 +232,6 @@ class DistrictReport():
 # data quality stats for residential addresses
 class ResidentialAddressReport():
 
-    council_id = None
-
     def __init__(self, council_id):
         self.council_id = council_id
 
@@ -301,9 +285,6 @@ class ResidentialAddressReport():
 
 # generate all the stats
 class DataQualityReportBuilder():
-
-    council_id = None
-    report = []
 
     def __init__(self, council_id):
         self.council_id = council_id
