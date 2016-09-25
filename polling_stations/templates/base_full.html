@@ -19,6 +19,9 @@
     <meta property="og:image" content="{{ CANONICAL_URL }}{% block og_image %}{% static "dc_theme/images/logo-large.png" %}{% endblock og_image %}" />
     <meta property="og:title" content="{% block og_title %}WhereDoIVote?{% endblock og_title %}" />
     <meta property="og:description" content="{% block og_description %}Find where to vote{% endblock og_description %}" />
+    {% if noindex %}
+    <meta name="robots" content="noindex">
+    {% endif %}
     {% block page_meta %}{% endblock page_meta %}
 {% endblock site_meta %}
 

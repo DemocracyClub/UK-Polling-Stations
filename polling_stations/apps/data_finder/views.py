@@ -151,6 +151,7 @@ class BasePollingStationView(
         context['station'] = self.station
         context['directions'] = self.directions
         context['we_know_where_you_should_vote'] = self.station
+        context['noindex'] = True
 
         if not context['we_know_where_you_should_vote']:
             if l is None:
@@ -270,6 +271,11 @@ def campaign_signup(request, postcode):
 class AddressFormView(FormView):
     form_class = AddressSelectForm
     template_name = "address_select.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(AddressFormView, self).get_context_data(**kwargs)
+        context['noindex'] = True
+        return context
 
     def get_form(self, form_class):
         addresses = ResidentialAddress.objects.filter(
