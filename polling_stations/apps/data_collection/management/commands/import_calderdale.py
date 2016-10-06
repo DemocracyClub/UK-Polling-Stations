@@ -8,11 +8,12 @@ from django.contrib.gis.geos import GEOSGeometry, Point
 from django.db import transaction
 from django.db import connection
 
-from data_collection.management.commands import BaseShpImporter
+from data_collection.data_types import StationSet
+from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 from pollingstations.models import PollingDistrict
 
 
-class Command(BaseShpImporter):
+class Command(BaseCsvStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Calderdale
     """
@@ -24,6 +25,15 @@ class Command(BaseShpImporter):
         'ref.2016-06-23'
     ]
     missing_stations = []
+
+    def get_station_hash(self, record):
+        return "-".join([
+            record.address,
+            record.polling_district,
+            record.ward,
+            record.easting,
+            record.northing,
+        ])
 
     def import_polling_districts(self):
         sf = shapefile.Reader("{0}/{1}".format(
@@ -102,15 +112,17 @@ class Command(BaseShpImporter):
     def post_import(self):
         # iterate self.missing_stations + insert
         # points are missing and we have no postcodes to geocode
+        self.stations = StationSet()
         for record in self.missing_stations:
             address_parts = self.split_address(record[2])
             self.add_polling_station({
                 'internal_council_id': record[1],
                 'postcode'           : address_parts['postcode'],
                 'address'            : address_parts['address'],
-                'location'           : None
+                'location'           : None,
+                'council'            : self.council
             })
-
+        self.stations.save()
 
         """
         This data isn't great – the polygons seem to be corrupt in some way.

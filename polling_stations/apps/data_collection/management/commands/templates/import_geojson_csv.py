@@ -5,9 +5,9 @@ import sys
 
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseJasonImporter
+from data_collection.management.commands import BaseCsvStationsJsonDistrictsImporter
 
-class Command(BaseJasonImporter):
+class Command(BaseCsvStationsJsonDistrictsImporter):
     """
     Imports the Polling Station data from COUNCIL
     """

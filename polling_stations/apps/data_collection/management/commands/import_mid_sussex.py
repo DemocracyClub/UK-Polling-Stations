@@ -4,9 +4,9 @@ Imports Mid Sussex
 import sys
 from lxml import etree
 from django.contrib.gis.geos import Point, GEOSGeometry
-from data_collection.management.commands import BaseKamlImporter
+from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
 
-class Command(BaseKamlImporter):
+class Command(BaseCsvStationsKmlDistrictsImporter):
     """
     Imports the Polling Station data from Mid Sussex
     """
@@ -31,6 +31,11 @@ class Command(BaseKamlImporter):
         }
 
     def station_record_to_dict(self, record):
+
+        # KDA is ambiguous: split district?
+        if record.msercode == 'KDA':
+            return None
+
         location = Point(float(record.xcoord), float(record.ycoord), srid=self.srid)
         address = "\n".join([record.venue, record.street, record.town])
         return {

@@ -4,9 +4,9 @@ Import North Tyneside
 import sys
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseShpImporter
+from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 
-class Command(BaseShpImporter):
+class Command(BaseCsvStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from North Tyneside
     """
@@ -14,6 +14,17 @@ class Command(BaseShpImporter):
     districts_name = 'NT_Polling_Districts_2014'
     stations_name  = 'NT_Polling_Stations_2015.csv'
     elections      = ['parl.2015-05-07']
+
+    def get_station_hash(self, record):
+        return "-".join([
+            record.pd,
+            record.place_desc,
+            record.place_pnam,
+            record.place_add1,
+            record.place_add2,
+            record.place_add3,
+            record.place_pcod,
+        ])
 
     def district_record_to_dict(self, record):
         return {

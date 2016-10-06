@@ -3,12 +3,13 @@ Import Richmond
 """
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseAddressCsvImporter
+from data_collection.slugger import Slugger
+from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode, geocode_point_only, PostcodeError
 from addressbase.models import Address
 
 
-class Command(BaseAddressCsvImporter):
+class Command(BaseCsvStationsCsvAddressesImporter):
     """
     Imports the Polling Station data from Richmond Council
     """
@@ -28,7 +29,7 @@ class Command(BaseAddressCsvImporter):
         """
         This data doesn't have IDs in, so we'll make them :/
         """
-        return self.slugify(" ".join([
+        return Slugger.slugify(" ".join([
             record.polling_place_name,
             record.polling_place_postcode,
         ]))

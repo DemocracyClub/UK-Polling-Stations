@@ -3,9 +3,11 @@ Import Runnymede
 """
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseShpImporter, import_polling_station_shapefiles
+from data_collection.management.commands import (
+    BaseShpStationsShpDistrictsImporter
+)
 
-class Command(BaseShpImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Runnymede Council
     """
@@ -26,6 +28,3 @@ class Command(BaseShpImporter):
             'postcode'           : '(No postcode supplied)',
             'address'            : record[1],
         }
-    
-    def import_polling_stations(self):
-        import_polling_station_shapefiles(self)

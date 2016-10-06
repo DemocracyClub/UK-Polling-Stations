@@ -5,9 +5,9 @@ import json
 
 from django.contrib.gis.geos import Point, GEOSGeometry
 
-from data_collection.management.commands import BaseKamlImporter
+from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
 
-class Command(BaseKamlImporter):
+class Command(BaseCsvStationsKmlDistrictsImporter):
     """
     Imports the Polling Station data from Spelthorne Council
     """
@@ -15,6 +15,14 @@ class Command(BaseKamlImporter):
     districts_name = 'Polling_Districts.kmz'
     stations_name  = 'Polling_Stations.csv'
     elections      = ['parl.2015-05-07']
+
+    def get_station_hash(self, record):
+        return "-".join([
+            record.polling_di,
+            record.building,
+            record.road,
+            record.town_villa
+        ])
 
     def station_record_to_dict(self, record):
         try:

@@ -5,11 +5,10 @@ note: this script takes quite a long time to run
 """
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import (
-    BaseAddressCsvImporter,
-    import_polling_station_shapefiles
+    BaseShpStationsCsvAddressesImporter
 )
 
-class Command(BaseAddressCsvImporter):
+class Command(BaseShpStationsCsvAddressesImporter):
     """
     Imports the Polling Station data from Neath Port Talbot
     """
@@ -23,10 +22,6 @@ class Command(BaseAddressCsvImporter):
         'naw.r.2016-05-05',
         'ref.2016-06-23'
     ]
-
-    # polling stations provided as shape files, not csv
-    def import_polling_stations(self):
-        import_polling_station_shapefiles(self)
 
     def station_record_to_dict(self, record):
 

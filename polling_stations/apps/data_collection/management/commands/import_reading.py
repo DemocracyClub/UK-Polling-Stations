@@ -3,9 +3,9 @@ Import Reading
 """
 import sys
 
-from data_collection.management.commands import BaseShpShpImporter
+from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
 
-class Command(BaseShpShpImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Reading
     """

@@ -2,6 +2,8 @@
 Imports Camden
 """
 import json
+import tempfile
+import urllib.request
 from lxml import etree
 from django.contrib.gis.geos import (
     GEOSGeometry,
@@ -10,15 +12,14 @@ from django.contrib.gis.geos import (
     Polygon,
     LinearRing
 )
-from data_collection.management.commands import (
-    BaseGenericApiImporter,
-    BaseImporter
-)
+from data_collection.base_importers import BaseGenericApiImporter
 
-class Command(BaseGenericApiImporter, BaseImporter):
+class Command(BaseGenericApiImporter):
     """
     Imports the Polling Station data from Camden Council
     """
+    stations_filetype = None
+    districts_filetype = None
     srid             = 4326
     districts_srid   = 4326
     council_id       = 'E09000007'
@@ -46,13 +47,11 @@ class Command(BaseGenericApiImporter, BaseImporter):
         multipoly = MultiPolygon(poly)
         return multipoly
 
-    def add_districts(self, filename):
-        districts = json.load(open(filename))
-        for district in districts['data']:
-            district_info = self.district_record_to_dict(district)
-            district_info['council'] = self.council
-            self.add_polling_district(district_info)
-        return
+    def get_districts(self):
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
+            data = json.load(open(tmp.name))
+            return data['data']
 
     def district_record_to_dict(self, record):
         poly = GEOSGeometry(record[8], srid=self.get_srid('districts'))
@@ -67,14 +66,11 @@ class Command(BaseGenericApiImporter, BaseImporter):
             'polling_station_id': record[-1]
         }
 
-    def add_stations(self, filename):
-        xml = etree.parse(filename)
-        stations = xml.getroot()[0]
-        for station in stations:
-            station_info = self.station_record_to_dict(station)
-            station_info['council'] = self.council
-            self.add_polling_station(station_info)
-        return
+    def get_stations(self):
+        with tempfile.NamedTemporaryFile() as tmp:
+            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
+            xml = etree.parse(tmp.name)
+            return xml.getroot()[0]
 
     def station_record_to_dict(self, record):
         info = {}

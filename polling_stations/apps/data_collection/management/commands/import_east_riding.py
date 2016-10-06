@@ -3,9 +3,9 @@ Import East Riding
 """
 import os
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseShpImporter, CsvHelper
+from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 
-class Command(BaseShpImporter):
+class Command(BaseCsvStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from East Riding of Yorkshire Council
     """
@@ -21,21 +21,7 @@ class Command(BaseShpImporter):
             'polling_station_id': record[1]
         }
 
-    # station_record_to_dicts() returns an array of dicts in this script
-    def import_polling_stations(self):
-        stations_file = os.path.join(self.base_folder_path, self.stations_name)
-
-        helper = CsvHelper(stations_file, self.csv_encoding)
-        data = helper.parseCsv()
-        for row in data:
-            stations = self.station_record_to_dicts(row)
-            for station in stations:
-                if 'council' not in station:
-                    station['council'] = self.council
-
-                self.add_polling_station(station)
-
-    def station_record_to_dicts(self, record):
+    def station_record_to_dict(self, record):
 
         try:
             location = Point(int(record.easting), int(record.northing), srid=self.srid)
@@ -54,12 +40,12 @@ class Command(BaseShpImporter):
         """
         internal_ids = record.code.split(", ")
         if (len(internal_ids) == 1):
-            return [{
+            return {
                 'internal_council_id': record.code,
                 'postcode'           : postcode,
                 'address'            : "\n".join(addr),
                 'location'           : location
-            }]
+            }
         else:
             stations = []
             for id in internal_ids:

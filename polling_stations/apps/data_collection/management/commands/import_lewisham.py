@@ -4,12 +4,12 @@ Import Lewisham
 
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseAddressCsvImporter
+from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode, geocode_point_only, PostcodeError
 from addressbase.models import Address
 
 
-class Command(BaseAddressCsvImporter):
+class Command(BaseCsvStationsCsvAddressesImporter):
     """
     Imports the Polling Station data from Lewisham Council
     """
@@ -22,9 +22,12 @@ class Command(BaseAddressCsvImporter):
     ]
 
     def get_station_hash(self, record):
+        polling_pl = record.polling_pl
+        if record.polling_pl[-1] == ',':
+            polling_pl = record.polling_pl[:-1]
         return "-".join([
             record.poll_ref,
-            record.polling_pl,
+            polling_pl,
         ])
 
     def station_record_to_dict(self, record):

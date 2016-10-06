@@ -1,19 +1,30 @@
 import os
 
+from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from councils.models import Council
-from data_collection.tests import (
+from data_collection.tests.stubs import (
+    stub_addressimport,
+    stub_duplicatedistrict,
+    stub_duplicatestation,
     stub_jsonimport,
     stub_jsonimport_different_srids,
     stub_kmlimport,
-    stub_kmlimport_different_srids
+    stub_kmlimport_different_srids,
+    stub_specialcases,
 )
-from pollingstations.models import PollingDistrict, PollingStation
+from pollingstations.models import (
+    PollingDistrict, PollingStation, ResidentialAddress)
 
 
 # High-level functional tests for import scripts
 class ImporterTest(TestCase):
+
+    opts = {
+        'noclean': False,
+        'verbosity': 0
+    }
 
     # create a dummy council which we're going to import data for
     def create_dummy_council(self):
@@ -57,8 +68,7 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_jsonimport.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
 
@@ -67,8 +77,7 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_jsonimport_different_srids.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
 
@@ -77,8 +86,7 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_kmlimport.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
 
@@ -87,7 +95,76 @@ class ImporterTest(TestCase):
 
         # run our stub importer
         cmd = stub_kmlimport_different_srids.Command()
-        opts = {}
-        cmd.handle(**opts)
+        cmd.handle(**self.opts)
 
         self.run_assertions()
+
+    def test_special_cases(self):
+        """
+        station_record_to_dict() may optionally return None or a list of dicts.
+        district_record_to_dict() may optionally return None.
+        Check our base import classes behave as intended in these cases.
+        """
+        self.create_dummy_council()
+        cmd = stub_specialcases.Command()
+        cmd.handle(**self.opts)
+
+        districts = PollingDistrict.objects\
+                                   .filter(council_id='X01000000')\
+                                   .order_by('internal_council_id')
+        self.assertEqual(2, len(districts))
+        self.assertEqual('AA', districts[0].internal_council_id)
+        self.assertEqual('AB', districts[1].internal_council_id)
+
+        stations = PollingStation.objects\
+                                 .filter(council_id='X01000000')\
+                                 .order_by('internal_council_id')
+        self.assertEqual(2, len(stations))
+        self.assertEqual('AA', stations[0].internal_council_id)
+        self.assertEqual('1 Foo Street', stations[0].address)
+        self.assertEqual('AB', stations[1].internal_council_id)
+        self.assertEqual('1 Foo Street', stations[1].address)
+
+    def test_duplicate_stations(self):
+        """
+        Check that if we try to insert a duplicate station on
+        (council_id, internal_council_id) an IntegrityError is thrown
+        """
+        self.create_dummy_council()
+        cmd = stub_duplicatestation.Command()
+        exception_thrown = False
+        try:
+            cmd.handle(**self.opts)
+        except IntegrityError:
+            exception_thrown = True
+
+        self.assertTrue(exception_thrown)
+
+    def test_duplicate_districts(self):
+        """
+        Check that if we try to insert a duplicate district on
+        (council_id, internal_council_id) an IntegrityError is thrown
+        """
+        self.create_dummy_council()
+        cmd = stub_duplicatedistrict.Command()
+        exception_thrown = False
+        try:
+            cmd.handle(**self.opts)
+        except IntegrityError:
+            exception_thrown = True
+
+        self.assertTrue(exception_thrown)
+
+    def test_address_import(self):
+        self.create_dummy_council()
+        cmd = stub_addressimport.Command()
+        cmd.handle(**self.opts)
+
+        addresses = ResidentialAddress.objects\
+                                      .filter(council_id='X01000000')\
+                                      .order_by('address')
+
+        self.assertEqual(3, len(addresses))
+        self.assertEqual('36 Abbots Park, London', addresses[0].address)
+        self.assertEqual('3 Factory Rd, Poole', addresses[1].address)
+        self.assertEqual('80 Pine Vale Cres, Bournemouth', addresses[2].address)

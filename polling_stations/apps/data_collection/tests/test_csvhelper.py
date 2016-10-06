@@ -1,6 +1,6 @@
 import os
 from django.test import TestCase
-from data_collection.management.commands import CsvHelper
+from data_collection.filehelpers import CsvHelper
 
 
 class CsvHelperTest(TestCase):
@@ -9,7 +9,7 @@ class CsvHelperTest(TestCase):
         helper = CsvHelper(
             os.path.join(os.path.dirname(__file__), 'fixtures/csv_helper/test.csv')
         )
-        data = helper.parseCsv()
+        data = helper.get_features()
 
         self.assertIsInstance(data[0], tuple)
         self.assertEqual('1', data[0].foo)

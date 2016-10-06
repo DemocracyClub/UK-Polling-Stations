@@ -3,10 +3,10 @@ Import Gwynedd
 """
 import shapefile
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseShpShpImporter
+from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 
-class Command(BaseShpShpImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Gwynedd Council
 
@@ -40,17 +40,6 @@ class Command(BaseShpShpImporter):
             'name': record[0],
             'polling_station_id': self.district_count
         }
-
-    def import_polling_stations(self):
-        sf = shapefile.Reader("{0}/{1}".format(
-            self.base_folder_path,
-            self.stations_name)
-        )
-        for station in sf.shapeRecords():
-            station_info = self.station_record_to_dict(station.record)
-            if station_info is not None:
-                station_info['council'] = self.council
-                self.add_polling_station(station_info)
 
     def station_record_to_dict(self, record):
         # No IDs/codes were supplied, so we'll just assign each

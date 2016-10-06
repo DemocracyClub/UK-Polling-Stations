@@ -1,14 +1,14 @@
 """
 Import Oadby & Wigston
 """
-from data_collection.management.commands import BaseShpShpImporter
+from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
 from data_collection.google_geocoding_api_wrapper import (
     GoogleGeocodingApiWrapper,
     PostcodeNotFoundException
 )
 
 
-class Command(BaseShpShpImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     """
     Imports the Polling Station data from Oadby & Wigston
     """
