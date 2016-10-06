@@ -14,6 +14,7 @@ from data_finder.views import (
     CoverageView,
     AddressView,
     AddressFormView,
+    WeDontKnowView,
     campaign_signup
 )
 
@@ -28,6 +29,8 @@ core_patterns = patterns(
         PostcodeView.as_view(), name='postcode_view'),
     url(r'^address/(?P<address_slug>.+)/$',
         AddressView.as_view(), name='address_view'),
+    url(r'^we_dont_know/(?P<postcode>.+)/$',
+        WeDontKnowView.as_view(), name='we_dont_know'),
     url(r'^address_select/(?P<postcode>.+)/$',
         AddressFormView.as_view(), name='address_select_view'),
     url(r'^campaign_signup/(?P<postcode>.+)/$',

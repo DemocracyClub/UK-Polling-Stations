@@ -15,6 +15,7 @@ class LoggedPostcode(TimeStampedModel):
     utm_medium = models.CharField(blank=True, max_length=100, db_index=True)
     utm_campaign = models.CharField(blank=True, max_length=100, db_index=True)
     language = models.CharField(blank=True, max_length=5)
+    view_used = models.CharField(blank=True, max_length=100)
 
 
     def __str__(self):

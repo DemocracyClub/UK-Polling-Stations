@@ -36,7 +36,7 @@ from .helpers import (
 
 
 class LogLookUpMixin(object):
-    def log_postcode(self, postcode, context):
+    def log_postcode(self, postcode, context, view_used):
 
         if 'language' in context:
             language = context['language']
@@ -55,6 +55,7 @@ class LogLookUpMixin(object):
             'council': context['council'],
             'brand': brand,
             'language': language,
+            'view_used': view_used,
         }
         kwargs.update(self.request.session['utm_data'])
         LoggedPostcode.objects.create(**kwargs)
@@ -159,7 +160,7 @@ class BasePollingStationView(
                 context['custom'] = CustomFinder.objects.get_custom_finder(
                     l['gss_codes'], self.postcode)
 
-        self.log_postcode(self.postcode, context)
+        self.log_postcode(self.postcode, context, type(self).__name__)
 
         return context
 
@@ -233,6 +234,17 @@ class AddressView(BasePollingStationView):
             self.address.council_id)
 
 
+class WeDontKnowView(PostcodeView):
+
+    def get(self, request, *args, **kwargs):
+        self.postcode = kwargs['postcode']
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_station(self):
+        return None
+
+
 def campaign_signup(request, postcode):
     if request.POST.get('join', 'false') == 'true':
         join_list = True
@@ -282,7 +294,7 @@ class AddressFormView(FormView):
         if not addresses:
             raise Http404
         else:
-            return form_class(select_addresses, **self.get_form_kwargs())
+            return form_class(select_addresses, self.kwargs['postcode'], **self.get_form_kwargs())
 
     def form_valid(self, form):
         self.success_url = reverse(

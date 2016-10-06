@@ -172,7 +172,7 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
         log_data['council'] = council
         log_data['brand'] = 'api'
         log_data['language'] = ''
-        self.log_postcode(postcode, log_data)
+        self.log_postcode(postcode, log_data, 'api')
 
         return Response(ret)
 
