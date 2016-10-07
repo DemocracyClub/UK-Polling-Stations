@@ -65,9 +65,9 @@ class ShpHelper:
 
 
 """
-Helper class for reading geographic data from (Geo)JSON files
+Helper class for reading geographic data from GeoJSON files
 """
-class JsonHelper:
+class GeoJsonHelper:
 
     def __init__(self, filepath):
         self.filepath = filepath
@@ -75,6 +75,18 @@ class JsonHelper:
     def get_features(self):
         geometries = json.load(open(self.filepath))
         return geometries['features']
+
+
+"""
+Helper class for reading data from JSON files
+"""
+class JsonHelper:
+
+    def __init__(self, filepath):
+        self.filepath = filepath
+
+    def get_features(self):
+        return json.load(open(self.filepath))
 
 
 """
@@ -125,7 +137,9 @@ class FileHelperFactory():
             return ShpHelper(filepath)
         elif (filetype == 'kml'):
             return KmlHelper(filepath)
-        elif (filetype == 'json'):
+        elif (filetype == 'geojson'):
+            return GeoJsonHelper(filepath)
+        elif filetype == 'json':
             return JsonHelper(filepath)
         elif (filetype == 'csv'):
             return CsvHelper(filepath, options['encoding'], options['delimiter'])
