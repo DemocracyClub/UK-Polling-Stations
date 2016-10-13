@@ -1,0 +1,283 @@
+<?xml version="1.0"?>
+<!-- <!DOCTYPE metadata SYSTEM "http://www.esri.com/metadata/esriprof80.dtd"> -->
+<metadata xml:lang="en"><Esri><CreaDate>20161012</CreaDate><CreaTime>14365900</CreaTime><SyncOnce>FALSE</SyncOnce><SyncDate>20161013</SyncDate><SyncTime>11291200</SyncTime><ModDate>20161013</ModDate><ModTime>11292300</ModTime><MetaID>{0F43A798-AB15-4954-807C-D9AA4A9A7130}</MetaID></Esri><idinfo><native Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 3; ESRI ArcCatalog 9.3.1.4000</native><descript><langdata Sync="TRUE">en</langdata><abstract>REQUIRED: A brief narrative summary of the data set.</abstract><purpose>REQUIRED: A summary of the intentions with which the data set was developed.</purpose></descript><citation><citeinfo><origin>REQUIRED: The name of an organization or individual that developed the data set.</origin><pubdate>REQUIRED: The date when the data set is published or otherwise made available for release.</pubdate><title Sync="TRUE">City_of_Gloucester_New_Electoral_Sub_Districts</title><ftname Sync="TRUE">City_of_Gloucester_New_Electoral_Sub_Districts</ftname><geoform Sync="TRUE">vector digital data</geoform><onlink Sync="TRUE">\\DL8102\C$\Documents and Settings\cjk\Desktop\Democracy Club data\City_of_Gloucester_New_Electoral_Sub_Districts.shp</onlink></citeinfo></citation><timeperd><current>REQUIRED: The basis on which the time period of content information is determined.</current><timeinfo><sngdate><caldate>REQUIRED: The year (and optionally month, or month and day) for which the data set corresponds to the ground.</caldate></sngdate></timeinfo></timeperd><status><progress>REQUIRED: The state of the data set.</progress><update>REQUIRED: The frequency with which changes and additions are made to the data set after the initial data set is completed.</update></status><spdom><bounding><westbc Sync="TRUE">-2.300346</westbc><eastbc Sync="TRUE">-2.175693</eastbc><northbc Sync="TRUE">51.884844</northbc><southbc Sync="TRUE">51.807049</southbc></bounding><lboundng><leftbc Sync="TRUE">379330.101788</leftbc><rightbc Sync="TRUE">387887.996997</rightbc><bottombc Sync="TRUE">212137.895414</bottombc><topbc Sync="TRUE">220761.646891</topbc></lboundng></spdom><keywords><theme><themekt>REQUIRED: Reference to a formally registered thesaurus or a similar authoritative source of theme keywords.</themekt><themekey>REQUIRED: Common-use word or phrase used to describe the subject of the data set.</themekey></theme></keywords><accconst>REQUIRED: Restrictions and legal prerequisites for accessing the data set.</accconst><useconst>REQUIRED: Restrictions and legal prerequisites for using the data set after access is granted.</useconst><natvform Sync="TRUE">Shapefile</natvform></idinfo><dataIdInfo><envirDesc Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 3; ESRI ArcCatalog 9.3.1.4000</envirDesc><dataLang><languageCode Sync="TRUE" value="en"></languageCode></dataLang><idCitation><resTitle Sync="TRUE">City_of_Gloucester_New_Electoral_Sub_Districts</resTitle><presForm><PresFormCd Sync="TRUE" value="005"></PresFormCd></presForm></idCitation><spatRpType><SpatRepTypCd Sync="TRUE" value="001"></SpatRepTypCd></spatRpType><dataExt><geoEle><GeoBndBox esriExtentType="native"><westBL Sync="TRUE">379330.101788</westBL><eastBL Sync="TRUE">387887.996997</eastBL><northBL Sync="TRUE">220761.646891</northBL><southBL Sync="TRUE">212137.895414</southBL><exTypeCode Sync="TRUE">1</exTypeCode></GeoBndBox></geoEle></dataExt><geoBox esriExtentType="decdegrees"><westBL Sync="TRUE">-2.300346</westBL><eastBL Sync="TRUE">-2.175693</eastBL><northBL Sync="TRUE">51.884844</northBL><southBL Sync="TRUE">51.807049</southBL><exTypeCode Sync="TRUE">1</exTypeCode></geoBox></dataIdInfo><metainfo><langmeta Sync="TRUE">en</langmeta><metstdn Sync="TRUE">FGDC Content Standards for Digital Geospatial Metadata</metstdn><metstdv Sync="TRUE">FGDC-STD-001-1998</metstdv><mettc Sync="TRUE">local time</mettc><metc><cntinfo><cntorgp><cntper>REQUIRED: The person responsible for the metadata information.</cntper><cntorg>REQUIRED: The organization responsible for the metadata information.</cntorg></cntorgp><cntaddr><addrtype>REQUIRED: The mailing and/or physical address for the organization or individual.</addrtype><city>REQUIRED: The city of the address.</city><state>REQUIRED: The state or province of the address.</state><postal>REQUIRED: The ZIP or other postal code of the address.</postal></cntaddr><cntvoice>REQUIRED: The telephone number by which individuals can speak to the organization or individual.</cntvoice></cntinfo></metc><metd Sync="TRUE">20161013</metd><metextns><onlink Sync="TRUE">http://www.esri.com/metadata/esriprof80.html</onlink><metprof Sync="TRUE">ESRI Metadata Profile</metprof></metextns></metainfo><mdLang><languageCode Sync="TRUE" value="en"></languageCode></mdLang><mdStanName Sync="TRUE">ISO 19115 Geographic Information - Metadata</mdStanName><mdStanVer Sync="TRUE">DIS_ESRI1.0</mdStanVer><mdChar><CharSetCd Sync="TRUE" value="004"></CharSetCd></mdChar><mdHrLv><ScopeCd Sync="TRUE" value="005"></ScopeCd></mdHrLv><mdHrLvName Sync="TRUE">dataset</mdHrLvName><GEMINI_Metadata><IdentificationInfo><spatialRepresentationType codeList="001"></spatialRepresentationType><extent><geographicElement><westBoundLongitude>-2.300346</westBoundLongitude><eastBoundLongitude>-2.175693</eastBoundLongitude><northBoundLatitude>51.884844</northBoundLatitude><southBoundLatitude>51.807048</southBoundLatitude></geographicElement></extent></IdentificationInfo><dateStamp>20161013</dateStamp><metadataStandardName>UK GEMINI Standard</metadataStandardName><metadataStandardVersion>1.0</metadataStandardVersion><referenceSystemInfo><referenceSystemIdentifier><code>001</code></referenceSystemIdentifier></referenceSystemInfo></GEMINI_Metadata><distinfo><resdesc Sync="TRUE">Downloadable Data</resdesc><stdorder><digform><digtinfo><transize Sync="TRUE">0.549</transize><dssize Sync="TRUE">0.549</dssize></digtinfo></digform></stdorder></distinfo><distInfo><distributor><distorTran><onLineSrc><orDesc Sync="TRUE">002</orDesc><linkage Sync="TRUE">file://\\DL8102\C$\Documents and Settings\cjk\Desktop\Democracy Club data\City_of_Gloucester_New_Electoral_Sub_Districts.shp</linkage><protocol Sync="TRUE">Local Area Network</protocol></onLineSrc><transSize Sync="TRUE">0.549</transSize></distorTran><distorFormat><formatName Sync="TRUE">Shapefile</formatName></distorFormat></distributor></distInfo><spdoinfo><direct Sync="TRUE">Vector</direct><ptvctinf><esriterm Name="City_of_Gloucester_New_Electoral_Sub_Districts"><efeatyp Sync="TRUE">Simple</efeatyp><efeageom Sync="TRUE">Polygon</efeageom><esritopo Sync="TRUE">FALSE</esritopo><efeacnt Sync="TRUE">72</efeacnt><spindex Sync="TRUE">TRUE</spindex><linrefer Sync="TRUE">FALSE</linrefer></esriterm><sdtsterm Name="City_of_Gloucester_New_Electoral_Sub_Districts"><sdtstype Sync="TRUE">G-polygon</sdtstype><ptvctcnt Sync="TRUE">72</ptvctcnt></sdtsterm></ptvctinf></spdoinfo><spref><horizsys><cordsysn><geogcsn Sync="TRUE">GCS_OSGB_1936</geogcsn><projcsn Sync="TRUE">British_National_Grid</projcsn></cordsysn><planar><planci><plance Sync="TRUE">coordinate pair</plance><plandu Sync="TRUE">meters</plandu><coordrep><absres Sync="TRUE">0.000000</absres><ordres Sync="TRUE">0.000000</ordres></coordrep></planci><mapproj><mapprojn Sync="TRUE">Transverse Mercator</mapprojn><transmer><sfctrmer Sync="TRUE">0.999601</sfctrmer><longcm Sync="TRUE">-2.000000</longcm><latprjo Sync="TRUE">49.000000</latprjo><feast Sync="TRUE">400000.000000</feast><fnorth Sync="TRUE">-100000.000000</fnorth></transmer></mapproj></planar><geodetic><horizdn Sync="TRUE">D_OSGB_1936</horizdn><ellips Sync="TRUE">Airy_1830</ellips><semiaxis Sync="TRUE">6377563.396000</semiaxis><denflat Sync="TRUE">299.324965</denflat></geodetic></horizsys></spref><refSysInfo><RefSystem><refSysID><identCode Sync="TRUE">British_National_Grid</identCode></refSysID></RefSystem></refSysInfo><spatRepInfo><VectSpatRep><topLvl><TopoLevCd Sync="TRUE" value="001"></TopoLevCd></topLvl><geometObjs Name="City_of_Gloucester_New_Electoral_Sub_Districts"><geoObjTyp><GeoObjTypCd Sync="TRUE" value="001"></GeoObjTypCd></geoObjTyp><geoObjCnt Sync="TRUE">72</geoObjCnt></geometObjs></VectSpatRep></spatRepInfo><eainfo><detailed Name="City_of_Gloucester_New_Electoral_Sub_Districts"><enttyp><enttypl Sync="TRUE">City_of_Gloucester_New_Electoral_Sub_Districts</enttypl><enttypt Sync="TRUE">Feature Class</enttypt><enttypc Sync="TRUE">72</enttypc></enttyp><attr><attrlabl Sync="TRUE">FID</attrlabl><attalias Sync="TRUE">FID</attalias><attrtype Sync="TRUE">OID</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale><attrdef Sync="TRUE">Internal feature number.</attrdef><attrdefs Sync="TRUE">ESRI</attrdefs><attrdomv><udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom></attrdomv></attr><attr><attrlabl Sync="TRUE">Shape</attrlabl><attalias Sync="TRUE">Shape</attalias><attrtype Sync="TRUE">Geometry</attrtype><attwidth Sync="TRUE">0</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale><attrdef Sync="TRUE">Feature geometry.</attrdef><attrdefs Sync="TRUE">ESRI</attrdefs><attrdomv><udom Sync="TRUE">Coordinates defining the features.</udom></attrdomv></attr><attr><attrlabl Sync="TRUE">OF_WARD</attrlabl><attalias Sync="TRUE">OF_WARD</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">30</attwidth></attr><attr><attrlabl Sync="TRUE">SUB_DIS</attrlabl><attalias Sync="TRUE">SUB_DIS</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr></detailed></eainfo><mdDateSt Sync="TRUE">20161013</mdDateSt><dataqual><lineage><procstep><procdesc Sync="TRUE">Dataset copied.</procdesc><srcused Sync="TRUE">M:\Electoral maps\Electorial Subdistricts\City of Gloucester Electoral Sub Districts</srcused><date Sync="TRUE">20140901</date><time Sync="TRUE">10424600</time></procstep><procstep><procdesc Sync="TRUE">Dataset moved.</procdesc><srcused Sync="TRUE">M:\Electoral maps\Electoral Boundaries data sets\Electorial Subdistricts\City of Gloucester New Electoral Sub Districts</srcused><procdate Sync="TRUE">20160108</procdate><proctime Sync="TRUE">11180000</proctime></procstep><procstep><procdesc Sync="TRUE">Dataset moved.</procdesc><srcused Sync="TRUE">M:\Electoral maps\New Gloucestershire Electoral Boundaries\City of Gloucester New Electoral Sub Districts</srcused><procdate Sync="TRUE">20160108</procdate><proctime Sync="TRUE">11181400</proctime></procstep><procstep><procdesc Sync="TRUE">Dataset copied.</procdesc><srcused Sync="TRUE"></srcused><procdate Sync="TRUE">20161012</procdate><proctime Sync="TRUE">14370100</proctime></procstep></lineage></dataqual><gmd:GEMINI_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:srv="http://www.isotc211.org/2005/srv" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+		<gmd:fileIdentifier>
+			<gco:CharacterString>{bdb9aac1-4992-4bbb-a539-cd03691f05bc}</gco:CharacterString>
+		</gmd:fileIdentifier>
+		<gmd:hierarchyLevel>
+			<gmd:MD_ScopeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">Dataset</gmd:MD_ScopeCode>
+		</gmd:hierarchyLevel>
+		<gmd:dateStamp>
+			<gco:Date>2016-05-02</gco:Date>
+		</gmd:dateStamp>
+		<gmd:language>
+			<gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">English [English]</gmd:LanguageCode>
+		</gmd:language>
+		<gmd:identificationInfo>
+			<gmd:MD_DataIdentification>
+				<gmd:language>
+					<gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">English [English]</gmd:LanguageCode>
+				</gmd:language>
+				<gmd:abstract>
+					<gco:CharacterString>Indicates new electoral subdistricts within City of Gloucester wards.</gco:CharacterString>
+				</gmd:abstract>
+				<gmd:citation>
+					<gmd:CI_Citation>
+						<gmd:title>
+							<gco:CharacterString>City of Gloucester New Electoral Subdistricts</gco:CharacterString>
+						</gmd:title>
+						<gmd:date>
+							<gmd:CI_Date>
+								<gmd:date>
+									<gco:Date>2016-05-02</gco:Date>
+								</gmd:date>
+								<gmd:dateType>
+									<gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">Publication</gmd:CI_DateTypeCode>
+								</gmd:dateType>
+							</gmd:CI_Date>
+						</gmd:date>
+						<gmd:date>
+							<gmd:CI_Date>
+								<gmd:date>
+									<gco:Date>2016-05-02</gco:Date>
+								</gmd:date>
+								<gmd:dateType>
+									<gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">Creation</gmd:CI_DateTypeCode>
+								</gmd:dateType>
+							</gmd:CI_Date>
+						</gmd:date>
+						<gmd:date>
+							<gmd:CI_Date>
+								<gmd:date>
+									<gco:Date>2016-05-02</gco:Date>
+								</gmd:date>
+								<gmd:dateType>
+									<gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">Revision</gmd:CI_DateTypeCode>
+								</gmd:dateType>
+							</gmd:CI_Date>
+						</gmd:date>
+					</gmd:CI_Citation>
+				</gmd:citation>
+				<gmd:topicCategory>
+					<gmd:MD_TopicCategoryCode>boundaries</gmd:MD_TopicCategoryCode>
+				</gmd:topicCategory>
+				<gmd:descriptiveKeywords>
+					<gmd:MD_Keywords>
+						<gmd:type>
+							<gmd:MD_KeywordTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">Theme</gmd:MD_KeywordTypeCode>
+						</gmd:type>
+					</gmd:MD_Keywords>
+				</gmd:descriptiveKeywords>
+				<gmd:extent>
+					<gmd:EX_Extent>
+						<gmd:geographicElement>
+							<gmd:EX_GeographicBoundingBox>
+								<gmd:westBoundLongitude>
+									<gco:Decimal>-2.30034614389259</gco:Decimal>
+								</gmd:westBoundLongitude>
+								<gmd:eastBoundLongitude>
+									<gco:Decimal>-2.17569344243898</gco:Decimal>
+								</gmd:eastBoundLongitude>
+								<gmd:southBoundLatitude>
+									<gco:Decimal>51.807048990386</gco:Decimal>
+								</gmd:southBoundLatitude>
+								<gmd:northBoundLatitude>
+									<gco:Decimal>51.8848441667796</gco:Decimal>
+								</gmd:northBoundLatitude>
+							</gmd:EX_GeographicBoundingBox>
+						</gmd:geographicElement>
+						<gmd:temporalElement>
+							<gmd:EX_TemporalExtent>
+								<gmd:extent>
+									<gml:TimePeriod>
+										<gml:beginPosition/>
+										<gml:endPosition/>
+									</gml:TimePeriod>
+								</gmd:extent>
+							</gmd:EX_TemporalExtent>
+						</gmd:temporalElement>
+					</gmd:EX_Extent>
+				</gmd:extent>
+				<gmd:pointOfContact>
+					<gmd:CI_ResponsibleParty>
+						<gmd:individualName>
+							<gco:CharacterString>Christopher Keeling</gco:CharacterString>
+						</gmd:individualName>
+						<gmd:organisationName>
+							<gco:CharacterString>Gloucester City Council</gco:CharacterString>
+						</gmd:organisationName>
+						<gmd:positionName>
+							<gco:CharacterString>Planning technician</gco:CharacterString>
+						</gmd:positionName>
+						<gmd:contactInfo>
+							<gmd:CI_Contact>
+								<gmd:address>
+									<gmd:CI_Address>
+										<gmd:deliveryPoint>
+											<gco:CharacterString>Gloucester City Council</gco:CharacterString>
+										</gmd:deliveryPoint>
+										<gmd:city>
+											<gco:CharacterString>Gloucester</gco:CharacterString>
+										</gmd:city>
+										<gmd:postalCode>
+											<gco:CharacterString>GL1 2EQ</gco:CharacterString>
+										</gmd:postalCode>
+										<gmd:electronicMailAddress>
+											<gco:CharacterString>Chris.Keeling@gloucester.gov.uk</gco:CharacterString>
+										</gmd:electronicMailAddress>
+										<gmd:country>
+											<gmd:Country codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#Country" codeListValue="GB-GLS">Gloucestershire</gmd:Country>
+										</gmd:country>
+									</gmd:CI_Address>
+								</gmd:address>
+								<gmd:phone>
+									<gmd:CI_Telephone>
+										<gmd:voice>
+											<gco:CharacterString>01452 396838</gco:CharacterString>
+										</gmd:voice>
+									</gmd:CI_Telephone>
+								</gmd:phone>
+								<gmd:onLine>
+									<gmd:CI_OnLineResource>
+										<gmd:linkage>
+											<gmd:URL>www.gloucester.gov.uk</gmd:URL>
+										</gmd:linkage>
+									</gmd:CI_OnLineResource>
+								</gmd:onLine>
+							</gmd:CI_Contact>
+						</gmd:contactInfo>
+						<gmd:role>
+							<gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="resourceProvider">Resource provider</gmd:CI_RoleCode>
+						</gmd:role>
+					</gmd:CI_ResponsibleParty>
+				</gmd:pointOfContact>
+				<gmd:resourceConstraints>
+					<gmd:MD_Constraints>
+						<gmd:useLimitation>
+							<gco:CharacterString>Not to be edited or amended.</gco:CharacterString>
+						</gmd:useLimitation>
+					</gmd:MD_Constraints>
+				</gmd:resourceConstraints>
+				<gmd:resourceConstraints>
+					<gmd:MD_LegalConstraints>
+						<gmd:otherConstraints>
+							<gco:CharacterString>Copyright</gco:CharacterString>
+						</gmd:otherConstraints>
+					</gmd:MD_LegalConstraints>
+				</gmd:resourceConstraints>
+				<gmd:resourceMaintenance>
+					<gmd:MD_MaintenanceInformation>
+						<gmd:maintenanceAndUpdateFrequency>
+							<gmd:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="asNeeded">As needed</gmd:MD_MaintenanceFrequencyCode>
+						</gmd:maintenanceAndUpdateFrequency>
+					</gmd:MD_MaintenanceInformation>
+				</gmd:resourceMaintenance>
+			</gmd:MD_DataIdentification>
+		</gmd:identificationInfo>
+		<gmd:distributionInfo>
+			<gmd:MD_Distribution>
+				<gmd:transferOptions>
+					<gmd:MD_DigitalTransferOptions>
+						<gmd:onLine>
+							<gmd:CI_OnlineResource>
+								<gmd:linkage>
+									<gmd:URL>\\V606\MapChampionsEdittingArea\RegenStrat\ChrisKeeling\Electoral maps\Electorial Subdistricts\City of Gloucester Electoral Sub Districts.shp</gmd:URL>
+								</gmd:linkage>
+							</gmd:CI_OnlineResource>
+						</gmd:onLine>
+					</gmd:MD_DigitalTransferOptions>
+				</gmd:transferOptions>
+				<gmd:distributionFormat>
+					<gmd:MD_Format>
+						<gmd:name>
+							<gco:CharacterString>Shapefile</gco:CharacterString>
+						</gmd:name>
+						<gmd:version>
+							<gco:CharacterString></gco:CharacterString>
+						</gmd:version>
+					</gmd:MD_Format>
+				</gmd:distributionFormat>
+			</gmd:MD_Distribution>
+		</gmd:distributionInfo>
+		<gmd:dataQualityInfo>
+			<gmd:DQ_DataQuality>
+				<gmd:lineage>
+					<gmd:LI_Lineage>
+						<gmd:statement>
+							<gco:CharacterString>Captured from data provided by Gloucester City Council's electoral services.</gco:CharacterString>
+						</gmd:statement>
+					</gmd:LI_Lineage>
+				</gmd:lineage>
+			</gmd:DQ_DataQuality>
+		</gmd:dataQualityInfo>
+		<gmd:referenceSystemInfo>
+			<gmd:MD_ReferenceSystem>
+				<gmd:referenceSystemIdentifier>
+					<gmd:RS_Identifier>
+						<gmd:code>
+							<gco:CharacterString>Great Britain National Grid</gco:CharacterString>
+						</gmd:code>
+					</gmd:RS_Identifier>
+				</gmd:referenceSystemIdentifier>
+			</gmd:MD_ReferenceSystem>
+		</gmd:referenceSystemInfo>
+		<gmd:contact>
+			<gmd:CI_ResponsibleParty>
+				<gmd:individualName>
+					<gco:CharacterString>Christopher John Keeling</gco:CharacterString>
+				</gmd:individualName>
+				<gmd:organisationName>
+					<gco:CharacterString>Gloucester City Council</gco:CharacterString>
+				</gmd:organisationName>
+				<gmd:positionName>
+					<gco:CharacterString>Planning Technician</gco:CharacterString>
+				</gmd:positionName>
+				<gmd:contactInfo>
+					<gmd:CI_Contact>
+						<gmd:address>
+							<gmd:CI_Address>
+								<gmd:deliveryPoint>
+									<gco:CharacterString>Herbert Warehouse, The Docks</gco:CharacterString>
+								</gmd:deliveryPoint>
+								<gmd:city>
+									<gco:CharacterString>Gloucester</gco:CharacterString>
+								</gmd:city>
+								<gmd:administrativeArea>
+									<gco:CharacterString>Gloucestershire</gco:CharacterString>
+								</gmd:administrativeArea>
+								<gmd:postalCode>
+									<gco:CharacterString>GL1 2EQ</gco:CharacterString>
+								</gmd:postalCode>
+								<gmd:electronicMailAddress>
+									<gco:CharacterString>chris.keeling@gloucester.gov.uk</gco:CharacterString>
+								</gmd:electronicMailAddress>
+								<gmd:country>
+									<gmd:Country codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#Country" codeListValue="GB-GLS">Gloucestershire</gmd:Country>
+								</gmd:country>
+							</gmd:CI_Address>
+						</gmd:address>
+						<gmd:phone>
+							<gmd:CI_Telephone>
+								<gmd:voice>
+									<gco:CharacterString>01452 396838</gco:CharacterString>
+								</gmd:voice>
+								<gmd:facsimile>
+									<gco:CharacterString></gco:CharacterString>
+								</gmd:facsimile>
+							</gmd:CI_Telephone>
+						</gmd:phone>
+						<gmd:onLine>
+							<gmd:CI_OnLineResource>
+								<gmd:linkage>
+									<gmd:URL></gmd:URL>
+								</gmd:linkage>
+							</gmd:CI_OnLineResource>
+						</gmd:onLine>
+					</gmd:CI_Contact>
+				</gmd:contactInfo>
+				<gmd:role>
+					<gmd:CI_RoleCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="pointOfContact">Point of contact</gmd:CI_RoleCode>
+				</gmd:role>
+			</gmd:CI_ResponsibleParty>
+		</gmd:contact>
+	</gmd:GEMINI_Metadata></metadata>
