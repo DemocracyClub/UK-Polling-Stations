@@ -270,7 +270,7 @@ WHITELABEL_PREFIXES = (
 INTERNAL_IPS = ('127.0.0.1')
 SITE_TITLE = "Where Do I Vote?"
 
-# Google maps API key used for geocoding in import scripts
+# Google maps API key used by directions helper
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', "")
 
 # Morph API key used for downloading scraped data in import scripts
