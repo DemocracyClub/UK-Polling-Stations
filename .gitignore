@@ -62,3 +62,6 @@ polling_stations/settings/local.py
 
 # editor cruft
 *~
+
+# cached local files from amazon s3
+s3cache/*

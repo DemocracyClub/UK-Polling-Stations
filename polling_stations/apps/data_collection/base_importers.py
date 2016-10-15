@@ -35,6 +35,7 @@ from data_collection.data_quality_report import (
 from data_collection.filehelpers import FileHelperFactory
 from data_collection.loghelper import LogHelper
 from data_collection.slugger import Slugger
+from data_collection.s3wrapper import S3Wrapper
 from pollingstations.models import (
     PollingStation,
     PollingDistrict,
@@ -151,13 +152,18 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     @property
     def data_path(self):
         data_private = getattr(self, 'private', False)
-        if data_private:
+        data_on_s3 = getattr(self, 'data_on_s3', False)
+        if data_on_s3:
+            s3 = S3Wrapper()
+            s3.fetch_data(self.council_id)
+            path = s3.data_path
+        elif data_private:
             path = getattr(
                 settings,
                 'PRIVATE_DATA_PATH',
                 '../polling_station_data/')
         else:
-            path = "./"
+            path = "./data"
         return os.path.abspath(path)
 
     def handle(self, *args, **kwargs):
@@ -177,7 +183,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             if self.base_folder_path is None:
                 path = os.path.join(
                     self.data_path,
-                    'data/{0}-*'.format(self.council_id))
+                    '{0}-*'.format(self.council_id))
                 self.base_folder_path = glob.glob(path)[0]
 
         self.import_data()

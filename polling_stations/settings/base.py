@@ -273,8 +273,17 @@ SITE_TITLE = "Where Do I Vote?"
 # Google maps API key used by directions helper
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', "")
 
+
 # Morph API key used for downloading scraped data in import scripts
 MORPH_API_KEY = os.environ.get('MORPH_API_KEY', "")
+
+
+# Config options for Amazon S3
+S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY', '')
+S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY', '')
+S3_DATA_BUCKET = os.environ.get('S3_DATA_BUCKET', '')
+S3_BASE_DIR = 'data/raw/ref.2016-06-23/' # <-- TODO: sort out how we're going to organise it!!
+
 
 MANAGE_ADDRESSBASE_MODEL = os.environ.get('MANAGE_ADDRESSBASE_MODEL', True)
 if type(MANAGE_ADDRESSBASE_MODEL) == str \
