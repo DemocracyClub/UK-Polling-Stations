@@ -48,6 +48,8 @@ class S3Wrapper:
         keys = self.bucket.list(prefix=prefix)
         count = 0
         for key in keys:
+            if key.key[-8:] == '$folder$':
+                continue
             local_file = os.path.join(self.base_path, key.key)
             os.makedirs(os.path.dirname(local_file), exist_ok=True)
             key.get_contents_to_filename(local_file)
