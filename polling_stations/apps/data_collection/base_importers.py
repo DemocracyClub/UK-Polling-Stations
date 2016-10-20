@@ -152,18 +152,15 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     @property
     def data_path(self):
         data_private = getattr(self, 'private', False)
-        data_on_s3 = getattr(self, 'data_on_s3', False)
-        if data_on_s3:
-            s3 = S3Wrapper()
-            s3.fetch_data(self.council_id)
-            path = s3.data_path
-        elif data_private:
+        if data_private:
             path = getattr(
                 settings,
                 'PRIVATE_DATA_PATH',
                 '../polling_station_data/')
         else:
-            path = "./data"
+            s3 = S3Wrapper()
+            s3.fetch_data(self.council_id)
+            path = s3.data_path
         return os.path.abspath(path)
 
     def handle(self, *args, **kwargs):
