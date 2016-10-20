@@ -282,7 +282,7 @@ MORPH_API_KEY = os.environ.get('MORPH_API_KEY', "")
 S3_ACCESS_KEY = os.environ.get('S3_ACCESS_KEY', '')
 S3_SECRET_KEY = os.environ.get('S3_SECRET_KEY', '')
 S3_DATA_BUCKET = os.environ.get('S3_DATA_BUCKET', '')
-S3_BASE_DIR = 'data/raw/ref.2016-06-23/' # <-- TODO: sort out how we're going to organise it!!
+S3_BASE_DIR = ''
 
 
 MANAGE_ADDRESSBASE_MODEL = os.environ.get('MANAGE_ADDRESSBASE_MODEL', True)
