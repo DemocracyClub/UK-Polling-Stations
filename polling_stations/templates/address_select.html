@@ -29,5 +29,17 @@
   </div>
 </div>
 
-
 {% endblock content %}
+
+{% block in_page_javascript %}
+<script type="text/javascript">
+fallback.ready(['jQuery'], function() {
+    $(document).ready(function() {
+        var isAndroid = /(android)/i.test(navigator.userAgent);
+        if (isAndroid) {
+            $('.select_multirow').css('-webkit-appearance', 'menulist');
+        }
+    });
+});
+</script>
+{% endblock in_page_javascript %}
