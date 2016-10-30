@@ -1,47 +1,65 @@
-"""
-Imports Mid Sussex
-"""
-import sys
-from lxml import etree
-from django.contrib.gis.geos import Point, GEOSGeometry
-from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
+from data_collection.data_types import (DistrictSet, StationSet)
+from data_collection.management.commands import BaseMorphApiImporter
 
-class Command(BaseCsvStationsKmlDistrictsImporter):
-    """
-    Imports the Polling Station data from Mid Sussex
-    """
-    council_id     = 'E07000228'
-    districts_name = 'msdc_3830_pollingdistricts_polygon.kmz'
-    stations_name  = 'R3900_pollingstations.csv'
-    elections      = ['parl.2015-05-07']
+class Command(BaseMorphApiImporter):
 
-    def extract_msercode_from_description(self, description):
-        html = etree.HTML(str(description).replace('&', '&amp;'))
-        rows = html.xpath("//td")
-        return rows[7].text
+    srid = 4326
+    districts_srid  = 4326
+    council_id = 'E07000228'
+    elections = ['local.west-sussex.2017-05-04']
+    scraper_name = 'wdiv-scrapers/DC-PollingStations-Mid-Sussex'
+    geom_type = 'geojson'
+    split_districts = set()
+
+    def get_station_hash(self, record):
+        # handle exact dupes on code/address
+        return "-".join([
+            record['msercode'],
+            record['uprn']
+        ])
+
+    def find_split_districts(self):
+        # identify any district codes which appear more than once
+        # with 2 different polling station addresses.
+        # We do not want to import these.
+        stations = self.get_stations()
+        for station1 in stations:
+            for station2 in stations:
+                if (station2['msercode'] == station1['msercode'] and\
+                    station2['uprn'] != station1['uprn']):
+                    self.split_districts.add(station1['msercode'])
 
     def district_record_to_dict(self, record):
-        msercode = self.extract_msercode_from_description(record['description'])
-        geojson = self.strip_z_values(record.geom.geojson)
-        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid('districts')))
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid('districts'))
         return {
-            'internal_council_id': msercode,
-            'name'               : record['Name'].value,
-            'area'               : poly
+            'internal_council_id': record['msercode'],
+            'name'               : record['boundname'],
+            'area'               : poly,
+            'polling_station_id' : record['msercode'],
         }
 
     def station_record_to_dict(self, record):
 
-        # KDA is ambiguous: split district?
-        if record.msercode == 'KDA':
+        # handle split districts
+        if record['msercode'] in self.split_districts:
             return None
 
-        location = Point(float(record.xcoord), float(record.ycoord), srid=self.srid)
-        address = "\n".join([record.venue, record.street, record.town])
+        location = self.extract_geometry(record, self.geom_type, self.get_srid('stations'))
         return {
-            'internal_council_id': record.msercode,
-            'postcode':            record.postcode,
-            'address':             address,
+            'internal_council_id': record['msercode'],
+            'postcode':            '',
+            'address':             record['address'],
             'location':            location,
-            'polling_district_id': record.msercode
         }
+
+    def import_data(self):
+        # override import_data so we can populate
+        # self.split_districts as a pre-process
+        self.find_split_districts()
+
+        self.stations = StationSet()
+        self.districts = DistrictSet()
+        self.import_polling_districts()
+        self.import_polling_stations()
+        self.districts.save()
+        self.stations.save()
