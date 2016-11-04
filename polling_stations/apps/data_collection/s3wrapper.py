@@ -1,6 +1,7 @@
 import glob
 import os
 import shutil
+from boto.pyami.config import Config
 from boto.s3.connection import S3Connection
 from django.conf import settings
 
@@ -8,15 +9,12 @@ from django.conf import settings
 class S3Wrapper:
 
     def __init__(self):
-        if settings.S3_ACCESS_KEY == '':
-            raise NotImplementedError('S3_ACCESS_KEY must be set')
-        if settings.S3_SECRET_KEY == '':
-            raise NotImplementedError('S3_SECRET_KEY must be set')
-        if settings.S3_DATA_BUCKET == '':
-            raise NotImplementedError('S3_DATA_BUCKET must be set')
+        config = Config()
+        access_key = config.get_value(settings.BOTO_SECTION, 'aws_access_key_id')
+        secret_key = config.get_value(settings.BOTO_SECTION, 'aws_secret_access_key')
 
         # connect to S3 + get ref to our data bucket
-        conn = S3Connection(settings.S3_ACCESS_KEY, settings.S3_SECRET_KEY)
+        conn = S3Connection(access_key, secret_key)
         self.bucket = conn.get_bucket(settings.S3_DATA_BUCKET)
 
         # this is where our local data will live
@@ -24,11 +22,10 @@ class S3Wrapper:
 
     @property
     def data_path(self):
-        return os.path.abspath(os.path.join(
-            self.base_path, settings.S3_BASE_DIR))
+        return os.path.abspath(self.base_path)
 
     def fetch_data(self, council_id):
-        prefix = "%s%s-" % (settings.S3_BASE_DIR, council_id)
+        prefix = "%s-" % (council_id)
         local_pattern = os.path.abspath("%s/%s*" % (self.base_path, prefix))
         local_paths = glob.glob(local_pattern)
 
