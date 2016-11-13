@@ -464,7 +464,17 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
 class BaseStationsDistrictsImporter(BaseStationsImporter,
                                     BaseDistrictsImporter):
 
+    def pre_import(self):
+        raise NotImplementedError
+
     def import_data(self):
+
+        # Optional step for pre import tasks
+        try:
+            self.pre_import()
+        except NotImplementedError:
+            pass
+
         self.stations = StationSet()
         self.districts = DistrictSet()
         self.import_polling_districts()
@@ -476,7 +486,17 @@ class BaseStationsDistrictsImporter(BaseStationsImporter,
 class BaseStationsAddressesImporter(BaseStationsImporter,
                                     BaseAddressesImporter):
 
+    def pre_import(self):
+        raise NotImplementedError
+
     def import_data(self):
+
+        # Optional step for pre import tasks
+        try:
+            self.pre_import()
+        except NotImplementedError:
+            pass
+
         self.stations = StationSet()
         self.addresses = AddressSet(self.logger)
         self.import_residential_addresses()
@@ -576,6 +596,13 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     local_files = False
 
     def import_data(self):
+
+        # Optional step for pre import tasks
+        try:
+            self.pre_import()
+        except NotImplementedError:
+            pass
+
         self.districts = DistrictSet()
         self.stations = StationSet()
 

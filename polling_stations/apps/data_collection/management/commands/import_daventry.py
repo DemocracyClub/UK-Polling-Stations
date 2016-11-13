@@ -1,5 +1,4 @@
 from django.contrib.gis.geos import GEOSGeometry, Point
-from data_collection.data_types import DistrictSet, StationSet
 from data_collection.geo_utils import convert_linestring_to_multiploygon
 from data_collection.management.commands import BaseApiKmlStationsKmlDistrictsImporter
 
@@ -13,6 +12,9 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
         'local.northamptonshire.2017-05-04'
     ]
     duplicate_districts = set()
+
+    def pre_import(self):
+        self.find_duplicate_districts()
 
     def find_duplicate_districts(self):
         # identify any district codes which appear
@@ -69,15 +71,3 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
                 'location':            location,
                 'polling_district_id': district_id
             }
-
-    def import_data(self):
-        # override import_data so we can populate
-        # self.duplicate_districts as a pre-process
-        self.find_duplicate_districts()
-
-        self.stations = StationSet()
-        self.districts = DistrictSet()
-        self.import_polling_districts()
-        self.import_polling_stations()
-        self.districts.save()
-        self.stations.save()

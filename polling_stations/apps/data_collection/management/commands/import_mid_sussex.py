@@ -1,4 +1,3 @@
-from data_collection.data_types import (DistrictSet, StationSet)
 from data_collection.management.commands import BaseMorphApiImporter
 
 class Command(BaseMorphApiImporter):
@@ -10,6 +9,9 @@ class Command(BaseMorphApiImporter):
     scraper_name = 'wdiv-scrapers/DC-PollingStations-Mid-Sussex'
     geom_type = 'geojson'
     split_districts = set()
+
+    def pre_import(self):
+        self.find_split_districts()
 
     def get_station_hash(self, record):
         # handle exact dupes on code/address
@@ -51,15 +53,3 @@ class Command(BaseMorphApiImporter):
             'address':             record['address'],
             'location':            location,
         }
-
-    def import_data(self):
-        # override import_data so we can populate
-        # self.split_districts as a pre-process
-        self.find_split_districts()
-
-        self.stations = StationSet()
-        self.districts = DistrictSet()
-        self.import_polling_districts()
-        self.import_polling_stations()
-        self.districts.save()
-        self.stations.save()
