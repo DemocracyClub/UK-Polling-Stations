@@ -5,14 +5,9 @@ import json
 import tempfile
 import urllib.request
 from lxml import etree
-from django.contrib.gis.geos import (
-    GEOSGeometry,
-    MultiPolygon,
-    Point,
-    Polygon,
-    LinearRing
-)
+from django.contrib.gis.geos import GEOSGeometry, Point
 from data_collection.base_importers import BaseGenericApiImporter
+from data_collection.geo_utils import convert_linestring_to_multiploygon
 
 class Command(BaseGenericApiImporter):
     """
@@ -34,19 +29,6 @@ class Command(BaseGenericApiImporter):
         'ref.2016-06-23'
     ]
 
-    def convert_linestring_to_multiploygon(self, linestring):
-        points = linestring.coords
-
-        # close the LineString so we can transform to LinearRing
-        points = list(points)
-        points.append(points[0])
-        ring = LinearRing(points)
-
-        # now we have a LinearRing we can make a Polygon.. and the rest is simple
-        poly = Polygon(ring)
-        multipoly = MultiPolygon(poly)
-        return multipoly
-
     def get_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
             req = urllib.request.urlretrieve(self.districts_url, tmp.name)
@@ -56,7 +38,7 @@ class Command(BaseGenericApiImporter):
     def district_record_to_dict(self, record):
         poly = GEOSGeometry(record[8], srid=self.get_srid('districts'))
         # poly is a LineString, but we need to convert it to a MultiPolygon so it will import
-        poly = self.convert_linestring_to_multiploygon(poly)
+        poly = convert_linestring_to_multiploygon(poly)
 
         return {
             'internal_council_id': record[-1],

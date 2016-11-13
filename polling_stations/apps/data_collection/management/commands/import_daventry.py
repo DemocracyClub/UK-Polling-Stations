@@ -1,11 +1,6 @@
-from django.contrib.gis.geos import (
-    GEOSGeometry,
-    MultiPolygon,
-    Point,
-    Polygon,
-    LinearRing
-)
-from data_collection.data_types import (DistrictSet, StationSet)
+from django.contrib.gis.geos import GEOSGeometry, Point
+from data_collection.data_types import DistrictSet, StationSet
+from data_collection.geo_utils import convert_linestring_to_multiploygon
 from data_collection.management.commands import BaseApiKmlStationsKmlDistrictsImporter
 
 class Command(BaseApiKmlStationsKmlDistrictsImporter):
@@ -30,24 +25,11 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
                 self.duplicate_districts.add(str(district['pollingdis']))
             seen.add(str(district['pollingdis']))
 
-    def convert_linestring_to_multiploygon(self, linestring):
-        points = linestring.coords
-
-        # close the LineString so we can transform to LinearRing
-        points = list(points)
-        points.append(points[0])
-        ring = LinearRing(points)
-
-        # now we have a LinearRing we can make a Polygon.. and the rest is simple
-        poly = Polygon(ring)
-        multipoly = MultiPolygon(poly)
-        return multipoly
-
     def district_record_to_dict(self, record):
         # polygon
         geojson = record.geom.geojson
         geometry_collection = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid('districts')))
-        poly = self.convert_linestring_to_multiploygon(geometry_collection)
+        poly = convert_linestring_to_multiploygon(geometry_collection)
 
         district_id = str(record['pollingdis']).strip()
         if district_id in self.duplicate_districts:
