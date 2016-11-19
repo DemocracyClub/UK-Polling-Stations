@@ -1,5 +1,6 @@
 import glob, os
 from importlib.machinery import SourceFileLoader
+from django.apps import apps
 from django.core.management.base import BaseCommand
 
 from pollingstations.models import PollingStation
@@ -8,6 +9,13 @@ from pollingstations.models import PollingStation
 Run all of the import scripts relating to a particular election or elections
 """
 class Command(BaseCommand):
+
+    """
+    Turn off auto system check for all apps
+    We will maunally run system checks only for the
+    'data_collection' and 'pollingstations' apps
+    """
+    requires_system_checks = False
 
     summary = []
 
@@ -45,6 +53,16 @@ class Command(BaseCommand):
                 self.stdout.write(line[1])
 
     def handle(self, *args, **kwargs):
+        """
+        Manually run system checks for the
+        'data_collection' and 'pollingstations' apps
+        Management commands can ignore checks that only apply to
+        the apps supporting the website part of the project
+        """
+        self.check([
+            apps.get_app_config('data_collection'),
+            apps.get_app_config('pollingstations')
+        ])
 
         files = glob.glob(
             os.path.abspath('polling_stations/apps/data_collection/management/commands') + '/import_*.py'

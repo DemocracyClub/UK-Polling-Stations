@@ -67,7 +67,8 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
     """
     Turn off auto system check for all apps
-    We will maunally run system checks only for the 'data_collection' app
+    We will maunally run system checks only for the
+    'data_collection' and 'pollingstations' apps
     """
     requires_system_checks = False
 
@@ -170,11 +171,15 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
     def handle(self, *args, **kwargs):
         """
-        Manually run system checks for the 'data_collection' app
+        Manually run system checks for the
+        'data_collection' and 'pollingstations' apps
         Management commands can ignore checks that only apply to
         the apps supporting the website part of the project
         """
-        self.check([apps.get_app_config('data_collection')])
+        self.check([
+            apps.get_app_config('data_collection'),
+            apps.get_app_config('pollingstations')
+        ])
 
         verbosity = kwargs.get('verbosity')
         self.logger = LogHelper(verbosity)

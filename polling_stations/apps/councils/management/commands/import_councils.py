@@ -3,6 +3,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos import Point
@@ -13,7 +14,25 @@ from data_finder.helpers import geocode
 
 
 class Command(BaseCommand):
+    """
+    Turn off auto system check for all apps
+    We will maunally run system checks only for the
+    'councils' and 'pollingstations' apps
+    """
+    requires_system_checks = False
+
     def handle(self, **options):
+        """
+        Manually run system checks for the
+        'councils' and 'pollingstations' apps
+        Management commands can ignore checks that only apply to
+        the apps supporting the website part of the project
+        """
+        self.check([
+            apps.get_app_config('councils'),
+            apps.get_app_config('pollingstations')
+        ])
+
         for council_type in settings.COUNCIL_TYPES:
             self.get_type_from_mapit(council_type)
 
