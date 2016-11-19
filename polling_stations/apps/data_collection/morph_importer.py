@@ -1,6 +1,7 @@
 import abc
 import json
 import tempfile
+from django.apps import apps
 from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.gdal import DataSource
@@ -12,16 +13,20 @@ from data_collection.base_importers import BaseGenericApiImporter
 @register()
 def api_key_check(app_configs, **kwargs):
     errors = []
-    key = getattr(settings, 'MORPH_API_KEY', '')
-    if key == '':
-        errors.append(
-            Error(
-                'MORPH_API_KEY must be set',
-                hint='Define MORPH_API_KEY as an env var or in local.py',
-                obj='BaseMorphApiImporter',
-                id='data_collection.E001',
+
+    if (app_configs is None or\
+        apps.get_app_config('data_collection') in app_configs):
+
+        key = getattr(settings, 'MORPH_API_KEY', '')
+        if key == '':
+            errors.append(
+                Error(
+                    'MORPH_API_KEY must be set',
+                    hint='Define MORPH_API_KEY as an env var or in local.py',
+                    obj='BaseMorphApiImporter',
+                    id='data_collection.E001',
+                )
             )
-        )
     return errors
 
 

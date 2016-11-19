@@ -11,6 +11,7 @@ import tempfile
 import urllib.request
 
 from argparse import ArgumentTypeError
+from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.gis import geos
@@ -63,6 +64,12 @@ class CsvMixin:
 
 
 class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
+
+    """
+    Turn off auto system check for all apps
+    We will maunally run system checks only for the 'data_collection' app
+    """
+    requires_system_checks = False
 
     srid = 27700
     council_id = None
@@ -162,6 +169,13 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         return os.path.abspath(path)
 
     def handle(self, *args, **kwargs):
+        """
+        Manually run system checks for the 'data_collection' app
+        Management commands can ignore checks that only apply to
+        the apps supporting the website part of the project
+        """
+        self.check([apps.get_app_config('data_collection')])
+
         verbosity = kwargs.get('verbosity')
         self.logger = LogHelper(verbosity)
         self.batch_size = kwargs.get('batch_size')
