@@ -4,7 +4,7 @@ import time
 from django.contrib.gis.geos import Point
 from lxml import etree
 
-from data_collection.management.commands import BaseMorphApiImporter
+from data_collection.morph_importer import BaseMorphApiImporter
 
 
 class Command(BaseMorphApiImporter):
