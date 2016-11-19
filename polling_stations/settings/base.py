@@ -257,11 +257,11 @@ if type(MANAGE_ADDRESSBASE_MODEL) == str \
 
 
 # import application constants
-from .councils import *
-from .importers import *
-from .mapit import *
-from .tiles import *
-from .directions import *
+from .constants.councils import *
+from .constants.directions import *
+from .constants.importers import *
+from .constants.mapit import *
+from .constants.tiles import *
 
 # Import .local.py last - settings in local.py override everything else
 try:
