@@ -9,13 +9,12 @@ from django.contrib.gis.geos import Point
 from django.conf import settings
 
 from councils.models import Council
-from data_collection import constants
 from data_finder.helpers import geocode
 
 
 class Command(BaseCommand):
     def handle(self, **options):
-        for council_type in constants.COUNCIL_TYPES:
+        for council_type in settings.COUNCIL_TYPES:
             self.get_type_from_mapit(council_type)
 
     def _save_council(self, council):
@@ -23,7 +22,7 @@ class Command(BaseCommand):
             council.save(using=db)
 
     def get_wkt_from_mapit(self, area_id):
-        req = requests.get('%sarea/%s.wkt' % (constants.MAPIT_URL, area_id))
+        req = requests.get('%sarea/%s.wkt' % (settings.MAPIT_URL, area_id))
         area = req.text
         if area.startswith('POLYGON'):
             area = area[7:]
@@ -35,7 +34,7 @@ class Command(BaseCommand):
         if council_id.startswith('N'):
             # GOV.UK returns a 500 for any id in Northen Ireland
             return {}
-        req = requests.get("%s%s" % (constants.GOV_UK_LA_URL, council_id))
+        req = requests.get("%s%s" % (settings.GOV_UK_LA_URL, council_id))
         soup = BeautifulSoup(req.text, "lxml")
         info = {}
         article = soup.findAll('article')[0]
@@ -52,7 +51,7 @@ class Command(BaseCommand):
         return info
 
     def get_type_from_mapit(self, council_type):
-        req = requests.get('%sareas/%s' % (constants.MAPIT_URL, council_type))
+        req = requests.get('%sareas/%s' % (settings.MAPIT_URL, council_type))
         for mapit_id, council in list(req.json().items()):
             council_id = council['codes'].get('gss')
             if not council_id:

@@ -1,7 +1,7 @@
+from django.conf import settings
 import urllib.parse, urllib.request, requests
 import json
 from time import sleep
-from data_collection import constants
 
 
 """
@@ -39,7 +39,7 @@ class GoogleGeocodingApiWrapper:
     """
     def sanity_check(self, postcode):
         sleep(1)  # ensure we don't hit mapit's usage limit
-        res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode))
+        res = requests.get("%s/postcode/%s" % (settings.MAPIT_URL, postcode))
         res_json = res.json()
 
         for area in res_json['areas']:

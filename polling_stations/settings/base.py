@@ -75,7 +75,6 @@ MEDIA_URL = '/media/'
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = root('static_root')
-# print(STATIC_ROOT)
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -215,25 +214,6 @@ LOGGING = {
     }
 }
 
-"""
-Map config:
------------
-
-Set a shell environment variable TILE_LAYER
-to configure which tile layer is used by leaflet.
-
-Supported values are:
-'MapQuestOpen' (default)
-'MapQuestSDK'
-'OpenStreetMap'
-"""
-TILE_LAYER = os.environ.get('TILE_LAYER', 'OpenStreetMap')
-"""
-Set a shell environment variable MQ_KEY
-to specify MapQuestSDK API key.
-"""
-MQ_KEY = os.environ.get('MQ_KEY', None)
-
 
 from django.utils.translation import ugettext_lazy as _
 LANGUAGE_CODE = 'en'
@@ -249,7 +229,6 @@ LOCALE_PATHS = (
 
 
 # API Settings
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -266,50 +245,30 @@ WHITELABEL_PREFIXES = (
     'nus_wales',
 )
 
-
 INTERNAL_IPS = ('127.0.0.1')
 SITE_TITLE = "Where Do I Vote?"
 
-# Google maps API key used by directions helper
-GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', "")
-
-
-# Morph API key used for downloading scraped data in import scripts
-MORPH_API_KEY = os.environ.get('MORPH_API_KEY', "")
-
-
-"""
-Amazon S3 config:
-By default, we will look for a section
-
-[wheredoivote]
-aws_access_key_id = xxxx
-aws_secret_access_key = xxxx
-
-in a /etc/boto.cfg or ~/.boto file, etc
-See: http://boto.cloudhackers.com/en/latest/boto_config_tut.html
-
-We can change the section name using the BOTO_SECTION setting
-"""
-BOTO_SECTION = 'wheredoivote'
-S3_DATA_BUCKET = 'pollingstations-data'
-
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 MANAGE_ADDRESSBASE_MODEL = os.environ.get('MANAGE_ADDRESSBASE_MODEL', True)
 if type(MANAGE_ADDRESSBASE_MODEL) == str \
         and MANAGE_ADDRESSBASE_MODEL.lower() in ['0', 'false']:
     MANAGE_ADDRESSBASE_MODEL = False
 
-# .local.py overrides all the common settings.
+
+# import application constants
+from .councils import *
+from .importers import *
+from .mapit import *
+from .tiles import *
+from .directions import *
+
+# Import .local.py last - settings in local.py override everything else
 try:
     from .local import *
 except ImportError:
     pass
 
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
     from .testing import *
-
-
