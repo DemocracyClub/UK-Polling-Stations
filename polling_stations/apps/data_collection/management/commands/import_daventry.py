@@ -63,11 +63,13 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
         ])
 
         district_ids = str(record['pollingdis']).strip().split(', ')
+        stations = []
         for district_id in district_ids:
-            return {
+            stations.append({
                 'internal_council_id': district_id,
                 'postcode':            record['postcode'],
                 'address':             address,
                 'location':            location,
                 'polling_district_id': district_id
-            }
+            })
+        return stations
