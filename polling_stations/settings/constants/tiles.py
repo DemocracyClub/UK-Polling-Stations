@@ -8,7 +8,6 @@ Set a shell environment variable TILE_LAYER
 to configure which tile layer is used by leaflet.
 
 Supported values are:
-'MapQuestOpen'
 'MapQuestSDK'
 'OpenStreetMap' (default)
 """
