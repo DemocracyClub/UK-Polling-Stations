@@ -7,8 +7,8 @@ from collections import namedtuple
 
 from django.utils.translation import ugettext as _
 from django.contrib.gis.geos import Point
+from django.conf import settings
 
-from data_collection import constants
 from addressbase.helpers import centre_from_points_qs
 from addressbase.models import Address
 
@@ -53,10 +53,10 @@ def geocode(postcode):
 
 
     headers = {}
-    if constants.MAPIT_UA:
-        headers['User-Agent'] = constants.MAPIT_UA
+    if settings.MAPIT_UA:
+        headers['User-Agent'] = settings.MAPIT_UA
 
-    res = requests.get("%s/postcode/%s" % (constants.MAPIT_URL, postcode), headers=headers)
+    res = requests.get("%s/postcode/%s" % (settings.MAPIT_URL, postcode), headers=headers)
 
     if res.status_code == 403:
         # we hit MapIt's rate limit
@@ -106,7 +106,7 @@ class DirectionsHelper():
         self.Directions = namedtuple('Directions', ['walk_time', 'walk_dist', 'route'])
 
     def get_ors_route(self, longlat_from, longlat_to):
-        url = constants.ORS_ROUTE_URL_TEMPLATE.format(longlat_from.x, longlat_from.y, longlat_to.x, longlat_to.y)
+        url = settings.ORS_ROUTE_URL_TEMPLATE.format(longlat_from.x, longlat_from.y, longlat_to.x, longlat_to.y)
 
         resp = requests.get(url)
         if resp.status_code != 200:
@@ -143,7 +143,7 @@ class DirectionsHelper():
 
     def get_google_route(self, postcode, end):
         url = "{base_url}{postcode}&destination={destination}".format(
-                base_url=constants.BASE_GOOGLE_URL,
+                base_url=settings.BASE_GOOGLE_URL,
                 postcode=postcode,
                 destination="{0},{1}".format(end.y, end.x),
             )

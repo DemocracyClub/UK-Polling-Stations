@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.db import connection
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
@@ -9,7 +10,25 @@ fields in DataQuality model
 """
 class Command(BaseCommand):
 
+    """
+    Turn off auto system check for all apps
+    We will maunally run system checks only for the
+    'data_collection' and 'pollingstations' apps
+    """
+    requires_system_checks = False
+
     def handle(self, *args, **kwargs):
+        """
+        Manually run system checks for the
+        'data_collection' and 'pollingstations' apps
+        Management commands can ignore checks that only apply to
+        the apps supporting the website part of the project
+        """
+        self.check([
+            apps.get_app_config('data_collection'),
+            apps.get_app_config('pollingstations')
+        ])
+
         PollingDistrict.objects.all().delete()
         PollingStation.objects.all().delete()
         ResidentialAddress.objects.all().delete()
