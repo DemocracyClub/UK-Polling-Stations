@@ -12,6 +12,7 @@ Feature: Check Postcodes
     Then I should see "Your polling station"
     Then I should see "The polling station for BB11BB is"
     Then I should see "Get walking directions"
+    Then No errors were thrown
 
     Scenario: Check postcode without address picker
     When I visit site page "/"
@@ -22,3 +23,4 @@ Feature: Check Postcodes
     Then I should see "Your polling station"
     Then I should see "The polling station for NP205GN is"
     Then I should see "Get walking directions"
+    Then No errors were thrown
