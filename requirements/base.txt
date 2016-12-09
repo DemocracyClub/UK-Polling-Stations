@@ -25,4 +25,4 @@ boto==2.42.0
 
 git+https://github.com/DemocracyClub/django-static-precompiler
 libsass
-git+git://github.com/DemocracyClub/dc_base_theme.git
+git+git://github.com/DemocracyClub/dc_base_theme.git@04efca5047b31d705e63d516b3b5dc5d0f0694a7
