@@ -28,11 +28,8 @@ class Command(BaseShpStationsShpDistrictsImporter):
             There is a dodgy point in this file.
             It has too many digits for a UK national grid reference.
 
-            (Either that or Bwttws Newydd Parish Community Hall
-            is actually in the sea somewhere between Norway and Iceland)
-
-            Replace it with the point for the postcode centroid
+            Joe queried, Monmouthshire provided this corrected point by email
             """
-            station['location'] = Point(336103, 205979, srid=27700)
+            station['location'] = Point(335973, 206322, srid=27700)
 
         return station
