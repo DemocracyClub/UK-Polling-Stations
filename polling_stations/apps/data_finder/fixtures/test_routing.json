@@ -3,7 +3,7 @@
         "fields": {
             "council_type": "",
             "mapit_id": "",
-            "name": "",
+            "name": "Foo Council",
             "email": "",
             "phone": "",
             "website": "",

@@ -32,6 +32,13 @@ def setup(scenario, outline, steps):
         call_command('loaddata', 'test_routing.json', stdout=f)
         call_command('loaddata', 'newport_council.json', stdout=f)
 
+@step('No errors were thrown')
+def no_errors(step):
+    assert\
+        len(world.browser.get_log('browser')) == 0,\
+        "JavaScript errors were logged:\n %s" %\
+        (world.browser.get_log('browser'))
+
 @after.each_example
 def take_down(scenario, outline, steps):
     world.browser.quit()
