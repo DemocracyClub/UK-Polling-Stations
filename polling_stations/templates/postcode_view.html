@@ -69,7 +69,7 @@
         <div>{{ custom.message|safe }}</div>
         {% if custom.base_url and custom.can_pass_postcode %}
 
-            <p><a href="{{ custom.base_url }}{{ custom.encoded_postcode }}">{% trans "Find your polling station" %}</a></p>
+            <p><a href="{{ custom.base_url }}{{ custom.encoded_postcode }}" target="_top">{% trans "Find your polling station" %}</a></p>
             {% if council.phone %}
               {% blocktrans with council_phone=council.phone council_name=council.name %}
               <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
@@ -79,7 +79,7 @@
         {% else %}
             {% if custom.base_url %}
 
-                <p><a href="{{ custom.base_url }}">{% trans "Find your polling station" %}</a></p>
+                <p><a href="{{ custom.base_url }}" target="_top">{% trans "Find your polling station" %}</a></p>
                 {% if council.phone %}
                   {% blocktrans with council_phone=council.phone council_name=council.name %}
                   <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
@@ -120,7 +120,7 @@
                 {% blocktrans with directions.walk_time as walk_time and directions.walk_dist as walk_dist %}
                 It's about {{ walk_dist }} away or a {{ walk_time }} walk from {{ postcode }}.
                 {% endblocktrans %}</p>
-            <a href="https://www.google.com/maps/dir/{{postcode}}/{{ station.location.y }},{{ station.location.x }}">
+            <a href="https://www.google.com/maps/dir/{{postcode}}/{{ station.location.y }},{{ station.location.x }}" target="_top">
                 {% trans "Get walking directions" %}
             </a>
             </div>
@@ -157,7 +157,7 @@
         <p>You don't need any other form of ID.</p>
         <p>If you haven’t received a polling card but think you should have done, contact your council</p>
         <p><strong>Polling stations are open from 7am to 10pm on polling day.</strong></p>
-        <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_blank">
+        <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
           Read more about voting in the UK
         </a></p>
         {% endblocktrans %}
@@ -166,7 +166,7 @@
     <div class="card">
         {% blocktrans %}
         <h3>You need to be registered in order to vote</h3>
-        <p>If you aren’t registered to vote visit <a href="https://www.gov.uk/register-to-vote">https://www.gov.uk/register-to-vote</a>.</p>
+        <p>If you aren’t registered to vote visit <a href="https://www.gov.uk/register-to-vote" target="_top">https://www.gov.uk/register-to-vote</a>.</p>
 
         {% endblocktrans %}
     </div>
@@ -174,7 +174,7 @@
     {# <div class="card"> #}
     {#     {% blocktrans %} #}
     {#     <h3>Information on your candidates</h3> #}
-    {#     <p>You can find information on your candidates at <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}"> #}
+    {#     <p>You can find information on your candidates at <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}" target="_top"> #}
     {#       WhoCanIVoteFor.co.uk #}
     {#     </a></p> #}
     {#  #}
@@ -237,14 +237,14 @@
       {% else %}
         {% if tile_layer == 'OpenStreetMap' %}
         tiles = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            attribution: 'Map data © <a href="http://openstreetmap.org" target="_top">OpenStreetMap</a> contributors',
             subdomains: 'abc'
         });
         {% else %}
         tiles = L.tileLayer('https://otile{s}-s.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
             type: 'map',
             ext: 'jpg',
-            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_top">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright" target="_top">OpenStreetMap</a>',
             subdomains: '1234'
         });
         {% endif %}
