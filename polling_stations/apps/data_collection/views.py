@@ -35,11 +35,17 @@ class MorphReport(TemplateView):
         return message % (date_formatted, date_human)
 
     def query(self):
-        url = "https://api.morph.io/wdiv-scrapers/dc-meta-scraper/data.json"
-        url += "?key=%s&query=select%%20*%%20from%%20%%27report%%27%%3B"
-        url = url % (settings.MORPH_API_KEY)
 
-        res = requests.get(url)
+        url = "https://api.morph.io/wdiv-scrapers/dc-meta-scraper/data.json"
+        query = "SELECT * FROM 'report' ORDER BY "
+        query += "(CASE WHEN changes>0 THEN 1 ELSE 0 END) DESC, "
+        query += "last_changed DESC, council_id, entity;"
+        payload = {
+            'key': settings.MORPH_API_KEY,
+            'query': query
+        }
+
+        res = requests.get(url, payload)
         if res.status_code != 200:
             res.raise_for_status()
         return res.json()
