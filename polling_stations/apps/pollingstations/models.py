@@ -121,6 +121,13 @@ class PollingStation(models.Model):
         return "\n".join([x[0] for x in groupby(self.address.split(','))])
 
 
+class ElectoralRoll(models.Model):
+    address             = models.TextField(blank=True, null=True)
+    postcode            = models.CharField(blank=True, null=True, max_length=100, db_index=True)
+    council             = models.ForeignKey(Council, null=True)
+    polling_district_id = models.CharField(blank=True, max_length=100)
+
+
 class ResidentialAddress(models.Model):
     address            = models.TextField(blank=True, null=True)
     postcode           = models.CharField(blank=True, null=True, max_length=100, db_index=True)
