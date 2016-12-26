@@ -18,6 +18,9 @@ class Command(BaseCommand):
     requires_system_checks = False
 
     summary = []
+    exclude = [
+        'import_crowdsourced_csv.py'
+    ]
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -70,6 +73,10 @@ class Command(BaseCommand):
         # loop over all the import scripts
         for f in files:
             head, tail = os.path.split(f)
+
+            if tail in self.exclude:
+                continue
+
             try:
                 command = SourceFileLoader("module.name", f).load_module()
             except:
