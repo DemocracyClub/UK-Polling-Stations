@@ -1,12 +1,25 @@
-import glob, os
+import glob, os, re
 from importlib.machinery import SourceFileLoader
 from django.apps import apps
 from django.core.management.base import BaseCommand
 
 from pollingstations.models import PollingStation
 
+
+# does this regular expression match any of the elements in this list?
+def match_in(regex, lst):
+    for el in lst:
+        if re.match(regex, el):
+            return True
+    return False
+
+
 """
 Run all of the import scripts relating to a particular election or elections
+
+Election id may be either a string or regex. For example:
+python manage.py import -e local.buckinghamshire.2017-05-04
+python manage.py import -r -e 'local.[a-z]+.2017-05-04'
 """
 class Command(BaseCommand):
 
@@ -29,6 +42,15 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
+            '-r',
+            '--regex',
+            help='<Optional> Election ids should be matched as regular expressions',
+            action='store_true',
+            required=False,
+            default=False
+        )
+
+        parser.add_argument(
             '-o',
             '--overwrite',
             help='<Optional> Force deleting of existing data',
@@ -37,10 +59,14 @@ class Command(BaseCommand):
             default=False
         )
 
-    def importer_covers_these_elections(self, args_elections, importer_elections):
+    def importer_covers_these_elections(self, args_elections, importer_elections, regex):
         for election in args_elections:
-            if election in importer_elections:
-                return True
+            if regex:
+                if match_in(election, importer_elections):
+                    return True
+            else:
+                if election in importer_elections:
+                    return True
         return False
 
     def output_summary(self):
@@ -81,7 +107,7 @@ class Command(BaseCommand):
 
             cmd = command.Command()
             if hasattr(cmd, 'elections'):
-                if self.importer_covers_these_elections(kwargs['elections'], cmd.elections):
+                if self.importer_covers_these_elections(kwargs['elections'], cmd.elections, kwargs['regex']):
                     # run the import script
 
                     # Only run if
