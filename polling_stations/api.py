@@ -40,14 +40,12 @@ class PolygonField(serializers.Field):
 
 # Serializers define the API representation.
 class CouncilSerializer(serializers.HyperlinkedModelSerializer):
-    location = PointField()
 #    area = PolygonField()
     class Meta:
         model = Council
         fields = (
             'council_id', 'council_type', 'mapit_id', 'name',
             'email', 'phone', 'website', 'postcode', 'address',
-            'location',
 #            'area' # This is super slow ATM - TODO!
         )
 
