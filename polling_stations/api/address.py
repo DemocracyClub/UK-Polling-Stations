@@ -18,10 +18,17 @@ class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ResidentialAddress
-        fields = ('address', 'postcode', 'council', 'polling_station_id')
+        lookup_field = 'slug'
+        extra_kwargs = {
+            'url': {'view_name': 'address-detail', 'lookup_field': 'slug'}
+        }
+
+        fields = ('url', 'address', 'postcode', 'council', 'polling_station_id')
 
 
 class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
+
+    lookup_field = 'slug'
 
     def get_queryset(self, **kwargs):
         if not kwargs:
@@ -29,14 +36,14 @@ class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
         assert 'slug' in kwargs
         return ResidentialAddress.objects.get(slug=kwargs['slug'])
 
-    def retrieve(self, request, pk=None, format=None):
+    def retrieve(self, request, slug=None, format=None):
         ret = {}
         ret['custom_finder'] = None
 
         # attempt to get address based on slug
         # if we fail, return an error response
         try:
-            address = self.get_queryset(slug=pk)
+            address = self.get_queryset(slug=slug)
         except ObjectDoesNotExist as e:
             return Response({'error': 'Address not found'}, status=404)
 
