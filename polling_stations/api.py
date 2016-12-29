@@ -110,7 +110,7 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
             location=kwargs['location']
         )
 
-    def retrieve(self, requst, pk=None, format=None):
+    def retrieve(self, request, pk=None, format=None):
         postcode = pk.replace(' ', '')
         ret = {}
         ret['polling_station_known'] = False
