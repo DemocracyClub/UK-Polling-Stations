@@ -136,6 +136,7 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
 
         rh = RoutingHelper(postcode)
 
+        ret['addresses'] = []
         if rh.route_type == "multiple_addresses":
             ret['addresses'] = [
                 ResidentialAddressSerializer(address, context={
@@ -156,11 +157,13 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
                 council=ret['council'],
                 )
 
+        ret['polling_station'] = None
         if polling_station:
             ret['polling_station_known'] = True
             ret['polling_station'] = PollingStationSerializer(
                 polling_station, context={'request': self.request}).data
 
+        ret['custom_finder'] = None
         if not ret['polling_station_known']:
             finder = CustomFinder.objects.get_custom_finder(l['gss_codes'], postcode)
             if finder and finder.base_url:
