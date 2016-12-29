@@ -120,9 +120,12 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
 
         try:
             l = geocode(pk)
-        except (PostcodeError, RateLimitError) as e:
+        except PostcodeError as e:
             ret['error'] = e.args[0]
-            return Response(ret)
+            return Response(ret, status=400)
+        except RateLimitError as e:
+            ret['error'] = e.args[0]
+            return Response(ret, status=403)
 
         location = Point(l['wgs84_lon'], l['wgs84_lat'])
         ret['postcode_location'] = PointField().to_representation(
