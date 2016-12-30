@@ -18,6 +18,8 @@ from .pollingstations import PollingStationDataSerializer as PollingStationSeria
 
 class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
 
+    http_method_names = ['get', 'post', 'head', 'options']
+
     def get_queryset(self, **kwargs):
         if not kwargs:
             return PollingStation.objects.all()

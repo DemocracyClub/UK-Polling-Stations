@@ -23,5 +23,6 @@ class PollingStationGeoSerializer(GeoFeatureModelSerializer):
 
 
 class PollingStationViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'head', 'options']
     queryset = PollingStation.objects.all()
     serializer_class = PollingStationDataSerializer

@@ -27,5 +27,6 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
 
 
 class CouncilViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'head', 'options']
     queryset = Council.objects.all()
     serializer_class = CouncilDataSerializer
