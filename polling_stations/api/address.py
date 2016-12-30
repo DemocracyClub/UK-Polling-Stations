@@ -29,7 +29,6 @@ class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
 class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
 
     http_method_names = ['get', 'post', 'head', 'options']
-
     lookup_field = 'slug'
 
     def get_queryset(self, **kwargs):

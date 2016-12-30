@@ -19,6 +19,7 @@ from .pollingstations import PollingStationDataSerializer as PollingStationSeria
 class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
 
     http_method_names = ['get', 'post', 'head', 'options']
+    lookup_field = 'postcode'
 
     def get_queryset(self, **kwargs):
         if not kwargs:
@@ -30,14 +31,14 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
             location=kwargs['location']
         )
 
-    def retrieve(self, request, pk=None, format=None):
-        postcode = pk.replace(' ', '')
+    def retrieve(self, request, postcode=None, format=None):
+        postcode = postcode.replace(' ', '')
         ret = {}
         ret['polling_station_known'] = False
         polling_station = None
 
         try:
-            l = geocode(pk)
+            l = geocode(postcode)
         except PostcodeError as e:
             ret['error'] = e.args[0]
             return Response(ret, status=400)
