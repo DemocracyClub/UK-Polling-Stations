@@ -8,8 +8,9 @@ class CouncilDataSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = Council
+        lookup_field = 'council_id'
         fields = (
-            'council_id', 'council_type', 'mapit_id', 'name',
+            'url', 'council_id', 'council_type', 'mapit_id', 'name',
             'email', 'phone', 'website', 'postcode', 'address',
         )
 

@@ -50,7 +50,8 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
         ret['postcode_location'] = PointField().to_representation(location)
 
         council = Council.objects.get(area__covers=location)
-        ret['council'] = CouncilSerializer(council).data
+        ret['council'] = CouncilSerializer(
+            council, context={'request': request}).data
 
         rh = RoutingHelper(postcode)
 

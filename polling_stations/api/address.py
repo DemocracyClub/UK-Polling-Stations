@@ -56,7 +56,8 @@ class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
             ).data
         ]
 
-        ret['council'] = CouncilSerializer(address.council).data
+        ret['council'] = CouncilSerializer(
+            address.council, context={'request': request}).data
 
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
