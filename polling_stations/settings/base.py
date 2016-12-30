@@ -166,6 +166,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'rest_framework',
+    'rest_framework_gis',
     'django_extensions',
 )
 
