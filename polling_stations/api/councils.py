@@ -1,19 +1,31 @@
-from rest_framework import serializers, viewsets
+from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from councils.models import Council
-# from .fields import PolygonField
 
 
-class CouncilSerializer(serializers.HyperlinkedModelSerializer):
-    # area = PolygonField()
+class CouncilDataSerializer(HyperlinkedModelSerializer):
+
     class Meta:
         model = Council
         fields = (
             'council_id', 'council_type', 'mapit_id', 'name',
             'email', 'phone', 'website', 'postcode', 'address',
-            # 'area' # This is super slow ATM - TODO!
         )
 
 
-class CouncilViewSet(viewsets.ModelViewSet):
+class CouncilGeoSerializer(GeoFeatureModelSerializer):
+
+    class Meta:
+        model = Council
+        geo_field = 'area'
+        id_field = 'council_id'
+        fields = (
+            'council_id', 'council_type', 'mapit_id', 'name',
+            'email', 'phone', 'website', 'postcode', 'address',
+        )
+
+
+class CouncilViewSet(ModelViewSet):
     queryset = Council.objects.all()
-    serializer_class = CouncilSerializer
+    serializer_class = CouncilDataSerializer

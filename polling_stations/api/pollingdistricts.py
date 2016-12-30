@@ -1,18 +1,24 @@
-from rest_framework import serializers, viewsets
+from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from pollingstations.models import PollingDistrict
-# from .fields import PolygonField
 
 
-class PollingDistrictSerializer(serializers.HyperlinkedModelSerializer):
-    # area = PolygonField()
+class PollingDistrictDataSerializer(HyperlinkedModelSerializer):
+
     class Meta:
         model = PollingDistrict
-        fields = (
-            'name', 'council',
-            # 'area' This is super slow ATM - TODO!
-        )
+        fields = ('name', 'council')
 
 
-class PollingDistrictViewSet(viewsets.ModelViewSet):
+class PollingDistrictGeoSerializer(GeoFeatureModelSerializer):
+
+    class Meta:
+        model = PollingDistrict
+        geo_field = 'area'
+        fields = ('name', 'council')
+
+
+class PollingDistrictViewSet(ModelViewSet):
     queryset = PollingDistrict.objects.all()
-    serializer_class = PollingDistrictSerializer
+    serializer_class = PollingDistrictDataSerializer

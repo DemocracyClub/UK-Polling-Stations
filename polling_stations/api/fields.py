@@ -18,13 +18,3 @@ class PointField(serializers.Field):
             "longitude": smart_str(value.x)
         }
         return value
-
-
-class PolygonField(serializers.Field):
-    type_name = 'PolygonField'
-    type_label = 'polygon'
-
-    def to_representation(self, value):
-        if value is None:
-            return value
-        return value.coords
