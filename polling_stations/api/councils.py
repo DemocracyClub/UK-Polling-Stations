@@ -1,5 +1,5 @@
 from rest_framework.serializers import HyperlinkedModelSerializer
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from councils.models import Council
 
@@ -26,7 +26,6 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
         )
 
 
-class CouncilViewSet(ModelViewSet):
-    http_method_names = ['get', 'post', 'head', 'options']
+class CouncilViewSet(ReadOnlyModelViewSet):
     queryset = Council.objects.all()
     serializer_class = CouncilDataSerializer

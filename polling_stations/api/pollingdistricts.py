@@ -1,5 +1,5 @@
 from rest_framework.serializers import HyperlinkedModelSerializer
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from pollingstations.models import PollingDistrict
 
@@ -19,7 +19,6 @@ class PollingDistrictGeoSerializer(GeoFeatureModelSerializer):
         fields = ('name', 'council')
 
 
-class PollingDistrictViewSet(ModelViewSet):
-    http_method_names = ['get', 'post', 'head', 'options']
+class PollingDistrictViewSet(ReadOnlyModelViewSet):
     queryset = PollingDistrict.objects.all()
     serializer_class = PollingDistrictDataSerializer
