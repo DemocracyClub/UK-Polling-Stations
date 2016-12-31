@@ -24,4 +24,4 @@ class PollingStationGeoSerializer(GeoFeatureModelSerializer):
 
 class PollingStationViewSet(ReadOnlyModelViewSet):
     queryset = PollingStation.objects.all()
-    serializer_class = PollingStationDataSerializer
+    serializer_class = PollingStationGeoSerializer
