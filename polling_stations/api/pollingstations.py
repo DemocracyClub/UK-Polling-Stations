@@ -1,3 +1,4 @@
+from rest_framework.decorators import list_route
 from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
@@ -15,3 +16,7 @@ class PollingStationSerializer(GeoFeatureModelSerializer):
 class PollingStationViewSet(GenericViewSet, ListModelMixin):
     queryset = PollingStation.objects.all()
     serializer_class = PollingStationSerializer
+
+    @list_route(url_path='geo')
+    def geo(self, request, format=None):
+        return self.list(request, format=None)
