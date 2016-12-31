@@ -46,7 +46,7 @@ class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
         try:
             address = self.get_queryset(slug=slug)
         except ObjectDoesNotExist as e:
-            return Response({'error': 'Address not found'}, status=404)
+            return Response({'detail': 'Address not found'}, status=404)
 
         # create singleton list for consistency with /postcode endpoint
         ret['addresses'] = [

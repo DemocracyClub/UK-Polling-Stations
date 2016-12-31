@@ -40,10 +40,10 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
         try:
             l = geocode(postcode)
         except PostcodeError as e:
-            ret['error'] = e.args[0]
+            ret['detail'] = e.args[0]
             return Response(ret, status=400)
         except RateLimitError as e:
-            ret['error'] = e.args[0]
+            ret['detail'] = e.args[0]
             return Response(ret, status=403)
 
         location = Point(l['wgs84_lon'], l['wgs84_lat'])
