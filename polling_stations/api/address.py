@@ -11,7 +11,7 @@ from data_finder.helpers import (
 from pollingstations.models import PollingStation, ResidentialAddress
 from .councils import CouncilDataSerializer as CouncilSerializer
 from .fields import PointField
-from .pollingstations import PollingStationSerializer
+from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
 
 
 class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):

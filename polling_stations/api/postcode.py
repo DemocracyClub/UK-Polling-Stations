@@ -13,7 +13,7 @@ from pollingstations.models import PollingStation, CustomFinder
 from .address import ResidentialAddressSerializer
 from .councils import CouncilDataSerializer as CouncilSerializer
 from .fields import PointField
-from .pollingstations import PollingStationSerializer
+from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
 
 
 class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
