@@ -1,10 +1,9 @@
-from rest_framework.decorators import list_route
 from rest_framework.mixins import ListModelMixin
-from rest_framework.response import Response
 from rest_framework.serializers import CharField, HyperlinkedModelSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from pollingstations.models import PollingStation
+from .mixins import PollingEntityMixin
 
 
 class PollingStationDataSerializer(HyperlinkedModelSerializer):
@@ -26,7 +25,7 @@ class PollingStationGeoSerializer(GeoFeatureModelSerializer):
         fields = ('council', 'station_id', 'postcode', 'address', 'location')
 
 
-class PollingStationViewSet(GenericViewSet, ListModelMixin):
+class PollingStationViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):
     queryset = PollingStation.objects.all()
 
     def get_queryset(self):
@@ -42,29 +41,13 @@ class PollingStationViewSet(GenericViewSet, ListModelMixin):
         return PollingStation.objects.filter(
             council=council_id, internal_council_id=station_id)
 
+    def get_serializer_class(self):
+        if self.geo:
+            return PollingStationGeoSerializer
+        return PollingStationDataSerializer
+
     def validate_request(self):
         if 'station_id' in self.request.query_params and\
                 'council_id' not in self.request.query_params:
             return False
         return True
-
-    def list(self, request, *args, **kwargs):
-        if not self.validate_request():
-            return Response(
-                {'detail': 'council_id parameter must be specified'}, 400)
-
-        queryset = self.get_queryset()
-        serializer = PollingStationDataSerializer(
-            queryset, many=True, read_only=True, context={'request': request})
-        return Response(serializer.data)
-
-    @list_route(url_path='geo')
-    def geo(self, request, format=None):
-        if not self.validate_request():
-            return Response(
-                {'detail': 'council_id parameter must be specified'}, 400)
-
-        queryset = self.get_queryset()
-        serializer = PollingStationGeoSerializer(
-            queryset, many=True, read_only=True, context={'request': request})
-        return Response(serializer.data)

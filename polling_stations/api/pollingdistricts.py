@@ -1,10 +1,9 @@
-from rest_framework.decorators import list_route
 from rest_framework.mixins import ListModelMixin
-from rest_framework.response import Response
 from rest_framework.serializers import CharField, HyperlinkedModelSerializer
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from pollingstations.models import PollingDistrict
+from .mixins import PollingEntityMixin
 
 
 class PollingDistrictDataSerializer(HyperlinkedModelSerializer):
@@ -26,7 +25,7 @@ class PollingDistrictGeoSerializer(GeoFeatureModelSerializer):
         fields = ('council', 'district_id', 'name')
 
 
-class PollingDistrictViewSet(GenericViewSet, ListModelMixin):
+class PollingDistrictViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):
     queryset = PollingDistrict.objects.all()
 
     def get_queryset(self):
@@ -42,29 +41,13 @@ class PollingDistrictViewSet(GenericViewSet, ListModelMixin):
         return PollingDistrict.objects.filter(
             council=council_id, internal_council_id=district_id)
 
+    def get_serializer_class(self):
+        if self.geo:
+            return PollingDistrictGeoSerializer
+        return PollingDistrictDataSerializer
+
     def validate_request(self):
         if 'district_id' in self.request.query_params and\
                 'council_id' not in self.request.query_params:
             return False
         return True
-
-    def list(self, request, *args, **kwargs):
-        if not self.validate_request():
-            return Response(
-                {'detail': 'council_id parameter must be specified'}, 400)
-
-        queryset = self.get_queryset()
-        serializer = PollingDistrictDataSerializer(
-            queryset, many=True, read_only=True, context={'request': request})
-        return Response(serializer.data)
-
-    @list_route(url_path='geo')
-    def geo(self, request, format=None):
-        if not self.validate_request():
-            return Response(
-                {'detail': 'council_id parameter must be specified'}, 400)
-
-        queryset = self.get_queryset()
-        serializer = PollingDistrictGeoSerializer(
-            queryset, many=True, read_only=True, context={'request': request})
-        return Response(serializer.data)
