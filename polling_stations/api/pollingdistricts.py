@@ -44,8 +44,8 @@ class PollingDistrictViewSet(GenericViewSet, ListModelMixin):
 
     def validate_request(self):
         if 'district_id' in self.request.query_params and\
-            'council_id' not in self.request.query_params:
-                return False
+                'council_id' not in self.request.query_params:
+            return False
         return True
 
     def list(self, request, *args, **kwargs):
