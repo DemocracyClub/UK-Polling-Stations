@@ -10,8 +10,8 @@ from data_finder.helpers import (
 )
 from pollingstations.models import PollingStation, ResidentialAddress
 from .councils import CouncilDataSerializer as CouncilSerializer
-from .fields import PointField
-from .pollingstations import PollingStationDataSerializer as PollingStationSerializer
+from .fields import GeoJsonPointField as PointField
+from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
 
 
 class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
@@ -64,10 +64,9 @@ class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
         try:
             l = geocode_point_only(address.postcode)
             location = Point(l['wgs84_lon'], l['wgs84_lat'])
-            ret['postcode_location'] = PointField().to_representation(location)
         except (PostcodeError, RateLimitError) as e:
             location = None
-            ret['postcode_location'] = None
+        ret['postcode_location'] = PointField().to_representation(location)
 
         # get polling station
         polling_station = PollingStation.objects.get_polling_station_by_id(

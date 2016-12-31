@@ -12,8 +12,8 @@ from data_finder.helpers import (
 from pollingstations.models import PollingStation, CustomFinder
 from .address import ResidentialAddressSerializer
 from .councils import CouncilDataSerializer as CouncilSerializer
-from .fields import PointField
-from .pollingstations import PollingStationDataSerializer as PollingStationSerializer
+from .fields import GeoJsonPointField as PointField
+from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
 
 
 class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
