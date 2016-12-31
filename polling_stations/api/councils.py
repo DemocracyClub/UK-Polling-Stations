@@ -1,6 +1,9 @@
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 
 
@@ -30,3 +33,15 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
 class CouncilViewSet(ReadOnlyModelViewSet):
     queryset = Council.objects.all()
     serializer_class = CouncilDataSerializer
+
+    @detail_route(url_path='geo')
+    def geo(self, request, pk=None, format=None):
+        try:
+            council = Council.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'detail': 'Not found.'}, 404)
+        except:
+            return Response({'detail': 'Internal server error'}, 500)
+
+        return Response(
+            CouncilGeoSerializer(council, context={'request': request}).data)
