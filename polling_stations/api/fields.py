@@ -1,4 +1,3 @@
-from django.utils.encoding import smart_str
 from rest_framework import serializers
 
 
