@@ -1,5 +1,9 @@
 from rest_framework.mixins import ListModelMixin
-from rest_framework.serializers import CharField, HyperlinkedModelSerializer
+from rest_framework.serializers import (
+    CharField,
+    HyperlinkedModelSerializer,
+    SerializerMethodField
+)
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from pollingstations.models import PollingDistrict
@@ -18,11 +22,16 @@ class PollingDistrictDataSerializer(HyperlinkedModelSerializer):
 class PollingDistrictGeoSerializer(GeoFeatureModelSerializer):
 
     district_id = CharField(source='internal_council_id', read_only=True)
+    id = SerializerMethodField('generate_id')
+
+    def generate_id(self, record):
+        return "%s.%s" % (record.council_id, record.internal_council_id)
 
     class Meta:
         model = PollingDistrict
         geo_field = 'area'
-        fields = ('council', 'district_id', 'name')
+        id_field = 'id'
+        fields = ('id', 'council', 'district_id', 'name')
 
 
 class PollingDistrictViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):
