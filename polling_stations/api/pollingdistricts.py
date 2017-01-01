@@ -15,6 +15,21 @@ from .pollingstations import PollingStationDataSerializer
 
 class PollingDistrictSerializer():
 
+    def generate_urls(self, record):
+        query_args = urlencode({
+            'council_id': record.council_id,
+            'district_id': record.internal_council_id})
+
+        detail_url = u'%s?%s' % (
+            reverse('pollingdistrict-list', request=self.context['request']),
+            query_args)
+
+        geo_url = u'%s?%s' % (
+            reverse('pollingdistrict-geo', request=self.context['request']),
+            query_args)
+
+        return {'detail': detail_url, 'geo': geo_url}
+
     def generate_polling_station(self, record):
         station = PollingStation.objects.get_polling_station(
             record.council_id, polling_district=record)
@@ -27,26 +42,19 @@ class PollingDistrictSerializer():
 class PollingDistrictDataSerializer(PollingDistrictSerializer, HyperlinkedModelSerializer):
 
     district_id = CharField(source='internal_council_id', read_only=True)
-    url = SerializerMethodField('generate_url')
+    urls = SerializerMethodField('generate_urls')
     polling_station = SerializerMethodField('generate_polling_station')
-
-    def generate_url(self, record):
-        url = reverse('pollingdistrict-list', request=self.context['request'])
-        return u'%s?%s' % (url, urlencode({
-            'council_id': record.council_id,
-            'district_id': record.internal_council_id
-        }))
 
     class Meta:
         model = PollingDistrict
-        fields = ('url', 'council', 'district_id', 'name', 'polling_station')
+        fields = ('urls', 'council', 'district_id', 'name', 'polling_station')
 
 
 class PollingDistrictGeoSerializer(PollingDistrictSerializer, GeoFeatureModelSerializer):
 
     district_id = CharField(source='internal_council_id', read_only=True)
     id = SerializerMethodField('generate_id')
-    url = SerializerMethodField('generate_url')
+    urls = SerializerMethodField('generate_urls')
     council = SerializerMethodField('generate_council')
     polling_station = SerializerMethodField('generate_polling_station')
 
@@ -60,18 +68,11 @@ class PollingDistrictGeoSerializer(PollingDistrictSerializer, GeoFeatureModelSer
     def generate_id(self, record):
         return "%s.%s" % (record.council_id, record.internal_council_id)
 
-    def generate_url(self, record):
-        url = reverse('pollingdistrict-geo', request=self.context['request'])
-        return u'%s?%s' % (url, urlencode({
-            'council_id': record.council_id,
-            'district_id': record.internal_council_id
-        }))
-
     class Meta:
         model = PollingDistrict
         geo_field = 'area'
         id_field = 'id'
-        fields = ('id', 'url', 'council', 'district_id', 'name', 'polling_station')
+        fields = ('id', 'urls', 'council', 'district_id', 'name', 'polling_station')
 
 
 class PollingDistrictViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):

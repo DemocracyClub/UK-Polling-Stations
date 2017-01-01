@@ -12,28 +12,39 @@ from pollingstations.models import PollingStation
 from .mixins import PollingEntityMixin
 
 
-class PollingStationDataSerializer(HyperlinkedModelSerializer):
+class PollingStationSerializer():
+
+    def generate_urls(self, record):
+        query_args = urlencode({
+            'council_id': record.council_id,
+            'station_id': record.internal_council_id})
+
+        detail_url = u'%s?%s' % (
+            reverse('pollingstation-list', request=self.context['request']),
+            query_args)
+
+        geo_url = u'%s?%s' % (
+            reverse('pollingstation-geo', request=self.context['request']),
+            query_args)
+
+        return {'detail': detail_url, 'geo': geo_url}
+
+
+class PollingStationDataSerializer(PollingStationSerializer, HyperlinkedModelSerializer):
 
     station_id = CharField(source='internal_council_id', read_only=True)
-    url = SerializerMethodField('generate_url')
-
-    def generate_url(self, record):
-        url = reverse('pollingstation-list', request=self.context['request'])
-        return u'%s?%s' % (url, urlencode({
-            'council_id': record.council_id,
-            'station_id': record.internal_council_id
-        }))
+    urls = SerializerMethodField('generate_urls')
 
     class Meta:
         model = PollingStation
-        fields = ('url', 'council', 'station_id', 'postcode', 'address')
+        fields = ('urls', 'council', 'station_id', 'postcode', 'address')
 
 
-class PollingStationGeoSerializer(GeoFeatureModelSerializer):
+class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSerializer):
 
     station_id = CharField(source='internal_council_id', read_only=True)
     id = SerializerMethodField('generate_id')
-    url = SerializerMethodField('generate_url')
+    urls = SerializerMethodField('generate_urls')
     council = SerializerMethodField('generate_council')
 
     def generate_council(self, record):
@@ -46,19 +57,12 @@ class PollingStationGeoSerializer(GeoFeatureModelSerializer):
     def generate_id(self, record):
         return "%s.%s" % (record.council_id, record.internal_council_id)
 
-    def generate_url(self, record):
-        url = reverse('pollingstation-geo', request=self.context['request'])
-        return u'%s?%s' % (url, urlencode({
-            'council_id': record.council_id,
-            'station_id': record.internal_council_id
-        }))
-
     class Meta:
         model = PollingStation
         geo_field = 'location'
         id_field = 'id'
         fields = (
-            'id', 'url', 'council', 'station_id', 'postcode', 'address', 'location'
+            'id', 'urls', 'council', 'station_id', 'postcode', 'address', 'location'
         )
 
 
