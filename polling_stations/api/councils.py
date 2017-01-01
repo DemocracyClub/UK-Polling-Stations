@@ -24,8 +24,11 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
         model = Council
         geo_field = 'area'
         id_field = 'council_id'
+        extra_kwargs = {
+            'url': {'view_name': 'council-geo', 'lookup_field': 'pk'}
+        }
         fields = (
-            'council_id', 'council_type', 'mapit_id', 'name',
+            'url', 'council_id', 'council_type', 'mapit_id', 'name',
             'email', 'phone', 'website', 'postcode', 'address',
         )
 

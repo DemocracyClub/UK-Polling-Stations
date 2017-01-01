@@ -18,7 +18,6 @@ class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ResidentialAddress
-        lookup_field = 'slug'
         extra_kwargs = {
             'url': {'view_name': 'address-detail', 'lookup_field': 'slug'}
         }
