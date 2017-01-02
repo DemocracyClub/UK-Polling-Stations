@@ -29,50 +29,57 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             location=kwargs['location']
         )
 
+    def generate_addresses(self, routing_helper):
+        if routing_helper.route_type == "multiple_addresses":
+            return [address for address in routing_helper.addresses]
+        return []
+
+    def generate_polling_station(self, routing_helper, council, location):
+        if routing_helper.route_type == "single_address":
+            return PollingStation.objects.get_polling_station_by_id(
+                routing_helper.addresses[0].polling_station_id,
+                council_id=routing_helper.addresses[0].council_id
+            )
+        elif routing_helper.route_type == "postcode":
+            return self.get_object(
+                location=location,
+                council=council,
+            )
+        else:
+            return None
+
     def retrieve(self, request, postcode=None, format=None):
         postcode = postcode.replace(' ', '')
         ret = {}
-        ret['polling_station_known'] = False
-        polling_station = None
 
+        # attempt to attach point and gss_codes
+        # in this situation, failure to geocode is fatal
+        # (we need 'gss_codes' to pass to get_custom_finder)
         try:
             l = geocode(postcode)
         except PostcodeError as e:
-            ret['detail'] = e.args[0]
-            return Response(ret, status=400)
+            return Response({'detail': e.args[0]}, status=400)
         except RateLimitError as e:
-            ret['detail'] = e.args[0]
-            return Response(ret, status=403)
+            return Response({'detail': e.args[0]}, status=403)
 
         location = Point(l['wgs84_lon'], l['wgs84_lat'])
         ret['postcode_location'] = location
 
+        # council object
         council = Council.objects.get(area__covers=location)
         ret['council'] = council
 
         rh = RoutingHelper(postcode)
 
-        ret['addresses'] = []
-        if rh.route_type == "multiple_addresses":
-            ret['addresses'] = [address for address in rh.addresses]
+        ret['addresses'] = self.generate_addresses(rh)
 
-        if rh.route_type == "single_address":
-            polling_station = PollingStation.objects.get_polling_station_by_id(
-                rh.addresses[0].polling_station_id,
-                council_id=rh.addresses[0].council_id
-                )
-
-        if rh.route_type == "postcode":
-            polling_station = self.get_object(
-                location=location,
-                council=ret['council'],
-                )
-
-        ret['polling_station'] = None
-        if polling_station:
+        # get polling station
+        ret['polling_station_known'] = False
+        ret['polling_station'] = self.generate_polling_station(rh, council, location)
+        if ret['polling_station']:
             ret['polling_station_known'] = True
-            ret['polling_station'] = polling_station
 
+        # get custom finder (if no polling station)
         ret['custom_finder'] = None
         if not ret['polling_station_known']:
             finder = CustomFinder.objects.get_custom_finder(l['gss_codes'], postcode)
@@ -82,6 +89,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
                 ret['custom_finder']['can_pass_postcode'] = finder.can_pass_postcode
                 ret['custom_finder']['encoded_postcode'] = finder.encoded_postcode
 
+        # create log entry
         log_data = {}
         log_data['we_know_where_you_should_vote'] = ret['polling_station_known']
         log_data['location'] = location
