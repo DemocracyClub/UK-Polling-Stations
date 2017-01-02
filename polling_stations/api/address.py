@@ -1,5 +1,5 @@
+from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.contrib.gis.geos import Point
@@ -11,12 +11,12 @@ from data_finder.helpers import (
     RateLimitError,
 )
 from pollingstations.models import PollingStation, ResidentialAddress
-from .councils import CouncilDataSerializer as CouncilSerializer
+from .councils import CouncilDataSerializer
 from .fields import PointField
-from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
+from .pollingstations import PollingStationGeoSerializer
 
 
-class ResidentialAddressSerializer(HyperlinkedModelSerializer):
+class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ResidentialAddress
@@ -27,11 +27,21 @@ class ResidentialAddressSerializer(HyperlinkedModelSerializer):
         fields = ('url', 'address', 'postcode', 'council', 'polling_station_id')
 
 
+class PostcodeResponseSerializer(serializers.Serializer):
+    polling_station_known = serializers.BooleanField(read_only=True)
+    postcode_location = PointField(read_only=True)
+    custom_finder = serializers.DictField(read_only=True)
+    council = CouncilDataSerializer(read_only=True)
+    polling_station = PollingStationGeoSerializer(read_only=True)
+    addresses = ResidentialAddressSerializer(read_only=True, many=True)
+
+
 class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ['get', 'post', 'head', 'options']
     lookup_field = 'slug'
+    serializer_class = PostcodeResponseSerializer
 
     def get_object(self, **kwargs):
         assert 'slug' in kwargs
@@ -49,15 +59,9 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
             return Response({'detail': 'Address not found'}, status=404)
 
         # create singleton list for consistency with /postcode endpoint
-        ret['addresses'] = [
-            ResidentialAddressSerializer(
-                address,
-                context={'request': self.request}
-            ).data
-        ]
+        ret['addresses'] = [address]
 
-        ret['council'] = CouncilSerializer(
-            address.council, context={'request': request}).data
+        ret['council'] = address.council
 
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
@@ -66,7 +70,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
             location = Point(l['wgs84_lon'], l['wgs84_lat'])
         except (PostcodeError, RateLimitError) as e:
             location = None
-        ret['postcode_location'] = PointField().to_representation(location)
+        ret['postcode_location'] = location
 
         # get polling station
         polling_station = PollingStation.objects.get_polling_station_by_id(
@@ -74,8 +78,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         ret['polling_station_known'] = False
         ret['polling_station'] = None
         if polling_station:
-            ret['polling_station'] = PollingStationSerializer(
-                polling_station, context={'request': self.request}).data
+            ret['polling_station'] = polling_station
             ret['polling_station_known'] = True
 
         # create log entry
@@ -87,4 +90,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         log_data['language'] = ''
         self.log_postcode(address.postcode, log_data, 'api')
 
-        return Response(ret)
+        serializer = PostcodeResponseSerializer(
+            ret, read_only=True, context={'request': request}
+        )
+        return Response(serializer.data)

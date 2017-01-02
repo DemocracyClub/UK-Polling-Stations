@@ -11,10 +11,7 @@ from data_finder.helpers import (
     RoutingHelper
 )
 from pollingstations.models import PollingStation, CustomFinder
-from .address import ResidentialAddressSerializer
-from .councils import CouncilDataSerializer as CouncilSerializer
-from .fields import PointField
-from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
+from .address import PostcodeResponseSerializer
 
 
 class PostcodeViewSet(ViewSet, LogLookUpMixin):
@@ -22,12 +19,13 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
     permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ['get', 'post', 'head', 'options']
     lookup_field = 'postcode'
+    serializer_class = PostcodeResponseSerializer
 
     def get_object(self, **kwargs):
         assert 'location' in kwargs
         assert 'council' in kwargs
         return PollingStation.objects.get_polling_station(
-            kwargs['council']['council_id'],
+            kwargs['council'],
             location=kwargs['location']
         )
 
@@ -47,22 +45,16 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return Response(ret, status=403)
 
         location = Point(l['wgs84_lon'], l['wgs84_lat'])
-        ret['postcode_location'] = PointField().to_representation(location)
+        ret['postcode_location'] = location
 
         council = Council.objects.get(area__covers=location)
-        ret['council'] = CouncilSerializer(
-            council, context={'request': request}).data
+        ret['council'] = council
 
         rh = RoutingHelper(postcode)
 
         ret['addresses'] = []
         if rh.route_type == "multiple_addresses":
-            ret['addresses'] = [
-                ResidentialAddressSerializer(address, context={
-                    'request': self.request}
-                    ).data for address in
-                rh.addresses
-            ]
+            ret['addresses'] = [address for address in rh.addresses]
 
         if rh.route_type == "single_address":
             polling_station = PollingStation.objects.get_polling_station_by_id(
@@ -79,8 +71,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         ret['polling_station'] = None
         if polling_station:
             ret['polling_station_known'] = True
-            ret['polling_station'] = PollingStationSerializer(
-                polling_station, context={'request': self.request}).data
+            ret['polling_station'] = polling_station
 
         ret['custom_finder'] = None
         if not ret['polling_station_known']:
@@ -99,4 +90,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         log_data['language'] = ''
         self.log_postcode(postcode, log_data, 'api')
 
-        return Response(ret)
+        serializer = PostcodeResponseSerializer(
+            ret, read_only=True, context={'request': request}
+        )
+        return Response(serializer.data)
