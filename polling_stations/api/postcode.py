@@ -1,5 +1,6 @@
-from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.viewsets import ViewSet
 from django.contrib.gis.geos import Point
 from councils.models import Council
 from data_finder.views import LogLookUpMixin
@@ -16,14 +17,13 @@ from .fields import PointField
 from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
 
 
-class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
+class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
+    permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ['get', 'post', 'head', 'options']
     lookup_field = 'postcode'
 
-    def get_queryset(self, **kwargs):
-        if not kwargs:
-            return PollingStation.objects.all()
+    def get_object(self, **kwargs):
         assert 'location' in kwargs
         assert 'council' in kwargs
         return PollingStation.objects.get_polling_station(
@@ -71,7 +71,7 @@ class PostcodeViewSet(viewsets.ViewSet, LogLookUpMixin):
                 )
 
         if rh.route_type == "postcode":
-            polling_station = self.get_queryset(
+            polling_station = self.get_object(
                 location=location,
                 council=ret['council'],
                 )

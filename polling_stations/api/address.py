@@ -1,5 +1,7 @@
-from rest_framework import serializers, viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework.response import Response
+from rest_framework.viewsets import ViewSet
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from data_finder.views import LogLookUpMixin
@@ -14,7 +16,7 @@ from .fields import PointField
 from .pollingstations import PollingStationGeoSerializer as PollingStationSerializer
 
 
-class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
+class ResidentialAddressSerializer(HyperlinkedModelSerializer):
 
     class Meta:
         model = ResidentialAddress
@@ -25,14 +27,13 @@ class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'address', 'postcode', 'council', 'polling_station_id')
 
 
-class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
+class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
 
+    permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ['get', 'post', 'head', 'options']
     lookup_field = 'slug'
 
-    def get_queryset(self, **kwargs):
-        if not kwargs:
-            return ResidentialAddress.objects.all()
+    def get_object(self, **kwargs):
         assert 'slug' in kwargs
         return ResidentialAddress.objects.get(slug=kwargs['slug'])
 
@@ -43,7 +44,7 @@ class ResidentialAddressViewSet(viewsets.ViewSet, LogLookUpMixin):
         # attempt to get address based on slug
         # if we fail, return an error response
         try:
-            address = self.get_queryset(slug=slug)
+            address = self.get_object(slug=slug)
         except ObjectDoesNotExist as e:
             return Response({'detail': 'Address not found'}, status=404)
 
