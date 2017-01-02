@@ -61,6 +61,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         # create singleton list for consistency with /postcode endpoint
         ret['addresses'] = [address]
 
+        # council object
         ret['council'] = address.council
 
         # attempt to attach point
