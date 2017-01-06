@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
-from polling_stations.api.router import router
+from api.router import router
 from data_finder.views import (
     HomeView,
     PrivacyView,
