@@ -13,7 +13,7 @@ class CouncilDataSerializer(HyperlinkedModelSerializer):
         model = Council
         lookup_field = 'council_id'
         fields = (
-            'url', 'council_id', 'council_type', 'mapit_id', 'name',
+            'url', 'council_id', 'council_type', 'name',
             'email', 'phone', 'website', 'postcode', 'address',
         )
 
@@ -28,7 +28,7 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
             'url': {'view_name': 'council-geo', 'lookup_field': 'pk'}
         }
         fields = (
-            'url', 'council_id', 'council_type', 'mapit_id', 'name',
+            'url', 'council_id', 'council_type', 'name',
             'email', 'phone', 'website', 'postcode', 'address',
         )
 
