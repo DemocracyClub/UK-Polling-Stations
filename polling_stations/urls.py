@@ -45,7 +45,7 @@ core_patterns = patterns(
 extra_patterns = patterns(
     '',
     url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^api/', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
 
     url(r'^admin/', include(admin.site.urls)),
 
