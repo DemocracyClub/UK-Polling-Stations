@@ -8,4 +8,5 @@ COUNCIL_TYPES = [
     "MTD",
     "LGD",
     "UTA",
+    "COI",
 ]
