@@ -20,6 +20,7 @@ class PollingEntityMixin():
         queryset = self.get_queryset()
 
         if 'council_id' not in request.query_params:
+            # paginate results if we are not filtering
             page = self.paginate_queryset(queryset)
             if page is not None:
                 serializer = self.get_serializer(
@@ -43,6 +44,15 @@ class PollingEntityMixin():
                 context={'request': request}
             )
             return Response(serializer.data)
+
+        if 'council_id' in request.query_params and (
+                'station_id' in request.query_params or
+                'district_id' in request.query_params) and\
+                len(queryset) == 0:
+            # If attempting to request a single polling station or district
+            # which doesn't exist, return an error instead of an empty array
+            return Response(
+                {'detail': 'Not found'}, 404)
 
         serializer = self.get_serializer(
             queryset,
