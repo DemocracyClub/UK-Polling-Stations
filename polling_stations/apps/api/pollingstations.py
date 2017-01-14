@@ -68,10 +68,11 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
 
 class PollingStationViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):
     queryset = PollingStation.objects.all()
+    id_field = 'station_id'
 
     def get_queryset(self):
         council_id = self.request.query_params.get('council_id', None)
-        station_id = self.request.query_params.get('station_id', None)
+        station_id = self.request.query_params.get(self.id_field, None)
 
         if council_id is None:
             return PollingStation.objects.all()
@@ -86,9 +87,3 @@ class PollingStationViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):
         if self.geo:
             return PollingStationGeoSerializer
         return PollingStationDataSerializer
-
-    def validate_request(self):
-        if 'station_id' in self.request.query_params and\
-                'council_id' not in self.request.query_params:
-            return False
-        return True

@@ -77,10 +77,11 @@ class PollingDistrictGeoSerializer(PollingDistrictSerializer, GeoFeatureModelSer
 
 class PollingDistrictViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):
     queryset = PollingDistrict.objects.all()
+    id_field = 'district_id'
 
     def get_queryset(self):
         council_id = self.request.query_params.get('council_id', None)
-        district_id = self.request.query_params.get('district_id', None)
+        district_id = self.request.query_params.get(self.id_field, None)
 
         if council_id is None:
             return PollingDistrict.objects.all()
@@ -95,9 +96,3 @@ class PollingDistrictViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin)
         if self.geo:
             return PollingDistrictGeoSerializer
         return PollingDistrictDataSerializer
-
-    def validate_request(self):
-        if 'district_id' in self.request.query_params and\
-                'council_id' not in self.request.query_params:
-            return False
-        return True

@@ -12,6 +12,12 @@ class PollingEntityMixin():
 
     pagination_class = LargeResultsSetPagination
 
+    def validate_request(self):
+        if self.id_field in self.request.query_params and\
+                'council_id' not in self.request.query_params:
+            return False
+        return True
+
     def output(self, request):
         if not self.validate_request():
             return Response(
@@ -31,10 +37,8 @@ class PollingEntityMixin():
                 )
                 return self.get_paginated_response(serializer.data)
 
-        if 'council_id' in request.query_params and (
-                'station_id' in request.query_params or
-                'district_id' in request.query_params) and\
-                len(queryset) == 1:
+        if 'council_id' in request.query_params and\
+                self.id_field in request.query_params and len(queryset) == 1:
             # If we are requesting a single polling station or district
             # return an object instead of an array with length 1
             serializer = self.get_serializer(
@@ -45,10 +49,8 @@ class PollingEntityMixin():
             )
             return Response(serializer.data)
 
-        if 'council_id' in request.query_params and (
-                'station_id' in request.query_params or
-                'district_id' in request.query_params) and\
-                len(queryset) == 0:
+        if 'council_id' in request.query_params and\
+                self.id_field in request.query_params and len(queryset) == 0:
             # If attempting to request a single polling station or district
             # which doesn't exist, return an error instead of an empty array
             return Response(
