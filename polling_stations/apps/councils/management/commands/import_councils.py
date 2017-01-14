@@ -79,9 +79,8 @@ class Command(BaseCommand):
             defaults = {
                 'name': council['name'],
             }
-            if defaults != "LGD":
-                defaults.update(
-                    self.get_contact_info_from_gov_uk(council_id))
+            defaults.update(
+                self.get_contact_info_from_gov_uk(council_id))
 
             defaults['council_type'] = council_type
             defaults['mapit_id']= mapit_id
