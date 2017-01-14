@@ -30,6 +30,20 @@ class PollingEntityMixin():
                 )
                 return self.get_paginated_response(serializer.data)
 
+        if 'council_id' in request.query_params and (
+                'station_id' in request.query_params or
+                'district_id' in request.query_params) and\
+                len(queryset) == 1:
+            # If we are requesting a single polling station or district
+            # return an object instead of an array with length 1
+            serializer = self.get_serializer(
+                queryset[0],
+                many=False,
+                read_only=True,
+                context={'request': request}
+            )
+            return Response(serializer.data)
+
         serializer = self.get_serializer(
             queryset,
             many=True,
