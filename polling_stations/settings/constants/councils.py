@@ -6,7 +6,6 @@ COUNCIL_TYPES = [
     "LBO",
     "DIS",
     "MTD",
-    "LGD",
     "UTA",
     "COI",
 ]
