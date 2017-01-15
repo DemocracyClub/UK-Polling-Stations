@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
 from api.router import router
+from api.docs import ApiDocsView
 from data_finder.views import (
     HomeView,
     PrivacyView,
@@ -18,6 +19,7 @@ from data_finder.views import (
     WeDontKnowView,
     campaign_signup
 )
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -46,6 +48,7 @@ extra_patterns = patterns(
     '',
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^api/v1/', include(router.urls)),
+    url(r'^api/$', ApiDocsView.as_view(), name='api_docs'),
 
     url(r'^admin/', include(admin.site.urls)),
 
