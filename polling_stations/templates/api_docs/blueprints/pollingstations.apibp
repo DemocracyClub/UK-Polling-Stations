@@ -1,0 +1,77 @@
+## Group Polling Stations
+
+The `/pollingstations` endpoint provides access to the polling station data underpinning our polling station finder.
+
+
+## Polling Stations Collection: JSON [/pollingstations.json?council_id={council_id}]
+
+List all polling stations in a local authority.
+Returns an array of [polling station objects](#polling-stations-polling-stations-json-get)
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+
+### List All Polling Stations in a Local Authority: JSON [GET]
+
++ Response 200 (application/json)
+    + Attributes (array[PollingStation])
+
+
+
+## Polling Stations Collection: GeoJSON [/pollingstations/geo.json?council_id={council_id}]
+
+List all polling stations in a local authority.
+Returns a [GeoJSON FeatureCollection](http://geojson.org/geojson-spec.html#feature-collection-objects)
+of [polling station features](#polling-stations-polling-stations-geojson-get)
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+
+### List All Polling Stations in a Local Authority: GeoJSON [GET]
+
++ Response 200 (application/json)
+    + Attributes
+        + type: `FeatureCollection` (string)
+        + features (array[GeoPollingStation])
+
+
+
+## Polling Stations: JSON [/pollingstations.json?council_id={council_id}&station_id={station_id}]
+
+Retrieve meta-data about a polling station in JSON format.
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + station_id: `SP2-NB` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
+
+### Retrieve a Polling Station: JSON [GET]
+
++ Response 200 (application/json)
+    + Attributes (PollingStation)
+
++ Response 404 (application/json)
+
+        {
+          "detail": "Not found."
+        }
+
+
+
+## Polling Stations: GeoJSON [/pollingstations/geo.json?council_id={council_id}&station_id={station_id}]
+
+Retrieve a [GeoJSON Feature](http://geojson.org/geojson-spec.html#feature-objects) describing a polling station.
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + station_id: `SP2-NB` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
+
+### Retrieve a Polling Station: GeoJSON [GET]
+
++ Response 200 (application/json)
+    + Attributes (GeoPollingStation)
+
++ Response 404 (application/json)
+
+        {
+          "detail": "Not found."
+        }

@@ -1,0 +1,29 @@
+            {
+                "polling_station_known": false,
+                "postcode_location": {
+                    "geometry": {
+                        "point": {
+                            "type": "Point",
+                            "coordinates": [
+                                -0.14320717529002294,
+                                51.50086373251905
+                            ]
+                        }
+                    },
+                    "type": "Feature"
+                },
+                "custom_finder": null,
+                "addresses": [],
+                "polling_station": null,
+                "council": {
+                    "website": "https://www.westminster.gov.uk/contact-electoral-services",
+                    "name": "Westminster City Council",
+                    "phone": "020 7641 2730",
+                    "url": "http://wheredoivote.co.uk/api/v1/councils/E09000033/",
+                    "council_id": "E09000033",
+                    "council_type": "LBO",
+                    "postcode": "SW1E 6QP",
+                    "address": "Westminster City Council\nElectoral Services\nWestminster City Hall\n64 Victoria Street\nLondon",
+                    "email": "electoralservices@westminster.gov.uk"
+                }
+            }

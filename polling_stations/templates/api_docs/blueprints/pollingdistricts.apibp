@@ -1,0 +1,82 @@
+## Group Polling Districts
+
+The `/pollingdistricts` endpoint provides access to the polling district data underpinning our polling station finder.
+Where possible a polling district contains a [polling station object](#polling-stations-polling-stations-json-get)
+describing the station which serves this district. This may optionally be null if this district is an orphan district.
+An orphan district occurrs where we hold the boundary of a polling district but we don't know the corresponding polling station.
+The polling station which serves a district does not necessarily have to be located inside the district it serves.
+
+
+## Polling Districts Collection: JSON [/pollingdistricts.json?council_id={council_id}]
+
+List all polling districts in a local authority.
+Returns an array of [polling district objects](#polling-districts-polling-districts-json-get)
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+
+### List All Polling Districts in a Local Authority: JSON [GET]
+
++ Response 200 (application/json)
+    + Attributes (array[PollingDistrict])
+
+
+
+## Polling Districts Collection: GeoJSON [/pollingdistricts/geo.json?council_id={council_id}]
+
+List all polling districts in a local authority.
+Returns a [GeoJSON FeatureCollection](http://geojson.org/geojson-spec.html#feature-collection-objects)
+of [polling district features](#polling-districts-polling-districts-geojson-get)
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+
+### List All Polling Districts in a Local Authority: GeoJSON [GET]
+
++ Response 200 (application/json)
+    + Attributes
+        + type: `FeatureCollection` (string)
+        + features (array[GeoPollingDistrict])
+
+
+
+## Polling Districts: JSON [/pollingdistricts.json?council_id={council_id}&district_id={district_id}]
+
+Retrieve meta-data about a polling district in JSON format.
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + district_id: `NB` (required, string) - Polling District ID. Polling District IDs are unique within councils, but are not unique nationally
+
+### Retrieve a Polling District: JSON [GET]
+
++ Response 200 (application/json)
+    + Attributes (PollingDistrict)
+
++ Response 404 (application/json)
+
+        {
+          "detail": "Not found."
+        }
+
+
+
+## Polling Districts: GeoJSON [/pollingdistricts/geo.json?council_id={council_id}&district_id={district_id}]
+
+Retrieve a [GeoJSON Feature](http://geojson.org/geojson-spec.html#feature-objects)
+containing a GIS boundary and meta-data about a polling district.
+
++ Parameters
+    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + district_id: `NB` (required, string) - Polling District ID. Polling District IDs are unique within councils, but are not unique nationally
+
+### Retrieve a Polling District: GeoJSON [GET]
+
++ Response 200 (application/json)
+    + Attributes (GeoPollingDistrict)
+
++ Response 404 (application/json)
+
+        {
+          "detail": "Not found."
+        }

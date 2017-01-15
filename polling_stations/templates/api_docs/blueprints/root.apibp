@@ -1,0 +1,15 @@
+## Group API Root
+
+## API Root [/.json]
+
+The initial API entry point for discovering endpoints.
+
+### Retrieve the Entry Point [GET]
+
++ Response 200 (application/json)
+
+        {
+          "councils": "http://wheredoivote.co.uk/api/v1/councils.json",
+          "pollingstations": "http://wheredoivote.co.uk/api/v1/pollingstations.json",
+          "pollingdistricts": "http://wheredoivote.co.uk/api/v1/pollingdistricts.json"
+        }
