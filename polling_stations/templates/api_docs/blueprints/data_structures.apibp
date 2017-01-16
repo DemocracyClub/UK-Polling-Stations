@@ -20,7 +20,7 @@
 - postcode: `CF10 4UW` (string) - Postcode component of contact address for this council
 - email: `electoralservices@cardiff.gov.uk` (string) - Contact email address for this council's Electoral Services team
 - phone: `029 2087 2034` (string) - Telephone number for this council's Electoral Services team
-- website: `https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx"` (string) - URL for this council's website
+- website: `https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx` (string) - URL for this council's website
 
 ## GeoCouncil (object)
 - geometry (MultiPolygon) - A GeoJSON object describing the boundary of this area
