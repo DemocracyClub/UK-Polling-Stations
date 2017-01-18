@@ -2,6 +2,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.contrib.gis.geos import Point
+from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
@@ -66,7 +67,10 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         ret['postcode_location'] = location
 
         # council object
-        council = Council.objects.get(area__covers=location)
+        try:
+            council = Council.objects.get(area__covers=location)
+        except ObjectDoesNotExist:
+            return Response({'detail': 'Internal server error'}, 500)
         ret['council'] = council
 
         rh = RoutingHelper(postcode)
