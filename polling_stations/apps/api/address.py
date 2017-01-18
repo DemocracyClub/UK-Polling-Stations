@@ -47,7 +47,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         assert 'slug' in kwargs
         return ResidentialAddress.objects.get(slug=kwargs['slug'])
 
-    def retrieve(self, request, slug=None, format=None, geocoder=geocode_point_only):
+    def retrieve(self, request, slug=None, format=None, geocoder=geocode_point_only, log=True):
         ret = {}
         ret['custom_finder'] = None
 
@@ -89,7 +89,8 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         log_data['council'] = address.council
         log_data['brand'] = 'api'
         log_data['language'] = ''
-        self.log_postcode(address.postcode, log_data, 'api')
+        if log:
+            self.log_postcode(address.postcode, log_data, 'api')
 
         serializer = PostcodeResponseSerializer(
             ret, read_only=True, context={'request': request}

@@ -49,7 +49,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         else:
             return None
 
-    def retrieve(self, request, postcode=None, format=None, geocoder=geocode):
+    def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
         postcode = postcode.replace(' ', '')
         ret = {}
 
@@ -100,7 +100,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         log_data['council'] = council
         log_data['brand'] = 'api'
         log_data['language'] = ''
-        self.log_postcode(postcode, log_data, 'api')
+        if log:
+            self.log_postcode(postcode, log_data, 'api')
 
         serializer = PostcodeResponseSerializer(
             ret, read_only=True, context={'request': request}
