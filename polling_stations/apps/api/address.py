@@ -47,7 +47,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         assert 'slug' in kwargs
         return ResidentialAddress.objects.get(slug=kwargs['slug'])
 
-    def retrieve(self, request, slug=None, format=None):
+    def retrieve(self, request, slug=None, format=None, geocoder=geocode_point_only):
         ret = {}
         ret['custom_finder'] = None
 
@@ -67,7 +67,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
         try:
-            l = geocode_point_only(address.postcode)
+            l = geocoder(address.postcode)
             location = Point(l['wgs84_lon'], l['wgs84_lat'])
         except (PostcodeError, RateLimitError) as e:
             location = None

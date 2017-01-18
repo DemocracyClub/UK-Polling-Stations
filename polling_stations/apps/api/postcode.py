@@ -48,7 +48,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         else:
             return None
 
-    def retrieve(self, request, postcode=None, format=None):
+    def retrieve(self, request, postcode=None, format=None, geocoder=geocode):
         postcode = postcode.replace(' ', '')
         ret = {}
 
@@ -56,7 +56,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         # in this situation, failure to geocode is fatal
         # (we need 'gss_codes' to pass to get_custom_finder)
         try:
-            l = geocode(postcode)
+            l = geocoder(postcode)
         except PostcodeError as e:
             return Response({'detail': e.args[0]}, status=400)
         except RateLimitError as e:
