@@ -1,7 +1,11 @@
 {% extends "rest_framework/base.html" %}
-
 {% load static from staticfiles %}
 {% block title %}Polling Stations API - Democracy Club{% endblock %}
-{% block navbar %}
-  {% include 'navbar.html' %}
+
+{% block branding %}
+  <a class="navbar-brand" rel="nofollow" href="/">Democracy Club Polling Stations</a>
+{% endblock %}
+
+{% block userlinks %}
+  <li><a href="/about">About</a></li>
 {% endblock %}
