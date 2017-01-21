@@ -41,6 +41,7 @@ from pollingstations.models import (
     ResidentialAddress
 )
 from data_collection.models import DataQuality
+from data_finder.helpers import geocode_point_only, PostcodeError
 from addressbase.helpers import create_address_records_for_council
 
 
@@ -601,6 +602,95 @@ class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter,
 
     stations_filetype = 'shp'
     addresses_filetype = 'csv'
+
+
+"""
+We see a lot of CSVs exported from Xpress
+electoral service software: http://www.xssl.uk/
+with the addresses and stations in a single CSV file
+
+This is a specialised case of BaseCsvStationsCsvAddressesImporter
+with some sensible presets for processing CSVs in this format
+but we can override them if necessary
+"""
+class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
+                            metaclass=abc.ABCMeta):
+    csv_delimiter = ','
+    station_postcode_field = 'pollingplaceaddress7'
+    station_address_fields = [
+        'pollingplaceaddress1',
+        'pollingplaceaddress2',
+        'pollingplaceaddress3',
+        'pollingplaceaddress4',
+        'pollingplaceaddress5',
+        'pollingplaceaddress6',
+    ]
+    station_id_field = 'pollingplaceid'
+
+    def get_station_hash(self, record):
+        return "-".join([
+            getattr(record, self.station_id_field),
+        ])
+
+    def get_station_address(self, record):
+        address_parts = address = "\n".join([
+            getattr(record, field) for field in self.station_address_fields
+        ])
+        while "\n\n" in address:
+            address = address.replace("\n\n", "\n").strip()
+        return address
+
+    def get_station_point(self, record):
+        location = None
+
+        if (hasattr(record, 'pollingplaceeasting') and\
+            hasattr(record, 'pollingplacenorthing') and\
+            record.pollingplaceeasting.strip() != '0' and\
+            record.pollingplaceeasting.strip() != '' and\
+            record.pollingplacenorthing.strip() != '0' and\
+            record.pollingplacenorthing.strip() != ''):
+
+            # if we've got points, use them
+            location = Point(
+                float(record.pollingplaceeasting),
+                float(record.pollingplacenorthing),
+                srid=27700)
+        else:
+            # otherwise, geocode using postcode
+            print(getattr(record, self.station_postcode_field).strip())
+            try:
+                location_data = geocode_point_only(
+                    getattr(record, self.station_postcode_field).strip())
+                location = Point(
+                    location_data['wgs84_lon'],
+                    location_data['wgs84_lat'],
+                    srid=4326)
+            except PostcodeError:
+                location = None
+
+        return location
+
+    def station_record_to_dict(self, record):
+        address = self.get_station_address(record)
+        location = self.get_station_point(record)
+        return {
+            'internal_council_id': getattr(record, self.station_id_field).strip(),
+            'postcode'           : getattr(record, self.station_postcode_field).strip(),
+            'address'            : address.strip(),
+            'location'           : location
+        }
+
+    def address_record_to_dict(self, record):
+        if record.propertynumber.strip() == '0' or record.propertynumber.strip() == '':
+            address = record.streetname.strip()
+        else:
+            address = '%s %s' % (record.propertynumber.strip(), record.streetname.strip())
+
+        return {
+            'address'           : address.strip(),
+            'postcode'          : record.postcode.strip(),
+            'polling_station_id': getattr(record, self.station_id_field).strip()
+        }
 
 
 class BaseGenericApiImporter(BaseStationsDistrictsImporter):
