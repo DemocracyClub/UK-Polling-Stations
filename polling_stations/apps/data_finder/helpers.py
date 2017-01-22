@@ -62,6 +62,11 @@ def geocode(postcode):
         # we hit MapIt's rate limit
         raise RateLimitError("Mapit error 403: Rate limit exceeded")
 
+    if res.status_code == 404:
+        # if mapit returns 404, it returns HTML even if we requested json
+        # this will cause an unhandled exception if we try to parse it
+        raise PostcodeError("Mapit error {}: {}".format(res.status_code, 'Not Found'))
+
     res_json = res.json()
 
     if 'error' in res_json:
