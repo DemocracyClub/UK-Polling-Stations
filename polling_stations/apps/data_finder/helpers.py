@@ -58,30 +58,44 @@ def geocode(postcode):
 
     res = requests.get("%s/postcode/%s" % (settings.MAPIT_URL, postcode), headers=headers)
 
-    if res.status_code == 403:
-        # we hit MapIt's rate limit
-        raise RateLimitError("Mapit error 403: Rate limit exceeded")
+    if res.status_code != 200:
+        if res.status_code == 403:
+            # we hit MapIt's rate limit
+            raise RateLimitError("Mapit error 403: Rate limit exceeded")
+
+        if res.status_code == 404:
+            # if mapit returns 404, it returns HTML even if we requested json
+            # this will cause an unhandled exception if we try to parse it
+            raise PostcodeError("Mapit error 404: Not Found")
+
+        try:
+            # attempt to parse error from json
+            res_json = res.json()
+            if 'error' in res_json:
+                raise PostcodeError("Mapit error {}: {}".format(res_json['code'], res_json['error']))
+            else:
+                raise PostcodeError("Mapit error {}: unknown".format(res.status_code))
+        except ValueError:
+            # if we fail to parse json, raise a less specific exception
+            raise PostcodeError("Mapit error {}: unknown".format(res.status_code))
 
     res_json = res.json()
 
-    if 'error' in res_json:
-        raise PostcodeError("Mapit error {}: {}".format(res_json['code'], res_json['error']))
-    else:
-        gss_codes = []
-        council_gss = None
-        for area in res_json['areas']:
-            if 'gss' in res_json['areas'][area]['codes']:
-                gss = res_json['areas'][area]['codes']['gss']
-                gss_codes.append(gss)
-                if res_json['areas'][area]['type'] in COUNCIL_TYPES:
-                    council_gss = gss
+    gss_codes = []
+    council_gss = None
+    for area in res_json['areas']:
+        if 'gss' in res_json['areas'][area]['codes']:
+            gss = res_json['areas'][area]['codes']['gss']
+            gss_codes.append(gss)
+            if res_json['areas'][area]['type'] in COUNCIL_TYPES:
+                council_gss = gss
 
-        return {
-            'wgs84_lon': res_json['wgs84_lon'],
-            'wgs84_lat': res_json['wgs84_lat'],
-            'gss_codes': gss_codes,
-            'council_gss': council_gss,
-        }
+    return {
+        'wgs84_lon': res_json['wgs84_lon'],
+        'wgs84_lat': res_json['wgs84_lat'],
+        'gss_codes': gss_codes,
+        'council_gss': council_gss,
+    }
 
 
 # sort a list of tuples by key in natural/human order
