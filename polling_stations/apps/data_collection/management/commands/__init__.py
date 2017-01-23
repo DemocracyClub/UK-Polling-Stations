@@ -4,6 +4,7 @@ from data_collection.base_importers import (
     BaseCsvStationsJsonDistrictsImporter,
     BaseCsvStationsKmlDistrictsImporter,
     BaseCsvStationsCsvAddressesImporter,
+    BaseXpressCsvImporter,
     BaseShpStationsCsvAddressesImporter,
     BaseApiKmlStationsKmlDistrictsImporter,
 )
