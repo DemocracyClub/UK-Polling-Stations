@@ -180,9 +180,58 @@ class AddressSet(CustomSet):
 
         return out_addresses
 
+    def build_postcode_lookup(self):
+        postcode_lookup = {}
+        for address in self.elements:
+            if address.postcode in postcode_lookup:
+                postcode_lookup[address.postcode].add(address.polling_station_id)
+            else:
+                postcode_lookup[address.postcode] = set([address.polling_station_id])
+
+        return postcode_lookup
+
+    def collapse_redundant_addresses(self):
+        postcode_lookup = self.build_postcode_lookup()
+
+        # convert our set of tuples into a list of dicts
+        tmp_addresses = list(self.elements)
+        tmp_addresses = [x._asdict() for x in tmp_addresses]
+
+        out_addresses = set()
+        address_count = 0
+        postcode_count = 0
+        for record in tmp_addresses:
+            if len(postcode_lookup[record['postcode']]) == 1:
+                record['address'] = ''
+                record['slug'] = Slugger.slugify(
+                    "%s-%s-%s" % (
+                        record['council'].pk,
+                        record['polling_station_id'],
+                        record['postcode']
+                    )
+                )
+                address_count = address_count + 1
+                postcode_record = self.build_namedtuple(record)
+                if postcode_record not in out_addresses:
+                    postcode_count = postcode_count + 1
+                out_addresses.add(postcode_record)
+            else:
+                out_addresses.add(self.build_namedtuple(record))
+
+        self.logger.log_message(logging.INFO,
+            "Collapsed %s redundant addresses into %s postcode records",
+            variable=(address_count, postcode_count))
+        return out_addresses
+
     def save(self, batch_size):
 
+        # remove any cases where the same address maps to > 1 polling station
         self.elements = self.remove_ambiguous_addresses()
+
+        # if all the addresses in this local auth with the same postcode map
+        # to the same polling station, collapse them into a single record
+        self.elements = self.collapse_redundant_addresses()
+
         addresses_db = []
 
         for address in self.elements:

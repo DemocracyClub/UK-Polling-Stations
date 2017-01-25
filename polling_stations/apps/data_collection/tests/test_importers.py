@@ -162,9 +162,20 @@ class ImporterTest(TestCase):
 
         addresses = ResidentialAddress.objects\
                                       .filter(council_id='X01000000')\
-                                      .order_by('address')
+                                      .order_by('postcode', 'address')
 
-        self.assertEqual(3, len(addresses))
-        self.assertEqual('36 Abbots Park, London', addresses[0].address)
-        self.assertEqual('3 Factory Rd, Poole', addresses[1].address)
-        self.assertEqual('80 Pine Vale Cres, Bournemouth', addresses[2].address)
+        self.assertEqual(4, len(addresses))
+
+        # this postcode contains addresses mapping to more than one
+        # station so we import the individual addresses
+        self.assertEqual('BH106BJ', addresses[0].postcode)
+        self.assertEqual('80 Pine Vale Cres, Bournemouth', addresses[0].address)
+        self.assertEqual('BH106BJ', addresses[1].postcode)
+        self.assertEqual('81 Pine Vale Cres, Bournemouth', addresses[1].address)
+
+        # all addresses in these postcodes map to the same station
+        # so we collapse to a single postcode record
+        self.assertEqual('BH165HT', addresses[2].postcode)
+        self.assertEqual('', addresses[2].address)
+        self.assertEqual('SW23QD', addresses[3].postcode)
+        self.assertEqual('', addresses[3].address)
