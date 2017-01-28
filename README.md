@@ -15,7 +15,7 @@ If you are interested in helping out in any way at all, please contact sym@democ
 ## Getting Started
 
 ### Python
-UK-Polling-Stations requires python 3.4
+UK-Polling-Stations requires python 3.4 or 3.5
 
 ### Install system dependencies
 UK-Polling-Stations requires Postgres, PostGIS, libgeos and GDAL.
@@ -27,11 +27,14 @@ brew install postgis
 brew install geos
 brew install gdal
 ```
-From a clean install of Ubuntu 14 (Trusty), the command:
+From a clean install of Ubuntu 14.04 (Trusty):
 ```
 sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1 libxml2-dev libxslt-dev
 ```
-will install all of the necessary dependencies.
+or on Ubuntu 16.04 (Xenial):
+```
+sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev
+```
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
