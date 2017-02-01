@@ -13,15 +13,15 @@ polling the URLs to look for changes.
 class Command(BaseShpStationsShpDistrictsImporter):
     srid = 27700
     council_id = 'E07000194'
-    districts_name = 'local.staffordshire.2017-05-04/Lichfield District Council Polling Districts Shapefile/Lichfield District Council Polling Districts'
+    districts_name = 'local.staffordshire.2017-05-04/Lichfield District Council Polling Districts Shapefile/Lichfield_District_Council_Polling_Districts'
     stations_name = 'local.staffordshire.2017-05-04/LDC_Polling_Stations_Shapefile/Lichfield_District_Council_Polling_Station_Locations.shp'
     elections = ['local.staffordshire.2017-05-04']
 
     def district_record_to_dict(self, record):
         return {
-            'internal_council_id': str(record[3]).strip(),
-            'name': str(record[3]).strip(),
-            'polling_station_id': str(record[3]).strip(),
+            'internal_council_id': str(record[4]).strip(),
+            'name': str(record[4]).strip(),
+            'polling_station_id': str(record[4]).strip(),
         }
 
     def station_record_to_dict(self, record):
