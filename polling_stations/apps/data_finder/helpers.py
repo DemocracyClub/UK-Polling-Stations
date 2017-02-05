@@ -98,11 +98,36 @@ def geocode(postcode):
     }
 
 
-# sort a list of tuples by key in natural/human order
-def natural_sort(l, key):
-    convert = lambda text: int(text) if text.isdigit() else text
-    alphanum_key = lambda item: [ convert(c) for c in re.split('([0-9]+)', key(item)) ]
-    return sorted(l, key = alphanum_key)
+class AddressSorter:
+    # Class for sorting sort a list of tuples
+    # containing addresses (defined by key function)
+    # in a human-readable order.
+
+    def convert(self, text):
+        # if text is numeric, covert to an int
+        # this allows us to sort numbers in int order, not string order
+        return int(text) if text.isdigit() else text
+
+    def alphanum_key(self, tup):
+        # split the desired component of tup (defined by key function)
+        # into a listof numeric and text components
+        return [ self.convert(c) for c in filter(None, re.split('([0-9]+)', self.key(tup))) ]
+
+    def swap_fields(self, item):
+        lst = self.alphanum_key(item)
+        # swap things about so we can sort by street name, house number
+        # instead of house number, street name
+        if len(lst) > 1 and isinstance(lst[0], int) and isinstance(lst[1], str) and (lst[1][0].isspace() or lst[1][0] == ','):
+            lst[0], lst[1] = lst[1], lst[0]
+        if len(lst) > 1 and isinstance(lst[0], int) and isinstance(lst[1], int):
+            lst[0], lst[1] = lst[1], lst[0]
+        if isinstance(lst[0], int):
+            lst[0] = str(lst[0])
+        return lst
+
+    def natural_sort(self, lst, key):
+        self.key = key
+        return sorted(lst, key = self.swap_fields)
 
 
 class OrsDirectionsApiError(Exception):
