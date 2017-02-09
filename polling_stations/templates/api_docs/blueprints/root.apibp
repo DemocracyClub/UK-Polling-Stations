@@ -9,7 +9,7 @@ The initial API entry point for discovering endpoints.
 + Response 200 (application/json)
 
         {
-          "councils": "http://wheredoivote.co.uk/api/v1/councils.json",
-          "pollingstations": "http://wheredoivote.co.uk/api/v1/pollingstations.json",
-          "pollingdistricts": "http://wheredoivote.co.uk/api/v1/pollingdistricts.json"
+          "councils": "http://wheredoivote.co.uk/api/beta/councils.json",
+          "pollingstations": "http://wheredoivote.co.uk/api/beta/pollingstations.json",
+          "pollingdistricts": "http://wheredoivote.co.uk/api/beta/pollingdistricts.json"
         }

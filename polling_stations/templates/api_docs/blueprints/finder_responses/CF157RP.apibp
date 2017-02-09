@@ -15,38 +15,38 @@
                 "custom_finder": null,
                 "addresses": [
                     {
-                        "url": "http://wheredoivote.co.uk/api/v1/address/w06000016-phe-4-rhymney-cottages-taffs-well-cardiff-cf157rp/",
+                        "url": "http://wheredoivote.co.uk/api/beta/address/w06000016-phe-4-rhymney-cottages-taffs-well-cardiff-cf157rp/",
                         "polling_station_id": "PHE",
                         "postcode": "CF157RP",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                         "address": "4 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"
                     },
                     {
-                        "url": "http://wheredoivote.co.uk/api/v1/address/w06000016-phe-2-rhymney-cottages-taffs-well-cardiff-cf157rp/",
+                        "url": "http://wheredoivote.co.uk/api/beta/address/w06000016-phe-2-rhymney-cottages-taffs-well-cardiff-cf157rp/",
                         "polling_station_id": "PHE",
                         "postcode": "CF157RP",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                         "address": "2 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"
                     },
                     {
-                        "url": "http://wheredoivote.co.uk/api/v1/address/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp/",
+                        "url": "http://wheredoivote.co.uk/api/beta/address/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp/",
                         "polling_station_id": "PHE",
                         "postcode": "CF157RP",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                         "address": "1 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"
                     },
                     {
-                        "url": "http://wheredoivote.co.uk/api/v1/address/w06000016-phc-the-old-forge-old-parish-road-taffs-well-cardiff-cf157rp/",
+                        "url": "http://wheredoivote.co.uk/api/beta/address/w06000016-phc-the-old-forge-old-parish-road-taffs-well-cardiff-cf157rp/",
                         "polling_station_id": "PHC",
                         "postcode": "CF157RP",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                         "address": "THE OLD FORGE, OLD PARISH ROAD, TAFFS WELL, CARDIFF"
                     },
                     {
-                        "url": "http://wheredoivote.co.uk/api/v1/address/w06000016-phe-3-rhymney-cottages-taffs-well-cardiff-cf157rp/",
+                        "url": "http://wheredoivote.co.uk/api/beta/address/w06000016-phe-3-rhymney-cottages-taffs-well-cardiff-cf157rp/",
                         "polling_station_id": "PHE",
                         "postcode": "CF157RP",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                         "address": "3 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"
                     }
                 ],
@@ -55,7 +55,7 @@
                     "website": "http://www.rctcbc.gov.uk/en/councildemocracy/democracyelections/elections-electoralregister/elections-electoralregister.aspx",
                     "name": "Rhondda Cynon Taf Council",
                     "phone": "01443 490100",
-                    "url": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                    "url": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                     "council_id": "W06000016",
                     "council_type": "UTA",
                     "postcode": "CF37 1NY",

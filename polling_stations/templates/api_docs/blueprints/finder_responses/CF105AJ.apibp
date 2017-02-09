@@ -27,10 +27,10 @@
                     "properties": {
                         "address": "Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff",
                         "station_id": "SP2-NB",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000015/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000015/",
                         "urls": {
-                            "geo": "http://wheredoivote.co.uk/api/v1/pollingstations/geo/?station_id=SP2-NB&council_id=W06000015",
-                            "detail": "http://wheredoivote.co.uk/api/v1/pollingstations/?station_id=SP2-NB&council_id=W06000015"
+                            "geo": "http://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=SP2-NB&council_id=W06000015",
+                            "detail": "http://wheredoivote.co.uk/api/beta/pollingstations/?station_id=SP2-NB&council_id=W06000015"
                         },
                         "postcode": ""
                     }
@@ -39,7 +39,7 @@
                     "website": "https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx",
                     "name": "Cardiff Council",
                     "phone": "029 2087 2034",
-                    "url": "http://wheredoivote.co.uk/api/v1/councils/W06000015/",
+                    "url": "http://wheredoivote.co.uk/api/beta/councils/W06000015/",
                     "council_id": "W06000015",
                     "council_type": "UTA",
                     "postcode": "CF10 4UW",

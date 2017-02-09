@@ -15,10 +15,10 @@
                 "custom_finder": null,
                 "addresses": [
                     {
-                        "url": "http://wheredoivote.co.uk/api/v1/address/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp/",
+                        "url": "http://wheredoivote.co.uk/api/beta/address/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp/",
                         "polling_station_id": "PHE",
                         "postcode": "CF157RP",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                         "address": "1 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"
                     }
                 ],
@@ -35,10 +35,10 @@
                     "properties": {
                         "address": "TY-RHIW COMMUNITY CENTRE\nTY-RHIW\nTAFFS WELL",
                         "station_id": "PHE",
-                        "council": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                         "urls": {
-                            "geo": "http://wheredoivote.co.uk/api/v1/pollingstations/geo/?station_id=PHE&council_id=W06000016",
-                            "detail": "http://wheredoivote.co.uk/api/v1/pollingstations/?station_id=PHE&council_id=W06000016"
+                            "geo": "http://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=PHE&council_id=W06000016",
+                            "detail": "http://wheredoivote.co.uk/api/beta/pollingstations/?station_id=PHE&council_id=W06000016"
                         },
                         "postcode": "CF15 7RS"
                     }
@@ -47,7 +47,7 @@
                     "website": "http://www.rctcbc.gov.uk/en/councildemocracy/democracyelections/elections-electoralregister/elections-electoralregister.aspx",
                     "name": "Rhondda Cynon Taf Council",
                     "phone": "01443 490100",
-                    "url": "http://wheredoivote.co.uk/api/v1/councils/W06000016/",
+                    "url": "http://wheredoivote.co.uk/api/beta/councils/W06000016/",
                     "council_id": "W06000016",
                     "council_type": "UTA",
                     "postcode": "CF37 1NY",

@@ -47,7 +47,7 @@ core_patterns = patterns(
 extra_patterns = patterns(
     '',
     url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^api/v1/', include(router.urls)),
+    url(r'^api/beta/', include(router.urls)),
     url(r'^api/$', ApiDocsView.as_view(), name='api_docs'),
 
     url(r'^admin/', include(admin.site.urls)),
