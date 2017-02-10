@@ -1,0 +1,70 @@
+# Data Structures
+
+
+## MultiPolygon (object)
+- type: `MultiPolygon` (string)
+- coordinates: `...` (array)
+
+## Council (object)
+- url: `http://wheredoivote.co.uk/api/beta/councils/W06000015.json` (string) - URL for this resource
+- council_id: `W06000015` (string) - GSS code for this council
+- name: `Cardiff Council` (string) - Name of this council
+- council_type: `UTA` (enum[string]) - One of: DIS (District council), LBO (London borough), LGD (Northern Ireland council), MTD (Metropolitan district), UTA (Unitary authority), COI (Isles of Scilly)
+    - DIS (string) - District council
+    - LBO (string) - London borough
+    - LGD (string) - Northern Ireland council
+    - MTD (string) - Metropolitan district
+    - UTA (string) - Unitary authority
+    - COI (string) - Isles of Scilly
+- address: `City of Cardiff Council\nCity of Cardiff Council\nCounty Hall Atlantic Wharf\nCardiff` (string) - Contact address for this council
+- postcode: `CF10 4UW` (string) - Postcode component of contact address for this council
+- email: `electoralservices@cardiff.gov.uk` (string) - Contact email address for this council's Electoral Services team
+- phone: `029 2087 2034` (string) - Telephone number for this council's Electoral Services team
+- website: `https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx` (string) - URL for this council's website
+
+## GeoCouncil (object)
+- geometry (MultiPolygon) - A GeoJSON object describing the boundary of this area
+- type: `Feature` (string)
+- id: `W06000015` (string) - GSS code for this council
+- properties (Council)
+
+
+
+## Point (object)
+- type: `Point` (string)
+- coordinates: `...` (array)
+
+## StationURLs (object)
+- detail: `http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&station_id=SP2-NB` (string) - URL to retrieve JSON meta-data about this polling station
+- geo: `http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&station_id=SP2-NB` (string) - URL to retrieve GeoJSON feature describing this polling station
+
+## PollingStation (object)
+- urls (StationURLs)
+- council: `http://wheredoivote.co.uk/api/beta/councils/W06000015.json` (string) - URL to retrieve JSON meta-data about the council which administers this polling station
+- station_id: `SP2-NB` (string) - An identifier for this polling station. Station IDs are unique within councils, but are not unique nationally
+- address: `Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff` (string) - Address for this polling station
+- postcode: ` ` (string) - Postcode for this polling station
+
+## GeoPollingStation (object)
+- geometry (Point, nullable) - A GeoJSON Point object describing the location of this polling station. Optionally null if we do not hold this information
+- type: `Feature` (string)
+- id: `W06000015.SP2-NB` (string)
+- properties (PollingStation)
+
+
+
+# DistrictURLs (object)
+- detail: `http://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=W06000015&district_id=NB` (string) - URL to retrieve JSON meta-data about this polling district
+- geo: `http://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=W06000015&district_id=NB` (string) - URL to retrieve GeoJSON feature describing this polling district
+
+## PollingDistrict (object)
+- urls (DistrictURLs)
+- council: `http://wheredoivote.co.uk/api/beta/councils/W06000015.json` (string) - URL to retrieve JSON meta-data about the council which administers this polling district
+- district_id: `NB` (string) - An identifier for this polling district. District IDs are unique within councils, but are not unique nationally
+- polling_station (PollingStation, nullable) - A polling station object describing the station which serves this district. Optionally null if we do not hold this information
+
+## GeoPollingDistrict (object)
+- geometry (MultiPolygon) - A GeoJSON object describing the boundary of this area
+- type: `Feature` (string)
+- id: `W06000015.NB` (string)
+- properties (PollingDistrict)

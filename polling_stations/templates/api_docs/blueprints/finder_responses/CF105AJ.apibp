@@ -1,0 +1,49 @@
+            {
+                "polling_station_known": true,
+                "postcode_location": {
+                    "geometry": {
+                        "point": {
+                            "type": "Point",
+                            "coordinates": [
+                                -3.1657202682046206,
+                                51.46518039304887
+                            ]
+                        }
+                    },
+                    "type": "Feature"
+                },
+                "custom_finder": null,
+                "addresses": [],
+                "polling_station": {
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -3.162477184225377,
+                            51.469852462940835
+                        ]
+                    },
+                    "type": "Feature",
+                    "id": "W06000015.SP2-NB",
+                    "properties": {
+                        "address": "Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff",
+                        "station_id": "SP2-NB",
+                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000015/",
+                        "urls": {
+                            "geo": "http://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=SP2-NB&council_id=W06000015",
+                            "detail": "http://wheredoivote.co.uk/api/beta/pollingstations/?station_id=SP2-NB&council_id=W06000015"
+                        },
+                        "postcode": ""
+                    }
+                },
+                "council": {
+                    "website": "https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx",
+                    "name": "Cardiff Council",
+                    "phone": "029 2087 2034",
+                    "url": "http://wheredoivote.co.uk/api/beta/councils/W06000015/",
+                    "council_id": "W06000015",
+                    "council_type": "UTA",
+                    "postcode": "CF10 4UW",
+                    "address": "City of Cardiff Council\nCity of Cardiff Council\nCounty Hall Atlantic Wharf\nCardiff",
+                    "email": "electoralservices@cardiff.gov.uk"
+                }
+            }

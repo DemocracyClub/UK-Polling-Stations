@@ -1,0 +1,130 @@
+## Group Polling Station Finder
+
+The `/postcode` and `/address` endpoints find a user's polling station based on their home address.
+This allows you to leverage Democracy Club's data to integrate a polling station finder into your website or app.
+
+A `200 OK` response from `/postcode` or `/address` is an object containing the following top-level keys:
+* `polling_station_known`: (boolean) - Do we know where this user should vote?
+* `postcode_location`: (object, nullable) - A [GeoJSON Feature](http://geojson.org/geojson-spec.html#feature-objects)
+  containing a [Point object](http://geojson.org/geojson-spec.html#point) describing the centroid of the input postcode.
+* `polling_station`: (object, nullable) - A GeoJSON [polling station feature](#polling-stations-polling-stations-geojson-get)
+* `addresses`: (array) - An array of address objects listing the addresses applicable to this request (if necessary).
+* `council`: (object) - A [Council](#councils-councils-json-get) object describing the local authority which covers this postcode.
+  If we do not know the user's polling station, this can be used to provide contact info for their local council.
+* `custom_finder`: (string, nullable) - If we don't know a user's polling station,
+  sometimes we can provide the URL of a polling station finder provided by their local council.
+
+
+
+## Postcode search [/postcode/{postcode}.json]
+
+The entry point to a polling station search is a call to the `/postcode` endpoint.
+A valid postcode search may result in one of 3 outcomes:
+* We hold data for this area and all voters with this postcode vote at the same polling station.
+* We hold data for this area but voters with this postcode don't all vote at the same polling station.
+  To find the user's polling station, we must make a second API call to the `/address` endpoint.
+* We do not hold data for this area.
+
++ Parameters
+    + postcode: `SW1A1AA` (required, string) - Whitespace in postcodes is ignored, so format may be `SW1A1AA` or `SW1A 1AA`
+
+### Postcode search [GET]
+
++ Response 200 (application/json)
+
+    When we hold data for this area and all voters with this postcode vote at the same polling station,
+    the following conditions can be observed in the response body:
+    * `polling_station_known` is `true`
+    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-polling-stations-geojson-get)
+    * `addresses` is an empty array
+
+    + Body
+
+<!-- include(finder_responses/CF105AJ.apibp) -->
+
+    + Schema
+
+<!-- include(finder_responses/schema.apibp) -->
+
+
++ Response 200 (application/json)
+
+    When we hold data for this area but voters with this postcode don't all vote at the same polling station,
+    the following conditions can be observed in the response body:
+    * `polling_station_known` is `false`
+    * `polling_station` is `null`
+    * `addresses` is an array of address objects covered by the input postcode.
+      This can be used to request the user's address and make a second API call to the `/address` endpoint.
+
+    + Body
+
+<!-- include(finder_responses/CF157RP.apibp) -->
+
+    + Schema
+
+<!-- include(finder_responses/schema.apibp) -->
+
+
++ Response 200 (application/json)
+
+    When we do not hold data for the area described by the postcode provided,
+    the following conditions can be observed in the response body:
+    * `polling_station_known` is `false`
+    * `polling_station` is `null`
+    * `addresses` is an empty array
+
+    + Body
+
+<!-- include(finder_responses/SW1A1AA.apibp) -->
+
+    + Schema
+
+<!-- include(finder_responses/schema.apibp) -->
+
+
++ Response 400 (application/json)
+
+        {
+          "detail": "Mapit error 400: Postcode 'FOOBAR' is not valid."
+        }
+
++ Response 403 (application/json)
+
+        {
+          "detail": "Mapit error 403: Rate limit exceeded"
+        }
+
+
+
+## Address search [/address/{slug}.json]
+
+In the event that the addresses described by a postcode are not all assigned to the same polling station,
+an array of address objects will be returned, each of which corresponds to a call to the `/address` endpoint.
+
++ Parameters
+    + slug: `w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp` (required, string) - A unique slug describing a residential address
+
+### Address search [GET]
+
++ Response 200 (application/json)
+
+    When we make a valid call to the `/address` endpoint,
+    the following conditions can be observed in the response body:
+    * `polling_station_known` is `true`
+    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-polling-stations-geojson-get)
+    * `addresses` is an array of length one containing a single address object describing the requested address
+
+    + Body
+
+<!-- include(finder_responses/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp.apibp) -->
+
+    + Schema
+
+<!-- include(finder_responses/schema.apibp) -->
+
+
++ Response 404 (application/json)
+
+        {
+          "detail": "Address not found"
+        }
