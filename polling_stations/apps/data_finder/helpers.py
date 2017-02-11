@@ -45,14 +45,7 @@ def geocode(postcode):
     Use MaPit to convert the postcode to a location and constituency
     """
 
-    COUNCIL_TYPES = [
-        "LBO",
-        "DIS",
-        "MTD",
-        "LGD",
-        "UTA",
-    ]
-
+    COUNCIL_TYPES = getattr(settings, 'COUNCIL_TYPES', [])
 
     headers = {}
     if settings.MAPIT_UA:
