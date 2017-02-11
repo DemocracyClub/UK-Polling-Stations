@@ -23,13 +23,15 @@ class RateLimitError(Exception):
         logger.error(message)
 
 
-def geocode_point_only(postcode):
+def geocode_point_only(postcode, sleep=True):
     """
     Try to get centre of the point from AddressBase, fall back to MapIt
     """
     addresses = Address.objects.filter(postcode=postcode)
     if not addresses:
-        time.sleep(1.3)
+        # optional sleep to avoid hammering mapit
+        if sleep:
+            time.sleep(1.3)
         return geocode(postcode)
 
     centre = centre_from_points_qs(addresses)
