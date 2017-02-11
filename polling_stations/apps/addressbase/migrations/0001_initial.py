@@ -7,8 +7,6 @@ import django.contrib.gis.db.models.fields
 
 class Migration(migrations.Migration):
 
-    replaces = [('addressbase', '0001_initial'), ('addressbase', '0002_auto_20160611_1700'), ('addressbase', '0003_auto_20160611_2130'), ('addressbase', '0004_auto_20160611_2304'), ('addressbase', '0005_auto_20160612_0904')]
-
     dependencies = [
     ]
 
