@@ -67,7 +67,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
         try:
-            l = geocoder(address.postcode)
+            l = geocoder(address.postcode, sleep=False)
             location = Point(l['wgs84_lon'], l['wgs84_lat'])
         except (PostcodeError, RateLimitError) as e:
             location = None
