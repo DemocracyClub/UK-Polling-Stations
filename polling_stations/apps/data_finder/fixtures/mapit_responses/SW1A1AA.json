@@ -1,0 +1,241 @@
+{
+    "wgs84_lat": 51.50100893647978,
+    "coordsyst": "G",
+    "shortcuts": {
+        "WMC": 65759,
+        "ward": 8569,
+        "council": 2504
+    },
+    "wgs84_lon": -0.14158760012261312,
+    "postcode": "SW1A 1AA",
+    "easting": 529089,
+    "areas": {
+        "2247": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 2247,
+            "codes": {
+                "unit_id": "41441"
+            },
+            "name": "Greater London Authority",
+            "country": "E",
+            "type_name": "Greater London Authority",
+            "generation_low": 1,
+            "country_name": "England",
+            "type": "GLA"
+        },
+        "2504": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 2504,
+            "codes": {
+                "ons": "00BK",
+                "gss": "E09000033",
+                "unit_id": "11164",
+                "local-authority-eng": "WSM"
+            },
+            "name": "Westminster City Council",
+            "country": "E",
+            "type_name": "London borough",
+            "generation_low": 1,
+            "country_name": "England",
+            "type": "LBO"
+        },
+        "8569": {
+            "parent_area": 2504,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 8569,
+            "codes": {
+                "ons": "00BKGQ",
+                "gss": "E05000644",
+                "unit_id": "11162"
+            },
+            "name": "St James's",
+            "country": "E",
+            "type_name": "London borough ward",
+            "generation_low": 1,
+            "country_name": "England",
+            "type": "LBW"
+        },
+        "11806": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 11806,
+            "codes": {
+                "ons": "07",
+                "gss": "E15000007",
+                "unit_id": "41428"
+            },
+            "name": "London",
+            "country": "E",
+            "type_name": "European region",
+            "generation_low": 1,
+            "country_name": "England",
+            "type": "EUR"
+        },
+        "11828": {
+            "parent_area": 2247,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 11828,
+            "codes": {
+                "gss": "E32000014",
+                "unit_id": "41449"
+            },
+            "name": "West Central",
+            "country": "E",
+            "type_name": "London Assembly constituency",
+            "generation_low": 1,
+            "country_name": "England",
+            "type": "LAC"
+        },
+        "34856": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 34856,
+            "codes": {
+                "ons": "E02000977"
+            },
+            "name": "Westminster 018",
+            "country": "E",
+            "type_name": "2001 Middle Layer Super Output Area (Full)",
+            "generation_low": 13,
+            "country_name": "England",
+            "type": "OMF"
+        },
+        "42050": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 42050,
+            "codes": {
+                "ons": "E02000977"
+            },
+            "name": "Westminster 018",
+            "country": "E",
+            "type_name": "2001 Middle Layer Super Output Area (Generalised)",
+            "generation_low": 13,
+            "country_name": "England",
+            "type": "OMG"
+        },
+        "65759": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 65759,
+            "codes": {
+                "gss": "E14000639",
+                "unit_id": "25040"
+            },
+            "name": "Cities of London and Westminster",
+            "country": "E",
+            "type_name": "UK Parliament constituency",
+            "generation_low": 13,
+            "country_name": "England",
+            "type": "WMC"
+        },
+        "70877": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 70877,
+            "codes": {
+                "ons": "E01004736"
+            },
+            "name": "Westminster 018C",
+            "country": "E",
+            "type_name": "2001 Lower Layer Super Output Area (Full)",
+            "generation_low": 13,
+            "country_name": "England",
+            "type": "OLF"
+        },
+        "105255": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 105255,
+            "codes": {
+                "ons": "E01004736"
+            },
+            "name": "Westminster 018C",
+            "country": "E",
+            "type_name": "2001 Lower Layer Super Output Area (Generalised)",
+            "generation_low": 13,
+            "country_name": "England",
+            "type": "OLG"
+        },
+        "148915": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 148915,
+            "codes": {
+                "nhse": "09A"
+            },
+            "name": "Central London (Westminster)",
+            "country": "E",
+            "type_name": "Clinical Commissioning Group",
+            "generation_low": 29,
+            "country_name": "England",
+            "type": "CCG"
+        },
+        "900000": {
+            "parent_area": null,
+            "generation_high": 19,
+            "all_names": {},
+            "id": 900000,
+            "codes": {},
+            "name": "House of Commons",
+            "country": "",
+            "type_name": "UK Parliament",
+            "generation_low": 1,
+            "country_name": "-",
+            "type": "WMP"
+        },
+        "900001": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 900001,
+            "codes": {},
+            "name": "European Parliament",
+            "country": "",
+            "type_name": "European Parliament",
+            "generation_low": 1,
+            "country_name": "-",
+            "type": "EUP"
+        },
+        "900002": {
+            "parent_area": 900006,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 900002,
+            "codes": {},
+            "name": "London Assembly",
+            "country": "E",
+            "type_name": "London Assembly area (shared)",
+            "generation_low": 1,
+            "country_name": "England",
+            "type": "LAE"
+        },
+        "900006": {
+            "parent_area": null,
+            "generation_high": 30,
+            "all_names": {},
+            "id": 900006,
+            "codes": {},
+            "name": "London Assembly",
+            "country": "E",
+            "type_name": "London Assembly area",
+            "generation_low": 1,
+            "country_name": "England",
+            "type": "LAS"
+        }
+    },
+    "northing": 179651
+}
