@@ -4,7 +4,7 @@ from api.address import ResidentialAddressViewSet
 
 
 # Test double for geocode function: always returns the same point
-def mock_geocode(postcode):
+def mock_geocode(postcode, sleep):
     return {
         'wgs84_lon': 0.22247314453125,
         'wgs84_lat': 53.149405955929744,
