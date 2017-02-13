@@ -1,13 +1,12 @@
 {% extends "rest_framework/base.html" %}
-
 {% load static from staticfiles %}
 {% block title %}Polling Stations API - Democracy Club{% endblock %}
-{% block bootstrap_theme %}
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootswatch.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'css/map.css' %}" rel="stylesheet">
+
+{% block branding %}
+  <a class="navbar-brand" rel="nofollow" href="/">Democracy Club Polling Stations</a>
 {% endblock %}
-{% block navbar %}
-  {% include 'navbar.html' %}
+
+{% block userlinks %}
+  <li><a href="/api">API Documentation</a></li>
+  <li><a href="/about">About</a></li>
 {% endblock %}
