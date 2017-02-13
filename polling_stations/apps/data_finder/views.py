@@ -28,7 +28,7 @@ from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     geocode,
     DirectionsHelper,
-    natural_sort,
+    AddressSorter,
     PostcodeError,
     RateLimitError,
     RoutingHelper
@@ -295,7 +295,8 @@ class AddressFormView(FormView):
         )
 
         select_addresses = [(element.slug, element.address) for element in addresses]
-        select_addresses = natural_sort(select_addresses, itemgetter(1))
+        sorter = AddressSorter()
+        select_addresses = sorter.natural_sort(select_addresses, itemgetter(1))
 
         if not addresses:
             raise Http404
