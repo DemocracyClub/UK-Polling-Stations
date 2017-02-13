@@ -15,7 +15,7 @@ If you are interested in helping out in any way at all, please contact sym@democ
 ## Getting Started
 
 ### Python
-UK-Polling-Stations requires python 3.4
+UK-Polling-Stations requires python 3.4 or 3.5
 
 ### Install system dependencies
 UK-Polling-Stations requires Postgres, PostGIS, libgeos and GDAL.
@@ -27,11 +27,14 @@ brew install postgis
 brew install geos
 brew install gdal
 ```
-From a clean install of Ubuntu 14 (Trusty), the command:
+From a clean install of Ubuntu 14.04 (Trusty):
 ```
 sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1 libxml2-dev libxslt-dev
 ```
-will install all of the necessary dependencies.
+or on Ubuntu 16.04 (Xenial):
+```
+sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev
+```
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
@@ -114,10 +117,9 @@ will run all of the import scripts relating to the 2016 EU Referendum.
 
 ## Importing the data we have from councils
 
-Each council that has unimported data has a Github Issue with the `Data Import` label.
+Each council that has unimported data has a Github Issue with the [Data Import](https://github.com/DemocracyClub/UK-Polling-Stations/issues?q=is%3Aissue+is%3Aopen+label%3A%22Data+Import%22) label.
 
 You can see the current status in [the Waffle Board](https://waffle.io/DemocracyClub/UK-Polling-Stations?label=Data%20Import).
 
-Data lives in ./data/[council.id]-[council.name]/*
-
-We make a Django manage.py command in the data_collection app for each council which imports the raw data. There are some base importer command classes in the `__init__.py` of `data_collection.management.commands` and some template import scripts in `polling_stations/apps/data_collection/management/commands/templates/` to use as a starting point.
+We make a Django `manage.py` command in the data_collection app for each council which imports the raw data.
+If you are interested in helping the project by writing an import script, see the issues tagged [recommended for beginners](https://github.com/DemocracyClub/UK-Polling-Stations/issues?q=is%3Aissue+is%3Aopen+label%3A%22recommended+for+beginners%22) for more info.
