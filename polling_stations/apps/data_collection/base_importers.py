@@ -657,9 +657,12 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
                 srid=27700)
         else:
             # otherwise, geocode using postcode
+            postcode = getattr(record, self.station_postcode_field).strip()
+            if postcode == '':
+                return None
+
             try:
-                location_data = geocode_point_only(
-                    getattr(record, self.station_postcode_field).strip())
+                location_data = geocode_point_only(postcode)
                 location = Point(
                     location_data['wgs84_lon'],
                     location_data['wgs84_lat'],
