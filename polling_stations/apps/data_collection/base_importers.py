@@ -867,3 +867,14 @@ class BaseApiShpZipStationsShpZipDistrictsImporter(BaseGenericApiImporter):
 
     stations_filetype = 'shp.zip'
     districts_filetype = 'shp.zip'
+
+
+class BaseApiCsvStationsShpZipDistrictsImporter(BaseGenericApiImporter,
+                                                CsvMixin):
+    """
+    Stations in CSV format
+    Districts in Zipped SHP format
+    """
+
+    stations_filetype = 'csv'
+    districts_filetype = 'shp.zip'
