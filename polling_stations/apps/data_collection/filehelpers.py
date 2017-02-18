@@ -41,6 +41,8 @@ class CsvHelper:
             '.': '_',
             '(': '',
             ')': '',
+            '/': '_',
+            '\\': '_',
         }
         clean = []
         for s in header:
