@@ -23,7 +23,7 @@ def centre_from_points_qs(qs):
 AddressTuple = namedtuple('Address', [
     'address',
     'postcode',
-    'council',
+    'council_id',
     'polling_station_id',
     'slug'])
 
@@ -47,7 +47,7 @@ class AddressSet:
                 address=address.address,
                 postcode=re.sub('[^A-Z0-9]', '', address.postcode),
                 polling_station_id=address.polling_station_id,
-                council=address.council,
+                council_id=address.council_id,
                 slug=address.slug,
             )
             addresses_db.append(record)
@@ -62,35 +62,49 @@ class EdgeCaseFixer:
         self.address_set = AddressSet()
         self.target_council_id = target_council_id
 
+    def get_station_id(self, location):
+        district = PollingDistrict.objects.get(
+            area__covers=location, council_id=self.target_council_id)
+
+        polling_station = PollingStation.objects.get_polling_station(
+            district.council.pk,
+            polling_district=district)
+
+        if not polling_station:
+            """
+            We do not know which station this district is served by (orphan district)
+
+            Because we have no way of knowing what the correct station is, intentionally insert a record with an empty station id
+            This allows us to *list* the address, but if the user *chooses* it, we will show "we don't know: call your council"
+            """
+            return ''
+
+        return polling_station.internal_council_id
+
     def make_addresses_for_postcode(self, postcode):
         addresses = Address.objects.filter(postcode=postcode)
         for address in addresses:
             try:
-                district = PollingDistrict.objects.get(
-                    area__covers=address.location, council_id=self.target_council_id)
+                station_id = self.get_station_id(address.location)
             except PollingDistrict.DoesNotExist:
                 # Chances are this is on the edge of the council area, and
-                # we don't have data for the are the property is in
+                # we don't have data for the area the property is in
+                # TODO: handle this
                 continue
             except PollingDistrict.MultipleObjectsReturned:
-                # This is normally causes by districts the overlap
-                # Because we have no way of knowing what the correct district is,
-                # we need to ignore this address
-                continue
+                """
+                This is normally caused by districts that overlap
 
-            polling_station = PollingStation.objects.get_polling_station(
-                district.council.pk,
-                polling_district=district)
-
-            if not polling_station:
-                # We do not know which station this district is served by, ignore it
-                continue
+                Because we have no way of knowing what the correct station is, intentionally insert a record with an empty station id
+                This allows us to *list* the address, but if the user *chooses* it, we will show "we don't know: call your council"
+                """
+                station_id = ''
 
             self.address_set.add(AddressTuple(
                 address.address,
                 postcode,
-                district.council,
-                polling_station.internal_council_id,
+                self.target_council_id,
+                station_id,
                 address.uprn,
             ))
 
