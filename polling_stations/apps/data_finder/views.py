@@ -230,6 +230,8 @@ class AddressView(BasePollingStationView):
             pk=self.address.council_id)
 
     def get_station(self):
+        if not self.address.polling_station_id:
+            return None
         return PollingStation.objects.get_polling_station_by_id(
             self.address.polling_station_id,
             self.address.council_id)
