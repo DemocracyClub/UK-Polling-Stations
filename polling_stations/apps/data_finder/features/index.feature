@@ -1,5 +1,5 @@
 Feature: Check Postcodes
-    Scenario: Check postcode with address picker
+    Scenario: Check postcode with address picker valid station id
     When I visit site page "/"
     Then I should see "Find your polling station"
     Then I fill in "postcode" with "BB11BB"
@@ -12,6 +12,20 @@ Feature: Check Postcodes
     And I should see "Your polling station"
     And I should see "The polling station for BB11BB is"
     And I should see "Get walking directions"
+    And No errors were thrown
+
+    Scenario: Check postcode with address picker invalid station id
+    When I visit site page "/"
+    Then I should see "Find your polling station"
+    Then I fill in "postcode" with "BB11BB"
+    Then I submit the only form
+    Then I should see "Choose Your Address / Street"
+    And I should see option "3 Baz Street, Bar Town" in selector "address"
+    Then I select "3 Baz Street, Bar Town" from "address"
+    Then I submit the only form
+    Then The browser's URL should contain "/address/5/"
+    And I should see "Contact Foo Council"
+    And I should see "We don't have data for your area."
     And No errors were thrown
 
     Scenario: Check postcode without address picker

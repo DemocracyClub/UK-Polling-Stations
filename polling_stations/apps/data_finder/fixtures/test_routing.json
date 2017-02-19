@@ -77,6 +77,17 @@
     },
     {
         "fields": {
+            "address": "3 Baz Street, Bar Town",
+            "postcode": "BB11BB",
+            "polling_station_id": "",
+            "council": "X01000001",
+            "slug": "5"
+        },
+        "model": "pollingstations.residentialaddress",
+        "pk": 5
+    },
+    {
+        "fields": {
             "council": "X01000001",
             "internal_council_id": "4",
             "postcode": "BB11BD",
