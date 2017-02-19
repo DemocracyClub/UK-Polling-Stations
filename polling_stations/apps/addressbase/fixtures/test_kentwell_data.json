@@ -57,7 +57,6 @@
     "fields": {
         "postcode": "KW15 88TF",
         "location": "SRID=4326;POINT (0.7208994610313341 52.0965737442737549)",
-        "polling_district_id": "TF1",
         "council": "X01000001",
         "internal_council_id": "3",
         "polling_district_id": "3",
@@ -70,7 +69,6 @@
     "fields": {
         "postcode": "KW15 88TF",
         "location": "SRID=4326;POINT (0.7222083790304389 52.0978388001128465)",
-        "polling_district_id": "BS1",
         "council": "X01000001",
         "internal_council_id": "2",
         "polling_district_id": "2",
@@ -83,7 +81,6 @@
     "fields": {
         "postcode": "KW15 88LM",
         "location": "SRID=4326;POINT (0.7151917202484516 52.0963096886925001)",
-        "polling_district_id": "LM1",
         "council": "X01000001",
         "internal_council_id": "1",
         "polling_district_id": "1",
