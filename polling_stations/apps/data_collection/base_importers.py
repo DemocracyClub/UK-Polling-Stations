@@ -399,7 +399,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 geojson = json.dumps(district.shape.__geo_interface__)
             if self.districts_filetype == 'geojson':
                 geojson = json.dumps(district['geometry'])
-            if 'location' not in district_info and\
+            if 'area' not in district_info and\
                     (self.districts_filetype == 'shp' or\
                      self.districts_filetype == 'geojson'):
                 poly = self.clean_poly(
