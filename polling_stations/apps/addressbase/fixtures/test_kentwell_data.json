@@ -59,7 +59,7 @@
         "location": "SRID=4326;POINT (0.7208994610313341 52.0965737442737549)",
         "council": "X01000001",
         "internal_council_id": "3",
-        "polling_district_id": "3",
+        "polling_district_id": "",
         "address": "By the gate"
     }
 },
@@ -71,7 +71,7 @@
         "location": "SRID=4326;POINT (0.7222083790304389 52.0978388001128465)",
         "council": "X01000001",
         "internal_council_id": "2",
-        "polling_district_id": "2",
+        "polling_district_id": "",
         "address": "In the woolshed"
     }
 },
@@ -83,7 +83,7 @@
         "location": "SRID=4326;POINT (0.7151917202484516 52.0963096886925001)",
         "council": "X01000001",
         "internal_council_id": "1",
-        "polling_district_id": "1",
+        "polling_district_id": "",
         "address": "Tissy's caravan"
     }
 },
