@@ -52,6 +52,42 @@
     }
 },
 {
+    "model": "pollingstations.pollingdistrict",
+    "pk": 120,
+    "fields": {
+        "polling_station_id": "1",
+        "area": "SRID=4326;MULTIPOLYGON (((-4.482703506946564 51.90543149087943, -4.481839835643768 51.90543149087943, -4.481839835643768 51.90589649263625, -4.482703506946564 51.90589649263625, -4.482703506946564 51.90543149087943)))",
+        "council": "X01000001",
+        "internal_council_id": "4",
+        "name": "Test district with valid station",
+        "extra_id": "4"
+    }
+},
+{
+    "model": "pollingstations.pollingdistrict",
+    "pk": 121,
+    "fields": {
+        "polling_station_id": "4",
+        "area": "SRID=4326;MULTIPOLYGON (((-4.481107592582703 51.90518492215854, -4.481064677238464 51.90582533609574, -4.481839835643768 51.90589649263625, -4.481839835643768 51.90543149087943, -4.481107592582703 51.90518492215854)))",
+        "council": "X01000001",
+        "internal_council_id": "5",
+        "name": "Test district with invalid station",
+        "extra_id": "5"
+    }
+},
+{
+    "model": "pollingstations.pollingdistrict",
+    "pk": 122,
+    "fields": {
+        "polling_station_id": "2",
+        "area": "SRID=4326;MULTIPOLYGON (((-4.4829261302948 51.905267663490946, -4.482614994049072 51.905267663490946, -4.482614994049072 51.905595317670404, -4.4829261302948 51.905595317670404, -4.4829261302948 51.905267663490946)))",
+        "council": "X01000001",
+        "internal_council_id": "6",
+        "name": "Test district that overlaps",
+        "extra_id": "6"
+    }
+},
+{
     "pk": 119,
     "model": "pollingstations.pollingstation",
     "fields": {
@@ -111,6 +147,51 @@
         "postcode": "KW15 88LM",
         "address": "Sym's Caravan",
         "location": "SRID=4326;POINT (0.7152352684829660 52.0954911675566947)"
+    },
+    "model": "addressbase.address"
+},
+{
+    "pk": "9999994",
+    "fields": {
+        "postcode": "KW15 88LX",
+        "address": "74 Kendell Street",
+        "location": "SRID=4326;POINT (-4.482032954692841 51.905678058246835)"
+    },
+    "model": "addressbase.address"
+},
+{
+    "pk": "9999995",
+    "fields": {
+        "postcode": "KW15 88LX",
+        "address": "75 Kendell Street",
+        "location": "SRID=4326;POINT (-4.481622576713562 51.905638342789175)"
+    },
+    "model": "addressbase.address"
+},
+{
+    "pk": "9999996",
+    "fields": {
+        "postcode": "KW15 88LZ",
+        "address": "80 Kendell Street",
+        "location": "SRID=4326;POINT (-4.482572078704834 51.90549602877751)"
+    },
+    "model": "addressbase.address"
+},
+{
+    "pk": "9999997",
+    "fields": {
+        "postcode": "KW15 88LZ",
+        "address": "81 Kendell Street",
+        "location": "SRID=4326;POINT (-4.482660591602325 51.905499338410806)"
+    },
+    "model": "addressbase.address"
+},
+{
+    "pk": "9999998",
+    "fields": {
+        "postcode": "KW15 88LZ",
+        "address": "82 Kendell Street",
+        "location": "SRID=4326;POINT (-4.482770562171936 51.905499338410806)"
     },
     "model": "addressbase.address"
 }

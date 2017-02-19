@@ -34,6 +34,8 @@ Sward polling station.
 To do this, we need to create ResidentialAddress objects for them.
 """
 
+from operator import attrgetter
+
 from django.test import TestCase
 
 from addressbase.models import Address
@@ -134,7 +136,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         endpoint = rh.get_endpoint()
         self.assertEqual('address_select_view', endpoint.view)
 
-    def test_make_addresses_cross_boarders(self):
+    def test_make_addresses_cross_borders(self):
         """
         Ensure that we make addresses for both sides of a district.
 
@@ -153,8 +155,49 @@ class PostcodeBoundaryFixerTestCase(TestCase):
 
         self.assertEqual(ResidentialAddress.objects.all().count(), 2)
 
+    def test_addresses_cross_borders_with_orphan_distirct(self):
+        """
+        In this case, we have a postcode which contains addresses in one
+        district where we do know the polling station and one where we don't
+        We should still insert addresses for both districts
+        """
+        postcode = "KW15 88LX"
+        fixer = EdgeCaseFixer("X01000001")
+        fixer.make_addresses_for_postcode(postcode)
+        addresses = fixer.get_address_set()
+        records = sorted(list(addresses.elements), key=attrgetter('address'))
+        self.assertEqual(len(records), 2)
+        self.assertEqual(records[0].address, '74 Kendell Street')
+        self.assertEqual(records[0].polling_station_id, '1')
+        # this address falls in the invalid district
+        self.assertEqual(records[1].address, '75 Kendell Street')
+        self.assertEqual(records[1].polling_station_id, '')
+
+    def test_addresses_cross_borders_with_overlapping_distirct(self):
+        """
+        In this case, we have a postcode which contains an addresses in
+        an overlap between 2 districts (both of which we know a station for).
+        We should still insert addresses for all addresses
+        even though we can't map all of them to a poling station
+        """
+        postcode = "KW15 88LZ"
+        fixer = EdgeCaseFixer("X01000001")
+        fixer.make_addresses_for_postcode(postcode)
+        addresses = fixer.get_address_set()
+        records = sorted(list(addresses.elements), key=attrgetter('address'))
+        self.assertEqual(len(records), 3)
+        # 80 Kendell Street is wholly in one district
+        self.assertEqual(records[0].address, '80 Kendell Street')
+        self.assertEqual(records[0].polling_station_id, '1')
+        # 81 Kendell Street is in the overlap
+        self.assertEqual(records[1].address, '81 Kendell Street')
+        self.assertEqual(records[1].polling_station_id, '')
+        # 82 Kendell Street is wholly in one district
+        self.assertEqual(records[2].address, '82 Kendell Street')
+        self.assertEqual(records[2].polling_station_id, '2')
+
     def test_center_from_points_qs(self):
-        qs = Address.objects.all()
+        qs = Address.objects.filter(pk__lte=9999993)
         centre = centre_from_points_qs(qs)
         self.assertEqual(
             centre.wkt,
