@@ -1,3 +1,4 @@
+import re
 from collections import namedtuple
 from pollingstations.models import (PollingDistrict, ResidentialAddress,
                                     PollingStation)
@@ -44,7 +45,7 @@ class AddressSet:
         for address in self.elements:
             record = ResidentialAddress(
                 address=address.address,
-                postcode=address.postcode,
+                postcode=re.sub('[^A-Z0-9]', '', address.postcode),
                 polling_station_id=address.polling_station_id,
                 council=address.council,
                 slug=address.slug,
