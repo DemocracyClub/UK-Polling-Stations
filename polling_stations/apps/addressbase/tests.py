@@ -39,7 +39,7 @@ from django.test import TestCase
 from addressbase.models import Address
 from addressbase.helpers import (postcodes_not_contained_by_district,
                                  district_contains_all_points,
-                                 make_addresses_for_postcode,
+                                 EdgeCaseFixer,
                                  create_address_records_for_council,
                                  centre_from_points_qs)
 from pollingstations.models import (PollingStation, PollingDistrict,
@@ -109,7 +109,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
 
     def test_create_address_records_for_council(self):
         council = Council.objects.get(pk='X01000001')
-        postcode_report = create_address_records_for_council(council)
+        postcode_report = create_address_records_for_council(council, 1000)
 
         self.assertEqual(postcode_report['no_attention_needed'], 1)
         self.assertTrue('KW15 88TF' in
@@ -125,7 +125,9 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         self.assertEqual('postcode_view', endpoint.view)
 
         # Fix the addresses outside of the districts
-        make_addresses_for_postcode(postcode, council_id="X01000001")
+        fixer = EdgeCaseFixer("X01000001")
+        fixer.make_addresses_for_postcode(postcode)
+        fixer.get_address_set().save(1000)
 
         # Now we should get offered an address lookup
         rh = RoutingHelper(postcode)
@@ -145,7 +147,9 @@ class PostcodeBoundaryFixerTestCase(TestCase):
 
         # Fix the addresses outside of the districts
         postcode = 'KW15 88TF'
-        make_addresses_for_postcode(postcode, council_id="X01000001")
+        fixer = EdgeCaseFixer("X01000001")
+        fixer.make_addresses_for_postcode(postcode)
+        fixer.get_address_set().save(1000)
 
         self.assertEqual(ResidentialAddress.objects.all().count(), 2)
 
