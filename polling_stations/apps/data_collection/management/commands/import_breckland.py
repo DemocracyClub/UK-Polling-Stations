@@ -1,0 +1,8 @@
+from data_collection.management.commands import BaseXpressCsvImporter
+
+class Command(BaseXpressCsvImporter):
+    council_id      = 'E07000143'
+    addresses_name  = 'May 2017/BrecklandPropertyPostCodePollingStationWebLookup-2017-02-20.TSV'
+    stations_name   = 'May 2017/BrecklandPropertyPostCodePollingStationWebLookup-2017-02-20.TSV'
+    elections       = ['local.norfolk.2017-05-04']
+    csv_delimiter = '\t'
