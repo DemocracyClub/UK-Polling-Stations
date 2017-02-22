@@ -45,6 +45,14 @@
       <h2>Sorry, we're a bit busy right now!</h2>
       <p>Try again in a few minutes.</p>
       {% endblocktrans %}
+      {% elif not has_election %}
+      <h2>{{ error }}</h2>
+
+      {# TODO: #}
+      {# election reminders #}
+      {# iCal feed #}
+      {# e.g: https://whocanivotefor.co.uk/elections/SW1A%201AA/ #}
+
       {% else %}
       {% blocktrans %}
       <h2>Sorry, we can't find {{ postcode }}</h2>

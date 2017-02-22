@@ -27,6 +27,7 @@ from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     geocode,
+    has_election,
     DirectionsHelper,
     AddressSorter,
     PostcodeError,
@@ -124,6 +125,14 @@ class BasePollingStationView(
         else:
             return ''
 
+    def has_election(self):
+        try:
+            return has_election(self.postcode)
+        except:
+            # if the request was unsucessful for some reason,
+            # assume there *is* and upcoming election
+            return True
+
     def get_context_data(self, **context):
         context['tile_layer'] = settings.TILE_LAYER
         context['mq_key'] = settings.MQ_KEY
@@ -145,6 +154,10 @@ class BasePollingStationView(
         self.council = self.get_council()
         self.station = self.get_station()
         self.directions = self.get_directions()
+
+        context['has_election'] = self.has_election()
+        if not context['has_election']:
+            context['error'] = 'There are no upcoming elections in your area'
 
         context['postcode'] = self.postcode
         context['location'] = self.location
