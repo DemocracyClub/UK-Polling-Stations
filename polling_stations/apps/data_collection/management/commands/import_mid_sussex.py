@@ -10,26 +10,12 @@ class Command(BaseMorphApiImporter):
     geom_type = 'geojson'
     split_districts = set()
 
-    def pre_import(self):
-        self.find_split_districts()
-
     def get_station_hash(self, record):
         # handle exact dupes on code/address
         return "-".join([
             record['msercode'],
-            record['uprn']
+            record['postcode'],
         ])
-
-    def find_split_districts(self):
-        # identify any district codes which appear more than once
-        # with 2 different polling station addresses.
-        # We do not want to import these.
-        stations = self.get_stations()
-        for station1 in stations:
-            for station2 in stations:
-                if (station2['msercode'] == station1['msercode'] and\
-                    station2['uprn'] != station1['uprn']):
-                    self.split_districts.add(station1['msercode'])
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid('districts'))
@@ -41,15 +27,16 @@ class Command(BaseMorphApiImporter):
         }
 
     def station_record_to_dict(self, record):
-
-        # handle split districts
-        if record['msercode'] in self.split_districts:
-            return None
-
         location = self.extract_geometry(record, self.geom_type, self.get_srid('stations'))
-        return {
-            'internal_council_id': record['msercode'],
-            'postcode':            '',
-            'address':             record['address'],
-            'location':            location,
-        }
+
+        codes = record['msercode'].split("/")
+        stations = []
+        for code in codes:
+            stations.append({
+                'internal_council_id': code.strip(),
+                'postcode':            record['postcode'],
+                'address':             "\n".join([record['venue'], record['street'], record['town']]),
+                'location':            location,
+            })
+
+        return stations
