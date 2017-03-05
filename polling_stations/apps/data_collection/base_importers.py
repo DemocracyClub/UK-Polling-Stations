@@ -626,6 +626,8 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         'pollingplaceaddress6',
     ]
     station_id_field = 'pollingplaceid'
+    easting_field = 'pollingplaceeasting'
+    northing_field = 'pollingplacenorthing'
 
     def get_station_hash(self, record):
         return "-".join([
@@ -633,7 +635,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         ])
 
     def get_station_address(self, record):
-        address_parts = address = "\n".join([
+        address = "\n".join([
             getattr(record, field) for field in self.station_address_fields
         ])
         while "\n\n" in address:
@@ -643,17 +645,17 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
     def get_station_point(self, record):
         location = None
 
-        if (hasattr(record, 'pollingplaceeasting') and\
-            hasattr(record, 'pollingplacenorthing') and\
-            record.pollingplaceeasting.strip() != '0' and\
-            record.pollingplaceeasting.strip() != '' and\
-            record.pollingplacenorthing.strip() != '0' and\
-            record.pollingplacenorthing.strip() != ''):
+        if (hasattr(record, self.easting_field) and\
+            hasattr(record, self.northing_field) and\
+            getattr(record, self.easting_field) != '0' and\
+            getattr(record, self.easting_field) != '' and\
+            getattr(record, self.northing_field) != '0' and\
+            getattr(record, self.northing_field) != ''):
 
             # if we've got points, use them
             location = Point(
-                float(record.pollingplaceeasting),
-                float(record.pollingplacenorthing),
+                float(getattr(record, self.easting_field)),
+                float(getattr(record, self.northing_field)),
                 srid=27700)
         else:
             # otherwise, geocode using postcode
