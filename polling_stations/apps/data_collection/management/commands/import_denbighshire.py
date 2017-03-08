@@ -1,69 +1,66 @@
-"""
-Import Denbighshire
-"""
-from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode_point_only, PostcodeError
+from data_collection.management.commands import BaseXpressCsvImporter
 
-class Command(BaseCsvStationsCsvAddressesImporter):
-    """
-    Imports the Polling Station data from Denbighshire
-    """
-    council_id      = 'W06000004'
-    addresses_name  = 'PropertyPostCodePollingStationWebLookup-2016-02-09.CSV'
-    stations_name   = 'PollingStations-2016-02-09.csv'
-    csv_encoding    = 'latin-1'
-    elections       = [
-        'pcc.2016-05-05',
-        'naw.c.2016-05-05',
-        'naw.r.2016-05-05',
-        'ref.2016-06-23'
-    ]
+class Command(BaseXpressCsvImporter):
+    council_id       = 'W06000004'
+    addresses_name   = 'PropertyPostCodePollingStationWebLookup-2016-02-09.CSV'
+    stations_name    = 'PropertyPostCodePollingStationWebLookup-2016-02-09.CSV'
+    csv_encoding     = 'latin-1'
+    station_id_field = 'pollingdistrictreference'
+    elections        = ['local.denbighshire.2017-05-04']
 
+    """
+    Joe received following reply from Denbighshire council:
+
+    Same data as for 2016, except for...
+
+    BLA
+    UPRN                    10023752725
+
+    St Asaph City Council Meeting Room
+    Roe Park Meadow
+    High Street
+    St Asaph, LL17 0RD
+
+
+    BLB
+    UPRN                    200004301587
+
+    St Asaph Cricket Club Pavilion
+    The Roe
+    St Asaph
+    LL17 0LU
+
+    .. so we will import last year's file and manually bodge in the changes
+    """
     def station_record_to_dict(self, record):
+        district_id = getattr(record, self.station_id_field).strip()
 
-        # format address
-        address = "\n".join([
-            record.pollingplaceaddress1,
-            record.pollingplaceaddress2,
-            record.pollingplaceaddress3,
-            record.pollingplaceaddress4,
-            record.pollingplaceaddress5,
-            record.pollingplaceaddress6,
-        ])
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n")
+        if district_id == 'BLA':
+            record = record._replace(pollingplaceaddress1 = 'St Asaph City Council Meeting Room')
+            record = record._replace(pollingplaceaddress2 = 'Roe Park Meadow')
+            record = record._replace(pollingplaceaddress3 = 'High Street')
+            record = record._replace(pollingplaceaddress4 = 'St Asaph')
+            record = record._replace(pollingplaceaddress5 = '')
+            record = record._replace(pollingplaceaddress6 = '')
+            record = record._replace(pollingplaceaddress7 = 'LL17 0RD')
+            record = record._replace(pollingplaceeasting = '0')
+            record = record._replace(pollingplacenorthing = '0')
+        if district_id == 'BLB':
+            record = record._replace(pollingplaceaddress1 = 'St Asaph Cricket Club Pavilion')
+            record = record._replace(pollingplaceaddress2 = 'The Roe')
+            record = record._replace(pollingplaceaddress3 = 'St Asaph')
+            record = record._replace(pollingplaceaddress4 = '')
+            record = record._replace(pollingplaceaddress5 = '')
+            record = record._replace(pollingplaceaddress6 = '')
+            record = record._replace(pollingplaceaddress7 = 'LL17 0LU')
+            record = record._replace(pollingplaceeasting = '0')
+            record = record._replace(pollingplacenorthing = '0')
 
-        """
-        No grid references were supplied,
-        so attempt to derive a grid ref from postcode
-
-        Unfortunately some of these postcodes cover
-        quite large areas, so the postcode centroid may
-        be some distance from the polling station :(
-        """
-        try:
-            gridref = geocode_point_only(record.pollingplaceaddress7)
-            location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
-        except PostcodeError:
-            location = None
-
+        address = self.get_station_address(record)
+        location = self.get_station_point(record)
         return {
-            'internal_council_id': record.pollingplaceid,
-            'postcode'           : record.pollingplaceaddress7,
-            'address'            : address,
+            'internal_council_id': district_id,
+            'postcode'           : getattr(record, self.station_postcode_field).strip(),
+            'address'            : address.strip(),
             'location'           : location
-        }
-
-    def address_record_to_dict(self, record):
-
-        if record.propertynumber == '0':
-            address = record.streetname
-        else:
-            address = '%s %s' % (record.propertynumber, record.streetname)
-
-        return {
-            'address'           : address,
-            'postcode'          : record.postcode,
-            'polling_station_id': record.pollingplaceid
         }
