@@ -70,11 +70,11 @@ def morph_api_key_check(app_configs, **kwargs):
         key = getattr(settings, 'MORPH_API_KEY', '')
         if key == '':
             errors.append(
-                Info(
+                Error(
                     'Morph API Key is not set - scraper report will not work',
                     hint='Define MORPH_API_KEY as an env var or in local.py',
                     obj='data_finder',
-                    id='data_finder.I003',
+                    id='data_finder.E002',
                 )
             )
     return errors
