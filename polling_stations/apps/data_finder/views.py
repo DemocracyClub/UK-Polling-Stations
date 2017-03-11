@@ -272,7 +272,6 @@ class WeDontKnowView(PostcodeView):
 
 
 def signup(request, postcode, model, fields):
-    print(fields)
     if request.POST.get('join', 'false') == 'true':
         join_list = True
     else:
