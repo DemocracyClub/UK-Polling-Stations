@@ -24,8 +24,19 @@ class LoggedPostcode(TimeStampedModel):
             self.brand,
         )
 
-class CampaignSignup(TimeStampedModel):
+
+class BaseSignup(TimeStampedModel):
     postcode = models.CharField(max_length=100, blank=False)
-    name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(blank=False)
     join_list = models.BooleanField(default=False)
+
+    class Meta(TimeStampedModel.Meta):
+        abstract = True
+
+
+class CampaignSignup(BaseSignup):
+    name = models.CharField(max_length=100, blank=False)
+
+
+class ElectionNotificationSignup(BaseSignup):
+    pass
