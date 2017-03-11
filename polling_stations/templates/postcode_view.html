@@ -156,6 +156,7 @@
     {% endif %}
 
     {% if not has_election %}
+      {% include "notifications/election_notification_form.html" %}
       {% include "notifications/ical_feed.html" %}
     {% endif %}
   </div>
@@ -336,45 +337,62 @@
           }
         );
 
-{% if not we_know_where_you_should_vote and not custom %}
-fallback.ready(['jQuery'], function() {
+{% if not we_know_where_you_should_vote or not has_election %}
+  {% if not custom %}
+
+  {% if not has_election %}
+    var url = '{% url "election_notification_signup" postcode=postcode %}';
+    var success_message = '<h2>{% trans "Thanks" %}</h2>' +
+      '<p>{% trans "We will email you when there is an election in this area. " %}';
+    var form_fields = ['email'];
+  {% else %}
+    var url = '{% url "campaign_signup" postcode=postcode %}';
+    var success_message = '<h2>{% trans "Thanks" %}</h2>' +
+      '<p>{% trans "Thanks for signing up. If enough people in your local area sign up, " %}' +
+      '{% trans "we will contact the head of your council on your behalf. " %}' +
+      '{% trans "We won’t share your email address with them or anyone else." %}</p>';
+    var form_fields = ['name', 'email'];
+  {% endif %}
+
+  fallback.ready(['jQuery'], function() {
 
     $(document).ready(function() {
 
-        $('#submit').on('click', function() {
-            // submit email signup form
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: '{% url "campaign_signup" postcode=postcode %}',
-                data: {
-                    'name': $('#name').val(),
-                    'email': $('#email').val(),
-                    'join': $('#join').is(':checked')
-                }
-            }).done(function() {
-                // sucessful signup
-                $('#campaign_form').html(
-                    '<h2>{% trans "Thanks" %}</h2>' +
-                    '<p>{% trans "Thanks for signing up. If enough people in your local area sign up, " %}' +
-                    '{% trans "we will contact the head of your council on your behalf. " %}' +
-                    '{% trans "We won’t share your email address with them or anyone else." %}</p>');
-                $('#campaign_form').focus();
-            }).fail(function(err) {
-                // validation error
-                for (var field in err.responseJSON.errors) {
-                    if (err.responseJSON.errors[field] === 1) {
-                        $('#' + field + '_error').addClass('is-visible');
-                    } else {
-                        $('#' + field + '_error').removeClass('is-visible');
-                    }
-                }
-            });
+      $('#submit').on('click', function() {
+        // submit email signup form
+
+        var data = {
+          'join': $('#join').is(':checked')
+        };
+        for (var i = 0; i < form_fields.length; i++) {
+          data[form_fields[i]] = $('#' + form_fields[i]).val();
+        }
+
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: url,
+          data: data
+        }).done(function() {
+          // sucessful signup
+          $('#signup_form').html(success_message);
+          $('#signup_form').focus();
+        }).fail(function(err) {
+          // validation error
+          for (var field in err.responseJSON.errors) {
+            if (err.responseJSON.errors[field] === 1) {
+              $('#' + field + '_error').addClass('is-visible');
+            } else {
+              $('#' + field + '_error').removeClass('is-visible');
+            }
+          }
         });
+      });
 
     });
 
-});
+  });
+  {% endif %}
 {% endif %}
 </script>
 {% endblock extra_javascript %}

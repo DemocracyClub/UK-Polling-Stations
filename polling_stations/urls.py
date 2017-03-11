@@ -40,6 +40,9 @@ core_patterns = patterns(
         AddressFormView.as_view(), name='address_select_view'),
     url(r'^campaign_signup/(?P<postcode>.+)/$',
         'data_finder.views.campaign_signup', name='campaign_signup'),
+    url(r'^election_notification_signup/(?P<postcode>.+)/$',
+        'data_finder.views.election_notification_signup',
+        name='election_notification_signup'),
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^privacy/$', PrivacyView.as_view(), name='privacy_view'),
     url(r'^robots\.txt$', TemplateView.as_view(
