@@ -152,7 +152,7 @@
     </div>
 
     {% if not we_know_where_you_should_vote and not custom and not error %}
-      {% include "campaign_signup.html" %}
+      {% include "notifications/campaign_signup.html" %}
     {% endif %}
 
     {% if not has_election %}
