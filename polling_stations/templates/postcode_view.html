@@ -41,33 +41,33 @@
     {% if error %}
 
       {% if error == 'Mapit error 403: Rate limit exceeded' %}
-      {% blocktrans %}
-      <h2>Sorry, we're a bit busy right now!</h2>
-      <p>Try again in a few minutes.</p>
-      {% endblocktrans %}
-      {% elif not has_election %}
-      <h2>{{ error }}</h2>
 
-      {# TODO: #}
-      {# election reminders #}
-      {# iCal feed #}
-      {# e.g: https://whocanivotefor.co.uk/elections/SW1A%201AA/ #}
+        {% blocktrans %}
+        <h2>Sorry, we're a bit busy right now!</h2>
+        <p>Try again in a few minutes.</p>
+        {% endblocktrans %}
+
+      {% elif not has_election %}
+
+        <h2>{{ error }}</h2>
 
       {% else %}
-      {% blocktrans %}
-      <h2>Sorry, we can't find {{ postcode }}</h2>
-      <p>This doesn't appear to be a valid postcode.</p>
-      {% endblocktrans %}
-      <form method="post" action="{% url 'home' %}" class="form form-inline">
-          {% csrf_token %}
-          <label class="card_header">{% trans "Enter Your Postcode" %}
-            <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
-          </label>
-          <p class="help-text" id="postcode_help_text">
-            {% trans 'e.g.' %} <a href="{{ example_postcode.url }}">{{ example_postcode.display }}</a>
-          </p>
-          <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
-      </form>
+
+        {% blocktrans %}
+        <h2>Sorry, we can't find {{ postcode }}</h2>
+        <p>This doesn't appear to be a valid postcode.</p>
+        {% endblocktrans %}
+        <form method="post" action="{% url 'home' %}" class="form form-inline">
+            {% csrf_token %}
+            <label class="card_header">{% trans "Enter Your Postcode" %}
+              <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
+            </label>
+            <p class="help-text" id="postcode_help_text">
+              {% trans 'e.g.' %} <a href="{{ example_postcode.url }}">{{ example_postcode.display }}</a>
+            </p>
+            <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
+        </form>
+
       {% endif %}
 
     {% else %}
