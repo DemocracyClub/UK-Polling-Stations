@@ -158,6 +158,8 @@ class BasePollingStationView(
             # this postcode is in Northern Ireland
             context['custom'] = CustomFinder.objects.get_custom_finder(
                 l['gss_codes'], self.postcode)
+            if context['custom'] is None:
+                raise Http404
             return self.get_context_data_northern_ireland(**context)
 
         self.council = self.get_council()
