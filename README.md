@@ -94,6 +94,14 @@ python manage.py migrate
 python manage.py import_councils
 ```
 
+#### Load CustomFinder for Northern Ireland
+
+The Electoral Office for Northern Ireland run their own finder. We redirect our users to that.
+
+```
+python manage.py loaddata polling_stations/apps/data_finder/fixtures/northern_ireland.json
+```
+
 #### Import some Polling District/Station data
 
 To populate your database, pass `manage.py import -e` a list of [Election IDs](https://democracyclub.org.uk/projects/election-ids/) to run all of the import scripts relating to a particular election or elections. For example:
