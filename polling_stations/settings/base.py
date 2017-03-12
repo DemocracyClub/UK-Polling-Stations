@@ -204,9 +204,18 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+        },
     },
     'loggers': {
+        # Silence DisallowedHost exception by setting null error handler - see
+        # https://docs.djangoproject.com/en/1.8/topics/logging/#django-security
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',

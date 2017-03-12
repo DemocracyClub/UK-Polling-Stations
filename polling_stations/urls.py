@@ -30,6 +30,8 @@ core_patterns = patterns(
     '',
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
+    url(r'^postcode/$',
+        PostcodeView.as_view(), name='postcode_view_alias'),
     url(r'^address/(?P<address_slug>.+)/$',
         AddressView.as_view(), name='address_view'),
     url(r'^we_dont_know/(?P<postcode>.+)/$',

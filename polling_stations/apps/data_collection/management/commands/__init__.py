@@ -5,6 +5,7 @@ from data_collection.base_importers import (
     BaseCsvStationsKmlDistrictsImporter,
     BaseCsvStationsCsvAddressesImporter,
     BaseXpressCsvImporter,
+    BaseHalaroseCsvImporter,
     BaseShpStationsCsvAddressesImporter,
     BaseApiKmlStationsKmlDistrictsImporter,
 )
