@@ -52,11 +52,10 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
     def generate_custom_finder(self, gss_codes, postcode):
         finder = CustomFinder.objects.get_custom_finder(gss_codes, postcode)
         if finder and finder.base_url:
-            return {
-                'base_url': finder.base_url,
-                'can_pass_postcode': finder.can_pass_postcode,
-                'encoded_postcode': finder.encoded_postcode,
-            }
+            if finder.can_pass_postcode:
+                return finder.base_url + finder.encoded_postcode
+            else:
+                return finder.base_url
         else:
             return None
 
