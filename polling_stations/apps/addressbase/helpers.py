@@ -28,21 +28,12 @@ AddressTuple = namedtuple('Address', [
     'slug'])
 
 
-class AddressSet:
-
-    def __len__(self):
-        return len(self.elements)
-
-    def __init__(self):
-        self.elements = set()
-
-    def add(self, address):
-        self.elements.add(address)
+class AddressSet(set):
 
     def save(self, batch_size):
 
         addresses_db = []
-        for address in self.elements:
+        for address in self:
             record = ResidentialAddress(
                 address=address.address,
                 postcode=re.sub('[^A-Z0-9]', '', address.postcode),

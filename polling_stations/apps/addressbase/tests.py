@@ -165,7 +165,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         fixer = EdgeCaseFixer("X01000001")
         fixer.make_addresses_for_postcode(postcode)
         addresses = fixer.get_address_set()
-        records = sorted(list(addresses.elements), key=attrgetter('address'))
+        records = sorted(list(addresses), key=attrgetter('address'))
         self.assertEqual(len(records), 2)
         self.assertEqual(records[0].address, '74 Kendell Street')
         self.assertEqual(records[0].polling_station_id, '1')
@@ -184,7 +184,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         fixer = EdgeCaseFixer("X01000001")
         fixer.make_addresses_for_postcode(postcode)
         addresses = fixer.get_address_set()
-        records = sorted(list(addresses.elements), key=attrgetter('address'))
+        records = sorted(list(addresses), key=attrgetter('address'))
         self.assertEqual(len(records), 3)
         # 80 Kendell Street is wholly in one district
         self.assertEqual(records[0].address, '80 Kendell Street')
