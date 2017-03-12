@@ -1,29 +1,7 @@
-"""
-Imports Chorley
-"""
-import sys
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
-from django.contrib.gis.geos import Point, GEOSGeometry
-
-from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
-
-class Command(BaseCsvStationsKmlDistrictsImporter):
-    """
-    Imports the Polling Station data from Chorley
-    """
-    council_id     = 'E07000118'
-    districts_name = 'Chorley Polling Districts.kmz'
-    stations_name  = 'Chorley_Polling_Stations.csv'
-    elections      = ['parl.2015-05-07']
-
-    def station_record_to_dict(self, record):
-        try:
-            location = Point(int(record.point_x), int(record.point_y), srid=self.srid)
-        except ValueError:
-            location = Point(float(record.point_x), float(record.point_y), srid=self.srid)
-        return {
-            'internal_council_id': record.objectid,
-            'postcode': self.postcode_from_address(record.address),
-            'address':  "\n".join(record.address.split(',')[:-1]),
-            'location': location
-        }
+class Command(BaseHalaroseCsvImporter):
+    council_id      = 'E07000118'
+    addresses_name  = 'May 2017/Chorley_polling_station_export-2017-03-03.csv'
+    stations_name   = 'May 2017/Chorley_polling_station_export-2017-03-03.csv'
+    elections       = ['local.lancashire.2017-05-04']
