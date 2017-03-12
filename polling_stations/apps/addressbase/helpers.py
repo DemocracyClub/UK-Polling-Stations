@@ -1,3 +1,4 @@
+import logging
 import re
 from collections import namedtuple
 from pollingstations.models import (PollingDistrict, ResidentialAddress,
@@ -90,6 +91,12 @@ class EdgeCaseFixer:
                 Because we have no way of knowing what the correct station is, intentionally insert a record with an empty station id
                 This allows us to *list* the address, but if the user *chooses* it, we will show "we don't know: call your council"
                 """
+
+                self.logger.log_message(
+                    logging.WARNING,
+                    "Found address contained by >1 polling districts - data may contain overlapping polygons:\n%s\n%s\n",
+                    variable=(address.address, address.postcode))
+
                 station_id = ''
 
             self.address_set.add(AddressTuple(
