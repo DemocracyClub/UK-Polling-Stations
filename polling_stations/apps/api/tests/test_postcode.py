@@ -41,9 +41,20 @@ def mock_geocode(postcode):
             'gss_codes': [],
         }
 
+    # Northern Ireland
+    if (postcode == 'BT11AA'):
+        return {
+            'wgs84_lon': -6.7950439453125,
+            'wgs84_lat': 54.746820492190885,
+            'gss_codes': ['N07000001'],
+        }
+
 
 class PostcodeTest(TestCase):
-    fixtures = ['polling_stations/apps/api/fixtures/test_address_postcode.json']
+    fixtures = [
+        'polling_stations/apps/api/fixtures/test_address_postcode.json',
+        'polling_stations/apps/data_finder/fixtures/northern_ireland.json',
+    ]
 
     def setUp(self):
         factory = APIRequestFactory()
@@ -59,6 +70,7 @@ class PostcodeTest(TestCase):
         self.assertFalse(response.data['polling_station_known'])
         self.assertEqual(None, response.data['polling_station'])
         self.assertEqual(3, len(response.data['addresses']))
+        self.assertIsNone(response.data['custom_finder'])
 
     def test_station_not_found(self):
         response = self.endpoint.retrieve(self.request, 'BB11BB', 'json',
@@ -69,6 +81,7 @@ class PostcodeTest(TestCase):
         self.assertFalse(response.data['polling_station_known'])
         self.assertEqual(None, response.data['polling_station'])
         self.assertEqual([], response.data['addresses'])
+        self.assertIsNone(response.data['custom_finder'])
 
     def test_station_found(self):
         response = self.endpoint.retrieve(self.request, 'CC11CC', 'json',
@@ -80,9 +93,24 @@ class PostcodeTest(TestCase):
         self.assertEqual("St Foo's Church Hall, Bar Town",
             response.data['polling_station']['properties']['address'])
         self.assertEqual([], response.data['addresses'])
+        self.assertIsNone(response.data['custom_finder'])
 
     def test_no_council(self):
         response = self.endpoint.retrieve(self.request, 'DD11DD', 'json',
             geocoder=mock_geocode, log=False)
 
         self.assertEqual(500, response.status_code)
+
+    def test_northern_ireland(self):
+        response = self.endpoint.retrieve(self.request, 'BT11AA', 'json',
+            geocoder=mock_geocode, log=False)
+
+        self.assertEqual(200, response.status_code)
+        self.assertIsNone(response.data['council'])
+        self.assertFalse(response.data['polling_station_known'])
+        self.assertIsNone(response.data['polling_station'])
+        self.assertEqual([], response.data['addresses'])
+        self.assertEqual(
+            "http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT1%201AA",
+            response.data['custom_finder']
+        )
