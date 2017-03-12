@@ -1,0 +1,43 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Linux/3.13.0-105-generic]
+    method: GET
+    uri: http://mapit.democracyclub.org.uk//postcode/BT11AA
+  response:
+    body: {string: '
+        {
+          "wgs84_lat": 54.550429095775804,
+          "wgs84_lon": -6.206229421006293,
+          "postcode": "BT1 1AA",
+          "easting": 316117,
+          "northing": 368380,
+          "areas": {
+            "1": {
+              "parent_area": null,
+              "codes": {
+                "gss": "N07000001"
+              },
+              "name": "Northern Ireland",
+              "type": "EUR"
+            }
+          }
+        }'
+    }
+    headers:
+      Access-Control-Allow-Origin: ['*']
+      Cache-Control: [max-age=2419200]
+      Connection: [keep-alive]
+      Content-Type: [application/json; charset=utf-8]
+      Date: ['Sun, 12 Mar 2017 20:46:58 GMT']
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=631138519]
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [DENY]
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
