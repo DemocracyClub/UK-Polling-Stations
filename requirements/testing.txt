@@ -7,3 +7,11 @@ aloe
 aloe_django
 aloe_webdriver
 vcrpy==1.7.4
+
+tox
+pytest
+pytest-django
+pytest-pep8
+pytest-flakes
+pytest-cov
+factory_boy
