@@ -124,6 +124,18 @@ class BasePollingStationView(
         else:
             return ''
 
+    def get_context_data_northern_ireland(self, **context):
+        # special case for Northern Ireland
+        context['postcode'] = self.postcode
+        context['location'] = self.location
+        context['council'] = None
+        context['station'] = None
+        context['directions'] = None
+        context['we_know_where_you_should_vote'] = False
+        context['noindex'] = True
+        self.log_postcode(self.postcode, context, type(self).__name__)
+        return context
+
     def get_context_data(self, **context):
         context['tile_layer'] = settings.TILE_LAYER
         context['mq_key'] = settings.MQ_KEY
@@ -141,6 +153,12 @@ class BasePollingStationView(
             self.location = Point(l['wgs84_lon'], l['wgs84_lat'])
             self.gss_codes = l['gss_codes']
             self.council_gss = l['council_gss']
+
+        if self.postcode[:2] == 'BT' or 'N07000001' in self.gss_codes:
+            # this postcode is in Northern Ireland
+            context['custom'] = CustomFinder.objects.get_custom_finder(
+                l['gss_codes'], self.postcode)
+            return self.get_context_data_northern_ireland(**context)
 
         self.council = self.get_council()
         self.station = self.get_station()
