@@ -86,6 +86,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
                 ret['council'] = None
                 ret['polling_station'] = None
                 ret['custom_finder'] = self.generate_custom_finder(l['gss_codes'], postcode)
+                ret['addresses'] = []
                 serializer = PostcodeResponseSerializer(
                     ret, read_only=True, context={'request': request}
                 )
