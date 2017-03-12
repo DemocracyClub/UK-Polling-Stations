@@ -47,8 +47,8 @@ from addressbase.helpers import create_address_records_for_council
 
 class PostProcessingMixin:
 
-    def clean_postcodes_overlapping_districts(self, batch_size):
-        data = create_address_records_for_council(self.council, batch_size)
+    def clean_postcodes_overlapping_districts(self, batch_size, logger):
+        data = create_address_records_for_council(self.council, batch_size, logger)
         self.postcodes_contained_by_district = data['no_attention_needed']
         self.postcodes_with_addresses_generated = data['addresses_created']
 
@@ -212,7 +212,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         # For areas with shape data, use AddressBase
         # to clean up overlapping postcode
         if not kwargs.get('noclean'):
-            self.clean_postcodes_overlapping_districts(self.batch_size)
+            self.clean_postcodes_overlapping_districts(self.batch_size, self.logger)
 
         # save and output data quality report
         if verbosity > 0:

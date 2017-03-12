@@ -49,9 +49,10 @@ class AddressSet(set):
 
 class EdgeCaseFixer:
 
-    def __init__(self, target_council_id):
+    def __init__(self, target_council_id, logger):
         self.address_set = AddressSet()
         self.target_council_id = target_council_id
+        self.logger = logger
 
     def get_station_id(self, location):
         district = PollingDistrict.objects.get(
@@ -121,14 +122,14 @@ def postcodes_not_contained_by_district(district):
     return data
 
 
-def create_address_records_for_council(council, batch_size):
+def create_address_records_for_council(council, batch_size, logger):
     postcode_report = {
         'no_attention_needed': 0,
         'addresses_created': 0,
         'postcodes_needing_address_lookup': set(),
     }
 
-    fixer = EdgeCaseFixer(council.pk)
+    fixer = EdgeCaseFixer(council.pk, logger)
     for district in PollingDistrict.objects.filter(council=council):
         data = postcodes_not_contained_by_district(district)
 

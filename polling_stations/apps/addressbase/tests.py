@@ -50,6 +50,11 @@ from councils.models import Council
 from data_finder.helpers import RoutingHelper
 
 
+class MockLogger:
+    def log_message(self, level, message, variable=None, pretty=False):
+        pass
+
+
 class PostcodeBoundaryFixerTestCase(TestCase):
     fixtures = ['test_kentwell_data.json']
 
@@ -111,7 +116,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
 
     def test_create_address_records_for_council(self):
         council = Council.objects.get(pk='X01000001')
-        postcode_report = create_address_records_for_council(council, 1000)
+        postcode_report = create_address_records_for_council(council, 1000, MockLogger())
 
         self.assertEqual(postcode_report['no_attention_needed'], 1)
         self.assertTrue('KW15 88TF' in
@@ -127,7 +132,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         self.assertEqual('postcode_view', endpoint.view)
 
         # Fix the addresses outside of the districts
-        fixer = EdgeCaseFixer("X01000001")
+        fixer = EdgeCaseFixer("X01000001", MockLogger())
         fixer.make_addresses_for_postcode(postcode)
         fixer.get_address_set().save(1000)
 
@@ -149,7 +154,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
 
         # Fix the addresses outside of the districts
         postcode = 'KW15 88TF'
-        fixer = EdgeCaseFixer("X01000001")
+        fixer = EdgeCaseFixer("X01000001", MockLogger())
         fixer.make_addresses_for_postcode(postcode)
         fixer.get_address_set().save(1000)
 
@@ -162,7 +167,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         We should still insert addresses for both districts
         """
         postcode = "KW15 88LX"
-        fixer = EdgeCaseFixer("X01000001")
+        fixer = EdgeCaseFixer("X01000001", MockLogger())
         fixer.make_addresses_for_postcode(postcode)
         addresses = fixer.get_address_set()
         records = sorted(list(addresses), key=attrgetter('address'))
@@ -181,7 +186,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         even though we can't map all of them to a poling station
         """
         postcode = "KW15 88LZ"
-        fixer = EdgeCaseFixer("X01000001")
+        fixer = EdgeCaseFixer("X01000001", MockLogger())
         fixer.make_addresses_for_postcode(postcode)
         addresses = fixer.get_address_set()
         records = sorted(list(addresses), key=attrgetter('address'))
