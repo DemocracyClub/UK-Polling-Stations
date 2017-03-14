@@ -8,3 +8,5 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default.
     }
 }
+
+# MORPH_API_KEY = 'your API key here'

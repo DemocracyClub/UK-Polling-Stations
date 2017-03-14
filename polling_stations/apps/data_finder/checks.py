@@ -58,3 +58,23 @@ def google_api_check(app_configs, **kwargs):
                 )
             )
     return errors
+
+
+@register()
+def morph_api_key_check(app_configs, **kwargs):
+    errors = []
+
+    if (app_configs is None or\
+        apps.get_app_config('data_finder') in app_configs):
+
+        key = getattr(settings, 'MORPH_API_KEY', '')
+        if key == '':
+            errors.append(
+                Error(
+                    'Morph API Key is not set - scraper report will not work',
+                    hint='Define MORPH_API_KEY as an env var or in local.py',
+                    obj='data_finder',
+                    id='data_finder.E002',
+                )
+            )
+    return errors

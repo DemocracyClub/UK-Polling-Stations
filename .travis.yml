@@ -14,6 +14,8 @@ cache:
     - $HOME/.pip-cache/
     - $HOME/.tox/
     - .tox
+env:
+  - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
 install:
   - pip install pip==8.1.2
   - pip install tox coveralls
