@@ -1,6 +1,7 @@
 [run]
 omit =
     */tests/*
+    */tests.py
     */apps.py
     */migrations/*
     polling_stations/wsgi.py
