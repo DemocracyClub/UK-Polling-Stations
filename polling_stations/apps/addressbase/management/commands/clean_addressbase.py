@@ -63,14 +63,12 @@ class Command(BaseCommand):
             'CLASS',
         ]
         self.base_path = os.path.abspath(kwargs['ab_path'])
-        for csv_path in glob.glob(os.path.join(self.base_path, '*.csv')):
-            if csv_path.endswith('cleaned.csv'):
-                continue
-            file_name = csv_path.split('/')[-1].split('.')[0]
-            out_path = os.path.join(self.base_path, '{}_cleaned.csv'.format(
-                file_name
-            ))
-            with open(out_path, 'w') as out_file:
+        out_path = os.path.join(self.base_path, 'addressbase_cleaned.csv')
+
+        with open(out_path, 'w') as out_file:
+            for csv_path in glob.glob(os.path.join(self.base_path, '*.csv')):
+                if csv_path.endswith('cleaned.csv'):
+                    continue
                 self.out_csv = csv.DictWriter(out_file, fieldnames=[
                     'UPRN',
                     'address',
