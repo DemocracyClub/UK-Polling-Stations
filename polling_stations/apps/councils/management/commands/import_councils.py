@@ -32,7 +32,7 @@ class Command(BaseCommand):
             default=False,
             action='store_true',
             required=False,
-            help='Sleep between requests'
+            help="Don't sleep between requests"
         )
 
     def handle(self, **options):
@@ -129,7 +129,7 @@ class Command(BaseCommand):
             if not council.area:
                 council.area = self.get_wkt_from_mapit(mapit_id)
                 self._save_council(council)
-                if not nosleep:
+                if not nosleep or not self.headers:
                     time.sleep(1)
             if not council.location:
                 print(council.postcode)
@@ -137,7 +137,7 @@ class Command(BaseCommand):
                     l = geocode(council.postcode)
                 except:
                     continue
-                if not nosleep:
+                if not nosleep or not self.headers:
                     time.sleep(1)
                 council.location = Point(l['wgs84_lon'], l['wgs84_lat'])
                 self._save_council(council)
