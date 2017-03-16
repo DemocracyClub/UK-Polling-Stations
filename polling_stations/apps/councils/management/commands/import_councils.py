@@ -1,7 +1,7 @@
 import time
+import json
 
 import requests
-from bs4 import BeautifulSoup
 
 from django.apps import apps
 from django.core.management.base import BaseCommand
@@ -47,26 +47,40 @@ class Command(BaseCommand):
             area = area[7:]
             area = "MULTIPOLYGON(%s)" % area
         return GEOSGeometry(area, srid=27700)
-        return area
 
-    def get_contact_info_from_gov_uk(self, council_id):
-        if council_id.startswith('N'):
-            # GOV.UK returns a 500 for any id in Northen Ireland
-            return {}
-        req = requests.get("%s%s" % (settings.GOV_UK_LA_URL, council_id))
-        soup = BeautifulSoup(req.text, "lxml")
+    def get_contact_info_from_yvm(self, council_id):
+        req = requests.get(
+            "%s%s" % (settings.YVM_LA_URL, council_id))
+        content = req.text
+        if council_id == "E08000017":
+            # Text not escaped properly
+            content = content.replace(
+                '"https://www.yourvotematters.co.uk/elections-in-2017/local-elections-in-england"',
+                '\'https://www.yourvotematters.co.uk/elections-in-2017/local-elections-in-england\'')
+
+        if council_id == "S12000034":
+            # JSON content duplicated(!!)
+            content = content.split("}{")[0] + "}"
+
+        council_data = json.loads(str(content))['registrationOffice']
         info = {}
-        article = soup.findAll('article')[0]
-        try:
-            info['website'] = article.find(id='url')['href'].strip()
-        except TypeError:
-            pass
-        info['email'] = article.find(
-            id='authority_email').a['href'].strip()[7:]
-        info['phone'] = article.find(id='authority_phone').text.strip()[7:]
-        info['address'] = "\n".join(
-            article.find(id='authority_address').stripped_strings)
-        info['postcode'] = article.find(id='authority_postcode').text
+        info['website'] = council_data.get('website')
+        info['email'] = council_data.get('email')
+        info['phone'] = council_data.get('telephone', '').replace('</a>', '')\
+            .split('>')[-1]
+
+        address_fields = [council_data.get(f, '') for f in [
+           'address1',
+           'address2',
+           'address3',
+           'city',
+           'address4',
+
+        ]]
+        info['address'] = "\n".join([f for f in address_fields if f])
+        info['postcode'] = " ".join(council_data.get('postalcode', '')\
+            .split(' ')[-2:])
+
         return info
 
     def get_type_from_mapit(self, council_type):
@@ -76,12 +90,8 @@ class Command(BaseCommand):
             if not council_id:
                 council_id = council['codes'].get('ons')
             print(council_id)
-            defaults = {
-                'name': council['name'],
-            }
-            if defaults != "LGD":
-                defaults.update(
-                    self.get_contact_info_from_gov_uk(council_id))
+
+            defaults = self.get_contact_info_from_yvm(council_id)
 
             defaults['council_type'] = council_type
             defaults['mapit_id']= mapit_id
