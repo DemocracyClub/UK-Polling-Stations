@@ -21,6 +21,10 @@ class Command(BaseCommand):
     """
     requires_system_checks = False
 
+    headers = {}
+    if settings.MAPIT_UA:
+        headers['User-Agent'] = settings.MAPIT_UA
+
     def add_arguments(self, parser):
         parser.add_argument(
             '-n',
@@ -51,7 +55,9 @@ class Command(BaseCommand):
             council.save(using=db)
 
     def get_wkt_from_mapit(self, area_id):
-        req = requests.get('%sarea/%s.wkt' % (settings.MAPIT_URL, area_id))
+        req = requests.get(
+            '%sarea/%s.wkt' % (settings.MAPIT_URL, area_id),
+            headers=self.headers)
         area = req.text
         if area.startswith('POLYGON'):
             area = area[7:]
@@ -96,7 +102,9 @@ class Command(BaseCommand):
         return info
 
     def get_type_from_mapit(self, council_type, nosleep):
-        req = requests.get('%sareas/%s' % (settings.MAPIT_URL, council_type))
+        req = requests.get(
+            '%sareas/%s' % (settings.MAPIT_URL, council_type),
+            headers=self.headers)
         # Sort here so the fixtures work as expected in tests
         areas = sorted(req.json().items(), key=lambda data: int(data[0]))
         for mapit_id, council in areas:
