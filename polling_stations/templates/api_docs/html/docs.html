@@ -25,8 +25,9 @@ containing a <a href="http://geojson.org/geojson-spec.html#point">Point object</
 <p><code>addresses</code>: (array) - An array of address objects listing the addresses applicable to this request (if necessary).</p>
 </li>
 <li>
-<p><code>council</code>: (object) - A <a href="#councils-councils-json-get">Council</a> object describing the local authority which covers this postcode.
-If we do not know the user’s polling station, this can be used to provide contact info for their local council.</p>
+<p><code>council</code>: (object, nullable) - A <a href="#councils-councils-json-get">Council</a> object describing the local authority which covers this postcode.
+If we do not know the user’s polling station, this can be used to provide contact info for their local council.
+Council may be <code>null</code> if we are not able to determine the user’s council.</p>
 </li>
 <li>
 <p><code>custom_finder</code>: (string, nullable) - If we don’t know a user’s polling station,
@@ -207,7 +208,10 @@ the following conditions can be observed in the response body:</p>
       "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"An array of address objects listing the addresses applicable to this request (if necessary)."</span>
     </span>}</span>,
     "<span class="hljs-attribute">council</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value">[
+        <span class="hljs-string">"object"</span>,
+        <span class="hljs-string">"null"</span>
+      ]</span>,
       "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">url</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
@@ -440,7 +444,10 @@ This can be used to request the user’s address and make a second API call to t
       "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"An array of address objects listing the addresses applicable to this request (if necessary)."</span>
     </span>}</span>,
     "<span class="hljs-attribute">council</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value">[
+        <span class="hljs-string">"object"</span>,
+        <span class="hljs-string">"null"</span>
+      ]</span>,
       "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">url</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
@@ -636,7 +643,10 @@ the following conditions can be observed in the response body:</p>
       "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"An array of address objects listing the addresses applicable to this request (if necessary)."</span>
     </span>}</span>,
     "<span class="hljs-attribute">council</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value">[
+        <span class="hljs-string">"object"</span>,
+        <span class="hljs-string">"null"</span>
+      ]</span>,
       "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">url</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
@@ -867,7 +877,10 @@ the following conditions can be observed in the response body:</p>
       "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"An array of address objects listing the addresses applicable to this request (if necessary)."</span>
     </span>}</span>,
     "<span class="hljs-attribute">council</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value">[
+        <span class="hljs-string">"object"</span>,
+        <span class="hljs-string">"null"</span>
+      ]</span>,
       "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">url</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
@@ -1576,7 +1589,7 @@ containing a GIS boundary and meta-data about a polling district.</p>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>404</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found."</span>
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 09 Feb 2017</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 16 Mar 2017</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 

@@ -9,8 +9,9 @@ A `200 OK` response from `/postcode` or `/address` is an object containing the f
   containing a [Point object](http://geojson.org/geojson-spec.html#point) describing the centroid of the input postcode.
 * `polling_station`: (object, nullable) - A GeoJSON [polling station feature](#polling-stations-polling-stations-geojson-get)
 * `addresses`: (array) - An array of address objects listing the addresses applicable to this request (if necessary).
-* `council`: (object) - A [Council](#councils-councils-json-get) object describing the local authority which covers this postcode.
+* `council`: (object, nullable) - A [Council](#councils-councils-json-get) object describing the local authority which covers this postcode.
   If we do not know the user's polling station, this can be used to provide contact info for their local council.
+  Council may be `null` if we are not able to determine the user's council.
 * `custom_finder`: (string, nullable) - If we don't know a user's polling station,
   sometimes we can provide the URL of a polling station finder provided by their local council.
 
