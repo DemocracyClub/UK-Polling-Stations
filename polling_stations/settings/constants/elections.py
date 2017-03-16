@@ -1,1 +1,1 @@
-CANDIDATES_BASE = 'https://candidates.democracyclub.org.uk/'
+EE_BASE = 'https://elections.democracyclub.org.uk/'
