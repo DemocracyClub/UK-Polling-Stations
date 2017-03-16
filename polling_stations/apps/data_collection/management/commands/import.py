@@ -103,12 +103,13 @@ class Command(BaseCommand):
         files = glob.glob(
             base_path + '/import_*.py'
         )
-        # loop over all the import scripts
 
         if not files:
             raise ValueError("No importers matched")
+
         commands_to_run = []
 
+        # loop over all the import scripts
         for f in files:
             head, tail = os.path.split(f)
             try:
