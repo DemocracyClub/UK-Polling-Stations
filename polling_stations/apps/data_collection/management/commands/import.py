@@ -99,8 +99,9 @@ class Command(BaseCommand):
             apps.get_app_config('pollingstations')
         ])
 
+        base_path = os.path.dirname(__file__)
         files = glob.glob(
-            os.path.abspath('polling_stations/apps/data_collection/management/commands') + '/import_*.py'
+            base_path + '/import_*.py'
         )
         # loop over all the import scripts
 
