@@ -1,0 +1,11 @@
+[
+  {
+    "model": "pollingstations.customfinder",
+    "fields": {
+      "can_pass_postcode": true,
+      "message": "The Electoral Office of Northern Ireland has its own polling station finder:",
+      "base_url": "http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode="
+    },
+    "pk": "N07000001"
+  }
+]

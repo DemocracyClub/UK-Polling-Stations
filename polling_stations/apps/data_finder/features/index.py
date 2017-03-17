@@ -31,6 +31,7 @@ def setup(scenario, outline, steps):
     with open(os.devnull, "w") as f:
         call_command('loaddata', 'test_routing.json', stdout=f)
         call_command('loaddata', 'newport_council.json', stdout=f)
+        call_command('loaddata', 'polling_stations/apps/data_finder/fixtures/northern_ireland.json', stdout=f)
 
 @step('No errors were thrown')
 def no_errors(step):

@@ -30,7 +30,7 @@ class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
 class PostcodeResponseSerializer(serializers.Serializer):
     polling_station_known = serializers.BooleanField(read_only=True)
     postcode_location = PointField(read_only=True)
-    custom_finder = serializers.DictField(read_only=True)
+    custom_finder = serializers.CharField(read_only=True)
     council = CouncilDataSerializer(read_only=True)
     polling_station = PollingStationGeoSerializer(read_only=True)
     addresses = ResidentialAddressSerializer(read_only=True, many=True)

@@ -96,7 +96,10 @@
                   "description": "An array of address objects listing the addresses applicable to this request (if necessary)."
                 },
                 "council": {
-                  "type": "object",
+                  "type": [
+                    "object",
+                    "null"
+                  ],
                   "properties": {
                     "url": {
                       "type": "string",
