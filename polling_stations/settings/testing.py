@@ -4,7 +4,6 @@ INSTALLED_APPS = list(INSTALLED_APPS)
 INSTALLED_APPS.append('aloe_django',)
 
 NOSE_ARGS = [
-    '--nocapture',
     '--verbosity=0',
     '--nologcapture',
 ]
