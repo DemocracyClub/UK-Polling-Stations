@@ -5,6 +5,8 @@ omit =
     */apps.py
     */migrations/*
     polling_stations/wsgi.py
+    polling_stations/settings/*
     */lib/python3.4/site-packages/*
+    */lib/python3.5/site-packages/*
     polling_stations/apps/data_collection/management/commands/import_*
     polling_stations/apps/data_collection/management/commands/misc_fixes.py

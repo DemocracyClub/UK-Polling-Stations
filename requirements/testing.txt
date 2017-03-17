@@ -8,7 +8,6 @@ aloe_django
 aloe_webdriver
 vcrpy==1.7.4
 
-tox
 pytest
 pytest-django
 pytest-pep8
