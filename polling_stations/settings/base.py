@@ -268,19 +268,19 @@ if type(MANAGE_ADDRESSBASE_MODEL) == str \
 
 
 # import application constants
-from .constants.councils import *
-from .constants.directions import *
+from .constants.councils import *  # noqa
+from .constants.directions import *  # noqa
 from .constants.example_postcode import *  # noqa
-from .constants.importers import *
-from .constants.mapit import *
-from .constants.tiles import *
+from .constants.importers import *  # noqa
+from .constants.mapit import *  # noqa
+from .constants.tiles import *  # noqa
 
 # Import .local.py last - settings in local.py override everything else
 try:
-    from .local import *
+    from .local import *  # noqa
 except ImportError:
     pass
 
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
-    from .testing import *
+    from .testing import *  # noqa
