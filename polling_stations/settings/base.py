@@ -143,7 +143,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.contrib.auth.context_processors.auth",
     "whitelabel.context_processors.base_template",
-    'dc_theme.context_processors.dc_theme_context'
+    'dc_theme.context_processors.dc_theme_context',
+    'data_finder.context_processors.example_postcode_context',
 )
 
 
@@ -269,6 +270,7 @@ if type(MANAGE_ADDRESSBASE_MODEL) == str \
 # import application constants
 from .constants.councils import *
 from .constants.directions import *
+from .constants.example_postcode import *  # noqa
 from .constants.importers import *
 from .constants.mapit import *
 from .constants.tiles import *
