@@ -166,9 +166,18 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
                 '../polling_station_data/')
         else:
             s3 = S3Wrapper()
-            s3.fetch_data(self.council_id)
+            s3.fetch_data_by_council(self.council_id)
             path = s3.data_path
         return os.path.abspath(path)
+
+    def get_base_folder_path(self):
+        if getattr(self, 'local_files', True):
+            if self.base_folder_path is None:
+                path = os.path.join(
+                    self.data_path,
+                    '{0}-*'.format(self.council_id))
+                return glob.glob(path)[0]
+        return self.base_folder_path
 
     def handle(self, *args, **kwargs):
         """
@@ -194,12 +203,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         # Delete old data for this council
         self.teardown(self.council)
 
-        if getattr(self, 'local_files', True):
-            if self.base_folder_path is None:
-                path = os.path.join(
-                    self.data_path,
-                    '{0}-*'.format(self.council_id))
-                self.base_folder_path = glob.glob(path)[0]
+        self.base_folder_path = self.get_base_folder_path()
 
         self.import_data()
 
