@@ -271,7 +271,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             except NotImplementedError:
                 pass
 
-            if self.stations_filetype == 'shp':
+            if self.stations_filetype in ['shp', 'shp.zip']:
                 record = station.record
             else:
                 record = station
@@ -317,7 +317,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 For other file types, we must return the key
                 'location' from station_record_to_dict()
                 """
-                if self.stations_filetype == 'shp' and 'location' not in station_record:
+                if self.stations_filetype in ['shp', 'shp.zip'] and 'location' not in station_record:
                     station_record['location'] = Point(
                         *station.shape.points[0],
                         srid=self.get_srid())
@@ -369,7 +369,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def import_polling_districts(self):
         districts = self.get_districts()
         for district in districts:
-            if self.districts_filetype == 'shp':
+            if self.districts_filetype in ['shp', 'shp.zip']:
                 district_info = self.district_record_to_dict(district.record)
             else:
                 district_info = self.district_record_to_dict(district)
@@ -395,13 +395,12 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             For other file types, we must return the key
             'area' from address_record_to_dict()
             """
-            if self.districts_filetype == 'shp':
+            if self.districts_filetype in ['shp', 'shp.zip']:
                 geojson = json.dumps(district.shape.__geo_interface__)
             if self.districts_filetype == 'geojson':
                 geojson = json.dumps(district['geometry'])
             if 'area' not in district_info and\
-                    (self.districts_filetype == 'shp' or\
-                     self.districts_filetype == 'geojson'):
+                    (self.districts_filetype in ['shp', 'shp.zip', 'geojson']):
                 poly = self.clean_poly(
                     GEOSGeometry(geojson, srid=self.get_srid('districts')))
                 district_info['area'] = poly
@@ -858,3 +857,24 @@ class BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter):
 
     stations_filetype = 'kml'
     districts_filetype = 'kml'
+
+
+class BaseApiShpZipStationsShpZipDistrictsImporter(BaseGenericApiImporter):
+    """
+    Stations in Zipped SHP format
+    Districts in Zipped SHP format
+    """
+
+    stations_filetype = 'shp.zip'
+    districts_filetype = 'shp.zip'
+
+
+class BaseApiCsvStationsShpZipDistrictsImporter(BaseGenericApiImporter,
+                                                CsvMixin):
+    """
+    Stations in CSV format
+    Districts in Zipped SHP format
+    """
+
+    stations_filetype = 'csv'
+    districts_filetype = 'shp.zip'

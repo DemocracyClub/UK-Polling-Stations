@@ -8,4 +8,6 @@ from data_collection.base_importers import (
     BaseHalaroseCsvImporter,
     BaseShpStationsCsvAddressesImporter,
     BaseApiKmlStationsKmlDistrictsImporter,
+    BaseApiShpZipStationsShpZipDistrictsImporter,
+    BaseApiCsvStationsShpZipDistrictsImporter,
 )

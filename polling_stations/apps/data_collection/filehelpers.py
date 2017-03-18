@@ -1,5 +1,7 @@
 import csv
+import fnmatch
 import json
+import os
 import shapefile
 import tempfile
 import zipfile
@@ -8,6 +10,13 @@ from collections import namedtuple
 
 from django.contrib.gis.gdal import DataSource, GDALException
 
+
+def recursive_find(path, pattern):
+    matches = []
+    for root, dirnames, filenames in os.walk(path):
+        for filename in fnmatch.filter(filenames, pattern):
+            matches.append(os.path.join(root, filename))
+    return matches
 
 """
 Helper class for reading data from CSV files
@@ -32,6 +41,8 @@ class CsvHelper:
             '.': '_',
             '(': '',
             ')': '',
+            '/': '_',
+            '\\': '_',
         }
         clean = []
         for s in header:
@@ -56,12 +67,28 @@ Helper class for reading geographic data from ESRI SHP files
 """
 class ShpHelper:
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, zip=False):
         self.filepath = filepath
+        self.zip = zip
 
     def get_features(self):
-        sf = shapefile.Reader(self.filepath)
-        return sf.shapeRecords()
+        # If our shapefile is in a zip, extract it
+        # otherwise, we can read it directly
+        if self.zip:
+            zip_file = zipfile.ZipFile(self.filepath, 'r')
+            tmpdir = tempfile.mkdtemp()
+            zip_file.extractall(tmpdir)
+
+            shp_files = recursive_find(tmpdir, "*.shp")
+            if len(shp_files) != 1:
+                raise ValueError('Found %i shapefiles in archive' % len(shp_files))
+            shp_file = shp_files[0]
+
+            sf = shapefile.Reader(shp_file)
+            return sf.shapeRecords()
+        else:
+            sf = shapefile.Reader(self.filepath)
+            return sf.shapeRecords()
 
 
 """
@@ -135,6 +162,8 @@ class FileHelperFactory():
     def create(filetype, filepath, options):
         if (filetype == 'shp'):
             return ShpHelper(filepath)
+        elif (filetype == 'shp.zip'):
+            return ShpHelper(filepath, zip=True)
         elif (filetype == 'kml'):
             return KmlHelper(filepath)
         elif (filetype == 'geojson'):
@@ -143,3 +172,5 @@ class FileHelperFactory():
             return JsonHelper(filepath)
         elif (filetype == 'csv'):
             return CsvHelper(filepath, options['encoding'], options['delimiter'])
+        else:
+            raise ValueError('Unexpected file type: %s' % (filetype))
