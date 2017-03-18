@@ -36,7 +36,7 @@
         <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
       </label>
       <p class="help-text" id="postcode_help_text">
-        {% trans 'e.g.' %} <a href="{% url 'postcode_view' postcode="CF105AJ" %}">CF10 5AJ</a>
+        {% trans 'e.g.' %} <a href="{{ example_postcode.url }}">{{ example_postcode.display }}</a>
       </p>
       <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
     </form>

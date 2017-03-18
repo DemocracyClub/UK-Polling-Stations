@@ -17,3 +17,6 @@ class ExamplePostcodeTest(TestCase):
         assert 'example_postcode' in resp.context
         assert resp.context['example_postcode'].display == "CF10 5AJ"
 
+    def test_example_postcode_on_home_page(self):
+        resp = self.client.get('/')
+        self.assertContains(resp, 'CF10 5AJ')
