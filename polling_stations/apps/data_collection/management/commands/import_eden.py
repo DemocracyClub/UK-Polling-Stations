@@ -1,4 +1,4 @@
-from data_collection.management.commands import BaseMorphApiImporter
+from data_collection.morph_importer import BaseMorphApiImporter
 
 class Command(BaseMorphApiImporter):
 
