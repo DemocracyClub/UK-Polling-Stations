@@ -59,6 +59,7 @@ class PostcodeTest(TestCase):
         self.assertFalse(response.data['polling_station_known'])
         self.assertEqual(None, response.data['polling_station'])
         self.assertEqual(3, len(response.data['addresses']))
+        self.assertIsNone(response.data['custom_finder'])
 
     def test_station_not_found(self):
         response = self.endpoint.retrieve(self.request, 'BB11BB', 'json',
@@ -69,6 +70,7 @@ class PostcodeTest(TestCase):
         self.assertFalse(response.data['polling_station_known'])
         self.assertEqual(None, response.data['polling_station'])
         self.assertEqual([], response.data['addresses'])
+        self.assertIsNone(response.data['custom_finder'])
 
     def test_station_found(self):
         response = self.endpoint.retrieve(self.request, 'CC11CC', 'json',
@@ -80,6 +82,7 @@ class PostcodeTest(TestCase):
         self.assertEqual("St Foo's Church Hall, Bar Town",
             response.data['polling_station']['properties']['address'])
         self.assertEqual([], response.data['addresses'])
+        self.assertIsNone(response.data['custom_finder'])
 
     def test_no_council(self):
         response = self.endpoint.retrieve(self.request, 'DD11DD', 'json',

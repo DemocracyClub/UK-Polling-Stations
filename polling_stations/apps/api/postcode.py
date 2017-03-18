@@ -49,6 +49,16 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         else:
             return None
 
+    def generate_custom_finder(self, gss_codes, postcode):
+        finder = CustomFinder.objects.get_custom_finder(gss_codes, postcode)
+        if finder and finder.base_url:
+            if finder.can_pass_postcode:
+                return finder.base_url + finder.encoded_postcode
+            else:
+                return finder.base_url
+        else:
+            return None
+
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
         postcode = postcode.replace(' ', '')
         ret = {}
@@ -86,12 +96,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         # get custom finder (if no polling station)
         ret['custom_finder'] = None
         if not ret['polling_station_known']:
-            finder = CustomFinder.objects.get_custom_finder(l['gss_codes'], postcode)
-            if finder and finder.base_url:
-                ret['custom_finder'] = {}
-                ret['custom_finder']['base_url'] = finder.base_url
-                ret['custom_finder']['can_pass_postcode'] = finder.can_pass_postcode
-                ret['custom_finder']['encoded_postcode'] = finder.encoded_postcode
+            ret['custom_finder'] = self.generate_custom_finder(l['gss_codes'], postcode)
 
         # create log entry
         log_data = {}
