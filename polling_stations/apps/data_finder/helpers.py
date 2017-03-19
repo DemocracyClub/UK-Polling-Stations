@@ -5,9 +5,10 @@ import requests
 import time
 from collections import namedtuple
 
-from django.utils.translation import ugettext as _
-from django.contrib.gis.geos import Point
 from django.conf import settings
+from django.contrib.gis.geos import Point
+from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 from addressbase.helpers import centre_from_points_qs
 from addressbase.models import Address
@@ -300,3 +301,18 @@ class RoutingHelper():
                 'postcode_view',
                 {'postcode': self.postcode}
             )
+
+
+class ExamplePostcodeHelper:
+    def __init__(self):
+        self.postcode = getattr(settings, 'EXAMPLE_POSTCODE', 'CF10 5AJ')
+
+    @property
+    def display(self):
+        return self.postcode
+
+    @property
+    def url(self):
+        return reverse(
+            'postcode_view',
+            kwargs={'postcode': self.postcode.replace(' ', '')})
