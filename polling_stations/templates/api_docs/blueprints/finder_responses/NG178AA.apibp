@@ -27,16 +27,16 @@
                     "properties": {
                         "address": "Councillors' Room, ADC Offices\nUrban Road, Kirkby in Ashfield",
                         "station_id": "KXP3",
-                        "council": "http://wheredoivote.co.uk/api/beta/councils/W06000015/",
+                        "council": "https://wheredoivote.co.uk/api/beta/councils/W06000015/",
                         "urls": {
-                            "geo": "http://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=KXP3&council_id=E07000170",
-                            "detail": "http://wheredoivote.co.uk/api/beta/pollingstations/?station_id=KXP3&council_id=E07000170"
+                            "geo": "https://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=KXP3&council_id=E07000170",
+                            "detail": "https://wheredoivote.co.uk/api/beta/pollingstations/?station_id=KXP3&council_id=E07000170"
                         },
                         "postcode": ""
                     }
                 },
                 "council": {
-                    "url": "http://wheredoivote.co.uk/api/beta/councils/E07000170/",
+                    "url": "https://wheredoivote.co.uk/api/beta/councils/E07000170/",
                     "council_id": "E07000170",
                     "council_type": "DIS",
                     "name": "Ashfield District Council",

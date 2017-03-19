@@ -15,10 +15,10 @@
                 "custom_finder": null,
                 "addresses": [
                     {
-                        "url": "http://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/",
+                        "url": "https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/",
                         "address": "5 Truleigh Way, Shoreham-by-Sea, West Sussex",
                         "postcode": "BN436HW",
-                        "council": "http://wheredoivote.co.uk/api/beta/councils/E07000223/",
+                        "council": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
                         "polling_station_id": "527"
                     }
                 ],
@@ -34,17 +34,17 @@
                     },
                     "properties": {
                         "urls": {
-                            "detail": "http://wheredoivote.co.uk/api/beta/pollingstations/?station_id=527&council_id=E07000223",
-                            "geo": "http://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=527&council_id=E07000223"
+                            "detail": "https://wheredoivote.co.uk/api/beta/pollingstations/?station_id=527&council_id=E07000223",
+                            "geo": "https://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=527&council_id=E07000223"
                         },
-                        "council": "http://wheredoivote.co.uk/api/beta/councils/E07000223/",
+                        "council": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
                         "station_id": "527",
                         "postcode": "BN43 6WF",
                         "address": "Shoreham Free Church Hall\nBuckingham Road/Gordon Road\nShoreham-by-Sea"
                     }
                 },
                 "council": {
-                    "url": "http://wheredoivote.co.uk/api/beta/councils/E07000223/",
+                    "url": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
                     "council_id": "E07000223",
                     "council_type": "DIS",
                     "name": "Adur District Council",
