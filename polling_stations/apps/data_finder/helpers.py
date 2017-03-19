@@ -86,6 +86,9 @@ def geocode(postcode):
             if res_json['areas'][area]['type'] in COUNCIL_TYPES:
                 council_gss = gss
 
+    if 'wgs84_lon' not in res_json or 'wgs84_lat' not in res_json:
+        raise PostcodeError("No location information")
+
     return {
         'wgs84_lon': res_json['wgs84_lon'],
         'wgs84_lat': res_json['wgs84_lat'],
