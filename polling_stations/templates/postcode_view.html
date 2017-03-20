@@ -47,7 +47,7 @@
         <p>Try again in a few minutes.</p>
         {% endblocktrans %}
 
-      {% elif not has_election %}
+      {% elif error == 'There are no upcoming elections in your area' %}
 
         <h2>{{ error }}</h2>
         {% if council.phone %}
@@ -175,7 +175,7 @@
       {% include "notifications/campaign_signup.html" %}
     {% endif %}
 
-    {% if not has_election %}
+    {% if error == 'There are no upcoming elections in your area' %}
       {% include "notifications/election_notification_form.html" %}
       {% include "notifications/ical_feed.html" %}
     {% endif %}
