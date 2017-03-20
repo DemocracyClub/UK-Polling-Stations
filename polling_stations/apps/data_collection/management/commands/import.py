@@ -161,5 +161,7 @@ def run_cmd(f):
         'noclean': False,
         'verbosity': 0
     }
-
-    cmd.handle(**opts)
+    try:
+        cmd.handle(**opts)
+    except:
+        print("Can't run {}".format(f))
