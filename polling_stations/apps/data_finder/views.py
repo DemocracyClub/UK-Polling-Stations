@@ -109,7 +109,6 @@ class BasePollingStationView(
         if self.postcode and self.station and self.station.location:
             dh = DirectionsHelper()
             return dh.get_directions(
-                start_postcode=self.postcode,
                 start_location=self.location,
                 end_location=self.station.location,
             )

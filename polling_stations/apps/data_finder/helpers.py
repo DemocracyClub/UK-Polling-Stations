@@ -176,10 +176,10 @@ class DirectionsHelper():
 
         return self.Directions(walk_time, walk_dist, ps)
 
-    def get_google_route(self, postcode, end):
-        url = "{base_url}{postcode}&destination={destination}".format(
+    def get_google_route(self, start, end):
+        url = "{base_url}{origin}&destination={destination}".format(
                 base_url=settings.BASE_GOOGLE_URL,
-                postcode=postcode,
+                origin="{0},{1}".format(start.y, start.x),
                 destination="{0},{1}".format(end.y, end.x),
             )
 
@@ -213,7 +213,7 @@ class DirectionsHelper():
 
     def get_directions(self, **kwargs):
         try:
-            directions = self.get_google_route(kwargs['start_postcode'], kwargs['end_location'])
+            directions = self.get_google_route(kwargs['start_location'], kwargs['end_location'])
         except GoogleDirectionsApiError as e1:
             return None
             # Should log error here
