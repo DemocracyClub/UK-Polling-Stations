@@ -49,18 +49,13 @@ class Command(BaseCommand):
         return GEOSGeometry(area, srid=27700)
 
     def get_contact_info_from_yvm(self, council_id):
-        req = requests.get(
-            "%s%s" % (settings.YVM_LA_URL, council_id))
-        content = req.text
-        if council_id == "E08000017":
-            # Text not escaped properly
-            content = content.replace(
-                '"https://www.yourvotematters.co.uk/elections-in-2017/local-elections-in-england"',
-                '\'https://www.yourvotematters.co.uk/elections-in-2017/local-elections-in-england\'')
+        url = "{}{}".format(settings.YVM_LA_URL, council_id)
+        if council_id == "E07000049":
+            # E07000049 needs a space before the code
+            url = "{}%20{}".format(settings.YVM_LA_URL, council_id)
 
-        if council_id == "S12000034":
-            # JSON content duplicated(!!)
-            content = content.split("}{")[0] + "}"
+        req = requests.get(url)
+        content = req.text
 
         council_data = json.loads(str(content))['registrationOffice']
         info = {}
