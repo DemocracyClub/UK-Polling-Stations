@@ -48,6 +48,12 @@ class Command(BaseCommand):
             area = "MULTIPOLYGON(%s)" % area
         return GEOSGeometry(area, srid=27700)
 
+    def clean_url(self, url):
+        if not url.startswith(('http://', 'https://')):
+            # Assume http everywhere will redirect to https if it's there.
+            url = "http://{}".format(url)
+        return url
+
     def get_contact_info_from_yvm(self, council_id):
         url = "{}{}".format(settings.YVM_LA_URL, council_id)
         if council_id == "E07000049":
@@ -59,7 +65,8 @@ class Command(BaseCommand):
 
         council_data = json.loads(str(content))['registrationOffice']
         info = {}
-        info['website'] = council_data.get('website')
+        info['name'] = council_data.get('office')
+        info['website'] = self.clean_url(council_data.get('website'))
         info['email'] = council_data.get('email')
         info['phone'] = council_data.get('telephone', '').replace('</a>', '')\
             .split('>')[-1]
