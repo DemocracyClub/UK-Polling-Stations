@@ -53,21 +53,21 @@
         {% if council.phone %}
           {% blocktrans with council.name as council_name and council.phone as council_phone %}
           <p>
-            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call your council to check and then <a href="https://democracyclub.org.uk/contact/">let us know</a>.*
+            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call your council to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
             You can contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
           </p>
           {% endblocktrans %}
         {% else %}
           {% blocktrans with council.name as council_name %}
           <p>
-            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call {{ council_name }} to check and then <a href="https://democracyclub.org.uk/contact/">let us know</a>.*
+            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call {{ council_name }} to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
           </p>
           {% endblocktrans %}
         {% endif %}
         <p>
           <small>
             * Why can't we be certain? Because there is no definitive source of UK elections.
-            You can help us build the free, public database at <a href="https://elections.democracyclub.org.uk">Every Election</a>.
+            You can help us build the free, public database at <a href="https://elections.democracyclub.org.uk" target="_top">Every Election</a>.
           </small>
         </p>
 
