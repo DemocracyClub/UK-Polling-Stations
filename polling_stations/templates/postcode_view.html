@@ -27,14 +27,6 @@
 
 {% block content %}
 
-<div class="callout warning" style="overflow:auto">
-    <div class="columns large-6 large-centered">
-      <h5>Archived site</h5>
-      <p>This site contains information about polling stations for the referendum in June 2016. We will be updating the site in time for May 2017.</p>
-      <a href="https://democracyclub.org.uk/blog/">Follow our blog for news on what we're up to.</a>
-    </div>
-</div>
-
 <div class="row">
   <div class="columns large-8">
     <div class="card">
@@ -156,7 +148,7 @@
             station and give them your name and address.</p>
         <p>You don't need any other form of ID.</p>
         <p>If you haven’t received a polling card but think you should have done, contact your council</p>
-        <p><strong>Polling stations are open from 7am to 10pm on polling day.</strong></p>
+        <p><strong>Polling stations are open from 7am to 10pm on Thursday 4 May.</strong></p>
         <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
           Read more about voting in the UK
         </a></p>
@@ -166,20 +158,23 @@
     <div class="card">
         {% blocktrans %}
         <h3>You need to be registered in order to vote</h3>
-        <p>If you aren’t registered to vote visit <a href="https://www.gov.uk/register-to-vote" target="_top">https://www.gov.uk/register-to-vote</a>.</p>
-
+        <p>If you aren’t registered to vote visit <a href="https://www.gov.uk/register-to-vote" target="_top">https://www.gov.uk/register-to-vote</a>
+        <ul>
+          <li>Before midnight on Thursday 13 April register for elections in England and Wales</li>
+          <li>Before midnight on Monday 17 April to register for elections in Scotland</li>
+        </ul>
+        </p>
         {% endblocktrans %}
     </div>
 
-    {# <div class="card"> #}
-    {#     {% blocktrans %} #}
-    {#     <h3>Information on your candidates</h3> #}
-    {#     <p>You can find information on your candidates at <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}" target="_top"> #}
-    {#       WhoCanIVoteFor.co.uk #}
-    {#     </a></p> #}
-    {#  #}
-    {#     {% endblocktrans %} #}
-    {# </div> #}
+    <div class="card">
+      {% blocktrans %}
+        <h3>Information on your candidates</h3>
+          <p>You can find information on your candidates at <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}" target="_top">
+            WhoCanIVoteFor.co.uk</a>
+          </p>
+      {% endblocktrans %}
+    </div>
 
 
     {% if council.address or council.postcode or council.phone or council.email %}
