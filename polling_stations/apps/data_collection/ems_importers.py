@@ -5,32 +5,47 @@ popular Electoral Management Software packages
 import abc
 from django.contrib.gis.geos import Point
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode_point_only
+from data_finder.helpers import geocode_point_only, PostcodeError
+
 
 """
 We see a lot of CSVs exported from Xpress
 electoral service software: http://www.xssl.uk/
 with the addresses and stations in a single CSV file
 
-This is a specialised case of BaseCsvStationsCsvAddressesImporter
-with some sensible presets for processing CSVs in this format
-but we can override them if necessary
+There are 2 formats we see:
+* WebLookup export (hopefully we will start seeing less of these)
+* DemocracyClub export (hopefully we will start seeing more of these)
+This is the parent class for both of them.
 """
 class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
                             metaclass=abc.ABCMeta):
     csv_delimiter = ','
-    station_postcode_field = 'pollingplaceaddress7'
-    station_address_fields = [
-        'pollingplaceaddress1',
-        'pollingplaceaddress2',
-        'pollingplaceaddress3',
-        'pollingplaceaddress4',
-        'pollingplaceaddress5',
-        'pollingplaceaddress6',
-    ]
-    station_id_field = 'pollingplaceid'
-    easting_field = 'pollingplaceeasting'
-    northing_field = 'pollingplacenorthing'
+
+    @property
+    @abc.abstractmethod
+    def station_postcode_field(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def station_address_fields(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def station_id_field(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def easting_field(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def northing_field(self):
+        pass
 
     def get_station_hash(self, record):
         return "-".join([
@@ -87,6 +102,27 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
             'location'           : location
         }
 
+
+"""
+Specialised case of BaseCsvStationsCsvAddressesImporter
+with some sensible presets for processing WebLookup
+CSVs exported from Xpress
+"""
+class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter,
+                                     metaclass=abc.ABCMeta):
+    station_postcode_field = 'pollingplaceaddress7'
+    station_address_fields = [
+        'pollingplaceaddress1',
+        'pollingplaceaddress2',
+        'pollingplaceaddress3',
+        'pollingplaceaddress4',
+        'pollingplaceaddress5',
+        'pollingplaceaddress6',
+    ]
+    station_id_field = 'pollingplaceid'
+    easting_field = 'pollingplaceeasting'
+    northing_field = 'pollingplacenorthing'
+
     def address_record_to_dict(self, record):
         if record.propertynumber.strip() == '0' or record.propertynumber.strip() == '':
             address = record.streetname.strip()
@@ -96,6 +132,45 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         return {
             'address'           : address.strip(),
             'postcode'          : record.postcode.strip(),
+            'polling_station_id': getattr(record, self.station_id_field).strip()
+        }
+
+
+"""
+Specialised case of BaseCsvStationsCsvAddressesImporter
+with some sensible presets for processing DemocracyClub
+CSVs exported from Xpress
+"""
+class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter,
+                                         metaclass=abc.ABCMeta):
+    station_postcode_field = 'polling_place_postcode'
+    station_address_fields = [
+        'polling_place_name',
+        'polling_place_address_1',
+        'polling_place_address_2',
+        'polling_place_address_3',
+        'polling_place_address_4',
+    ]
+    station_id_field = 'polling_place_id'
+    easting_field = 'polling_place_easting'
+    northing_field = 'polling_place_northing'
+
+    def address_record_to_dict(self, record):
+        address = ", ".join([
+            record.addressline1,
+            record.addressline2,
+            record.addressline3,
+            record.addressline4,
+            record.addressline5,
+        ])
+        while ", , " in address:
+            address = address.replace(", , ", ", ")
+        if address[-2:] == ', ':
+            address = address[:-2]
+
+        return {
+            'address'           : address.strip(),
+            'postcode'          : record.addressline6.strip(),
             'polling_station_id': getattr(record, self.station_id_field).strip()
         }
 
