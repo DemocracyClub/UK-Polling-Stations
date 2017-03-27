@@ -270,6 +270,7 @@ if type(MANAGE_ADDRESSBASE_MODEL) == str \
 # import application constants
 from .constants.councils import *  # noqa
 from .constants.directions import *  # noqa
+from .constants.elections import *  # noqa
 from .constants.example_postcode import *  # noqa
 from .constants.importers import *  # noqa
 from .constants.mapit import *  # noqa

@@ -33,25 +33,53 @@
     {% if error %}
 
       {% if error == 'Mapit error 403: Rate limit exceeded' %}
-      {% blocktrans %}
-      <h2>Sorry, we're a bit busy right now!</h2>
-      <p>Try again in a few minutes.</p>
-      {% endblocktrans %}
-      {% else %}
-      {% blocktrans %}
-      <h2>Sorry, we can't find {{ postcode }}</h2>
-      <p>This doesn't appear to be a valid postcode.</p>
-      {% endblocktrans %}
-      <form method="post" action="{% url 'home' %}" class="form form-inline">
-          {% csrf_token %}
-          <label class="card_header">{% trans "Enter Your Postcode" %}
-            <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
-          </label>
-          <p class="help-text" id="postcode_help_text">
-            {% trans 'e.g.' %} <a href="{{ example_postcode.url }}">{{ example_postcode.display }}</a>
+
+        {% blocktrans %}
+        <h2>Sorry, we're a bit busy right now!</h2>
+        <p>Try again in a few minutes.</p>
+        {% endblocktrans %}
+
+      {% elif error == 'There are no upcoming elections in your area' %}
+
+        <h2>{{ error }}</h2>
+        {% if council.phone %}
+          {% blocktrans with council.name as council_name and council.phone as council_phone %}
+          <p>
+            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call your council to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
+            You can contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
           </p>
-          <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
-      </form>
+          {% endblocktrans %}
+        {% else %}
+          {% blocktrans with council.name as council_name %}
+          <p>
+            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call {{ council_name }} to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
+          </p>
+          {% endblocktrans %}
+        {% endif %}
+        <p>
+          <small>
+            * Why can't we be certain? Because there is no definitive source of UK elections.
+            You can help us build the free, public database at <a href="https://elections.democracyclub.org.uk" target="_top">Every Election</a>.
+          </small>
+        </p>
+
+      {% else %}
+
+        {% blocktrans %}
+        <h2>Sorry, we can't find {{ postcode }}</h2>
+        <p>This doesn't appear to be a valid postcode.</p>
+        {% endblocktrans %}
+        <form method="post" action="{% url 'home' %}" class="form form-inline">
+            {% csrf_token %}
+            <label class="card_header">{% trans "Enter Your Postcode" %}
+              <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
+            </label>
+            <p class="help-text" id="postcode_help_text">
+              {% trans 'e.g.' %} <a href="{{ example_postcode.url }}">{{ example_postcode.display }}</a>
+            </p>
+            <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
+        </form>
+
       {% endif %}
 
     {% else %}
@@ -134,8 +162,14 @@
 
     {% endif %}
     </div>
+
     {% if not we_know_where_you_should_vote and not custom and not error %}
-    {% include "campaign_signup.html" %}
+      {% include "notifications/campaign_signup.html" %}
+    {% endif %}
+
+    {% if error == 'There are no upcoming elections in your area' %}
+      {% include "notifications/election_notification_form.html" %}
+      {% include "notifications/ical_feed.html" %}
     {% endif %}
   </div>
 
@@ -318,45 +352,62 @@
           }
         );
 
-{% if not we_know_where_you_should_vote and not custom %}
-fallback.ready(['jQuery'], function() {
+{% if not we_know_where_you_should_vote or not has_election %}
+  {% if not custom %}
+
+  {% if not has_election %}
+    var url = '{% url "election_notification_signup" postcode=postcode %}';
+    var success_message = '<h2>{% trans "Thanks" %}</h2>' +
+      '<p>{% trans "We will email you when there is an election in this area. " %}';
+    var form_fields = ['email'];
+  {% else %}
+    var url = '{% url "campaign_signup" postcode=postcode %}';
+    var success_message = '<h2>{% trans "Thanks" %}</h2>' +
+      '<p>{% trans "Thanks for signing up. If enough people in your local area sign up, " %}' +
+      '{% trans "we will contact the head of your council on your behalf. " %}' +
+      '{% trans "We won’t share your email address with them or anyone else." %}</p>';
+    var form_fields = ['name', 'email'];
+  {% endif %}
+
+  fallback.ready(['jQuery'], function() {
 
     $(document).ready(function() {
 
-        $('#submit').on('click', function() {
-            // submit email signup form
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: '{% url "campaign_signup" postcode=postcode %}',
-                data: {
-                    'name': $('#name').val(),
-                    'email': $('#email').val(),
-                    'join': $('#join').is(':checked')
-                }
-            }).done(function() {
-                // sucessful signup
-                $('#campaign_form').html(
-                    '<h2>{% trans "Thanks" %}</h2>' +
-                    '<p>{% trans "Thanks for signing up. If enough people in your local area sign up, " %}' +
-                    '{% trans "we will contact the head of your council on your behalf. " %}' +
-                    '{% trans "We won’t share your email address with them or anyone else." %}</p>');
-                $('#campaign_form').focus();
-            }).fail(function(err) {
-                // validation error
-                for (var field in err.responseJSON.errors) {
-                    if (err.responseJSON.errors[field] === 1) {
-                        $('#' + field + '_error').addClass('is-visible');
-                    } else {
-                        $('#' + field + '_error').removeClass('is-visible');
-                    }
-                }
-            });
+      $('#submit').on('click', function() {
+        // submit email signup form
+
+        var data = {
+          'join': $('#join').is(':checked')
+        };
+        for (var i = 0; i < form_fields.length; i++) {
+          data[form_fields[i]] = $('#' + form_fields[i]).val();
+        }
+
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: url,
+          data: data
+        }).done(function() {
+          // sucessful signup
+          $('#signup_form').html(success_message);
+          $('#signup_form').focus();
+        }).fail(function(err) {
+          // validation error
+          for (var field in err.responseJSON.errors) {
+            if (err.responseJSON.errors[field] === 1) {
+              $('#' + field + '_error').addClass('is-visible');
+            } else {
+              $('#' + field + '_error').removeClass('is-visible');
+            }
+          }
         });
+      });
 
     });
 
-});
+  });
+  {% endif %}
 {% endif %}
 </script>
 {% endblock extra_javascript %}

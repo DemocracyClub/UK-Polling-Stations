@@ -126,6 +126,15 @@ class AddressSorter:
         return sorted(lst, key = self.swap_fields)
 
 
+def has_election(postcode):
+    res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
+        settings.EE_BASE, postcode))
+    res_json = res.json()
+    if len(res_json['results']) > 0:
+        return True
+    return False
+
+
 class OrsDirectionsApiError(Exception):
     pass
 

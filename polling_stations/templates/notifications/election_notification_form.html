@@ -1,0 +1,26 @@
+{% load i18n %}
+{% if request.brand == 'democracyclub' %}
+<div class="card" id="signup_form">
+  <h2 class="card_header">{% trans "Free election reminders" %}</h2>
+  {% blocktrans %}
+  <p>We will email you when there is an election in this area.</p>
+  {% endblocktrans %}
+
+  <div class="form-group">
+    <label for="email">{% trans "Email" %}</label>
+    <input type="email" id="email" name="email" value="" maxlength="100">
+    <span class="form-error" id="email_error">{% trans "Please enter an email address" %}</span>
+
+    <div style="margin-bottom: 1rem;">
+    <input type="checkbox" id="join" name="join" value="1" style="margin-bottom: 0;">
+
+    <label for="join" style="display: inline;">
+    {% blocktrans %}Yes, I’d like to join Democracy Club (it’s free!) to help
+    make democracy work better for everyone.{% endblocktrans %}
+    </label>
+    </div>
+
+    <button type="button" class="button" id="submit">{% trans "Sign up" %}</button>
+  </div>
+</div>
+{% endif %}

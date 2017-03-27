@@ -17,7 +17,11 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
-from data_finder.models import LoggedPostcode, CampaignSignup
+from data_finder.models import (
+    LoggedPostcode,
+    CampaignSignup,
+    ElectionNotificationSignup
+)
 from pollingstations.models import (
     PollingStation,
     ResidentialAddress,
@@ -27,6 +31,7 @@ from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     geocode,
+    has_election,
     DirectionsHelper,
     AddressSorter,
     PostcodeError,
@@ -123,6 +128,14 @@ class BasePollingStationView(
         else:
             return ''
 
+    def has_election(self):
+        try:
+            return has_election(self.postcode)
+        except:
+            # if the request was unsucessful for some reason,
+            # assume there *is* and upcoming election
+            return True
+
     def get_context_data(self, **context):
         context['tile_layer'] = settings.TILE_LAYER
         context['mq_key'] = settings.MQ_KEY
@@ -144,6 +157,10 @@ class BasePollingStationView(
         self.council = self.get_council()
         self.station = self.get_station()
         self.directions = self.get_directions()
+
+        context['has_election'] = self.has_election()
+        if not context['has_election']:
+            context['error'] = 'There are no upcoming elections in your area'
 
         context['postcode'] = self.postcode
         context['location'] = self.location
@@ -253,7 +270,7 @@ class WeDontKnowView(PostcodeView):
         return None
 
 
-def campaign_signup(request, postcode):
+def signup(request, postcode, model, fields):
     if request.POST.get('join', 'false') == 'true':
         join_list = True
     else:
@@ -262,29 +279,42 @@ def campaign_signup(request, postcode):
     email = request.POST.get('email', '')
 
     errors = { 'errors': { 'name': 0, 'email': 0 } }
-    if not name or len(name) > 100:
-        errors['errors']['name'] = 1
-    if not email or len(email) > 100:
-        errors['errors']['email'] = 1
-    try:
-        validate_email(email)
-    except ValidationError:
-        errors['errors']['email'] = 1
 
-    if errors['errors']['name'] == 1 or errors['errors']['email'] == 1:
+    if 'name' in fields:
+        if not name or len(name) > 100:
+            errors['errors']['name'] = 1
+
+    if 'email' in fields:
+        if not email or len(email) > 100:
+            errors['errors']['email'] = 1
+        try:
+            validate_email(email)
+        except ValidationError:
+            errors['errors']['email'] = 1
+
+    if (errors['errors']['name'] == 1 and 'name' in fields) or\
+        (errors['errors']['email'] == 1 and 'email' in fields):
         return HttpResponse(json.dumps(errors),
             status=400, content_type='application/json')
 
-    kwargs = {
-        'postcode': postcode,
-        'name': name,
-        'email': email,
-        'join_list': join_list
-    }
-    CampaignSignup.objects.create(**kwargs)
+    kwargs = { 'postcode': postcode, 'join_list': join_list }
+    if 'name' in fields:
+        kwargs['name'] = name
+    if 'email' in fields:
+        kwargs['email'] = email
+
+    model.objects.create(**kwargs)
 
     return HttpResponse(json.dumps(errors),
         status=200, content_type='application/json')
+
+
+def election_notification_signup(request, postcode):
+    return signup(request, postcode, ElectionNotificationSignup, ['email'])
+
+
+def campaign_signup(request, postcode):
+    return signup(request, postcode, CampaignSignup, ['name', 'email'])
 
 
 class AddressFormView(FormView):
