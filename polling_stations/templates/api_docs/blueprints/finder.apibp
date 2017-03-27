@@ -41,7 +41,7 @@ A valid postcode search may result in one of 3 outcomes:
 
     + Body
 
-<!-- include(finder_responses/CF105AJ.apibp) -->
+<!-- include(finder_responses/NG178AA.apibp) -->
 
     + Schema
 
@@ -59,7 +59,7 @@ A valid postcode search may result in one of 3 outcomes:
 
     + Body
 
-<!-- include(finder_responses/CF157RP.apibp) -->
+<!-- include(finder_responses/BN436HW.apibp) -->
 
     + Schema
 
@@ -103,7 +103,7 @@ In the event that the addresses described by a postcode are not all assigned to 
 an array of address objects will be returned, each of which corresponds to a call to the `/address` endpoint.
 
 + Parameters
-    + slug: `w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp` (required, string) - A unique slug describing a residential address
+    + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (required, string) - A unique slug describing a residential address
 
 ### Address search [GET]
 
@@ -117,7 +117,7 @@ an array of address objects will be returned, each of which corresponds to a cal
 
     + Body
 
-<!-- include(finder_responses/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp.apibp) -->
+<!-- include(finder_responses/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw.apibp) -->
 
     + Schema
 

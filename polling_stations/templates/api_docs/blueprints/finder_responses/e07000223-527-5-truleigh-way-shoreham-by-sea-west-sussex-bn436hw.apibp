@@ -1,0 +1,57 @@
+            {
+                "polling_station_known": true,
+                "postcode_location": {
+                    "geometry": {
+                        "point": {
+                            "type": "Point",
+                            "coordinates": [
+                                -0.26353977212676555,
+                                50.84477241345472
+                            ]
+                        }
+                    },
+                    "type": "Feature"
+                },
+                "custom_finder": null,
+                "addresses": [
+                    {
+                        "url": "https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/",
+                        "address": "5 Truleigh Way, Shoreham-by-Sea, West Sussex",
+                        "postcode": "BN436HW",
+                        "council": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
+                        "polling_station_id": "527"
+                    }
+                ],
+                "polling_station": {
+                    "id": "E07000223.527",
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                            -0.2693240568181819,
+                            50.83494864772728
+                        ]
+                    },
+                    "properties": {
+                        "urls": {
+                            "detail": "https://wheredoivote.co.uk/api/beta/pollingstations/?station_id=527&council_id=E07000223",
+                            "geo": "https://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=527&council_id=E07000223"
+                        },
+                        "council": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
+                        "station_id": "527",
+                        "postcode": "BN43 6WF",
+                        "address": "Shoreham Free Church Hall\nBuckingham Road/Gordon Road\nShoreham-by-Sea"
+                    }
+                },
+                "council": {
+                    "url": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
+                    "council_id": "E07000223",
+                    "council_type": "DIS",
+                    "name": "Adur District Council",
+                    "email": "elections@adur-worthing.gov.uk",
+                    "phone": "01903 221014/5/6",
+                    "website": "http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/",
+                    "postcode": "BN11 1HA",
+                    "address": "Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex"
+                }
+            }

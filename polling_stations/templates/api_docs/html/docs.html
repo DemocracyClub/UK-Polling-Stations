@@ -4,9 +4,9 @@ A website to help people in the UK find their polling station, built by <a href=
 <p>Note this API is currently in beta and outputs are subject to change.</p>
 <section id="api-root" class="resource-group"><h2 class="group-heading">API Root <a href="#api-root" class="permalink">&para;</a></h2><div id="api-root-api-root" class="resource"><h3 class="resource-heading">API Root <a href="#api-root-api-root" class="permalink">&nbsp;&para;</a></h3><p>The initial API entry point for discovering endpoints.</p>
 <div id="api-root-api-root-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve the Entry Point</div><a href="#api-root-api-root-get" class="method get">GET</a><code class="uri">/.json</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/.json</span></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
-  "<span class="hljs-attribute">councils</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils.json"</span></span>,
-  "<span class="hljs-attribute">pollingstations</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations.json"</span></span>,
-  "<span class="hljs-attribute">pollingdistricts</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts.json"</span>
+  "<span class="hljs-attribute">councils</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils.json"</span></span>,
+  "<span class="hljs-attribute">pollingstations</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations.json"</span></span>,
+  "<span class="hljs-attribute">pollingdistricts</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts.json"</span>
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section><section id="polling-station-finder" class="resource-group"><h2 class="group-heading">Polling Station Finder <a href="#polling-station-finder" class="permalink">&para;</a></h2><p>The <code>/postcode</code> and <code>/address</code> endpoints find a user’s polling station based on their home address.
 This allows you to leverage Democracy Club’s data to integrate a polling station finder into your website or app.</p>
 <p>A <code>200 OK</code> response from <code>/postcode</code> or <code>/address</code> is an object containing the following top-level keys:</p>
@@ -69,8 +69,8 @@ the following conditions can be observed in the response body:</p>
       "<span class="hljs-attribute">point</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Point"</span></span>,
         "<span class="hljs-attribute">coordinates</span>": <span class="hljs-value">[
-          -<span class="hljs-number">3.1657202682046206</span>,
-          <span class="hljs-number">51.46518039304887</span>
+          -<span class="hljs-number">1.2491514412601963</span>,
+          <span class="hljs-number">53.09878716696975</span>
         ]
       </span>}
     </span>}</span>,
@@ -82,33 +82,33 @@ the following conditions can be observed in the response body:</p>
     "<span class="hljs-attribute">geometry</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Point"</span></span>,
       "<span class="hljs-attribute">coordinates</span>": <span class="hljs-value">[
-        -<span class="hljs-number">3.162477184225377</span>,
-        <span class="hljs-number">51.469852462940835</span>
+        -<span class="hljs-number">1.248013</span>,
+        <span class="hljs-number">53.100064</span>
       ]
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015.SP2-NB"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"E07000170.KXP3"</span></span>,
     "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
-      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Councillors' Room, ADC Offices\nUrban Road, Kirkby in Ashfield"</span></span>,
+      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"KXP3"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/W06000015/"</span></span>,
       "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=SP2-NB&amp;council_id=W06000015"</span></span>,
-        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?station_id=SP2-NB&amp;council_id=W06000015"</span>
+        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=KXP3&amp;council_id=E07000170"</span></span>,
+        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?station_id=KXP3&amp;council_id=E07000170"</span>
       </span>}</span>,
       "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">council</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx"</span></span>,
-    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Cardiff Council"</span></span>,
-    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"029 2087 2034"</span></span>,
-    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015/"</span></span>,
-    "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015"</span></span>,
-    "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"UTA"</span></span>,
-    "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF10 4UW"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"City of Cardiff Council\nCity of Cardiff Council\nCounty Hall Atlantic Wharf\nCardiff"</span></span>,
-    "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"electoralservices@cardiff.gov.uk"</span>
+    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170/"</span></span>,
+    "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"E07000170"</span></span>,
+    "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"DIS"</span></span>,
+    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Ashfield District Council"</span></span>,
+    "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"regelec@ashfield-dc.gov.uk"</span></span>,
+    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"01623 457321"</span></span>,
+    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"http://www.ashfield-dc.gov.uk/residents/democracy,-elections-and-legal/elections/registering-to-vote.aspx"</span></span>,
+    "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"NG17 8DA"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashfield District Council\nCouncil Offices\nUrban Road\nKirkby-in-Ashfield\nNottingham"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
   "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
@@ -289,8 +289,8 @@ This can be used to request the user’s address and make a second API call to t
       "<span class="hljs-attribute">point</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Point"</span></span>,
         "<span class="hljs-attribute">coordinates</span>": <span class="hljs-value">[
-          -<span class="hljs-number">3.262801815353187</span>,
-          <span class="hljs-number">51.54630720254116</span>
+          -<span class="hljs-number">0.26353977212676555</span>,
+          <span class="hljs-number">50.84477241345472</span>
         ]
       </span>}
     </span>}</span>,
@@ -299,52 +299,59 @@ This can be used to request the user’s address and make a second API call to t
   "<span class="hljs-attribute">custom_finder</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
   "<span class="hljs-attribute">addresses</span>": <span class="hljs-value">[
     {
-      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/address/w06000016-phe-4-rhymney-cottages-taffs-well-cardiff-cf157rp/"</span></span>,
-      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"PHE"</span></span>,
-      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF157RP"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"4 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"</span>
+      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/"</span></span>,
+      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"527"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN436HW"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"5 Truleigh Way, Shoreham-by-Sea, West Sussex"</span>
     </span>},
     {
-      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/address/w06000016-phe-2-rhymney-cottages-taffs-well-cardiff-cf157rp/"</span></span>,
-      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"PHE"</span></span>,
-      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF157RP"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"2 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"</span>
+      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/address/e07000223-524-2-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/"</span></span>,
+      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"524"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN436HW"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"2 Truleigh Way, Shoreham-by-Sea, West Sussex"</span>
     </span>},
     {
-      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/address/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp/"</span></span>,
-      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"PHE"</span></span>,
-      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF157RP"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"1 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"</span>
+      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/address/e07000223-527-3-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/"</span></span>,
+      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"527"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN436HW"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"3 Truleigh Way, Shoreham-by-Sea, West Sussex"</span>
     </span>},
     {
-      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/address/w06000016-phc-the-old-forge-old-parish-road-taffs-well-cardiff-cf157rp/"</span></span>,
-      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"PHC"</span></span>,
-      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF157RP"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"THE OLD FORGE, OLD PARISH ROAD, TAFFS WELL, CARDIFF"</span>
+      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/address/e07000223-527-1-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/"</span></span>,
+      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"527"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN436HW"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"1 Truleigh Way, Shoreham-by-Sea, West Sussex"</span>
     </span>},
     {
-      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/address/w06000016-phe-3-rhymney-cottages-taffs-well-cardiff-cf157rp/"</span></span>,
-      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"PHE"</span></span>,
-      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF157RP"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"3 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"</span>
+      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/address/e07000223-524-4-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/"</span></span>,
+      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"524"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN436HW"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"4 Truleigh Way, Shoreham-by-Sea, West Sussex"</span>
+    </span>},
+    {
+      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/address/e07000223-524-6-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/"</span></span>,
+      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"524"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN436HW"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"6 Truleigh Way, Shoreham-by-Sea, West Sussex"</span>
     </span>}
   ]</span>,
   "<span class="hljs-attribute">polling_station</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
   "<span class="hljs-attribute">council</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"http://www.rctcbc.gov.uk/en/councildemocracy/democracyelections/elections-electoralregister/elections-electoralregister.aspx"</span></span>,
-    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Rhondda Cynon Taf Council"</span></span>,
-    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"01443 490100"</span></span>,
-    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-    "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"W06000016"</span></span>,
-    "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"UTA"</span></span>,
-    "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF37 1NY"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Rhondda-Cynon-Taff Council\nUnit 2\nMaritime Business Park\nMaritime Industrial Estate\nPontypridd"</span></span>,
-    "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"electoralservices@rhondda-cynon-taf.gov.uk"</span>
+    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/"</span></span>,
+    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Adur District Council"</span></span>,
+    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"01903 221014/5/6"</span></span>,
+    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+    "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"E07000223"</span></span>,
+    "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"DIS"</span></span>,
+    "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN11 1HA"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex"</span></span>,
+    "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"elections@adur-worthing.gov.uk"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
   "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
@@ -538,7 +545,7 @@ the following conditions can be observed in the response body:</p>
     "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"https://www.westminster.gov.uk/contact-electoral-services"</span></span>,
     "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Westminster City Council"</span></span>,
     "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"020 7641 2730"</span></span>,
-    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/E09000033/"</span></span>,
+    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E09000033/"</span></span>,
     "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"E09000033"</span></span>,
     "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"LBO"</span></span>,
     "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"SW1E 6QP"</span></span>,
@@ -709,7 +716,7 @@ the following conditions can be observed in the response body:</p>
   "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Mapit error 403: Rate limit exceeded"</span>
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="polling-station-finder-address-search" class="resource"><h3 class="resource-heading">Address search <a href="#polling-station-finder-address-search" class="permalink">&nbsp;&para;</a></h3><p>In the event that the addresses described by a postcode are not all assigned to the same polling station,
 an array of address objects will be returned, each of which corresponds to a call to the <code>/address</code> endpoint.</p>
-<div id="polling-station-finder-address-search-get" class="action get"><h4 class="action-heading"><div class="name">Address search</div><a href="#polling-station-finder-address-search-get" class="method get">GET</a><code class="uri">/address/{slug}.json</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/address/<span class="hljs-attribute" title="slug">w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp</span>.json</span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>slug</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp</span></span><p>A unique slug describing a residential address</p>
+<div id="polling-station-finder-address-search-get" class="action get"><h4 class="action-heading"><div class="name">Address search</div><a href="#polling-station-finder-address-search-get" class="method get">GET</a><code class="uri">/address/{slug}.json</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/address/<span class="hljs-attribute" title="slug">e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw</span>.json</span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>slug</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw</span></span><p>A unique slug describing a residential address</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><div class="description"><p>When we make a valid call to the <code>/address</code> endpoint,
 the following conditions can be observed in the response body:</p>
 <ul>
@@ -730,8 +737,8 @@ the following conditions can be observed in the response body:</p>
       "<span class="hljs-attribute">point</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Point"</span></span>,
         "<span class="hljs-attribute">coordinates</span>": <span class="hljs-value">[
-          -<span class="hljs-number">3.262801815353187</span>,
-          <span class="hljs-number">51.54630720254116</span>
+          -<span class="hljs-number">0.26353977212676555</span>,
+          <span class="hljs-number">50.84477241345472</span>
         ]
       </span>}
     </span>}</span>,
@@ -740,44 +747,44 @@ the following conditions can be observed in the response body:</p>
   "<span class="hljs-attribute">custom_finder</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
   "<span class="hljs-attribute">addresses</span>": <span class="hljs-value">[
     {
-      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/address/w06000016-phe-1-rhymney-cottages-taffs-well-cardiff-cf157rp/"</span></span>,
-      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"PHE"</span></span>,
-      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF157RP"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"1 RHYMNEY COTTAGES, TAFFS WELL, CARDIFF"</span>
+      "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"5 Truleigh Way, Shoreham-by-Sea, West Sussex"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN436HW"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">polling_station_id</span>": <span class="hljs-value"><span class="hljs-string">"527"</span>
     </span>}
   ]</span>,
   "<span class="hljs-attribute">polling_station</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"E07000223.527"</span></span>,
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
     "<span class="hljs-attribute">geometry</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Point"</span></span>,
       "<span class="hljs-attribute">coordinates</span>": <span class="hljs-value">[
-        -<span class="hljs-number">3.2592334478260865</span>,
-        <span class="hljs-number">51.5431234304348</span>
+        -<span class="hljs-number">0.2693240568181819</span>,
+        <span class="hljs-number">50.83494864772728</span>
       ]
     </span>}</span>,
-    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"W06000016.PHE"</span></span>,
     "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"TY-RHIW COMMUNITY CENTRE\nTY-RHIW\nTAFFS WELL"</span></span>,
-      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"PHE"</span></span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
       "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=PHE&amp;council_id=W06000016"</span></span>,
-        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?station_id=PHE&amp;council_id=W06000016"</span>
+        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?station_id=527&amp;council_id=E07000223"</span></span>,
+        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=527&amp;council_id=E07000223"</span>
       </span>}</span>,
-      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF15 7RS"</span>
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"527"</span></span>,
+      "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN43 6WF"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Shoreham Free Church Hall\nBuckingham Road/Gordon Road\nShoreham-by-Sea"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">council</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"http://www.rctcbc.gov.uk/en/councildemocracy/democracyelections/elections-electoralregister/elections-electoralregister.aspx"</span></span>,
-    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Rhondda Cynon Taf Council"</span></span>,
-    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"01443 490100"</span></span>,
-    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000016/"</span></span>,
-    "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"W06000016"</span></span>,
-    "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"UTA"</span></span>,
-    "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF37 1NY"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Rhondda-Cynon-Taff Council\nUnit 2\nMaritime Business Park\nMaritime Industrial Estate\nPontypridd"</span></span>,
-    "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"electoralservices@rhondda-cynon-taf.gov.uk"</span>
+    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000223/"</span></span>,
+    "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"E07000223"</span></span>,
+    "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"DIS"</span></span>,
+    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Adur District Council"</span></span>,
+    "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"elections@adur-worthing.gov.uk"</span></span>,
+    "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"01903 221014/5/6"</span></span>,
+    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/"</span></span>,
+    "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"BN11 1HA"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
   "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
@@ -944,15 +951,15 @@ the following conditions can be observed in the response body:</p>
 <div id="councils-councils-collection-json" class="resource"><h3 class="resource-heading">Councils Collection: JSON <a href="#councils-councils-collection-json" class="permalink">&nbsp;&para;</a></h3><p>List all councils. Returns an array of <a href="#councils-councils-json-get">council objects</a></p>
 <div id="councils-councils-collection-json-get" class="action get"><h4 class="action-heading"><div class="name">List All Councils: JSON</div><a href="#councils-councils-collection-json-get" class="method get">GET</a><code class="uri">/councils.json</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/councils.json</span></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>[
   {
-    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
+    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
     "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015"</span></span>,
     "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Cardiff Council"</span></span>,
     "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"DIS"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"City of Cardiff Council\\nCity of Cardiff Council\\nCounty Hall Atlantic Wharf\\nCardiff"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Electoral Registration Officer\\nCity of Cardiff Council\\nCounty Hall Atlantic Wharf"</span></span>,
     "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF10 4UW"</span></span>,
     "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"electoralservices@cardiff.gov.uk"</span></span>,
     "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"029 2087 2034"</span></span>,
-    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx"</span>
+    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"www.cardiff.gov.uk/"</span>
   </span>}
 ]</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
   "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
@@ -960,15 +967,15 @@ the following conditions can be observed in the response body:</p>
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="councils-councils-json" class="resource"><h3 class="resource-heading">Councils: JSON <a href="#councils-councils-json" class="permalink">&nbsp;&para;</a></h3><p>Retrieve meta-data about a council in JSON format.</p>
 <div id="councils-councils-json-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Council: JSON</div><a href="#councils-councils-json-get" class="method get">GET</a><code class="uri">/councils/{council_id}.json</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/councils/<span class="hljs-attribute" title="council_id">W06000015</span>.json</span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
-  "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
+  "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
   "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015"</span></span>,
   "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Cardiff Council"</span></span>,
   "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"DIS"</span></span>,
-  "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"City of Cardiff Council\\nCity of Cardiff Council\\nCounty Hall Atlantic Wharf\\nCardiff"</span></span>,
+  "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Electoral Registration Officer\\nCity of Cardiff Council\\nCounty Hall Atlantic Wharf"</span></span>,
   "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF10 4UW"</span></span>,
   "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"electoralservices@cardiff.gov.uk"</span></span>,
   "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"029 2087 2034"</span></span>,
-  "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx"</span>
+  "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"www.cardiff.gov.uk/"</span>
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
   "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
   "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"object"</span></span>,
@@ -1032,15 +1039,15 @@ the following conditions can be observed in the response body:</p>
   "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
   "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015"</span></span>,
   "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
+    "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
     "<span class="hljs-attribute">council_id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015"</span></span>,
     "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Cardiff Council"</span></span>,
     "<span class="hljs-attribute">council_type</span>": <span class="hljs-value"><span class="hljs-string">"DIS"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"City of Cardiff Council\\nCity of Cardiff Council\\nCounty Hall Atlantic Wharf\\nCardiff"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Electoral Registration Officer\\nCity of Cardiff Council\\nCounty Hall Atlantic Wharf"</span></span>,
     "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">"CF10 4UW"</span></span>,
     "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"electoralservices@cardiff.gov.uk"</span></span>,
     "<span class="hljs-attribute">phone</span>": <span class="hljs-value"><span class="hljs-string">"029 2087 2034"</span></span>,
-    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"https://www.cardiff.gov.uk/ENG/Your-Council/Voting-and-elections/pages/default.aspx"</span>
+    "<span class="hljs-attribute">website</span>": <span class="hljs-value"><span class="hljs-string">"www.cardiff.gov.uk/"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
   "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
@@ -1120,16 +1127,16 @@ the following conditions can be observed in the response body:</p>
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section><section id="polling-stations" class="resource-group"><h2 class="group-heading">Polling Stations <a href="#polling-stations" class="permalink">&para;</a></h2><p>The <code>/pollingstations</code> endpoint provides access to the polling station data underpinning our polling station finder.</p>
 <div id="polling-stations-polling-stations-collection-json" class="resource"><h3 class="resource-heading">Polling Stations Collection: JSON <a href="#polling-stations-polling-stations-collection-json" class="permalink">&nbsp;&para;</a></h3><p>List all polling stations in a local authority.
 Returns an array of <a href="#polling-stations-polling-stations-json-get">polling station objects</a></p>
-<div id="polling-stations-polling-stations-collection-json-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Stations in a Local Authority: JSON</div><a href="#polling-stations-polling-stations-collection-json-get" class="method get">GET</a><code class="uri">/pollingstations.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+<div id="polling-stations-polling-stations-collection-json-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Stations in a Local Authority: JSON</div><a href="#polling-stations-polling-stations-collection-json-get" class="method get">GET</a><code class="uri">/pollingstations.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>[
   {
     "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-    "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+    "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
     "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
   </span>}
 ]</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
@@ -1138,7 +1145,7 @@ Returns an array of <a href="#polling-stations-polling-stations-json-get">pollin
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="polling-stations-polling-stations-collection-geojson" class="resource"><h3 class="resource-heading">Polling Stations Collection: GeoJSON <a href="#polling-stations-polling-stations-collection-geojson" class="permalink">&nbsp;&para;</a></h3><p>List all polling stations in a local authority.
 Returns a <a href="http://geojson.org/geojson-spec.html#feature-collection-objects">GeoJSON FeatureCollection</a>
 of <a href="#polling-stations-polling-stations-geojson-get">polling station features</a></p>
-<div id="polling-stations-polling-stations-collection-geojson-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Stations in a Local Authority: GeoJSON</div><a href="#polling-stations-polling-stations-collection-geojson-get" class="method get">GET</a><code class="uri">/pollingstations/geo.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations/geo.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+<div id="polling-stations-polling-stations-collection-geojson-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Stations in a Local Authority: GeoJSON</div><a href="#polling-stations-polling-stations-collection-geojson-get" class="method get">GET</a><code class="uri">/pollingstations/geo.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations/geo.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"FeatureCollection"</span></span>,
   "<span class="hljs-attribute">features</span>": <span class="hljs-value">[
@@ -1150,15 +1157,15 @@ of <a href="#polling-stations-polling-stations-geojson-get">polling station feat
         ]
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
-      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015.SP2-NB"</span></span>,
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"E07000170.SUM4"</span></span>,
       "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-          "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+          "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+          "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
         </span>}</span>,
-        "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-        "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-        "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+        "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+        "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+        "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
         "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
       </span>}
     </span>}
@@ -1175,16 +1182,16 @@ of <a href="#polling-stations-polling-stations-geojson-get">polling station feat
     </span>}
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="polling-stations-polling-stations-json" class="resource"><h3 class="resource-heading">Polling Stations: JSON <a href="#polling-stations-polling-stations-json" class="permalink">&nbsp;&para;</a></h3><p>Retrieve meta-data about a polling station in JSON format.</p>
-<div id="polling-stations-polling-stations-json-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling Station: JSON</div><a href="#polling-stations-polling-stations-json-get" class="method get">GET</a><code class="uri">/pollingstations.json?council_id={council_id}&amp;station_id={station_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span>&station_id=<span class="hljs-attribute" title="station_id">SP2-NB</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
-</dd><dt>station_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>SP2-NB</span></span><p>Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally</p>
+<div id="polling-stations-polling-stations-json-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling Station: JSON</div><a href="#polling-stations-polling-stations-json-get" class="method get">GET</a><code class="uri">/pollingstations.json?council_id={council_id}&amp;station_id={station_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span>&station_id=<span class="hljs-attribute" title="station_id">SUM4</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+</dd><dt>station_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>SUM4</span></span><p>Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-    "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+    "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+    "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
   </span>}</span>,
-  "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-  "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-  "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+  "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+  "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+  "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
   "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
   "<span class="hljs-attribute">$schema</span>": <span class="hljs-value"><span class="hljs-string">"http://json-schema.org/draft-04/schema#"</span></span>,
@@ -1223,8 +1230,8 @@ of <a href="#polling-stations-polling-stations-geojson-get">polling station feat
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>404</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found."</span>
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="polling-stations-polling-stations-geojson" class="resource"><h3 class="resource-heading">Polling Stations: GeoJSON <a href="#polling-stations-polling-stations-geojson" class="permalink">&nbsp;&para;</a></h3><p>Retrieve a <a href="http://geojson.org/geojson-spec.html#feature-objects">GeoJSON Feature</a> describing a polling station.</p>
-<div id="polling-stations-polling-stations-geojson-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling Station: GeoJSON</div><a href="#polling-stations-polling-stations-geojson-get" class="method get">GET</a><code class="uri">/pollingstations/geo.json?council_id={council_id}&amp;station_id={station_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations/geo.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span>&station_id=<span class="hljs-attribute" title="station_id">SP2-NB</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
-</dd><dt>station_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>SP2-NB</span></span><p>Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally</p>
+<div id="polling-stations-polling-stations-geojson-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling Station: GeoJSON</div><a href="#polling-stations-polling-stations-geojson-get" class="method get">GET</a><code class="uri">/pollingstations/geo.json?council_id={council_id}&amp;station_id={station_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingstations/geo.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span>&station_id=<span class="hljs-attribute" title="station_id">SUM4</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+</dd><dt>station_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>SUM4</span></span><p>Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">geometry</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Point"</span></span>,
@@ -1233,15 +1240,15 @@ of <a href="#polling-stations-polling-stations-geojson-get">polling station feat
     ]
   </span>}</span>,
   "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
-  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015.SP2-NB"</span></span>,
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"E07000170.SUM4"</span></span>,
   "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-    "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+    "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
     "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
@@ -1313,23 +1320,23 @@ An orphan district occurrs where we hold the boundary of a polling district but 
 The polling station which serves a district does not necessarily have to be located inside the district it serves.</p>
 <div id="polling-districts-polling-districts-collection-json" class="resource"><h3 class="resource-heading">Polling Districts Collection: JSON <a href="#polling-districts-polling-districts-collection-json" class="permalink">&nbsp;&para;</a></h3><p>List all polling districts in a local authority.
 Returns an array of <a href="#polling-districts-polling-districts-json-get">polling district objects</a></p>
-<div id="polling-districts-polling-districts-collection-json-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Districts in a Local Authority: JSON</div><a href="#polling-districts-polling-districts-collection-json-get" class="method get">GET</a><code class="uri">/pollingdistricts.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+<div id="polling-districts-polling-districts-collection-json-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Districts in a Local Authority: JSON</div><a href="#polling-districts-polling-districts-collection-json-get" class="method get">GET</a><code class="uri">/pollingdistricts.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>[
   {
     "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=W06000015&amp;district_id=NB"</span></span>,
-      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=W06000015&amp;district_id=NB"</span>
+      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=E07000170&amp;district_id=SUM4"</span></span>,
+      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=E07000170&amp;district_id=SUM4"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-    "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"NB"</span></span>,
+    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+    "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
     "<span class="hljs-attribute">polling_station</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
       </span>}</span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
       "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
     </span>}
   </span>}
@@ -1339,7 +1346,7 @@ Returns an array of <a href="#polling-districts-polling-districts-json-get">poll
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="polling-districts-polling-districts-collection-geojson" class="resource"><h3 class="resource-heading">Polling Districts Collection: GeoJSON <a href="#polling-districts-polling-districts-collection-geojson" class="permalink">&nbsp;&para;</a></h3><p>List all polling districts in a local authority.
 Returns a <a href="http://geojson.org/geojson-spec.html#feature-collection-objects">GeoJSON FeatureCollection</a>
 of <a href="#polling-districts-polling-districts-geojson-get">polling district features</a></p>
-<div id="polling-districts-polling-districts-collection-geojson-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Districts in a Local Authority: GeoJSON</div><a href="#polling-districts-polling-districts-collection-geojson-get" class="method get">GET</a><code class="uri">/pollingdistricts/geo.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts/geo.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+<div id="polling-districts-polling-districts-collection-geojson-get" class="action get"><h4 class="action-heading"><div class="name">List All Polling Districts in a Local Authority: GeoJSON</div><a href="#polling-districts-polling-districts-collection-geojson-get" class="method get">GET</a><code class="uri">/pollingdistricts/geo.json?council_id={council_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts/geo.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"FeatureCollection"</span></span>,
   "<span class="hljs-attribute">features</span>": <span class="hljs-value">[
@@ -1351,22 +1358,22 @@ of <a href="#polling-districts-polling-districts-geojson-get">polling district f
         ]
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
-      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015.NB"</span></span>,
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"E07000170.SUM4"</span></span>,
       "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=W06000015&amp;district_id=NB"</span></span>,
-          "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=W06000015&amp;district_id=NB"</span>
+          "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=E07000170&amp;district_id=SUM4"</span></span>,
+          "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=E07000170&amp;district_id=SUM4"</span>
         </span>}</span>,
-        "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-        "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"NB"</span></span>,
+        "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+        "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
         "<span class="hljs-attribute">polling_station</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-            "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+            "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+            "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
           </span>}</span>,
-          "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-          "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-          "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+          "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+          "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+          "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
           "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
         </span>}
       </span>}
@@ -1384,23 +1391,23 @@ of <a href="#polling-districts-polling-districts-geojson-get">polling district f
     </span>}
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="polling-districts-polling-districts-json" class="resource"><h3 class="resource-heading">Polling Districts: JSON <a href="#polling-districts-polling-districts-json" class="permalink">&nbsp;&para;</a></h3><p>Retrieve meta-data about a polling district in JSON format.</p>
-<div id="polling-districts-polling-districts-json-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling District: JSON</div><a href="#polling-districts-polling-districts-json-get" class="method get">GET</a><code class="uri">/pollingdistricts.json?council_id={council_id}&amp;district_id={district_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span>&district_id=<span class="hljs-attribute" title="district_id">NB</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
-</dd><dt>district_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>NB</span></span><p>Polling District ID. Polling District IDs are unique within councils, but are not unique nationally</p>
+<div id="polling-districts-polling-districts-json-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling District: JSON</div><a href="#polling-districts-polling-districts-json-get" class="method get">GET</a><code class="uri">/pollingdistricts.json?council_id={council_id}&amp;district_id={district_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span>&district_id=<span class="hljs-attribute" title="district_id">SUM4</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+</dd><dt>district_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>SUM4</span></span><p>Polling District ID. Polling District IDs are unique within councils, but are not unique nationally</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=W06000015&amp;district_id=NB"</span></span>,
-    "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=W06000015&amp;district_id=NB"</span>
+    "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=E07000170&amp;district_id=SUM4"</span></span>,
+    "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=E07000170&amp;district_id=SUM4"</span>
   </span>}</span>,
-  "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-  "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"NB"</span></span>,
+  "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+  "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
   "<span class="hljs-attribute">polling_station</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-    "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+    "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+    "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
     "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div><h5>Schema</h5><pre><code>{
@@ -1471,8 +1478,8 @@ of <a href="#polling-districts-polling-districts-geojson-get">polling district f
   "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found."</span>
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="polling-districts-polling-districts-geojson" class="resource"><h3 class="resource-heading">Polling Districts: GeoJSON <a href="#polling-districts-polling-districts-geojson" class="permalink">&nbsp;&para;</a></h3><p>Retrieve a <a href="http://geojson.org/geojson-spec.html#feature-objects">GeoJSON Feature</a>
 containing a GIS boundary and meta-data about a polling district.</p>
-<div id="polling-districts-polling-districts-geojson-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling District: GeoJSON</div><a href="#polling-districts-polling-districts-geojson-get" class="method get">GET</a><code class="uri">/pollingdistricts/geo.json?council_id={council_id}&amp;district_id={district_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts/geo.json?council_id=<span class="hljs-attribute" title="council_id">W06000015</span>&district_id=<span class="hljs-attribute" title="district_id">NB</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>W06000015</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
-</dd><dt>district_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>NB</span></span><p>Polling District ID. Polling District IDs are unique within councils, but are not unique nationally</p>
+<div id="polling-districts-polling-districts-geojson-get" class="action get"><h4 class="action-heading"><div class="name">Retrieve a Polling District: GeoJSON</div><a href="#polling-districts-polling-districts-geojson-get" class="method get">GET</a><code class="uri">/pollingdistricts/geo.json?council_id={council_id}&amp;district_id={district_id}</code></h4><h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://wheredoivote.co.uk/api/beta</span>/pollingdistricts/geo.json?council_id=<span class="hljs-attribute" title="council_id">E07000170</span>&district_id=<span class="hljs-attribute" title="district_id">SUM4</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>council_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>E07000170</span></span><p><a href="http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode">GSS code</a> for this council</p>
+</dd><dt>district_id</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>SUM4</span></span><p>Polling District ID. Polling District IDs are unique within councils, but are not unique nationally</p>
 </dd></dl></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">geometry</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"MultiPolygon"</span></span>,
@@ -1481,22 +1488,22 @@ containing a GIS boundary and meta-data about a polling district.</p>
     ]
   </span>}</span>,
   "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"Feature"</span></span>,
-  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"W06000015.NB"</span></span>,
+  "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"E07000170.SUM4"</span></span>,
   "<span class="hljs-attribute">properties</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=W06000015&amp;district_id=NB"</span></span>,
-      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=W06000015&amp;district_id=NB"</span>
+      "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=E07000170&amp;district_id=SUM4"</span></span>,
+      "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=E07000170&amp;district_id=SUM4"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-    "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"NB"</span></span>,
+    "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+    "<span class="hljs-attribute">district_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
     "<span class="hljs-attribute">polling_station</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">urls</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/?council_id=W06000015&amp;station_id=SP2-NB"</span></span>,
-        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=W06000015&amp;station_id=SP2-NB"</span>
+        "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&amp;station_id=SUM4"</span></span>,
+        "<span class="hljs-attribute">geo</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&amp;station_id=SUM4"</span>
       </span>}</span>,
-      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"http://wheredoivote.co.uk/api/beta/councils/W06000015.json"</span></span>,
-      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SP2-NB"</span></span>,
-      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Portacabin, County Hall, County Hall, Atlantic Wharf, Butetown, Cardiff"</span></span>,
+      "<span class="hljs-attribute">council</span>": <span class="hljs-value"><span class="hljs-string">"https://wheredoivote.co.uk/api/beta/councils/E07000170.json"</span></span>,
+      "<span class="hljs-attribute">station_id</span>": <span class="hljs-value"><span class="hljs-string">"SUM4"</span></span>,
+      "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-string">"Ashwood Centre\\nPortland Street, Kirkby in Ashfield"</span></span>,
       "<span class="hljs-attribute">postcode</span>": <span class="hljs-value"><span class="hljs-string">""</span>
     </span>}
   </span>}
@@ -1589,7 +1596,7 @@ containing a GIS boundary and meta-data about a polling district.</p>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>404</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Not found."</span>
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 16 Mar 2017</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 19 Mar 2017</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
