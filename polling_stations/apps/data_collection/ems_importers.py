@@ -124,6 +124,9 @@ class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter,
     northing_field = 'pollingplacenorthing'
 
     def address_record_to_dict(self, record):
+        if record.postcode.strip() == '':
+            return None
+
         if record.propertynumber.strip() == '0' or record.propertynumber.strip() == '':
             address = record.streetname.strip()
         else:
@@ -156,6 +159,9 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter,
     northing_field = 'polling_place_northing'
 
     def address_record_to_dict(self, record):
+        if record.addressline6.strip() == '':
+            return None
+
         address = ", ".join([
             record.addressline1,
             record.addressline2,
