@@ -1,6 +1,6 @@
-from data_collection.management.commands import BaseXpressCsvImporter
+from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
-class Command(BaseXpressCsvImporter):
+class Command(BaseXpressWebLookupCsvImporter):
     council_id       = 'E07000226'
     addresses_name   = 'May 2017 crawley property and polling station.csv'
     stations_name    = 'May 2017 crawley property and polling station.csv'
