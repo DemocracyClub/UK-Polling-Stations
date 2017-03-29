@@ -8,9 +8,7 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
     council_id       = 'E07000151'
     districts_url    = 'http://feeds.getmapping.com/47732.wmsx?login=61dfb362-893b-464d-8a96-fb3edb7565f8&password=yd5v5y03&LAYERS=daventry_parliamentary_polling_districts_region&TRANSPARENT=TRUE&HOVER=false&FORMAT=kml&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG%3A27700&BBOX=447025,247876,489247,288998&WIDTH=867&HEIGHT=426'
     stations_url     = 'http://feeds.getmapping.com/47733.wmsx?login=70a1b086-b9cc-4b22-9b90-7d88bd589d4b&password=sjy2869b&LAYERS=daventry_parliamentary_polling_stations&TRANSPARENT=TRUE&HOVER=false&FORMAT=kml&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG%3A27700&BBOX=449708,250805,486927,287603&WIDTH=867&HEIGHT=426'
-    elections        = [
-        'local.northamptonshire.2017-05-04'
-    ]
+    elections        = []  # 'local.northamptonshire.2017-05-04'
     duplicate_districts = set()
 
     def pre_import(self):
