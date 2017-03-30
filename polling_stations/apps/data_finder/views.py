@@ -188,8 +188,9 @@ class PostcodeView(BasePollingStationView):
 
         if 'postcode' in request.GET:
             self.kwargs['postcode'] = kwargs['postcode'] = request.GET['postcode']
-        if 'postcode' not in kwargs:
+        if 'postcode' not in kwargs or kwargs['postcode'] == '':
             return HttpResponseRedirect(reverse('home'))
+        self.kwargs['postcode'] = kwargs['postcode'] = kwargs['postcode'].upper().replace(' ', '')
 
         rh = RoutingHelper(self.kwargs['postcode'])
         endpoint = rh.get_endpoint()
