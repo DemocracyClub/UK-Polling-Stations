@@ -21,6 +21,16 @@ class Command(BaseCommand):
     """
     requires_system_checks = False
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '-n',
+            '--nosleep',
+            default=False,
+            action='store_true',
+            required=False,
+            help='Sleep between requests'
+        )
+
     def handle(self, **options):
         """
         Manually run system checks for the
@@ -34,7 +44,7 @@ class Command(BaseCommand):
         ])
 
         for council_type in settings.COUNCIL_TYPES:
-            self.get_type_from_mapit(council_type)
+            self.get_type_from_mapit(council_type, options['nosleep'])
 
     def _save_council(self, council):
         for db in settings.DATABASES.keys():
@@ -80,14 +90,16 @@ class Command(BaseCommand):
 
         ]]
         info['address'] = "\n".join([f for f in address_fields if f])
-        info['postcode'] = " ".join(council_data.get('postalcode', '')\
-            .split(' ')[-2:])
+        info['postcode'] = " ".join(
+            council_data.get('postalcode', '').split(' ')[-2:])
 
         return info
 
-    def get_type_from_mapit(self, council_type):
+    def get_type_from_mapit(self, council_type, nosleep):
         req = requests.get('%sareas/%s' % (settings.MAPIT_URL, council_type))
-        for mapit_id, council in list(req.json().items()):
+        # Sort here so the fixtures work as expected in tests
+        areas = sorted(req.json().items(), key=lambda data: int(data[0]))
+        for mapit_id, council in areas:
             council_id = council['codes'].get('gss')
             if not council_id:
                 council_id = council['codes'].get('ons')
@@ -96,7 +108,7 @@ class Command(BaseCommand):
             defaults = self.get_contact_info_from_yvm(council_id)
 
             defaults['council_type'] = council_type
-            defaults['mapit_id']= mapit_id
+            defaults['mapit_id'] = mapit_id
 
             council, created = Council.objects.update_or_create(
                 pk=council_id,
@@ -109,13 +121,15 @@ class Command(BaseCommand):
             if not council.area:
                 council.area = self.get_wkt_from_mapit(mapit_id)
                 self._save_council(council)
-                time.sleep(1)
+                if not nosleep:
+                    time.sleep(1)
             if not council.location:
                 print(council.postcode)
                 try:
                     l = geocode(council.postcode)
                 except:
                     continue
-                time.sleep(1)
+                if not nosleep:
+                    time.sleep(1)
                 council.location = Point(l['wgs84_lon'], l['wgs84_lat'])
                 self._save_council(council)

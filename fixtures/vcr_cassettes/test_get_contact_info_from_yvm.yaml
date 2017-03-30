@@ -1,0 +1,39 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
+    method: GET
+    uri: https://www.yourvotematters.co.uk/_design/nested-content/results-page2/search-voting-locations-by-districtcode?queries_distcode_query=E07000044
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA91Uy27bMBC8G/A/LHj2226RGmnQR1Kkh75SH3uhpZVFlCYFcmVDCALkN/p7/ZJy
+        pUqWVbXXouVJ4g45s7vDvYfhAMISDnfKk5OkrPmQJCpCsYb7KlgCbL0pPtucUriVew/XfEZFBK9t
+        biKlxah1QsaxQ+/n4SJxozEi66SGuxYRVEyu79iCj72xWkuyBm5t7rEPtmTYR13sS1F3VsZ9qBWj
+        zgKRooI3N5YM+rNQZj1JHdmYSyCu8RD4N5+ewZP3N2LEteDVyjOyhmREv1AQasxSa8prLiWkDpPn
+        YXM9m1/MlhdP54vl6qr8hurnciqvzpTgXoaaBhHhpog74194zjMNtZ/s7GGSfz3DH3HrFZV8x+Nx
+        UmLHDB7H0U/8VJyUP7S71VAEvlbfOVeRKOc5v85+GSNFumTcpLnzsSxgBe9ksYaqcGwMKmp/QMMC
+        X/LFbL6Ek5namfDNvESMPnIq49y5Dm8TKGz+/fGbQzCWQGqHMi6gci86jIEsHCzhiIFgsNqp47At
+        YK9io3YpAbe11hyUvMyc0nx8iyC3GuubQBmgVPlG+6RXqYpZYG/IHxVFKYfJ5WcurrJsnh+6VzkF
+        uzfQU68Y2e4X/wuPwXvM+8fG9GrqFLYX8zdSCpV2/1dGic0dcff/3SadbNi2oGh83cnsNK4aI7cm
+        TencLAx2ZXZh0NZPO5E6TPjfMNXvt3keXUajmColytbTKc8+tEZNrNt1RmRJbilF18FX03RaE43J
+        jnmMtAUNBw/DwQ9ef1I1MQcAAA==
+    headers:
+      Age: ['10633']
+      Cache-Control: ['private, max-age=0']
+      Connection: [keep-alive]
+      Content-Encoding: [gzip]
+      Content-Type: [text/html; charset=utf-8]
+      Date: ['Thu, 30 Mar 2017 13:39:41 GMT']
+      Server: [openresty]
+      Vary: [Accept-Encoding]
+      Via: [1.1 squizedge.net]
+      X-Cache: [HIT from squizedge.net]
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+    status: {code: 200, message: OK}
+version: 1
