@@ -265,8 +265,8 @@
         });
       {% else %}
         {% if tile_layer == 'OpenStreetMap' %}
-        tiles = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data © <a href="http://openstreetmap.org" target="_top">OpenStreetMap</a> contributors',
+        tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
             subdomains: 'abc'
         });
         {% else %}
