@@ -162,9 +162,13 @@ class ImporterTest(TestCase):
 
         addresses = ResidentialAddress.objects\
                                       .filter(council_id='X01000000')\
-                                      .order_by('address')
+                                      .order_by('address')\
+                                      .values_list('address', flat=True)
 
         self.assertEqual(3, len(addresses))
-        self.assertEqual('36 Abbots Park, London', addresses[0].address)
-        self.assertEqual('3 Factory Rd, Poole', addresses[1].address)
-        self.assertEqual('80 Pine Vale Cres, Bournemouth', addresses[2].address)
+        expected = set([
+            '36 Abbots Park, London',
+            '3 Factory Rd, Poole',
+            '80 Pine Vale Cres, Bournemouth',
+        ])
+        self.assertEqual(set(addresses), expected)

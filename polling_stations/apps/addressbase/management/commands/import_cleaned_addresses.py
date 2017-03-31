@@ -38,6 +38,7 @@ class Command(BaseCommand):
             "*_cleaned.csv"
         )
         for cleaned_file_path in glob.glob(glob_str):
+            cleaned_file_path = os.path.abspath(cleaned_file_path)
             print(cleaned_file_path)
             cursor = connection.cursor()
 
