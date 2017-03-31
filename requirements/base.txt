@@ -2,7 +2,6 @@
 # After the first "pip install -r", just run "pip freeze" and add the version
 # to each package in each requirements/*.txt.
 
-beautifulsoup4==4.4.0
 dj-database-url==0.3.0
 django-extensions
 django-filter==0.11.0
