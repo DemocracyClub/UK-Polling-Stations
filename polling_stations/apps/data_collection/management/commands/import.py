@@ -145,11 +145,6 @@ class Command(BaseCommand):
 
         self.output_summary()
 
-        opts = {
-            'noclean': False,
-            'verbosity': 1
-        }
-
         if kwargs['multiprocessing']:
             pool = Pool()
             pool.map(run_cmd, commands_to_run)
