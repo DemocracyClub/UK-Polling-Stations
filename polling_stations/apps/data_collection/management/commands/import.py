@@ -21,12 +21,8 @@ def load_command(f):
     return command.Command()
 
 # run a django management command from file f
-def run_cmd(f):
+def run_cmd(f, opts):
     cmd = load_command(f)
-    opts = {
-        'noclean': False,
-        'verbosity': 0
-    }
     try:
         cmd.handle(**opts)
     except Exception as e:
@@ -107,12 +103,12 @@ class Command(BaseCommand):
                 self.stdout.write(line[1])
 
     def run_commands_in_series(self, commands):
-        for f in commands:
-            run_cmd(f)
+        for f, opts in commands:
+            run_cmd(f, opts)
 
     def run_commands_in_parallel(self, commands):
         pool = Pool()
-        pool.map(run_cmd, commands)
+        pool.starmap(run_cmd, commands)
         pool.close()
         pool.join()
 
@@ -129,14 +125,15 @@ class Command(BaseCommand):
         ])
 
         base_path = os.path.dirname(__file__)
-        files = glob.glob(
-            base_path + '/import_*.py'
-        )
+        files = glob.glob(base_path + '/import_*.py')
 
         if not files:
             raise ValueError("No importers matched")
 
         commands_to_run = []
+        opts = {'noclean': False, 'verbosity': 1}
+        if kwargs['multiprocessing']:
+            opts = {'noclean': False, 'verbosity': 0}
 
         # loop over all the import scripts
         # and build up a list of management commands to run
@@ -159,10 +156,11 @@ class Command(BaseCommand):
                     if not existing_data or kwargs.get('overwrite'):
                         self.summary.append(
                             ('INFO', "Ran import script %s" % tail))
-                        commands_to_run.append(f)
+                        commands_to_run.append((f, opts))
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
 
+        # run the list of import scripts in commands_to_run[]
         if kwargs['multiprocessing']:
             # before kicking off parallel imports, close any open
             # DB connections. Otherwise, Django will throw
