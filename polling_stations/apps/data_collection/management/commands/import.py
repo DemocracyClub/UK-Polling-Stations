@@ -121,7 +121,7 @@ class Command(BaseCommand):
         commands_to_run = []
 
         # loop over all the import scripts
-        # and build up a list of commands to run
+        # and build up a list of management commands to run
         for f in files:
             head, tail = os.path.split(f)
             try:
@@ -136,8 +136,6 @@ class Command(BaseCommand):
             cmd = command.Command()
             if hasattr(cmd, 'elections'):
                 if self.importer_covers_these_elections(kwargs['elections'], cmd.elections, kwargs['regex']):
-                    # run the import script
-
                     # # Only run if
                     # existing_data = PollingStation.objects.filter(
                     #     council_id=cmd.council_id).exists()
