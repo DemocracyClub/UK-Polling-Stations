@@ -1,6 +1,7 @@
 import glob, os, re
 from importlib.machinery import SourceFileLoader
 from multiprocessing import Pool
+from django import db
 from django.apps import apps
 from django.core.management.base import BaseCommand
 
@@ -136,22 +137,26 @@ class Command(BaseCommand):
             cmd = command.Command()
             if hasattr(cmd, 'elections'):
                 if self.importer_covers_these_elections(kwargs['elections'], cmd.elections, kwargs['regex']):
-                    # # Only run if
-                    # existing_data = PollingStation.objects.filter(
-                    #     council_id=cmd.council_id).exists()
-                    # if not existing_data or kwargs.get('overwrite'):
-                    #     self.summary.append(
-                    #         ('INFO', "Ran import script %s" % tail))
-                    commands_to_run.append(f)
+                    # Only run if
+                    existing_data = PollingStation.objects.filter(
+                        council_id=cmd.council_id).exists()
+                    if not existing_data or kwargs.get('overwrite'):
+                        self.summary.append(
+                            ('INFO', "Ran import script %s" % tail))
+                        commands_to_run.append(f)
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
 
-        self.output_summary()
-
         if kwargs['multiprocessing']:
+            # before kicking off parallel imports, close any open
+            # DB connections. Otherwise, Django will throw
+            # django.db.utils.DatabaseError: lost synchronization with server
+            db.connections.close_all()
             self.run_commands_in_parallel(commands_to_run)
         else:
             self.run_commands_in_series(commands_to_run)
+
+        self.output_summary()
 
 def run_cmd(f):
     cmd = load_command(f)
