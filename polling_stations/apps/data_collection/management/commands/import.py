@@ -1,5 +1,6 @@
 import glob, os, re
 from importlib.machinery import SourceFileLoader
+from multiprocessing import Pool
 from django.apps import apps
 from django.core.management.base import BaseCommand
 
@@ -150,7 +151,6 @@ class Command(BaseCommand):
         }
 
         if kwargs['multiprocessing']:
-            from multiprocessing import Pool
             pool = Pool()
             pool.map(run_cmd, commands_to_run)
             pool.close()
