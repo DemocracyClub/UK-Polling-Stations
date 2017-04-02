@@ -142,7 +142,7 @@ class Command(BaseCommand):
         for f in files:
             head, tail = os.path.split(f)
             try:
-                command = SourceFileLoader("module.name", f).load_module()
+                cmd = load_command(f)
             except:
                 # usually we want to handle a specific exception, but in in this situation
                 # if there is any issue (at all) trying to load the module,
@@ -150,7 +150,6 @@ class Command(BaseCommand):
                 self.summary.append(('WARNING', "%s could not be loaded!" % tail))
                 continue
 
-            cmd = command.Command()
             if hasattr(cmd, 'elections'):
                 if self.importer_covers_these_elections(kwargs['elections'], cmd.elections, kwargs['regex']):
                     # Only run if
