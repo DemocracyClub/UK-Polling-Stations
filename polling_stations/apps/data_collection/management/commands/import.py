@@ -15,6 +15,22 @@ def match_in(regex, lst):
             return True
     return False
 
+# load a django management command from file f
+def load_command(f):
+    command = SourceFileLoader("module.name", f).load_module()
+    return command.Command()
+
+# run a django management command from file f
+def run_cmd(f):
+    cmd = load_command(f)
+    opts = {
+        'noclean': False,
+        'verbosity': 0
+    }
+    try:
+        cmd.handle(**opts)
+    except:
+        print("Can't run {}".format(f))
 
 """
 Run all of the import scripts relating to a particular election or elections
@@ -157,18 +173,3 @@ class Command(BaseCommand):
             self.run_commands_in_series(commands_to_run)
 
         self.output_summary()
-
-def run_cmd(f):
-    cmd = load_command(f)
-    opts = {
-        'noclean': False,
-        'verbosity': 0
-    }
-    try:
-        cmd.handle(**opts)
-    except:
-        print("Can't run {}".format(f))
-
-def load_command(f):
-    command = SourceFileLoader("module.name", f).load_module()
-    return command.Command()
