@@ -1,4 +1,4 @@
-import glob, os, re
+import glob, os, re, traceback
 from importlib.machinery import SourceFileLoader
 from multiprocessing import Pool
 from django import db
@@ -29,8 +29,9 @@ def run_cmd(f):
     }
     try:
         cmd.handle(**opts)
-    except:
-        print("Can't run {}".format(f))
+    except Exception as e:
+        traceback.print_exc()
+        raise e
 
 """
 Run all of the import scripts relating to a particular election or elections
