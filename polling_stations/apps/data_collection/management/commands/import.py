@@ -88,6 +88,16 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(line[1])
 
+    def run_commands_in_series(self, commands):
+        for f in commands:
+            run_cmd(f)
+
+    def run_commands_in_parallel(self, commands):
+        pool = Pool()
+        pool.map(run_cmd, commands)
+        pool.close()
+        pool.join()
+
     def handle(self, *args, **kwargs):
         """
         Manually run system checks for the
@@ -111,6 +121,7 @@ class Command(BaseCommand):
         commands_to_run = []
 
         # loop over all the import scripts
+        # and build up a list of commands to run
         for f in files:
             head, tail = os.path.split(f)
             try:
@@ -133,23 +144,16 @@ class Command(BaseCommand):
                     # if not existing_data or kwargs.get('overwrite'):
                     #     self.summary.append(
                     #         ('INFO', "Ran import script %s" % tail))
-                    opts = {
-                        'noclean': False,
-                        'verbosity': 0
-                    }
                     commands_to_run.append(f)
-                    if not kwargs['multiprocessing']:
-                        cmd.handle(**opts)
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
 
         self.output_summary()
 
         if kwargs['multiprocessing']:
-            pool = Pool()
-            pool.map(run_cmd, commands_to_run)
-            pool.close()
-            pool.join()
+            self.run_commands_in_parallel(commands_to_run)
+        else:
+            self.run_commands_in_series(commands_to_run)
 
 def run_cmd(f):
     cmd = load_command(f)
