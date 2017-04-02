@@ -1,5 +1,7 @@
-import glob, os, re
+import glob, os, re, traceback
 from importlib.machinery import SourceFileLoader
+from multiprocessing import Pool
+from django import db
 from django.apps import apps
 from django.core.management.base import BaseCommand
 
@@ -13,6 +15,19 @@ def match_in(regex, lst):
             return True
     return False
 
+# load a django management command from file f
+def load_command(f):
+    command = SourceFileLoader("module.name", f).load_module()
+    return command.Command()
+
+# run a django management command from file f
+def run_cmd(f, opts):
+    cmd = load_command(f)
+    try:
+        cmd.handle(**opts)
+    except Exception as e:
+        traceback.print_exc()
+        raise e
 
 """
 Run all of the import scripts relating to a particular election or elections
@@ -59,6 +74,15 @@ class Command(BaseCommand):
             default=False
         )
 
+        parser.add_argument(
+            '-m',
+            '--multiprocessing',
+            help='<Optional> Use multiprocessing for import',
+            action='store_true',
+            required=False,
+            default=False
+        )
+
     def importer_covers_these_elections(self, args_elections, importer_elections, regex):
         for election in args_elections:
             if regex:
@@ -78,6 +102,16 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(line[1])
 
+    def run_commands_in_series(self, commands):
+        for f, opts in commands:
+            run_cmd(f, opts)
+
+    def run_commands_in_parallel(self, commands):
+        pool = Pool()
+        pool.starmap(run_cmd, commands)
+        pool.close()
+        pool.join()
+
     def handle(self, *args, **kwargs):
         """
         Manually run system checks for the
@@ -90,14 +124,23 @@ class Command(BaseCommand):
             apps.get_app_config('pollingstations')
         ])
 
-        files = glob.glob(
-            os.path.abspath('polling_stations/apps/data_collection/management/commands') + '/import_*.py'
-        )
+        base_path = os.path.dirname(__file__)
+        files = glob.glob(base_path + '/import_*.py')
+
+        if not files:
+            raise ValueError("No importers matched")
+
+        commands_to_run = []
+        opts = {'noclean': False, 'verbosity': 1}
+        if kwargs['multiprocessing']:
+            opts = {'noclean': False, 'verbosity': 0}
+
         # loop over all the import scripts
+        # and build up a list of management commands to run
         for f in files:
             head, tail = os.path.split(f)
             try:
-                command = SourceFileLoader("module.name", f).load_module()
+                cmd = load_command(f)
             except:
                 # usually we want to handle a specific exception, but in in this situation
                 # if there is any issue (at all) trying to load the module,
@@ -105,23 +148,26 @@ class Command(BaseCommand):
                 self.summary.append(('WARNING', "%s could not be loaded!" % tail))
                 continue
 
-            cmd = command.Command()
             if hasattr(cmd, 'elections'):
                 if self.importer_covers_these_elections(kwargs['elections'], cmd.elections, kwargs['regex']):
-                    # run the import script
-
                     # Only run if
                     existing_data = PollingStation.objects.filter(
                         council_id=cmd.council_id).exists()
                     if not existing_data or kwargs.get('overwrite'):
                         self.summary.append(
                             ('INFO', "Ran import script %s" % tail))
-                        opts = {
-                            'noclean': False,
-                            'verbosity': 1
-                        }
-                        cmd.handle(**opts)
+                        commands_to_run.append((f, opts))
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
+
+        # run the list of import scripts in commands_to_run[]
+        if kwargs['multiprocessing']:
+            # before kicking off parallel imports, close any open
+            # DB connections. Otherwise, Django will throw
+            # django.db.utils.DatabaseError: lost synchronization with server
+            db.connections.close_all()
+            self.run_commands_in_parallel(commands_to_run)
+        else:
+            self.run_commands_in_series(commands_to_run)
 
         self.output_summary()
