@@ -152,8 +152,7 @@ class Command(BaseCommand):
             pool.join()
 
 def run_cmd(f):
-    command = SourceFileLoader("module.name", f).load_module()
-    cmd = command.Command()
+    cmd = load_command(f)
     opts = {
         'noclean': False,
         'verbosity': 0
@@ -162,3 +161,7 @@ def run_cmd(f):
         cmd.handle(**opts)
     except:
         print("Can't run {}".format(f))
+
+def load_command(f):
+    command = SourceFileLoader("module.name", f).load_module()
+    return command.Command()
