@@ -1,3 +1,4 @@
+import html
 import time
 import json
 
@@ -81,7 +82,7 @@ class Command(BaseCommand):
 
         council_data = json.loads(str(content))['registrationOffice']
         info = {}
-        info['name'] = council_data.get('office')
+        info['name'] = html.unescape(council_data.get('office'))
         info['website'] = self.clean_url(council_data.get('website'))
         info['email'] = council_data.get('email')
         info['phone'] = council_data.get('telephone', '').replace('</a>', '')\
