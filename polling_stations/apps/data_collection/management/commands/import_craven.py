@@ -7,7 +7,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     addresses_name  = 'Craven Property List with UPRNs.csv'
     stations_name   = 'CravePolling Station List.csv'
     elections       = ['local.north-yorkshire.2017-05-04']
-    csv_encoding    = 'windows-1253'
+    csv_encoding    = 'windows-1252'
 
     def get_station_point(self, record):
         return Point(
