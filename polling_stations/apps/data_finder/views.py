@@ -271,6 +271,29 @@ class WeDontKnowView(PostcodeView):
         return None
 
 
+class MultipleCouncilsView(TemplateView):
+    # because sometimes "we don't know" just isn't uncertain enough
+    template_name = "multiple_councils.html"
+
+    def get(self, request, *args, **kwargs):
+        rh = RoutingHelper(self.kwargs['postcode'])
+        endpoint = rh.get_endpoint()
+        if endpoint.view != 'multiple_councils_view':
+            return HttpResponseRedirect(
+                reverse(endpoint.view, kwargs=endpoint.kwargs)
+            )
+
+        self.council_ids = rh.councils
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **context):
+        context['councils'] = []
+        for council_id in self.council_ids:
+            context['councils'].append(Council.objects.get(pk=council_id))
+        return context
+
+
 def signup(request, postcode, model, fields):
     if request.POST.get('join', 'false') == 'true':
         join_list = True

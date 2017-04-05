@@ -17,6 +17,7 @@ from data_finder.views import (
     AddressView,
     AddressFormView,
     WeDontKnowView,
+    MultipleCouncilsView,
     campaign_signup
 )
 
@@ -36,6 +37,8 @@ core_patterns = patterns(
         AddressView.as_view(), name='address_view'),
     url(r'^we_dont_know/(?P<postcode>.+)/$',
         WeDontKnowView.as_view(), name='we_dont_know'),
+    url(r'^multiple_councils/(?P<postcode>.+)/$',
+        MultipleCouncilsView.as_view(), name='multiple_councils_view'),
     url(r'^address_select/(?P<postcode>.+)/$',
         AddressFormView.as_view(), name='address_select_view'),
     url(r'^campaign_signup/(?P<postcode>.+)/$',
