@@ -30,7 +30,7 @@ class Onsad(models.Model):
     uprn = models.CharField(primary_key=True, max_length=12)
     """
     Note: this is not a FK to Address because the ONSAD is released quarterly
-    and AddressBase is released monthly, so these 2 sources won't
+    and AddressBase is released every 6 weeks, so these 2 sources won't
     necessarily match up exactly.
 
     Like every aspect of this project, it is *not that simple*
