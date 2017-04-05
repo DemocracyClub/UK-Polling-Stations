@@ -33,16 +33,20 @@ class Command(BaseCommand):
             apps.get_app_config('pollingstations')
         ])
 
-        glob_str = os.path.join(
-            kwargs['cleaned_ab_path'],
-            "*_cleaned.csv"
-        )
-        for cleaned_file_path in glob.glob(glob_str):
-            cleaned_file_path = os.path.abspath(cleaned_file_path)
-            print(cleaned_file_path)
-            cursor = connection.cursor()
+        cursor = connection.cursor()
+        print("clearing existing data..")
+        cursor.execute("TRUNCATE TABLE addressbase_address;")
 
-            cursor.execute("""
-                COPY addressbase_address (UPRN,address,postcode,location)
-                FROM '{}' (FORMAT CSV, DELIMITER ',', quote '"');
-            """.format(cleaned_file_path))
+        cleaned_file_path = os.path.abspath(os.path.join(
+            kwargs['cleaned_ab_path'],
+            "addressbase_cleaned.csv"
+        ))
+
+        print("importing from %s.." % (cleaned_file_path))
+
+        cursor.execute("""
+            COPY addressbase_address (UPRN,address,postcode,location)
+            FROM '{}' (FORMAT CSV, DELIMITER ',', quote '"');
+        """.format(cleaned_file_path))
+
+        print("...done")
