@@ -2,6 +2,7 @@
 import os
 import re
 import json
+import signal
 from contextlib import contextmanager
 from django.template.defaultfilters import slugify
 
@@ -41,7 +42,12 @@ def no_errors(step):
 
 @after.each_example
 def take_down(scenario, outline, steps):
-    world.browser.quit()
+    try:
+        # we can do this the easy way...
+        world.browser.quit()
+    except OSError:
+        # ..or we can do this the hard way
+        world.browser.service.process.send_signal(signal.SIGTERM)
 
 @around.each_step
 @contextmanager
