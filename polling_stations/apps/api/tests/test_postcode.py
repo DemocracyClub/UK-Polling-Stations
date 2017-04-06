@@ -41,6 +41,14 @@ def mock_geocode(postcode):
             'gss_codes': [],
         }
 
+    # multiple councils
+    if (postcode == 'EE11EE'):
+        return {
+            'wgs84_lon': 68.90625,
+            'wgs84_lat': 48.3416461723746,  # doesn't really matter..
+            'gss_codes': [],
+        }
+
 
 class PostcodeTest(TestCase):
     fixtures = ['polling_stations/apps/api/fixtures/test_address_postcode.json']
@@ -89,3 +97,10 @@ class PostcodeTest(TestCase):
             geocoder=mock_geocode, log=False)
 
         self.assertEqual(500, response.status_code)
+
+    def test_blacklist(self):
+        response = self.endpoint.retrieve(self.request, 'EE11EE', 'json',
+            geocoder=mock_geocode, log=False)
+        self.assertEqual(200, response.status_code)
+        self.assertIsNone(response.data['council'])
+        self.assertFalse(response.data['polling_station_known'])
