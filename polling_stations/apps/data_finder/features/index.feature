@@ -50,3 +50,12 @@ Feature: Check Postcodes
     And I should see "We don't have data for your area."
     And I should see "We think everyone should be able to find their polling station online. If you agree, please sign up below."
     And No errors were thrown
+
+    Scenario: Check multiple councils
+    When I visit site page "/"
+    Then I should see "Find your polling station"
+    Then I fill in "postcode" with "DD11DD"
+    Then I submit the only form
+    Then I should see "Contact Your Council"
+    And I should see "Residents in DD11DD may be in one of the following council areas:"
+    And No errors were thrown
