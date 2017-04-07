@@ -28,7 +28,12 @@ def geocode_point_only(postcode, sleep=True):
     """
     Try to get centre of the point from AddressBase, fall back to MapIt
     """
-    addresses = Address.objects.filter(postcode=postcode)
+
+    # ensure postcode is in the right format for addressbase
+    formatted_postcode = re.sub('[^A-Z0-9]', '', postcode.upper())
+    formatted_postcode = formatted_postcode[:-3] + ' ' + formatted_postcode[-3:]
+
+    addresses = Address.objects.filter(postcode=formatted_postcode)
     if not addresses:
         # optional sleep to avoid hammering mapit
         if sleep:
