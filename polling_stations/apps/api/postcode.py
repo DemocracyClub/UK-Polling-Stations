@@ -76,14 +76,17 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         location = Point(l['wgs84_lon'], l['wgs84_lat'])
         ret['postcode_location'] = location
 
-        # council object
-        try:
-            council = Council.objects.get(area__covers=location)
-        except ObjectDoesNotExist:
-            return Response({'detail': 'Internal server error'}, 500)
-        ret['council'] = council
-
         rh = RoutingHelper(postcode)
+
+        # council object
+        if rh.route_type == "multiple_councils":
+            council = None
+        else:
+            try:
+                council = Council.objects.get(area__covers=location)
+            except ObjectDoesNotExist:
+                return Response({'detail': 'Internal server error'}, 500)
+        ret['council'] = council
 
         ret['addresses'] = self.generate_addresses(rh)
 

@@ -66,6 +66,17 @@ class LogLookUpMixin(object):
         LoggedPostcode.objects.create(**kwargs)
 
 
+class LanguageMixin(object):
+
+    def get_language(self):
+        if self.request.session and\
+            translation.LANGUAGE_SESSION_KEY in self.request.session and\
+            self.request.session[translation.LANGUAGE_SESSION_KEY]:
+            return self.request.session[translation.LANGUAGE_SESSION_KEY]
+        else:
+            return ''
+
+
 class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
     form_class = PostcodeLookupForm
     template_name = "home.html"
@@ -94,7 +105,7 @@ class PrivacyView(WhiteLabelTemplateOverrideMixin, TemplateView):
 
 
 class BasePollingStationView(
-    TemplateView, LogLookUpMixin, metaclass=abc.ABCMeta):
+    TemplateView, LogLookUpMixin, LanguageMixin, metaclass=abc.ABCMeta):
 
     template_name = "postcode_view.html"
 
@@ -119,14 +130,6 @@ class BasePollingStationView(
             )
         else:
             return None
-
-    def get_language(self):
-        if self.request.session and\
-            translation.LANGUAGE_SESSION_KEY in self.request.session and\
-            self.request.session[translation.LANGUAGE_SESSION_KEY]:
-            return self.request.session[translation.LANGUAGE_SESSION_KEY]
-        else:
-            return ''
 
     def has_election(self):
         try:
@@ -269,6 +272,37 @@ class WeDontKnowView(PostcodeView):
 
     def get_station(self):
         return None
+
+
+class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
+    # because sometimes "we don't know" just isn't uncertain enough
+    template_name = "multiple_councils.html"
+
+    def get(self, request, *args, **kwargs):
+        rh = RoutingHelper(self.kwargs['postcode'])
+        endpoint = rh.get_endpoint()
+        if endpoint.view != 'multiple_councils_view':
+            return HttpResponseRedirect(
+                reverse(endpoint.view, kwargs=endpoint.kwargs)
+            )
+
+        self.council_ids = rh.councils
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **context):
+        context['councils'] = []
+        for council_id in self.council_ids:
+            context['councils'].append(Council.objects.get(pk=council_id))
+
+        log_data = {
+            'we_know_where_you_should_vote': False,
+            'location': None,
+            'council': None,
+        }
+        self.log_postcode(self.kwargs['postcode'], log_data, type(self).__name__)
+
+        return context
 
 
 def signup(request, postcode, model, fields):

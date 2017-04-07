@@ -1,18 +1,10 @@
 import csv
 import os
 import glob
-
-from django.apps import apps
-from django.core.management.base import BaseCommand
+from addressbase.management.base_command import BaseAddressBaseCommand
 
 
-class Command(BaseCommand):
-    """
-    Turn off auto system check for all apps
-    We will maunally run system checks only for the
-    'addressbase' and 'pollingstations' apps
-    """
-    requires_system_checks = False
+class Command(BaseAddressBaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -22,16 +14,7 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **kwargs):
-        """
-        Manually run system checks for the
-        'addressbase' and 'pollingstations' apps
-        Management commands can ignore checks that only apply to
-        the apps supporting the website part of the project
-        """
-        self.check([
-            apps.get_app_config('addressbase'),
-            apps.get_app_config('pollingstations')
-        ])
+        self.perform_checks()
 
         self.fieldnames = [
             'UPRN',

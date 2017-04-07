@@ -24,3 +24,53 @@ class Address(models.Model):
         managed = getattr(settings, 'MANAGE_ADDRESSBASE_MODEL', True)
 
     objects = AddressManager()
+
+
+class Onsad(models.Model):
+    uprn = models.CharField(primary_key=True, max_length=12)
+    """
+    Note: this is not a FK to Address because the ONSAD is released quarterly
+    and AddressBase is released every 6 weeks, so these 2 sources won't
+    necessarily match up exactly.
+
+    Like every aspect of this project, it is *not that simple*
+    """
+    cty = models.CharField(blank=True, max_length=9)
+    lad = models.CharField(blank=True, max_length=9)
+    ward = models.CharField(blank=True, max_length=9)
+    hlthau = models.CharField(blank=True, max_length=9)
+    ctry = models.CharField(blank=True, max_length=9)
+    rgn = models.CharField(blank=True, max_length=9)
+    pcon = models.CharField(blank=True, max_length=9)
+    eer = models.CharField(blank=True, max_length=9)
+    ttwa = models.CharField(blank=True, max_length=9)
+    nuts = models.CharField(blank=True, max_length=9)
+    park = models.CharField(blank=True, max_length=9)
+    oa11 = models.CharField(blank=True, max_length=9)
+    lsoa11 = models.CharField(blank=True, max_length=9)
+    msoa11 = models.CharField(blank=True, max_length=9)
+    parish = models.CharField(blank=True, max_length=9)
+    wz11 = models.CharField(blank=True, max_length=9)
+    ccg = models.CharField(blank=True, max_length=9)
+    bua11 = models.CharField(blank=True, max_length=9)
+    buasd11 = models.CharField(blank=True, max_length=9)
+    ruc11 = models.CharField(blank=True, max_length=2)
+    oac11 = models.CharField(blank=True, max_length=3)
+    lep1 = models.CharField(blank=True, max_length=9)
+    lep2 = models.CharField(blank=True, max_length=9)
+    pfa = models.CharField(blank=True, max_length=9)
+    imd = models.CharField(blank=True, max_length=5)
+
+
+class Blacklist(models.Model):
+    """
+    Model for storing postcodes containing UPRNs in >1 local authorities
+    This is intentionally de-normalised for performance reasons
+    Ideally ('postcode', 'lad') should be a composite PK,
+    but django's ORM doesn't support them.
+    """
+    postcode = models.CharField(blank=False, max_length=15, db_index=True)
+    lad = models.CharField(blank=False, max_length=9)
+
+    class Meta:
+        unique_together = (('postcode', 'lad'))

@@ -117,5 +117,21 @@
         },
         "pk": 1,
         "model": "pollingstations.pollingdistrict"
+    },
+    {
+        "fields": {
+            "postcode": "DD11DD",
+            "lad": "X01000001"
+        },
+        "pk": 1,
+        "model": "addressbase.blacklist"
+    },
+    {
+        "fields": {
+            "postcode": "DD11DD",
+            "lad": "W06000022"
+        },
+        "pk": 2,
+        "model": "addressbase.blacklist"
     }
 ]
