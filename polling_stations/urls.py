@@ -22,11 +22,6 @@ from data_finder.views import (
 )
 
 
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-admin.autodiscover()
-
-
 core_patterns = patterns(
     '',
     url(r'^postcode/(?P<postcode>.+)/$',
@@ -57,8 +52,6 @@ extra_patterns = patterns(
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^api/beta/', include(router.urls)),
     url(r'^api/$', ApiDocsView.as_view(), name='api_docs'),
-
-    url(r'^admin/', include(admin.site.urls)),
 
     url(r'^league_table', include('data_collection.urls')),
     url(r'^coverage$', CoverageView.as_view(), name='coverage'),
