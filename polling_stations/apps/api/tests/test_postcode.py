@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from api.postcode import PostcodeViewSet
+from data_finder.helpers import MultipleCouncilsException
 
 
 """
@@ -43,11 +44,7 @@ def mock_geocode(postcode):
 
     # multiple councils
     if (postcode == 'EE11EE'):
-        return {
-            'wgs84_lon': 68.90625,
-            'wgs84_lat': 48.3416461723746,  # doesn't really matter..
-            'gss_codes': [],
-        }
+        raise MultipleCouncilsException()
 
 
 class PostcodeTest(TestCase):
