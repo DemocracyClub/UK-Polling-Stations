@@ -30,10 +30,11 @@ from pollingstations.models import (
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
+    AddressSorter,
+    DirectionsHelper,
     geocode,
     has_election,
-    DirectionsHelper,
-    AddressSorter,
+    MultipleCouncilsException,
     PostcodeError,
     RateLimitError,
     RoutingHelper
@@ -204,7 +205,15 @@ class PostcodeView(BasePollingStationView):
         else:
             # we are already in postcode_view
             self.postcode = kwargs['postcode']
-            context = self.get_context_data(**kwargs)
+
+            try:
+                context = self.get_context_data(**kwargs)
+            except MultipleCouncilsException:
+                return HttpResponseRedirect(
+                    reverse('multiple_councils_view',
+                    kwargs={'postcode': self.postcode})
+                )
+
             return self.render_to_response(context)
 
     def get_location(self):
@@ -241,7 +250,15 @@ class AddressView(BasePollingStationView):
             slug=self.kwargs['address_slug']
         )
         self.postcode = self.address.postcode
-        context = self.get_context_data(**kwargs)
+
+        try:
+            context = self.get_context_data(**kwargs)
+        except MultipleCouncilsException:
+            return HttpResponseRedirect(
+                reverse('multiple_councils_view',
+                kwargs={'postcode': self.postcode})
+            )
+
         return self.render_to_response(context)
 
     def get_location(self):
