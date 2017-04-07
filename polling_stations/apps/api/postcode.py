@@ -9,6 +9,7 @@ from data_finder.helpers import (
     geocode,
     PostcodeError,
     RateLimitError,
+    MultipleCouncilsException,
     RoutingHelper
 )
 from pollingstations.models import PollingStation, CustomFinder
@@ -68,18 +69,22 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         # (we need 'gss_codes' to pass to get_custom_finder)
         try:
             l = geocoder(postcode)
+            location = Point(l['wgs84_lon'], l['wgs84_lat'])
         except PostcodeError as e:
             return Response({'detail': e.args[0]}, status=400)
         except RateLimitError as e:
             return Response({'detail': e.args[0]}, status=403)
+        except MultipleCouncilsException as e:
+            l = {}
+            location = None
 
-        location = Point(l['wgs84_lon'], l['wgs84_lat'])
         ret['postcode_location'] = location
 
         rh = RoutingHelper(postcode)
 
         # council object
         if rh.route_type == "multiple_councils":
+            # We can't assign this council to exactly one council
             council = None
         else:
             try:
@@ -98,7 +103,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
         # get custom finder (if no polling station)
         ret['custom_finder'] = None
-        if not ret['polling_station_known']:
+        if not ret['polling_station_known'] and 'gss_codes' in l:
             ret['custom_finder'] = self.generate_custom_finder(l['gss_codes'], postcode)
 
         # create log entry
