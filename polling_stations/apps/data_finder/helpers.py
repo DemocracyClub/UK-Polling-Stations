@@ -32,7 +32,7 @@ class RateLimitError(Exception):
         logger.error(message)
 
 
-class MapitWrapper:
+class MapitGeocoder:
 
     def __init__(self, postcode):
         self.postcode = postcode
@@ -91,7 +91,7 @@ class MapitWrapper:
         }
 
 
-class AddressBaseWrapper:
+class AddressBaseGeocoder:
 
     def __init__(self, postcode):
         self.postcode = self.format_postcode(postcode)
@@ -170,8 +170,8 @@ class AddressBaseWrapper:
 
 
 def geocode_point_only(postcode, sleep=True):
-    addressbase = AddressBaseWrapper(postcode)
-    mapit = MapitWrapper(postcode)
+    addressbase = AddressBaseGeocoder(postcode)
+    mapit = MapitGeocoder(postcode)
 
     try:
         # first try addressbase
@@ -197,8 +197,8 @@ def geocode_point_only(postcode, sleep=True):
 
 
 def geocode(postcode):
-    addressbase = AddressBaseWrapper(postcode)
-    mapit = MapitWrapper(postcode)
+    addressbase = AddressBaseGeocoder(postcode)
+    mapit = MapitGeocoder(postcode)
 
     try:
         # first try addressbase

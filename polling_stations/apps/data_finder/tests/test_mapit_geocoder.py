@@ -1,10 +1,10 @@
 import json
 from os.path import abspath, dirname
 from django.test import TestCase
-from data_finder.helpers import MapitWrapper, PostcodeError
+from data_finder.helpers import MapitGeocoder, PostcodeError
 
 
-class MapitWrapperValidMock(MapitWrapper):
+class MapitGeocoderValidMock(MapitGeocoder):
 
     # Mock out the HTTP response from mapit so it returns a known good value
     def call_mapit(self):
@@ -12,17 +12,17 @@ class MapitWrapperValidMock(MapitWrapper):
             dirname(__file__) + '/../fixtures/mapit_responses/SW1A1AA.json'
         )))
 
-class MapitWrapperNoLocationMock(MapitWrapper):
+class MapitGeocoderNoLocationMock(MapitGeocoder):
 
     # Mock out the HTTP response from mapit so it returns a known bad value
     def call_mapit(self):
         return {"postcode": "JE3 7DW", "areas": {}}
 
 
-class MapitWrapperValidTest(TestCase):
+class MapitGeocoderValidTest(TestCase):
 
-    def test_mapit_wrapper(self):
-        mapit = MapitWrapperValidMock('SW1A 1AA')
+    def test_mapit_geocoder(self):
+        mapit = MapitGeocoderValidMock('SW1A 1AA')
         result = mapit.geocode()
         self.assertEqual('mapit', result['source'])
         self.assertEqual(-0.14158760012261312, result['wgs84_lon'])
@@ -33,8 +33,8 @@ class MapitWrapperValidTest(TestCase):
             result['gss_codes']
         )
 
-class MapitWrapperNoLocationTest(TestCase):
+class MapitGeocoderNoLocationTest(TestCase):
 
-    def test_mapit_wrapper(self):
-        mapit = MapitWrapperNoLocationMock('JE3 7DW')
+    def test_mapit_geocoder(self):
+        mapit = MapitGeocoderNoLocationMock('JE3 7DW')
         self.assertRaises(PostcodeError, mapit.geocode)

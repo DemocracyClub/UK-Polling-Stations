@@ -1,7 +1,7 @@
 import mock
 from django.test import TestCase
 from data_finder.helpers import (
-    geocode, geocode_point_only, MapitWrapper, MultipleCouncilsException
+    geocode, geocode_point_only, MapitGeocoder, MultipleCouncilsException
 )
 
 
@@ -18,7 +18,7 @@ class GeocodeTest(TestCase):
 
     fixtures = ['test_addressbase.json']
 
-    @mock.patch("data_finder.helpers.MapitWrapper.geocode", mock_geocode)
+    @mock.patch("data_finder.helpers.MapitGeocoder.geocode", mock_geocode)
     def test_no_records(self):
         """
         We can't find any records for the given postcode in the AddressBase table
@@ -28,7 +28,7 @@ class GeocodeTest(TestCase):
         result = geocode('DD1 1DD')
         self.assertEqual('mapit', result['source'])
 
-    @mock.patch("data_finder.helpers.MapitWrapper.geocode", mock_geocode)
+    @mock.patch("data_finder.helpers.MapitGeocoder.geocode", mock_geocode)
     def test_no_codes(self):
         """
         We find records for the given postcode in the AddressBase table
@@ -39,7 +39,7 @@ class GeocodeTest(TestCase):
         result = geocode('AA11AA')
         self.assertEqual('mapit', result['source'])
 
-    @mock.patch("data_finder.helpers.MapitWrapper.geocode", mock_geocode)
+    @mock.patch("data_finder.helpers.MapitGeocoder.geocode", mock_geocode)
     def test_multiple_councils(self):
         """
         We find records for the given postcode in the AddressBase table
@@ -55,7 +55,7 @@ class GeocodeTest(TestCase):
             exception_thrown = True
         self.assertTrue(exception_thrown)
 
-    @mock.patch("data_finder.helpers.MapitWrapper.geocode", mock_geocode)
+    @mock.patch("data_finder.helpers.MapitGeocoder.geocode", mock_geocode)
     def test_valid(self):
         """
         We find records for the given postcode in the AddressBase table
@@ -71,7 +71,7 @@ class GeocodePointOnlyTest(TestCase):
 
     fixtures = ['test_addressbase.json']
 
-    @mock.patch("data_finder.helpers.MapitWrapper.geocode", mock_geocode)
+    @mock.patch("data_finder.helpers.MapitGeocoder.geocode", mock_geocode)
     def test_no_records(self):
         """
         We can't find any records for the given postcode in the AddressBase table
@@ -81,7 +81,7 @@ class GeocodePointOnlyTest(TestCase):
         result = geocode_point_only('DD1 1DD', sleep=False)
         self.assertEqual('mapit', result['source'])
 
-    @mock.patch("data_finder.helpers.MapitWrapper.geocode", mock_geocode)
+    @mock.patch("data_finder.helpers.MapitGeocoder.geocode", mock_geocode)
     def test_valid(self):
         """
         We find records for the given postcode in the AddressBase table

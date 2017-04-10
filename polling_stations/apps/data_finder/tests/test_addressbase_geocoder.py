@@ -1,11 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from data_finder.helpers import (
-    AddressBaseWrapper, CodesNotFoundException, MultipleCouncilsException
+    AddressBaseGeocoder, CodesNotFoundException, MultipleCouncilsException
 )
 
 
-class AddressBaseWrapperTest(TestCase):
+class AddressBaseGeocoderTest(TestCase):
 
     fixtures = ['test_addressbase.json']
 
@@ -15,7 +15,7 @@ class AddressBaseWrapperTest(TestCase):
 
         Exception of class ObjectDoesNotExist should be thrown
         """
-        addressbase = AddressBaseWrapper('DD1 1DD')
+        addressbase = AddressBaseGeocoder('DD1 1DD')
         exception_thrown = False
         try:
             result = addressbase.geocode()
@@ -37,7 +37,7 @@ class AddressBaseWrapperTest(TestCase):
 
         Exception of class CodesNotFoundException should be thrown
         """
-        addressbase = AddressBaseWrapper('AA11AA')
+        addressbase = AddressBaseGeocoder('AA11AA')
         exception_thrown = False
         try:
             result = addressbase.geocode()
@@ -57,7 +57,7 @@ class AddressBaseWrapperTest(TestCase):
 
         Exception of class MultipleCouncilsException should be thrown
         """
-        addressbase = AddressBaseWrapper('CC11CC')
+        addressbase = AddressBaseGeocoder('CC11CC')
         exception_thrown = False
         try:
             result = addressbase.geocode()
@@ -79,7 +79,7 @@ class AddressBaseWrapperTest(TestCase):
         Note that in this case, the ONSAD table does not contain corresponding
         records for *all* of the UPRNs we found, but we accept the result anyway
         """
-        addressbase = AddressBaseWrapper('bb 1   1B B')  # intentionally spurious whitespace and case
+        addressbase = AddressBaseGeocoder('bb 1   1B B')  # intentionally spurious whitespace and case
         result = addressbase.geocode()
         self.assertEqual('addressbase', result['source'])
         self.assertEqual('B01000001', result['council_gss'])
