@@ -191,55 +191,67 @@ class AddressBaseGeocoder(BaseGeocoder):
 
 
 def geocode_point_only(postcode, sleep=True):
-    addressbase = AddressBaseGeocoder(postcode)
-    mapit = MapitGeocoder(postcode)
+    geocoders = (AddressBaseGeocoder(postcode), MapitGeocoder(postcode))
+    for geocoder in geocoders:
+        try:
+            return geocoder.run(True)
+        except ObjectDoesNotExist:
+            # we couldn't find this postcode in AddressBase
+            # fall back to the next source
 
-    try:
-        # first try addressbase
-        result = addressbase.geocode_point_only()
-    except ObjectDoesNotExist:
-        # we couldn't find this postcode in AddressBase: fall back to mapit
+            # optional sleep to avoid hammering external services
+            if sleep:
+                time.sleep(1.3)
 
-        # optional sleep to avoid hammering mapit
-        if sleep:
-            time.sleep(1.3)
+            continue
+        except PostcodeError:
+            # we were unable to geocode this postcode using mapit
+            # re-raise the exception.
+            # Note: in future we may want to fall back to yet another source
+            raise
+        except:
+            # something else went wrong:
+            # lets give the next source a try anyway
 
-        result = mapit.geocode()
-    except:
-        # something else went wrong: lets give mapit a go anyway
+            # optional sleep to avoid hammering external services
+            if sleep:
+                time.sleep(1.3)
 
-        # optional sleep to avoid hammering mapit
-        if sleep:
-            time.sleep(1.3)
+            continue
 
-        result = mapit.geocode()
-
-    return result
+    # All of our attempts to geocode this failed. Raise a generic exception
+    raise PostcodeError('Could not geocode from any source')
 
 
 def geocode(postcode):
-    addressbase = AddressBaseGeocoder(postcode)
-    mapit = MapitGeocoder(postcode)
+    geocoders = (AddressBaseGeocoder(postcode), MapitGeocoder(postcode))
+    for geocoder in geocoders:
+        try:
+            return geocoder.run(False)
+        except ObjectDoesNotExist:
+            # we couldn't find this postcode in AddressBase
+            # fall back to the next source
+            continue
+        except CodesNotFoundException:
+            # we did find this postcode in AddressBase, but there were no
+            # corresponding codes in ONSAD: fall back to the next source
+            continue
+        except MultipleCouncilsException:
+            # this postcode contains uprns in multiple local authorities
+            # re-raise the exception.
+            raise
+        except PostcodeError:
+            # we were unable to geocode this postcode using mapit
+            # re-raise the exception.
+            # Note: in future we may want to fall back to yet another source
+            raise
+        except:
+            # something else went wrong:
+            # lets give the next source a try anyway
+            continue
 
-    try:
-        # first try addressbase
-        result = addressbase.geocode()
-    except ObjectDoesNotExist:
-        # we couldn't find this postcode in AddressBase: fall back to mapit
-        result = mapit.geocode()
-    except CodesNotFoundException:
-        # we did find this postcode in AddressBase, but there were no
-        # corresponding codes in ONSAD: fall back to mapit
-        result = mapit.geocode()
-    except MultipleCouncilsException:
-        # this postcode contains uprns in multiple local authorities
-        # re-raise the exception.
-        raise
-    except:
-        # something else went wrong: lets give mapit a go anyway
-        result = mapit.geocode()
-
-    return result
+    # All of our attempts to geocode this failed. Raise a generic exception
+    raise PostcodeError('Could not geocode from any source')
 
 
 class AddressSorter:
