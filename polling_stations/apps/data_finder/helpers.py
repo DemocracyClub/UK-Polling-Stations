@@ -91,10 +91,6 @@ class MapitWrapper:
         }
 
 
-def mapit_wrapper_factory(postcode):
-    return MapitWrapper(postcode)
-
-
 class AddressBaseWrapper:
 
     def __init__(self, postcode):
@@ -173,9 +169,9 @@ class AddressBaseWrapper:
         }
 
 
-def geocode_point_only(postcode, sleep=True, mapit=mapit_wrapper_factory):
+def geocode_point_only(postcode, sleep=True):
     addressbase = AddressBaseWrapper(postcode)
-    mapit = mapit(postcode)
+    mapit = MapitWrapper(postcode)
 
     try:
         # first try addressbase
@@ -200,9 +196,9 @@ def geocode_point_only(postcode, sleep=True, mapit=mapit_wrapper_factory):
     return result
 
 
-def geocode(postcode, mapit=mapit_wrapper_factory):
+def geocode(postcode):
     addressbase = AddressBaseWrapper(postcode)
-    mapit = mapit(postcode)
+    mapit = MapitWrapper(postcode)
 
     try:
         # first try addressbase
