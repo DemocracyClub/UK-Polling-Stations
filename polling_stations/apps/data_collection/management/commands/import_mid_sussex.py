@@ -1,42 +1,8 @@
-from data_collection.morph_importer import BaseMorphApiImporter
+from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
-class Command(BaseMorphApiImporter):
-
-    srid = 4326
-    districts_srid  = 4326
+class Command(BaseXpressWebLookupCsvImporter):
     council_id = 'E07000228'
+    addresses_name = 'MidSussexDemocracy Club Data-2017-04-10.TSV'
+    stations_name = 'MidSussexDemocracy Club Data-2017-04-10.TSV'
     elections = ['local.west-sussex.2017-05-04']
-    scraper_name = 'wdiv-scrapers/DC-PollingStations-Mid-Sussex'
-    geom_type = 'geojson'
-    split_districts = set()
-
-    def get_station_hash(self, record):
-        # handle exact dupes on code/address
-        return "-".join([
-            record['msercode'],
-            record['postcode'],
-        ])
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid('districts'))
-        return {
-            'internal_council_id': record['msercode'],
-            'name'               : record['boundname'],
-            'area'               : poly,
-            'polling_station_id' : record['msercode'],
-        }
-
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(record, self.geom_type, self.get_srid('stations'))
-
-        codes = record['msercode'].split("/")
-        stations = []
-        for code in codes:
-            stations.append({
-                'internal_council_id': code.strip(),
-                'postcode':            record['postcode'],
-                'address':             "\n".join([record['venue'], record['street'], record['town']]),
-                'location':            location,
-            })
-
-        return stations
+    csv_delimiter = '\t'
