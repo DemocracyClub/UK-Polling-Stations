@@ -10,7 +10,6 @@ Feature: Check Postcodes
     Then I submit the only form
     Then The browser's URL should contain "/address/4/"
     And I should see "Your polling station"
-    And I should see "The polling station for BB11BB is"
     And I should see "Get walking directions"
     And No errors were thrown
 
@@ -35,7 +34,6 @@ Feature: Check Postcodes
     Then I submit the only form
     Then The browser's URL should contain "/postcode/NP205GN/"
     And I should see "Your polling station"
-    And I should see "The polling station for NP205GN is"
     And I should see "Get walking directions"
     And No errors were thrown
 
