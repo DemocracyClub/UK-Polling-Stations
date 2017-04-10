@@ -1,3 +1,4 @@
+import abc
 import logging
 import lxml.etree
 import re
@@ -32,10 +33,30 @@ class RateLimitError(Exception):
         logger.error(message)
 
 
-class MapitGeocoder:
+class BaseGeocoder(metaclass=abc.ABCMeta):
 
     def __init__(self, postcode):
-        self.postcode = postcode
+        self.postcode = self.format_postcode(postcode)
+
+    def format_postcode(self, postcode):
+        return postcode
+
+    @abc.abstractmethod
+    def geocode_point_only(self):
+        pass
+
+    @abc.abstractmethod
+    def geocode(self):
+        pass
+
+    def run(self, point_only=False):
+        if point_only:
+            return self.geocode_point_only()
+        else:
+            return self.geocode()
+
+
+class MapitGeocoder(BaseGeocoder):
 
     def call_mapit(self):
         headers = {}
@@ -90,11 +111,11 @@ class MapitGeocoder:
             'council_gss': council_gss,
         }
 
+    def geocode_point_only(self):
+        return self.geocode()
 
-class AddressBaseGeocoder:
 
-    def __init__(self, postcode):
-        self.postcode = self.format_postcode(postcode)
+class AddressBaseGeocoder(BaseGeocoder):
 
     def format_postcode(self, postcode):
         # postcodes in AddressBase are in format AA1 1AA
