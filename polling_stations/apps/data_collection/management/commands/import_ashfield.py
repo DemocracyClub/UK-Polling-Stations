@@ -1,5 +1,7 @@
-from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
+from django.db import transaction
+from django.db import connection
+from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from pollingstations.models import PollingDistrict
 
 """
 Ashfield publish their data on data.gov.uk :D
@@ -13,13 +15,12 @@ https://morph.io/wdiv-scrapers/DC-PollingStations-Ashfield
 polling the URLs to look for changes.
 """
 
-class Command(BaseCsvStationsShpDistrictsImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     council_id = 'E07000170'
-    srid = 4326
+    srid = 27700
     districts_srid = 27700
-    districts_name = 'polling_districts_2016-12-18'
-    stations_name = 'polling_stations_2016-12-18.csv'
-    csv_delimiter = ','
+    districts_name = 'New data/shp/polling_districts'
+    stations_name = 'New data/shp/polling_stations.shp'
     elections = ['local.nottinghamshire.2017-05-04']
 
     def district_record_to_dict(self, record):
@@ -30,10 +31,21 @@ class Command(BaseCsvStationsShpDistrictsImporter):
         }
 
     def station_record_to_dict(self, record):
-        location = Point(float(record.x), float(record.y), srid=self.srid)
         return {
-            'internal_council_id': record.id,
-            'address' : '%s\n%s' % (record.name, record.address),
-            'postcode': '',
-            'location': location,
+            'internal_council_id': str(record[0]).strip(),
+            'address' : '%s\n%s' % (str(record[2]).strip(), str(record[3]).strip()),
+            'postcode': str(record[4]).strip(),
         }
+
+    @transaction.atomic
+    def post_import(self):
+        # fix self-intersecting polygon
+        print("running fixup SQL")
+        table_name = PollingDistrict()._meta.db_table
+
+        cursor = connection.cursor()
+        cursor.execute("""
+        UPDATE {0}
+         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
+         WHERE NOT ST_IsValid(area);
+        """.format(table_name))
