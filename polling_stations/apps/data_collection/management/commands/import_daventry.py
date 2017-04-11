@@ -10,6 +10,7 @@ lenient interpretation of the spec which allows us access to the meta-data.
 import requests
 from fastkml import kml
 from time import sleep
+from councils.models import Council
 from django.contrib.gis.geos import GEOSGeometry, Point
 from data_collection.geo_utils import convert_linestring_to_multiploygon
 from data_collection.base_importers import BaseGenericApiImporter
@@ -91,6 +92,23 @@ class Command(BaseGenericApiImporter):
                 extended_data[pair.name] = pair.value
         return extended_data
 
+    def is_in_daventry(self, polygon):
+        """
+        Daventry's API serves up a number of polling districts which are
+        actually in South Northamptonshire or Wellingborough.
+        We only want to import the ones that are in Daventry here.
+
+        This method (using the centroid) is a bit crude and will fall down
+        if we get a district which is C-shaped or U-shaped.
+        Fortunately all the districts we are dealing with here are sufficiently
+        convex that this will do the job.
+        """
+        centroid = polygon.centroid
+        council = Council.objects.get(area__covers=centroid)
+        if council.council_id == self.council_id:
+            return True
+        return False
+
     def district_record_to_dict(self, record):
 
         # polygon
@@ -98,6 +116,10 @@ class Command(BaseGenericApiImporter):
             GEOSGeometry(record.geometry.wkt, srid=self.get_srid('districts'))
         )
         poly = convert_linestring_to_multiploygon(geometry_collection)
+
+        # exclude polygons that are outside Daventry
+        if not self.is_in_daventry(poly):
+            return None
 
         # meta-data
         extended_data = self.parse_extended_data(record)
