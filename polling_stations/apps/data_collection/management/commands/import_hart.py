@@ -7,7 +7,8 @@ class Command(BaseCsvStationsJsonDistrictsImporter):
     council_id = 'E07000089'
     districts_name = 'Hart Polling Districts-fixed.geojson'
     stations_name = 'Hart Polling Stations 2017.csv'
-    elections = ['local.hampshire.2017-05-04']
+    #elections = ['local.hampshire.2017-05-04']
+    elections = []
 
     def district_record_to_dict(self, record):
         name = str(record['properties']['Name']).strip()
