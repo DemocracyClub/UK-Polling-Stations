@@ -101,3 +101,10 @@ class PostcodeTest(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertIsNone(response.data['council'])
         self.assertFalse(response.data['polling_station_known'])
+
+    def test_blacklist_lowercase_postcode(self):
+        response = self.endpoint.retrieve(self.request, 'ee11ee', 'json',
+            geocoder=mock_geocode, log=False)
+        self.assertEqual(200, response.status_code)
+        self.assertIsNone(response.data['council'])
+        self.assertFalse(response.data['polling_station_known'])
