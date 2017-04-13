@@ -61,7 +61,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return None
 
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
-        postcode = postcode.replace(' ', '')
+        postcode = postcode.replace(' ', '').upper()
         ret = {}
 
         # attempt to attach point and gss_codes
