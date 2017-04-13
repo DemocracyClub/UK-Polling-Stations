@@ -50,3 +50,10 @@ class RoutingHelperTest(TestCase):
         rh = RoutingHelper('CC11CC')
         endpoint = rh.get_endpoint()
         self.assertEqual('multiple_councils_view', endpoint.view)
+
+    def test_multiple_councils_lowercase_postcode(self):
+        # check we are directed to multiple_councils_view if
+        # postcode is attached to multiple councils in the blacklist
+        rh = RoutingHelper('dd11dd')
+        endpoint = rh.get_endpoint()
+        self.assertEqual('multiple_councils_view', endpoint.view)
