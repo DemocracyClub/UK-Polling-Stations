@@ -97,7 +97,7 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 
     def form_invalid(self, form):
         context = self.get_context_data(form=form)
-        context['postcode'] = form.data['postcode']
+        context['postcode'] = form.data.get('postcode', '')
         return self.render_to_response(context)
 
 
