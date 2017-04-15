@@ -302,7 +302,6 @@ class EveryElectionWrapper:
         return res_json['results']
 
     def has_election(self):
-
         if not self.request_success:
             # if the request was unsucessful for some reason,
             # assume there *is* an upcoming election
@@ -312,6 +311,19 @@ class EveryElectionWrapper:
             return True
 
         return False
+
+    def get_explanations(self):
+        explanations = []
+        if not self.request_success:
+            # if the request was unsucessful for some reason,
+            # return no explanations
+            return explanations
+
+        if len(self.elections) > 0:
+            for election in self.elections:
+                if 'explanation' in election and election['explanation']:
+                    explanations.append(election['explanation'])
+        return explanations
 
 
 class OrsDirectionsApiError(Exception):
