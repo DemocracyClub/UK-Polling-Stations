@@ -33,7 +33,7 @@ from .helpers import (
     AddressSorter,
     DirectionsHelper,
     geocode,
-    has_election,
+    EveryElectionWrapper,
     MultipleCouncilsException,
     PostcodeError,
     RateLimitError,
@@ -132,14 +132,6 @@ class BasePollingStationView(
         else:
             return None
 
-    def has_election(self):
-        try:
-            return has_election(self.postcode)
-        except:
-            # if the request was unsucessful for some reason,
-            # assume there *is* and upcoming election
-            return True
-
     def get_context_data(self, **context):
         context['tile_layer'] = settings.TILE_LAYER
         context['mq_key'] = settings.MQ_KEY
@@ -162,7 +154,8 @@ class BasePollingStationView(
         self.station = self.get_station()
         self.directions = self.get_directions()
 
-        context['has_election'] = self.has_election()
+        ee = EveryElectionWrapper(self.postcode)
+        context['has_election'] = ee.has_election()
         if not context['has_election']:
             context['error'] = 'There are no upcoming elections in your area'
 
