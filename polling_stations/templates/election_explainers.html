@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load markdown_deux_tags %}
+{% if request.brand == 'democracyclub' %}
+<div class="card">
+  {% blocktrans %}
+  <h2>Elections in your area</h2>
+  {% endblocktrans %}
+
+  {% for explanation in election_explainers %}
+    <div>
+    {% filter markdown %}
+{{explanation}}
+    {% endfilter %}
+    </div>
+  {% endfor %}
+</div>
+{% endif %}

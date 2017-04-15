@@ -170,6 +170,10 @@
       {% include "notifications/election_notification_form.html" %}
       {% include "notifications/ical_feed.html" %}
     {% endif %}
+
+    {% if we_know_where_you_should_vote and election_explainers %}
+      {% include "election_explainers.html" %}
+    {% endif %}
   </div>
 
 
