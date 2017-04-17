@@ -50,3 +50,11 @@ class PollingStationsDistrictIdTest(TestCase, PollingStationsTestBase):
 # test lookup when we match based on point in polygon
 class PollingStationsPointInPolygonTest(TestCase, PollingStationsTestBase):
     fixtures = ['test_polling_stations_polygon.json']
+
+    def test_good(self):
+        # this point will be in district AA
+        point = Point(-2.1588134765625, 52.8193630015979)
+        station = PollingStation.objects.get_polling_station(
+            'X01000001', location=point)
+        # district AA has a blank station refernce
+        self.assertIsNone(station)
