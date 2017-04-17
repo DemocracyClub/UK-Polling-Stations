@@ -70,15 +70,8 @@ class PollingStationManager(models.GeoManager):
             # do not fall back and attempt point within polygon lookup
             return station
         else:
-            # only try a point within polygon lookup
-            # if polling_station_id is not set
-            station = self.filter(
-                location__within=polling_district.area, council_id=council_id)
-            if len(station) == 1:
-                return station[0]
-            else:
-                # make this explicit rather than implied
-                return None
+            # make this explicit rather than implied
+            return None
 
     def get_polling_station_by_id(self, internal_council_id, council_id):
         station = self.filter(
