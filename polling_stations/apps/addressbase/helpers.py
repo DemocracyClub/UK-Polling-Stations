@@ -1,6 +1,7 @@
 import logging
 import re
 from collections import namedtuple
+from django.db import connection
 from pollingstations.models import (PollingDistrict, ResidentialAddress,
                                     PollingStation)
 from addressbase.models import Address
@@ -54,31 +55,90 @@ class EdgeCaseFixer:
         self.address_set = AddressSet()
         self.target_council_id = target_council_id
         self.logger = logger
+        self.AddressRecord = namedtuple('AddressRecord', [
+            'uprn',
+            'address',
+            'postcode',
+            'district_id',
+            'station_id',
+            'council_id',
+            'count'
+        ])
 
-    def get_station_id(self, location):
-        district = PollingDistrict.objects.get(
-            area__covers=location, council_id=self.target_council_id)
+    def unpack_address(self, record):
+        return self.AddressRecord(*record)
 
-        polling_station = PollingStation.objects.get_polling_station(
-            district.council.pk,
-            polling_district=district)
+    def get_station_id(self, address):
+        if address.count > 1:
+            raise PollingDistrict.MultipleObjectsReturned
 
-        if not polling_station:
+        if address.council_id != self.target_council_id:
+            # treat addresses in other council areas as district not found
+            raise PollingDistrict.DoesNotExist
+
+        if not address.district_id:
+            raise PollingDistrict.DoesNotExist
+
+        if address.station_id:
+            polling_station = address.station_id
+        else:
             """
             We do not know which station this district is served by (orphan district)
 
             Because we have no way of knowing what the correct station is, intentionally insert a record with an empty station id
             This allows us to *list* the address, but if the user *chooses* it, we will show "we don't know: call your council"
             """
-            return ''
+            polling_station = ''
 
-        return polling_station.internal_council_id
+        return polling_station
 
     def make_addresses_for_postcode(self, postcode):
-        addresses = Address.objects.filter(postcode=postcode)
-        for address in addresses:
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+            SELECT
+                ab.uprn,
+                ab.address,
+                ab.postcode,
+                pd.internal_council_id,
+                ps.internal_council_id,
+                pd.council_id,
+                c.count
+            FROM addressbase_address ab
+
+            LEFT JOIN pollingstations_pollingdistrict pd
+            ON ST_CONTAINS(pd.area, ab.location)
+
+            LEFT JOIN pollingstations_pollingstation ps
+            ON (
+                (pd.polling_station_id=ps.internal_council_id
+                    AND pd.council_id=ps.council_id)
+                OR
+                (pd.internal_council_id=ps.polling_district_id
+                    AND pd.council_id=ps.council_id)
+            )
+
+            JOIN (
+                SELECT
+                    ab.uprn,
+                    COUNT(*) AS count
+                FROM addressbase_address ab
+                LEFT JOIN pollingstations_pollingdistrict pd
+                ON ST_CONTAINS(pd.area, ab.location)
+                WHERE ab.postcode=%s
+                GROUP BY ab.uprn
+            ) c
+            ON ab.uprn=c.uprn
+
+            WHERE ab.postcode=%s
+            """, [postcode, postcode]
+        )
+        addresses = cursor.fetchall()
+
+        for record in addresses:
+            address = self.unpack_address(record)
             try:
-                station_id = self.get_station_id(address.location)
+                station_id = self.get_station_id(address)
             except PollingDistrict.DoesNotExist:
                 # Chances are this is on the edge of the council area, and
                 # we don't have data for the area the property is in
