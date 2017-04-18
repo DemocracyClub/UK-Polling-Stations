@@ -8,6 +8,7 @@ from data_collection.base_importers import (
     BaseApiKmlStationsKmlDistrictsImporter,
     BaseApiShpZipStationsShpZipDistrictsImporter,
     BaseApiCsvStationsShpZipDistrictsImporter,
+    BaseScotlandSpatialHubImporter,
 )
 from data_collection.ems_importers import (
     BaseXpressWebLookupCsvImporter,
