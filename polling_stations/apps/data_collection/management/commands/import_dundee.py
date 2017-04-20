@@ -1,40 +1,51 @@
-"""
-Import Dundee
-"""
-from django.contrib.gis.geos import Point
+from django.core.exceptions import ObjectDoesNotExist
+from addressbase.models import Address
+from data_collection.morph_importer import BaseMorphApiImporter
 
-from data_collection.management.commands import BaseCsvStationsJsonDistrictsImporter
+class Command(BaseMorphApiImporter):
 
-class Command(BaseCsvStationsJsonDistrictsImporter):
-    """
-    Imports the Polling station/district data from Dundee Council
-    """
-    council_id     = 'S12000042'
-    districts_name = 'polling_districts.bng.geo.json'
-    stations_name  = 'SV_POLLING_STATIONS.csv'
-    elections      = ['parl.2015-05-07']
+    srid = 4326
+    districts_srid = 4326
+    council_id = 'S12000042'
+    elections = ['local.dundee-city.2017-05-04']
+    scraper_name = 'wdiv-scrapers/DC-PollingStations-Dundee'
+    geom_type = 'geojson'
 
     def district_record_to_dict(self, record):
-        properties = record['properties']
+        poly = self.extract_geometry(
+            record,
+            self.geom_type,
+            self.get_srid('districts')
+        )
+
         return {
-            'council':             self.council,
-            'internal_council_id': properties['POLLING_DISTRICT'],
-            'name':                properties['POLLING_STATION_NAME']
+            'internal_council_id': record['POLLING_DISTRICT'],
+            'name': record['POLLING_DISTRICT'],
+            'area': poly,
+            'polling_station_id': record['POLLING_STATION_ID'],
         }
 
-    def station_record_to_dict(self, record):
-        location = Point(float(record.easting), float(record.northing), srid=self.srid)
+    def get_address(self, uprn):
+        ab = Address.objects.get(pk=uprn.lstrip("0"))
+        return (ab.address, ab.postcode)
 
-        """
-        address data is sufficiently poor quality that
-        geocoding is likely to produce misleading results
-        """
+    def station_record_to_dict(self, record):
+        location = self.extract_geometry(
+            record,
+            self.geom_type,
+            self.get_srid('stations')
+        )
+
+        # Get full address from AddressBase if we can
+        try:
+            address, postcode = self.get_address(record['UPRN'])
+        except ObjectDoesNotExist:
+            address = record['NAME']
+            postcode = ''
 
         return {
-            'council':             self.council,
-            'internal_council_id': record.objectid,
-            'postcode':            "",
-            'address':             record.name,
-            'location':            location,
-            'polling_district_id': record.polling_district
+            'internal_council_id': record['ID'],
+            'address': address,
+            'postcode': postcode,
+            'location': location,
         }
