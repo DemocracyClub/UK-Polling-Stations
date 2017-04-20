@@ -16,15 +16,12 @@ class Command(BaseShpStationsShpDistrictsImporter):
         }
 
     def format_address(self, record):
-        address_parts = [
-            str(record[4]).strip('\'b').strip(),
-            str(record[5]).strip('\'b').strip(),
-            str(record[6]).strip('\'b').strip(),
-            str(record[7]).strip('\'b').strip(),
-            str(record[8]).strip('\'b').strip(),
-        ]
-        if str(record[3]).strip('\'b').strip():
-            address_parts.insert(0, str(record[3]).strip('\'b').strip())
+        address_parts = [record[x].strip() for x in range(4, 9)]
+        for i, part in enumerate(address_parts):
+            if part == b'':
+                address_parts[i] = ''
+        if record[3].strip() != b'':
+            address_parts.insert(0, str(record[3]).strip())
         address = "\n".join(address_parts)
         while "\n\n" in address:
             address = address.replace("\n\n", "\n").strip()

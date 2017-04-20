@@ -26,9 +26,9 @@ class Command(BaseStationsAddressesImporter):
         }
 
     def format_address(self, record):
-        address_parts = [str(record[x]).strip() for x in range(3, 7)]
+        address_parts = [record[x].strip() for x in range(3, 7)]
         for i, part in enumerate(address_parts):
-            if part[:2] == "b'":
+            if part == b'':
                 address_parts[i] = ''
         address = "\n".join(address_parts)
         while "\n\n" in address:

@@ -16,9 +16,9 @@ class Command(BaseShpStationsShpDistrictsImporter):
         }
 
     def format_address(self, record):
-        address_parts = [str(record[x]).strip() for x in range(3, 7)]
+        address_parts = [record[x].strip() for x in range(3, 7)]
         for i, part in enumerate(address_parts):
-            if part[:2] == "b'":
+            if part == b'':
                 address_parts[i] = ''
         for i, part in enumerate(address_parts):
             if len(part) <= 3 and len(part) > 0:
@@ -31,7 +31,9 @@ class Command(BaseShpStationsShpDistrictsImporter):
         return address.strip()
 
     def station_record_to_dict(self, record):
-        postcode = str(record[8]).strip('\'b').strip()
+        postcode = record[8].strip()
+        if postcode == b'':
+            postcode = ''
         return {
             'internal_council_id': str(record[1]).strip(),
             'address' : self.format_address(record),
