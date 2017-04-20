@@ -24,8 +24,7 @@ class S3Wrapper:
     def data_path(self):
         return os.path.abspath(self.base_path)
 
-    def fetch_data(self, council_id):
-        prefix = "%s-" % (council_id)
+    def fetch_data(self, prefix):
         local_pattern = os.path.abspath("%s/%s*" % (self.base_path, prefix))
         local_paths = glob.glob(local_pattern)
 
@@ -41,7 +40,7 @@ class S3Wrapper:
             # any necessary directories when we pull data down from s3
             pass
 
-        # fetch data for this council
+        # fetch data for this prefix
         keys = self.bucket.list(prefix=prefix)
         count = 0
         for key in keys:
@@ -60,3 +59,7 @@ class S3Wrapper:
 
         if count == 0:
             raise ValueError("Couldn't find any data to import")
+
+    def fetch_data_by_council(self, council_id):
+        prefix = "%s-" % (council_id)
+        self.fetch_data(prefix)

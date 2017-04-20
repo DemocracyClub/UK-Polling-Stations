@@ -166,9 +166,18 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
                 '../polling_station_data/')
         else:
             s3 = S3Wrapper()
-            s3.fetch_data(self.council_id)
+            s3.fetch_data_by_council(self.council_id)
             path = s3.data_path
         return os.path.abspath(path)
+
+    def get_base_folder_path(self):
+        if getattr(self, 'local_files', True):
+            if self.base_folder_path is None:
+                path = os.path.join(
+                    self.data_path,
+                    '{0}-*'.format(self.council_id))
+                return glob.glob(path)[0]
+        return self.base_folder_path
 
     def handle(self, *args, **kwargs):
         """
@@ -194,12 +203,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         # Delete old data for this council
         self.teardown(self.council)
 
-        if getattr(self, 'local_files', True):
-            if self.base_folder_path is None:
-                path = os.path.join(
-                    self.data_path,
-                    '{0}-*'.format(self.council_id))
-                self.base_folder_path = glob.glob(path)[0]
+        self.base_folder_path = self.get_base_folder_path()
 
         self.import_data()
 
@@ -578,6 +582,89 @@ class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter,
             'internal_council_id': record['Name'].value,
             'name': record['Name'].value,
             'area': poly
+        }
+
+
+class BaseScotlandSpatialHubImporter(BaseShpStationsShpDistrictsImporter,
+                                     metaclass=abc.ABCMeta):
+
+    """
+    Data from the Scotland SpatialHub will be provided in a single
+    dataset for the whole country. All importers consuming this data
+    should extend BaseScotlandSpatialHubImporter.
+    """
+
+    srid = 27700
+    districts_name = 'polling_districts_20170406/polling_districts_20170406.shp'
+    stations_name = 'polling_places_20170407/polling_places_20170407.shp'
+    data_prefix = 'Scotland May 2017'
+
+    @property
+    @abc.abstractmethod
+    def council_name(self):
+        pass
+
+    @property
+    def data_path(self):
+        data_private = getattr(self, 'private', False)
+        if data_private:
+            path = getattr(
+                settings,
+                'PRIVATE_DATA_PATH',
+                '../polling_station_data/')
+        else:
+            s3 = S3Wrapper()
+            s3.fetch_data(self.data_prefix)
+            path = s3.data_path
+        return os.path.abspath(path)
+
+    def get_base_folder_path(self):
+        if getattr(self, 'local_files', True):
+            if self.base_folder_path is None:
+                path = os.path.join(self.data_path, self.data_prefix + '*')
+                return glob.glob(path)[0]
+        return self.base_folder_path
+
+    def parse_string(self, text):
+        try:
+            return text.strip().decode('windows-1252')
+        except AttributeError:
+            return text.strip()
+
+    def district_record_to_dict(self, record):
+        council_name = self.parse_string(record[3])
+        if council_name != self.council_name:
+            return None
+
+        code = self.parse_string(record[0])
+        if not code:
+            return None
+
+        name = self.parse_string(record[1])
+        if not name:
+            name = code
+
+        return {
+            'internal_council_id': code,
+            'name': name,
+            'polling_station_id': code,
+        }
+
+    def station_record_to_dict(self, record):
+        council_name = self.parse_string(record[3])
+        if council_name != self.council_name:
+            return None
+
+        code = self.parse_string(record[1])
+        if not code:
+            return None
+
+        address = self.parse_string(record[0])
+
+        return {
+            'internal_council_id': code,
+            'postcode': '',
+            'address': address,
         }
 
 
