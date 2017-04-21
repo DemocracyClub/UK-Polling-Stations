@@ -98,24 +98,32 @@ python manage.py import_councils
 
 #### Import some Polling District/Station data
 
-To populate your database, pass `manage.py import -e` a list of [Election IDs](https://democracyclub.org.uk/projects/election-ids/) to run all of the import scripts relating to a particular election or elections. For example:
+For development purposes, you will need to seed your database with some data.
+Most of our import scripts reference data is hosted privately, but there are
+a number of councils who publish their data at a public location.
 
-```
-python manage.py import -e parl.2015-05-07
-```
-will run all of the import scripts relating to the 2015 general election.
+For example:
 
-```
-python manage.py import -e naw.c.2016-05-05 naw.r.2016-05-05
-```
-will run all of the import scripts relating to the 2016 Welsh Assembly elections.
+* `python manage.py import_barrow_in_furness`
+* `python manage.py import_canterbury`
+* `python manage.py import_doncaster`
+* `python manage.py import_dover`
+* `python manage.py import_dundee`
+* `python manage.py import_eden`
+* `python manage.py import_edinburgh`
+* `python manage.py import_epsom_and_ewell`
+* `python manage.py import_fife`
+* `python manage.py import_guildford`
+* `python manage.py import_hastings`
+* `python manage.py import_lancaster`
+* `python manage.py import_salford`
+* `python manage.py import_shepway`
+* `python manage.py import_thanet`
+* `python manage.py import_tonbridge`
+* `python manage.py import_tunbridge_wells`
+* `python manage.py import_wolverhampton`
 
-```
-python manage.py import -e ref.2016-06-23
-```
-
-will run all of the import scripts relating to the 2016 EU Referendum.
-
+all reference data which is publicly available.
 
 ## Importing the data we have from councils
 
