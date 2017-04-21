@@ -1,25 +1,28 @@
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 
-class Command(BaseShpStationsShpDistrictsImporter):
+class Command(BaseCsvStationsShpDistrictsImporter):
     srid = 27700
     council_id = 'E07000113'
     districts_name = 'shp/Swale Polling Districts'
-    stations_name = 'shp/Swale Polling Stations.shp'
-    #elections = ['local.kent.2017-05-04']
-    elections = []
+    stations_name = 'Swale 21 Feb 2017 Polling scheme station numbers.csv'
+    elections = ['local.kent.2017-05-04']
 
     def district_record_to_dict(self, record):
         code = str(record[0]).strip()
         return {
             'internal_council_id': code,
             'name': str(record[1]).strip(),
-            'polling_station_id': code,
         }
 
     def station_record_to_dict(self, record):
-
-        return {
-            'internal_council_id': str(record[0]).strip(),
-            'postcode': '',
-            'address': str(record[4]).strip(),
-        }
+        codes = record.pd.split(" and ")
+        stations = []
+        for code in codes:
+            stations.append({
+                'internal_council_id': code,
+                'postcode': '',
+                'address': record.premises,
+                'polling_district_id': code,
+                'location': None,
+            })
+        return stations
