@@ -15,32 +15,44 @@ class Command(BaseShpStationsShpDistrictsImporter):
     council_id     = 'W06000015'
     districts_name = 'Polling Districts_region'
     stations_name  = 'Polling Stations_font_point.shp'
-    elections      = [
-        'pcc.2016-05-05',
-        'naw.c.2016-05-05',
-        'naw.r.2016-05-05',
-        'ref.2016-06-23'
-    ]
+    elections      = ['local.cardiff.2017-05-04']
+
+    def parse_string(self, text):
+        try:
+            return text.strip().decode('latin-1')
+        except AttributeError:
+            return text.strip()
 
     def district_record_to_dict(self, record):
-        if type(record[1]) == str:
-            name = record[1]
-        else:
-            name = record[1].decode('latin-1')
+        code = self.parse_string(record[0])
+
+        """
+        Joe received following from Cardiff:
+
+        Two polling districts SJ and QK
+        The following streets are affected
+          - SJ Duncan Close
+          - QK Bethania Row
+        but no updated data: exclude these 2 districts
+        because we don't have the new boundaries
+        """
+        if code == 'SJ' or code == 'QK':
+            return None
+
         return {
-            'internal_council_id': record[0].encode('utf8'),
-            'name': name
+            'internal_council_id': code,
+            'name': code
         }
 
     def station_record_to_dict(self, record):
         unique_id = "-".join(
-                (str(record[0]).strip('\'b'), str(record[1]).strip())
+                (self.parse_string(record[0]), self.parse_string(record[1]))
             ).strip()
         return {
             'internal_council_id': unique_id,
             'postcode'           : "",
-            'address'            : str(record[2]),
-            'polling_district_id': str(record[1]),
+            'address'            : self.parse_string(record[2]),
+            'polling_district_id': self.parse_string(record[1]),
         }
 
     @transaction.atomic
