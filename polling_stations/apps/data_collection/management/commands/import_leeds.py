@@ -5,7 +5,7 @@ class Command(BaseMorphApiImporter):
     srid = 4326
     districts_srid  = 4326
     council_id = 'E08000035'
-    elections = []
+    elections = ['parl.2017-06-08']
     scraper_name = 'wdiv-scrapers/DC-PollingStations-Leeds'
     geom_type = 'geojson'
     split_districts = set()
