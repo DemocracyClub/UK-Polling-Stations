@@ -289,6 +289,10 @@ class AddressSorter:
 def has_election(postcode):
     res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
         settings.EE_BASE, postcode))
+
+    if res.status_code != 200:
+        res.raise_for_status()
+
     res_json = res.json()
     if len(res_json['results']) > 0:
         return True
