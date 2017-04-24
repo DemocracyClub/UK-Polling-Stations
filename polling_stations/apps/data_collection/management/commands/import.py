@@ -130,7 +130,8 @@ class Command(BaseCommand):
         if not files:
             raise ValueError("No importers matched")
 
-        commands_to_run = []
+        commands_series = []
+        commands_parallel = []
         opts = {'noclean': False, 'verbosity': 1}
         if kwargs['multiprocessing']:
             opts = {'noclean': False, 'verbosity': 0}
@@ -156,18 +157,24 @@ class Command(BaseCommand):
                     if not existing_data or kwargs.get('overwrite'):
                         self.summary.append(
                             ('INFO', "Ran import script %s" % tail))
-                        commands_to_run.append((f, opts))
+                        if hasattr(cmd, 'run_in_series'):
+                            commands_series.append((f, opts))
+                        else:
+                            commands_parallel.append((f, opts))
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
 
-        # run the list of import scripts in commands_to_run[]
+        # run all the import scripts
         if kwargs['multiprocessing']:
+            # do anything we want to run in series first
+            self.run_commands_in_series(commands_series)
+
             # before kicking off parallel imports, close any open
             # DB connections. Otherwise, Django will throw
             # django.db.utils.DatabaseError: lost synchronization with server
             db.connections.close_all()
-            self.run_commands_in_parallel(commands_to_run)
+            self.run_commands_in_parallel(commands_parallel)
         else:
-            self.run_commands_in_series(commands_to_run)
+            self.run_commands_in_series(commands_parallel + commands_series)
 
         self.output_summary()
