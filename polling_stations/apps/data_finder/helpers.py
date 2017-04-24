@@ -298,6 +298,10 @@ class EveryElectionWrapper:
     def get_data(self, postcode):
         res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
             settings.EE_BASE, postcode))
+
+        if res.status_code != 200:
+            res.raise_for_status()
+
         res_json = res.json()
         return res_json['results']
 
