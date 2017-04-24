@@ -1,3 +1,4 @@
+import re
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -61,7 +62,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return None
 
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
-        postcode = postcode.replace(' ', '').upper()
+        postcode = re.sub('[^A-Z0-9]', '', postcode.upper())
         ret = {}
 
         # attempt to attach point and gss_codes
