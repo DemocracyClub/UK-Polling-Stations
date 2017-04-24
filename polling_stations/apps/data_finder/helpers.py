@@ -286,17 +286,48 @@ class AddressSorter:
         return sorted(lst, key = self.swap_fields)
 
 
-def has_election(postcode):
-    res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
-        settings.EE_BASE, postcode))
+class EveryElectionWrapper:
 
-    if res.status_code != 200:
-        res.raise_for_status()
+    def __init__(self, postcode):
+        try:
+            self.elections = self.get_data(postcode)
+            self.request_success = True
+        except:
+            self.request_success = False
 
-    res_json = res.json()
-    if len(res_json['results']) > 0:
-        return True
-    return False
+    def get_data(self, postcode):
+        res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
+            settings.EE_BASE, postcode))
+
+        if res.status_code != 200:
+            res.raise_for_status()
+
+        res_json = res.json()
+        return res_json['results']
+
+    def has_election(self):
+        if not self.request_success:
+            # if the request was unsucessful for some reason,
+            # assume there *is* an upcoming election
+            return True
+
+        if len(self.elections) > 0:
+            return True
+
+        return False
+
+    def get_explanations(self):
+        explanations = []
+        if not self.request_success:
+            # if the request was unsucessful for some reason,
+            # return no explanations
+            return explanations
+
+        if len(self.elections) > 0:
+            for election in self.elections:
+                if 'explanation' in election and election['explanation']:
+                    explanations.append(election['explanation'])
+        return explanations
 
 
 class OrsDirectionsApiError(Exception):
