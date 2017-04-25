@@ -89,6 +89,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         log_data['council'] = address.council
         log_data['brand'] = 'api'
         log_data['language'] = ''
+        log_data['api_user'] = request.user
         if log:
             self.log_postcode(address.postcode, log_data, 'api')
 

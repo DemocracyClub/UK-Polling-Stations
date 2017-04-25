@@ -116,6 +116,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         log_data['council'] = council
         log_data['brand'] = 'api'
         log_data['language'] = ''
+        log_data['api_user'] = request.user
         if log:
             self.log_postcode(postcode, log_data, 'api')
 

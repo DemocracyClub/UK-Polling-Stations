@@ -61,6 +61,8 @@ class LogLookUpMixin(object):
             'language': language,
             'view_used': view_used,
         }
+        if 'api_user' in context:
+            kwargs['api_user'] = context['api_user']
         kwargs.update(self.request.session['utm_data'])
         LoggedPostcode.objects.create(**kwargs)
 
