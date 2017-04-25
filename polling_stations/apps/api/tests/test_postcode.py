@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import AnonymousUser
 from rest_framework.test import APIRequestFactory
 from api.postcode import PostcodeViewSet
 from data_finder.helpers import MultipleCouncilsException
@@ -53,6 +54,7 @@ class PostcodeTest(TestCase):
     def setUp(self):
         factory = APIRequestFactory()
         self.request = factory.get('/foo', format='json')
+        self.request.user = AnonymousUser()
         self.endpoint = PostcodeViewSet()
 
     def test_address_list(self):

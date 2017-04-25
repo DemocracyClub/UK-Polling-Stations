@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import AnonymousUser
 from rest_framework.test import APIRequestFactory
 from api.address import ResidentialAddressViewSet
 
@@ -18,6 +19,7 @@ class AddressTest(TestCase):
     def setUp(self):
         factory = APIRequestFactory()
         self.request = factory.get('/foo', format='json')
+        self.request.user = AnonymousUser()
         self.endpoint = ResidentialAddressViewSet()
 
     def test_station_found(self):
