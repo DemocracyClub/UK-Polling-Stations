@@ -2,6 +2,7 @@ import logging
 import re
 from collections import namedtuple
 from django.db import connection
+from councils.models import Council
 from pollingstations.models import (PollingDistrict, ResidentialAddress,
                                     PollingStation)
 from addressbase.models import Address
@@ -69,12 +70,15 @@ class EdgeCaseFixer:
         return self.AddressRecord(*record)
 
     def get_station_id(self, address):
-        if address.count > 1:
-            raise PollingDistrict.MultipleObjectsReturned
+        if not address.council_id:
+            raise Council.DoesNotExist
 
         if address.council_id != self.target_council_id:
             # treat addresses in other council areas as district not found
             raise PollingDistrict.DoesNotExist
+
+        if address.count > 1:
+            raise PollingDistrict.MultipleObjectsReturned
 
         if not address.district_id:
             raise PollingDistrict.DoesNotExist
@@ -102,12 +106,15 @@ class EdgeCaseFixer:
                 ab.postcode,
                 pd.internal_council_id,
                 ps.internal_council_id,
-                pd.council_id,
-                c.count
+                cl.council_id,
+                ct.count
             FROM addressbase_address ab
 
             LEFT JOIN pollingstations_pollingdistrict pd
             ON ST_CONTAINS(pd.area, ab.location)
+
+            LEFT JOIN councils_council cl
+            ON ST_COVERS(cl.area, ab.location)
 
             LEFT JOIN pollingstations_pollingstation ps
             ON (
@@ -127,8 +134,8 @@ class EdgeCaseFixer:
                 ON ST_CONTAINS(pd.area, ab.location)
                 WHERE ab.postcode=%s
                 GROUP BY ab.uprn
-            ) c
-            ON ab.uprn=c.uprn
+            ) ct
+            ON ab.uprn=ct.uprn
 
             WHERE ab.postcode=%s
             """, [postcode, postcode]
