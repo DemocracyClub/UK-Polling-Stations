@@ -5,7 +5,7 @@ from django.db import connection
 from councils.models import Council
 from pollingstations.models import (PollingDistrict, ResidentialAddress,
                                     PollingStation)
-from addressbase.models import Address
+from addressbase.models import Address, Onsad
 
 
 def centre_from_points_qs(qs):
@@ -71,9 +71,15 @@ class EdgeCaseFixer:
 
     def get_station_id(self, address):
         if not address.council_id:
-            raise Council.DoesNotExist
+            try:
+                o = Onsad.objects.get(pk=address.uprn)
+                council_id = o.lad
+            except Onsad.DoesNotExist:
+                raise Council.DoesNotExist
+        else:
+            council_id = address.council_id
 
-        if address.council_id != self.target_council_id:
+        if council_id != self.target_council_id:
             # treat addresses in other council areas as district not found
             raise PollingDistrict.DoesNotExist
 
@@ -165,6 +171,12 @@ class EdgeCaseFixer:
                     variable=(address.address, address.postcode))
 
                 station_id = ''
+            except Council.DoesNotExist:
+                self.logger.log_message(
+                    logging.WARNING,
+                    "Skipping address which could not be assigned to a local authority:\n%s\n%s\n",
+                    variable=(address.address, address.postcode))
+                continue
 
             self.address_set.add(AddressTuple(
                 address.address,
