@@ -375,14 +375,13 @@ class AddressFormView(FormView):
             postcode=self.kwargs['postcode']
         )
 
+        if not addresses:
+            raise Http404
+
         sorter = AddressSorter(addresses)
         addresses = sorter.natural_sort()
         select_addresses = [(element.slug, element.address) for element in addresses]
-
-        if not addresses:
-            raise Http404
-        else:
-            return form_class(select_addresses, self.kwargs['postcode'], **self.get_form_kwargs())
+        return form_class(select_addresses, self.kwargs['postcode'], **self.get_form_kwargs())
 
     def form_valid(self, form):
         self.success_url = reverse(
