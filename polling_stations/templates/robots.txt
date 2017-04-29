@@ -10,3 +10,8 @@ Disallow: /nus_wales/
 Disallow: /postcode/
 Disallow: /static/
 Disallow: /we_dont_know/
+Disallow: /api/beta/councils/
+Disallow: /api/beta/pollingstations/
+Disallow: /api/beta/pollingdistricts/
+Disallow: /api/beta/postcode/
+Disallow: /api/beta/address/
