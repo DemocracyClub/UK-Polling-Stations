@@ -5,7 +5,7 @@ from django.db import connection
 from councils.models import Council
 from pollingstations.models import (PollingDistrict, ResidentialAddress,
                                     PollingStation)
-from addressbase.models import Address, Onsad
+from addressbase.models import Address
 
 
 def centre_from_points_qs(qs):
@@ -63,7 +63,8 @@ class EdgeCaseFixer:
             'district_id',
             'station_id',
             'council_id',
-            'count'
+            'count',
+            'location',
         ])
 
     def unpack_address(self, record):
@@ -71,11 +72,10 @@ class EdgeCaseFixer:
 
     def get_station_id(self, address):
         if not address.council_id:
-            try:
-                o = Onsad.objects.get(pk=address.uprn)
-                council_id = o.lad
-            except Onsad.DoesNotExist:
-                raise Council.DoesNotExist
+            c = Council.objects\
+                .defer("area", "location")\
+                .get(area__covers=address.location)
+            council_id = c.council_id
         else:
             council_id = address.council_id
 
@@ -112,15 +112,16 @@ class EdgeCaseFixer:
                 ab.postcode,
                 pd.internal_council_id,
                 ps.internal_council_id,
-                cl.council_id,
-                ct.count
+                os.lad,
+                ct.count,
+                ab.location
             FROM addressbase_address ab
 
             LEFT JOIN pollingstations_pollingdistrict pd
             ON ST_CONTAINS(pd.area, ab.location)
 
-            LEFT JOIN councils_council cl
-            ON ST_COVERS(cl.area, ab.location)
+            LEFT JOIN addressbase_onsad os
+            ON os.uprn=ab.uprn
 
             LEFT JOIN pollingstations_pollingstation ps
             ON (
