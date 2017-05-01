@@ -44,6 +44,8 @@ class PollingStationManager(models.GeoManager):
                     area__covers=location)
             except PollingDistrict.DoesNotExist:
                 return None
+            except PollingDistrict.MultipleObjectsReturned:
+                return None
 
         if polling_district.internal_council_id:
             # always attempt to look up district id in stations table
