@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
+    AddressSorter,
     geocode,
     PostcodeError,
     RateLimitError,
@@ -34,7 +35,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
     def generate_addresses(self, routing_helper):
         if routing_helper.route_type == "multiple_addresses":
-            return [address for address in routing_helper.addresses]
+            sorter = AddressSorter(routing_helper.addresses)
+            return sorter.natural_sort()
         return []
 
     def generate_polling_station(self, routing_helper, council, location):

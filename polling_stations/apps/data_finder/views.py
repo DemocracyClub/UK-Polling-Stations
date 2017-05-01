@@ -3,8 +3,6 @@ import json
 import re
 import requests
 
-from operator import itemgetter
-
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
@@ -377,14 +375,13 @@ class AddressFormView(FormView):
             postcode=self.kwargs['postcode']
         )
 
-        select_addresses = [(element.slug, element.address) for element in addresses]
-        sorter = AddressSorter()
-        select_addresses = sorter.natural_sort(select_addresses, itemgetter(1))
-
         if not addresses:
             raise Http404
-        else:
-            return form_class(select_addresses, self.kwargs['postcode'], **self.get_form_kwargs())
+
+        sorter = AddressSorter(addresses)
+        addresses = sorter.natural_sort()
+        select_addresses = [(element.slug, element.address) for element in addresses]
+        return form_class(select_addresses, self.kwargs['postcode'], **self.get_form_kwargs())
 
     def form_valid(self, form):
         self.success_url = reverse(

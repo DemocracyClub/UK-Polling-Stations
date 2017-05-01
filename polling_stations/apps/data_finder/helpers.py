@@ -5,6 +5,7 @@ import re
 import requests
 import time
 from collections import namedtuple
+from operator import itemgetter
 
 from django.conf import settings
 from django.contrib.gis.geos import Point
@@ -255,9 +256,11 @@ def geocode(postcode):
 
 
 class AddressSorter:
-    # Class for sorting sort a list of tuples
-    # containing addresses (defined by key function)
+    # Class for sorting sort a list of address objects
     # in a human-readable order.
+
+    def __init__(self, addresses):
+        self.addresses = addresses
 
     def convert(self, text):
         # if text is numeric, covert to an int
@@ -267,7 +270,7 @@ class AddressSorter:
     def alphanum_key(self, tup):
         # split the desired component of tup (defined by key function)
         # into a listof numeric and text components
-        return [ self.convert(c) for c in filter(None, re.split('([0-9]+)', self.key(tup))) ]
+        return [ self.convert(c) for c in filter(None, re.split('([0-9]+)', tup[1])) ]
 
     def swap_fields(self, item):
         lst = self.alphanum_key(item)
@@ -281,9 +284,12 @@ class AddressSorter:
             lst[0] = str(lst[0])
         return lst
 
-    def natural_sort(self, lst, key):
-        self.key = key
-        return sorted(lst, key = self.swap_fields)
+    def natural_sort(self):
+        sorted_list = sorted(
+            [(address, address.address) for address in self.addresses],
+            key=self.swap_fields
+        )
+        return [address[0] for address in sorted_list]
 
 
 class EveryElectionWrapper:
