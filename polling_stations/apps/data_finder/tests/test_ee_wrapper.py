@@ -12,9 +12,9 @@ def get_data_no_elections(self, postcode):
 
 def get_data_with_elections(self, postcode):
     return [
-        {},  # no explanation key
-        {'explanation': None},  # null explanation key
-        {'explanation': 'some text'},  # explanation key contains text
+        {'election_title': 'some election'},  # no explanation key
+        {'election_title': 'some election', 'explanation': None},  # null explanation key
+        {'election_title': 'some election', 'explanation': 'some text'},  # explanation key contains text
     ]
 
 class EveryElectionWrapperTest(TestCase):
@@ -38,4 +38,6 @@ class EveryElectionWrapperTest(TestCase):
         ee = EveryElectionWrapper('AA11AA')
         self.assertTrue(ee.request_success)
         self.assertTrue(ee.has_election())
-        self.assertEqual(['some text'], ee.get_explanations())
+        self.assertEqual([
+            {'title': 'some election', 'explanation': 'some text'}
+        ], ee.get_explanations())
