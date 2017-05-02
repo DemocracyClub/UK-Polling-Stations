@@ -326,7 +326,10 @@ class EveryElectionWrapper:
         if len(self.elections) > 0:
             for election in self.elections:
                 if 'explanation' in election and election['explanation']:
-                    explanations.append(election['explanation'])
+                    explanations.append({
+                        'title': election['election_title'],
+                        'explanation': election['explanation'],
+                    })
         return explanations
 
 
