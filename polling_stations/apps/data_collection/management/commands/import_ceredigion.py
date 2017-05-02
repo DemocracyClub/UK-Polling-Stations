@@ -1,26 +1,18 @@
-"""
-Import Ceredigion
-
-note: this script takes quite a long time to run
-"""
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
+from addressbase.models import Address
 
 class Command(BaseCsvStationsCsvAddressesImporter):
     """
     Imports the Polling Station data from Ceredigion
     """
     council_id       = 'W06000008'
-    addresses_name   = 'Ceredigion_Addresses_processed.csv'
+    addresses_name   = 'Ceredigion_Properties_withheaders.csv'
     stations_name    = 'Ceredigion_Polling_Stations_processed.csv'
     srid             = 27700
     csv_encoding     = 'latin-1'
-    elections        = [
-        'pcc.2016-05-05',
-        'naw.c.2016-05-05',
-        'naw.r.2016-05-05',
-        'ref.2016-06-23'
-    ]
+    elections        = ['local.ceredigion.2017-05-04']
 
     def station_record_to_dict(self, record):
 
@@ -31,7 +23,11 @@ class Command(BaseCsvStationsCsvAddressesImporter):
             record.address4
         ])
 
-        location = Point(float(record.x_coordinate), float(record.y_coordinate), srid=self.get_srid())
+        location = Point(
+            float(record.x_coordinate),
+            float(record.y_coordinate),
+            srid=self.get_srid()
+        )
 
         return {
             'internal_council_id': record.polling_station_id,
@@ -42,15 +38,13 @@ class Command(BaseCsvStationsCsvAddressesImporter):
 
     def address_record_to_dict(self, record):
 
-        address = "\n".join([
-            record.address1,
-            record.street_description,
-            record.town_name,
-            record.administrative_area
-        ])
+        try:
+            address = Address.objects.get(pk=record.uprn)
+        except ObjectDoesNotExist:
+            return None
 
         return {
-            'address'           : address,
-            'postcode'          : record.postcode_locator,
-            'polling_station_id': record.polling_station_id
+            'address': address.address,
+            'postcode': address.postcode,
+            'polling_station_id': record.station,
         }
