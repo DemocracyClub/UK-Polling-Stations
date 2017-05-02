@@ -6,10 +6,11 @@
   <h2>Elections in your area</h2>
   {% endblocktrans %}
 
-  {% for explanation in election_explainers %}
+  {% for election in election_explainers %}
     <div>
+        <h3>{{ election.title }}</h3>
     {% filter markdown %}
-{{explanation}}
+{{ election.explanation }}
     {% endfilter %}
     </div>
   {% endfor %}
