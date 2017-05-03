@@ -22,7 +22,7 @@ class Command(BaseCommand):
             internal_council_id='3019'
         )
         if len(stations) == 1:
-            station= stations[0]
+            station = stations[0]
             station.location = Point(-2.24415, 53.47784, srid=4326)
             station.save()
             print("..updated")
@@ -36,12 +36,25 @@ class Command(BaseCommand):
             internal_council_id='15'
         )
         if len(stations) == 1:
-            station= stations[0]
+            station = stations[0]
             station.location = Point(-1.984424, 52.590524, srid=4326)
             station.save()
             print("..updated")
         else:
             print("..NOT updated")
+
+
+        print("deleting: Heathfield Youth Centre...")
+        stations = PollingStation.objects.filter(
+            council_id='E07000065',
+            internal_council_id='4754'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.delete()
+            print("..deleted")
+        else:
+            print("..NOT deleted")
 
 
         print("..done")
