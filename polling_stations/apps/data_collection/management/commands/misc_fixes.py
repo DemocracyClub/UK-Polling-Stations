@@ -8,4 +8,10 @@ from councils.models import Council
 class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
-        pass
+
+        print("updating Torridge phone number...")
+        torridge = Council.objects.get(pk='E07000046')
+        torridge.phone = "01237 428739"
+        torridge.save()
+
+        print("..done")
