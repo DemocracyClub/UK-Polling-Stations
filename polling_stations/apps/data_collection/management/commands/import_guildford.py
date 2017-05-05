@@ -5,7 +5,7 @@ class Command(BaseMorphApiImporter):
     srid = 27700
     districts_srid  = 27700
     council_id = 'E07000209'
-    elections = ['local.surrey.2017-05-04']
+    elections = ['parl.2017-06-08']
     scraper_name = 'wdiv-scrapers/DC-PollingStations-Guildford'
     geom_type = 'gml'
 
