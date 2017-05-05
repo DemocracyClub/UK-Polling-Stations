@@ -282,18 +282,6 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             station_info = self.station_record_to_dict(record)
 
             """
-            station_record_to_dict() may optionally return None
-            if we want to exclude a particular station record
-            from being imported
-            """
-            if station_info is None:
-                self.logger.log_message(
-                    logging.INFO,
-                    "station_record_to_dict() returned None with input:\n%s",
-                    variable=record, pretty=True)
-                continue
-
-            """
             station_record_to_dict() will usually return a dict
             but it may also optionally return a list of dicts.
 
@@ -312,6 +300,19 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 station_records = [station_info]
 
             for station_record in station_records:
+
+                """
+                station_record_to_dict() may optionally return None
+                if we want to exclude a particular station record
+                from being imported
+                """
+                if station_record is None:
+                    self.logger.log_message(
+                        logging.INFO,
+                        "station_record_to_dict() returned None with input:\n%s",
+                        variable=record, pretty=True)
+                    continue
+
                 if 'council' not in station_record:
                     station_record['council'] = self.council
 
