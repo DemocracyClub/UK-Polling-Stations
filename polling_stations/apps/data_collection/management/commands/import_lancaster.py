@@ -26,12 +26,7 @@ class Command(BaseMorphApiImporter):
 
         for code in codes:
             if (code, record['POLLING_PL']) in self.seen_stations:
-
-                # TECH DEBT
-                # TODO: this is not quite right, fix after election!!
-                return None
-                # /TECH DEBT
-
+                stations.append(None)
             else:
                 self.seen_stations.add((code, record['POLLING_PL']))
                 stations.append({
