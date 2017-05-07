@@ -303,7 +303,7 @@ class EveryElectionWrapper:
 
     def get_data(self, postcode):
         res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
-            settings.EE_BASE, postcode))
+            settings.EE_BASE, postcode), timeout=4)
 
         if res.status_code != 200:
             res.raise_for_status()
