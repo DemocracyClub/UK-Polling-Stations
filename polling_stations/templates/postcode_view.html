@@ -226,7 +226,6 @@
       var polling_station_location = point;
 
       var map = L.map('area_map', {zoomControl:true, dragging: !L.Browser.mobile});
-      map.scrollWheelZoom.disable();
 
       var tiles;
       {% if tile_layer == 'MapQuestSDK' and mq_key %}
