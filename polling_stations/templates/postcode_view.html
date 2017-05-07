@@ -226,8 +226,7 @@
       // var council_location = L.geoJson(point);
       var polling_station_location = point;
 
-      var map = L.map('area_map', {zoomControl:true});
-      map.dragging.disable();
+      var map = L.map('area_map', {zoomControl:true, dragging: !L.Browser.mobile});
       // map.touchZoom.disable();
       // map.doubleClickZoom.disable();
       map.scrollWheelZoom.disable();
