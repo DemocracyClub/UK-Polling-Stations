@@ -6,7 +6,7 @@ class Command(BaseMorphApiImporter):
     srid = 4326
     districts_srid = 4326
     council_id = 'S12000036'
-    elections = ['local.city-of-edinburgh.2017-05-04']
+    elections = ['parl.2017-06-08']
     scraper_name = 'wdiv-scrapers/DC-PollingStations-Edinburgh'
     geom_type = 'geojson'
 
