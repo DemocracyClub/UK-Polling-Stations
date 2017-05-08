@@ -302,8 +302,12 @@ class EveryElectionWrapper:
             self.request_success = False
 
     def get_data(self, postcode):
+        headers = {}
+        if hasattr(settings, 'CUSTOM_UA'):
+            headers['User-Agent'] = settings.CUSTOM_UA
+
         res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
-            settings.EE_BASE, postcode))
+            settings.EE_BASE, postcode), timeout=4, headers=headers)
 
         if res.status_code != 200:
             res.raise_for_status()
