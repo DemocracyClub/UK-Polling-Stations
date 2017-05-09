@@ -4,5 +4,8 @@ class Command(BaseXpressWebLookupCsvImporter):
     council_id      = 'E08000003'
     addresses_name  = 'ManchesterPropertyPostCodePollingStationWebLookup-2017-04-06.TSV'
     stations_name   = 'ManchesterPropertyPostCodePollingStationWebLookup-2017-04-06.TSV'
-    elections       = ['mayor.greater-manchester.2017-05-04']
+    elections       = [
+        'mayor.greater-manchester.2017-05-04',
+        'parl.2017-06-08'
+    ]
     csv_delimiter = '\t'

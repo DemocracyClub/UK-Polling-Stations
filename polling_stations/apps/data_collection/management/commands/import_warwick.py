@@ -5,7 +5,10 @@ class Command(BaseShpStationsShpDistrictsImporter):
     council_id = 'E07000222'
     districts_name = 'POLLD4 (1)'
     stations_name = 'POLLINST.shp'
-    elections = ['local.warwickshire.2017-05-04']
+    elections = [
+        'local.warwickshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def get_station_hash(self, record):
         return record.record[0]

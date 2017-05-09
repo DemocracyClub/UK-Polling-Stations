@@ -6,7 +6,10 @@ class Command(BaseApiShpZipStationsShpZipDistrictsImporter):
     council_id = 'E07000194'
     districts_url = 'https://www.lichfielddc.gov.uk/Inspire-data-sets/Lichfield%20District%20Council%20Polling%20Districts/Lichfield%20District%20Council%20Polling%20Districts%20Shapefile.zip'
     stations_url = 'https://www.lichfielddc.gov.uk/Inspire-data-sets/Lichfield%20District%20Council%20Polling%20Stations/LDC_Polling_Stations_Shapefile.zip'
-    elections = ['local.staffordshire.2017-05-04']
+    elections = [
+        'local.staffordshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def district_record_to_dict(self, record):
         return {

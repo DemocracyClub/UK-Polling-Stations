@@ -5,7 +5,10 @@ class Command(BaseShpStationsShpDistrictsImporter):
     council_id = 'E07000037'
     districts_name = 'High Peak Polling Districts'
     stations_name = 'High Peak Polling Districts.shp'
-    elections = ['local.derbyshire.2017-05-04']
+    elections = [
+        'local.derbyshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def district_record_to_dict(self, record):
         name = str(record[0]).strip()

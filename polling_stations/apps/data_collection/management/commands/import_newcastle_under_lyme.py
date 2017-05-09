@@ -5,7 +5,10 @@ class Command(BaseShpStationsShpDistrictsImporter):
     council_id = 'E07000195'
     districts_name = 'New data for 4 May/nulbcPollingDistricts'
     stations_name = 'New data for 4 May/nulbcPollingStations.shp'
-    elections = ['local.staffordshire.2017-05-04']
+    elections = [
+        'local.staffordshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def parse_string(self, text):
         try:

@@ -7,5 +7,6 @@ class Command(BaseHalaroseCsvImporter):
     elections       = [
         'local.cambridgeshire.2017-05-04'
         'mayor.cambridgeshire-and-peterborough.2017-05-04',
+        'parl.2017-06-08'
     ]
     csv_encoding    = 'latin-1'

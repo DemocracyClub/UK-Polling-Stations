@@ -4,5 +4,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E07000034'
     addresses_name = 'May 2017/ChesterfieldDemocracy_Club__04May2017a.txt'
     stations_name = 'May 2017/ChesterfieldDemocracy_Club__04May2017a.txt'
-    elections = ['local.derbyshire.2017-05-04']
+    elections = [
+        'local.derbyshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
     csv_delimiter = '\t'

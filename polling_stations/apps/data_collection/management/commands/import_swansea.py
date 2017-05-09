@@ -4,7 +4,10 @@ class Command(BaseHalaroseCsvImporter):
     council_id      = 'W06000011'
     addresses_name  = 'May 2017/Swansea_polling_station_export-2017-03-06.csv'
     stations_name   = 'May 2017/Swansea_polling_station_export-2017-03-06.csv'
-    elections       = ['local.swansea.2017-05-04']
+    elections       = [
+        'local.swansea.2017-05-04',
+        'parl.2017-06-08'
+    ]
     csv_encoding    = 'latin-1'
 
     def station_record_to_dict(self, record):

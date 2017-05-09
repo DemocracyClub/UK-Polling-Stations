@@ -5,4 +5,7 @@ class Command(BaseXpressWebLookupCsvImporter):
     # note: extension is TSV, but file is actually comma seperated
     addresses_name  = 'RossendalePropertyPostCodePollingStationWebLookup-2017-03-10.TSV'
     stations_name   = 'RossendalePropertyPostCodePollingStationWebLookup-2017-03-10.TSV'
-    elections       = ['local.lancashire.2017-05-04']
+    elections       = [
+        'local.lancashire.2017-05-04',
+        'parl.2017-06-08'
+    ]

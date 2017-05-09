@@ -5,7 +5,10 @@ class Command(BaseShpStationsShpDistrictsImporter):
     council_id = 'E07000081'
     districts_name = 'City_of_Gloucester_New_Electoral_Sub_Districts'
     stations_name = 'New_City_of_Gloucester_Polling_Stations.shp'
-    elections = ['local.gloucestershire.2017-05-04']
+    elections = [
+        'local.gloucestershire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def district_record_to_dict(self, record):
         return {

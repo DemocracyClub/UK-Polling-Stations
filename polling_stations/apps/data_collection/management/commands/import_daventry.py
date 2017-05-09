@@ -11,7 +11,10 @@ class Command(BaseStationsAddressesImporter):
     council_id = 'E07000151'
     addresses_name = 'UPRN_PollingStationRef.shp'
     stations_name = 'DDC Polling Stations.shp'
-    elections = ['local.northamptonshire.2017-05-04']
+    elections = [
+        'local.northamptonshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def address_record_to_dict(self, record):
         try:

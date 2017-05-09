@@ -7,6 +7,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = [
         'mayor.liverpool-city-ca.2017-05-04',
         'local.wirral.2017-05-04',
+        'parl.2017-06-08'
     ]
     csv_delimiter = '\t'
     csv_encoding = 'latin-1'

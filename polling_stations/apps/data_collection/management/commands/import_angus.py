@@ -3,7 +3,10 @@ from data_collection.management.commands import BaseScotlandSpatialHubImporter
 class Command(BaseScotlandSpatialHubImporter):
     council_id = 'S12000041'
     council_name = 'Angus'
-    elections = ['local.angus.2017-05-04']
+    elections = [
+        'local.angus.2017-05-04',
+        'parl.2017-06-08'
+    ]
     """
     In the Angus data, station names are in the districts file but the
     address is in the stations file, so we need to grab the station name

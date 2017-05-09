@@ -5,7 +5,10 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     council_id = 'E07000113'
     districts_name = 'shp/Swale Polling Districts'
     stations_name = 'Swale 21 Feb 2017 Polling scheme station numbers.csv'
-    elections = ['local.kent.2017-05-04']
+    elections = [
+        'local.kent.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def district_record_to_dict(self, record):
         code = str(record[0]).strip()

@@ -6,7 +6,10 @@ class Command(BaseXpressWebLookupCsvImporter):
     stations_name    = 'PropertyPostCodePollingStationWebLookup-2016-02-09.CSV'
     csv_encoding     = 'latin-1'
     station_id_field = 'pollingdistrictreference'
-    elections        = ['local.denbighshire.2017-05-04']
+    elections        = [
+        'local.denbighshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     """
     Joe received following reply from Denbighshire council:

@@ -8,7 +8,10 @@ due to incomplete/poor quality data
 class Command(BaseScotlandSpatialHubImporter):
     council_id = 'S12000044'
     council_name = 'North Lanarkshire'
-    elections = ['local.north-lanarkshire.2017-05-04']
+    elections = [
+        'local.north-lanarkshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def station_record_to_dict(self, record):
         # clean up codes

@@ -4,7 +4,10 @@ class Command(BaseHalaroseCsvImporter):
     council_id      = 'E07000188'
     addresses_name  = 'Sedgemoor_polling_station_export-2017-02-24.csv'
     stations_name   = 'Sedgemoor_polling_station_export-2017-02-24.csv'
-    elections       = ['local.somerset.2017-05-04']
+    elections       = [
+        'local.somerset.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def station_record_to_dict(self, record):
         if getattr(record, self.station_id_field).strip() == 'n/a':
