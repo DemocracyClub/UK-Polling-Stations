@@ -5,7 +5,7 @@ class Command(BaseMorphApiImporter):
     srid = 4326
     districts_srid  = 4326
     council_id = 'E07000062'
-    elections = ['parl.2017-06-08']
+    #elections = ['parl.2017-06-08']
     scraper_name = 'wdiv-scrapers/DC-PollingStations-Hastings'
     geom_type = 'geojson'
 
