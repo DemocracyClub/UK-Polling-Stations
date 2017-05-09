@@ -279,7 +279,14 @@ from .constants.tiles import *  # noqa
 
 # Import .local.py last - settings in local.py override everything else
 try:
+
     from .local import *  # noqa
+
+    try:
+        INSTALLED_APPS += PROD_APPS
+    except NameError:
+        pass
+
 except ImportError:
     pass
 
