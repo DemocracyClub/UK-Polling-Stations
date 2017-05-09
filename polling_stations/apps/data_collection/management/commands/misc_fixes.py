@@ -44,17 +44,4 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
-        print("deleting: Heathfield Youth Centre...")
-        stations = PollingStation.objects.filter(
-            council_id='E07000065',
-            internal_council_id='4754'
-        )
-        if len(stations) == 1:
-            station = stations[0]
-            station.delete()
-            print("..deleted")
-        else:
-            print("..NOT deleted")
-
-
         print("..done")
