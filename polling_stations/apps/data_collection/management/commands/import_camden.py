@@ -22,12 +22,7 @@ class Command(BaseGenericApiImporter):
     districts_url    = 'https://opendata.camden.gov.uk/api/views/ta65-2szc/rows.json?accessType=DOWNLOAD'
     # This is just a bespoke XML format
     stations_url     = 'https://opendata.camden.gov.uk/api/views/5rhh-fxna/rows.xml?accessType=DOWNLOAD'
-    elections        = [
-        'gla.c.2016-05-05',
-        'gla.a.2016-05-05',
-        'mayor.london.2016-05-05',
-        'ref.2016-06-23'
-    ]
+    elections        = ['parl.2017-06-08']
 
     def get_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
@@ -61,7 +56,7 @@ class Command(BaseGenericApiImporter):
 
         address = "\n".join([info['organisation'], info['street']])
 
-        if info['polling_district_name'] == "JA":
+        if info['polling_district_name'] == "JA" and info['organisation'] == 'Rainbow Nursery':
             info['postcode'] = "NW5 2HY"
             address = "Rainbow Nursery, St. Benet's Church Hall, Lupton Street London"
             info['longitude'] = "-0.1381025"

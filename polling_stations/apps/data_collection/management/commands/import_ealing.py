@@ -5,12 +5,7 @@ class Command(BaseMorphApiImporter):
     srid = 4326
     districts_srid  = 4326
     council_id = 'E09000009'
-    elections = [
-        'gla.c.2016-05-05',
-        'gla.a.2016-05-05',
-        'mayor.london.2016-05-05',
-        'ref.2016-06-23',
-    ]
+    elections = ['parl.2017-06-08']
     scraper_name = 'wdiv-scrapers/DC-PollingStations-Ealing'
     geom_type = 'geojson'
 
