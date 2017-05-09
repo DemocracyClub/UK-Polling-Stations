@@ -5,7 +5,10 @@ class Command(BaseHalaroseCsvImporter):
     council_id      = 'E07000126'
     addresses_name  = 'Properties.csv'
     stations_name   = 'Polling Stations.csv'
-    elections       = ['local.lancashire.2017-05-04']
+    elections       = [
+        'local.lancashire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     # South Ribble use Halarose, but they've split the standard export up into
     # 2 files and removed some columns. They've also added grid refs for the

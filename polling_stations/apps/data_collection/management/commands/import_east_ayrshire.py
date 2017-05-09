@@ -8,7 +8,10 @@ due to incomplete/poor quality data
 class Command(BaseScotlandSpatialHubImporter):
     council_id = 'S12000008'
     council_name = 'East Ayrshire'
-    elections = ['local.east-ayrshire.2017-05-04']
+    elections = [
+        'local.east-ayrshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def station_record_to_dict(self, record):
         # exclude duplicate district code

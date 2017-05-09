@@ -6,7 +6,10 @@ class Command(BaseStationsDistrictsImporter):
     districts_filetype = 'shp'
     srid = 27700
     council_id = 'E07000124'
-    elections = ['local.lancashire.2017-05-04']
+    elections = [
+        'local.lancashire.2017-05-04',
+        'parl.2017-06-08'
+    ]
     districts_name = 'Ribble Valley 2017 Polling Disricts/Polling Districts'
     stations_name  = 'Ribble Valley 2017 Polling Stations/Polling Stations-fixed.geojson'
 

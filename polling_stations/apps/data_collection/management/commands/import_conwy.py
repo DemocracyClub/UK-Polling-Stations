@@ -11,7 +11,10 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     council_id     = 'W06000003'
     districts_name = 'Conwy CBC Polling Districts 20160407'
     stations_name  = 'Conwy CBC Polling Stations (with UPRN) 20160407.csv'
-    elections      = ['local.conwy.2017-05-04']
+    elections      = [
+        'local.conwy.2017-05-04',
+        'parl.2017-06-08'
+    ]
     ja_count = 0
 
     def district_record_to_dict(self, record):

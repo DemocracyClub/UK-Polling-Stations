@@ -4,7 +4,10 @@ class Command(BaseXpressWebLookupCsvImporter):
     council_id      = 'E06000001'
     addresses_name  = 'HartlepoolProperty Post Code New.csv'
     stations_name   = 'HartlepoolProperty Post Code New.csv'
-    elections       = ['mayor.tees-valley.2017-05-04']
+    elections       = [
+        'mayor.tees-valley.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     # Hartlepool use Xpress, but they've provided a slightly trimmed down
     # version of the WebLookup export. We need to customise a bit..

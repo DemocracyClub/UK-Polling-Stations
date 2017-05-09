@@ -6,7 +6,10 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     council_id = 'E07000221'
     districts_name = 'Polling_Districts'
     stations_name = 'Copy of Polling Station Details - Revised.csv'
-    elections = ['local.warwickshire.2017-05-04']
+    elections = [
+        'local.warwickshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     """
     File supplied contains 154 districts and 148 stations.

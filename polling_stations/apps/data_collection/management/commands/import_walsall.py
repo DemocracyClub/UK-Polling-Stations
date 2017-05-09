@@ -4,5 +4,8 @@ class Command(BaseHalaroseCsvImporter):
     council_id      = 'E08000030'
     addresses_name  = 'polling_station_export-2017-05-02.csv'
     stations_name   = 'polling_station_export-2017-05-02.csv'
-    elections       = ['mayor.west-midlands.2017-05-04']
+    elections       = [
+        'mayor.west-midlands.2017-05-04',
+        'parl.2017-06-08'
+    ]
     csv_encoding    = 'latin-1'

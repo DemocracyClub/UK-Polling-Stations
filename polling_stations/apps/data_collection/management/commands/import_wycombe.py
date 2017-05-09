@@ -7,7 +7,10 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     council_id = 'E07000007'
     districts_name = 'Polling Districts_region'
     stations_name = 'polling-stations.csv'
-    elections = ['local.buckinghamshire.2017-05-04']
+    elections = [
+        'local.buckinghamshire.2017-05-04',
+        'parl.2017-06-08'
+    ]
 
     def district_record_to_dict(self, record):
         return {

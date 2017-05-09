@@ -4,4 +4,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E08000011'
     addresses_name = 'Democracy_Club__04May2017 - Knowsley MBC.CSV'
     stations_name = 'Democracy_Club__04May2017 - Knowsley MBC.CSV'
-    elections = ['mayor.liverpool-city-ca.2017-05-04']
+    elections = [
+        'mayor.liverpool-city-ca.2017-05-04',
+        'parl.2017-06-08'
+    ]
