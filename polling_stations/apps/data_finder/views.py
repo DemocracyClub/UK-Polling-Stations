@@ -364,6 +364,7 @@ def campaign_signup(request, postcode):
 class AddressFormView(FormView):
     form_class = AddressSelectForm
     template_name = "address_select.html"
+    NOTINLIST = '519RA5LCGuHHXQvBUVgOXiCcqWy7SZG1inRDKcx1'
 
     def get_context_data(self, **kwargs):
         context = super(AddressFormView, self).get_context_data(**kwargs)
@@ -381,13 +382,21 @@ class AddressFormView(FormView):
         sorter = AddressSorter(addresses)
         addresses = sorter.natural_sort()
         select_addresses = [(element.slug, element.address) for element in addresses]
+        select_addresses.append((self.NOTINLIST, 'My address is not in the list'))
         return form_class(select_addresses, self.kwargs['postcode'], **self.get_form_kwargs())
 
     def form_valid(self, form):
-        self.success_url = reverse(
-            'address_view',
-            kwargs={'address_slug': form.cleaned_data['address']}
-        )
+        slug = form.cleaned_data['address']
+        if slug == self.NOTINLIST:
+            self.success_url = reverse(
+                'we_dont_know',
+                kwargs={'postcode': self.kwargs['postcode']}
+            )
+        else:
+            self.success_url = reverse(
+                'address_view',
+                kwargs={'address_slug': slug}
+            )
         return super(AddressFormView, self).form_valid(form)
 
 
