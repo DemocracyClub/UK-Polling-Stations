@@ -2,3 +2,4 @@
 
 gunicorn==19.1.1
 raven
+django-redis
