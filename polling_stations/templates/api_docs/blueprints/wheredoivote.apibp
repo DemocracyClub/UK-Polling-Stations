@@ -10,6 +10,11 @@ More information about the project is available on our [website](https://democra
 
 Note this API is currently in beta and outputs are subject to change.
 
+### Usage restrictions
+
+Anonymous users are limited to 1,000 requests per day.
+If you need a higher limit, please [contact us](mailto:pollingstations@democracyclub.org.uk) to discuss your usage and obtain an API key.
+
 <!-- include(data_structures.apibp) -->
 
 <!-- include(root.apibp) -->
