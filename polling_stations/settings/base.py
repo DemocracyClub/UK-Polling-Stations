@@ -252,6 +252,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'api.authentication.authentication.TokenAuthSupportQueryString',
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1000/day',
+    },
 }
 
 EMBED_PREFIXES = (
