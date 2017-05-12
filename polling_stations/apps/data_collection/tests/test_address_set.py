@@ -110,21 +110,28 @@ class AddressSetTest(TestCase):
                 'council': '',
                 'slug': 'e'
             },
+            {
+                'address': '56 Mickleton Dr, Southport',
+                'postcode': 'BT281QZ',
+                'polling_station_id': 'A04',
+                'council': '',
+                'slug': 'f'
+            },
         ]
 
         expected = set([
-            Address(
-                address='56 Mickleton Dr, Southport',
-                postcode='PR82QX',
-                polling_station_id='A04',
-                council='',
-                slug='d'),
             Address(
                 address='5-6 Mickleton Dr, Southport',
                 postcode='BT281QZ',
                 polling_station_id='A05',
                 council='',
                 slug='e'),
+            Address(
+                address='56 Mickleton Dr, Southport',
+                postcode='BT281QZ',
+                polling_station_id='A04',
+                council='',
+                slug='f'),
         ])
 
         address_list = AddressSet(MockLogger())
