@@ -3,8 +3,8 @@ from data_collection.management.commands import BaseShpStationsShpDistrictsImpor
 class Command(BaseShpStationsShpDistrictsImporter):
     srid = 27700
     council_id = 'E07000165'
-    districts_name = '4 April 2017/POLLDISTOPEN'
-    stations_name = '4 April 2017/POLLSTAOPEN.shp'
+    districts_name = 'parl.2017-06-08/Version 1/POLLDISTOPEN'
+    stations_name = 'parl.2017-06-08/Version 1/POLLSTAOPEN.shp'
     elections = [
         'local.north-yorkshire.2017-05-04',
         'parl.2017-06-08'
