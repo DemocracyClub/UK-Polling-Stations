@@ -146,8 +146,7 @@ class AddressSet(CustomSet):
         # for each address, build a lookup of address -> list of station ids
 
         address_lookup = {}
-        for i in range(0, len(addresses)):
-            record = addresses[i]
+        for i, record in enumerate(addresses):
             address_slug = Slugger.slugify(
                 "-".join([record['address'], record['postcode']]))
             addresses[i]['address_slug'] = address_slug
@@ -161,22 +160,50 @@ class AddressSet(CustomSet):
 
     def remove_ambiguous_addresses(self):
 
+        """ TODO:
+        1. Should this only remove all addresses in the postcode where all
+           of the 'remaining' addresses (after discarding the ambiguous ones)
+           all vote at the same station?
+           In the case where the 'remaining' addresses are split,
+           we'll show an address picker and the user can choose
+           'my address is not in the list'. Is that better/(more) correct?
+        2. This function is doing too many things: clean it up
+        3. Add more test cases
+        """
+
         # convert our set of tuples into a list of dicts
         tmp_addresses = list(self.elements)
         tmp_addresses = [x._asdict() for x in tmp_addresses]
 
         address_lookup = self.build_address_lookup(tmp_addresses)
-
+        flagged_postcodes = set()
         out_addresses = set()
-        # discard any addresses which map to >1 polling station
+
+        # build a list of postcodes containing
+        # an address that maps to >1 polling stations
         for record in tmp_addresses:
-            address_slug = record['address_slug']
-            if len(address_lookup[address_slug]) == 1:
-                out_addresses.add(self.build_namedtuple(record))
-            else:
+            if len(address_lookup[record['address_slug']]) != 1:
+                flagged_postcodes.add(record['postcode'])
+
+        # use that list to discard all addresses with one of those postcodes
+        for i, record in enumerate(tmp_addresses):
+            if record['postcode'] in flagged_postcodes:
+                tmp_addresses[i] = None
+                if len(address_lookup[record['address_slug']]) != 1:
+                    # we discard it because the address itself is ambiguous
+                    reason = address_lookup[record['address_slug']]
+                else:
+                    # we've discarded it because it has the same postcode
+                    # as some other addresses we have discarded
+                    reason = record['postcode']
+
                 self.logger.log_message(
                     logging.INFO, "Ambiguous addresses discarded: %s: %s",
-                    variable=(address_slug, address_lookup[address_slug]))
+                    variable=(record['address_slug'], reason))
+
+        for record in tmp_addresses:
+            if record:
+                out_addresses.add(self.build_namedtuple(record))
 
         return out_addresses
 
