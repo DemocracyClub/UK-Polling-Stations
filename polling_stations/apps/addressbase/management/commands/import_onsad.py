@@ -24,7 +24,7 @@ class Command(BaseAddressBaseCommand):
         cursor = connection.cursor()
         print("clearing existing data..")
         cursor.execute("TRUNCATE TABLE addressbase_onsad;")
-        glob_str = os.path.join(kwargs['path'], "onsad_*.csv")
+        glob_str = os.path.join(kwargs['path'], "*.csv")
         print("importing from files..")
         for f in glob.glob(glob_str):
             print(f)
