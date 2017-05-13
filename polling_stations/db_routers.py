@@ -1,12 +1,17 @@
+APPS_THAT_USE_LOGGER = [
+    'data_finder',
+    'data_collection',
+]
+
 class LoggerRouter(object):
 
     def db_for_read(self, model, **hints):
-        if model._meta.app_label == 'data_finder':
+        if model._meta.app_label in APPS_THAT_USE_LOGGER :
             return 'logger'
         return None
 
     def db_for_write(self, model, **hints):
-        if model._meta.app_label == 'data_finder':
+        if model._meta.app_label in APPS_THAT_USE_LOGGER:
             return 'logger'
         return None
 
@@ -24,6 +29,6 @@ class LoggerRouter(object):
         Make sure the auth app only appears in the 'auth_db'
         database.
         """
-        if app_label == 'data_finder':
+        if app_label in APPS_THAT_USE_LOGGER:
             return db == 'logger'
         return None
