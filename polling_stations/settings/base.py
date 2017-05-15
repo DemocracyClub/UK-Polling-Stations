@@ -167,6 +167,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_gis',
     'django_extensions',
     'markdown_deux',
@@ -174,6 +175,7 @@ INSTALLED_APPS = (
 
 PROJECT_APPS = (
     'addressbase',
+    'api',
     'councils',
     'data_collection',
     'data_finder',
@@ -246,7 +248,16 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'api.authentication.authentication.TokenAuthSupportQueryString',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1000/day',
+    },
 }
 
 EMBED_PREFIXES = (

@@ -9,8 +9,7 @@ NOSE_ARGS = [
 ]
 
 MIGRATION_MODULES = {
-    app.split('.')[-1]: '{}.nomigrations'.format(
-        app.split('.')[-1])
+    app: '{}.nomigrations'.format(app)
     for app in INSTALLED_APPS
     if 'django' not in app
 }
