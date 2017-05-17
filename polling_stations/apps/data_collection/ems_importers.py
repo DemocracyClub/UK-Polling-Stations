@@ -60,6 +60,9 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
             address = address.replace("\n\n", "\n").strip()
         return address
 
+    def get_station_postcode(self, record):
+        return getattr(record, self.station_postcode_field).strip()
+
     def get_station_point(self, record):
         location = None
 
@@ -77,8 +80,8 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
                 srid=27700)
         else:
             # otherwise, geocode using postcode
-            postcode = getattr(record, self.station_postcode_field).strip()
-            if postcode == '':
+            postcode = self.get_station_postcode(record)
+            if not postcode:
                 return None
 
             try:
@@ -97,7 +100,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         location = self.get_station_point(record)
         return {
             'internal_council_id': getattr(record, self.station_id_field).strip(),
-            'postcode'           : getattr(record, self.station_postcode_field).strip(),
+            'postcode'           : self.get_station_postcode(record),
             'address'            : address.strip(),
             'location'           : location
         }
@@ -179,6 +182,49 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter,
             'postcode'          : record.addressline6.strip(),
             'polling_station_id': getattr(record, self.station_id_field).strip()
         }
+
+
+"""
+Sometimes the postcode doesn't appear in a consistent
+column and we need to work around that
+"""
+class BaseXpressDCCsvInconsistentPostcodesImporter(
+    BaseXpressDemocracyClubCsvImporter, metaclass=abc.ABCMeta):
+
+    # concat all the address columns together into address
+    # don't bother trying to split into address/postcode
+    station_address_fields = [
+        'polling_place_name',
+        'polling_place_address_1',
+        'polling_place_address_2',
+        'polling_place_address_3',
+        'polling_place_address_4',
+        'polling_place_postcode',
+    ]
+    station_postcode_search_fields = [
+        'polling_place_postcode',
+        'polling_place_address_4',
+        'polling_place_address_3',
+    ]
+
+    def station_record_to_dict(self, record):
+        address = self.get_station_address(record)
+        location = self.get_station_point(record)
+        return {
+            'internal_council_id': getattr(record, self.station_id_field).strip(),
+            'postcode'           : '',  # don't rely on get_station_postcode()
+            'address'            : address.strip(),
+            'location'           : location
+        }
+
+    def get_station_postcode(self, record):
+        # postcode does not appear in a consistent column
+        # return the contents of the last populated address
+        # field and we'll attempt to geocode with that
+        for field in self.station_postcode_search_fields:
+            if getattr(record, field):
+                return getattr(record, field).strip()
+        return None
 
 
 """
