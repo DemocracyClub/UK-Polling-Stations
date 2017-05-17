@@ -1,11 +1,8 @@
-from data_collection.management.commands import BaseXpressWebLookupCsvImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-class Command(BaseXpressWebLookupCsvImporter):
-    council_id      = 'E07000125'
-    # note: extension is TSV, but file is actually comma seperated
-    addresses_name  = 'RossendalePropertyPostCodePollingStationWebLookup-2017-03-10.TSV'
-    stations_name   = 'RossendalePropertyPostCodePollingStationWebLookup-2017-03-10.TSV'
-    elections       = [
-        'local.lancashire.2017-05-04',
-        'parl.2017-06-08'
-    ]
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = 'E07000125'
+    addresses_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 (15).tsv'
+    stations_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 (15).tsv'
+    elections = ['parl.2017-06-08']
+    csv_delimiter = '\t'
