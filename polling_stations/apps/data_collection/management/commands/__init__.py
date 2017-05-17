@@ -13,5 +13,6 @@ from data_collection.base_importers import (
 from data_collection.ems_importers import (
     BaseXpressWebLookupCsvImporter,
     BaseXpressDemocracyClubCsvImporter,
+    BaseXpressDCCsvInconsistentPostcodesImporter,
     BaseHalaroseCsvImporter,
 )
