@@ -1,66 +1,20 @@
-"""
-Import Harrow
-"""
-from time import sleep
+from data_collection.management.commands import BaseXpressDCCsvInconsistentPostcodesImporter
 
-from django.contrib.gis.geos import Point
-
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode, geocode_point_only, PostcodeError
-from addressbase.models import Address
-
-
-class Command(BaseCsvStationsCsvAddressesImporter):
-    """
-    Imports the Polling Station data from Harrow Council
-    """
-    private = True
-    council_id      = 'E09000015'
-    addresses_name  = 'addresses.csv'
-    stations_name   = 'stations.csv'
-    csv_delimiter   = ','
-    elections       = [
-        'ref.2016-06-23'
-    ]
+class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
+    council_id = 'E09000008'
+    addresses_name = 'parl.2017-06-08/Version 2/Democracy_Club__08June2017 (16).tsv'
+    stations_name = 'parl.2017-06-08/Version 2/Democracy_Club__08June2017 (16).tsv'
+    elections = ['parl.2017-06-08']
+    csv_delimiter = '\t'
 
     def station_record_to_dict(self, record):
-        address = record.situation_of_polling_station
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
 
-        location = None
-        location_data = None
-        if record.postcode_if_available:
-            try:
-                postcode = record.postcode_if_available.strip()
-                postcode = postcode.replace('\n', '')
-                if len(postcode) > 5:
-                    location_data = geocode_point_only(postcode)
-            except PostcodeError:
-                pass
+        """
+        File supplied contained obviously inaccurate point
+        remove it and fall back to geocoding
+        """
+        if record.polling_place_id == '8700':
+            record = record._replace(polling_place_easting = '0')
+            record = record._replace(polling_place_northing = '0')
 
-            if location_data:
-                location = Point(
-                    location_data['wgs84_lon'],
-                    location_data['wgs84_lat'],
-                    srid=4326)
-
-        desc = record.description_of_persons_entitled_to_vote
-        district = desc.split('-')[0].strip()
-
-        return {
-            'internal_council_id': district,
-            'polling_district_id': district,
-            'postcode'           : None,
-            'address'            : address,
-            'location'           : location
-        }
-
-    def address_record_to_dict(self, record):
-        address = record.address
-
-        return {
-            'address'           : address,
-            'postcode'          : record.postcode.strip(),
-            'polling_station_id': record.district
-        }
+        return super().station_record_to_dict(record)
