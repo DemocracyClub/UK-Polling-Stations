@@ -2,10 +2,7 @@ from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
 class Command(BaseXpressWebLookupCsvImporter):
     council_id      = 'E08000026'
-    addresses_name  = 'rev02-2017/CoventryPropertyPostCodePollingStationWebLookup-2017-02-02.TSV'
-    stations_name   = 'rev02-2017/CoventryPropertyPostCodePollingStationWebLookup-2017-02-02.TSV'
-    elections       = [
-        'mayor.west-midlands.2017-05-04',
-        'parl.2017-06-08'
-    ]
+    addresses_name  = 'parl.2017-06-08/Version 1/E08000026-Coventry PropertyPostCodePollingStationWebLookup-2017-05-19.TSV'
+    stations_name   = 'parl.2017-06-08/Version 1/E08000026-Coventry PropertyPostCodePollingStationWebLookup-2017-05-19.TSV'
+    elections       = ['parl.2017-06-08']
     csv_delimiter = '\t'
