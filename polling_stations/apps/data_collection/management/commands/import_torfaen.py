@@ -5,12 +5,9 @@ from data_finder.helpers import geocode_point_only, PostcodeError
 
 class Command(BaseCsvStationsCsvAddressesImporter):
     council_id      = 'W06000020'
-    addresses_name  = 'ElectorateAddressWthPollingStationsTorfaenFINAL-anonymised.csv'
-    stations_name   = 'ElectorateAddressWthPollingStationsTorfaenFINAL-anonymised.csv'
-    elections       = [
-        'local.torfaen.2017-05-04',
-        'parl.2017-06-08'
-    ]
+    addresses_name  = 'parl.2017-06-08/Version 1/ElectorateAddressWthPollingStationsTorfaenFINAL-anonymised.csv'
+    stations_name   = 'parl.2017-06-08/Version 1/ElectorateAddressWthPollingStationsTorfaenFINAL-anonymised.csv'
+    elections       = ['parl.2017-06-08']
 
     def get_station_hash(self, record):
         return "-".join([
