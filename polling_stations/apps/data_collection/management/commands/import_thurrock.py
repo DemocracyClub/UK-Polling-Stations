@@ -1,9 +1,9 @@
-from data_collection.management.commands import BaseXpressDCCsvInconsistentPostcodesImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
-    council_id = 'E09000008'
-    addresses_name = 'parl.2017-06-08/Version 2/Democracy_Club__08June2017 (16).tsv'
-    stations_name = 'parl.2017-06-08/Version 2/Democracy_Club__08June2017 (16).tsv'
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = 'E06000034'
+    addresses_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 (8).tsv'
+    stations_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 (8).tsv'
     elections = ['parl.2017-06-08']
     csv_delimiter = '\t'
 
@@ -13,7 +13,7 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         File supplied contained obviously inaccurate point
         remove it and fall back to geocoding
         """
-        if record.polling_place_id == '8700':
+        if record.polling_place_id == '4871':
             record = record._replace(polling_place_easting = '0')
             record = record._replace(polling_place_northing = '0')
 

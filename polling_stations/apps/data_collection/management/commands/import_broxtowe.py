@@ -3,12 +3,9 @@ from data_collection.management.commands import BaseShpStationsShpDistrictsImpor
 class Command(BaseShpStationsShpDistrictsImporter):
     srid = 27700
     council_id = 'E07000172'
-    districts_name = 'Broxtowe_Polling_Information'
-    stations_name = 'Broxtowe_Polling_Stations.shp'
-    elections = [
-        'local.nottinghamshire.2017-05-04',
-        #'parl.2017-06-08'
-    ]
+    districts_name = 'parl.2017-06-08/Version 1/Broxtowe_Polling_Information'
+    stations_name = 'parl.2017-06-08/Version 1/Broxtowe_Polling_Stations.shp'
+    elections = ['parl.2017-06-08']
 
     def district_record_to_dict(self, record):
         return {

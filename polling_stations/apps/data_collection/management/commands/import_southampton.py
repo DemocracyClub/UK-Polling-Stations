@@ -14,9 +14,7 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
     council_id       = 'E06000045'
     districts_url    = 'http://www.southampton.gov.uk/geoserver/wms?LAYERS=SCC%3APOLLING_DISTRICTS&TRANSPARENT=TRUE&STYLES=Polling_Districts_Labelled&HOVER=false&FORMAT=kml&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A27700&BBOX=436000.0,108500.0,448000.0,118000.0&WIDTH=867&HEIGHT=426'
     stations_url     = 'http://www.southampton.gov.uk/geoserver/wms?LAYERS=SCC%3APOLLING_STATIONS&TRANSPARENT=TRUE&STYLES=Polling_Stations_Labelled&HOVER=false&FORMAT=kml&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A27700&BBOX=436000.0,108500.0,448000.0,118000.0&WIDTH=867&HEIGHT=426'
-    elections        = [
-        'ref.2016-06-23'
-    ]
+    elections        = ['parl.2017-06-08']
 
 
     def extract_info_from_district_description(self, description):
@@ -52,11 +50,8 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
         # lxml needs everything to be enclosed in one root element
         html = etree.XML('<div>' + str(description).replace('&', '&amp;') + '</div>')
         return {
-            'POLLING_STATION':      html[1][0][1].text,
-            'WARD_NAME':            html[1][1][1].text,
-            'POLLING_DISTRICT_REF': html[1][2][1].text,
-            'POLLING_STATION_NO':   html[1][3][1].text,
-            'MI_PRINX':             html[1][4][1].text,
+            'POLLING_STATION': html[0][0][0].text,
+            'POLLING_DISTRICT_REF': html[0][1][0].text.split(":")[1].strip()
         }
 
     def station_record_to_dict(self, record):
