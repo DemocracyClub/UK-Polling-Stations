@@ -164,6 +164,10 @@ class Command(BaseCommand):
             else:
                 self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
 
+        print(
+            "running %i import scripts..." %\
+            (len(commands_series) + len(commands_parallel))
+        )
         # run all the import scripts
         if kwargs['multiprocessing']:
             # do anything we want to run in series first
