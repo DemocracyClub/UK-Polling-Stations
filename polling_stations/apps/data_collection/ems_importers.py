@@ -335,3 +335,92 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
             'postcode'          : record.housepostcode.strip(),
             'polling_station_id': getattr(record, self.station_id_field).strip(),
         }
+
+
+"""
+We see a lot of CSVs exported from Democracy Counts
+electoral service software: http://www.democracycounts.co.uk/
+with the addresses and stations in a single CSV file
+
+This is a specialised case of BaseCsvStationsCsvAddressesImporter
+with some sensible presets for processing CSVs in this format
+but we can override them if necessary
+"""
+class BaseDemocracyCountsCsvImporter(BaseCsvStationsCsvAddressesImporter,
+                                     metaclass=abc.ABCMeta):
+
+    csv_delimiter = ','
+    station_name_field = 'placename'
+    address_fields = [
+        'add1',
+        'add2',
+        'add3',
+        'add4',
+        'add5',
+        'add6',
+    ]
+    postcode_field = 'postcode'
+    station_id_field = 'stationcode'
+
+    def address_record_to_dict(self, record):
+
+        if not getattr(record, self.postcode_field).strip():
+            return None
+
+        address = ", ".join([
+            getattr(record, field) for field in self.address_fields
+        ])
+        while ", , " in address:
+            address = address.replace(", , ", ", ")
+        if address[-2:] == ', ':
+            address = address[:-2]
+
+        if 'Dummy Record' in address:
+            return None
+
+        return {
+            'address'           : address,
+            'postcode'          : getattr(record, self.postcode_field).strip(),
+            'polling_station_id': getattr(record, self.station_id_field).strip(),
+        }
+
+    def get_station_point(self, record):
+        location = None
+
+        badvalues = ['', '0', '0.00']
+        if (record.xordinate not in badvalues and record.yordinate not in badvalues):
+            # if we've got points, use them
+            location = Point(float(record.xordinate), float(record.yordinate), srid=27700)
+        else:
+            # otherwise, geocode using postcode
+            postcode = record.postcode.strip()
+            if postcode == '':
+                return None
+
+            try:
+                location_data = geocode_point_only(postcode)
+                location = Point(
+                    location_data['wgs84_lon'],
+                    location_data['wgs84_lat'],
+                    srid=4326)
+            except PostcodeError:
+                location = None
+
+        return location
+
+    def station_record_to_dict(self, record):
+
+        address = "\n".join(
+            [getattr(record, self.station_name_field)] +
+            [getattr(record, field) for field in self.address_fields])
+        while "\n\n" in address:
+            address = address.replace("\n\n", "\n").strip()
+
+        location = self.get_station_point(record)
+
+        return {
+            'internal_council_id': getattr(record, self.station_id_field).strip(),
+            'postcode'           : getattr(record, self.postcode_field).strip(),
+            'address'            : address,
+            'location'           : location
+        }

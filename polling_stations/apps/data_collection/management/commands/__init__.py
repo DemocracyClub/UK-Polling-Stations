@@ -15,4 +15,5 @@ from data_collection.ems_importers import (
     BaseXpressDemocracyClubCsvImporter,
     BaseXpressDCCsvInconsistentPostcodesImporter,
     BaseHalaroseCsvImporter,
+    BaseDemocracyCountsCsvImporter,
 )
