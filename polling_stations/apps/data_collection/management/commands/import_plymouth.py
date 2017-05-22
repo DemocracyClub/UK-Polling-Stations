@@ -1,72 +1,8 @@
-"""
-Imports Plymouth
-"""
-from django.contrib.gis.geos import Point, GEOSGeometry
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
-from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
-from data_collection.google_geocoding_api_wrapper import (
-    GoogleGeocodingApiWrapper,
-    PostcodeNotFoundException
-)
-
-
-class Command(BaseCsvStationsKmlDistrictsImporter):
-    """
-    Imports the Polling Station data from Plymouth Council
-    """
-    council_id     = 'E06000026'
-    districts_name = 'Plymouth_Polling_Districts.kml'
-    stations_name  = 'Plymouth Polling Stations.csv'
-    elections      = ['parl.2015-05-07']
-
-    def district_record_to_dict(self, record):
-        # this kml has no altitude co-ordinates so the data is ok as it stands
-        geojson = record.geom.geojson
-
-        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid('districts')))
-
-        # manually deal with dodgy/missing data
-        if record['DISTRICT'].value == '' and record['NOTES1'].value == 'EGGBUCKLAND' and record['AREA'].value == 689766:
-            id = 'HD'
-        elif record['DISTRICT'].value == '' and record['NOTES1'].value == 'EGGBUCKLAND' and record['AREA'].value == 594904:
-            id = 'HF'
-        elif record['DISTRICT'].value == '' and record['NOTES1'].value == '':
-            # Drake's Island ( https://en.wikipedia.org/wiki/Drake's_Island )
-            # seems to have a polling district but no associated station so can't work out the code.
-            # We'll just give it a name:
-            id = "Drake's Island"
-        else:
-            id = record['DISTRICT'].value
-
-        return {
-            'internal_council_id': id,
-            'name'               : id,
-            'area'               : poly
-        }
-
-    def station_record_to_dict(self, record):
-        location = Point(float(record.east), float(record.north), srid=self.get_srid())
-
-        address = "\n".join([record.addressl1, record.addressl2, record.addressl3])
-        if address[-1:] == '\n':
-            address = address[:-1]
-
-        # attempt to attach postcodes
-        gwrapper = GoogleGeocodingApiWrapper(address + ", Plymouth, UK", self.council_id, 'UTA')
-        try:
-            postcode = gwrapper.address_to_postcode()
-        except PostcodeNotFoundException:
-            postcode = ''
-
-        # These district codes don't exist in the district boundaries
-        # so don't import stations for them
-        if (record.pdref == 'BC' or record.pdref == 'BH'):
-            return None
-        else:
-            return {
-                'internal_council_id': record.statno,
-                'postcode':            postcode,
-                'address':             address,
-                'location':            location,
-                'polling_district_id': record.pdref
-            }
+class Command(BaseHalaroseCsvImporter):
+    council_id      = 'E06000026'
+    addresses_name  = 'parl.2017-06-08/Version 1/Plymouth Addresses on database - Polling Stations.csv'
+    stations_name   = 'parl.2017-06-08/Version 1/Plymouth Addresses on database - Polling Stations.csv'
+    elections       = ['parl.2017-06-08']
+    csv_encoding    = 'windows-1252'
