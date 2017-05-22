@@ -1,30 +1,8 @@
-"""
-Import Reading
-"""
-import sys
+from data_collection.management.commands import BaseXpressDCCsvInconsistentPostcodesImporter
 
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
-
-class Command(BaseShpStationsShpDistrictsImporter):
-    """
-    Imports the Polling Station data from Reading
-    """
-    council_id     = 'E06000038'
-    districts_name = 'polling_districts'
-    stations_name  = 'polling_stations.shp'
-    elections      = ['parl.2015-05-07']
-
-    def district_record_to_dict(self, record):
-        return {
-            'internal_council_id': record[0],
-            'name': "%s - %s" % (record[1], record[0]),
-        }
-
-    def station_record_to_dict(self, record):
-        district_id = record[3].split(" ")[-1].strip()
-        return {
-            'internal_council_id': record[0],
-            'postcode'           : record[-1],
-            'address'            : "\n".join(record[2:-1]),
-            'polling_district_id': district_id
-        }
+class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
+    council_id = 'E06000038'
+    addresses_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 (17).tsv'
+    stations_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 (17).tsv'
+    elections = ['parl.2017-06-08']
+    csv_delimiter = '\t'
