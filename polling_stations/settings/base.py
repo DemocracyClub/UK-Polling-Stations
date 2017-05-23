@@ -122,6 +122,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -171,6 +172,7 @@ INSTALLED_APPS = (
     'rest_framework_gis',
     'django_extensions',
     'markdown_deux',
+    'corsheaders',
 )
 
 PROJECT_APPS = (
@@ -267,6 +269,12 @@ EMBED_PREFIXES = (
 WHITELABEL_PREFIXES = (
     'nus_wales',
 )
+
+# CorsMiddleware config
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = ()
+CORS_URLS_REGEX = r'^/(api|embed)/.*$'
+
 
 INTERNAL_IPS = ('127.0.0.1')
 SITE_TITLE = "Where Do I Vote?"
