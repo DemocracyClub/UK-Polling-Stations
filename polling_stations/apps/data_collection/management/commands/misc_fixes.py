@@ -44,4 +44,18 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
+        print("updating point for: St Alban's Hall, Oxford...")
+        stations = PollingStation.objects.filter(
+            council_id='E07000178',
+            internal_council_id='4399'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-1.232920, 51.740993, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
         print("..done")

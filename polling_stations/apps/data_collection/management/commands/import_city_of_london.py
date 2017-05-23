@@ -1,51 +1,13 @@
-from data_collection.morph_importer import BaseMorphApiImporter
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
-class Command(BaseMorphApiImporter):
-
-    srid = 27700
-    districts_srid = 27700
-    council_id = 'E09000001'
-    elections = [
-        'gla.c.2016-05-05',
-        'gla.a.2016-05-05',
-        'mayor.london.2016-05-05',
-        'ref.2016-06-23',
-    ]
-    scraper_name = 'wdiv-scrapers/DC-PollingStations-CityOfLondon'
-    geom_type = 'gml'
-
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid('districts'))
-
-        return {
-            'internal_council_id': record['OBJECTID'],
-            'name'               : record['POLLING_DISTRICT'],
-            'area'               : poly
-        }
-
+class Command(BaseHalaroseCsvImporter):
+    council_id      = 'E09000001'
+    addresses_name  = 'parl.2017-06-08/Version 1/polling_station_export-2017-05-18.csv'
+    stations_name   = 'parl.2017-06-08/Version 1/polling_station_export-2017-05-18.csv'
+    elections       = ['parl.2017-06-08']
+    csv_encoding    = 'windows-1252'
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(record, self.geom_type, self.get_srid('stations'))
-
-
-        # format address and postcode
-        address = str(record['Address'])
-        address_parts = address.split(', ')
-        postcode = address_parts[-1]
-
-        if postcode[:1] == 'E':
-            del(address_parts[-1])
-        else:
-            postcode = address_parts[-1][-8:]
-            address_parts[-1] = address_parts[-1][:-9]
-
-        address = "\n".join(address_parts)
-
-
-        return {
-            'internal_council_id': record['OBJECTID'],
-            'postcode':            postcode,
-            'address':             address,
-            'location':            location
-        }
+        if getattr(record, self.station_id_field).strip() == 'n/a':
+            return None
+        return super().station_record_to_dict(record)
