@@ -43,7 +43,8 @@ Feature: Check Postcodes
     Then I fill in "postcode" with "BB11BB"
     Then I submit the only form
     Then I should see "Choose Your Address / Street"
-    Then I click "My address is not in the list"
+    Then I select "My address is not in the list" from "address"
+    Then I submit the only form
     Then I should see "Contact Foo Council"
     And I should see "We don't have data for your area."
     And I should see "We think everyone should be able to find their polling station online. If you agree, please sign up below."

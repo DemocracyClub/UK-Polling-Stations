@@ -16,11 +16,8 @@
         <div class="form-group">
             {{ form.as_p }}
             <button type="submit" class="button" id="submit-address">
-              {% trans "I've selected my address. Find my Polling Station" %}
+              {% trans "Find my Polling Station" %}
             </button>
-            <a class="button" href="{% url "we_dont_know" postcode=form.postcode %}">
-                {% trans "My address is not in the list" %}
-            </a>
         </div>
       </form>
 
