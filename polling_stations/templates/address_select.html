@@ -15,11 +15,22 @@
         {% csrf_token %}
         <div class="form-group">
             {{ form.as_p }}
-            <button type="submit" class="button" id="submit-address">
-              {% trans "I've selected my address. Find my Polling Station" %}
+
+            <p class="text-right">&nbsp;
+              <span id="clear-span" style="display:none;">
+                <a href="#" id="clear-button">
+                  <i class="fa fa-times" aria-hidden="true"></i> clear selection
+                </a>
+              </span>
+            </p>
+
+            <button type="submit" class="button" id="submit-button">
+              <i class="fa fa-check" aria-hidden="true"></i>
+              {% trans "Find my Polling Station" %}
             </button>
-            <a class="button" href="{% url "we_dont_know" postcode=form.postcode %}">
-                {% trans "My address is not in the list" %}
+
+            <a class="button" href="{% url "we_dont_know" postcode=form.postcode %}" id="wdk-button">
+              {% trans "My address is not in the list" %}
             </a>
         </div>
       </form>
@@ -39,6 +50,26 @@ fallback.ready(['jQuery'], function() {
         if (isAndroid) {
             $('.select_multirow').css('-webkit-appearance', 'menulist');
         }
+
+        var address_change_handler = function() {
+          if ($("#id_address").val() == null) {
+            $("#submit-button").addClass('disabled');
+            $("#wdk-button").removeClass('disabled');
+            $("#clear-span").hide();
+          } else {
+            $("#submit-button").removeClass('disabled');
+            $("#wdk-button").addClass('disabled');
+            $("#clear-span").show();
+          }
+        };
+        $("#id_address").on('change', address_change_handler);
+        address_change_handler();
+
+        $("#clear-button").on('click', function() {
+          $("#id_address").val(null);
+          address_change_handler();
+        });
+
     });
 });
 </script>
