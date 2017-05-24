@@ -1,12 +1,9 @@
-from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseXpressWebLookupCsvImporter):
     council_id = 'E07000093'
-    addresses_name = 'TestValleyDemocracy_Club__04May2017 (2).tsv'
-    stations_name = 'TestValleyDemocracy_Club__04May2017 (2).tsv'
-    elections = [
-        'local.hampshire.2017-05-04',
-        'parl.2017-06-08'
-    ]
+    addresses_name = 'parl.2017-06-08/Version 1/PropertyPostCodePollingStationWebLookup-2017-05-22.TSV'
+    stations_name = 'parl.2017-06-08/Version 1/PropertyPostCodePollingStationWebLookup-2017-05-22.TSV'
+    elections = ['parl.2017-06-08']
     csv_delimiter = '\t'
     csv_encoding = 'latin-1'
