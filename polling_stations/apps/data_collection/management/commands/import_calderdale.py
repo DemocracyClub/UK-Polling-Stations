@@ -28,7 +28,6 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
         # grab the last bit of the address - it might be a postcode
         postcode = record[2].split(",")[-1].strip()
-        print(postcode)
 
         # attempt to derive a point from it
         try:

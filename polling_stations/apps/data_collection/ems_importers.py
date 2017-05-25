@@ -283,6 +283,10 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         return location
 
     def station_record_to_dict(self, record):
+
+        if getattr(record, self.station_id_field).strip() == 'n/a':
+            return None
+
         address = self.get_station_address(record)
         location = self.get_station_point(record)
         return {

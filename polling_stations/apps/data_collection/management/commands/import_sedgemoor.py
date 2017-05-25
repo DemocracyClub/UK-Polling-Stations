@@ -8,8 +8,3 @@ class Command(BaseHalaroseCsvImporter):
         'local.somerset.2017-05-04',
         'parl.2017-06-08'
     ]
-
-    def station_record_to_dict(self, record):
-        if getattr(record, self.station_id_field).strip() == 'n/a':
-            return None
-        return super().station_record_to_dict(record)
