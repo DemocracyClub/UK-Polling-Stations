@@ -4,11 +4,26 @@
         <h3>You don't need your poll card to vote</h3>
         <p>If you don't have your poll card, you can go to the polling
             station and give them your name and address.</p>
-        <p>You don't need any other form of ID.</p>
+        {% endblocktrans %}
+
+        {% if territory == 'NI' %}
+          <p>{% trans "You will need photographic identification" %}</p>
+        {% else %}
+          <p>{% trans "You don't need any other form of ID" %}</p>
+        {% endif %}
+
+        {% blocktrans %}
         <p>If you haven’t received a polling card but think you should have done, contact your council</p>
         <p><strong>Polling stations are open from 7am to 10pm on Thursday 8 June.</strong></p>
-        <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
-          Read more about voting in the UK
-        </a></p>
         {% endblocktrans %}
+
+        {% if territory == 'NI' %}
+          <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
+            {% trans "Read more about voting in Northern Ireland" %}
+          </a></p>
+        {% else %}
+          <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
+            {% trans "Read more about voting in Great Britain" %}
+          </a></p>
+        {% endif %}
     </div>
