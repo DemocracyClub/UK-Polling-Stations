@@ -20,6 +20,9 @@
     line-height: 1.6;
     text-rendering: optimizeLegibility;
   }
+  .callout.success {
+    margin-top: 2rem;
+  }
 </style>
 {% endblock extra_page_css %}
 
@@ -174,6 +177,12 @@
     {% if we_know_where_you_should_vote and election_explainers %}
       {% include "election_explainers.html" %}
     {% endif %}
+
+    {% if we_know_where_you_should_vote or custom %}
+      {% if request.brand == 'democracyclub' and not error %}
+        {% include "feedback/feedback_form.html" %}
+      {% endif %}
+    {% endif %}
   </div>
 
 
@@ -197,6 +206,7 @@
 
   </div>
 </div>
+
 {% endblock content %}
 
 {% block in_page_javascript %}
@@ -379,4 +389,7 @@
   {% endif %}
 {% endif %}
 </script>
+
+{% include "feedback/feedback_js.html" %}
+
 {% endblock extra_javascript %}
