@@ -146,6 +146,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "whitelabel.context_processors.base_template",
     'dc_theme.context_processors.dc_theme_context',
     'data_finder.context_processors.example_postcode_context',
+    'feedback.context_processors.feedback_form',
 )
 
 
@@ -182,6 +183,7 @@ PROJECT_APPS = (
     'data_collection',
     'data_finder',
     'dc_theme',
+    'feedback',
     'nus_wales',
     'pollingstations',
     'static_precompiler',

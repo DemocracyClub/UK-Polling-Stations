@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+<div class="row">
+  <div class="columns large-8">
+{% include "feedback/feedback_form.html" %}
+  </div>
+</div>
+
+{% endblock content %}

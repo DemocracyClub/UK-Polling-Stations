@@ -52,7 +52,7 @@ extra_patterns = patterns(
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^api/beta/', include(router.urls)),
     url(r'^api/$', ApiDocsView.as_view(), name='api_docs'),
-
+    url(r'^feedback/', include('feedback.urls')),
     url(r'^league_table', include('data_collection.urls')),
     url(r'^coverage$', CoverageView.as_view(), name='coverage'),
 
