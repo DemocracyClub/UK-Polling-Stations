@@ -6,5 +6,5 @@ class Command(BaseXpressWebLookupCsvImporter):
     stations_name   = 'RBC Polling Station look up data.csv'
     elections       = [
         'local.worcestershire.2017-05-04',
-        'parl.2017-06-08'
+        #'parl.2017-06-08'
     ]
