@@ -1,47 +1,8 @@
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    srid = 27700
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E07000222'
-    districts_name = 'POLLD4 (1)'
-    stations_name = 'POLLINST.shp'
-    elections = [
-        'local.warwickshire.2017-05-04',
-        'parl.2017-06-08'
-    ]
-
-    def get_station_hash(self, record):
-        return record.record[0]
-
-    def district_record_to_dict(self, record):
-        return {
-            'internal_council_id': str(record[1]).strip().upper(),
-            'name': "%s - %s" % (
-                str(record[1]).strip().upper(),
-                str(record[0]).strip()
-            ),
-        }
-
-    def station_record_to_dict(self, record):
-
-        # WMH1 has 2 polling stations in the same location: merge them
-        if record[0] == 'WMH1':
-            return {
-                'internal_council_id': str(record[0]).strip().upper(),
-                'address'            : "\n".join([
-                    'Temporary Building (Stations A & B), Myton Fields Car Park',
-                    str(record[2]).strip(),
-                    str(record[3]).strip(),
-                ]),
-                'polling_district_id': str(record[0]).strip().upper(),
-            }
-
-        return {
-            'internal_council_id': str(record[0]).strip().upper(),
-            'address'            : "\n".join([
-                str(record[1]).strip(),
-                str(record[2]).strip(),
-                str(record[3]).strip(),
-            ]),
-            'polling_district_id': str(record[0]).strip().upper(),
-        }
+    addresses_name = 'parl.2017-06-08/Version 1/Warwick Democracy_Club__08June2017.tsv'
+    stations_name = 'parl.2017-06-08/Version 1/Warwick Democracy_Club__08June2017.tsv'
+    elections = ['parl.2017-06-08']
+    csv_delimiter = '\t'
