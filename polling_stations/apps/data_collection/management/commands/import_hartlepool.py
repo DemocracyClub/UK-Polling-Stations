@@ -2,12 +2,9 @@ from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
 class Command(BaseXpressWebLookupCsvImporter):
     council_id      = 'E06000001'
-    addresses_name  = 'HartlepoolProperty Post Code New.csv'
-    stations_name   = 'HartlepoolProperty Post Code New.csv'
-    elections       = [
-        'mayor.tees-valley.2017-05-04',
-        'parl.2017-06-08'
-    ]
+    addresses_name  = 'parl.2017-06-08/Version 1/Hartlepool Polling Station Addresses for Democracy Club.csv'
+    stations_name   = 'parl.2017-06-08/Version 1/Hartlepool Polling Station Addresses for Democracy Club.csv'
+    elections       = ['parl.2017-06-08']
 
     # Hartlepool use Xpress, but they've provided a slightly trimmed down
     # version of the WebLookup export. We need to customise a bit..
@@ -17,7 +14,7 @@ class Command(BaseXpressWebLookupCsvImporter):
         'pollingplaceaddress1',
         'pollingplaceaddress2',
     ]
-    station_id_field = 'pollingplaceid'
+    station_id_field = 'polling_place_id'
     easting_field = 'pollingplaceeasting'
     northing_field = 'pollingplacenorthing'
 
