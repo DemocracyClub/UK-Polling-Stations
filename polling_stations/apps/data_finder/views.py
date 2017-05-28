@@ -30,6 +30,7 @@ from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     AddressSorter,
     DirectionsHelper,
+    get_territory,
     geocode,
     EveryElectionWrapper,
     MultipleCouncilsException,
@@ -169,7 +170,7 @@ class BasePollingStationView(
         context['directions'] = self.directions
         context['we_know_where_you_should_vote'] = self.station
         context['noindex'] = True
-
+        context['territory'] = get_territory(self.postcode)
         if not context['we_know_where_you_should_vote']:
             if l is None:
                 context['custom'] = None
@@ -307,6 +308,8 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
         context['councils'] = []
         for council_id in self.council_ids:
             context['councils'].append(Council.objects.get(pk=council_id))
+
+        context['territory'] = get_territory(self.kwargs['postcode'])
 
         log_data = {
             'we_know_where_you_should_vote': False,

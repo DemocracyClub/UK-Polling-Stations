@@ -255,6 +255,12 @@ def geocode(postcode):
     raise PostcodeError('Could not geocode from any source')
 
 
+def get_territory(postcode):
+    if postcode[:2] == 'BT':
+        return 'NI'
+    return 'GB'
+
+
 class AddressSorter:
     # Class for sorting sort a list of address objects
     # in a human-readable order.
