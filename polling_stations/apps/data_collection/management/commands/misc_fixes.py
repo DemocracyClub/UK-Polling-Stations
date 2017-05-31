@@ -29,11 +29,6 @@ class Command(BaseCommand):
         print("..updated")
 
 
-        print("updating point for: Manchester Central Library...")
-        update_station_point('E08000003', '3019',
-            Point(-2.24415, 53.47784, srid=4326))
-
-
         print("updating point for: CLASSROOM HS210, WALSALL COLLEGE...")
         update_station_point('E08000030', '15',
             Point(-1.984424, 52.590524, srid=4326))
