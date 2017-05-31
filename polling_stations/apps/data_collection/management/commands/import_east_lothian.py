@@ -5,5 +5,5 @@ class Command(BaseScotlandSpatialHubImporter):
     council_name = 'East Lothian'
     elections = [
         'local.east-lothian.2017-05-04',
-        'parl.2017-06-08'
+        #'parl.2017-06-08'
     ]
