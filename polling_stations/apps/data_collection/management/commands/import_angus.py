@@ -5,7 +5,7 @@ class Command(BaseScotlandSpatialHubImporter):
     council_name = 'Angus'
     elections = [
         'local.angus.2017-05-04',
-        'parl.2017-06-08'
+        #'parl.2017-06-08'
     ]
     """
     In the Angus data, station names are in the districts file but the

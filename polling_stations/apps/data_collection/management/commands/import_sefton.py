@@ -2,10 +2,6 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E08000014'
-    addresses_name = 'Democracy_Club__04May2017 Sefton.tsv'
-    stations_name = 'Democracy_Club__04May2017 Sefton.tsv'
-    elections = [
-        'mayor.liverpool-city-ca.2017-05-04',
-        #'parl.2017-06-08'
-    ]
-    csv_delimiter = '\t'
+    addresses_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 2.CSV'
+    stations_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 2.CSV'
+    elections = ['parl.2017-06-08']

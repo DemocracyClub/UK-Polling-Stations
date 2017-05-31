@@ -2,10 +2,7 @@ from data_collection.management.commands import BaseXpressDCCsvInconsistentPostc
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = 'E07000171'
-    addresses_name = 'Democracy_Club__04May2017 (7).tsv'
-    stations_name = 'Democracy_Club__04May2017 (7).tsv'
-    elections = [
-        'local.nottinghamshire.2017-05-04',
-        'parl.2017-06-08'
-    ]
+    addresses_name = 'parl.2017-06-08/Version 1/Bassetlaw Democracy_Club__08June2017.tsv'
+    stations_name = 'parl.2017-06-08/Version 1/Bassetlaw Democracy_Club__08June2017.tsv'
+    elections = ['parl.2017-06-08']
     csv_delimiter = '\t'
