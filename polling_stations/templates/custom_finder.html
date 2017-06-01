@@ -1,0 +1,23 @@
+{% load i18n %}
+<div>{{ custom.message|safe }}</div>
+{% if custom.base_url and custom.can_pass_postcode %}
+  <p><a href="{{ custom.base_url }}{{ custom.encoded_postcode }}" target="_top">{% trans "Find your polling station" %}</a></p>
+{% else %}
+  {% if custom.base_url %}
+    <p><a href="{{ custom.base_url }}" target="_top">{% trans "Find your polling station" %}</a></p>
+  {% endif %}
+{% endif %}
+
+{% if custom.base_url %}
+  {% if council.phone %}
+    {% if territory == 'NI' %}
+      {% blocktrans with council_phone=council.phone council_name=council.name %}
+        <p>Alternatively, contact The Electoral Office for Northern Ireland on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
+      {% endblocktrans %}
+    {% else %}
+      {% blocktrans with council_phone=council.phone council_name=council.name %}
+        <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
+      {% endblocktrans %}
+    {% endif %}
+  {% endif %}
+{% endif %}

@@ -88,30 +88,7 @@
     {% else %}
 
       {% if custom %}
-
-        <div>{{ custom.message|safe }}</div>
-        {% if custom.base_url and custom.can_pass_postcode %}
-
-            <p><a href="{{ custom.base_url }}{{ custom.encoded_postcode }}" target="_top">{% trans "Find your polling station" %}</a></p>
-            {% if council.phone %}
-              {% blocktrans with council_phone=council.phone council_name=council.name %}
-              <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-              {% endblocktrans %}
-            {% endif %}
-
-        {% else %}
-            {% if custom.base_url %}
-
-                <p><a href="{{ custom.base_url }}" target="_top">{% trans "Find your polling station" %}</a></p>
-                {% if council.phone %}
-                  {% blocktrans with council_phone=council.phone council_name=council.name %}
-                  <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-                  {% endblocktrans %}
-                {% endif %}
-
-            {% endif %}
-        {% endif %}
-
+        {% include "custom_finder.html" %}
       {% else %}
 
         <h2>
@@ -193,7 +170,11 @@
 
     {% if council.address or council.postcode or council.phone or council.email %}
     <div class="card">
-      <h3>{% trans "Council Contact info" %}</h3>
+      {% if territory == 'NI' %}
+        <h3>The Electoral Office for Northern Ireland</h3>
+      {% else %}
+        <h3>{% trans "Council Contact info" %}</h3>
+      {% endif %}
       <address>
         {{ council.address|linebreaksbr }}<br>
         {{ council.postcode }}<br><br>
