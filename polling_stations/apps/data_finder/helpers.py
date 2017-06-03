@@ -458,7 +458,7 @@ class DirectionsHelper():
 class RoutingHelper():
 
     def __init__(self, postcode):
-        self.postcode = postcode.replace(' ', '').upper()
+        self.postcode = re.sub('[^A-Z0-9]', '', postcode.upper())
         self.Endpoint = namedtuple('Endpoint', ['view', 'kwargs'])
         self.get_addresses()
         self.get_councils_from_blacklist()
