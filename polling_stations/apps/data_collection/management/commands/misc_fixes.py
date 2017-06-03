@@ -45,18 +45,32 @@ class Command(BaseCommand):
             Point(0.1572, 52.2003, srid=4326))
 
 
-        print("removing dodgy blacklist entry (result of bad point in AddressBase)")
+        print("removing dodgy blacklist entry (result of bad point in AddressBase)..")
         blacklist = Blacklist.objects.filter(postcode='AB115QH')
-        for b in blacklist:
-            b.delete()
+        if len(blacklist) == 2:
+            for b in blacklist:
+                b.delete()
+                print('..deleted')
+        else:
+            print('..NOT deleted')
 
 
         print("removing bad point from AddressBase (UPRN 10090647993)")
-        address = Address.objects.get(pk='10090647993')
-        address.delete()
+        try:
+            address = Address.objects.get(pk='10090647993')
+            address.delete()
+            print('..deleted')
+        except Address.DoesNotExist:
+            print('..NOT deleted')
+
 
         print("removing bad point from AddressBase (UPRN 10091769090)")
-        address = Address.objects.get(pk='10091769090')
-        address.delete()
+        try:
+            address = Address.objects.get(pk='10091769090')
+            address.delete()
+            print('..deleted')
+        except Address.DoesNotExist:
+            print('..NOT deleted')
+
 
         print("..done")
