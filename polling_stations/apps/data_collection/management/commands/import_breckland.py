@@ -6,7 +6,7 @@ class Command(BaseXpressWebLookupCsvImporter):
     stations_name   = 'May 2017/BrecklandPropertyPostCodePollingStationWebLookup-2017-02-20.TSV'
     elections       = [
         'local.norfolk.2017-05-04',
-        'parl.2017-06-08'
+        #'parl.2017-06-08'
     ]
     csv_delimiter = '\t'
 
