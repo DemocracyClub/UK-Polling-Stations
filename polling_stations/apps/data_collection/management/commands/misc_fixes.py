@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
 
+from addressbase.models import Address, Blacklist
 from pollingstations.models import PollingStation, PollingDistrict
 from councils.models import Council
 
@@ -43,5 +44,19 @@ class Command(BaseCommand):
         update_station_point('E07000008', '38',
             Point(0.1572, 52.2003, srid=4326))
 
+
+        print("removing dodgy blacklist entry (result of bad point in AddressBase)")
+        blacklist = Blacklist.objects.filter(postcode='AB115QH')
+        for b in blacklist:
+            b.delete()
+
+
+        print("removing bad point from AddressBase (UPRN 10090647993)")
+        address = Address.objects.get(pk='10090647993')
+        address.delete()
+
+        print("removing bad point from AddressBase (UPRN 10091769090)")
+        address = Address.objects.get(pk='10091769090')
+        address.delete()
 
         print("..done")
