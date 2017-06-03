@@ -6,7 +6,6 @@ class Command(BaseShpStationsShpDistrictsImporter):
     districts_name = 'fixed_districts/Polling_districts'
     stations_name = 'Cheltenham_Polling_stations.shp'
     elections = [
-        'local.gloucestershire.2017-05-04',
         'parl.2017-06-08'
     ]
 
@@ -28,13 +27,22 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
         stations = []
         for code in codes:
-            station = {
-                'internal_council_id': code.strip(),
-                'postcode'           : '',
-                'address'            : "\n".join([
+
+            if code == 'LA':
+                address = "\n".join([
+                    'Pittville Pump Room',
+                    str(record[0]).strip()
+                ])
+            else:
+                address = "\n".join([
                     str(record[1]).strip(),
                     str(record[0]).strip()
                 ])
+
+            station = {
+                'internal_council_id': code.strip(),
+                'postcode'           : '',
+                'address'            : address,
             }
 
             if code.strip() == 'MA1' or code.strip() == 'MA2':
