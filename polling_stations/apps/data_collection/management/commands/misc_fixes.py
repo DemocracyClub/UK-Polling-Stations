@@ -45,6 +45,9 @@ class Command(BaseCommand):
             Point(0.1572, 52.2003, srid=4326))
 
 
+        print("removing point for: Leckhampstead Village Hall...")
+        update_station_point('E06000037', '3109', None)
+
         print("removing dodgy blacklist entry (result of bad point in AddressBase)..")
         blacklist = Blacklist.objects.filter(postcode='AB115QH')
         if len(blacklist) == 2:
