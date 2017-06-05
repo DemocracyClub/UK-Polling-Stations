@@ -122,6 +122,10 @@
             <a href="https://www.google.com/maps/dir/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}" target="_top">
                 {% trans "Get walking directions" %}
             </a>
+            /
+            <a href="https://www.cyclestreets.net/journey/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}/" target="_top">
+                cycling directions
+            </a>
             </div>
             {% endif %}
         {% else %}
