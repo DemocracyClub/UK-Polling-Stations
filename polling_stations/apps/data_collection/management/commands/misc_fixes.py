@@ -31,7 +31,9 @@ class Command(BaseCommand):
 
 
         print("updating point for: CLASSROOM HS210, WALSALL COLLEGE...")
-        update_station_point('E08000030', '15',
+        update_station_point(
+            'E08000030',
+            '15-classroom-hs210-the-hub-enter-via-portland-street',
             Point(-1.984424, 52.590524, srid=4326))
 
 
@@ -41,7 +43,7 @@ class Command(BaseCommand):
 
 
         print("updating point for: C3 Centre, Cambridge...")
-        update_station_point('E07000008', '38',
+        update_station_point('E07000008', '38-c3-centre',
             Point(0.1572, 52.2003, srid=4326))
 
 
