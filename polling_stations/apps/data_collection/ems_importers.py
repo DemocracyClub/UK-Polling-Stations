@@ -4,6 +4,7 @@ popular Electoral Management Software packages
 """
 import abc
 from django.contrib.gis.geos import Point
+from django.utils.text import slugify
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 
@@ -248,11 +249,11 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         'pollingstationaddress_4',
         'pollingstationaddress_5',
     ]
-    station_id_field = 'pollingstationnumber'
 
     def get_station_hash(self, record):
         return "-".join([
-            getattr(record, self.station_id_field),
+            record.pollingstationnumber.strip(),
+            slugify(record.pollingstationname.strip())[:90]
         ])
 
     def get_station_address(self, record):
@@ -284,13 +285,13 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
 
     def station_record_to_dict(self, record):
 
-        if getattr(record, self.station_id_field).strip() == 'n/a':
+        if record.pollingstationnumber.strip() == 'n/a':
             return None
 
         address = self.get_station_address(record)
         location = self.get_station_point(record)
         return {
-            'internal_council_id': getattr(record, self.station_id_field).strip(),
+            'internal_council_id': self.get_station_hash(record),
             'postcode'           : getattr(record, self.station_postcode_field).strip(),
             'address'            : address.strip(),
             'location'           : location
@@ -337,7 +338,7 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         return {
             'address'           : address,
             'postcode'          : record.housepostcode.strip(),
-            'polling_station_id': getattr(record, self.station_id_field).strip(),
+            'polling_station_id': self.get_station_hash(record),
         }
 
 

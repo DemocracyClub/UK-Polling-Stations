@@ -23,7 +23,7 @@ class Command(BaseHalaroseCsvImporter):
         for record in gridrefs:
             stations = PollingStation.objects.filter(
                 council_id=self.council_id,
-                internal_council_id=record.pollingstationnumber
+                internal_council_id=self.get_station_hash(record)
             )
             if len(stations) == 1:
                 station = stations[0]
@@ -34,5 +34,5 @@ class Command(BaseHalaroseCsvImporter):
                 )
                 station.save()
             else:
-                print("Could not find station id " + record.pollingstationnumber)
+                print("Could not find station id " + record.get_station_hash(record))
         print("...done")

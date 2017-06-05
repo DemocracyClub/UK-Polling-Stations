@@ -23,7 +23,7 @@ class Command(BaseHalaroseCsvImporter):
     ]
 
     def get_station_hash(self, record):
-        raise NotImplementedError
+        return record.pollingstationnumber.strip()
 
     def get_station_point(self, record):
         return Point(
