@@ -119,8 +119,13 @@
                 {% blocktrans with directions.walk_time as walk_time and directions.walk_dist as walk_dist %}
                 It's about {{ walk_dist }} away or a {{ walk_time }} walk from {{ postcode }}.
                 {% endblocktrans %}</p>
+            Get
             <a href="https://www.google.com/maps/dir/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}" target="_top">
-                {% trans "Get walking directions" %}
+                {% trans "Walking directions from Google" %}
+            </a>
+            or
+            <a href="https://www.cyclestreets.net/journey/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}/" target="_top">
+                {% trans "Cycling directions from CycleStreets" %}
             </a>
             </div>
             {% endif %}
