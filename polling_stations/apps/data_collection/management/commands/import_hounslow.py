@@ -10,6 +10,11 @@ class Command(BaseHalaroseCsvImporter):
     elections       = ['parl.2017-06-08']
     csv_encoding    = 'windows-1252'
 
+    def get_station_hash(self, record):
+        return "-".join([
+            record.pollingstationnumber.strip(),
+        ])
+
     # Hounslow have supplied an additional file with
     # better grid references for the polling stations
     def post_import(self):
@@ -23,7 +28,7 @@ class Command(BaseHalaroseCsvImporter):
         for record in gridrefs:
             stations = PollingStation.objects.filter(
                 council_id=self.council_id,
-                internal_council_id=record.pollingstationnumber
+                internal_council_id=self.get_station_hash(record)
             )
             if len(stations) == 1:
                 station = stations[0]
@@ -34,5 +39,5 @@ class Command(BaseHalaroseCsvImporter):
                 )
                 station.save()
             else:
-                print("Could not find station id " + record.pollingstationnumber)
+                print("Could not find station id " + self.get_station_hash(record))
         print("...done")
