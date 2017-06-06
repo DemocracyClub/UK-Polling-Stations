@@ -74,6 +74,34 @@ class Command(BaseCommand):
         update_station_point('E06000038', '2494', None)
 
 
+        print("removing point for: Muslim Khatri Association Community Centre...")
+        update_station_point('E06000016', '5379', None)
+
+
+        print("removing point for: Kingston College, Richmond Road Centre...")
+        update_station_point('E09000021', '3426', None)
+
+
+        print("updating point for: Warwickshire Shopping Park...")
+        update_station_point('E08000026', '8115',
+            Point(-1.433619, 52.398430, srid=4326))
+
+
+        print("updating point for: St. Thomas' Church Hall, Islington...")
+        update_station_point('E09000019', '1213',
+            Point(-0.104049, 51.560139, srid=4326))
+
+
+        print("updating point for: Hove Town Hall...")
+        update_station_point('E06000043', '4515',
+            Point(-0.1712095, 50.8287022, srid=4326))
+
+
+        print("updating point for: Sir Francis Drake Primary School...")
+        update_station_point('E09000023', '13422',
+            Point(-0.041439, 51.485670, srid=4326))
+
+
         print("adding note to: North Finchley Library...")
         stations = PollingStation.objects.filter(
             council_id='E09000003', internal_council_id__in=['B55', 'B54/1'])
