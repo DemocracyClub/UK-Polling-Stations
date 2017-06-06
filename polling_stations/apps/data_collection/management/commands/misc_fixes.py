@@ -76,12 +76,12 @@ class Command(BaseCommand):
 
         print("adding note to: North Finchley Library...")
         stations = PollingStation.objects.filter(
-            council_id='E09000003', internal_council_id='B55')
-        if len(stations) == 1:
-            station = stations[0]
-            station.address = "North Finchley Library (Open despite refurbishment)\nRavensdale Avenue\nNorth Finchley\nLondon"
-            station.save()
-            print("..updated")
+            council_id='E09000003', internal_council_id__in=['B55', 'B54/1'])
+        if len(stations) == 2:
+            for station in stations:
+                station.address = "North Finchley Library (Open despite refurbishment)\nRavensdale Avenue\nNorth Finchley\nLondon"
+                station.save()
+                print("..updated")
         else:
             print("..NOT updated")
 
