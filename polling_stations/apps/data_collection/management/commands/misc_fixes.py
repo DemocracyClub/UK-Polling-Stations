@@ -65,6 +65,27 @@ class Command(BaseCommand):
         update_station_point('E07000049', '5329', None)
 
 
+        print("updating point for: Carlton Road United Reformed Church...")
+        update_station_point('E06000015', '6305',
+            Point(-1.4980912, 52.9057198, srid=4326))
+
+
+        print("removing point for: Tilehurst Village Hall...")
+        update_station_point('E06000038', '2494', None)
+
+
+        print("adding note to: North Finchley Library...")
+        stations = PollingStation.objects.filter(
+            council_id='E09000003', internal_council_id='B55')
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "North Finchley Library (Open despite refurbishment)\nRavensdale Avenue\nNorth Finchley\nLondon"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
         print("removing dodgy blacklist entry (result of bad point in AddressBase)..")
         blacklist = Blacklist.objects.filter(postcode='AB115QH')
         if len(blacklist) == 2:
