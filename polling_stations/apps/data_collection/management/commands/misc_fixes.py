@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
 
 from addressbase.models import Address, Blacklist
-from pollingstations.models import PollingStation, PollingDistrict
+from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from councils.models import Council
 
 def update_station_point(council_id, station_id, point):
@@ -27,6 +27,13 @@ class Command(BaseCommand):
         torridge = Council.objects.get(pk='E07000046')
         torridge.phone = "01237 428739"
         torridge.save()
+        print("..updated")
+
+
+        print("updating Torfaen phone number...")
+        torfaen = Council.objects.get(pk='W06000020')
+        torfaen.phone = "01495 762200"
+        torfaen.save()
         print("..updated")
 
 
@@ -61,8 +68,20 @@ class Command(BaseCommand):
             Point(-0.0619122, 51.4715108, srid=4326))
 
 
-        print("removing point for: Corfe Mullen Village Hall...")
-        update_station_point('E07000049', '5329', None)
+        print("updating: Corfe Mullen Village Hall...")
+        stations = PollingStation.objects.filter(
+            council_id='E07000049',
+            internal_council_id__in= ['5329', '5333']
+        )
+        if len(stations) == 2:
+            for station in stations:
+                station.location = Point(-2.017191, 50.7748038, srid=4326)
+                station.address = 'Corfe Mullen Village Hall\nTowers Way\nCorfe Mullen\nWimborne'
+                station.postcode = 'BH21 3UA'
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
 
 
         print("updating point for: Carlton Road United Reformed Church...")
@@ -185,6 +204,22 @@ class Command(BaseCommand):
             print('..deleted')
         except Address.DoesNotExist:
             print('..NOT deleted')
+
+
+        print("adding manual override for AL55FE...")
+        addresses = ResidentialAddress.objects.filter(postcode='AL55FE')
+        if len(addresses) == 0:
+            record = ResidentialAddress(
+                address='AL55FE',
+                postcode='AL55FE',
+                polling_station_id='HBD',
+                council_id='E07000240',
+                slug='e07000240-hbd-al55fe',
+            )
+            record.save()
+            print('..fixed')
+        else:
+            print('..NOT fixed')
 
 
         print("..done")
