@@ -70,8 +70,19 @@ class Command(BaseCommand):
             Point(-1.4980912, 52.9057198, srid=4326))
 
 
-        print("removing point for: Tilehurst Village Hall...")
-        update_station_point('E06000038', '2494', None)
+        print("updating: Tilehurst Village Hall...")
+        stations = PollingStation.objects.filter(
+            council_id='E06000038',
+            internal_council_id='2494'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-1.040355, 51.460535, srid=4326)
+            station.address = 'Tilehurst Village Hall\n17 Victoria Road\nTilehurst\nReading\nRG31 5AB'
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
 
 
         print("removing point for: Muslim Khatri Association Community Centre...")
