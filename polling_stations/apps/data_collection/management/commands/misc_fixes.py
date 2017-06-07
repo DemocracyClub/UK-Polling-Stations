@@ -102,6 +102,40 @@ class Command(BaseCommand):
             Point(-0.041439, 51.485670, srid=4326))
 
 
+        print("updating point for: University of Warwick - Oculus Building...")
+        update_station_point('E08000026', '8423',
+            Point(-1.5598858, 52.3799439, srid=4326))
+
+
+        print("removing point for: Sleaford Leisure Centre...")
+        update_station_point('E07000139', '4421', None)
+
+
+        print("updating point for: St. Joseph's R.C Church Hall...")
+        update_station_point('W06000012', '90-st-josephs-rc-church-hall',
+            Point(-3.800506, 51.6536899, srid=4326))
+
+
+        print("updating point for: Watton Sports Association...")
+        update_station_point('E07000143', '5854',
+            Point(0.827944, 52.574566, srid=4326))
+
+
+        print("updating point for: St John The Baptist Church Hall...")
+        update_station_point('E07000091', '6913',
+            Point(-1.767228, 50.8546796, srid=4326))
+
+
+        print("updating point for: Eastney Methodist Church...")
+        update_station_point('E06000044', '3021',
+            Point(-1.059545, 50.7866578, srid=4326))
+
+
+        print("updating point for: Kingston College...")
+        update_station_point('E09000021', '3426',
+            Point(-0.3009045, 51.4146479, srid=4326))
+
+
         print("adding note to: North Finchley Library...")
         stations = PollingStation.objects.filter(
             council_id='E09000003', internal_council_id__in=['B55', 'B54/1'])
