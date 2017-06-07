@@ -8,7 +8,7 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     stations_name = 'Copy of Polling Station Details - Revised.csv'
     elections = [
         'local.warwickshire.2017-05-04',
-        'parl.2017-06-08'
+        #'parl.2017-06-08'
     ]
 
     """
