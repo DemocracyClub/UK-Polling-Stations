@@ -178,6 +178,19 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
+        print("updating Albany Road Primary School --> Mackintosh Community Centre")
+        stations = PollingStation.objects.filter(
+            council_id='W06000015', internal_council_id__in=['C37-EE', 'C37-EB', 'C37-EG'])
+        if len(stations) == 3:
+            for station in stations:
+                station.address = "Mackintosh Community Centre\nKeppoch Street\nRoath\nCardiff\nCF24 3JW"
+                station.location = None
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
+
+
         print("removing dodgy blacklist entry (result of bad point in AddressBase)..")
         blacklist = Blacklist.objects.filter(postcode='AB115QH')
         if len(blacklist) == 2:
