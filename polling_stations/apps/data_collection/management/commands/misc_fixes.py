@@ -260,19 +260,6 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
-        print("removing Clifton Library (say we don't know for York YKD)")
-        stations = PollingStation.objects.filter(
-            council_id='E06000014',
-            internal_council_id='YKD'
-        )
-        if len(stations) == 1:
-            station = stations[0]
-            station.delete()
-            print('..deleted')
-        else:
-            print('..NOT deleted')
-
-
         print("adding note to: North Finchley Library...")
         stations = PollingStation.objects.filter(
             council_id='E09000003', internal_council_id__in=['B55', 'B54/1'])
@@ -342,23 +329,7 @@ class Command(BaseCommand):
             print('..NOT fixed')
 
 
-        print("adding manual override for YO105DD...")
-        addresses = ResidentialAddress.objects.filter(postcode='YO105DD')
-        if len(addresses) == 0:
-            record = ResidentialAddress(
-                address='YO105DD',
-                postcode='YO105DD',
-                polling_station_id='',
-                council_id='E06000014',
-                slug='e06000014-yo105dd',
-            )
-            record.save()
-            print('..fixed')
-        else:
-            print('..NOT fixed')
-
-
-        deleteme = ['S12000008', 'W06000015']
+        deleteme = ['S12000008', 'W06000015', 'E06000014']
         for council_id in deleteme:
             print('Deleting data for council %s...' % (council_id))
             # check this council exists
