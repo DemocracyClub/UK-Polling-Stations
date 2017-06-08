@@ -225,6 +225,26 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
+        print("updating point for: St John's Hill Residents Centre...")
+        update_station_point('E09000032', '5645',
+            Point(-0.1699533, 51.4622247, srid=4326))
+
+
+        print("updating point for: High Hill Estate Community Hall...")
+        update_station_point('E09000012', '2297',
+            Point(-0.0542398, 51.5677442, srid=4326))
+
+
+        print("updating point for: Mission Grove South Site...")
+        update_station_point('E09000031', '2622',
+            Point(-0.025035, 51.581813, srid=4326))
+
+
+        print("updating point for: The Coach House, Littleborough...")
+        update_station_point('E08000005', '1522',
+            Point(-2.0961003, 53.6444469, srid=4326))
+
+
         print("adding note to: North Finchley Library...")
         stations = PollingStation.objects.filter(
             council_id='E09000003', internal_council_id__in=['B55', 'B54/1'])
