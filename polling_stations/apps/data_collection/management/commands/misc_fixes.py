@@ -138,6 +138,11 @@ class Command(BaseCommand):
             Point(-1.5598858, 52.3799439, srid=4326))
 
 
+        print("updating point for: University of Warwick - Oculus Building...")
+        update_station_point('E07000222', '5874',
+            Point(-1.5598858, 52.3799439, srid=4326))
+
+
         print("removing point for: Sleaford Leisure Centre...")
         update_station_point('E07000139', '4421', None)
 
@@ -188,6 +193,21 @@ class Command(BaseCommand):
         if len(stations) == 1:
             station = stations[0]
             station.address = "St. Andrew's Church, Beechwood Road, Holmfield, Halifax. HX2 9AR"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
+        print("updating: Bradford Trident...")
+        stations = PollingStation.objects.filter(
+            council_id='E08000032',
+            internal_council_id='14937'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = "BD5 8EH"
+            station.location = Point(-1.7535968, 53.7730021, srid=4326)
             station.save()
             print("..updated")
         else:
