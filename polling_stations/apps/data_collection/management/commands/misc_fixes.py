@@ -280,6 +280,44 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
+        print("updating point for: Brookhurst Primary School (A)...")
+        update_station_point('E07000222', '5879',
+            Point(-1.5555102, 52.2955468, srid=4326))
+        print("updating point for: Brookhurst Primary School (B)...")
+        update_station_point('E07000222', '5942',
+            Point(-1.5555102, 52.2955468, srid=4326))
+        print("updating point for: Brookhurst Primary School (C)...")
+        update_station_point('E07000222', '5941',
+            Point(-1.5555102, 52.2955468, srid=4326))
+
+
+        print("updating point for: Craven Swimming Pool...")
+        update_station_point('E07000163', '5483',
+            Point(-2.034308, 53.962048, srid=4326))
+
+
+        print("updating: Ince Independent Methodist Church...")
+        stations = PollingStation.objects.filter(
+            council_id='E08000010',
+            internal_council_id='1483'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Ince Independent Methodist Church (Use Stopford Street Entrance)\nKeble Street\nInce"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
+        print("updating point for: West Moors Memorial Hall (1)...")
+        update_station_point('E07000049', '5276',
+            Point(-1.889877, 50.828989, srid=4326))
+        print("updating point for: West Moors Memorial Hall (2)...")
+        update_station_point('E07000049', '5274',
+            Point(-1.889877, 50.828989, srid=4326))
+
+
         print("adding note to: North Finchley Library...")
         stations = PollingStation.objects.filter(
             council_id='E09000003', internal_council_id__in=['B55', 'B54/1'])
