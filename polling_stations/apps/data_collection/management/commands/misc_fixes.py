@@ -272,6 +272,44 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
+        print("adding note to: Eagleswell Primary School...")
+        stations = PollingStation.objects.filter(
+            council_id='W06000014', internal_council_id='UD0')
+        if len(stations) == 1:
+            for station in stations:
+                station.address = 'Portacabin, ' + station.address
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
+
+
+        print("updating point for: Kensington Primary School...")
+        update_station_point('E08000012', '4219',
+            Point(-2.9532108, 53.4082081, srid=4326))
+
+
+        print("removing: Runnymede/ENGE1...")
+        stations = PollingStation.objects.filter(
+            council_id='E07000212', internal_council_id='ENGE1')
+        if len(stations) == 1:
+            station = stations[0]
+            station.delete()
+            print("..deleted")
+        else:
+            print("..NOT deleted")
+
+
+        print("updating point for: St Paul and St Stephen Church...")
+        update_station_point('E07000081', '1490',
+            Point(-2.2455852, 51.8543848, srid=4326))
+
+
+        print("updating point for: St. Paul's Church Centre, Andover...")
+        update_station_point('E07000093', '7246',
+            Point(-1.4751832, 51.2216948, srid=4326))
+
+
         print("updating Albany Road Primary School --> Mackintosh Community Centre")
         stations = PollingStation.objects.filter(
             council_id='W06000015', internal_council_id__in=['C37-EE', 'C37-EB', 'C37-EG'])
@@ -329,7 +367,7 @@ class Command(BaseCommand):
             print('..NOT fixed')
 
 
-        deleteme = ['S12000008', 'W06000015', 'E06000014']
+        deleteme = ['S12000008', 'W06000015', 'E06000014', 'E07000224']
         for council_id in deleteme:
             print('Deleting data for council %s...' % (council_id))
             # check this council exists
