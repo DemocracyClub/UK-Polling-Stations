@@ -310,17 +310,42 @@ class Command(BaseCommand):
             Point(-1.4751832, 51.2216948, srid=4326))
 
 
-        print("updating Albany Road Primary School --> Mackintosh Community Centre")
+        print("updating point for: Exeter Cricket Club Pavilion...")
+        update_station_point('E07000041', '2858',
+            Point(-3.5289003, 50.7337729, srid=4326))
+
+
+        print("updating point for: Furnace Green Community Centre...")
+        update_station_point('E07000226', '525',
+            Point(-0.1670816, 51.1069636, srid=4326))
+
+
+        print("updating point for: UK Paper Leisure Club...")
+        update_station_point('E07000113', '28-uk-paper-leisure-club',
+            Point(0.7348272, 51.3374302, srid=4326))
+
+
+        print("updating: Park Lane Primary School...")
         stations = PollingStation.objects.filter(
-            council_id='W06000015', internal_council_id__in=['C37-EE', 'C37-EB', 'C37-EG'])
-        if len(stations) == 3:
+            council_id='E06000038', internal_council_id='2490')
+        if len(stations) == 1:
             for station in stations:
-                station.address = "Mackintosh Community Centre\nKeppoch Street\nRoath\nCardiff\nCF24 3JW"
+                station.address = "Park Lane Primary School\nSchool Road\nTilehurst\nReading\nRG31 5BD"
                 station.location = None
                 station.save()
                 print("..updated")
         else:
             print("..NOT updated")
+
+
+        print("updating point for: The Bede Centre...")
+        update_station_point('E09000028', '10098',
+            Point(-0.055743, 51.492305, srid=4326))
+
+
+        print("updating point for: Manton Parish Hall...")
+        update_station_point('E07000171', '7458',
+            Point(-1.1105063, 53.2957291, srid=4326))
 
 
         print("removing dodgy blacklist entry (result of bad point in AddressBase)..")
@@ -367,7 +392,7 @@ class Command(BaseCommand):
             print('..NOT fixed')
 
 
-        deleteme = ['S12000008', 'W06000015', 'E06000014', 'E07000224']
+        deleteme = ['S12000008', 'W06000015', 'E06000014', 'E07000224', 'E08000035']
         for council_id in deleteme:
             print('Deleting data for council %s...' % (council_id))
             # check this council exists
