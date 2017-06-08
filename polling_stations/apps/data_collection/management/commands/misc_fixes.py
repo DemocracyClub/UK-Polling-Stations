@@ -245,6 +245,34 @@ class Command(BaseCommand):
             Point(-2.0961003, 53.6444469, srid=4326))
 
 
+        print("updating: Park Hill Primary School...")
+        stations = PollingStation.objects.filter(
+            council_id='E08000026',
+            internal_council_id='8295'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = "CV5 7LR"
+            station.location = Point(-1.575559, 52.4162392, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
+        print("removing Clifton Library (say we don't know for York YKD)")
+        stations = PollingStation.objects.filter(
+            council_id='E06000014',
+            internal_council_id='YKD'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.delete()
+            print('..deleted')
+        else:
+            print('..NOT deleted')
+
+
         print("adding note to: North Finchley Library...")
         stations = PollingStation.objects.filter(
             council_id='E09000003', internal_council_id__in=['B55', 'B54/1'])
@@ -312,6 +340,35 @@ class Command(BaseCommand):
             print('..fixed')
         else:
             print('..NOT fixed')
+
+
+        print("adding manual override for YO105DD...")
+        addresses = ResidentialAddress.objects.filter(postcode='YO105DD')
+        if len(addresses) == 0:
+            record = ResidentialAddress(
+                address='YO105DD',
+                postcode='YO105DD',
+                polling_station_id='',
+                council_id='E06000014',
+                slug='e06000014-yo105dd',
+            )
+            record.save()
+            print('..fixed')
+        else:
+            print('..NOT fixed')
+
+
+        deleteme = ['S12000008', 'W06000015']
+        for council_id in deleteme:
+            print('Deleting data for council %s...' % (council_id))
+            # check this council exists
+            c = Council.objects.get(pk=council_id)
+            print(c.name)
+
+            PollingStation.objects.filter(council=council_id).delete()
+            PollingDistrict.objects.filter(council=council_id).delete()
+            ResidentialAddress.objects.filter(council=council_id).delete()
+            print('..deleted')
 
 
         print("..done")
