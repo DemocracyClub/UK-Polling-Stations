@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import GEOSGeometry
 
 from addressbase.models import Address, Blacklist
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
@@ -164,6 +165,64 @@ class Command(BaseCommand):
         print("updating point for: Kingston College...")
         update_station_point('E09000021', '3426',
             Point(-0.3009045, 51.4146479, srid=4326))
+
+
+        print("updating point for: Church of the Good Shepard (1)...")
+        update_station_point('E09000029', '74-the-church-of-the-good-shepherd',
+            Point(-0.1691277, 51.35325, srid=4326))
+        print("updating point for: Church of the Good Shepard (2)...")
+        update_station_point('E09000029', '75-the-church-of-the-good-shepherd',
+            Point(-0.1691277, 51.35325, srid=4326))
+
+
+        print("updating point for: Chepstow Community Centre, Milton Keynes...")
+        update_station_point('E06000042', '4861',
+            Point(-0.7692866, 51.9892058, srid=4326))
+
+
+        print("updating: St Andrew's Church, Calderdale...")
+        stations = PollingStation.objects.filter(
+            council_id='E08000033',
+            internal_council_id='FF'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "St. Andrew's Church, Beechwood Road, Holmfield, Halifax. HX2 9AR"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
+        print("updating: RA, Camden...")
+        stations = PollingStation.objects.filter(
+            council_id='E09000007',
+            internal_council_id='RA'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Dragon Hall\nStukeley Street"
+            station.postcode = "WC2B 5LL"
+            station.location = GEOSGeometry('0101000020E610000093C9A99D616ABFBFD7F7E12021C24940')
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
+        print("updating: Bennett Court Tenants Hall...")
+        stations = PollingStation.objects.filter(
+            council_id='E09000019',
+            internal_council_id='1186'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = "N7 6BN"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
 
 
         print("adding note to: North Finchley Library...")
