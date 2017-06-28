@@ -399,9 +399,15 @@ class DirectionsHelper():
 
         return self.Directions(walk_time, walk_dist, ps)
 
+    def get_base_google_url(self):
+        return "{base}&key={key}".format(
+            base=settings.BASE_GOOGLE_URL,
+            key=settings.GOOGLE_API_KEY
+        )
+
     def get_google_route(self, start, end):
-        url = "{base_url}{origin}&destination={destination}".format(
-                base_url=settings.BASE_GOOGLE_URL,
+        url = "{base_url}&origin={origin}&destination={destination}".format(
+                base_url=self.get_base_google_url(),
                 origin="{0},{1}".format(start.y, start.x),
                 destination="{0},{1}".format(end.y, end.x),
             )

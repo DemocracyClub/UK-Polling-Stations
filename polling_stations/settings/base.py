@@ -311,8 +311,6 @@ try:
 except ImportError:
     pass
 
-BASE_GOOGLE_URL = "https://maps.googleapis.com/maps/api/directions/json?mode=walking&units=imperial&key={}&origin=".format(GOOGLE_API_KEY)
-
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ['test', 'harvest']:
     from .testing import *  # noqa
