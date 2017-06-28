@@ -17,6 +17,7 @@ from addressbase.helpers import centre_from_points_qs
 from addressbase.models import Address, Blacklist, Onsad
 
 from pollingstations.models import ResidentialAddress
+from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
 
 
 class PostcodeError(Exception):
@@ -121,9 +122,7 @@ class AddressBaseGeocoder(BaseGeocoder):
     def format_postcode(self, postcode):
         # postcodes in AddressBase are in format AA1 1AA
         # ensure postcode is formatted correctly before we try to query
-        formatted_postcode = re.sub('[^A-Z0-9]', '', postcode.upper())
-        formatted_postcode = formatted_postcode[:-3] + ' ' + formatted_postcode[-3:]
-        return formatted_postcode
+        return format_postcode_with_space(postcode)
 
     def get_uprns(self, addresses):
         return [a.uprn for a in addresses]
@@ -458,7 +457,7 @@ class DirectionsHelper():
 class RoutingHelper():
 
     def __init__(self, postcode):
-        self.postcode = re.sub('[^A-Z0-9]', '', postcode.upper())
+        self.postcode = format_postcode_no_space(postcode)
         self.Endpoint = namedtuple('Endpoint', ['view', 'kwargs'])
         self.get_addresses()
         self.get_councils_from_blacklist()
@@ -558,4 +557,4 @@ class ExamplePostcodeHelper:
     def url(self):
         return reverse(
             'postcode_view',
-            kwargs={'postcode': self.postcode.replace(' ', '')})
+            kwargs={'postcode': format_postcode_no_space(self.postcode)})

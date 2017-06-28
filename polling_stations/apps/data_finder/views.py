@@ -1,6 +1,5 @@
 import abc
 import json
-import re
 import requests
 
 from django.conf import settings
@@ -25,6 +24,7 @@ from pollingstations.models import (
     ResidentialAddress,
     CustomFinder
 )
+from pollingstations.helpers import format_postcode_no_space
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
@@ -85,7 +85,7 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 
     def form_valid(self, form):
 
-        postcode = re.sub('[^A-Z0-9]', '', form.cleaned_data['postcode'])
+        postcode = format_postcode_no_space(form.cleaned_data['postcode'])
 
         rh = RoutingHelper(postcode)
         endpoint = rh.get_endpoint()
@@ -191,7 +191,7 @@ class PostcodeView(BasePollingStationView):
             self.kwargs['postcode'] = kwargs['postcode'] = request.GET['postcode']
         if 'postcode' not in kwargs or kwargs['postcode'] == '':
             return HttpResponseRedirect(reverse('home'))
-        self.kwargs['postcode'] = kwargs['postcode'] = re.sub('[^A-Z0-9]', '', kwargs['postcode'].upper())
+        self.kwargs['postcode'] = kwargs['postcode'] = format_postcode_no_space(kwargs['postcode'])
 
         rh = RoutingHelper(self.kwargs['postcode'])
         endpoint = rh.get_endpoint()

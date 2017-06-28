@@ -3,7 +3,6 @@ Models for actual Polling Stations and Polling Districts!
 """
 
 from itertools import groupby
-import re
 import urllib.parse
 
 from django.contrib.gis.db import models
@@ -11,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
+from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
 
 
 class PollingDistrict(models.Model):
@@ -128,7 +128,7 @@ class ResidentialAddress(models.Model):
         strip all whitespace from postcode and convert to uppercase
         this will make it easier to query based on user-supplied postcode
         """
-        self.postcode = re.sub('[^A-Z0-9]', '', self.postcode.upper())
+        self.postcode = format_postcode_no_space(self.postcode)
         super().save(*args, **kwargs)
 
 
@@ -151,8 +151,7 @@ class CustomFinderManager(models.Manager):
             At the moment I only have this one to work with.
             """
             finder.encoded_postcode = urllib.parse.quote(
-                "%s %s" % (postcode[:(len(postcode)-3)], postcode[-3:])
-            )
+                format_postcode_with_space(postcode))
             return finder
         except ObjectDoesNotExist:
             return None
