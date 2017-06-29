@@ -168,7 +168,6 @@ class AddressSet(CustomSet):
            we'll show an address picker and the user can choose
            'my address is not in the list'. Is that better/(more) correct?
         2. This function is doing too many things: clean it up
-        3. Add more test cases
         """
 
         # convert our set of tuples into a list of dicts
