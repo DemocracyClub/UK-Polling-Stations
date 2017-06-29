@@ -6,7 +6,6 @@ import json
 import glob
 import logging
 import os
-import re
 import tempfile
 import urllib.request
 
@@ -41,6 +40,7 @@ from pollingstations.models import (
     ResidentialAddress
 )
 from data_collection.models import DataQuality
+from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
 from data_finder.helpers import geocode_point_only, PostcodeError
 from addressbase.helpers import create_address_records_for_council
 
@@ -476,8 +476,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         strip all whitespace from postcode and convert to uppercase
         this will make it easier to query this based on user-supplied postcode
         """
-        address_info['postcode'] =\
-            re.sub('[^A-Z0-9]', '', address_info['postcode'].upper())
+        address_info['postcode'] = format_postcode_no_space(address_info['postcode'])
 
         # generate a unique slug so we can provide a consistent url
         slug = self.get_slug(address_info)

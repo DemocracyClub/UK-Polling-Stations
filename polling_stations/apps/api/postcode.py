@@ -1,4 +1,3 @@
-import re
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -15,6 +14,7 @@ from data_finder.helpers import (
     RoutingHelper
 )
 from pollingstations.models import PollingStation, CustomFinder
+from pollingstations.helpers import format_postcode_no_space
 from .address import PostcodeResponseSerializer
 
 
@@ -64,7 +64,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return None
 
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
-        postcode = re.sub('[^A-Z0-9]', '', postcode.upper())
+        postcode = format_postcode_no_space(postcode)
         ret = {}
 
         # attempt to attach point and gss_codes
