@@ -169,15 +169,6 @@ class AddressSet(CustomSet):
 
     def remove_ambiguous_addresses(self):
 
-        """ TODO:
-        1. Should this only remove all addresses in the postcode where all
-           of the 'remaining' addresses (after discarding the ambiguous ones)
-           all vote at the same station?
-           In the case where the 'remaining' addresses are split,
-           we'll show an address picker and the user can choose
-           'my address is not in the list'. Is that better/(more) correct?
-        """
-
         # convert our set of tuples into a list of dicts
         tmp_addresses = list(self.elements)
         tmp_addresses = [x._asdict() for x in tmp_addresses]
