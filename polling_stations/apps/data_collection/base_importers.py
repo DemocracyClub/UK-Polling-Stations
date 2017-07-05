@@ -104,6 +104,14 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             default=3000
         )
 
+        parser.add_argument(
+            '--nochecks',
+            help='<Optional> Do not perform validation checks',
+            action='store_true',
+            required=False,
+            default=False
+        )
+
     def teardown(self, council):
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
@@ -194,6 +202,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         verbosity = kwargs.get('verbosity')
         self.logger = LogHelper(verbosity)
         self.batch_size = kwargs.get('batch_size')
+        self.validation_checks = not(kwargs.get('nochecks'))
 
         if self.council_id is None:
             self.council_id = args[0]
@@ -347,7 +356,8 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                         *station.shape.points[0],
                         srid=self.get_srid())
 
-                self.check_station_point(station_record)
+                if self.validation_checks:
+                    self.check_station_point(station_record)
                 self.add_polling_station(station_record)
 
     def add_polling_station(self, station_info):
