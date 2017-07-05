@@ -30,6 +30,7 @@ from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
     AddressSorter,
     DirectionsHelper,
+    get_council,
     get_territory,
     geocode,
     EveryElectionWrapper,
@@ -116,7 +117,7 @@ class BasePollingStationView(
         pass
 
     @abc.abstractmethod
-    def get_council(self):
+    def get_council(self, geocode_result):
         pass
 
     @abc.abstractmethod
@@ -138,20 +139,18 @@ class BasePollingStationView(
         context['mq_key'] = settings.MQ_KEY
 
         try:
-            l = self.get_location()
+            loc = self.get_location()
         except (PostcodeError, RateLimitError) as e:
             context['error'] = str(e)
             return context
 
-        if l is None:
+        if loc is None:
             # AddressView.get_location() may legitimately return None
             self.location = None
         else:
-            self.location = Point(l['wgs84_lon'], l['wgs84_lat'])
-            self.gss_codes = l['gss_codes']
-            self.council_gss = l['council_gss']
+            self.location = Point(loc['wgs84_lon'], loc['wgs84_lat'])
 
-        self.council = self.get_council()
+        self.council = self.get_council(loc)
         self.station = self.get_station()
         self.directions = self.get_directions()
 
@@ -170,11 +169,11 @@ class BasePollingStationView(
         context['noindex'] = True
         context['territory'] = get_territory(self.postcode)
         if not context['we_know_where_you_should_vote']:
-            if l is None:
+            if loc is None:
                 context['custom'] = None
             else:
                 context['custom'] = CustomFinder.objects.get_custom_finder(
-                    l['gss_codes'], self.postcode)
+                    loc['gss_codes'], self.postcode)
 
         self.log_postcode(self.postcode, context, type(self).__name__)
 
@@ -214,23 +213,8 @@ class PostcodeView(BasePollingStationView):
     def get_location(self):
         return geocode(self.postcode)
 
-    def get_council(self):
-        if getattr(self, 'council_gss'):
-            try:
-                return Council.objects.defer("area", "location").get(
-                    council_id=self.council_gss)
-            except Council.DoesNotExist:
-                pass
-
-        if getattr(self, 'gss_codes'):
-            try:
-                return Council.objects.defer("area", "location").get(
-                    council_id__in=self.gss_codes)
-            except Council.DoesNotExist:
-                pass
-
-        return Council.objects.get(
-            area__covers=self.location)
+    def get_council(self, geocode_result):
+        return get_council(geocode_result)
 
     def get_station(self):
         return PollingStation.objects.get_polling_station(
@@ -263,7 +247,7 @@ class AddressView(BasePollingStationView):
         except PostcodeError:
             return None
 
-    def get_council(self):
+    def get_council(self, geocode_result):
         return Council.objects.defer("area", "location").get(
             pk=self.address.council_id)
 

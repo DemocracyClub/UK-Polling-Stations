@@ -7,6 +7,7 @@ from councils.models import Council
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     AddressSorter,
+    get_council,
     geocode,
     PostcodeError,
     RateLimitError,
@@ -71,14 +72,14 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         # in this situation, failure to geocode is fatal
         # (we need 'gss_codes' to pass to get_custom_finder)
         try:
-            l = geocoder(postcode)
-            location = Point(l['wgs84_lon'], l['wgs84_lat'])
+            loc = geocoder(postcode)
+            location = Point(loc['wgs84_lon'], loc['wgs84_lat'])
         except PostcodeError as e:
             return Response({'detail': e.args[0]}, status=400)
         except RateLimitError as e:
             return Response({'detail': e.args[0]}, status=403)
         except MultipleCouncilsException as e:
-            l = {}
+            loc = {}
             location = None
 
         ret['postcode_location'] = location
@@ -87,11 +88,11 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
         # council object
         if rh.route_type == "multiple_councils":
-            # We can't assign this council to exactly one council
+            # We can't assign this postcode to exactly one council
             council = None
         else:
             try:
-                council = Council.objects.get(area__covers=location)
+                council = get_council(loc)
             except ObjectDoesNotExist:
                 return Response({'detail': 'Internal server error'}, 500)
         ret['council'] = council
@@ -106,8 +107,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
         # get custom finder (if no polling station)
         ret['custom_finder'] = None
-        if not ret['polling_station_known'] and 'gss_codes' in l:
-            ret['custom_finder'] = self.generate_custom_finder(l['gss_codes'], postcode)
+        if not ret['polling_station_known'] and 'gss_codes' in loc:
+            ret['custom_finder'] = self.generate_custom_finder(loc['gss_codes'], postcode)
 
         # create log entry
         log_data = {}
