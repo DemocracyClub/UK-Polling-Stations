@@ -104,6 +104,14 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             default=3000
         )
 
+        parser.add_argument(
+            '--nochecks',
+            help='<Optional> Do not perform validation checks',
+            action='store_true',
+            required=False,
+            default=False
+        )
+
     def teardown(self, council):
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
@@ -194,6 +202,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         verbosity = kwargs.get('verbosity')
         self.logger = LogHelper(verbosity)
         self.batch_size = kwargs.get('batch_size')
+        self.validation_checks = not(kwargs.get('nochecks'))
 
         if self.council_id is None:
             self.council_id = args[0]
@@ -247,6 +256,26 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def get_station_hash(self, station):
         raise NotImplementedError
+
+    def check_station_point(self, station_record):
+        if station_record['location']:
+            try:
+                council = Council.objects.get(area__covers=station_record['location'])
+                if council.council_id != self.council_id:
+                    self.logger.log_message(
+                        logging.WARNING,
+                        "Polling station %s is in %s (%s) but target council is %s (%s) - manual check recommended",
+                        variable=(
+                            station_record['internal_council_id'],
+                            council.name,
+                            council.council_id,
+                            self.council.name,
+                            self.council.council_id))
+            except Council.DoesNotExist:
+                self.logger.log_message(
+                    logging.WARNING,
+                    "Polling station %s is not covered by any council area - manual check recommended",
+                    variable=(station_record['internal_council_id']))
 
     def import_polling_stations(self):
         stations = self.get_stations()
@@ -327,6 +356,8 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                         *station.shape.points[0],
                         srid=self.get_srid())
 
+                if self.validation_checks:
+                    self.check_station_point(station_record)
                 self.add_polling_station(station_record)
 
     def add_polling_station(self, station_info):
