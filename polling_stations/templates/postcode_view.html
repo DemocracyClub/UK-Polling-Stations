@@ -255,7 +255,7 @@
       }).addTo(map);
 
       {% if directions.route %}
-      decoded = polyline.decode('{{ directions.route }}');
+      decoded = polyline.decode('{{ directions.route }}', {{ directions.precision }});
       try {
         firstpolyline = new L.Polyline(decoded, {
             color: 'red',
