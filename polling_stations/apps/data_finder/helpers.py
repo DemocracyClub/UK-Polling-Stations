@@ -5,6 +5,7 @@ import lxml.etree
 import re
 import requests
 import time
+import urllib
 from collections import namedtuple
 from operator import itemgetter
 
@@ -435,7 +436,7 @@ class MapzenDirectionsClient(DirectionsClient):
         }
         url = "{base_url}&json={json}".format(
             base_url=self.get_base_url(),
-            json=json.dumps(query)
+            json=urllib.parse.quote_plus(json.dumps(query))
         )
 
         resp = requests.get(url)
