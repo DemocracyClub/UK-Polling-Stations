@@ -401,7 +401,7 @@ class GoogleDirectionsClient(DirectionsClient):
             directions['routes'][0]['legs'][0]['distance']['text']
         ).replace('mi', _('miles'))
 
-        return Directions(walk_time, walk_dist, route, self.precision)
+        return Directions(walk_time, walk_dist, json.dumps(route), self.precision)
 
 
 class MapzenDirectionsClient(DirectionsClient):
@@ -456,7 +456,7 @@ class MapzenDirectionsClient(DirectionsClient):
             round(directions['trip']['summary']['length'],1)
         ) + " miles"
 
-        return Directions(walk_time, walk_dist, route, self.precision)
+        return Directions(walk_time, walk_dist, json.dumps(route), self.precision)
 
 
 class DirectionsHelper():
