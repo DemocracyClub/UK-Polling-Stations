@@ -383,15 +383,7 @@ class DirectionsHelper():
         if directions['status'] != 'OK':
             raise GoogleDirectionsApiError("Google Directions API error: {}".format(directions['status']))
 
-        start_points = [
-            Point(x['start_location']['lng'], x['start_location']['lat'])
-            for x in directions['routes'][0]['legs'][0]['steps']
-        ]
-
-        end_points = [
-            Point(x['end_location']['lng'], x['end_location']['lat'])
-            for x in directions['routes'][0]['legs'][0]['steps']
-        ]
+        route = directions['routes'][0]['overview_polyline']['points']
 
         walk_time = str(
             directions['routes'][0]['legs'][0]['duration']['text']
@@ -401,7 +393,7 @@ class DirectionsHelper():
             directions['routes'][0]['legs'][0]['distance']['text']
         ).replace('mi', _('miles'))
 
-        return self.Directions(walk_time, walk_dist, start_points[:] + end_points[-1:])
+        return self.Directions(walk_time, walk_dist, route)
 
     def get_directions(self, **kwargs):
         if kwargs['start_location'] and kwargs['end_location']:

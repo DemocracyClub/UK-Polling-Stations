@@ -218,6 +218,7 @@
           prefix: 'fa'
       });
       var polling_station_location = point;
+      var firstpolyline = false;
 
       var map = L.map('area_map', {zoomControl:true, dragging: !L.Browser.mobile});
       {% if request.brand == 'embed' %}
@@ -254,36 +255,38 @@
       }).addTo(map);
 
       {% if directions.route %}
-      var pointList = [
-      {% for p in directions.route %}
-          new L.LatLng({{p.1}}, {{p.0}}){% if not forloop.last %},{% endif %}
-      {% endfor %}
-      ];
+      decoded = polyline.decode('{{ directions.route }}');
+      try {
+        firstpolyline = new L.Polyline(decoded, {
+            color: 'red',
+            weight: 3,
+            opacity: 1.0,
+            smoothFactor: 1,
+            dashArray: "5, 5"
+        });
 
-      // home
-      L.marker(pointList[0], {
-        'clickable': true,
-        'icon': homeMarker
-      }).addTo(map);
+        // home
+        L.marker(firstpolyline._latlngs[0], {
+            'clickable': true,
+            'icon': homeMarker
+        }).addTo(map);
 
-      var firstpolyline = new L.Polyline(pointList, {
-        color: 'red',
-        weight: 3,
-        opacity: 1.0,
-        smoothFactor: 1,
-        dashArray: "5, 5"
-      });
-      firstpolyline.addTo(map);
+        firstpolyline.addTo(map);
+      } catch (e) {
+        // do nothing
+        // if something goes wrong trying to plot the route
+        // we only want to show the station point
+      }
       {% endif %}
 
       window.map = map;
       window.polling_station_location = polling_station_location;
 
-      {% if directions.route %}
-      map.fitBounds(firstpolyline.getBounds(), {maxZoom: 16});
-      {% else %}
-      map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
-      {% endif %}
+      if (firstpolyline) {
+        map.fitBounds(firstpolyline.getBounds(), {maxZoom: 16});
+      } else {
+        map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
+      }
     };
 
     var point = [{{ location.1 }}, {{ location.0 }}];
