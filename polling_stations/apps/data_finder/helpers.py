@@ -348,40 +348,45 @@ class EveryElectionWrapper:
         return explanations
 
 
-class OrsDirectionsApiError(Exception):
+Directions = namedtuple('Directions', ['walk_time', 'walk_dist', 'route'])
+
+
+class DirectionsException(Exception):
     pass
 
 
-class GoogleDirectionsApiError(Exception):
-    pass
-
-
-class DirectionsHelper():
+class DirectionsClient(metaclass=abc.ABCMeta):
 
     def __init__(self):
-        self.re_time = re.compile("PT([0-9]+)M([0-9]+)S")
-        self.Directions = namedtuple('Directions', ['walk_time', 'walk_dist', 'route'])
+        pass
 
-    def get_base_google_url(self):
+    @abc.abstractmethod
+    def get_route(self, start, end):
+        pass
+
+
+class GoogleDirectionsClient(DirectionsClient):
+
+    def get_base_url(self):
         return "{base}&key={key}".format(
             base=settings.BASE_GOOGLE_URL,
             key=settings.GOOGLE_API_KEY
         )
 
-    def get_google_route(self, start, end):
+    def get_route(self, start, end):
         url = "{base_url}&origin={origin}&destination={destination}".format(
-                base_url=self.get_base_google_url(),
+                base_url=self.get_base_url(),
                 origin="{0},{1}".format(start.y, start.x),
                 destination="{0},{1}".format(end.y, end.x),
             )
 
         resp = requests.get(url)
         if resp.status_code != 200:
-            raise GoogleDirectionsApiError("Google Directions API error: HTTP status code %i" % resp.status_code)
+            raise DirectionsException("Google Directions API error: HTTP status code %i" % resp.status_code)
         directions = resp.json()
 
         if directions['status'] != 'OK':
-            raise GoogleDirectionsApiError("Google Directions API error: {}".format(directions['status']))
+            raise DirectionsException("Google Directions API error: {}".format(directions['status']))
 
         route = directions['routes'][0]['overview_polyline']['points']
 
@@ -393,14 +398,20 @@ class DirectionsHelper():
             directions['routes'][0]['legs'][0]['distance']['text']
         ).replace('mi', _('miles'))
 
-        return self.Directions(walk_time, walk_dist, route)
+        return Directions(walk_time, walk_dist, route)
+
+
+class DirectionsHelper():
 
     def get_directions(self, **kwargs):
         if kwargs['start_location'] and kwargs['end_location']:
-            try:
-                return self.get_google_route(kwargs['start_location'], kwargs['end_location'])
-            except GoogleDirectionsApiError as e1:
-                return None
+            clients = (GoogleDirectionsClient(),)
+            for client in clients:
+                try:
+                    return client.get_route(kwargs['start_location'], kwargs['end_location'])
+                except DirectionsException as e:
+                    pass
+            return None
         else:
             return None
 
