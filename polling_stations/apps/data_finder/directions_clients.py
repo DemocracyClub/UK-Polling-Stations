@@ -7,7 +7,8 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 
 
-Directions = namedtuple('Directions', ['walk_time', 'walk_dist', 'route', 'precision'])
+Directions = namedtuple('Directions', [
+    'walk_time', 'walk_dist', 'route', 'precision', 'source'])
 
 
 class DirectionsException(Exception):
@@ -62,7 +63,8 @@ class GoogleDirectionsClient(DirectionsClient):
             directions['routes'][0]['legs'][0]['distance']['text']
         ).replace('mi', _('miles'))
 
-        return Directions(walk_time, walk_dist, json.dumps(route), self.precision)
+        return Directions(
+            walk_time, walk_dist, json.dumps(route), self.precision, 'Google')
 
 
 class MapzenDirectionsClient(DirectionsClient):
@@ -120,4 +122,5 @@ class MapzenDirectionsClient(DirectionsClient):
             round(directions['trip']['summary']['length'],1)
         ) + _(" miles")
 
-        return Directions(walk_time, walk_dist, json.dumps(route), self.precision)
+        return Directions(
+            walk_time, walk_dist, json.dumps(route), self.precision, 'MapZen')
