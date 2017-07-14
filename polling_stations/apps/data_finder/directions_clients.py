@@ -83,8 +83,11 @@ class MapzenDirectionsClient(DirectionsClient):
             raise DirectionsException("Mapzen Directions API error: HTTP status code %i" % resp.status_code)
         return resp.json()
 
+    def get_api_key(self):
+        return settings.MAPZEN_API_KEY
+
     def get_route(self, start, end):
-        if settings.MAPZEN_API_KEY == '':
+        if self.get_api_key() == '':
             raise DirectionsException("No Mapzen Directions API key set")
 
         query = {
@@ -123,4 +126,4 @@ class MapzenDirectionsClient(DirectionsClient):
         ) + _(" miles")
 
         return Directions(
-            walk_time, walk_dist, json.dumps(route), self.precision, 'MapZen')
+            walk_time, walk_dist, json.dumps(route), self.precision, 'Mapzen')
