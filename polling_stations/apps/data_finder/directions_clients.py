@@ -34,6 +34,12 @@ class GoogleDirectionsClient(DirectionsClient):
             key=settings.GOOGLE_API_KEY
         )
 
+    def get_data(self, url):
+        resp = requests.get(url)
+        if resp.status_code != 200:
+            raise DirectionsException("Google Directions API error: HTTP status code %i" % resp.status_code)
+        return resp.json()
+
     def get_route(self, start, end):
         url = "{base_url}&origin={origin}&destination={destination}".format(
                 base_url=self.get_base_url(),
@@ -41,10 +47,7 @@ class GoogleDirectionsClient(DirectionsClient):
                 destination="{0},{1}".format(end.y, end.x),
             )
 
-        resp = requests.get(url)
-        if resp.status_code != 200:
-            raise DirectionsException("Google Directions API error: HTTP status code %i" % resp.status_code)
-        directions = resp.json()
+        directions = self.get_data(url)
 
         if directions['status'] != 'OK':
             raise DirectionsException("Google Directions API error: {}".format(directions['status']))
@@ -72,6 +75,12 @@ class MapzenDirectionsClient(DirectionsClient):
             key=settings.MAPZEN_API_KEY
         )
 
+    def get_data(self, url):
+        resp = requests.get(url)
+        if resp.status_code != 200:
+            raise DirectionsException("Mapzen Directions API error: HTTP status code %i" % resp.status_code)
+        return resp.json()
+
     def get_route(self, start, end):
         if settings.MAPZEN_API_KEY == '':
             raise DirectionsException("No Mapzen Directions API key set")
@@ -96,10 +105,7 @@ class MapzenDirectionsClient(DirectionsClient):
             json=urllib.parse.quote_plus(json.dumps(query))
         )
 
-        resp = requests.get(url)
-        if resp.status_code != 200:
-            raise DirectionsException("Mapzen Directions API error: HTTP status code %i" % resp.status_code)
-        directions = resp.json()
+        directions = self.get_data(url)
 
         if directions['trip']['status'] != 0:
             raise DirectionsException("Mapzen Directions API error: {}".format(directions['trip']['status']))
