@@ -108,10 +108,10 @@ class MapzenDirectionsClient(DirectionsClient):
 
         walk_time = str(
             int(round(directions['trip']['summary']['time']/60, 0))
-        ) + " minute"
+        ) + _(" minute")
 
         walk_dist = str(
             round(directions['trip']['summary']['length'],1)
-        ) + " miles"
+        ) + _(" miles")
 
         return Directions(walk_time, walk_dist, json.dumps(route), self.precision)
