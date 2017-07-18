@@ -16,7 +16,7 @@ from django.utils.translation import ugettext as _
 from addressbase.helpers import centre_from_points_qs
 from addressbase.models import Address, Blacklist, Onsad
 
-from pollingstations.models import ResidentialAddress
+from pollingstations.models import Council, ResidentialAddress
 from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
 
 
@@ -258,6 +258,25 @@ def get_territory(postcode):
     if postcode[:2] == 'BT':
         return 'NI'
     return 'GB'
+
+
+def get_council(geocode_result):
+    if 'council_gss' in geocode_result:
+        try:
+            return Council.objects.defer("area", "location").get(
+                council_id=geocode_result['council_gss'])
+        except Council.DoesNotExist:
+            pass
+
+    if 'gss_codes' in geocode_result:
+        try:
+            return Council.objects.defer("area", "location").get(
+                council_id__in=geocode_result['gss_codes'])
+        except Council.DoesNotExist:
+            pass
+
+    location = Point(geocode_result['wgs84_lon'], geocode_result['wgs84_lat'])
+    return Council.objects.defer("area", "location").get(area__covers=location)
 
 
 class AddressSorter:
