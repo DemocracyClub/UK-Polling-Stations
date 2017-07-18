@@ -180,3 +180,87 @@ class AddressSetTest(TestCase):
         result = address_list.remove_ambiguous_addresses()
 
         self.assertEqual(set(), result)
+
+    def test_remove_ambiguous_addresses_whole_postcode(self):
+        # if we've got one ambiguous address,
+        # we should remove all addresse with the same postcode
+        in_list = [
+            {
+                'address': '1 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'a'
+            },
+            {
+                'address': '2 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'b'
+            },
+            {
+                'address': '3 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AB',
+                'council': '',
+                'slug': 'c'
+            },
+            {
+                'address': '3 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'd'
+            },
+        ]
+
+        address_list = AddressSet(MockLogger())
+        for el in in_list:
+            address_list.add(el)
+        result = address_list.remove_ambiguous_addresses()
+
+        self.assertEqual(set(), result)
+
+    def test_remove_ambiguous_addresses_no_issues(self):
+        # if there are no ambiguous addresses,
+        # we shouldn't do anything
+
+        in_list = [
+            {
+                'address': '1 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'a'
+            },
+            {
+                'address': '2 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'b'
+            },
+            {
+                'address': '3 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AB',
+                'council': '',
+                'slug': 'c'
+            },
+            {
+                'address': '4 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'd'
+            },
+        ]
+
+        address_list = AddressSet(MockLogger())
+        for el in in_list:
+            address_list.add(el)
+        expected = set(address_list.elements)
+        result = address_list.remove_ambiguous_addresses()
+
+        self.assertEqual(expected, result)
