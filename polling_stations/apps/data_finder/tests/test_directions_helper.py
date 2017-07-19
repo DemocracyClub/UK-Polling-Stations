@@ -20,11 +20,11 @@ def mock_route_exception(self, start, end):
 
 def mock_route_google(self, start, end):
     return Directions(
-        '1', '1', 'foo', 5, 'Google')
+        '1', '1', 'walk', 'foo', 5, 'Google')
 
 def mock_route_mapzen(self, start, end):
     return Directions(
-        '1', '1', 'foo', 6, 'Mapzen')
+        '1', '1', 'walk', 'foo', 6, 'Mapzen')
 
 
 class DirectionsTest(TestCase):

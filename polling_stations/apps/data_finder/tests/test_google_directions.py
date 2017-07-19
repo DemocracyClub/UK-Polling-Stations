@@ -54,8 +54,8 @@ class GoogleDirectionsClientTest(TestCase):
     def test_valid(self):
         g = GoogleDirectionsClientValidMock()
         result = g.get_route(self.a, self.b)
-        self.assertEqual('4 minute', result.walk_time)
-        self.assertEqual('0.2 miles', result.walk_dist)
+        self.assertEqual('4 minute', result.time)
+        self.assertEqual('0.2 miles', result.dist)
         self.assertEqual(json.dumps('foo\bar'), result.route)
         self.assertEqual(5, result.precision)
         self.assertEqual('Google', result.source)

@@ -62,8 +62,8 @@ class MapzenDirectionsClientTest(TestCase):
     def test_valid(self):
         m = MapzenDirectionsClientValidMock()
         result = m.get_route(self.a, self.b)
-        self.assertEqual('10 minute', result.walk_time)
-        self.assertEqual('0.5 miles', result.walk_dist)
+        self.assertEqual('10 minute', result.time)
+        self.assertEqual('0.5 miles', result.dist)
         self.assertEqual(json.dumps('foo\bar'), result.route)
         self.assertEqual(6, result.precision)
         self.assertEqual('Mapzen', result.source)

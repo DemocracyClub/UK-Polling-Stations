@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 
 Directions = namedtuple('Directions', [
-    'walk_time', 'walk_dist', 'route', 'precision', 'source'])
+    'time', 'dist', 'mode', 'route', 'precision', 'source'])
 
 
 class DirectionsException(Exception):
@@ -39,7 +39,7 @@ class GoogleDirectionsClient(DirectionsClient):
         return resp.json()
 
     def get_route(self, start, end):
-        url = "{base_url}&origin={origin}&destination={destination}".format(
+        url = "{base_url}&mode=walking&origin={origin}&destination={destination}".format(
                 base_url=self.get_base_url(),
                 origin="{0},{1}".format(start.y, start.x),
                 destination="{0},{1}".format(end.y, end.x),
@@ -52,16 +52,16 @@ class GoogleDirectionsClient(DirectionsClient):
 
         route = directions['routes'][0]['overview_polyline']['points']
 
-        walk_time = str(
+        time = str(
             directions['routes'][0]['legs'][0]['duration']['text']
         ).replace('mins', _('minute'))
 
-        walk_dist = str(
+        dist = str(
             directions['routes'][0]['legs'][0]['distance']['text']
         ).replace('mi', _('miles'))
 
         return Directions(
-            walk_time, walk_dist, json.dumps(route), self.precision, 'Google')
+            time, dist, 'walk', json.dumps(route), self.precision, 'Google')
 
 
 class MapzenDirectionsClient(DirectionsClient):
@@ -114,13 +114,13 @@ class MapzenDirectionsClient(DirectionsClient):
 
         route = directions['trip']['legs'][0]['shape']
 
-        walk_time = str(
+        time = str(
             int(round(directions['trip']['summary']['time']/60, 0))
         ) + _(" minute")
 
-        walk_dist = str(
+        dist = str(
             round(directions['trip']['summary']['length'],1)
         ) + _(" miles")
 
         return Directions(
-            walk_time, walk_dist, json.dumps(route), self.precision, 'Mapzen')
+            time, dist, 'walk', json.dumps(route), self.precision, 'Mapzen')
