@@ -357,7 +357,7 @@ class DirectionsHelper():
             for client in clients:
                 try:
                     return client.get_route(kwargs['start_location'], kwargs['end_location'])
-                except DirectionsException as e:
+                except DirectionsException:
                     pass
             return None
         else:
