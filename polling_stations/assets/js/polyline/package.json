@@ -1,0 +1,26 @@
+{
+  "author": "Tom MacWright <tom@macwright.org> (http://macwright.org/)",
+  "name": "@mapbox/polyline",
+  "description": "Polyline encoding and decoding",
+  "version": "0.2.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mapbox/polyline.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^0.23.0",
+    "tap": "^1.2.1"
+  },
+  "optionalDependencies": {},
+  "scripts": {
+    "test": "eslint --no-eslintrc -c .eslintrc src && tap --coverage test/polyline.test.js"
+  },
+  "main": "src/polyline.js",
+  "engines": {
+    "node": "*"
+  },
+  "bin": {
+    "polyline": "bin/polyline.bin.js"
+  }
+}

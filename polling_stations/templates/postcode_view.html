@@ -115,11 +115,11 @@
                 {% endif %}
             </address>
             </div>
-            {% if directions.walk_time %}
+            {% if directions.time %}
             <div id="directions">
             <p>
-                {% blocktrans with directions.walk_time as walk_time and directions.walk_dist as walk_dist %}
-                It's about {{ walk_dist }} away or a {{ walk_time }} walk from {{ postcode }}.
+                {% blocktrans with directions.time as time and directions.dist as dist and directions.mode as mode %}
+                It's about {{ dist }} away or a {{ time }} {{ mode }} from {{ postcode }}.
                 {% endblocktrans %}</p>
             Get
             <a href="https://www.google.com/maps/dir/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}" target="_top">
@@ -218,6 +218,7 @@
           prefix: 'fa'
       });
       var polling_station_location = point;
+      var firstpolyline = false;
 
       var map = L.map('area_map', {zoomControl:true, dragging: !L.Browser.mobile});
       {% if request.brand == 'embed' %}
@@ -254,36 +255,38 @@
       }).addTo(map);
 
       {% if directions.route %}
-      var pointList = [
-      {% for p in directions.route %}
-          new L.LatLng({{p.1}}, {{p.0}}){% if not forloop.last %},{% endif %}
-      {% endfor %}
-      ];
+      decoded = polyline.decode({{ directions.route|safe }}, {{ directions.precision }});
+      try {
+        firstpolyline = new L.Polyline(decoded, {
+            color: 'red',
+            weight: 3,
+            opacity: 1.0,
+            smoothFactor: 1,
+            dashArray: "5, 5"
+        });
 
-      // home
-      L.marker(pointList[0], {
-        'clickable': true,
-        'icon': homeMarker
-      }).addTo(map);
+        // home
+        L.marker(firstpolyline._latlngs[0], {
+            'clickable': true,
+            'icon': homeMarker
+        }).addTo(map);
 
-      var firstpolyline = new L.Polyline(pointList, {
-        color: 'red',
-        weight: 3,
-        opacity: 1.0,
-        smoothFactor: 1,
-        dashArray: "5, 5"
-      });
-      firstpolyline.addTo(map);
+        firstpolyline.addTo(map);
+      } catch (e) {
+        // do nothing
+        // if something goes wrong trying to plot the route
+        // we only want to show the station point
+      }
       {% endif %}
 
       window.map = map;
       window.polling_station_location = polling_station_location;
 
-      {% if directions.route %}
-      map.fitBounds(firstpolyline.getBounds(), {maxZoom: 16});
-      {% else %}
-      map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
-      {% endif %}
+      if (firstpolyline) {
+        map.fitBounds(firstpolyline.getBounds(), {maxZoom: 16});
+      } else {
+        map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
+      }
     };
 
     var point = [{{ location.1 }}, {{ location.0 }}];
@@ -311,6 +314,9 @@
           ],
           'L.ExtraMarkers': [
               '{% static "Leaflet.ExtraMarkers/js/leaflet.extra-markers.min.js" %}'
+          ],
+          'polyline': [
+              '{% static 'js/polyline/src/polyline.js' %}'
           ]}, {
             shim: {
               'L': ['jQuery'],

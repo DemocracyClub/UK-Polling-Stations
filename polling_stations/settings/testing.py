@@ -13,3 +13,5 @@ MIGRATION_MODULES = {
     for app in INSTALLED_APPS
     if 'django' not in app
 }
+
+MAPZEN_API_KEY = ''

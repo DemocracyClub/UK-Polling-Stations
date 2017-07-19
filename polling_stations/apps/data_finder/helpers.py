@@ -11,13 +11,14 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext as _
 
 from addressbase.helpers import centre_from_points_qs
 from addressbase.models import Address, Blacklist, Onsad
 
 from pollingstations.models import Council, ResidentialAddress
 from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
+from data_finder.directions_clients import (
+    DirectionsException, GoogleDirectionsClient, MapzenDirectionsClient)
 
 
 class PostcodeError(Exception):
@@ -367,115 +368,19 @@ class EveryElectionWrapper:
         return explanations
 
 
-class OrsDirectionsApiError(Exception):
-    pass
-
-
-class GoogleDirectionsApiError(Exception):
-    pass
-
-
 class DirectionsHelper():
 
-    def __init__(self):
-        self.re_time = re.compile("PT([0-9]+)M([0-9]+)S")
-        self.Directions = namedtuple('Directions', ['walk_time', 'walk_dist', 'route'])
-
-    def get_ors_route(self, longlat_from, longlat_to):
-        url = settings.ORS_ROUTE_URL_TEMPLATE.format(longlat_from.x, longlat_from.y, longlat_to.x, longlat_to.y)
-
-        resp = requests.get(url)
-        if resp.status_code != 200:
-            raise OrsDirectionsApiError("Open Route Service API error: HTTP status code %i" % resp.status_code)
-
-        root = lxml.etree.fromstring(resp.content)
-
-        ns = {
-            "xls": "http://www.opengis.net/xls",
-            "xsi": "http://www.w3.org/2001/XMLSchema-instance",
-            "gml": "http://www.opengis.net/gml",
-        }
-
-        ps = [
-            [float(x) for x in pos.text.split()]
-            for pos in root.xpath('//xls:RouteGeometry/gml:LineString/gml:pos', namespaces=ns)
-        ]
-
-        walk_dist = "{} {}".format(
-            root.xpath('//xls:RouteSummary/xls:TotalDistance/@value', namespaces=ns)[0],
-            _('miles'),
-        )
-
-        time_text = root.xpath('//xls:RouteSummary/xls:TotalTime/text()', namespaces=ns)[0]
-        matches = self.re_time.match(
-            time_text,
-        )
-        if matches is not None:
-            walk_time = "{} {}".format(matches.group(1), _('minute'))
-        else:
-            walk_time = None
-
-        return self.Directions(walk_time, walk_dist, ps)
-
-    def get_base_google_url(self):
-        return "{base}&key={key}".format(
-            base=settings.BASE_GOOGLE_URL,
-            key=settings.GOOGLE_API_KEY
-        )
-
-    def get_google_route(self, start, end):
-        url = "{base_url}&origin={origin}&destination={destination}".format(
-                base_url=self.get_base_google_url(),
-                origin="{0},{1}".format(start.y, start.x),
-                destination="{0},{1}".format(end.y, end.x),
-            )
-
-        resp = requests.get(url)
-        if resp.status_code != 200:
-            raise GoogleDirectionsApiError("Google Directions API error: HTTP status code %i" % resp.status_code)
-        directions = resp.json()
-
-        if directions['status'] != 'OK':
-            raise GoogleDirectionsApiError("Google Directions API error: {}".format(directions['status']))
-
-        start_points = [
-            Point(x['start_location']['lng'], x['start_location']['lat'])
-            for x in directions['routes'][0]['legs'][0]['steps']
-        ]
-
-        end_points = [
-            Point(x['end_location']['lng'], x['end_location']['lat'])
-            for x in directions['routes'][0]['legs'][0]['steps']
-        ]
-
-        walk_time = str(
-            directions['routes'][0]['legs'][0]['duration']['text']
-        ).replace('mins', _('minute'))
-
-        walk_dist = str(
-            directions['routes'][0]['legs'][0]['distance']['text']
-        ).replace('mi', _('miles'))
-
-        return self.Directions(walk_time, walk_dist, start_points[:] + end_points[-1:])
-
     def get_directions(self, **kwargs):
-        try:
-            directions = self.get_google_route(kwargs['start_location'], kwargs['end_location'])
-        except GoogleDirectionsApiError as e1:
-            return None
-            # Should log error here
-
-            if kwargs['start_location']:
+        if kwargs['start_location'] and kwargs['end_location']:
+            clients = (MapzenDirectionsClient(), GoogleDirectionsClient(),)
+            for client in clients:
                 try:
-                    directions = self.get_ors_route(kwargs['start_location'], kwargs['end_location'])
-                except OrsDirectionsApiError as e2:
-                    # Should log error here
-
-                    directions = None
-            else:
-                directions = None
-
-        return directions
+                    return client.get_route(kwargs['start_location'], kwargs['end_location'])
+                except DirectionsException:
+                    pass
+            return None
+        else:
+            return None
 
 
 # use a postcode to decide which endpoint the user should be directed to
