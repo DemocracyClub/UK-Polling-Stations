@@ -155,7 +155,11 @@ class BasePollingStationView(
         self.directions = self.get_directions()
 
         ee = EveryElectionWrapper(self.postcode)
-        context['has_election'] = ee.has_election()
+        if settings.EVERY_ELECTION['CHECK']:
+            context['has_election'] = ee.has_election()
+        else:
+            context['has_election'] = settings.EVERY_ELECTION['HAS_ELECTION']
+
         if not context['has_election']:
             context['error'] = 'There are no upcoming elections in your area'
         context['election_explainers'] = ee.get_explanations()
