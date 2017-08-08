@@ -1,6 +1,6 @@
 # Contributing
 
-At [DemocracyClub](https://democracyclub.org.uk/) we value contributions to our projects from volunteers and contirbutors.
+At [DemocracyClub](https://democracyclub.org.uk/) we value contributions to our projects from volunteers and contirbutors. Please read and follow our [Code of Conduct](https://democracyclub.org.uk/code-of-conduct/).
 
 ## Issues
 * To report a bug or suggest an improvement, [create an issue](https://github.com/DemocracyClub/UK-Polling-Stations/issues/new).
