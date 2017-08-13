@@ -7,7 +7,7 @@ Polling stations and districts are maintained by local councils so all of our da
 
 ## Councils Collection: JSON [/councils.json]
 
-List all councils. Returns an array of [council objects](#councils-councils-json-get)
+List all councils. Returns an array of [council objects](#retrieve-a-council-json-3)
 
 ### List All Councils: JSON [GET]
 
