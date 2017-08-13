@@ -22,9 +22,18 @@ cache:
 env:
   - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
 install:
-  - pip install pip==8.1.2
+  - pip install --upgrade pip
   - pip install tox coveralls tox-travis
   - npm install
+  - git clone --recursive git://github.com/apiaryio/drafter.git
+  - cd drafter
+  - /usr/bin/python2.7 configure --shared
+  - make libdrafter
+  - sudo cp build/out/Release/lib.target/libdrafter.so /usr/lib/libdrafter.so
+  - sudo mkdir -p /usr/include/drafter
+  - sudo cp src/drafter.h /usr/include/drafter/drafter.h
+  - cd ..
+  - rm -rf drafter/
 script:
   - tox
 after_success:
