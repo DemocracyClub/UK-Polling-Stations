@@ -152,6 +152,7 @@ INSTALLED_APPS = (
     'corsheaders',
     'pipeline',
     'dc_signup_form',
+    'apiblueprint_view',
 )
 
 PROJECT_APPS = (
