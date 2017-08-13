@@ -40,7 +40,7 @@
           $(el).parent().children('.api-description').toggle();
           $(el).parent().children('.api-action-body').toggle();
           $(el).parent().children('.api-action-schema').toggle();
-        }
+        };
         $('.api-http-code').on('click', function() {
           handler(this);
         });
@@ -48,6 +48,10 @@
           handler(this);
         });
         $('.api-http-code').wrapInner('<a></a>');
+
+        /* update the hash again after we've hidden stuff
+        so we end up in the right place on the page */
+        location.hash = location.hash;
       });
     });
   </script>
