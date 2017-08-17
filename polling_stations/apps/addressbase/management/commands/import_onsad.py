@@ -29,7 +29,8 @@ class Command(BaseAddressBaseCommand):
         for f in glob.glob(glob_str):
             print(f)
             cursor.execute("""
-                COPY addressbase_onsad (uprn, cty, lad, ward, hlthau, ctry,
+                COPY addressbase_onsad (
+                uprn, ctry_flag, cty, lad, ward, hlthau, ctry,
                 rgn, pcon, eer, ttwa, nuts, park, oa11, lsoa11, msoa11, parish,
                 wz11, ccg, bua11, buasd11, ruc11, oac11, lep1, lep2, pfa, imd)
                 FROM '{}' (FORMAT CSV, DELIMITER ',', QUOTE '"', HEADER);
