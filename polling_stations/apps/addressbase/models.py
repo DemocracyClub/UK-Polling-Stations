@@ -35,6 +35,7 @@ class Onsad(models.Model):
 
     Like every aspect of this project, it is *not that simple*
     """
+    ctry_flag = models.CharField(blank=True, max_length=1)
     cty = models.CharField(blank=True, max_length=9)
     lad = models.CharField(blank=True, max_length=9)
     ward = models.CharField(blank=True, max_length=9)
