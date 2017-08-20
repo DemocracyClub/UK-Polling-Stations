@@ -27,6 +27,7 @@ install:
   - npm install
   - git clone --recursive git://github.com/apiaryio/drafter.git
   - cd drafter
+  - git checkout v3.2.7
   - /usr/bin/python2.7 configure --shared
   - make libdrafter
   - sudo cp build/out/Release/lib.target/libdrafter.so /usr/lib/libdrafter.so
