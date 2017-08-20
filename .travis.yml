@@ -7,8 +7,12 @@ python:
 addons:
   postgresql: '9.5'
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - postgresql-9.5-postgis-2.3
+      - gcc-5
+      - g++-5
 before_script:
   - psql -U postgres -c "create extension postgis"
   - export BOTO_CONFIG=/dev/null
@@ -22,6 +26,7 @@ cache:
 env:
   - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
 install:
+  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
   - pip install --upgrade pip
   - pip install tox coveralls tox-travis
   - npm install
