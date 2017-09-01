@@ -65,3 +65,6 @@ polling_stations/settings/local.py
 
 # cached local files from amazon s3
 s3cache/*
+
+# node js dependencies
+node_modules/
