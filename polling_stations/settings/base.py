@@ -74,7 +74,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = root('static_root')
+STATIC_ROOT = root('static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -83,34 +83,35 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     root('assets'),
-    root('static'),
 )
 
-# TODO find a way to move these in to the DC theme app?
-STATIC_PRECOMPILER_ROOT =root('static')
-import os
-import dc_theme
-root_path = os.path.dirname(dc_theme.__file__)
-STATIC_PRECOMPILER_COMPILERS = (
-    ('static_precompiler.compilers.libsass.SCSS', {
-        "sourcemap_enabled": True,
-        # "output_style": "compressed",
-        "load_paths": [
-            root_path + '/static/dc_theme/bower_components/foundation-sites/assets',
-            root_path + '/static/dc_theme/bower_components/foundation-sites/scss',
-            root_path + '/static/dc_theme/bower_components/motion-ui/src',
-            root_path + '/static/dc_theme/scss/',
-        ],
-    }),
+
+from dc_theme.settings import get_pipeline_settings
+from dc_theme.settings import STATICFILES_FINDERS
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+STATICFILES_FINDERS = STATICFILES_FINDERS + (
+    'pipeline.finders.ManifestFinder',
 )
 
-# List of finder classes that know how to find static files in
-# various locations.
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'static_precompiler.finders.StaticPrecompilerFinder',
+PIPELINE = get_pipeline_settings(
+    extra_css=[
+        'css/style.scss',
+        'css/font-awesome.min.css',
+        'css/map.css',
+        'Leaflet.ExtraMarkers/css/leaflet.extra-markers.min.css',
+    ],
+    extra_js=[
+        'js/leaflet.js',
+        'Leaflet.ExtraMarkers/js/leaflet.extra-markers.min.js',
+        'js/polyline/src/polyline.js',
+        'js/polyline_global.js',
+    ],
 )
+PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
+PIPELINE['UGLIFYJS_BINARY'] = 'node_modules/uglify-js/bin/uglifyjs'
+PIPELINE['UGLIFYJS_ARGUMENTS'] = '--no-mangle'
+
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'asdasdasdasdasdasdasd'
@@ -174,6 +175,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'markdown_deux',
     'corsheaders',
+    'pipeline',
 )
 
 PROJECT_APPS = (
@@ -186,7 +188,6 @@ PROJECT_APPS = (
     'feedback',
     'nus_wales',
     'pollingstations',
-    'static_precompiler',
     'whitelabel',
 )
 
