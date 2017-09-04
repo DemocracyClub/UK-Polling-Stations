@@ -5,7 +5,11 @@
 {% load pipeline %}
 
 {% block extra_page_css %}
-{% stylesheet 'map' %}
+
+{% if we_know_where_you_should_vote and station.location %}
+    {% stylesheet 'map' %}
+{% endif %}
+
 <style>
   .council_location_icon {
     background-color:black;
@@ -357,7 +361,10 @@
 {% endif %}
 </script>
 {% javascript 'scripts' %}
-{% javascript 'map' %}
+
+{% if we_know_where_you_should_vote and station.location %}
+    {% javascript 'map' %}
+{% endif %}
 
 {% include "feedback/feedback_js.html" %}
 
