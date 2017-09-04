@@ -83,6 +83,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     root('assets'),
+    root('../node_modules'),
 )
 
 
@@ -97,20 +98,21 @@ STATICFILES_FINDERS = STATICFILES_FINDERS + (
 PIPELINE = get_pipeline_settings(
     extra_css=[
         'css/style.scss',
-        'css/font-awesome.min.css',
+        'font-awesome/css/font-awesome.min.css',
         'css/map.css',
-        'Leaflet.ExtraMarkers/css/leaflet.extra-markers.min.css',
+        'leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css',
     ],
     extra_js=[
-        'js/leaflet.js',
-        'Leaflet.ExtraMarkers/js/leaflet.extra-markers.min.js',
-        'js/polyline/src/polyline.js',
+        'leaflet/dist/leaflet.js',
+        'leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js',
+        '@mapbox/polyline/src/polyline.js',
         'js/polyline_global.js',
     ],
 )
 PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 PIPELINE['UGLIFYJS_BINARY'] = 'node_modules/uglify-js/bin/uglifyjs'
 PIPELINE['UGLIFYJS_ARGUMENTS'] = '--no-mangle'
+COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter']
 
 
 # Make this unique, and don't share it with anybody.
