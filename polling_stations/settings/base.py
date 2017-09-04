@@ -97,17 +97,17 @@ STATICFILES_FINDERS = STATICFILES_FINDERS + (
 
 PIPELINE = get_pipeline_settings(
     extra_css=[
-        'css/style.scss',
+        'custom_css/style.scss',
         'font-awesome/css/font-awesome.min.css',
         'leaflet/dist/leaflet.css',
-        'css/map.css',
+        'custom_css/map.css',
         'leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css',
     ],
     extra_js=[
         'leaflet/dist/leaflet.js',
         'leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js',
         '@mapbox/polyline/src/polyline.js',
-        'js/polyline_global.js',
+        'custom_js/polyline_global.js',
     ],
 )
 PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
