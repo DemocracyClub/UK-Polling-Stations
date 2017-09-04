@@ -99,6 +99,7 @@ PIPELINE = get_pipeline_settings(
     extra_css=[
         'css/style.scss',
         'font-awesome/css/font-awesome.min.css',
+        'leaflet/dist/leaflet.css',
         'css/map.css',
         'leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css',
     ],
