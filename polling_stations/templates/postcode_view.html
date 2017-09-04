@@ -5,7 +5,7 @@
 {% load pipeline %}
 
 {% block extra_page_css %}
-
+{% stylesheet 'map' %}
 <style>
   .council_location_icon {
     background-color:black;
@@ -357,6 +357,7 @@
 {% endif %}
 </script>
 {% javascript 'scripts' %}
+{% javascript 'map' %}
 
 {% include "feedback/feedback_js.html" %}
 
