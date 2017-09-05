@@ -236,6 +236,13 @@
 
 
 {% block extra_javascript %}
+
+  {% javascript 'scripts' %}
+
+  {% if we_know_where_you_should_vote and station.location %}
+    {% javascript 'map' %}
+  {% endif %}
+
 <script type="text/javascript">
 
 {% if not we_know_where_you_should_vote or not has_election %}
@@ -292,11 +299,6 @@
   {% endif %}
 {% endif %}
 </script>
-{% javascript 'scripts' %}
-
-{% if we_know_where_you_should_vote and station.location %}
-    {% javascript 'map' %}
-{% endif %}
 
 {% include "feedback/feedback_js.html" %}
 
