@@ -1,19 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
-import re
-import json
 import signal
 from contextlib import contextmanager
 from django.template.defaultfilters import slugify
-
-from lxml import html
-
-from django.test.client import Client
-from django.core.urlresolvers import reverse
 from django.core.management import call_command
-
 from aloe import before, after, around, step, world
-from aloe_django import django_url
 import aloe_webdriver.django
 from selenium import webdriver
 import vcr
