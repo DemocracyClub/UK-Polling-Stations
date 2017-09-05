@@ -30,6 +30,7 @@ PIPELINE['JAVASCRIPT']['map'] = {
         'leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js',
         '@mapbox/polyline/src/polyline.js',
         'custom_js/polyline_global.js',
+        'custom_js/map.js',
     ],
     'output_filename': 'js/map.js',
 }
