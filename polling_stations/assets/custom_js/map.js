@@ -2,7 +2,7 @@
 
 window.PollingStationMap = function(div_id) {
 
-    var map = L.map('area_map', {zoomControl:true, dragging: !L.Browser.mobile});
+    var map = L.map(div_id, {zoomControl:true, dragging: !L.Browser.mobile});
 
     var add_tile_layer = function(tile_layer, mq_key) {
         var tiles;
