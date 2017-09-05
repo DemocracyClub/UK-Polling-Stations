@@ -11,20 +11,12 @@ window.PollingStationMap = function(div_id) {
             tiles = MQ.tileLayer();
             tiles.addTo(map);
           });
-        } else {
-          if (tile_layer == 'OpenStreetMap') {
-            tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-              subdomains: 'abc'
-            });
-          } else {
-            tiles = L.tileLayer('https://otile{s}-s.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
-              type: 'map',
-              ext: 'jpg',
-              attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_top">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright" target="_top">OpenStreetMap</a>',
-              subdomains: '1234'
-            });
-          }
+        }
+        if (tile_layer == 'OpenStreetMap') {
+          tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            subdomains: 'abc'
+          });
           tiles.addTo(map);
         }
       };
