@@ -2,10 +2,14 @@
 
 {% load i18n %}
 {% load static from staticfiles %}
+{% load pipeline %}
 
 {% block extra_page_css %}
-<link rel="stylesheet" href="{% static "css/map.css" %}" />
-<link rel="stylesheet" href="{% static "Leaflet.ExtraMarkers/css/leaflet.extra-markers.min.css" %}">
+
+{% if we_know_where_you_should_vote and station.location %}
+    {% stylesheet 'map' %}
+{% endif %}
+
 <style>
   .council_location_icon {
     background-color:black;
@@ -197,131 +201,49 @@
 
 {% block in_page_javascript %}
   <script type="text/javascript">
-
-    // Maps
-    window.create_area_map = function(point) {
-
-      var homeMarker = L.ExtraMarkers.icon({
-          icon: 'fa-home',
-          markerColor: 'purple',
-          iconColor: 'white',
-          shape: 'circle',
-          prefix: 'fa'
-      });
-      var stationMarker = L.ExtraMarkers.icon({
-          icon: 'fa-check-square',
-          markerColor: 'purple',
-          iconColor: 'white',
-          shape: 'circle',
-          prefix: 'fa'
-      });
-      var polling_station_location = point;
-      var firstpolyline = false;
-
-      var map = L.map('area_map', {zoomControl:true, dragging: !L.Browser.mobile});
-      {% if request.brand == 'embed' %}
-      map.scrollWheelZoom.disable();
-      {% endif %}
-
-      var tiles;
-      {% if tile_layer == 'MapQuestSDK' and mq_key %}
-        $.getScript("http://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key={{ mq_key }}").done(function() {
-          tiles = MQ.tileLayer();
-          tiles.addTo(map);
-        });
-      {% else %}
-        {% if tile_layer == 'OpenStreetMap' %}
-        tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-            subdomains: 'abc'
-        });
-        {% else %}
-        tiles = L.tileLayer('https://otile{s}-s.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
-            type: 'map',
-            ext: 'jpg',
-            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_top">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright" target="_top">OpenStreetMap</a>',
-            subdomains: '1234'
-        });
-        {% endif %}
-        tiles.addTo(map);
-      {% endif %}
-
-      // polling station
-      L.marker([{{ station.location.1 }}, {{ station.location.0 }}], {
-        'clickable': true,
-        'icon': stationMarker
-      }).addTo(map);
-
-      {% if directions.route %}
-      decoded = polyline.decode({{ directions.route|safe }}, {{ directions.precision }});
-      try {
-        firstpolyline = new L.Polyline(decoded, {
-            color: 'red',
-            weight: 3,
-            opacity: 1.0,
-            smoothFactor: 1,
-            dashArray: "5, 5"
-        });
-
-        // home
-        L.marker(firstpolyline._latlngs[0], {
-            'clickable': true,
-            'icon': homeMarker
-        }).addTo(map);
-
-        firstpolyline.addTo(map);
-      } catch (e) {
-        // do nothing
-        // if something goes wrong trying to plot the route
-        // we only want to show the station point
-      }
-      {% endif %}
-
-      window.map = map;
-      window.polling_station_location = polling_station_location;
-
-      if (firstpolyline) {
-        map.fitBounds(firstpolyline.getBounds(), {maxZoom: 16});
-      } else {
-        map.setView([{{ station.location.1 }}, {{ station.location.0 }}],15);
-      }
-    };
-
-    var point = [{{ location.1 }}, {{ location.0 }}];
-
     {% if we_know_where_you_should_vote and station.location %}
-    fallback.ready(['L.ExtraMarkers'], function() {
-        create_area_map(point);
-    });
-    {% endif %}
+      $(document).ready(function() {
+        var station_point = [{{ station.location.1 }}, {{ station.location.0 }}];
+        var tile_layer = '{{ tile_layer }}';
 
+        {% if directions %}
+            var directions = {
+                route: {{ directions.route|safe }},
+                precision: {{ directions.precision }}
+            };
+        {% else %}
+            var directions = {};
+        {% endif %}
+
+        {% if request.brand == 'embed' %}
+            var embed = true;
+        {% else %}
+            var embed = false;
+        {% endif %}
+
+        {% if mq_key %}
+            var mq_key = '{{ mq_key }}';
+        {% else %}
+            var mq_key = null;
+        {% endif %}
+
+        var map = new PollingStationMap('area_map');
+        map.draw(station_point, embed, tile_layer, mq_key, directions);
+      });
+    {% endif %}
   </script>
 {% endblock in_page_javascript %}
 
 
 {% block extra_javascript %}
+
+  {% javascript 'scripts' %}
+
+  {% if we_know_where_you_should_vote and station.location %}
+    {% javascript 'map' %}
+  {% endif %}
+
 <script type="text/javascript">
-        fallback.load({
-          'css$font-awesome': [
-              '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css',
-              '{% static 'css/font-awesome.min.css' %}'
-          ],
-          L: [
-              '//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
-              '{% static 'js/leaflet.js' %}'
-          ],
-          'L.ExtraMarkers': [
-              '{% static "Leaflet.ExtraMarkers/js/leaflet.extra-markers.min.js" %}'
-          ],
-          'polyline': [
-              '{% static 'js/polyline/src/polyline.js' %}'
-          ]}, {
-            shim: {
-              'L': ['jQuery'],
-              'L.ExtraMarkers': ['L']
-            }
-          }
-        );
 
 {% if not we_know_where_you_should_vote or not has_election %}
   {% if not custom %}
@@ -339,8 +261,6 @@
       '{% trans "We won’t share your email address with them or anyone else." %}</p>';
     var form_fields = ['name', 'email'];
   {% endif %}
-
-  fallback.ready(['jQuery'], function() {
 
     $(document).ready(function() {
 
@@ -376,8 +296,6 @@
       });
 
     });
-
-  });
   {% endif %}
 {% endif %}
 </script>

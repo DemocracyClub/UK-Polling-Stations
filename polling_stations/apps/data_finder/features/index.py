@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
-import re
-import json
+import shutil
 import signal
+import tempfile
 from contextlib import contextmanager
 from django.template.defaultfilters import slugify
-
-from lxml import html
-
-from django.test.client import Client
-from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.core.management import call_command
-
 from aloe import before, after, around, step, world
-from aloe_django import django_url
 import aloe_webdriver.django
 from selenium import webdriver
 import vcr
@@ -22,6 +16,20 @@ selenium_vcr = vcr.VCR()
 # We need to ignore localhost as selenium communicates over local http
 # to interact with the 'browser'
 selenium_vcr.ignore_localhost = True
+
+temp_dir = tempfile.mkdtemp()
+
+
+@before.all
+def before_all():
+    # build static assets into a temporary location
+    settings.STATIC_ROOT=temp_dir
+    call_command('collectstatic', interactive=False)
+
+@after.all
+def after_all():
+    # clean up static assets
+    shutil.rmtree(temp_dir)
 
 @before.each_example
 def setup(scenario, outline, steps):

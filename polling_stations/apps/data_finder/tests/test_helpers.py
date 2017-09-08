@@ -1,7 +1,9 @@
 from django.test import TestCase, override_settings
 from data_finder.helpers import ExamplePostcodeHelper
 
-@override_settings(EXAMPLE_POSTCODE='CF10 5AJ')
+@override_settings(
+    STATICFILES_STORAGE='pipeline.storage.NonPackagingPipelineStorage',
+    EXAMPLE_POSTCODE='CF10 5AJ')
 class ExamplePostcodeTest(TestCase):
     def setUp(self):
         self.example_postcode = ExamplePostcodeHelper()

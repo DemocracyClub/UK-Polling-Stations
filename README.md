@@ -18,7 +18,7 @@ If you are interested in helping out in any way at all, please contact sym@democ
 UK-Polling-Stations requires python 3.4 or 3.5
 
 ### Install system dependencies
-UK-Polling-Stations requires Postgres, PostGIS, libgeos and GDAL.
+UK-Polling-Stations requires Python 3, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
 
 On Mac OSX, run:
 ```
@@ -26,25 +26,35 @@ brew install postgresql
 brew install postgis
 brew install geos
 brew install gdal
+brew install node
 ```
 From a clean install of Ubuntu 14.04 (Trusty):
 ```
-sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1 libxml2-dev libxslt-dev
+sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1 libxml2-dev libxslt-dev nodejs npm
+
+sudo ln -s /usr/bin/nodejs /usr/bin/node
 ```
 or on Ubuntu 16.04 (Xenial):
 ```
-sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev
+sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev nodejs npm
+
+sudo ln -s /usr/bin/nodejs /usr/bin/node
 ```
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
-### Install project requirements
+### Install python dependencies
 ```
 pip install -r requirements/base.txt
 ```
 
+### Install front-end dependencies
+```
+npm install
+```
+
 ### Install testing dependencies
-The integration tests require [PhantomJS](http://phantomjs.org/).
+The integration tests require [PhantomJS](http://phantomjs.org/) to be installed globally.
 
 On Mac OSX, this can be installed by running
 ```
@@ -53,8 +63,6 @@ brew install phantomjs
 
 On Ubunutu, run:
 ```
-sudo apt-get install nodejs npm
-sudo ln -s /usr/bin/nodejs /usr/bin/node
 sudo npm install -g phantomjs-prebuilt
 ```
 

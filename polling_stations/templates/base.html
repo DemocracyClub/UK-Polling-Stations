@@ -1,8 +1,8 @@
 {% extends base_template|default:"base_full.html" %}
-{% load compile_static %}
 {% load static from staticfiles %}
+{% load pipeline %}
 {% block extra_site_css %}
-    <link rel="stylesheet" href="{% static "css/style.scss"|compile %}" />
+    {% stylesheet 'styles' %}
 {% endblock extra_site_css %}
 
 
@@ -17,7 +17,6 @@
 
   ga('create', 'UA-61638489-1', 'auto');
   ga('send', 'pageview');
-
 </script>
 {% endif %}
 {% endblock ga_tracking_code %}
@@ -53,12 +52,5 @@
 {% endblock site_footer %}
 
 {% block extra_javascript %}
-<script type="text/javascript">
-    fallback.load({
-        'css$font-awesome': [
-            '//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css',
-            '{% static 'css/font-awesome.min.css' %}'
-        ]}
-    );
-</script>
+{% javascript 'scripts' %}
 {% endblock extra_javascript %}
