@@ -2,10 +2,6 @@ from dc_theme.settings import get_pipeline_settings
 from dc_theme.settings import STATICFILES_FINDERS
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
-STATICFILES_FINDERS = STATICFILES_FINDERS + (
-    'pipeline.finders.ManifestFinder',
-)
-
 PIPELINE = get_pipeline_settings(
     extra_css=[
         'custom_css/style.scss',

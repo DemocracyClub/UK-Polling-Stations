@@ -27,4 +27,4 @@ boto==2.42.0
 
 git+https://github.com/mysociety/django-pipeline-csscompressor
 libsass>=0.12.3
-git+git://github.com/DemocracyClub/dc_base_theme.git@d88d7d0be082e7a6c5b77dff68fdac3e5c6ebc9b
+git+git://github.com/DemocracyClub/dc_base_theme.git@94d172df89342072c25f29c4c2de34fe9a27886b
