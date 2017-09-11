@@ -19,7 +19,6 @@ from data_finder.views import (
     AddressFormView,
     WeDontKnowView,
     MultipleCouncilsView,
-    campaign_signup
 )
 
 
@@ -37,11 +36,6 @@ core_patterns = patterns(
         MultipleCouncilsView.as_view(), name='multiple_councils_view'),
     url(r'^address_select/(?P<postcode>.+)/$',
         AddressFormView.as_view(), name='address_select_view'),
-    url(r'^campaign_signup/(?P<postcode>.+)/$',
-        'data_finder.views.campaign_signup', name='campaign_signup'),
-    url(r'^election_notification_signup/(?P<postcode>.+)/$',
-        'data_finder.views.election_notification_signup',
-        name='election_notification_signup'),
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^privacy/$', PrivacyView.as_view(), name='privacy_view'),
     url(r'^robots\.txt$', TemplateView.as_view(
@@ -57,6 +51,7 @@ extra_patterns = patterns(
     url(r'^league_table', include('data_collection.urls')),
     url(r'^coverage$', CoverageView.as_view(), name='coverage'),
     url(r'^example$', ExamplePostcodeView.as_view(), name='example'),
+    url(r'^email/', include('dc_signup_form.urls', namespace='dc_signup_form')),
 
     url(r'^about$',
         RedirectView.as_view(

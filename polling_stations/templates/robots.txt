@@ -2,8 +2,7 @@ User-agent: *
 Disallow: /admin/
 Disallow: /address/
 Disallow: /address_select/
-Disallow: /campaign_signup/
-Disallow: /election_notification_signup/
+Disallow: /email/
 Disallow: /embed/
 Disallow: /i18n/
 Disallow: /nus_wales/

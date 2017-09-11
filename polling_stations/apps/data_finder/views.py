@@ -15,9 +15,7 @@ from django.utils.translation import ugettext as _
 
 from councils.models import Council
 from data_finder.models import (
-    LoggedPostcode,
-    CampaignSignup,
-    ElectionNotificationSignup
+    LoggedPostcode
 )
 from pollingstations.models import (
     PollingStation,
@@ -347,53 +345,6 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
         self.log_postcode(self.kwargs['postcode'], log_data, type(self).__name__)
 
         return context
-
-
-def signup(request, postcode, model, fields):
-    if request.POST.get('join', 'false') == 'true':
-        join_list = True
-    else:
-        join_list = False
-    name = request.POST.get('name', '')
-    email = request.POST.get('email', '')
-
-    errors = { 'errors': { 'name': 0, 'email': 0 } }
-
-    if 'name' in fields:
-        if not name or len(name) > 100:
-            errors['errors']['name'] = 1
-
-    if 'email' in fields:
-        if not email or len(email) > 100:
-            errors['errors']['email'] = 1
-        try:
-            validate_email(email)
-        except ValidationError:
-            errors['errors']['email'] = 1
-
-    if (errors['errors']['name'] == 1 and 'name' in fields) or\
-        (errors['errors']['email'] == 1 and 'email' in fields):
-        return HttpResponse(json.dumps(errors),
-            status=400, content_type='application/json')
-
-    kwargs = { 'postcode': postcode, 'join_list': join_list }
-    if 'name' in fields:
-        kwargs['name'] = name
-    if 'email' in fields:
-        kwargs['email'] = email
-
-    model.objects.create(**kwargs)
-
-    return HttpResponse(json.dumps(errors),
-        status=200, content_type='application/json')
-
-
-def election_notification_signup(request, postcode):
-    return signup(request, postcode, ElectionNotificationSignup, ['email'])
-
-
-def campaign_signup(request, postcode):
-    return signup(request, postcode, CampaignSignup, ['name', 'email'])
 
 
 class AddressFormView(FormView):

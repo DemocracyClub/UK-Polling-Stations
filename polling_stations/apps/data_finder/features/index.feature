@@ -47,7 +47,6 @@ Feature: Check Postcodes
     Then I submit the only form
     Then I should see "Contact Foo Council"
     And I should see "We don't have data for your area."
-    And I should see "We think everyone should be able to find their polling station online. If you agree, please sign up below."
     And No errors were thrown
 
     Scenario: Check multiple councils
