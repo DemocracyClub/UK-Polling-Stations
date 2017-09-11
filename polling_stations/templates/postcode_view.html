@@ -158,14 +158,16 @@
       {% endif %}
     {% endif %}
 
-    {% if not error and request.brand == 'democracyclub' and not messages %}
-    <div class="card">
-      <h2>Free election reminders</h2>
-      <p>We can email you the next time there is an election in {{ postcode }}.</p>
-      {% include "email_form/election_reminders_form.html" %}
-    </div>
-    {% include "notifications/ical_feed.html" %}
-  {% endif %}
+    {% if not error or error == 'There are no upcoming elections in your area' %}
+      {% if request.brand == 'democracyclub' and not messages %}
+        <div class="card">
+          <h2>Free election reminders</h2>
+          <p>We can email you the next time there is an election in {{ postcode }}.</p>
+          {% include "email_form/election_reminders_form.html" %}
+        </div>
+        {% include "notifications/ical_feed.html" %}
+      {% endif %}
+    {% endif %}
   </div>
 
 
