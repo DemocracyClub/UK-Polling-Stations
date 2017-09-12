@@ -121,7 +121,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "whitelabel.context_processors.base_template",
     'dc_theme.context_processors.dc_theme_context',
-    'data_finder.context_processors.example_postcode_context',
     'feedback.context_processors.feedback_form',
 )
 
@@ -286,7 +285,6 @@ EVERY_ELECTION = {
 from .constants.councils import *  # noqa
 from .constants.directions import *  # noqa
 from .constants.elections import *  # noqa
-from .constants.example_postcode import *  # noqa
 from .constants.importers import *  # noqa
 from .constants.mapit import *  # noqa
 from .constants.tiles import *  # noqa
