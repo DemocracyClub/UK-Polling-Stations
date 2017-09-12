@@ -119,9 +119,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.contrib.auth.context_processors.auth",
-    "whitelabel.context_processors.base_template",
     'dc_theme.context_processors.dc_theme_context',
+    'dc_signup_form.context_processors.signup_form',
     'feedback.context_processors.feedback_form',
+    "whitelabel.context_processors.base_template",
 )
 
 
@@ -150,6 +151,7 @@ INSTALLED_APPS = (
     'markdown_deux',
     'corsheaders',
     'pipeline',
+    'dc_signup_form',
 )
 
 PROJECT_APPS = (
@@ -279,6 +281,10 @@ EVERY_ELECTION = {
     'CHECK': True,
     'HAS_ELECTION': True
 }
+
+
+EMAIL_SIGNUP_ENDPOINT = 'https://democracyclub.org.uk/mailing_list/api_signup/v1/'
+EMAIL_SIGNUP_API_KEY = ''
 
 
 # import application constants
