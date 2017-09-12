@@ -473,18 +473,3 @@ class RoutingHelper():
                 'postcode_view',
                 {'postcode': self.postcode}
             )
-
-
-class ExamplePostcodeHelper:
-    def __init__(self):
-        self.postcode = getattr(settings, 'EXAMPLE_POSTCODE', 'CF10 5AJ')
-
-    @property
-    def display(self):
-        return self.postcode
-
-    @property
-    def url(self):
-        return reverse(
-            'postcode_view',
-            kwargs={'postcode': format_postcode_no_space(self.postcode)})

@@ -263,6 +263,48 @@ class AddressView(BasePollingStationView):
             self.address.council_id)
 
 
+class ExamplePostcodeView(BasePollingStationView):
+
+    """
+    This class presents a hard-coded example of what our website does
+    without having to worry about having any data imported
+    or whether an election is actually happening or not
+    """
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_location(self):
+        return {
+            "wgs84_lat": 51.43921783606831,
+            "wgs84_lon": -2.54333651887832,
+            'gss_codes': [],
+        }
+
+    def get_council(self, geocode_result):
+        return Council.objects.defer("area", "location").get(pk='E06000023')
+
+    def get_station(self):
+        return PollingStation(
+            internal_council_id="BREF",
+            postcode="BS4 4NZ",
+            address="St Peters Methodist Church\nAllison Road\nBrislington",
+            location=Point(-2.5417780465622686, 51.440043287399604),
+            council_id="E06000023"
+        )
+
+    def get_context_data(self, **kwargs):
+        self.postcode = 'EXAMPLE'  # put this in the logs so it is easy to exclude
+        context = super().get_context_data(**kwargs)
+        context['postcode'] = 'BS4 4NL'  # show this on the page
+        context['has_election'] = True
+        context['election_explainers'] = []
+        context['error'] = None
+        context['custom'] = None
+        return context
+
+
 class WeDontKnowView(PostcodeView):
 
     def get(self, request, *args, **kwargs):

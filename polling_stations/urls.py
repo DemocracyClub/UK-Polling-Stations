@@ -13,6 +13,7 @@ from data_finder.views import (
     HomeView,
     PrivacyView,
     PostcodeView,
+    ExamplePostcodeView,
     CoverageView,
     AddressView,
     AddressFormView,
@@ -55,6 +56,7 @@ extra_patterns = patterns(
     url(r'^feedback/', include('feedback.urls')),
     url(r'^league_table', include('data_collection.urls')),
     url(r'^coverage$', CoverageView.as_view(), name='coverage'),
+    url(r'^example$', ExamplePostcodeView.as_view(), name='example'),
 
     url(r'^about$',
         RedirectView.as_view(
