@@ -91,7 +91,10 @@ window.PollingStationMap = function(div_id) {
           if ((markers.length == 2) && directions_polyline) {
             map.fitBounds(
                 L.featureGroup(markers.concat(directions_polyline)).getBounds(),
-                {maxZoom: 16}
+                {
+                  maxZoom: 16,
+                  padding: [30, 30]
+                }
             );
           } else {
             map.setView(station_point, 15);
