@@ -1,5 +1,6 @@
 from .base import *
 
+DISABLE_GA = True  # don't log to Google Analytics when we are running tests
 INSTALLED_APPS = list(INSTALLED_APPS)
 INSTALLED_APPS.append('aloe_django',)
 
