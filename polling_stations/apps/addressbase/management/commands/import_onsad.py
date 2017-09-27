@@ -1,7 +1,7 @@
 import os
 import glob
 from django.db import connection
-from addressbase.management.base_command import BaseAddressBaseCommand
+from django.core.management.base import BaseCommand
 
 
 """
@@ -10,7 +10,7 @@ http://ons.maps.arcgis.com/home/search.html?q=ONS%20Address%20Directory&t=conten
 and run
 python manage.py import_onsad /path/to/data
 """
-class Command(BaseAddressBaseCommand):
+class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -19,8 +19,6 @@ class Command(BaseAddressBaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-        self.perform_checks()
-
         cursor = connection.cursor()
         print("clearing existing data..")
         cursor.execute("TRUNCATE TABLE addressbase_onsad;")

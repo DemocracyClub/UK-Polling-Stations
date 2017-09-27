@@ -1,5 +1,5 @@
 from django.db import connection
-from addressbase.management.base_command import BaseAddressBaseCommand
+from django.core.management.base import BaseCommand
 from addressbase.models import Blacklist
 
 
@@ -7,7 +7,7 @@ from addressbase.models import Blacklist
 Use AddressBase and ONSAD to create a list of
 postcodes which contain UPRNs in >1 local authorities
 """
-class Command(BaseAddressBaseCommand):
+class Command(BaseCommand):
 
     def get_bad_postcodes(self):
         # get a list of postcodes containing UPRNs in >1 local authorities
@@ -35,8 +35,6 @@ class Command(BaseAddressBaseCommand):
         return [council[0] for council in councils]
 
     def handle(self, *args, **kwargs):
-        self.perform_checks()
-
         self.cursor = connection.cursor()
         print("clearing existing data..")
         self.cursor.execute("TRUNCATE TABLE addressbase_blacklist;")

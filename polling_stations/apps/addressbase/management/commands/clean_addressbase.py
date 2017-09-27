@@ -1,10 +1,10 @@
 import csv
 import os
 import glob
-from addressbase.management.base_command import BaseAddressBaseCommand
+from django.core.management.base import BaseCommand
 
 
-class Command(BaseAddressBaseCommand):
+class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -14,8 +14,6 @@ class Command(BaseAddressBaseCommand):
 
 
     def handle(self, *args, **kwargs):
-        self.perform_checks()
-
         self.fieldnames = [
             'UPRN',
             'OS_ADDRESS_TOID',
