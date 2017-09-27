@@ -1,6 +1,7 @@
 import csv
 import os
 import glob
+from addressbase.helpers import AddressFormatter
 from django.core.management.base import BaseCommand
 
 
@@ -11,7 +12,6 @@ class Command(BaseCommand):
             'ab_path',
             help='The path to the folder containing the AddressBase CSVs'
         )
-
 
     def handle(self, *args, **kwargs):
         self.fieldnames = [
@@ -72,19 +72,20 @@ class Command(BaseCommand):
 
     def clean_address(self, line):
         address_fields = [
-            line['ORGANISATION_NAME'],
-            line['DEPARTMENT_NAME'],
-            line['PO_BOX_NUMBER'],
-            line['SUB_BUILDING_NAME'],
-            line['BUILDING_NAME'],
-            line['BUILDING_NUMBER'],
-            line['DEPENDENT_THOROUGHFARE'],
-            line['THOROUGHFARE'],
-            line['DOUBLE_DEPENDENT_LOCALITY'],
-            line['DEPENDENT_LOCALITY'],
-            line['POST_TOWN'],
+            'ORGANISATION_NAME',
+            'DEPARTMENT_NAME',
+            'PO_BOX_NUMBER',
+            'SUB_BUILDING_NAME',
+            'BUILDING_NAME',
+            'BUILDING_NUMBER',
+            'DEPENDENT_THOROUGHFARE',
+            'THOROUGHFARE',
+            'DOUBLE_DEPENDENT_LOCALITY',
+            'DEPENDENT_LOCALITY',
+            'POST_TOWN'
         ]
-        return ", ".join([f for f in address_fields if f])
+        kwargs = {k.lower(): line[k] for k in line if k in address_fields}
+        return AddressFormatter(**kwargs).generate_address_label()
 
     def clean_output_line(self, line):
         data = {}
