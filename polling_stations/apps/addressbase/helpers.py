@@ -120,7 +120,7 @@ class EdgeCaseFixer:
             LEFT JOIN pollingstations_pollingdistrict pd
             ON ST_CONTAINS(pd.area, ab.location)
 
-            LEFT JOIN addressbase_onsad os
+            LEFT JOIN addressbase_onsud os
             ON os.uprn=ab.uprn
 
             LEFT JOIN pollingstations_pollingstation ps

@@ -110,7 +110,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "addressbase.onsad",
+        "model": "addressbase.onsud",
         "pk": "00000004"
     },
     {
@@ -140,7 +140,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "addressbase.onsad",
+        "model": "addressbase.onsud",
         "pk": "00000005"
     },
 
@@ -171,7 +171,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "addressbase.onsad",
+        "model": "addressbase.onsud",
         "pk": "00000007"
     },
     {
@@ -201,7 +201,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "addressbase.onsad",
+        "model": "addressbase.onsud",
         "pk": "00000008"
     },
     {
@@ -231,7 +231,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "addressbase.onsad",
+        "model": "addressbase.onsud",
         "pk": "00000009"
     }
 ]

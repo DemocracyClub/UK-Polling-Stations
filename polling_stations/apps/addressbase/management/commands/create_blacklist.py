@@ -4,7 +4,7 @@ from addressbase.models import Blacklist
 
 
 """
-Use AddressBase and ONSAD to create a list of
+Use AddressBase and ONSUD to create a list of
 postcodes which contain UPRNs in >1 local authorities
 """
 class Command(BaseCommand):
@@ -14,8 +14,8 @@ class Command(BaseCommand):
         self.cursor.execute("""
             SELECT DISTINCT(postcode)
             FROM addressbase_address as AB
-            JOIN addressbase_onsad ONSAD
-            ON AB.uprn = ONSAD.uprn
+            JOIN addressbase_onsud ONSUD
+            ON AB.uprn = ONSUD.uprn
             GROUP BY postcode
             HAVING COUNT(DISTINCT(LAD))>1;
         """)
@@ -27,8 +27,8 @@ class Command(BaseCommand):
         self.cursor.execute("""
             SELECT DISTINCT(LAD)
             FROM addressbase_address as AB
-            JOIN addressbase_onsad ONSAD
-            ON AB.uprn = ONSAD.uprn
+            JOIN addressbase_onsud ONSUD
+            ON AB.uprn = ONSUD.uprn
             WHERE AB.postcode=%s;
         """, [postcode])
         councils = self.cursor.fetchall()
