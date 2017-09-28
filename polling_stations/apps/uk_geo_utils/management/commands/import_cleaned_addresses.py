@@ -1,5 +1,4 @@
 import os
-import glob
 from django.db import connection
 from django.core.management.base import BaseCommand
 
