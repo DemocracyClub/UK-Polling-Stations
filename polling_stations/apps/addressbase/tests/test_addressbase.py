@@ -42,8 +42,7 @@ from addressbase.models import Address
 from addressbase.helpers import (postcodes_not_contained_by_district,
                                  district_contains_all_points,
                                  EdgeCaseFixer,
-                                 create_address_records_for_council,
-                                 centre_from_points_qs)
+                                 create_address_records_for_council)
 from pollingstations.models import (PollingStation, PollingDistrict,
                                     ResidentialAddress)
 from councils.models import Council
@@ -200,11 +199,3 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         # 82 Kendell Street is wholly in one district
         self.assertEqual(records[2].address, '82 Kendell Street')
         self.assertEqual(records[2].polling_station_id, '2')
-
-    def test_center_from_points_qs(self):
-        qs = Address.objects.filter(pk__lte=9999993)
-        centre = centre_from_points_qs(qs)
-        self.assertEqual(
-            centre.wkt,
-            "POINT (0.7195476867864934 52.0965233704130242)"
-        )

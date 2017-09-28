@@ -1,3 +1,18 @@
+def centre_from_points_qs(qs):
+    if not qs:
+        return None
+
+    if len(qs) == 1:
+        return qs[0].location
+
+    base_point = qs[0].location
+    poly = base_point.union(qs[1].location)
+    for m in qs:
+        poly = poly.union(m.location)
+
+    return poly.centroid
+
+
 class AddressFormatter:
 
     def __init__(

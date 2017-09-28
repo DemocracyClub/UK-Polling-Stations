@@ -12,7 +12,7 @@ from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 
-from addressbase.helpers import centre_from_points_qs
+from uk_geo_utils.helpers import centre_from_points_qs
 from addressbase.models import Address, Blacklist
 from uk_geo_utils.models import Onsud
 
