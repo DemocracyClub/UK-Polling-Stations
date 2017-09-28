@@ -23,7 +23,7 @@ class Command(BaseCommand):
         self.table_name = kwargs['table']
 
         cursor = connection.cursor()
-        print("clearing existing data..")
+        self.stdout.write("clearing existing data..")
         cursor.execute("TRUNCATE TABLE %s;" % (self.table_name))
 
         cleaned_file_path = os.path.abspath(os.path.join(
@@ -31,11 +31,11 @@ class Command(BaseCommand):
             "addressbase_cleaned.csv"
         ))
 
-        print("importing from %s.." % (cleaned_file_path))
+        self.stdout.write("importing from %s.." % (cleaned_file_path))
 
         cursor.execute("""
             COPY {0} (UPRN,address,postcode,location)
             FROM '{1}' (FORMAT CSV, DELIMITER ',', quote '"');
         """.format(self.table_name, cleaned_file_path))
 
-        print("...done")
+        self.stdout.write("...done")

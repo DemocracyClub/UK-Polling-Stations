@@ -29,12 +29,12 @@ class Command(BaseCommand):
         self.table_name = kwargs['table']
 
         cursor = connection.cursor()
-        print("clearing existing data..")
+        self.stdout.write("clearing existing data..")
         cursor.execute("TRUNCATE TABLE %s;" % (self.table_name))
         glob_str = os.path.join(kwargs['path'], "*.csv")
-        print("importing from files..")
+        self.stdout.write("importing from files..")
         for f in glob.glob(glob_str):
-            print(f)
+            self.stdout.write(f)
             cursor.execute("""
                 COPY {0} (
                 uprn, ctry_flag, cty, lad, ward, hlthau, ctry,
@@ -42,4 +42,4 @@ class Command(BaseCommand):
                 wz11, ccg, bua11, buasd11, ruc11, oac11, lep1, lep2, pfa, imd)
                 FROM '{1}' (FORMAT CSV, DELIMITER ',', QUOTE '"', HEADER);
             """.format(self.table_name, f))
-        print("...done")
+        self.stdout.write("...done")
