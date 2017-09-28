@@ -1,8 +1,8 @@
 from django.contrib.gis.db import models
-from uk_geo_utils.models import AbstractAddress
+from uk_geo_utils.models import AbstractAddress, AbstractAddressManager
 
 
-class AddressManager(models.GeoManager):
+class AddressManager(AbstractAddressManager):
     def postcodes_for_district(self, district):
         qs = self.filter(location__within=district.area)
         qs = qs.values_list('postcode', flat=True).distinct()

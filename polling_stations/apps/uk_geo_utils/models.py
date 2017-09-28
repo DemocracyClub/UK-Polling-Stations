@@ -1,11 +1,35 @@
 from django.contrib.gis.db import models
 
 
+class AddressQuerySet(models.QuerySet):
+
+    @property
+    def centroid(self):
+        if not self:
+            return None
+
+        if len(self) == 1:
+            return self[0].location
+
+        base_point = self[0].location
+        poly = base_point.union(self[1].location)
+        for m in self:
+            poly = poly.union(m.location)
+
+        return poly.centroid
+
+
+class AbstractAddressManager(models.GeoManager):
+    def get_queryset(self):
+        return AddressQuerySet(self.model, using=self._db)
+
+
 class AbstractAddress(models.Model):
     uprn = models.CharField(primary_key=True, max_length=100)
     address = models.TextField(blank=True)
     postcode = models.CharField(blank=True, max_length=15, db_index=True)
     location = models.PointField(null=True, blank=True)
+    objects = AbstractAddressManager()
 
     class Meta:
         abstract = True

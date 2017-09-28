@@ -12,7 +12,6 @@ from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 
-from uk_geo_utils.helpers import centre_from_points_qs
 from addressbase.models import Address, Blacklist
 from uk_geo_utils.models import Onsud
 
@@ -170,7 +169,7 @@ class AddressBaseGeocoder(BaseGeocoder):
             raise ObjectDoesNotExist('No addresses found for postcode %s' % (self.postcode))
 
         codes = self.get_codes(self.get_uprns(addresses))
-        centre = centre_from_points_qs(addresses)
+        centre = addresses.centroid
         return {
             'source': 'addressbase',
             'wgs84_lon': centre.x,
@@ -184,7 +183,7 @@ class AddressBaseGeocoder(BaseGeocoder):
         if not addresses:
             raise ObjectDoesNotExist('No addresses found for postcode %s' % (self.postcode))
 
-        centre = centre_from_points_qs(addresses)
+        centre = addresses.centroid
         return {
             'source': 'addressbase',
             'wgs84_lon': centre.x,
