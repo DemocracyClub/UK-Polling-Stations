@@ -28,7 +28,7 @@ class Address(AbstractAddress):
     objects = AddressManager()
 
 
-class Onsud(models.Model):
+class AbstractOnsud(models.Model):
     uprn = models.CharField(primary_key=True, max_length=12)
     """
     Note: this is not a FK to Address because the ONSUD is released quarterly
@@ -63,6 +63,13 @@ class Onsud(models.Model):
     lep2 = models.CharField(blank=True, max_length=9)
     pfa = models.CharField(blank=True, max_length=9)
     imd = models.CharField(blank=True, max_length=5)
+
+    class Meta:
+        abstract = True
+
+
+class Onsud(AbstractOnsud):
+    pass
 
 
 class Blacklist(models.Model):
