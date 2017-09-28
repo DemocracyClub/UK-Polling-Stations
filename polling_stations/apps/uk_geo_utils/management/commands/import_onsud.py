@@ -35,11 +35,12 @@ class Command(BaseCommand):
         self.stdout.write("importing from files..")
         for f in glob.glob(glob_str):
             self.stdout.write(f)
-            cursor.execute("""
-                COPY {0} (
+            fp = open(f, 'r')
+            cursor.copy_expert("""
+                COPY %s (
                 uprn, ctry_flag, cty, lad, ward, hlthau, ctry,
                 rgn, pcon, eer, ttwa, nuts, park, oa11, lsoa11, msoa11, parish,
                 wz11, ccg, bua11, buasd11, ruc11, oac11, lep1, lep2, pfa, imd)
-                FROM '{1}' (FORMAT CSV, DELIMITER ',', QUOTE '"', HEADER);
-            """.format(self.table_name, f))
+                FROM STDIN (FORMAT CSV, DELIMITER ',', QUOTE '"', HEADER);
+            """ % (self.table_name), fp)
         self.stdout.write("...done")

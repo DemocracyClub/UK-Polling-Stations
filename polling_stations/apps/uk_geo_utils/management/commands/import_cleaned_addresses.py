@@ -31,10 +31,10 @@ class Command(BaseCommand):
         ))
 
         self.stdout.write("importing from %s.." % (cleaned_file_path))
-
-        cursor.execute("""
-            COPY {0} (UPRN,address,postcode,location)
-            FROM '{1}' (FORMAT CSV, DELIMITER ',', quote '"');
-        """.format(self.table_name, cleaned_file_path))
+        fp = open(cleaned_file_path, 'r')
+        cursor.copy_expert("""
+            COPY %s (UPRN,address,postcode,location)
+            FROM STDIN (FORMAT CSV, DELIMITER ',', quote '"');
+        """ % (self.table_name), fp)
 
         self.stdout.write("...done")
