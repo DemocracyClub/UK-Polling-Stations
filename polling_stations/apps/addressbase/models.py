@@ -19,14 +19,13 @@ class AbstractAddress(models.Model):
     address = models.TextField(blank=True)
     postcode = models.CharField(blank=True, max_length=15, db_index=True)
     location = models.PointField(null=True, blank=True)
-    objects = AddressManager()
 
     class Meta:
         abstract = True
 
 
 class Address(AbstractAddress):
-    pass
+    objects = AddressManager()
 
 
 class Onsud(models.Model):
