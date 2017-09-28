@@ -4,13 +4,13 @@ from django.db import connection
 from django.core.management.base import BaseCommand
 
 
-"""
-To import ONSUD, grab the latest release:
-http://ons.maps.arcgis.com/home/search.html?q=ONS%20Address%20Directory&t=content
-and run
-python manage.py import_onsud /path/to/data
-"""
 class Command(BaseCommand):
+    """
+    To import ONSUD, grab the latest release:
+    http://ons.maps.arcgis.com/home/search.html?q=ONS%20Address%20Directory&t=content
+    and run
+    python manage.py import_onsud /path/to/data
+    """
 
     def add_arguments(self, parser):
         parser.add_argument(
