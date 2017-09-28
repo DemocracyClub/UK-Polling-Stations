@@ -12,7 +12,7 @@ python manage.py import_onsud /path/to/data
 """
 class Command(BaseCommand):
 
-    table_name = 'addressbase_onsud'
+    table_name = 'uk_geo_utils_onsud'
 
     def add_arguments(self, parser):
         parser.add_argument(

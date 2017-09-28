@@ -13,7 +13,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 
 from addressbase.helpers import centre_from_points_qs
-from addressbase.models import Address, Blacklist, Onsud
+from addressbase.models import Address, Blacklist
+from uk_geo_utils.models import Onsud
 
 from pollingstations.models import Council, ResidentialAddress
 from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space

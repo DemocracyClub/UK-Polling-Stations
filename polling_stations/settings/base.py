@@ -164,6 +164,7 @@ PROJECT_APPS = (
     'feedback',
     'nus_wales',
     'pollingstations',
+    'uk_geo_utils',
     'whitelabel',
 )
 

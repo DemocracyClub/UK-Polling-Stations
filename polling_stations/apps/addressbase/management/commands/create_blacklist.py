@@ -14,7 +14,7 @@ class Command(BaseCommand):
         self.cursor.execute("""
             SELECT DISTINCT(postcode)
             FROM addressbase_address as AB
-            JOIN addressbase_onsud ONSUD
+            JOIN uk_geo_utils_onsud ONSUD
             ON AB.uprn = ONSUD.uprn
             GROUP BY postcode
             HAVING COUNT(DISTINCT(LAD))>1;
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         self.cursor.execute("""
             SELECT DISTINCT(LAD)
             FROM addressbase_address as AB
-            JOIN addressbase_onsud ONSUD
+            JOIN uk_geo_utils_onsud ONSUD
             ON AB.uprn = ONSUD.uprn
             WHERE AB.postcode=%s;
         """, [postcode])
