@@ -1,7 +1,7 @@
 import csv
 import os
 import glob
-from addressbase.helpers import AddressFormatter
+from uk_geo_utils.helpers import AddressFormatter
 from django.core.management.base import BaseCommand
 
 
