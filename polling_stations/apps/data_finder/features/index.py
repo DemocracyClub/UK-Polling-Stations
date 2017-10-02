@@ -37,6 +37,7 @@ def setup(scenario, outline, steps):
     # world.browser = webdriver.Chrome()
     world.browser = webdriver.PhantomJS()
     world.browser.set_page_load_timeout(10)
+    world.browser.set_script_timeout(10)
 
     with open(os.devnull, "w") as f:
         call_command('loaddata', 'test_routing.json', stdout=f)
