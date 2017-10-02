@@ -85,7 +85,7 @@ class AddressFormatter:
         """
         if element[0].isdigit() and element[-1].isdigit():
             return True
-        if element[0].isdigit() and element[-2].isdigit() and element[-1].isalpha():
+        if len(element) > 1 and element[0].isdigit() and element[-2].isdigit() and element[-1].isalpha():
             return True
         if len(element) == 1 and element.isalpha():
             return True
