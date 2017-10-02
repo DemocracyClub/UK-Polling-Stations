@@ -2,6 +2,7 @@ import os
 import glob
 from django.db import connection
 from django.core.management.base import BaseCommand
+from uk_geo_utils.helpers import get_onsud_model
 
 
 class Command(BaseCommand):
@@ -17,16 +18,9 @@ class Command(BaseCommand):
             'path',
             help='Path to the directory containing the ONSUD CSVs'
         )
-        parser.add_argument(
-            '-t',
-            '--table',
-            help='If you have extended the AbstractOnsud model, use this flag to specify the table name for your child table',
-            default='uk_geo_utils_onsud',
-            required=False,
-        )
 
     def handle(self, *args, **kwargs):
-        self.table_name = kwargs['table']
+        self.table_name = get_onsud_model()._meta.db_table
 
         cursor = connection.cursor()
         self.stdout.write("clearing existing data..")

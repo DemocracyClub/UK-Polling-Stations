@@ -28,7 +28,6 @@ class OnsudImportTest(TestCase):
         # import data
         opts = {
             'path': csv_path,
-            'table': 'uk_geo_utils_onsud',
         }
         cmd.handle(**opts)
 

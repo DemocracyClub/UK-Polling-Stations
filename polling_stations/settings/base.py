@@ -262,6 +262,9 @@ SITE_TITLE = "Where Do I Vote?"
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
+ADDRESS_MODEL = 'addressbase.Address'
+
+
 """
 Every Election settings
 

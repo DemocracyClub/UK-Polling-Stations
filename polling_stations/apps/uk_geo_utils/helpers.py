@@ -1,3 +1,21 @@
+import re
+from django.apps import apps
+from django.conf import settings
+
+
+def get_model(const, default):
+    model_str = getattr(settings, const, default)
+    if not re.match('\w+\.\w+', model_str):
+        raise LookupError("%s setting must be of the form 'app.Model'" % (const))
+    return apps.get_model(*model_str.split('.'))
+
+def get_address_model():
+    return get_model('ADDRESS_MODEL', 'uk_geo_utils.Address')
+
+def get_onsud_model():
+    return get_model('ONSUD_MODEL', 'uk_geo_utils.Onsud')
+
+
 class AddressFormatter:
 
     def __init__(

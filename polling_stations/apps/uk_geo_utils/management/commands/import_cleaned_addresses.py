@@ -1,6 +1,7 @@
 import os
 from django.db import connection
 from django.core.management.base import BaseCommand
+from uk_geo_utils.helpers import get_address_model
 
 
 class Command(BaseCommand):
@@ -10,16 +11,9 @@ class Command(BaseCommand):
             'cleaned_ab_path',
             help='The path to the folder containing the cleaned AddressBase CSVs'
         )
-        parser.add_argument(
-            '-t',
-            '--table',
-            help='If you have extended the AbstractAddress model, use this flag to specify the table name for your child table',
-            default='uk_geo_utils_address',
-            required=False,
-        )
 
     def handle(self, *args, **kwargs):
-        self.table_name = kwargs['table']
+        self.table_name = get_address_model()._meta.db_table
 
         cursor = connection.cursor()
         self.stdout.write("clearing existing data..")
