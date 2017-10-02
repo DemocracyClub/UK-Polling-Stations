@@ -24,7 +24,7 @@ temp_dir = tempfile.mkdtemp()
 def before_all():
     # build static assets into a temporary location
     settings.STATIC_ROOT=temp_dir
-    call_command('collectstatic', interactive=False)
+    call_command('collectstatic', interactive=False, verbosity=0)
 
 @after.all
 def after_all():
@@ -56,6 +56,10 @@ def take_down(scenario, outline, steps):
     except OSError:
         # ..or we can do this the hard way
         world.browser.service.process.send_signal(signal.SIGTERM)
+
+@before.each_step
+def each_step(step):
+    print(str(step))
 
 @around.each_step
 @contextmanager

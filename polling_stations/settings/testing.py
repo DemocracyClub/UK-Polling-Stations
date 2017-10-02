@@ -4,8 +4,9 @@ INSTALLED_APPS = list(INSTALLED_APPS)
 INSTALLED_APPS.append('aloe_django',)
 
 NOSE_ARGS = [
-    '--verbosity=0',
+    '--verbosity=2',
     '--nologcapture',
+    '--nocapture',
 ]
 
 MIGRATION_MODULES = {
