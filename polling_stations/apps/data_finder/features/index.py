@@ -36,6 +36,7 @@ def setup(scenario, outline, steps):
     # TODO Set browser in django.conf.settings
     # world.browser = webdriver.Chrome()
     world.browser = webdriver.PhantomJS()
+    world.browser.set_page_load_timeout(10)
 
     with open(os.devnull, "w") as f:
         call_command('loaddata', 'test_routing.json', stdout=f)
