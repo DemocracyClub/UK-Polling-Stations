@@ -50,8 +50,9 @@ brew install --HEAD https://raw.github.com/apiaryio/drafter/master/tools/homebre
 
 On Ubuntu, this needs to be installed/compiled manually:
 ```
-git clone --recursive git://github.com/apiaryio/drafter.git
-cd drafter
+wget https://github.com/apiaryio/drafter/releases/download/v3.2.7/drafter-v3.2.7.tar.gz
+tar xvzf drafter-v3.2.7.tar.gz
+cd drafter-v3.2.7
 ./configure --shared
 make libdrafter
 sudo cp build/out/Release/lib.target/libdrafter.so /usr/lib/libdrafter.so
