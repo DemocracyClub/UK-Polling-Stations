@@ -3,6 +3,7 @@
 window.PollingStationMap = function(div_id) {
 
     var map = L.map(div_id, {zoomControl:true, dragging: !L.Browser.mobile});
+    var markers = [];
 
     var add_tile_layer = function(tile_layer, mq_key) {
         var tiles;
@@ -30,10 +31,12 @@ window.PollingStationMap = function(div_id) {
           prefix: 'fa'
         });
 
-        L.marker(station_point, {
+        var station = L.marker(station_point, {
           'clickable': true,
           'icon': stationMarker
-        }).addTo(map);
+        });
+        station.addTo(map);
+        markers.push(station);
       };
 
       var add_directions = function(directions) {
@@ -57,10 +60,12 @@ window.PollingStationMap = function(div_id) {
             });
 
             // home
-            L.marker(firstpolyline._latlngs[0], {
+            var home = L.marker(firstpolyline._latlngs[0], {
               'clickable': true,
               'icon': homeMarker
-            }).addTo(map);
+            });
+            home.addTo(map);
+            markers.push(home);
 
             firstpolyline.addTo(map);
             return firstpolyline;
@@ -83,8 +88,14 @@ window.PollingStationMap = function(div_id) {
           add_station_marker(station_point);
           var directions_polyline = add_directions(directions);
 
-          if (directions_polyline) {
-            map.fitBounds(directions_polyline.getBounds(), {maxZoom: 16});
+          if ((markers.length == 2) && directions_polyline) {
+            map.fitBounds(
+                L.featureGroup(markers.concat(directions_polyline)).getBounds(),
+                {
+                  maxZoom: 16,
+                  padding: [30, 30]
+                }
+            );
           } else {
             map.setView(station_point, 15);
           }
