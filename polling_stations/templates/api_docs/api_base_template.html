@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static from staticfiles %}
+
+{% block extra_page_css %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<style>
+    .api-action-request {
+        margin-top: 30px;
+    }
+    h4 {
+        margin-top: 30px;
+    }
+    a:link {
+        text-decoration: none;
+    }
+    p {
+        margin-bottom: 3px;
+    }
+</style>
+{% endblock extra_page_css %}
+
+{% block page_title %}API Documentation{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+  {% include 'api_docs/docs_parent.html' %}
+</div>
+{% endblock content %}
+
+{% block in_page_javascript %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+  <script>
+    fallback.ready(['jQuery'], function() {
+      $().ready(function() {
+        handler = function(el) {
+          $(el).parent().children('.api-action-headers').toggle();
+          $(el).parent().children('.api-description').toggle();
+          $(el).parent().children('.api-action-body').toggle();
+          $(el).parent().children('.api-action-schema').toggle();
+        };
+        $('.api-http-code').on('click', function() {
+          handler(this);
+        });
+        $.each($('.api-http-code'), function() {
+          handler(this);
+        });
+        $('.api-http-code').wrapInner('<a></a>');
+
+        /* update the hash again after we've hidden stuff
+        so we end up in the right place on the page */
+        location.hash = location.hash;
+      });
+    });
+  </script>
+{% endblock in_page_javascript %}

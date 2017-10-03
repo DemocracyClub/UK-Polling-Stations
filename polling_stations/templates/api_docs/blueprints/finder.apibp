@@ -7,9 +7,9 @@ A `200 OK` response from `/postcode` or `/address` is an object containing the f
 * `polling_station_known`: (boolean) - Do we know where this user should vote?
 * `postcode_location`: (object, nullable) - A [GeoJSON Feature](http://geojson.org/geojson-spec.html#feature-objects)
   containing a [Point object](http://geojson.org/geojson-spec.html#point) describing the centroid of the input postcode.
-* `polling_station`: (object, nullable) - A GeoJSON [polling station feature](#polling-stations-polling-stations-geojson-get)
+* `polling_station`: (object, nullable) - A GeoJSON [polling station feature](#polling-stations-geojson-3)
 * `addresses`: (array) - An array of address objects listing the addresses applicable to this request (if necessary).
-* `council`: (object, nullable) - A [Council](#councils-councils-json-get) object describing the local authority which covers this postcode.
+* `council`: (object, nullable) - A [Council](#councils-json-3) object describing the local authority which covers this postcode.
   If we do not know the user's polling station, this can be used to provide contact info for their local council.
   Council may be `null` if we are not able to determine the user's council.
 * `custom_finder`: (string, nullable) - If we don't know a user's polling station,
@@ -36,7 +36,7 @@ A valid postcode search may result in one of 3 outcomes:
     When we hold data for this area and all voters with this postcode vote at the same polling station,
     the following conditions can be observed in the response body:
     * `polling_station_known` is `true`
-    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-polling-stations-geojson-get)
+    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-geojson-3)
     * `addresses` is an empty array
 
     + Body
@@ -112,7 +112,7 @@ an array of address objects will be returned, each of which corresponds to a cal
     When we make a valid call to the `/address` endpoint,
     the following conditions can be observed in the response body:
     * `polling_station_known` is `true`
-    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-polling-stations-geojson-get)
+    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-geojson-3)
     * `addresses` is an array of length one containing a single address object describing the requested address
 
     + Body

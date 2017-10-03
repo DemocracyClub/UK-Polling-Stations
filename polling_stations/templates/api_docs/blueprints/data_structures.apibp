@@ -53,7 +53,7 @@
 
 
 
-# DistrictURLs (object)
+## DistrictURLs (object)
 - detail: `https://wheredoivote.co.uk/api/beta/pollingdistricts/?council_id=E07000170&district_id=SUM4` (string) - URL to retrieve JSON meta-data about this polling district
 - geo: `https://wheredoivote.co.uk/api/beta/pollingdistricts/geo/?council_id=E07000170&district_id=SUM4` (string) - URL to retrieve GeoJSON feature describing this polling district
 

@@ -1,7 +1,7 @@
 ## Group Polling Districts
 
 The `/pollingdistricts` endpoint provides access to the polling district data underpinning our polling station finder.
-Where possible a polling district contains a [polling station object](#polling-stations-polling-stations-json-get)
+Where possible a polling district contains a [polling station object](#polling-stations-json-3)
 describing the station which serves this district. This may optionally be null if this district is an orphan district.
 An orphan district occurrs where we hold the boundary of a polling district but we don't know the corresponding polling station.
 The polling station which serves a district does not necessarily have to be located inside the district it serves.
@@ -10,7 +10,7 @@ The polling station which serves a district does not necessarily have to be loca
 ## Polling Districts Collection: JSON [/pollingdistricts.json?council_id={council_id}]
 
 List all polling districts in a local authority.
-Returns an array of [polling district objects](#polling-districts-polling-districts-json-get)
+Returns an array of [polling district objects](#polling-districts-json-3)
 
 + Parameters
     + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
@@ -26,7 +26,7 @@ Returns an array of [polling district objects](#polling-districts-polling-distri
 
 List all polling districts in a local authority.
 Returns a [GeoJSON FeatureCollection](http://geojson.org/geojson-spec.html#feature-collection-objects)
-of [polling district features](#polling-districts-polling-districts-geojson-get)
+of [polling district features](#polling-districts-geojson-3)
 
 + Parameters
     + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council

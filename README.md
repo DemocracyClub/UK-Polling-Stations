@@ -43,6 +43,22 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
+The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing API Blueprint. On OSX this can be installed using
+```
+brew install --HEAD https://raw.github.com/apiaryio/drafter/master/tools/homebrew/drafter.rb
+```
+
+On Ubuntu, this needs to be installed/compiled manually:
+```
+wget https://github.com/apiaryio/drafter/releases/download/v3.2.7/drafter-v3.2.7.tar.gz
+tar xvzf drafter-v3.2.7.tar.gz
+cd drafter-v3.2.7
+./configure --shared
+make libdrafter
+sudo cp build/out/Release/lib.target/libdrafter.so /usr/lib/libdrafter.so
+sudo cp src/drafter.h /usr/include/drafter/drafter.h
+```
+
 ### Install python dependencies
 ```
 pip install -r requirements/base.txt

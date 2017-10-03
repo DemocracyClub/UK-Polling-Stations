@@ -1,4 +1,5 @@
 sudo: required
+dist: trusty
 language: python
 python:
   - '3.4'
@@ -6,8 +7,12 @@ python:
 addons:
   postgresql: '9.5'
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - postgresql-9.5-postgis-2.3
+      - gcc-5
+      - g++-5
 
 env:
   - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
@@ -18,16 +23,29 @@ before_cache:
     - rm -f .cache/pip/log/*.log
 cache:
   pip: true
+  ccache: true
   directories:
     - /home/travis/virtualenv
     - $HOME/.pip-cache/
     - $HOME/.tox/
     - .tox
+    - $HOME/drafter-v3.2.7/build/
 
 install:
-  - pip install pip==8.1.2
+  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
+  - pip install --upgrade pip
   - pip install tox coveralls tox-travis
   - npm install
+  - wget https://github.com/apiaryio/drafter/releases/download/v3.2.7/drafter-v3.2.7.tar.gz
+  - tar xvzf drafter-v3.2.7.tar.gz
+  - cd drafter-v3.2.7
+  - /usr/bin/python2.7 configure --shared
+  - make libdrafter
+  - sudo cp build/out/Release/lib.target/libdrafter.so /usr/lib/libdrafter.so
+  - sudo mkdir -p /usr/include/drafter
+  - sudo cp src/drafter.h /usr/include/drafter/drafter.h
+  - cd ..
+  - rm -rf drafter-v3.2.7/
 
 before_script:
   - psql -U postgres -c "create extension postgis"

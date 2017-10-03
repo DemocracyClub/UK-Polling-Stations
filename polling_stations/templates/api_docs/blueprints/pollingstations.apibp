@@ -6,7 +6,7 @@ The `/pollingstations` endpoint provides access to the polling station data unde
 ## Polling Stations Collection: JSON [/pollingstations.json?council_id={council_id}]
 
 List all polling stations in a local authority.
-Returns an array of [polling station objects](#polling-stations-polling-stations-json-get)
+Returns an array of [polling station objects](#polling-stations-json-3)
 
 + Parameters
     + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
@@ -22,7 +22,7 @@ Returns an array of [polling station objects](#polling-stations-polling-stations
 
 List all polling stations in a local authority.
 Returns a [GeoJSON FeatureCollection](http://geojson.org/geojson-spec.html#feature-collection-objects)
-of [polling station features](#polling-stations-polling-stations-geojson-get)
+of [polling station features](#polling-stations-geojson-3)
 
 + Parameters
     + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
