@@ -13,9 +13,14 @@ addons:
       - postgresql-9.5-postgis-2.3
       - gcc-5
       - g++-5
-before_script:
-  - psql -U postgres -c "create extension postgis"
-  - export BOTO_CONFIG=/dev/null
+
+env:
+  - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
+
+before_cache:
+    - rm -f .tox/py34-django18/log/*.log
+    - rm -f .tox/py35-django18/log/*.log
+    - rm -f .cache/pip/log/*.log
 cache:
   pip: true
   ccache: true
@@ -25,8 +30,7 @@ cache:
     - $HOME/.tox/
     - .tox
     - $HOME/drafter-v3.2.7/build/
-env:
-  - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
+
 install:
   - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
   - pip install --upgrade pip
@@ -42,14 +46,16 @@ install:
   - sudo cp src/drafter.h /usr/include/drafter/drafter.h
   - cd ..
   - rm -rf drafter-v3.2.7/
+
+before_script:
+  - psql -U postgres -c "create extension postgis"
+  - export BOTO_CONFIG=/dev/null
 script:
   - tox
+
 after_success:
   - coveralls
-before_cache:
-    - rm -f .tox/py34-django18/log/*.log
-    - rm -f .tox/py35-django18/log/*.log
-    - rm -f .cache/pip/log/*.log
+
 notifications:
   slack:
     secure: XDoMlbyJR1HOfF3ibOGNEizbb7MYGG8abDPrVTdTBscV5d3vm7qE0Uvd7Hq7YefwhSv8dJ+psrnWwMxBH7Z8zQmyLDyeVCNysOIfc3JfLi/cgrxZ0x0GoqUiiW8sgMl4Um/9jlEpcd5te5HpIeCFp0PHDO3GIWpzxx7xMbS6/0Q=
