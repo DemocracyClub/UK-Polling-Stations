@@ -18,11 +18,13 @@ before_script:
   - export BOTO_CONFIG=/dev/null
 cache:
   pip: true
+  ccache: true
   directories:
     - /home/travis/virtualenv
     - $HOME/.pip-cache/
     - $HOME/.tox/
     - .tox
+    - $HOME/drafter-v3.2.7/build/
 env:
   - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
 install:
