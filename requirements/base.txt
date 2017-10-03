@@ -29,4 +29,4 @@ git+https://github.com/mysociety/django-pipeline-csscompressor
 libsass>=0.12.3
 git+git://github.com/DemocracyClub/dc_base_theme.git@94d172df89342072c25f29c4c2de34fe9a27886b
 git+https://github.com/DemocracyClub/dc_signup_form.git@1.0.0
-git+https://github.com/chris48s/django-apiblueprint-view.git
+git+https://github.com/chris48s/django-apiblueprint-view.git@1.1.0
