@@ -2,19 +2,19 @@
     <div class="card">
         {% blocktrans %}
         <h3>You don't need your poll card to vote</h3>
-        <p>If you don't have your poll card, you can go to the polling
-            station and give them your name and address.</p>
+        <p>
+          If you are registered to vote but you don't have your poll card, you
+          can go to the polling station and give them your name and address.
+        </p>
         {% endblocktrans %}
 
         {% if territory == 'NI' %}
           <p>{% trans "You will need photographic identification" %}</p>
         {% else %}
-          <p>{% trans "You don't need any other form of ID" %}</p>
+          <p>{% trans "You don't need any other form of ID." %}</p>
         {% endif %}
 
-        {% blocktrans %}
-        <p>If you haven’t received a polling card but think you should have done, contact your council</p>
-        {% endblocktrans %}
+        <p>{% trans "You must vote at your assigned polling station." %}</p>
 
         {% if territory == 'NI' %}
           <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
