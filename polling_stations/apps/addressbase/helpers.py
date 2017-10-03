@@ -8,21 +8,6 @@ from pollingstations.helpers import format_postcode_no_space
 from addressbase.models import Address
 
 
-def centre_from_points_qs(qs):
-    if not qs:
-        return None
-
-    if len(qs) == 1:
-        return qs[0].location
-
-    base_point = qs[0].location
-    poly = base_point.union(qs[1].location)
-    for m in qs:
-        poly = poly.union(m.location)
-
-    return poly.centroid
-
-
 AddressTuple = namedtuple('Address', [
     'address',
     'postcode',
@@ -120,7 +105,7 @@ class EdgeCaseFixer:
             LEFT JOIN pollingstations_pollingdistrict pd
             ON ST_CONTAINS(pd.area, ab.location)
 
-            LEFT JOIN addressbase_onsad os
+            LEFT JOIN uk_geo_utils_onsud os
             ON os.uprn=ab.uprn
 
             LEFT JOIN pollingstations_pollingstation ps

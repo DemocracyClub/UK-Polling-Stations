@@ -12,8 +12,8 @@ from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 
-from addressbase.helpers import centre_from_points_qs
-from addressbase.models import Address, Blacklist, Onsad
+from addressbase.models import Address, Blacklist
+from uk_geo_utils.models import Onsud
 
 from pollingstations.models import Council, ResidentialAddress
 from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
@@ -129,12 +129,12 @@ class AddressBaseGeocoder(BaseGeocoder):
         return [a.uprn for a in addresses]
 
     def get_codes(self, uprns):
-        addresses = Onsad.objects.filter(uprn__in=uprns)
+        addresses = Onsud.objects.filter(uprn__in=uprns)
 
         if len(addresses) == 0:
-            # No records in the ONSAD table were found for the given UPRNs
+            # No records in the ONSUD table were found for the given UPRNs
             # because...reasons
-            raise CodesNotFoundException('Found no records in ONSAD for supplied UPRNs')
+            raise CodesNotFoundException('Found no records in ONSUD for supplied UPRNs')
 
         if len(addresses) != len(uprns):
             # For the moment I'm going to do nothing about this, but lets
@@ -169,7 +169,7 @@ class AddressBaseGeocoder(BaseGeocoder):
             raise ObjectDoesNotExist('No addresses found for postcode %s' % (self.postcode))
 
         codes = self.get_codes(self.get_uprns(addresses))
-        centre = centre_from_points_qs(addresses)
+        centre = addresses.centroid
         return {
             'source': 'addressbase',
             'wgs84_lon': centre.x,
@@ -183,7 +183,7 @@ class AddressBaseGeocoder(BaseGeocoder):
         if not addresses:
             raise ObjectDoesNotExist('No addresses found for postcode %s' % (self.postcode))
 
-        centre = centre_from_points_qs(addresses)
+        centre = addresses.centroid
         return {
             'source': 'addressbase',
             'wgs84_lon': centre.x,
@@ -235,7 +235,7 @@ def geocode(postcode):
             continue
         except CodesNotFoundException:
             # we did find this postcode in AddressBase, but there were no
-            # corresponding codes in ONSAD: fall back to the next source
+            # corresponding codes in ONSUD: fall back to the next source
             continue
         except MultipleCouncilsException:
             # this postcode contains uprns in multiple local authorities

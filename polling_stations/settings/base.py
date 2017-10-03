@@ -164,6 +164,7 @@ PROJECT_APPS = (
     'feedback',
     'nus_wales',
     'pollingstations',
+    'uk_geo_utils',
     'whitelabel',
 )
 
@@ -260,10 +261,8 @@ SITE_TITLE = "Where Do I Vote?"
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-MANAGE_ADDRESSBASE_MODEL = os.environ.get('MANAGE_ADDRESSBASE_MODEL', True)
-if type(MANAGE_ADDRESSBASE_MODEL) == str \
-        and MANAGE_ADDRESSBASE_MODEL.lower() in ['0', 'false']:
-    MANAGE_ADDRESSBASE_MODEL = False
+
+ADDRESS_MODEL = 'addressbase.Address'
 
 
 """

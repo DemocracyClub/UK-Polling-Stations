@@ -1,0 +1,47 @@
+[
+    {
+        "pk": "1",
+        "fields": {
+            "postcode": "KW15 88TF",
+            "address": "In the middle of the field",
+            "location": "SRID=4326;POINT (0.7208994610313337 52.0965737442737833)"
+        },
+        "model": "uk_geo_utils.address"
+    },
+    {
+        "pk": "2",
+        "fields": {
+            "postcode": "KW15 88TF",
+            "address": "The Cott",
+            "location": "SRID=4326;POINT (0.7225083308451804 52.0975051994085803)"
+        },
+        "model": "uk_geo_utils.address"
+    },
+    {
+        "pk": "3",
+        "fields": {
+            "postcode": "KW15 88LM",
+            "address": "Sym's Caravan",
+            "location": "SRID=4326;POINT (0.7152352684829660 52.0954911675566947)"
+        },
+        "model": "uk_geo_utils.address"
+    },
+    {
+        "pk": "4",
+        "fields": {
+            "postcode": "XM4 5HQ",
+            "address": "North Pole",
+            "location": "SRID=4326;POINT (0 90)"
+        },
+        "model": "uk_geo_utils.address"
+    },
+    {
+        "pk": "5",
+        "fields": {
+            "postcode": "96598",
+            "address": "South Pole",
+            "location": "SRID=4326;POINT (0 -90)"
+        },
+        "model": "uk_geo_utils.address"
+    }
+]
