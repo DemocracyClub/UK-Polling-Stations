@@ -24,7 +24,7 @@ temp_dir = tempfile.mkdtemp()
 def before_all():
     # build static assets into a temporary location
     settings.STATIC_ROOT=temp_dir
-    call_command('collectstatic', interactive=False)
+    call_command('collectstatic', interactive=False, verbosity=0)
 
 @after.all
 def after_all():
@@ -36,6 +36,8 @@ def setup(scenario, outline, steps):
     # TODO Set browser in django.conf.settings
     # world.browser = webdriver.Chrome()
     world.browser = webdriver.PhantomJS()
+    world.browser.set_page_load_timeout(10)
+    world.browser.set_script_timeout(10)
 
     with open(os.devnull, "w") as f:
         call_command('loaddata', 'test_routing.json', stdout=f)
@@ -56,6 +58,10 @@ def take_down(scenario, outline, steps):
     except OSError:
         # ..or we can do this the hard way
         world.browser.service.process.send_signal(signal.SIGTERM)
+
+@before.each_step
+def each_step(step):
+    print(str(step))
 
 @around.each_step
 @contextmanager
