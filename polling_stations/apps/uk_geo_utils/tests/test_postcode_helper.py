@@ -50,3 +50,12 @@ class PostcodeHelperTest(TestCase):
                 postcode['exp_no_space'],
                 Postcode(postcode['input']).without_space
             )
+
+    def test_equality_equal(self):
+        self.assertEqual(Postcode('AA1 1AA'), Postcode('AA11AA'))
+
+    def test_equality_not_equal(self):
+        self.assertNotEqual(Postcode('AA1 1AA'), Postcode('AA1 1AB'))
+
+    def test_equality_different_type(self):
+        self.assertNotEqual('AA1 1AA', Postcode('AA1 1AA'))

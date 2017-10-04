@@ -24,6 +24,11 @@ class Postcode:
     def __str__(self):
         return self.without_space
 
+    def __eq__(self, other):
+        return type(self) == Postcode and\
+            type(other) == Postcode and\
+            self.without_space == other.without_space
+
     @property
     def territory(self):
         if self.postcode[:2] == 'BT':
