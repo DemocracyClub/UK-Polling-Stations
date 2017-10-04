@@ -19,6 +19,8 @@ def get_onsud_model():
 class Postcode:
 
     def __init__(self, postcode):
+        if len(str(postcode)) < 5:
+            raise ValueError("Postcode must have at least 5 characters")
         self.postcode = re.sub('[^A-Z0-9]', '', str(postcode).upper())
 
     def __str__(self):

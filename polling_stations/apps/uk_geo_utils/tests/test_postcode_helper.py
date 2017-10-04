@@ -72,6 +72,10 @@ class PostcodeHelperTest(TestCase):
             Postcode(Postcode('AA11AA'))  # so nice we built it twice!
         )
 
+    def test_create_invalid(self):
+        with self.assertRaises(ValueError):
+            Postcode('abc')
+
     def test_equality_equal(self):
         self.assertEqual(Postcode('AA1 1AA'), Postcode('AA11AA'))
 
