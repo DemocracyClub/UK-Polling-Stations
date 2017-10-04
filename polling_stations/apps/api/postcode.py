@@ -6,7 +6,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
-    AddressSorter,
     get_council,
     geocode,
     PostcodeError,
@@ -16,6 +15,7 @@ from data_finder.helpers import (
 )
 from pollingstations.models import PollingStation, CustomFinder
 from pollingstations.helpers import format_postcode_no_space
+from uk_geo_utils.helpers import AddressSorter
 from .address import PostcodeResponseSerializer
 
 

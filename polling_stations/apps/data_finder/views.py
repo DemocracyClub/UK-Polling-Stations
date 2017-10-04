@@ -23,10 +23,10 @@ from pollingstations.models import (
     CustomFinder
 )
 from pollingstations.helpers import format_postcode_no_space
+from uk_geo_utils.helpers import AddressSorter
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
 from .helpers import (
-    AddressSorter,
     DirectionsHelper,
     get_council,
     get_territory,

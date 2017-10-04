@@ -1,7 +1,6 @@
 from collections import namedtuple
 from django.test import TestCase
-from data_finder.helpers import AddressSorter
-from pollingstations.models import ResidentialAddress
+from uk_geo_utils.helpers import AddressSorter
 
 Address = namedtuple('Address', ['id', 'address'])
 
