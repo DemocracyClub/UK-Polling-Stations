@@ -51,6 +51,27 @@ class PostcodeHelperTest(TestCase):
                 Postcode(postcode['input']).without_space
             )
 
+    def test_create_from_object(self):
+        """
+        We may create a Postcode object from either a string, or an existing
+        Postcode object. This is intentional and gives us a nice property,
+        because it means we can declare a function like:
+
+        ```
+        def do_thing(postcode)
+            a = Postcode(postcode).with_space
+            bla
+        ```
+
+        and we can call `do_thing('AA1 1AA')` with a string representation
+        of a postcode or `do_thing(postcode)` with an existing Postcode object
+        and it will transparently "just work"
+        """
+        self.assertEqual(
+            Postcode('AA1 1AA'),
+            Postcode(Postcode('AA11AA'))  # so nice we built it twice!
+        )
+
     def test_equality_equal(self):
         self.assertEqual(Postcode('AA1 1AA'), Postcode('AA11AA'))
 
