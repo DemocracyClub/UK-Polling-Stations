@@ -14,8 +14,7 @@ from data_finder.helpers import (
     RoutingHelper
 )
 from pollingstations.models import PollingStation, CustomFinder
-from pollingstations.helpers import format_postcode_no_space
-from uk_geo_utils.helpers import AddressSorter
+from uk_geo_utils.helpers import AddressSorter, Postcode
 from .address import PostcodeResponseSerializer
 
 
@@ -65,7 +64,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return None
 
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
-        postcode = format_postcode_no_space(postcode)
+        postcode = Postcode(postcode)
         ret = {}
 
         # attempt to attach point and gss_codes

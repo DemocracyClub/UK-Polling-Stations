@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
-from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
+from uk_geo_utils.helpers import Postcode
 
 class PostcodeHelperTest(TestCase):
 
@@ -41,12 +41,12 @@ class PostcodeHelperTest(TestCase):
         for postcode in self.postcodes:
             self.assertEqual(
                 postcode['exp_space'],
-                format_postcode_with_space(postcode['input'])
+                Postcode(postcode['input']).with_space
             )
 
     def test_without_spaces(self):
         for postcode in self.postcodes:
             self.assertEqual(
                 postcode['exp_no_space'],
-                format_postcode_no_space(postcode['input'])
+                Postcode(postcode['input']).without_space
             )

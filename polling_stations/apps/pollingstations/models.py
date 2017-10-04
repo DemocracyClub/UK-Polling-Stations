@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
-from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
+from uk_geo_utils.helpers import Postcode
 
 
 class PollingDistrict(models.Model):
@@ -128,7 +128,7 @@ class ResidentialAddress(models.Model):
         strip all whitespace from postcode and convert to uppercase
         this will make it easier to query based on user-supplied postcode
         """
-        self.postcode = format_postcode_no_space(self.postcode)
+        self.postcode = Postcode(self.postcode).without_space
         super().save(*args, **kwargs)
 
 
@@ -151,7 +151,8 @@ class CustomFinderManager(models.Manager):
             At the moment I only have this one to work with.
             """
             finder.encoded_postcode = urllib.parse.quote(
-                format_postcode_with_space(postcode))
+                Postcode(postcode).with_space)
+
             return finder
         except ObjectDoesNotExist:
             return None

@@ -14,9 +14,9 @@ from django.core.urlresolvers import reverse
 
 from addressbase.models import Address, Blacklist
 from uk_geo_utils.models import Onsud
+from uk_geo_utils.helpers import Postcode
 
 from pollingstations.models import Council, ResidentialAddress
-from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
 from data_finder.directions_clients import (
     DirectionsException, GoogleDirectionsClient, MapzenDirectionsClient)
 
@@ -42,7 +42,7 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
         self.postcode = self.format_postcode(postcode)
 
     def format_postcode(self, postcode):
-        return postcode
+        return Postcode(postcode).without_space
 
     @abc.abstractmethod
     def geocode_point_only(self):
@@ -123,7 +123,7 @@ class AddressBaseGeocoder(BaseGeocoder):
     def format_postcode(self, postcode):
         # postcodes in AddressBase are in format AA1 1AA
         # ensure postcode is formatted correctly before we try to query
-        return format_postcode_with_space(postcode)
+        return Postcode(postcode).with_space
 
     def get_uprns(self, addresses):
         return [a.uprn for a in addresses]
@@ -255,12 +255,6 @@ def geocode(postcode):
     raise PostcodeError('Could not geocode from any source')
 
 
-def get_territory(postcode):
-    if postcode[:2] == 'BT':
-        return 'NI'
-    return 'GB'
-
-
 def get_council(geocode_result):
     if 'council_gss' in geocode_result:
         try:
@@ -284,7 +278,7 @@ class EveryElectionWrapper:
 
     def __init__(self, postcode):
         try:
-            self.elections = self.get_data(postcode)
+            self.elections = self.get_data(Postcode(postcode).with_space)
             self.request_success = True
         except:
             self.request_success = False
@@ -350,7 +344,7 @@ class DirectionsHelper():
 class RoutingHelper():
 
     def __init__(self, postcode):
-        self.postcode = format_postcode_no_space(postcode)
+        self.postcode = Postcode(postcode).without_space
         self.Endpoint = namedtuple('Endpoint', ['view', 'kwargs'])
         self.get_addresses()
         self.get_councils_from_blacklist()

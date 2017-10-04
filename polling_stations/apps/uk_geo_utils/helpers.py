@@ -16,6 +16,29 @@ def get_onsud_model():
     return get_model('ONSUD_MODEL', 'uk_geo_utils.Onsud')
 
 
+class Postcode:
+
+    def __init__(self, postcode):
+        self.postcode = re.sub('[^A-Z0-9]', '', str(postcode).upper())
+
+    def __str__(self):
+        return self.without_space
+
+    @property
+    def territory(self):
+        if self.postcode[:2] == 'BT':
+            return 'NI'
+        return 'GB'
+
+    @property
+    def with_space(self):
+        return self.postcode[:-3] + ' ' + self.postcode[-3:]
+
+    @property
+    def without_space(self):
+        return self.postcode
+
+
 class AddressFormatter:
 
     def __init__(
