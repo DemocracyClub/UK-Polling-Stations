@@ -10,54 +10,25 @@ from django.utils.encoding import force_bytes
 from data_collection.base_importers import BaseGenericApiImporter
 
 
-@register()
-def api_key_check(app_configs, **kwargs):
-    errors = []
+class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
 
-    if (app_configs is None or\
-        apps.get_app_config('data_collection') in app_configs):
-
-        key = getattr(settings, 'MORPH_API_KEY', '')
-        if key == '':
-            errors.append(
-                Error(
-                    'MORPH_API_KEY must be set',
-                    hint='Define MORPH_API_KEY as an env var or in local.py',
-                    obj='BaseMorphApiImporter',
-                    id='data_collection.E001',
-                )
-            )
-    return errors
-
-
-class BaseMorphApiImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
-
-    base_url = 'https://api.morph.io/'
-    stations_query = '/data.json?query=select%20*%20from%20%27stations%27%3B'
-    districts_query = '/data.json?query=select%20*%20from%20%27districts%27%3B'
+    base_url = 'https://raw.githubusercontent.com/wdiv-scrapers/data/master/%s/%s.%s'
+    stations_query = 'stations'
+    districts_query = 'districts'
     stations_filetype = 'json'
     districts_filetype = 'json'
     srid = 4326
     districts_srid = 4326
 
     @property
-    @abc.abstractmethod
-    def scraper_name(self):
-        pass
-
-    @property
-    def morph_api_key(self):
-        return settings.MORPH_API_KEY
-
-    @property
     def stations_url(self):
-        return "%s%s%s&key=%s" % (
-            self.base_url, self.scraper_name, self.stations_query, self.morph_api_key)
+        return self.base_url % (
+            self.council_id, self.stations_query, self.stations_filetype)
 
     @property
     def districts_url(self):
-        return "%s%s%s&key=%s" % (
-            self.base_url, self.scraper_name, self.districts_query, self.morph_api_key)
+        return self.base_url % (
+            self.council_id, self.districts_query, self.districts_filetype)
 
     def extract_geometry(self, record, format, srid):
         if format == 'geojson':
