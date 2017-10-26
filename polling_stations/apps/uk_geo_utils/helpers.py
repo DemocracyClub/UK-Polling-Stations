@@ -15,6 +15,9 @@ def get_address_model():
 def get_onsud_model():
     return get_model('ONSUD_MODEL', 'uk_geo_utils.Onsud')
 
+def get_onspd_model():
+    return get_model('ONSPD_MODEL', 'uk_geo_utils.Onspd')
+
 
 class Postcode:
 
