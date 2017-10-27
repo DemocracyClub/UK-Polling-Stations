@@ -14,9 +14,9 @@ from django.core.urlresolvers import reverse
 
 from addressbase.models import Address, Blacklist
 from uk_geo_utils.models import Onsud
+from uk_geo_utils.helpers import Postcode
 
 from pollingstations.models import Council, ResidentialAddress
-from pollingstations.helpers import format_postcode_no_space, format_postcode_with_space
 from data_finder.directions_clients import (
     DirectionsException, GoogleDirectionsClient, MapzenDirectionsClient)
 
@@ -42,7 +42,7 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
         self.postcode = self.format_postcode(postcode)
 
     def format_postcode(self, postcode):
-        return postcode
+        return Postcode(postcode).without_space
 
     @abc.abstractmethod
     def geocode_point_only(self):
@@ -123,7 +123,7 @@ class AddressBaseGeocoder(BaseGeocoder):
     def format_postcode(self, postcode):
         # postcodes in AddressBase are in format AA1 1AA
         # ensure postcode is formatted correctly before we try to query
-        return format_postcode_with_space(postcode)
+        return Postcode(postcode).with_space
 
     def get_uprns(self, addresses):
         return [a.uprn for a in addresses]
@@ -255,12 +255,6 @@ def geocode(postcode):
     raise PostcodeError('Could not geocode from any source')
 
 
-def get_territory(postcode):
-    if postcode[:2] == 'BT':
-        return 'NI'
-    return 'GB'
-
-
 def get_council(geocode_result):
     if 'council_gss' in geocode_result:
         try:
@@ -280,48 +274,11 @@ def get_council(geocode_result):
     return Council.objects.defer("area", "location").get(area__covers=location)
 
 
-class AddressSorter:
-    # Class for sorting sort a list of address objects
-    # in a human-readable order.
-
-    def __init__(self, addresses):
-        self.addresses = addresses
-
-    def convert(self, text):
-        # if text is numeric, covert to an int
-        # this allows us to sort numbers in int order, not string order
-        return int(text) if text.isdigit() else text
-
-    def alphanum_key(self, tup):
-        # split the desired component of tup (defined by key function)
-        # into a listof numeric and text components
-        return [ self.convert(c) for c in filter(None, re.split('([0-9]+)', tup[1])) ]
-
-    def swap_fields(self, item):
-        lst = self.alphanum_key(item)
-        # swap things about so we can sort by street name, house number
-        # instead of house number, street name
-        if len(lst) > 1 and isinstance(lst[0], int) and isinstance(lst[1], str) and (lst[1][0].isspace() or lst[1][0] == ','):
-            lst[0], lst[1] = lst[1], lst[0]
-        if len(lst) > 1 and isinstance(lst[0], int) and isinstance(lst[1], int):
-            lst[0], lst[1] = lst[1], lst[0]
-        if isinstance(lst[0], int):
-            lst[0] = str(lst[0])
-        return lst
-
-    def natural_sort(self):
-        sorted_list = sorted(
-            [(address, address.address) for address in self.addresses],
-            key=self.swap_fields
-        )
-        return [address[0] for address in sorted_list]
-
-
 class EveryElectionWrapper:
 
     def __init__(self, postcode):
         try:
-            self.elections = self.get_data(postcode)
+            self.elections = self.get_data(Postcode(postcode).with_space)
             self.request_success = True
         except:
             self.request_success = False
@@ -387,7 +344,7 @@ class DirectionsHelper():
 class RoutingHelper():
 
     def __init__(self, postcode):
-        self.postcode = format_postcode_no_space(postcode)
+        self.postcode = Postcode(postcode).without_space
         self.Endpoint = namedtuple('Endpoint', ['view', 'kwargs'])
         self.get_addresses()
         self.get_councils_from_blacklist()

@@ -11,6 +11,7 @@ allows us to use fake postcodes and return known
 results that work with the data in our test fixtures
 """
 def mock_geocode(postcode):
+    postcode = postcode.without_space
     # list of addresses
     if (postcode == 'AA11AA'):
         return {

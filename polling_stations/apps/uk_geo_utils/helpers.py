@@ -16,6 +16,36 @@ def get_onsud_model():
     return get_model('ONSUD_MODEL', 'uk_geo_utils.Onsud')
 
 
+class Postcode:
+
+    def __init__(self, postcode):
+        self.postcode = re.sub('[^A-Z0-9]', '', str(postcode).upper())
+        if len(str(self.postcode)) < 5:
+            raise ValueError("Postcode must have at least 5 characters")
+
+    def __str__(self):
+        return self.without_space
+
+    def __eq__(self, other):
+        return type(self) == Postcode and\
+            type(other) == Postcode and\
+            self.without_space == other.without_space
+
+    @property
+    def territory(self):
+        if self.postcode[:2] == 'BT':
+            return 'NI'
+        return 'GB'
+
+    @property
+    def with_space(self):
+        return self.postcode[:-3] + ' ' + self.postcode[-3:]
+
+    @property
+    def without_space(self):
+        return self.postcode
+
+
 class AddressFormatter:
 
     def __init__(
@@ -125,3 +155,40 @@ class AddressFormatter:
     def __str__(self):
         """Return the label form of the address."""
         return ','.join(self.generate_address_label())
+
+
+class AddressSorter:
+    # Class for sorting sort a list of address objects
+    # in a human-readable order.
+
+    def __init__(self, addresses):
+        self.addresses = addresses
+
+    def convert(self, text):
+        # if text is numeric, covert to an int
+        # this allows us to sort numbers in int order, not string order
+        return int(text) if text.isdigit() else text
+
+    def alphanum_key(self, tup):
+        # split the desired component of tup (defined by key function)
+        # into a listof numeric and text components
+        return [ self.convert(c) for c in filter(None, re.split('([0-9]+)', tup[1])) ]
+
+    def swap_fields(self, item):
+        lst = self.alphanum_key(item)
+        # swap things about so we can sort by street name, house number
+        # instead of house number, street name
+        if len(lst) > 1 and isinstance(lst[0], int) and isinstance(lst[1], str) and (lst[1][0].isspace() or lst[1][0] == ','):
+            lst[0], lst[1] = lst[1], lst[0]
+        if len(lst) > 1 and isinstance(lst[0], int) and isinstance(lst[1], int):
+            lst[0], lst[1] = lst[1], lst[0]
+        if isinstance(lst[0], int):
+            lst[0] = str(lst[0])
+        return lst
+
+    def natural_sort(self):
+        sorted_list = sorted(
+            [(address, address.address) for address in self.addresses],
+            key=self.swap_fields
+        )
+        return [address[0] for address in sorted_list]

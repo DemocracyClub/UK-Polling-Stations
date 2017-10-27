@@ -4,7 +4,7 @@ from django.db import connection
 from councils.models import Council
 from pollingstations.models import (PollingDistrict, ResidentialAddress,
                                     PollingStation)
-from pollingstations.helpers import format_postcode_no_space
+from uk_geo_utils.helpers import Postcode
 from addressbase.models import Address
 
 
@@ -24,7 +24,7 @@ class AddressSet(set):
         for address in self:
             record = ResidentialAddress(
                 address=address.address,
-                postcode=format_postcode_no_space(address.postcode),
+                postcode=Postcode(address.postcode).without_space,
                 polling_station_id=address.polling_station_id,
                 council_id=address.council_id,
                 slug=address.slug,
