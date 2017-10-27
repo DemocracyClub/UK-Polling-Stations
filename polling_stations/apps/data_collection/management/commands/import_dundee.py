@@ -1,8 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from addressbase.models import Address
-from data_collection.morph_importer import BaseMorphApiImporter
+from data_collection.github_importer import BaseGitHubImporter
 
-class Command(BaseMorphApiImporter):
+class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326

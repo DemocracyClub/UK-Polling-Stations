@@ -1,9 +1,9 @@
 import json
 from django.contrib.gis.geos import GEOSGeometry
 from data_collection.data_types import StationSet
-from data_collection.morph_importer import BaseMorphApiImporter
+from data_collection.github_importer import BaseGitHubImporter
 
-class Command(BaseMorphApiImporter):
+class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid  = 4326

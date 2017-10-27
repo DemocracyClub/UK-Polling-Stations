@@ -1,7 +1,7 @@
 from django.conf import settings
-from data_collection.morph_importer import BaseMorphApiImporter
+from data_collection.github_importer import BaseGitHubImporter
 
-class Command(BaseMorphApiImporter):
+class Command(BaseGitHubImporter):
 
     srid = 27700
     districts_srid  = 27700

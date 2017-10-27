@@ -14,9 +14,6 @@ addons:
       - gcc-5
       - g++-5
 
-env:
-  - MORPH_API_KEY=FakeApiKey # set a fake morph api key so the system checks pass
-
 before_cache:
     - rm -f .tox/py34-django18/log/*.log
     - rm -f .tox/py35-django18/log/*.log

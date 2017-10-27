@@ -1,12 +1,11 @@
-from data_collection.morph_importer import BaseMorphApiImporter
-
+from data_collection.github_importer import BaseGitHubImporter
 
 """
 Note:
 This importer provides coverage for 190/193 districts
 due to incomplete/poor quality data
 """
-class Command(BaseMorphApiImporter):
+class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326

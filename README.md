@@ -92,8 +92,6 @@ pip install -r requirements/testing.txt
 cp polling_stations/settings/local.example.py polling_stations/settings/local.py
 ```
 
-Fill in database credentials and `MORPH_API_KEY` - you can get an API key from [https://morph.io/](https://morph.io/) using your github account.
-
 ### Create database
 ```
 sudo -u postgres createdb polling_stations

@@ -11,7 +11,7 @@ I've converted these to CSV and SHP format
 and uploaded that data to Amazon S3 for import purposes
 
 Additionally there's a hashes only scraper at
-https://morph.io/wdiv-scrapers/DC-PollingStations-Ashfield
+https://github.com/wdiv-scrapers/DC-PollingStations-Ashfield
 polling the URLs to look for changes.
 """
 

@@ -1,10 +1,5 @@
 import os
 
-# settings used by import scripts
-
-# Morph API key used for downloading scraped data in import scripts
-MORPH_API_KEY = os.environ.get('MORPH_API_KEY', "")
-
 """
 Amazon S3 config:
 By default, we will look for a section

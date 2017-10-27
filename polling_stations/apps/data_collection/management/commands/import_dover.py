@@ -1,8 +1,7 @@
 from django.contrib.gis.geos import Point
-from data_collection.morph_importer import BaseMorphApiImporter
+from data_collection.github_importer import BaseGitHubImporter
 
-
-class Command(BaseMorphApiImporter):
+class Command(BaseGitHubImporter):
 
     srid = 27700
     districts_srid  = 4326
