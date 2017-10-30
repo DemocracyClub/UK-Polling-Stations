@@ -52,13 +52,13 @@ class AddressBaseGeocoder(BaseGeocoder):
             raise AddressBaseNotImportedException('Address Base table is empty')
 
         self.addresses = self.address_model.objects.filter(
-            postcode=self.postcode.with_space)
+            postcode=self.postcode.with_space).order_by('uprn')
         if not self.addresses:
             raise self.address_model.DoesNotExist(
                 'No addresses found for postcode %s' % (self.postcode))
 
         self.uprns = self.onsud_model.objects.filter(
-            uprn__in=self._get_uprns())
+            uprn__in=self._get_uprns()).order_by('uprn')
 
     def _get_uprns(self):
         return [a.uprn for a in self.addresses]
