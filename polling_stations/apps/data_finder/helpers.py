@@ -15,6 +15,8 @@ from django.core.urlresolvers import reverse
 from addressbase.models import Address, Blacklist
 from uk_geo_utils.models import Onsud
 from uk_geo_utils.helpers import Postcode
+from uk_geo_utils.geocoders import (
+    AddressBaseGeocoder, CodesNotFoundException, MultipleCodesException)
 
 from pollingstations.models import Council, ResidentialAddress
 from data_finder.directions_clients import (
@@ -24,11 +26,9 @@ from data_finder.directions_clients import (
 class PostcodeError(Exception):
     pass
 
-class MultipleCouncilsException(Exception):
+class MultipleCouncilsException(MultipleCodesException):
     pass
 
-class CodesNotFoundException(Exception):
-    pass
 
 class RateLimitError(Exception):
     def __init__(self, message):
@@ -118,72 +118,48 @@ class MapitGeocoder(BaseGeocoder):
         return self.geocode()
 
 
-class AddressBaseGeocoder(BaseGeocoder):
+class AddressBaseGeocoderAdapter(BaseGeocoder):
+    """
+    For the moment we need an adapter clas to sit between
+    uk_geo_utils.geocoders.AddressBaseGeocoder
+    and the calling code which wraps up output from
+    uk_geo_utils.geocoders.AddressBaseGeocoder
+    in the data structure that the calling code is expecting.
 
-    def format_postcode(self, postcode):
-        # postcodes in AddressBase are in format AA1 1AA
-        # ensure postcode is formatted correctly before we try to query
-        return Postcode(postcode).with_space
-
-    def get_uprns(self, addresses):
-        return [a.uprn for a in addresses]
-
-    def get_codes(self, uprns):
-        addresses = Onsud.objects.filter(uprn__in=uprns)
-
-        if len(addresses) == 0:
-            # No records in the ONSUD table were found for the given UPRNs
-            # because...reasons
-            raise CodesNotFoundException('Found no records in ONSUD for supplied UPRNs')
-
-        if len(addresses) != len(uprns):
-            # For the moment I'm going to do nothing about this, but lets
-            # leave this condition here to make that decision explicit
-            # TODO: maybe we should actually do....something else??
-            pass
-
-        council_ids = set([a.lad for a in addresses])
-
-        # assemble list of codes
-        gss_codes = set()
-        for address in addresses:
-            extra_codes = [address.cty, address.lad, address.ctry, address.rgn, address.eer]
-            for code in extra_codes:
-                gss_codes.add(code)
-
-        if len(council_ids) == 1:
-            # all the uprns supplied are in the same local authority
-            council_gss = list(council_ids)[0]
-        else:
-            # the urpns supplied are in multiple local authorities
-            raise MultipleCouncilsException('Postcode %s covers UPRNs in more than one local authority' % (self.postcode))
-
-        return {
-            'council_gss': council_gss,
-            'gss_codes': list(gss_codes)
-        }
+    Somewhere later in the refactoring process,
+    we can probably remove this abstraction layer
+    """
 
     def geocode(self):
-        addresses = Address.objects.filter(postcode=self.postcode)
-        if not addresses:
-            raise ObjectDoesNotExist('No addresses found for postcode %s' % (self.postcode))
+        geocoder = AddressBaseGeocoder(self.postcode)
+        centre = geocoder.centroid
 
-        codes = self.get_codes(self.get_uprns(addresses))
-        centre = addresses.centroid
+        try:
+            lad = geocoder.get_code('lad')
+        except MultipleCodesException as e:
+            # re-raise as a more specific MultipleCouncilsException
+            # because that is what the calling code expects to handle
+            raise MultipleCouncilsException(str(e))
+
+        codes = [
+            geocoder.get_code('cty'),
+            geocoder.get_code('lad'),
+            geocoder.get_code('ctry'),
+            geocoder.get_code('rgn'),
+            geocoder.get_code('eer'),
+        ]
+
         return {
             'source': 'addressbase',
             'wgs84_lon': centre.x,
             'wgs84_lat': centre.y,
-            'council_gss': codes['council_gss'],
-            'gss_codes': codes['gss_codes'],
+            'council_gss': geocoder.get_code('lad'),
+            'gss_codes': codes,
         }
 
     def geocode_point_only(self):
-        addresses = Address.objects.filter(postcode=self.postcode)
-        if not addresses:
-            raise ObjectDoesNotExist('No addresses found for postcode %s' % (self.postcode))
-
-        centre = addresses.centroid
+        geocoder = AddressBaseGeocoder(self.postcode)
+        centre = geocoder.centroid
         return {
             'source': 'addressbase',
             'wgs84_lon': centre.x,
@@ -192,7 +168,7 @@ class AddressBaseGeocoder(BaseGeocoder):
 
 
 def geocode_point_only(postcode, sleep=True):
-    geocoders = (AddressBaseGeocoder(postcode), MapitGeocoder(postcode))
+    geocoders = (AddressBaseGeocoderAdapter(postcode), MapitGeocoder(postcode))
     for geocoder in geocoders:
         try:
             return geocoder.run(True)
@@ -225,7 +201,7 @@ def geocode_point_only(postcode, sleep=True):
 
 
 def geocode(postcode):
-    geocoders = (AddressBaseGeocoder(postcode), MapitGeocoder(postcode))
+    geocoders = (AddressBaseGeocoderAdapter(postcode), MapitGeocoder(postcode))
     for geocoder in geocoders:
         try:
             return geocoder.run(False)

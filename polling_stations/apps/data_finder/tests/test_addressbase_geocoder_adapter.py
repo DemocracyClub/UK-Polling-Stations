@@ -1,11 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from data_finder.helpers import (
-    AddressBaseGeocoder, CodesNotFoundException, MultipleCouncilsException
+    AddressBaseGeocoderAdapter, CodesNotFoundException, MultipleCouncilsException
 )
 
 
-class AddressBaseGeocoderTest(TestCase):
+class AddressBaseGeocoderAdapterTest(TestCase):
 
     fixtures = ['test_addressbase.json']
 
@@ -15,7 +15,7 @@ class AddressBaseGeocoderTest(TestCase):
 
         Exception of class ObjectDoesNotExist should be thrown
         """
-        addressbase = AddressBaseGeocoder('DD1 1DD')
+        addressbase = AddressBaseGeocoderAdapter('DD1 1DD')
         exception_thrown = False
         try:
             result = addressbase.geocode()
@@ -37,7 +37,7 @@ class AddressBaseGeocoderTest(TestCase):
 
         Exception of class CodesNotFoundException should be thrown
         """
-        addressbase = AddressBaseGeocoder('AA11AA')
+        addressbase = AddressBaseGeocoderAdapter('AA11AA')
         exception_thrown = False
         try:
             result = addressbase.geocode()
@@ -57,7 +57,7 @@ class AddressBaseGeocoderTest(TestCase):
 
         Exception of class MultipleCouncilsException should be thrown
         """
-        addressbase = AddressBaseGeocoder('CC11CC')
+        addressbase = AddressBaseGeocoderAdapter('CC11CC')
         exception_thrown = False
         try:
             result = addressbase.geocode()
@@ -79,7 +79,7 @@ class AddressBaseGeocoderTest(TestCase):
         Note that in this case, the ONSUD table does not contain corresponding
         records for *all* of the UPRNs we found, but we accept the result anyway
         """
-        addressbase = AddressBaseGeocoder('bb 1   1B B')  # intentionally spurious whitespace and case
+        addressbase = AddressBaseGeocoderAdapter('bb 1   1B B')  # intentionally spurious whitespace and case
         result = addressbase.geocode()
         self.assertEqual('addressbase', result['source'])
         self.assertEqual('B01000001', result['council_gss'])
