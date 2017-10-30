@@ -103,7 +103,7 @@ class Onsud(AbstractOnsud):
 class AbstractOnspd(models.Model):
     pcd = models.CharField(blank=True, max_length=7)
     pcd2 = models.CharField(blank=True, max_length=8)
-    pcds = models.CharField(blank=True, max_length=8)
+    pcds = models.CharField(blank=True, max_length=8, primary_key=True)
     dointr = models.CharField(blank=True, max_length=6)
     doterm = models.CharField(blank=True, max_length=6)
     oscty = models.CharField(blank=True, max_length=9)
