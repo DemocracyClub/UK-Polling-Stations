@@ -1,7 +1,16 @@
 from django.contrib.gis.db import models
 
 
-class AddressQuerySet(models.QuerySet):
+class CachedGetMixin:
+
+    def get_cached(self, pk):
+        for record in self:
+            if record.pk == pk:
+                return record
+        raise self.model.DoesNotExist()
+
+
+class AddressQuerySet(models.QuerySet, CachedGetMixin):
 
     @property
     def centroid(self):
@@ -39,6 +48,15 @@ class Address(AbstractAddress):
     pass
 
 
+class OnsudQuerySet(models.QuerySet, CachedGetMixin):
+    pass
+
+
+class AbstractOnsudManager(models.GeoManager):
+    def get_queryset(self):
+        return OnsudQuerySet(self.model, using=self._db)
+
+
 class AbstractOnsud(models.Model):
     uprn = models.CharField(primary_key=True, max_length=12)
     """
@@ -72,6 +90,7 @@ class AbstractOnsud(models.Model):
     lep2 = models.CharField(blank=True, max_length=9)
     pfa = models.CharField(blank=True, max_length=9)
     imd = models.CharField(blank=True, max_length=5)
+    objects = AbstractOnsudManager()
 
     class Meta:
         abstract = True

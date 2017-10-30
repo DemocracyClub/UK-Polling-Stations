@@ -37,31 +37,35 @@ class AddressBaseGeocoderTest(TestCase):
         The AddressBase table has no records in it
         """
         get_address_model().objects.all().delete()
-        with self.assertRaises(AddressBaseNotImportedException):
-            addressbase = AddressBaseGeocoder('AA11AA')
+        with self.assertNumQueries(1):
+            with self.assertRaises(AddressBaseNotImportedException):
+                addressbase = AddressBaseGeocoder('AA11AA')
 
     def test_northern_ireland(self):
-        with self.assertRaises(NorthernIrelandException):
-            addressbase = AddressBaseGeocoder('BT11AA')
+        with self.assertNumQueries(0):
+            with self.assertRaises(NorthernIrelandException):
+                addressbase = AddressBaseGeocoder('BT11AA')
 
     def test_no_records(self):
         """
         We can't find any records for the given postcode in the AddressBase table
         """
-        with self.assertRaises(get_address_model().DoesNotExist):
-            addressbase = AddressBaseGeocoder('ZZ1 1ZZ')
+        with self.assertNumQueries(2):
+            with self.assertRaises(get_address_model().DoesNotExist):
+                addressbase = AddressBaseGeocoder('ZZ1 1ZZ')
 
     def test_no_codes(self):
         """
         We find records for the given postcode in the AddressBase table
         but there are no corresponding records in the ONSUD for the UPRNs we found
         """
-        addressbase = AddressBaseGeocoder('AA11AA')
+        with self.assertNumQueries(3):
+            addressbase = AddressBaseGeocoder('AA11AA')
 
-        with self.assertRaises(CodesNotFoundException):
-            result = addressbase.get_code('lad')
+            with self.assertRaises(CodesNotFoundException):
+                result = addressbase.get_code('lad')
 
-        self.assertIsInstance(addressbase.centroid, Point)
+            self.assertIsInstance(addressbase.centroid, Point)
 
     def test_valid(self):
         """
@@ -73,9 +77,10 @@ class AddressBaseGeocoderTest(TestCase):
         Note that in this case, the ONSUD table does not contain corresponding
         records for *all* of the UPRNs we found, but we accept the result anyway
         """
-        addressbase = AddressBaseGeocoder('bb 1   1B B')  # intentionally spurious whitespace and case
-        self.assertEqual('B01000001', addressbase.get_code('lad'))
-        self.assertIsInstance(addressbase.centroid, Point)
+        with self.assertNumQueries(3):
+            addressbase = AddressBaseGeocoder('bb 1   1B B')  # intentionally spurious whitespace and case
+            self.assertEqual('B01000001', addressbase.get_code('lad'))
+            self.assertIsInstance(addressbase.centroid, Point)
 
     def test_multiple_codes(self):
         """
@@ -84,39 +89,43 @@ class AddressBaseGeocoderTest(TestCase):
         The UPRNs described by this postcode map to more than one 'lad'
         but they all map to the same 'cty'
         """
-        addressbase = AddressBaseGeocoder('CC1 1CC')
+        with self.assertNumQueries(3):
+            addressbase = AddressBaseGeocoder('CC1 1CC')
 
-        with self.assertRaises(MultipleCodesException):
-            result = addressbase.get_code('lad')
+            with self.assertRaises(MultipleCodesException):
+                result = addressbase.get_code('lad')
 
-        self.assertEqual('A01000001', addressbase.get_code('cty'))
+            self.assertEqual('A01000001', addressbase.get_code('cty'))
 
-        self.assertIsInstance(addressbase.centroid, Point)
+            self.assertIsInstance(addressbase.centroid, Point)
 
     def test_invalid_code_type(self):
-        addressbase = AddressBaseGeocoder('CC1 1CC')
-        with self.assertRaises(FieldDoesNotExist):
-            result = addressbase.get_code('foo')  # not a real code type
+        with self.assertNumQueries(2):
+            addressbase = AddressBaseGeocoder('CC1 1CC')
+            with self.assertRaises(FieldDoesNotExist):
+                result = addressbase.get_code('foo')  # not a real code type
 
     def test_get_code_by_uprn_valid(self):
         """
         valid get_code() by UPRN queries
         """
-        addressbase = AddressBaseGeocoder('CC1 1CC')
-        self.assertEqual('B01000001', addressbase.get_code('lad', '00000008'))
-        self.assertIsInstance(addressbase.get_point('00000008'), Point)
-        self.assertEqual('B01000002', addressbase.get_code('lad', '00000009'))
-        self.assertIsInstance(addressbase.get_point('00000009'), Point)
+        with self.assertNumQueries(3):
+            addressbase = AddressBaseGeocoder('CC1 1CC')
+            self.assertEqual('B01000001', addressbase.get_code('lad', '00000008'))
+            self.assertIsInstance(addressbase.get_point('00000008'), Point)
+            self.assertEqual('B01000002', addressbase.get_code('lad', '00000009'))
+            self.assertIsInstance(addressbase.get_point('00000009'), Point)
 
     def test_get_code_by_uprn_invalid_uprn(self):
         """
         'foo' is not a valid UPRN in our DB
         """
-        addressbase = AddressBaseGeocoder('CC1 1CC')
-        with self.assertRaises(get_address_model().DoesNotExist):
-            result = addressbase.get_code('lad', 'foo')
-        with self.assertRaises(get_address_model().DoesNotExist):
-            result = addressbase.get_point('foo')
+        with self.assertNumQueries(2):
+            addressbase = AddressBaseGeocoder('CC1 1CC')
+            with self.assertRaises(get_address_model().DoesNotExist):
+                result = addressbase.get_code('lad', 'foo')
+            with self.assertRaises(get_address_model().DoesNotExist):
+                result = addressbase.get_point('foo')
 
     def test_get_code_by_uprn_invalid_uprn_for_postcode(self):
         """
@@ -124,17 +133,19 @@ class AddressBaseGeocoderTest(TestCase):
         but for a different postcode
         than the one we constructed with
         """
-        addressbase = AddressBaseGeocoder('CC1 1CC')
-        with self.assertRaises(get_address_model().DoesNotExist):
-            result = addressbase.get_code('lad', '00000001')
-        with self.assertRaises(get_address_model().DoesNotExist):
-            result = addressbase.get_point('00000001')
+        with self.assertNumQueries(2):
+            addressbase = AddressBaseGeocoder('CC1 1CC')
+            with self.assertRaises(get_address_model().DoesNotExist):
+                result = addressbase.get_code('lad', '00000001')
+            with self.assertRaises(get_address_model().DoesNotExist):
+                result = addressbase.get_point('00000001')
 
     def test_get_code_by_uprn_no_onsud(self):
         """
         '00000006' is a valid UPRN in AddressBase but not in ONSUD
         """
-        addressbase = AddressBaseGeocoder('BB1 1BB')
-        with self.assertRaises(get_onsud_model().DoesNotExist):
-            result = addressbase.get_code('lad', '00000006')
-        self.assertIsInstance(addressbase.get_point('00000006'), Point)
+        with self.assertNumQueries(3):
+            addressbase = AddressBaseGeocoder('BB1 1BB')
+            with self.assertRaises(get_onsud_model().DoesNotExist):
+                result = addressbase.get_code('lad', '00000006')
+            self.assertIsInstance(addressbase.get_point('00000006'), Point)

@@ -68,15 +68,15 @@ class AddressBaseGeocoder(BaseGeocoder):
         return self.addresses.centroid
 
     def get_point(self, uprn):
-        return self.addresses.get(uprn=uprn).location
+        return self.addresses.get_cached(uprn).location
 
     def get_code(self, code_type, uprn=None):
         # check the code_type field exists on our model
         self.onsud_model._meta.get_field(code_type)
 
         if uprn:
-            self.addresses.get(uprn=uprn)
-            return getattr(self.uprns.get(uprn=uprn), code_type)
+            self.addresses.get_cached(uprn)
+            return getattr(self.uprns.get_cached(uprn), code_type)
 
         if len(self.uprns) == 0:
             # No records in the ONSUD table were found for the given UPRNs
