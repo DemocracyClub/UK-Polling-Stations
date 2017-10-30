@@ -4,6 +4,7 @@ from django.contrib.gis.geos import Point
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     get_address_model,
+    get_onsud_model,
     AddressBaseNotImportedException,
     CodesNotFoundException,
     MultipleCodesException,
@@ -96,3 +97,37 @@ class AddressBaseGeocoderTest(TestCase):
         addressbase = AddressBaseGeocoder('CC1 1CC')
         with self.assertRaises(FieldDoesNotExist):
             result = addressbase.get_code('foo')  # not a real code type
+
+    def test_get_code_by_uprn_valid(self):
+        """
+        valid get_code() by UPRN queries
+        """
+        addressbase = AddressBaseGeocoder('CC1 1CC')
+        self.assertEqual('B01000001', addressbase.get_code('lad', '00000008'))
+        self.assertEqual('B01000002', addressbase.get_code('lad', '00000009'))
+
+    def test_get_code_by_uprn_invalid_uprn(self):
+        """
+        'foo' is not a valid UPRN in our DB
+        """
+        addressbase = AddressBaseGeocoder('CC1 1CC')
+        with self.assertRaises(get_address_model().DoesNotExist):
+            result = addressbase.get_code('lad', 'foo')
+
+    def test_get_code_by_uprn_invalid_uprn_for_postcode(self):
+        """
+        '00000001' is a valid UPRN in our DB,
+        but for a different postcode
+        than the one we constructed with
+        """
+        addressbase = AddressBaseGeocoder('CC1 1CC')
+        with self.assertRaises(get_address_model().DoesNotExist):
+            result = addressbase.get_code('lad', '00000001')
+
+    def test_get_code_by_uprn_no_onsud(self):
+        """
+        '00000006' is a valid UPRN in AddressBase but not in ONSUD
+        """
+        addressbase = AddressBaseGeocoder('BB1 1BB')
+        with self.assertRaises(get_onsud_model().DoesNotExist):
+            result = addressbase.get_code('lad', '00000006')

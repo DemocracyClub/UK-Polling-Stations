@@ -72,8 +72,8 @@ class AddressBaseGeocoder(BaseGeocoder):
         self.onsud_model._meta.get_field(code_type)
 
         if uprn:
-            # TODO: implement this
-            raise NotImplementedError()
+            self.addresses.get(uprn=uprn)
+            return getattr(self.uprns.get(uprn=uprn), code_type)
 
         if len(self.uprns) == 0:
             # No records in the ONSUD table were found for the given UPRNs
@@ -85,7 +85,7 @@ class AddressBaseGeocoder(BaseGeocoder):
             # TODO: maybe we should actually do....something else??
             pass
 
-        codes = set([getattr(u, code_type, None) for u in self.uprns])
+        codes = set([getattr(u, code_type) for u in self.uprns])
         if len(codes) == 1:
             # all the uprns supplied are in the same area
             return list(codes)[0]
