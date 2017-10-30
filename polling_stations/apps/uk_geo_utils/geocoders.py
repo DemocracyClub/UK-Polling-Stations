@@ -67,6 +67,9 @@ class AddressBaseGeocoder(BaseGeocoder):
     def centroid(self):
         return self.addresses.centroid
 
+    def get_point(self, uprn):
+        return self.addresses.get(uprn=uprn).location
+
     def get_code(self, code_type, uprn=None):
         # check the code_type field exists on our model
         self.onsud_model._meta.get_field(code_type)

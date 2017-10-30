@@ -104,7 +104,9 @@ class AddressBaseGeocoderTest(TestCase):
         """
         addressbase = AddressBaseGeocoder('CC1 1CC')
         self.assertEqual('B01000001', addressbase.get_code('lad', '00000008'))
+        self.assertIsInstance(addressbase.get_point('00000008'), Point)
         self.assertEqual('B01000002', addressbase.get_code('lad', '00000009'))
+        self.assertIsInstance(addressbase.get_point('00000009'), Point)
 
     def test_get_code_by_uprn_invalid_uprn(self):
         """
@@ -113,6 +115,8 @@ class AddressBaseGeocoderTest(TestCase):
         addressbase = AddressBaseGeocoder('CC1 1CC')
         with self.assertRaises(get_address_model().DoesNotExist):
             result = addressbase.get_code('lad', 'foo')
+        with self.assertRaises(get_address_model().DoesNotExist):
+            result = addressbase.get_point('foo')
 
     def test_get_code_by_uprn_invalid_uprn_for_postcode(self):
         """
@@ -123,6 +127,8 @@ class AddressBaseGeocoderTest(TestCase):
         addressbase = AddressBaseGeocoder('CC1 1CC')
         with self.assertRaises(get_address_model().DoesNotExist):
             result = addressbase.get_code('lad', '00000001')
+        with self.assertRaises(get_address_model().DoesNotExist):
+            result = addressbase.get_point('00000001')
 
     def test_get_code_by_uprn_no_onsud(self):
         """
@@ -131,3 +137,4 @@ class AddressBaseGeocoderTest(TestCase):
         addressbase = AddressBaseGeocoder('BB1 1BB')
         with self.assertRaises(get_onsud_model().DoesNotExist):
             result = addressbase.get_code('lad', '00000006')
+        self.assertIsInstance(addressbase.get_point('00000006'), Point)
