@@ -83,9 +83,29 @@ class AddressBaseGeocoder(BaseGeocoder):
             # because...reasons
             raise CodesNotFoundException('Found no records in ONSUD for supplied UPRNs')
         if len(self.addresses) != len(self.uprns):
-            # For the moment I'm going to do nothing about this, but lets
-            # leave this condition here to make that decision explicit
-            # TODO: maybe we should actually do....something else??
+            """
+            TODO: once you can easily map addresses in WhereDIV to a UPRN,
+            change this to:
+
+            for uprn in self._get_uprns():
+                try:
+                    self.uprns.get_cached(uprn)
+                except self.onsud_model.DoesNotExist:
+                    raise SomeException('oh noes!!')
+
+            Then you can handle it by calling something like
+            try:
+                code = g.get_code('lad')
+            except SomeException:
+                point = g.get_point(myuprn)
+                code = Council.objects.get(area__covers=point)
+
+            (this will make the BB1 1BB test case fail
+            so you'll need to update that too)
+
+            For the moment I'm going to leave it as-is
+            to maintain backwards-compatibility
+            """
             pass
 
         codes = set([getattr(u, code_type) for u in self.uprns])
