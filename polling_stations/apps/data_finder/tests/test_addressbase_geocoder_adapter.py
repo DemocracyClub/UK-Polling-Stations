@@ -16,19 +16,12 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         Exception of class ObjectDoesNotExist should be thrown
         """
         addressbase = AddressBaseGeocoderAdapter('DD1 1DD')
-        exception_thrown = False
-        try:
+        with self.assertRaises(ObjectDoesNotExist):
             result = addressbase.geocode()
-        except ObjectDoesNotExist:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
         # point only geocode should also fail
-        try:
+        with self.assertRaises(ObjectDoesNotExist):
             result = addressbase.geocode_point_only()
-        except ObjectDoesNotExist:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
     def test_no_codes(self):
         """
@@ -38,12 +31,8 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         Exception of class CodesNotFoundException should be thrown
         """
         addressbase = AddressBaseGeocoderAdapter('AA11AA')
-        exception_thrown = False
-        try:
+        with self.assertRaises(CodesNotFoundException):
             result = addressbase.geocode()
-        except CodesNotFoundException:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
         # point only geocode should return a result anyway
         result = addressbase.geocode_point_only()
@@ -58,12 +47,8 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         Exception of class MultipleCouncilsException should be thrown
         """
         addressbase = AddressBaseGeocoderAdapter('CC11CC')
-        exception_thrown = False
-        try:
+        with self.assertRaises(MultipleCouncilsException):
             result = addressbase.geocode()
-        except MultipleCouncilsException:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
         # point only geocode should return a result anyway
         result = addressbase.geocode_point_only()
