@@ -73,9 +73,6 @@ class Command(BaseCommand):
 
     def get_contact_info_from_yvm(self, council_id):
         url = "{}{}".format(settings.YVM_LA_URL, council_id)
-        if council_id == "E07000049":
-            # E07000049 needs a space before the code
-            url = "{}%20{}".format(settings.YVM_LA_URL, council_id)
 
         req = requests.get(url)
         content = req.text
