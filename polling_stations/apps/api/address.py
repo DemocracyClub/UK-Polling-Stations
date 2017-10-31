@@ -11,6 +11,7 @@ from data_finder.helpers import (
     RateLimitError,
 )
 from pollingstations.models import PollingStation, ResidentialAddress
+from uk_geo_utils.helpers import Postcode
 from .councils import CouncilDataSerializer
 from .fields import PointField
 from .pollingstations import PollingStationGeoSerializer
@@ -91,7 +92,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         log_data['language'] = ''
         log_data['api_user'] = request.user
         if log:
-            self.log_postcode(address.postcode, log_data, 'api')
+            self.log_postcode(Postcode(address.postcode), log_data, 'api')
 
         serializer = PostcodeResponseSerializer(
             ret, read_only=True, context={'request': request}
