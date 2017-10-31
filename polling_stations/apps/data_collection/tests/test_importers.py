@@ -28,11 +28,7 @@ class ImporterTest(TestCase):
 
     # create a dummy council which we're going to import data for
     def create_dummy_council(self):
-        Council.objects.update_or_create(
-            pk='X01000000',
-            mapit_id=1,
-            council_type='DIS'
-        )
+        Council.objects.update_or_create(pk='X01000000')
 
     # all of these tests should import the same data
     # from various different source formats

@@ -1,15 +1,12 @@
 [
     {
         "fields": {
-            "council_type": "",
-            "mapit_id": "",
             "name": "",
             "email": "",
             "phone": "",
             "website": "",
             "postcode": "",
             "address": "",
-            "location": null,
             "area": null
         },
         "model": "councils.council",
@@ -17,15 +14,12 @@
     },
     {
         "fields": {
-            "council_type": "",
-            "mapit_id": "",
             "name": "",
             "email": "",
             "phone": "",
             "website": "",
             "postcode": "",
             "address": "",
-            "location": null,
             "area": null
         },
         "model": "councils.council",
@@ -33,15 +27,12 @@
     },
     {
         "fields": {
-            "council_type": "",
-            "mapit_id": "",
             "name": "",
             "email": "",
             "phone": "",
             "website": "",
             "postcode": "",
             "address": "",
-            "location": null,
             "area": null
         },
         "model": "councils.council",

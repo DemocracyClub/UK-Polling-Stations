@@ -247,7 +247,7 @@ class AddressView(BasePollingStationView):
             return None
 
     def get_council(self, geocode_result):
-        return Council.objects.defer("area", "location").get(
+        return Council.objects.defer("area").get(
             pk=self.address.council_id)
 
     def get_station(self):
@@ -278,7 +278,7 @@ class ExamplePostcodeView(BasePollingStationView):
         }
 
     def get_council(self, geocode_result):
-        return Council.objects.defer("area", "location").get(pk='E06000023')
+        return Council.objects.defer("area").get(pk='E06000023')
 
     def get_station(self):
         return PollingStation(
