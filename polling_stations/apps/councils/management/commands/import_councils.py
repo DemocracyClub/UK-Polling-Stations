@@ -109,7 +109,7 @@ class Command(BaseCommand):
         councils = []
         self.stdout.write("Downloading GB boundaries from ONS...")
         councils = councils + self.get_councils(
-            settings.GB_BOUNDARIES_URL, id_field='lad14cd', name_field='lad14nm')
+            settings.GB_BOUNDARIES_URL, id_field='lad16cd', name_field='lad16nm')
         self.stdout.write("Downloading NI boundaries from ONS...")
         councils = councils + self.get_councils(
             settings.NI_BOUNDARIES_URL, id_field='LGDCode', name_field='LGDNAME')

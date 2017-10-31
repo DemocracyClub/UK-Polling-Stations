@@ -28,8 +28,8 @@ class MockCouncilsImporter(Command):
                     "type": "Feature",
                     "properties": {
                         "objectid": 1,
-                        "lad14cd": auth['code'],
-                        "lad14nm": auth['name'],
+                        "lad16cd": auth['code'],
+                        "lad16nm": auth['name'],
                         "lad14nmw": " ",
                         "st_areashape": 123,
                         "st_lengthshape": 4564
