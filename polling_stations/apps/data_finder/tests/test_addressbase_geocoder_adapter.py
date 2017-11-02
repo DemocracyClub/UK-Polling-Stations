@@ -1,11 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from data_finder.helpers import (
-    AddressBaseGeocoder, CodesNotFoundException, MultipleCouncilsException
+    AddressBaseGeocoderAdapter, CodesNotFoundException, MultipleCouncilsException
 )
 
 
-class AddressBaseGeocoderTest(TestCase):
+class AddressBaseGeocoderAdapterTest(TestCase):
 
     fixtures = ['test_addressbase.json']
 
@@ -15,20 +15,13 @@ class AddressBaseGeocoderTest(TestCase):
 
         Exception of class ObjectDoesNotExist should be thrown
         """
-        addressbase = AddressBaseGeocoder('DD1 1DD')
-        exception_thrown = False
-        try:
+        addressbase = AddressBaseGeocoderAdapter('DD1 1DD')
+        with self.assertRaises(ObjectDoesNotExist):
             result = addressbase.geocode()
-        except ObjectDoesNotExist:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
         # point only geocode should also fail
-        try:
+        with self.assertRaises(ObjectDoesNotExist):
             result = addressbase.geocode_point_only()
-        except ObjectDoesNotExist:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
     def test_no_codes(self):
         """
@@ -37,13 +30,9 @@ class AddressBaseGeocoderTest(TestCase):
 
         Exception of class CodesNotFoundException should be thrown
         """
-        addressbase = AddressBaseGeocoder('AA11AA')
-        exception_thrown = False
-        try:
+        addressbase = AddressBaseGeocoderAdapter('AA11AA')
+        with self.assertRaises(CodesNotFoundException):
             result = addressbase.geocode()
-        except CodesNotFoundException:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
         # point only geocode should return a result anyway
         result = addressbase.geocode_point_only()
@@ -57,13 +46,9 @@ class AddressBaseGeocoderTest(TestCase):
 
         Exception of class MultipleCouncilsException should be thrown
         """
-        addressbase = AddressBaseGeocoder('CC11CC')
-        exception_thrown = False
-        try:
+        addressbase = AddressBaseGeocoderAdapter('CC11CC')
+        with self.assertRaises(MultipleCouncilsException):
             result = addressbase.geocode()
-        except MultipleCouncilsException:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
 
         # point only geocode should return a result anyway
         result = addressbase.geocode_point_only()
@@ -79,7 +64,7 @@ class AddressBaseGeocoderTest(TestCase):
         Note that in this case, the ONSUD table does not contain corresponding
         records for *all* of the UPRNs we found, but we accept the result anyway
         """
-        addressbase = AddressBaseGeocoder('bb 1   1B B')  # intentionally spurious whitespace and case
+        addressbase = AddressBaseGeocoderAdapter('bb 1   1B B')  # intentionally spurious whitespace and case
         result = addressbase.geocode()
         self.assertEqual('addressbase', result['source'])
         self.assertEqual('B01000001', result['council_gss'])

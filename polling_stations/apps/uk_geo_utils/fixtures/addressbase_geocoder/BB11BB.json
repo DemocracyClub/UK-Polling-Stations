@@ -1,0 +1,90 @@
+[
+    {
+        "fields": {
+            "address": "1 Baz Street, Bar Town",
+            "postcode": "BB1 1BB",
+            "location": "SRID=4326;POINT (-3.9 51.1)"
+        },
+        "model": "uk_geo_utils.address",
+        "pk": "00000004"
+    },
+    {
+        "fields": {
+            "address": "2 Baz Street, Bar Town",
+            "postcode": "BB1 1BB",
+            "location": "SRID=4326;POINT (-3.8 51.1)"
+        },
+        "model": "uk_geo_utils.address",
+        "pk": "00000005"
+    },
+    {
+        "fields": {
+            "address": "2 Baz Street, Bar Town",
+            "postcode": "BB1 1BB",
+            "location": "SRID=4326;POINT (-3.8 51.2)"
+        },
+        "model": "uk_geo_utils.address",
+        "pk": "00000006"
+    },
+
+    {
+        "fields": {
+            "cty": "A01000001",
+            "lad": "B01000001",
+            "ward": "",
+            "hlthau": "",
+            "ctry": "",
+            "rgn": "",
+            "eer": "",
+            "ttwa": "",
+            "nuts": "",
+            "park": "",
+            "oa11": "",
+            "lsoa11": "",
+            "msoa11": "",
+            "parish": "",
+            "wz11": "",
+            "ccg": "",
+            "bua11": "",
+            "buasd11": "",
+            "ruc11": "",
+            "oac11": "",
+            "lep1": "",
+            "lep2": "",
+            "pfa": "",
+            "imd": ""
+        },
+        "model": "uk_geo_utils.onsud",
+        "pk": "00000004"
+    },
+    {
+        "fields": {
+            "cty": "A01000001",
+            "lad": "B01000001",
+            "ward": "",
+            "hlthau": "",
+            "ctry": "",
+            "rgn": "",
+            "eer": "",
+            "ttwa": "",
+            "nuts": "",
+            "park": "",
+            "oa11": "",
+            "lsoa11": "",
+            "msoa11": "",
+            "parish": "",
+            "wz11": "",
+            "ccg": "",
+            "bua11": "",
+            "buasd11": "",
+            "ruc11": "",
+            "oac11": "",
+            "lep1": "",
+            "lep2": "",
+            "pfa": "",
+            "imd": ""
+        },
+        "model": "uk_geo_utils.onsud",
+        "pk": "00000005"
+    }
+]

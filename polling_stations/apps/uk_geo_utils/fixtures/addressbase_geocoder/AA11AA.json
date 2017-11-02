@@ -1,0 +1,29 @@
+[
+    {
+        "fields": {
+            "address": "1 Foo Street, Bar Town",
+            "postcode": "AA1 1AA",
+            "location": "SRID=4326;POINT (-2.9 51.1)"
+        },
+        "model": "uk_geo_utils.address",
+        "pk": "00000001"
+    },
+    {
+        "fields": {
+            "address": "2 Foo Street, Bar Town",
+            "postcode": "AA1 1AA",
+            "location": "SRID=4326;POINT (-2.8 51.1)"
+        },
+        "model": "uk_geo_utils.address",
+        "pk": "00000002"
+    },
+    {
+        "fields": {
+            "address": "3 Foo Street, Bar Town",
+            "postcode": "AA1 1AA",
+            "location": "SRID=4326;POINT (-2.8 51.2)"
+        },
+        "model": "uk_geo_utils.address",
+        "pk": "00000003"
+    }
+]
