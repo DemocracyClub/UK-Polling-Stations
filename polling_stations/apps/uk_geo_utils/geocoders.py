@@ -43,12 +43,8 @@ class AddressBaseGeocoder(BaseGeocoder):
         self.onsud_model = get_onsud_model()
         self.address_model = get_address_model()
 
-        try:
-            # check if there are one or more records in the address table
-            self.address_model.objects.raw(
-                "SELECT uprn FROM %s LIMIT 1;" %\
-                (self.address_model._meta.db_table))[0]
-        except IndexError:
+        # check if there are one or more records in the address table
+        if not self.address_model.objects.all().exists():
             raise AddressBaseNotImportedException('Address Base table is empty')
 
         self.addresses = self.address_model.objects.filter(
