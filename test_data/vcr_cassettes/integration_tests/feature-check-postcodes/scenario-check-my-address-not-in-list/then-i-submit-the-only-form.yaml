@@ -5,39 +5,19 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Linux/3.13.0-105-generic]
+      User-Agent: [python-requests/2.7.0 CPython/3.5.2 Linux/4.4.0-67-generic]
     method: GET
-    uri: http://mapit.democracyclub.org.uk//postcode/BB11BB
+    uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=BB1%201BB&future=1
   response:
-    body: {string: '
-        {
-          "wgs84_lat": 53.742999319646245,
-          "wgs84_lon": -2.479324581331954,
-          "postcode": "BB1 1BB",
-          "easting": 368484,
-          "northing": 427509,
-          "areas": {
-            "1": {
-              "parent_area": null,
-              "codes": {
-                "gss": "X01000001"
-              },
-              "name": "Foo Council",
-              "type": "UTA"
-            }
-          }
-        }'
-    }
+    body: {string: '{"count":1,"next":null,"previous":null,"results":[{"election_id":"blablabla.bla"}]}'}
     headers:
-      Access-Control-Allow-Origin: ['*']
-      Cache-Control: [max-age=2419200]
+      Allow: ['GET, OPTIONS']
       Connection: [keep-alive]
-      Content-Type: [application/json; charset=utf-8]
-      Date: ['Fri, 09 Dec 2016 20:13:08 GMT']
+      Content-Type: [application/json]
+      Date: ['Fri, 17 Mar 2017 16:28:15 GMT']
       Server: [nginx]
-      Strict-Transport-Security: [max-age=631138519]
-      X-Content-Type-Options: [nosniff]
-      X-Frame-Options: [DENY]
-      X-XSS-Protection: [1; mode=block]
+      Strict-Transport-Security: [max-age=15768000]
+      Vary: ['Accept, Cookie']
+      X-Frame-Options: [SAMEORIGIN]
     status: {code: 200, message: OK}
 version: 1

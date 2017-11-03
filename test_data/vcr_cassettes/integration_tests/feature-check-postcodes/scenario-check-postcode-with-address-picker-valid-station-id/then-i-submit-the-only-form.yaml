@@ -7,45 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
     method: GET
-    uri: http://mapit.democracyclub.org.uk//postcode/BB11BB
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA82W32/aMBDH/xUrL+uktYoTOz/2Bh3tpEF/bEPsDXmJF6KmNnJsIVTxv+/slBZo
-        aEHNQ3mA+Gyfv/fhcr4Hb1HUCZlWTHtfEQ3PYhIklNKYEAyP0RfkZVKqvF7WdoF36YGlnkmlM6Nr
-        sDx4k9E5/EY0TTDMLZjKYZjGJHV7jcjKCgwBpcHKzjfHSQG20+CMxGnox0mQpklIUxLDirmsdSZz
-        bo/r9zHC/b49lLNal6IAaxglJLHKmAKj05D69uMe52AVemrnYCxMVcHKgguumC6lmM7KYgYT2Mpj
-        VTUV7J47J1Zd6bQ7Z059/jxl11lJ36WpOZL/0Lm8v5ei9h7D1Gppp+1QL+d8ul4//oFumKpKGArt
-        bWup5MJKefbwtOt07ccOJqMbz0pwwvAxUQbJ61HifVEOjJJzzsSO9tcC3bPl+HAH4yZcEkZp2FG0
-        ztdmsJ796+xhfuD7QRT43mb4/Ypld3+NEmhR6hn6xtSCC+T70Q6EwQsK4A2jUZnnFUdDtuQK/TJz
-        +L42em406kEI6OTSSa/Kmuef2xmFLZAGoqiYyDdRXY8une44ieOj0v8VVM5XOyrsY0CVHoaqdxir
-        oVwAnr2oLiCCdzIaXjjBYUTStCNGzteHSacOGI0aRrZstyCyxfvo+rK+AXYI+f7gz9WtU1s/IqMQ
-        ZBRSazOi1FO33yMRpVsUbw3n4lNt68vdm+DG4IipJeoZDbdVqZfI3kzoZPx7sgfVYaRgvxNlkXSU
-        TI90W0ltcYrcxZTscAqThBySbn2ppClmcG81d/LRBN+HreckYhxiknQErnH2YUpVd1V92FR111N1
-        xGrdnz2jWqcVJpBUFK6P7bQKCLRl7fjeTp3Nngdl8KfoUhsusj05dCAX22k2SZT4cWc5BL5a375g
-        893D1L17wW6NwiTEW5CuoDWeoQmvd/ull5SeGibFCxD7ntdrMP7prZwMe3zTJpMAKnC4+g+htKKo
-        4gsAAA==
-    headers:
-      Accept-Ranges: [bytes, bytes]
-      Access-Control-Allow-Origin: ['*']
-      Age: ['74623', '74623']
-      Cache-Control: [max-age=2419200]
-      Connection: [keep-alive]
-      Content-Encoding: [gzip]
-      Content-Length: ['745']
-      Content-Type: [application/json; charset=utf-8]
-      Date: ['Sat, 11 Jun 2016 10:31:21 GMT']
-      x-url: [//postcode/BB11BB]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
-    method: GET
-    uri: https://maps.googleapis.com/maps/api/directions/json?mode=walking&units=imperial&origin=53.742855574417426,-2.4793078299835947&destination=51.595814835763214,-2.995147704661227
+    uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=walking&origin=51.13333333333333,-3.8333333333333335&destination=51.595814835763214,-2.995147704661227
   response:
     body:
       string: !!binary |

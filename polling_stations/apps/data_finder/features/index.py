@@ -40,6 +40,7 @@ def setup(scenario, outline, steps):
     world.browser.set_script_timeout(10)
 
     with open(os.devnull, "w") as f:
+        call_command('loaddata', 'integration_tests_addressbase.json', stdout=f)
         call_command('loaddata', 'test_routing.json', stdout=f)
         call_command('loaddata', 'newport_council.json', stdout=f)
 
