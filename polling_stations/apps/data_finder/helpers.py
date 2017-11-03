@@ -150,10 +150,7 @@ class OnspdGeocoderAdapter(BaseGeocoder):
             raise PostcodeError("No location information")
 
         codes = [
-            geocoder.get_code('cty'),
             geocoder.get_code('lad'),
-            geocoder.get_code('ctry'),
-            geocoder.get_code('rgn'),
             geocoder.get_code('eer'),
         ]
 
@@ -201,10 +198,7 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
             raise MultipleCouncilsException(str(e))
 
         codes = [
-            geocoder.get_code('cty'),
             geocoder.get_code('lad'),
-            geocoder.get_code('ctry'),
-            geocoder.get_code('rgn'),
             geocoder.get_code('eer'),
         ]
 
