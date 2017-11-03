@@ -16,7 +16,11 @@ from addressbase.models import Address, Blacklist
 from uk_geo_utils.models import Onsud
 from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.geocoders import (
-    AddressBaseGeocoder, CodesNotFoundException, MultipleCodesException)
+    AddressBaseGeocoder,
+    OnspdGeocoder,
+    CodesNotFoundException,
+    MultipleCodesException
+)
 
 from pollingstations.models import Council, ResidentialAddress
 from data_finder.directions_clients import (
@@ -116,6 +120,61 @@ class MapitGeocoder(BaseGeocoder):
 
     def geocode_point_only(self):
         return self.geocode()
+
+
+class OnspdGeocoderAdapter(BaseGeocoder):
+    """
+    For the moment we need an adapter clas to sit between
+    uk_geo_utils.geocoders.OnspdGeocoder
+    and the calling code which wraps up output from
+    uk_geo_utils.geocoders.OnspdGeocoder
+    in the data structure that the calling code is expecting.
+
+    Somewhere later in the refactoring process,
+    we can probably remove this abstraction layer
+    """
+
+    def geocode(self):
+        geocoder = OnspdGeocoder(self.postcode)
+        centre = geocoder.centroid
+        if not centre:
+            raise PostcodeError("No location information")
+
+        local_auth = geocoder.get_code('lad')
+        error_values = [
+            'L99999999', # Channel Islands
+            'M99999999', # Isle of Man
+            '' # Terminated Postcode or other
+        ]
+        if not local_auth or local_auth in error_values:
+            raise PostcodeError("No location information")
+
+        codes = [
+            geocoder.get_code('cty'),
+            geocoder.get_code('lad'),
+            geocoder.get_code('ctry'),
+            geocoder.get_code('rgn'),
+            geocoder.get_code('eer'),
+        ]
+
+        return {
+            'source': 'onspd',
+            'wgs84_lon': centre.x,
+            'wgs84_lat': centre.y,
+            'gss_codes': codes,
+            'council_gss': local_auth,
+        }
+
+    def geocode_point_only(self):
+        geocoder = OnspdGeocoder(self.postcode)
+        centre = geocoder.centroid
+        if not centre:
+            raise PostcodeError("No location information")
+        return {
+            'source': 'onspd',
+            'wgs84_lon': centre.x,
+            'wgs84_lat': centre.y,
+        }
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
