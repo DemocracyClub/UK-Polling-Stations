@@ -66,7 +66,7 @@ def each_step(step):
 
 @around.each_step
 @contextmanager
-def mock_mapit(step):
+def mock_http_calls(step):
     feature = slugify(step.feature.text)
     scenario = slugify(step.scenario.text)
     step_slug = slugify(step.text)
