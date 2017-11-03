@@ -276,7 +276,6 @@ from .constants.councils import *  # noqa
 from .constants.directions import *  # noqa
 from .constants.elections import *  # noqa
 from .constants.importers import *  # noqa
-from .constants.mapit import *  # noqa
 from .constants.tiles import *  # noqa
 
 # Import .local.py last - settings in local.py override everything else
