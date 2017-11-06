@@ -234,20 +234,20 @@ def geocode(postcode):
 def get_council(geocode_result):
     if 'council_gss' in geocode_result:
         try:
-            return Council.objects.defer("area", "location").get(
+            return Council.objects.defer("area").get(
                 council_id=geocode_result['council_gss'])
         except Council.DoesNotExist:
             pass
 
     if 'gss_codes' in geocode_result:
         try:
-            return Council.objects.defer("area", "location").get(
+            return Council.objects.defer("area").get(
                 council_id__in=geocode_result['gss_codes'])
         except Council.DoesNotExist:
             pass
 
     location = Point(geocode_result['wgs84_lon'], geocode_result['wgs84_lat'])
-    return Council.objects.defer("area", "location").get(area__covers=location)
+    return Council.objects.defer("area").get(area__covers=location)
 
 
 class EveryElectionWrapper:

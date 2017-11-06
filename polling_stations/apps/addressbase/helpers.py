@@ -58,7 +58,7 @@ class EdgeCaseFixer:
     def get_station_id(self, address):
         if not address.council_id:
             c = Council.objects\
-                .defer("area", "location")\
+                .defer("area")\
                 .get(area__covers=address.location)
             council_id = c.council_id
         else:

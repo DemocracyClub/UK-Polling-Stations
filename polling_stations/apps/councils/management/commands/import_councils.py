@@ -1,17 +1,11 @@
 import html
-import time
 import json
-
 import requests
-
 from django.apps import apps
-from django.core.management.base import BaseCommand
-from django.contrib.gis.geos import GEOSGeometry
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.conf import settings
-
+from django.core.management.base import BaseCommand
 from councils.models import Council
-from data_finder.helpers import geocode
 
 
 class Command(BaseCommand):
@@ -22,60 +16,54 @@ class Command(BaseCommand):
     """
     requires_system_checks = False
 
-    headers = {}
-    if settings.MAPIT_UA:
-        headers['User-Agent'] = settings.MAPIT_UA
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '-n',
-            '--nosleep',
+            '-t',
+            '--teardown',
             default=False,
             action='store_true',
             required=False,
-            help="Don't sleep between requests"
+            help="Clear Councils table before importing"
         )
 
-    def handle(self, **options):
-        """
-        Manually run system checks for the
-        'councils' and 'pollingstations' apps
-        Management commands can ignore checks that only apply to
-        the apps supporting the website part of the project
-        """
-        self.check([
-            apps.get_app_config('councils'),
-            apps.get_app_config('pollingstations')
-        ])
+    def feature_to_multipolygon(self, feature):
+        geometry = GEOSGeometry(json.dumps(feature['geometry']), srid=4326)
+        if isinstance(geometry, Polygon):
+            return MultiPolygon(geometry)
+        return geometry
 
-        for council_type in settings.COUNCIL_TYPES:
-            self.get_type_from_mapit(council_type, options['nosleep'])
+    def get_json(self, url):
+        r = requests.get(url)
+        r.raise_for_status()
+        return r.json()
+
+    def get_councils(self, url, id_field, name_field):
+        # call url and return a list of Council objects
+        # with the code and boundary fields populated
+        # (ready to atttach contact details to)
+        councils = []
+        feature_collection = self.get_json(url)
+        for feature in feature_collection['features']:
+            council_id = feature['properties'][id_field]
+            self.stdout.write("Found boundary for %s: %s" % (council_id, feature['properties'][name_field]))
+            poly = self.feature_to_multipolygon(feature)
+            councils.append(Council(council_id=council_id, area=poly))
+        return councils
 
     def _save_council(self, council):
+        # write council object to ALL databases
         for db in settings.DATABASES.keys():
             council.save(using=db)
 
-    def get_wkt_from_mapit(self, area_id):
-        req = requests.get(
-            '%sarea/%s.wkt' % (settings.MAPIT_URL, area_id),
-            headers=self.headers)
-        area = req.text
-        if area.startswith('POLYGON'):
-            area = area[7:]
-            area = "MULTIPOLYGON(%s)" % area
-        return GEOSGeometry(area, srid=27700)
-
     def clean_url(self, url):
         if not url.startswith(('http://', 'https://')):
-            # Assume http everywhere will redirect to https if it's there.
+            # Assume http everywhere will redirect to https if it is there.
             url = "http://{}".format(url)
         return url
 
     def get_contact_info_from_yvm(self, council_id):
         url = "{}{}".format(settings.YVM_LA_URL, council_id)
-        if council_id == "E07000049":
-            # E07000049 needs a space before the code
-            url = "{}%20{}".format(settings.YVM_LA_URL, council_id)
 
         req = requests.get(url)
         content = req.text
@@ -102,43 +90,40 @@ class Command(BaseCommand):
 
         return info
 
-    def get_type_from_mapit(self, council_type, nosleep):
-        req = requests.get(
-            '%sareas/%s' % (settings.MAPIT_URL, council_type),
-            headers=self.headers)
-        # Sort here so the fixtures work as expected in tests
-        areas = sorted(req.json().items(), key=lambda data: int(data[0]))
-        for mapit_id, council in areas:
-            council_id = council['codes'].get('gss')
-            if not council_id:
-                council_id = council['codes'].get('ons')
-            print(council_id)
+    def handle(self, **options):
+        """
+        Manually run system checks for the
+        'councils' and 'pollingstations' apps
+        Management commands can ignore checks that only apply to
+        the apps supporting the website part of the project
+        """
+        self.check([
+            apps.get_app_config('councils'),
+            apps.get_app_config('pollingstations')
+        ])
 
-            defaults = self.get_contact_info_from_yvm(council_id)
+        if options['teardown']:
+            self.stdout.write('Clearing councils table..')
+            Council.objects.all().delete()
 
-            defaults['council_type'] = council_type
-            defaults['mapit_id'] = mapit_id
+        councils = []
+        self.stdout.write("Downloading GB boundaries from ONS...")
+        councils = councils + self.get_councils(
+            settings.GB_BOUNDARIES_URL, id_field='lad16cd', name_field='lad16nm')
+        self.stdout.write("Downloading NI boundaries from ONS...")
+        councils = councils + self.get_councils(
+            settings.NI_BOUNDARIES_URL, id_field='LGDCode', name_field='LGDNAME')
 
-            council, created = Council.objects.update_or_create(
-                pk=council_id,
-                defaults=defaults,
-            )
-
-            # Call _save here to ensure it gets written to all databases
+        for council in councils:
+            self.stdout.write("Getting contact info for %s from YourVoteMatters" %\
+                (council.council_id))
+            info = self.get_contact_info_from_yvm(council.council_id)
+            council.name = info['name']
+            council.website = info['website']
+            council.email = info['email']
+            council.phone = info['phone']
+            council.address = info['address']
+            council.postcode = info['postcode']
             self._save_council(council)
 
-            if not council.area:
-                council.area = self.get_wkt_from_mapit(mapit_id)
-                self._save_council(council)
-                if not nosleep or not self.headers:
-                    time.sleep(1)
-            if not council.location:
-                print(council.postcode)
-                try:
-                    l = geocode(council.postcode)
-                except:
-                    continue
-                if not nosleep or not self.headers:
-                    time.sleep(1)
-                council.location = Point(l['wgs84_lon'], l['wgs84_lat'])
-                self._save_council(council)
+        self.stdout.write('..done')
