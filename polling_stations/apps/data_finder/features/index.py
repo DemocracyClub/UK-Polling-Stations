@@ -40,6 +40,7 @@ def setup(scenario, outline, steps):
     world.browser.set_script_timeout(10)
 
     with open(os.devnull, "w") as f:
+        call_command('loaddata', 'integration_tests_addressbase.json', stdout=f)
         call_command('loaddata', 'test_routing.json', stdout=f)
         call_command('loaddata', 'newport_council.json', stdout=f)
 
@@ -65,7 +66,7 @@ def each_step(step):
 
 @around.each_step
 @contextmanager
-def mock_mapit(step):
+def mock_http_calls(step):
     feature = slugify(step.feature.text)
     scenario = slugify(step.scenario.text)
     step_slug = slugify(step.text)

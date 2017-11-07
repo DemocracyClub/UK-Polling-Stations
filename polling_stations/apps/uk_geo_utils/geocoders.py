@@ -1,7 +1,7 @@
 import abc
 from django.core.exceptions import ObjectDoesNotExist
 from uk_geo_utils.helpers import (
-    get_address_model, get_onsud_model, Postcode)
+    get_address_model, get_onspd_model, get_onsud_model, Postcode)
 
 
 class CodesNotFoundException(Exception):
@@ -113,3 +113,19 @@ class AddressBaseGeocoder(BaseGeocoder):
                 "Postcode %s covers UPRNs in more than one '%s' area" %\
                 (self.postcode, code_type)
             )
+
+
+class OnspdGeocoder(BaseGeocoder):
+
+    def __init__(self, postcode):
+        self.postcode = Postcode(postcode)
+        self.onspd_model = get_onspd_model()
+        self.record = self.onspd_model.get(pcds=self.postcode.with_space)
+
+    @property
+    def centroid(self):
+        return self.record.location
+
+    def get_code(self, code_type):
+
+        return getattr(self.record, code_type)

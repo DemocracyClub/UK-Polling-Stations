@@ -7,47 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
     method: GET
-    uri: http://mapit.democracyclub.org.uk//postcode/NP205GN
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA8VXTW/iMBD9K1ZOXWnbtR0nOHtjEWWlBYraRTmiFFyIFGIUO4tQ1f++Y6d8BAKF
-        EqkcIB7b4zePN+PJq7OcKs5GSaSdn8gjd17guT7FhPEGxp73HTljKbOJWimzwOk4YFEzmelxrhVY
-        Xp2w14Jf38dBAHPLKJvAkFCCid2cp+M4AQv1vODNLCjOkynYbuldEAS04RKGMSM4IA1YsZBKj+VE
-        mPP6A4qR1+mbY0WkdJxOwey6mHPjPsrAaFEE2Hzs4wKsqR6ZORineZLAyqlIRRbpWKajWTydGYgG
-        bpQkozSaC+vEwIsN+sKZhT/ZTpl1BtNvmSuB5Atqyflcpsp5j1NnKzNthnq1EKP1+uEfNIiyJIZh
-        qp0ylkQuDZSth82u27UfMwh7A8dAsMDIJVFSfjpKcizKdp7JhYjSPeynAj2y5fJw28MiXJ81GlXR
-        Gi1dGq31tRusY/46OAzjwSOmnkWqrCXEIEfMXWpseRrrkfXgkAbnzi5HT7PoRQv1nGcrKwazdrXH
-        UnhAUyv+FycIIorV7Md4d9shU7SCqjBKhNqlqzVobdXB6lQHO6aOvnUTJaiplJg/Jyv0IjO0QXYy
-        /lAkarbZeLZCDsIOm082bFtralLJtm5VqKQ/KInEMyJhwaFIgmMi+ZCaIfiJQEzNXEONBVUgkYix
-        lhkwPQHZKIgC3Qz/tr99njbYXdBGOHFrEov1VUUbwSXKOC4KWJkyRhhlJc7OE9Km3mRiCjg/T0l7
-        +GiPZ5xivyZKrK8qSkJMgQPXo6WI+2K5gFsVYQDwUdywn6BePJkkAnWjlcjQU76A74dcL3KNmgAa
-        3XQs2CRWYnJELO451Dz0OoVaAHJttaVwVk0OzBGfk2Pk/DqPna5cAiFHybkH0Fex0r0vWGHMrU0x
-        hbMSK+vEITZvMD9IHM91y8VGQuUo6jBqQ790YTE+lUkW+RlFuaguth+siZh1b3nIC24YWjx/jxfK
-        oJOsVFAozuCk1LChMUhTxzoX6fjIZXWWZEybbGsMXDC0rhpjfH1hjbk6jXrrNOKYVt1Fm5S4MJGM
-        u2rB2LbG3b+04QbCVwhmL4k+VAz1z0ulQjHEZT6vSzKFsy8svXXdS93iXjJNXk3UvPeLla1fqYvx
-        jYbo/tsBY4z6ldy13l+CL+7+rmnyms6bxQIAZsVbM+E84PjtP1UoPHPzDwAA
-    headers:
-      Accept-Ranges: [bytes, bytes]
-      Access-Control-Allow-Origin: ['*']
-      Age: ['69165', '69165']
-      Cache-Control: [max-age=2419200]
-      Connection: [keep-alive]
-      Content-Encoding: [gzip]
-      Content-Length: ['900']
-      Content-Type: [application/json; charset=utf-8]
-      Date: ['Sat, 11 Jun 2016 10:31:31 GMT']
-      x-url: [//postcode/NP205GN]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
-    method: GET
-    uri: https://maps.googleapis.com/maps/api/directions/json?mode=walking&units=imperial&origin=51.595362014870055,-2.9992731400410917&destination=51.595814835763214,-2.995147704661227
+    uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=walking&origin=51.596012118680264,-2.998065948486328&destination=51.595814835763214,-2.995147704661227
   response:
     body:
       string: !!binary |

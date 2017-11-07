@@ -16,7 +16,11 @@ from addressbase.models import Address, Blacklist
 from uk_geo_utils.models import Onsud
 from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.geocoders import (
-    AddressBaseGeocoder, CodesNotFoundException, MultipleCodesException)
+    AddressBaseGeocoder,
+    OnspdGeocoder,
+    CodesNotFoundException,
+    MultipleCodesException
+)
 
 from pollingstations.models import Council, ResidentialAddress
 from data_finder.directions_clients import (
@@ -59,63 +63,56 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
             return self.geocode()
 
 
-class MapitGeocoder(BaseGeocoder):
+class OnspdGeocoderAdapter(BaseGeocoder):
+    """
+    For the moment we need an adapter clas to sit between
+    uk_geo_utils.geocoders.OnspdGeocoder
+    and the calling code which wraps up output from
+    uk_geo_utils.geocoders.OnspdGeocoder
+    in the data structure that the calling code is expecting.
 
-    def call_mapit(self):
-        headers = {}
-        if settings.MAPIT_UA:
-            headers['User-Agent'] = settings.MAPIT_UA
-
-        res = requests.get("%s/postcode/%s" % (settings.MAPIT_URL, self.postcode), headers=headers)
-
-        if res.status_code != 200:
-            if res.status_code == 403:
-                # we hit MapIt's rate limit
-                raise RateLimitError("Mapit error 403: Rate limit exceeded")
-
-            if res.status_code == 404:
-                # if mapit returns 404, it returns HTML even if we requested json
-                # this will cause an unhandled exception if we try to parse it
-                raise PostcodeError("Mapit error 404: Not Found")
-
-            try:
-                # attempt to parse error from json
-                res_json = res.json()
-                if 'error' in res_json:
-                    raise PostcodeError("Mapit error {}: {}".format(res_json['code'], res_json['error']))
-                else:
-                    raise PostcodeError("Mapit error {}: unknown".format(res.status_code))
-            except ValueError:
-                # if we fail to parse json, raise a less specific exception
-                raise PostcodeError("Mapit error {}: unknown".format(res.status_code))
-
-        return res.json()
+    Somewhere later in the refactoring process,
+    we can probably remove this abstraction layer
+    """
 
     def geocode(self):
-        res_json = self.call_mapit()
-        COUNCIL_TYPES = getattr(settings, 'COUNCIL_TYPES', [])
-        gss_codes = []
-        council_gss = None
-        for area in res_json['areas']:
-            if 'gss' in res_json['areas'][area]['codes']:
-                gss = res_json['areas'][area]['codes']['gss']
-                gss_codes.append(gss)
-                if res_json['areas'][area]['type'] in COUNCIL_TYPES:
-                    council_gss = gss
-
-        if 'wgs84_lon' not in res_json or 'wgs84_lat' not in res_json:
+        geocoder = OnspdGeocoder(self.postcode)
+        centre = geocoder.centroid
+        if not centre:
             raise PostcodeError("No location information")
 
+        local_auth = geocoder.get_code('lad')
+        error_values = [
+            'L99999999', # Channel Islands
+            'M99999999', # Isle of Man
+            '' # Terminated Postcode or other
+        ]
+        if not local_auth or local_auth in error_values:
+            raise PostcodeError("No location information")
+
+        codes = [
+            geocoder.get_code('lad'),
+            geocoder.get_code('eer'),
+        ]
+
         return {
-            'source': 'mapit',
-            'wgs84_lon': res_json['wgs84_lon'],
-            'wgs84_lat': res_json['wgs84_lat'],
-            'gss_codes': gss_codes,
-            'council_gss': council_gss,
+            'source': 'onspd',
+            'wgs84_lon': centre.x,
+            'wgs84_lat': centre.y,
+            'gss_codes': codes,
+            'council_gss': local_auth,
         }
 
     def geocode_point_only(self):
-        return self.geocode()
+        geocoder = OnspdGeocoder(self.postcode)
+        centre = geocoder.centroid
+        if not centre:
+            raise PostcodeError("No location information")
+        return {
+            'source': 'onspd',
+            'wgs84_lon': centre.x,
+            'wgs84_lat': centre.y,
+        }
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
@@ -142,10 +139,7 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
             raise MultipleCouncilsException(str(e))
 
         codes = [
-            geocoder.get_code('cty'),
             geocoder.get_code('lad'),
-            geocoder.get_code('ctry'),
-            geocoder.get_code('rgn'),
             geocoder.get_code('eer'),
         ]
 
@@ -168,7 +162,7 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
 
 
 def geocode_point_only(postcode, sleep=True):
-    geocoders = (AddressBaseGeocoderAdapter(postcode), MapitGeocoder(postcode))
+    geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
             return geocoder.run(True)
@@ -182,7 +176,7 @@ def geocode_point_only(postcode, sleep=True):
 
             continue
         except PostcodeError:
-            # we were unable to geocode this postcode using mapit
+            # we were unable to geocode this postcode using ONSPD
             # re-raise the exception.
             # Note: in future we may want to fall back to yet another source
             raise
@@ -201,7 +195,7 @@ def geocode_point_only(postcode, sleep=True):
 
 
 def geocode(postcode):
-    geocoders = (AddressBaseGeocoderAdapter(postcode), MapitGeocoder(postcode))
+    geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
             return geocoder.run(False)
@@ -218,7 +212,7 @@ def geocode(postcode):
             # re-raise the exception.
             raise
         except PostcodeError:
-            # we were unable to geocode this postcode using mapit
+            # we were unable to geocode this postcode using ONSPD
             # re-raise the exception.
             # Note: in future we may want to fall back to yet another source
             raise
