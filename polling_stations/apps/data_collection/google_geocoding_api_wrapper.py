@@ -30,23 +30,8 @@ class GoogleGeocodingApiWrapper:
         json_response = json.loads(str_response)
         return json_response
 
-    """
-    If self.area_code is set, use mapit to check that
-    the postcode we've found is in the area
-    (probably local auth, but if we have ward or something, use that)
-    that it is supposed to be in
-    Otherwise raises exception of class PostcodeNotFoundException
-    """
     def sanity_check(self, postcode):
-        sleep(1)  # ensure we don't hit mapit's usage limit
-        res = requests.get("%s/postcode/%s" % (settings.MAPIT_URL, postcode))
-        res_json = res.json()
-
-        for area in res_json['areas']:
-            if res_json['areas'][area]['type'] == self.area_type:
-                if res_json['areas'][area]['codes']['gss'] != self.area_code:
-                    raise PostcodeNotFoundException("Postcode found but sanity check failed")
-        return True
+        raise NotImplementedError()
 
     """
     Returns postcode if we have a decent match
