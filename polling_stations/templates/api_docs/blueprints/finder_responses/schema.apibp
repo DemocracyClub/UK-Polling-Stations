@@ -113,18 +113,6 @@
                       "type": "string",
                       "description": "Name of this council"
                     },
-                    "council_type": {
-                      "type": "string",
-                      "enum": [
-                        "DIS",
-                        "LBO",
-                        "LGD",
-                        "MTD",
-                        "UTA",
-                        "COI"
-                      ],
-                      "description": "One of: DIS (District council), LBO (London borough), LGD (Northern Ireland council), MTD (Metropolitan district), UTA (Unitary authority), COI (Isles of Scilly)"
-                    },
                     "address": {
                       "type": "string",
                       "description": "Contact address for this council"

@@ -38,7 +38,6 @@
                 "council": {
                     "url": "https://wheredoivote.co.uk/api/beta/councils/E07000170/",
                     "council_id": "E07000170",
-                    "council_type": "DIS",
                     "name": "Ashfield District Council",
                     "email": "regelec@ashfield-dc.gov.uk",
                     "phone": "01623 457321",
