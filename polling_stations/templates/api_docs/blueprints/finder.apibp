@@ -86,13 +86,7 @@ A valid postcode search may result in one of 3 outcomes:
 + Response 400 (application/json)
 
         {
-          "detail": "Mapit error 400: Postcode 'FOOBAR' is not valid."
-        }
-
-+ Response 403 (application/json)
-
-        {
-          "detail": "Mapit error 403: Rate limit exceeded"
+          "detail": "Could not geocode from any source"
         }
 
 
