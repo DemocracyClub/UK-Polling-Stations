@@ -33,7 +33,6 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
   <script>
-    fallback.ready(['jQuery'], function() {
       $().ready(function() {
         handler = function(el) {
           $(el).parent().children('.api-action-headers').toggle();
@@ -53,6 +52,5 @@
         so we end up in the right place on the page */
         location.hash = location.hash;
       });
-    });
   </script>
 {% endblock in_page_javascript %}

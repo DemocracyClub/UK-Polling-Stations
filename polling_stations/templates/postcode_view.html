@@ -39,14 +39,7 @@
     <div class="card">
     {% if error %}
 
-      {% if error == 'Mapit error 403: Rate limit exceeded' %}
-
-        {% blocktrans %}
-        <h2>Sorry, we're a bit busy right now!</h2>
-        <p>Try again in a few minutes.</p>
-        {% endblocktrans %}
-
-      {% elif error == 'There are no upcoming elections in your area' %}
+      {% if error == 'There are no upcoming elections in your area' %}
 
         <h2>{{ error }}</h2>
         {% if council.phone %}

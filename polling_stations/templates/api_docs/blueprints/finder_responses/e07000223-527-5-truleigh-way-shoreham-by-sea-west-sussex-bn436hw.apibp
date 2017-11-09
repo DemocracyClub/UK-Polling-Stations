@@ -46,7 +46,6 @@
                 "council": {
                     "url": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
                     "council_id": "E07000223",
-                    "council_type": "DIS",
                     "name": "Adur District Council",
                     "email": "elections@adur-worthing.gov.uk",
                     "phone": "01903 221014/5/6",
