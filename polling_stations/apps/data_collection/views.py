@@ -12,7 +12,7 @@ class LeagueTable(ListView):
     queryset = DataQuality.objects\
         .all()\
         .select_related('council')\
-        .defer('council__area', 'council__location')\
+        .defer('council__area')\
         .annotate(has_report=Case(
                 When(Q(report=''), then=Value(0)),
                 When(~Q(report=''), then=Value(1)),
