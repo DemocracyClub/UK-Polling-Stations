@@ -1,11 +1,6 @@
-# Versions are left out on purpose in order for you to use the latest ones.
-# After the first "pip install -r", just run "pip freeze" and add the version
-# to each package in each requirements/*.txt.
-
 dj-database-url==0.3.0
 django-apiblueprint-view==1.1.1
 django-extensions
-django-filter==0.11.0
 django-localflavor==1.1
 django-markdown-deux==1.0.5
 django-model-utils==2.3.1
@@ -14,10 +9,7 @@ djangorestframework==3.2.3
 djangorestframework-gis==0.10.1
 django-cors-headers==2.0.2
 fastkml==0.11
-git+git://github.com/geomet/geomet.git
 lxml==3.5.0
-markdown==2.6.2
-Pillow==2.9.0
 psycopg2==2.6.1
 pygeoif==0.6
 pyshp==1.2.3
