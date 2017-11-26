@@ -3,12 +3,12 @@ django-apiblueprint-view==1.1.1
 django-extensions
 django-localflavor==1.6.1
 django-markdown-deux==1.0.5
-django==1.8.18
-djangorestframework==3.5.4
-djangorestframework-gis==0.11.2
+django==1.8.18  # pyup: >=1.8,<1.9
+djangorestframework==3.5.4  # pyup: >=3.5,<3.6
+djangorestframework-gis==0.11.2  # pyup: >=0.11,<0.12
 django-cors-headers==2.1.0
 fastkml==0.11
-lxml==3.8.0
+lxml==3.8.0  # pyup: >=3,<4
 psycopg2==2.7.3.2
 pyshp==1.2.12
 requests==2.18.4

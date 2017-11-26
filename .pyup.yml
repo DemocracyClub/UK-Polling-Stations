@@ -1,0 +1,18 @@
+update: all
+pin: True
+schedule: "every day"
+search: True
+
+requirements:
+  - requirements/base.txt:
+      update: all
+      pin: True
+  - requirements/local.txt:
+      update: False
+      pin: False
+  - requirements/production.txt:
+      update: all
+      pin: False
+  - requirements/testing.txt:
+      update: False
+      pin: False
