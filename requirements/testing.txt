@@ -4,7 +4,7 @@ mock
 aloe
 aloe_django
 aloe_webdriver
-vcrpy==1.7.4
+vcrpy==1.11.0
 
 pytest
 pytest-django
