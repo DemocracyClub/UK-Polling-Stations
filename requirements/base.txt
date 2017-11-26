@@ -11,7 +11,7 @@ django-cors-headers==2.0.2
 fastkml==0.11
 lxml==3.5.0
 psycopg2==2.6.1
-pyshp==1.2.3
+pyshp==1.2.12
 requests==2.18.4
 boto==2.48.0
 
