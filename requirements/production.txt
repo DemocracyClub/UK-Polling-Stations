@@ -1,6 +1,6 @@
 -r base.txt
 
-gunicorn==19.1.1
+gunicorn==19.7.1
 raven
 django-redis
 hiredis
