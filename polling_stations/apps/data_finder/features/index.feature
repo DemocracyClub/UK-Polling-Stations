@@ -57,3 +57,8 @@ Feature: Check Postcodes
     Then I should see "Contact Your Council"
     And I should see "Residents in DD11DD may be in one of the following council areas:"
     And No errors were thrown
+
+    Scenario: Check invalid postcode
+    When I visit site page "/postcode/foo"
+    Then I should see "This doesn't appear to be a valid postcode."
+    And No errors were thrown
