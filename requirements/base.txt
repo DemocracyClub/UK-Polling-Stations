@@ -1,32 +1,21 @@
-# Versions are left out on purpose in order for you to use the latest ones.
-# After the first "pip install -r", just run "pip freeze" and add the version
-# to each package in each requirements/*.txt.
-
-dj-database-url==0.3.0
+dj-database-url==0.4.2
 django-apiblueprint-view==1.1.1
-django-extensions
-django-filter==0.11.0
-django-localflavor==1.1
+django-extensions==1.9.7
+django-localflavor==1.6.1
 django-markdown-deux==1.0.5
-django-model-utils==2.3.1
-django==1.8.18
-djangorestframework==3.2.3
-djangorestframework-gis==0.10.1
-django-cors-headers==2.0.2
+django==1.8.18  # pyup: >=1.8,<1.9
+djangorestframework==3.5.4  # pyup: >=3.5,<3.6
+djangorestframework-gis==0.11.2  # pyup: >=0.11,<0.12
+django-cors-headers==2.1.0
 fastkml==0.11
-git+git://github.com/geomet/geomet.git
-lxml==3.5.0
-markdown==2.6.2
-Pillow==2.9.0
-psycopg2==2.6.1
-pygeoif==0.6
-pyshp==1.2.3
-python-dateutil==2.4.2
-requests==2.7.0
-boto==2.42.0
+lxml==3.8.0  # pyup: >=3,<4
+psycopg2==2.7.3.2
+pyshp==1.2.12
+requests==2.18.4
+boto==2.48.0
 
 
 git+https://github.com/mysociety/django-pipeline-csscompressor
-libsass>=0.12.3
+libsass==0.13.4
 git+git://github.com/DemocracyClub/dc_base_theme.git@94d172df89342072c25f29c4c2de34fe9a27886b
 git+https://github.com/DemocracyClub/dc_signup_form.git@1.0.0

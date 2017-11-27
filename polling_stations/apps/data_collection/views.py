@@ -1,4 +1,3 @@
-import requests
 from datetime import datetime
 from django.conf import settings
 from django.db.models import Case, IntegerField, Q, Value, When
