@@ -21,9 +21,9 @@ def get_onspd_model():
 
 class Postcode:
 
-    def __init__(self, postcode):
+    def __init__(self, postcode, validate=False):
         self.postcode = re.sub('[^A-Z0-9]', '', str(postcode).upper())
-        if len(str(self.postcode)) < 5:
+        if validate and len(str(self.postcode)) < 5:
             raise ValueError("Postcode must have at least 5 characters")
 
     def __str__(self):

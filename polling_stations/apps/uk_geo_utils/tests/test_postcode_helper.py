@@ -74,7 +74,19 @@ class PostcodeHelperTest(TestCase):
 
     def test_create_invalid(self):
         with self.assertRaises(ValueError):
-            Postcode('abc')
+            Postcode('abc', validate=True)
+
+    def test_with_space_less_than_three_chars(self):
+        # these aren't necessarily terribly useful outputs but these tests
+        # demonstrate that with_space() does not raise in the situation
+        pc = Postcode('abc')
+        self.assertEqual(' ABC', pc.with_space)
+        pc = Postcode('ab')
+        self.assertEqual(' AB', pc.with_space)
+        pc = Postcode('a')
+        self.assertEqual(' A', pc.with_space)
+        pc = Postcode('')
+        self.assertEqual(' ', pc.with_space)
 
     def test_equality_equal(self):
         self.assertEqual(Postcode('AA1 1AA'), Postcode('AA11AA'))
