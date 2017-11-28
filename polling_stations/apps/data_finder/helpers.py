@@ -3,7 +3,6 @@ import logging
 import lxml.etree
 import re
 import requests
-import time
 from collections import namedtuple
 from operator import itemgetter
 
@@ -161,7 +160,7 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
         }
 
 
-def geocode_point_only(postcode, sleep=True):
+def geocode_point_only(postcode):
     geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
@@ -169,11 +168,6 @@ def geocode_point_only(postcode, sleep=True):
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
             # fall back to the next source
-
-            # optional sleep to avoid hammering external services
-            if sleep:
-                time.sleep(1.3)
-
             continue
         except PostcodeError:
             # we were unable to geocode this postcode using ONSPD
@@ -183,11 +177,6 @@ def geocode_point_only(postcode, sleep=True):
         except:
             # something else went wrong:
             # lets give the next source a try anyway
-
-            # optional sleep to avoid hammering external services
-            if sleep:
-                time.sleep(1.3)
-
             continue
 
     # All of our attempts to geocode this failed. Raise a generic exception

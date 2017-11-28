@@ -78,7 +78,7 @@ class GeocodePointOnlyTest(TestCase):
 
         We should fall back to centroid-based geocoding using ONSPD
         """
-        result = geocode_point_only('DD1 1DD', sleep=False)
+        result = geocode_point_only('DD1 1DD')
         self.assertEqual('onspd', result['source'])
 
     @mock.patch("data_finder.helpers.OnspdGeocoderAdapter.geocode_point_only", mock_geocode)
@@ -89,5 +89,5 @@ class GeocodePointOnlyTest(TestCase):
 
         Valid result should be returned based on geocoding using AddressBase
         """
-        result = geocode_point_only('BB1 1BB', sleep=False)
+        result = geocode_point_only('BB1 1BB')
         self.assertEqual('addressbase', result['source'])
