@@ -17,7 +17,7 @@ from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     OnspdGeocoder,
-    CodesNotFoundException,
+    AddressBaseException,
     MultipleCodesException
 )
 
@@ -167,6 +167,10 @@ def geocode_point_only(postcode):
             return geocoder.run(True)
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
+            # this might be because
+            # - The postcode isn't in AddressBase
+            # - The postcode is in Northern Ireland
+            # - AddressBase hasn;t been imported
             # fall back to the next source
             continue
         except PostcodeError:
@@ -190,16 +194,20 @@ def geocode(postcode):
             return geocoder.run(False)
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
+            # this might be because
+            # - The postcode isn't in AddressBase
+            # - The postcode is in Northern Ireland
+            # - AddressBase hasn;t been imported
             # fall back to the next source
-            continue
-        except CodesNotFoundException:
-            # we did find this postcode in AddressBase, but there were no
-            # corresponding codes in ONSUD: fall back to the next source
             continue
         except MultipleCouncilsException:
             # this postcode contains uprns in multiple local authorities
             # re-raise the exception.
             raise
+        except AddressBaseException:
+            # we did find this postcode in AddressBase, but there were no
+            # corresponding codes in ONSUD: fall back to the next source
+            continue
         except PostcodeError:
             # we were unable to geocode this postcode using ONSPD
             # re-raise the exception.
