@@ -1,8 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from data_finder.helpers import (
-    AddressBaseGeocoderAdapter, CodesNotFoundException, MultipleCouncilsException
-)
+    AddressBaseGeocoderAdapter, MultipleCouncilsException)
+from uk_geo_utils.geocoders import CodesNotFoundException
 
 
 class AddressBaseGeocoderAdapterTest(TestCase):
