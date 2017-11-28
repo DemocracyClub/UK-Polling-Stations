@@ -1,8 +1,6 @@
-from django.contrib.gis.geos import Point
 from django.db import connection
 from pollingstations.models import PollingDistrict
 from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
-from data_finder.helpers import geocode_point_only, PostcodeError
 
 
 class Command(BaseShpStationsShpDistrictsImporter):

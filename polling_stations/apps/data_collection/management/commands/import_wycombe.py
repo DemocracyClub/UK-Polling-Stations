@@ -1,4 +1,3 @@
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 
@@ -30,8 +29,8 @@ class Command(BaseCsvStationsShpDistrictsImporter):
         address, postcode = self.format_address(record.polling_place)
 
         try:
-            point = geocode_point_only(postcode)
-            location = Point(point['wgs84_lon'], point['wgs84_lat'], srid=4326)
+            location_data = geocode_point_only(postcode)
+            location = location_data.centroid
         except PostcodeError:
             location = None
 

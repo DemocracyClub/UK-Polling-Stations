@@ -41,7 +41,6 @@ from pollingstations.models import (
 )
 from data_collection.models import DataQuality
 from uk_geo_utils.helpers import Postcode
-from data_finder.helpers import geocode_point_only, PostcodeError
 from addressbase.helpers import create_address_records_for_council
 
 

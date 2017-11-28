@@ -101,11 +101,7 @@ class OnspdGeocoderAdapter(BaseGeocoder):
         centre = geocoder.centroid
         if not centre:
             raise PostcodeError("No location information")
-        return {
-            'source': 'onspd',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-        }
+        return geocoder
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
@@ -145,13 +141,7 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
         }
 
     def geocode_point_only(self):
-        geocoder = AddressBaseGeocoder(self.postcode)
-        centre = geocoder.centroid
-        return {
-            'source': 'addressbase',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-        }
+        return AddressBaseGeocoder(self.postcode)
 
 
 def geocode_point_only(postcode):

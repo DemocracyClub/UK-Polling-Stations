@@ -119,5 +119,4 @@ class OnspdGeocoder(BaseGeocoder):
         return self.record.location
 
     def get_code(self, code_type):
-
         return getattr(self.record, code_type)

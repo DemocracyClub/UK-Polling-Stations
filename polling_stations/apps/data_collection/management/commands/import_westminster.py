@@ -3,8 +3,6 @@ Import Southwark
 """
 from time import sleep
 
-from django.contrib.gis.geos import Point
-
 from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode, geocode_point_only, PostcodeError
 from addressbase.models import Address
@@ -48,14 +46,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         location_data = None
         try:
             location_data = geocode_point_only(postcode)
+            location = location_data.centroid
         except PostcodeError:
             pass
-
-        if location_data:
-            location = Point(
-                location_data['wgs84_lon'],
-                location_data['wgs84_lat'],
-                srid=4326)
 
         return {
             'internal_council_id': record.pollingstationnumber,

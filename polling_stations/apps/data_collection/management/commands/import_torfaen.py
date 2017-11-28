@@ -1,4 +1,3 @@
-from django.contrib.gis.geos import Point
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 
@@ -34,10 +33,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
 
         try:
             location_data = geocode_point_only(postcode)
-            location = Point(
-                location_data['wgs84_lon'],
-                location_data['wgs84_lat'],
-                srid=4326)
+            location = location_data.centroid
         except PostcodeError:
             location = None
         return location

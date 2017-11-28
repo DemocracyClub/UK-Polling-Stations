@@ -3,10 +3,8 @@ Import Bromley
 """
 from time import sleep
 
-from django.contrib.gis.geos import Point
-
 from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode, geocode_point_only, PostcodeError
+from data_finder.helpers import geocode, PostcodeError
 from addressbase.models import Address
 
 
@@ -33,14 +31,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         if record.postcode_if_available:
             try:
                 location_data = geocode_point_only(postcode_if_available)
+                location = location_data.centroid
             except PostcodeError:
                 pass
-
-            if location_data:
-                location = Point(
-                    location_data['wgs84_lon'],
-                    location_data['wgs84_lat'],
-                    srid=4326)
 
         desc = record.description_of_persons_entitled_to_vote
         district = desc.split('-')[0].strip()
