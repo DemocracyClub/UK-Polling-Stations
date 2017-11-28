@@ -178,10 +178,6 @@ def geocode_point_only(postcode):
             # re-raise the exception.
             # Note: in future we may want to fall back to yet another source
             raise
-        except:
-            # something else went wrong:
-            # lets give the next source a try anyway
-            continue
 
     # All of our attempts to geocode this failed. Raise a generic exception
     raise PostcodeError('Could not geocode from any source')
@@ -213,10 +209,6 @@ def geocode(postcode):
             # re-raise the exception.
             # Note: in future we may want to fall back to yet another source
             raise
-        except:
-            # something else went wrong:
-            # lets give the next source a try anyway
-            continue
 
     # All of our attempts to geocode this failed. Raise a generic exception
     raise PostcodeError('Could not geocode from any source')
