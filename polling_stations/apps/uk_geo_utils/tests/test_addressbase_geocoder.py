@@ -9,6 +9,7 @@ from uk_geo_utils.geocoders import (
     CodesNotFoundException,
     MultipleCodesException,
     NorthernIrelandException,
+    StrictMatchException,
 )
 
 
@@ -95,6 +96,20 @@ class AddressBaseGeocoderTest(TestCase):
             addressbase = AddressBaseGeocoder('bb 1   1B B')  # intentionally spurious whitespace and case
             self.assertEqual('B01000001', addressbase.get_code('lad'))
             self.assertIsInstance(addressbase.centroid, Point)
+
+    def test_strict_mode(self):
+        """
+        We find records for the given postcode in the AddressBase table
+        There are some corresponding records in the ONSUD for the UPRNs we found
+
+        Note that in this case, the ONSUD table does not contain corresponding
+        records for *all* of the UPRNs we found, and we are passing strict=True
+        so we raise a StrictMatchException
+        """
+        with self.assertNumQueries(FuzzyInt(0, 3)):
+            addressbase = AddressBaseGeocoder('BB11BB')
+            with self.assertRaises(StrictMatchException):
+                addressbase.get_code('lad', strict=True)
 
     def test_multiple_codes(self):
         """
