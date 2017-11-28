@@ -120,7 +120,7 @@ class OnspdGeocoder(BaseGeocoder):
     def __init__(self, postcode):
         self.postcode = Postcode(postcode)
         self.onspd_model = get_onspd_model()
-        self.record = self.onspd_model.get(pcds=self.postcode.with_space)
+        self.record = self.onspd_model.objects.get(pcds=self.postcode.with_space)
 
     @property
     def centroid(self):
