@@ -27,6 +27,19 @@
     },
     {
         "fields": {
+            "name": "Bristol Council",
+            "email": "",
+            "phone": "",
+            "website": "",
+            "postcode": "",
+            "address": "",
+            "area": "MULTIPOLYGON(((-2.6181793212890625 51.4739416782317,-2.5275421142578125 51.4739416782317,-2.5275421142578125 51.43115250328755,-2.6181793212890625 51.43115250328755,-2.6181793212890625 51.4739416782317)))"
+        },
+        "model": "councils.council",
+        "pk": "E06000023"
+    },
+    {
+        "fields": {
             "address": "1 Foo Street, Bar Town",
             "postcode": "AA11AA",
             "polling_station_id": "1",

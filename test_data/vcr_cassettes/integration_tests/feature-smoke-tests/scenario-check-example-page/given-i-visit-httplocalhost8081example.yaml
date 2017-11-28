@@ -1,0 +1,68 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=walking&origin=51.43921783606831,-2.54333651887832&destination=51.440043287399604,-2.5417780465622686
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/81YW1LjOBT9ZxUqf0PGrxDoqq5yCD28Q0PD9Ex3KJewlERgWy5JjjswqZo99Cpm
+        G7OUWcnIdgh2bGOHBqb947Lu8b3nSvfodb8GAFBGmDoUYWRHcBpQ4guugHfga2yTz/38nUEymwso
+        wgSmnB4p6xlI4EIH2wQltt744HDvwrn5ODr66FyOzo/H0Smit13zw23uJzENcBoUKFwwjIUNEWKY
+        y8arOW62/kKE9Isz0o5OE0KuiK796V3n8JKvTih+XyV/KYyGAld22zUNfZRYM62xwadMjDHkomiL
+        zS5MDG2tZZqqsdU214sQfxRDNvRW29RMVd3KIWb5HxQuaY4j3CCesdXpbG4/Hc8wNzU9H+/xKxta
+        cWgwZWQ0TitLOYEBQFBA8M/fuqp1wB6lIxfnBsDFo1x3pk+RMiJy5H0HlyYUAwT+liSlqC0deEQp
+        pBSDJtANExeGaSzbZ8VOQCGDglC/PmhbhvR5XVBtu0FQ7KPHGpSutY4Juq5LOPXBOVoHO0x2BXXB
+        zicTmP0v6+DyqBg38eJS52n6ubqTT7EOwHLptQ3dbJCEHCwm8mloYB8yFBHnFvTc5TSOK9JI/ayS
+        iLGtaR2jNpFiTVclgoOSAk2fMi6gQbHOYYvq0VUDDEVp9cyhixraLJCuov7ApaaGl7locSU3omJu
+        rkilSU3OofUzVAabGVa9s6kXlF1Dayw815bqFSx0Ymppve5jiMAgVFXDuU5eOJlU40k8bf1l3gyk
+        LnO4TJkvIQWNpC2P/uSMqZTBOcpjq0ZACag7dYlfV1uP67tCw9m3fRbRvtX7Qq3fZtbxH8qKXdRM
+        hnNwIzE+YOskWUNMMDjBru3JvUGS6+fu8dFBf68sv1IfL6VgtaVVLTpz6EI22lZhAn2CIHiGhI3q
+        xahIpvMmIq7Y1mSwWREbqr7q3FIu4ouQLYnTxcOifgX9MU160MfhBLMkppAxN+IwLyjhWy4lPOS0
+        jy3HGllne72D7knvpEu7B+HO6Zup+bVn4p9Fzbraabwer5rj663HK28NnitlfbtxFRSPKvW0mko5
+        OWjUavlx6/xsMSeBXlDN3kyq+Sag/V3S3b23dj3rrRT86tPwz6JgTdObKth47eW4uYKLR6saKs9V
+        cNVZ7wFbd+KrofUDCk6/EJkALqYufj9QhlLTG5zc4Xdqaxt7AyUF7mIuiJ9kDiLiuuA62YnLHTrI
+        upWe/ne93/8p9T65of076/e3U/orz9KrKH257ap4zpbuhkPi2DzAGNnYF2yanLpLoBMCFzeYKabq
+        bir7s0LlGE8IjuzqASw9NQ0G3EJW1J1vvc4+wF9t6xD35LSdH8/cTRgPPQ+mOSiL7WTu5kseBX3i
+        l91+KZ+heytNABGGUwEByDAgvixyAVsx5pJj4MAwKf9///oOLsaEg+R2EnhwGovBI5zHTjhBOJIO
+        OaAMBBhJ3TACfRBAMeYtpaK3HjrYpgyl2vhadh+av45dm639B7OWgHBqFgAA
+    headers:
+      Alt-Svc: ['hq=":443"; ma=2592000; quic=51303431; quic=51303339; quic=51303338;
+          quic=51303337; quic=51303335,quic=":443"; ma=2592000; v="41,39,38,37,35"']
+      Cache-Control: ['public, max-age=86400']
+      Content-Encoding: [gzip]
+      Content-Length: ['1128']
+      Content-Type: [application/json; charset=UTF-8]
+      Date: ['Tue, 28 Nov 2017 17:14:02 GMT']
+      Expires: ['Wed, 29 Nov 2017 17:14:02 GMT']
+      Server: [mafe]
+      Vary: [Accept-Language]
+      X-Frame-Options: [SAMEORIGIN]
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=EXAM%20PLE&future=1
+  response:
+    body: {string: '{"detail":"Invalid postcode"}'}
+    headers:
+      Allow: ['GET, OPTIONS']
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Tue, 28 Nov 2017 17:15:12 GMT']
+      Server: [nginx]
+      Vary: ['Accept, Cookie']
+      X-Frame-Options: [SAMEORIGIN]
+    status: {code: 400, message: Bad Request}
+version: 1
