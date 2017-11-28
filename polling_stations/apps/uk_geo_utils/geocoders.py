@@ -4,13 +4,16 @@ from uk_geo_utils.helpers import (
     get_address_model, get_onspd_model, get_onsud_model, Postcode)
 
 
-class CodesNotFoundException(Exception):
+class AddressBaseException(Exception):
     pass
 
-class MultipleCodesException(Exception):
+class CodesNotFoundException(AddressBaseException):
     pass
 
-class StrictMatchException(Exception):
+class MultipleCodesException(AddressBaseException):
+    pass
+
+class StrictMatchException(AddressBaseException):
     pass
 
 class NorthernIrelandException(ObjectDoesNotExist):
