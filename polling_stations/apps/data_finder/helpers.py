@@ -55,12 +55,6 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
     def geocode(self):
         pass
 
-    def run(self, point_only=False):
-        if point_only:
-            return self.geocode_point_only()
-        else:
-            return self.geocode()
-
 
 class OnspdGeocoderAdapter(BaseGeocoder):
     """
@@ -164,7 +158,7 @@ def geocode_point_only(postcode):
     geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
-            return geocoder.run(True)
+            return geocoder.geocode_point_only()
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
             # this might be because
@@ -187,7 +181,7 @@ def geocode(postcode):
     geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
-            return geocoder.run(False)
+            return geocoder.geocode()
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
             # this might be because
