@@ -57,16 +57,6 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
 
 
 class OnspdGeocoderAdapter(BaseGeocoder):
-    """
-    For the moment we need an adapter clas to sit between
-    uk_geo_utils.geocoders.OnspdGeocoder
-    and the calling code which wraps up output from
-    uk_geo_utils.geocoders.OnspdGeocoder
-    in the data structure that the calling code is expecting.
-
-    Somewhere later in the refactoring process,
-    we can probably remove this abstraction layer
-    """
 
     def geocode(self):
         geocoder = OnspdGeocoder(self.postcode)
@@ -83,18 +73,7 @@ class OnspdGeocoderAdapter(BaseGeocoder):
         if not local_auth or local_auth in error_values:
             raise PostcodeError("No location information")
 
-        codes = [
-            geocoder.get_code('lad'),
-            geocoder.get_code('eer'),
-        ]
-
-        return {
-            'source': 'onspd',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-            'gss_codes': codes,
-            'council_gss': local_auth,
-        }
+        return geocoder
 
     def geocode_point_only(self):
         geocoder = OnspdGeocoder(self.postcode)
@@ -105,16 +84,6 @@ class OnspdGeocoderAdapter(BaseGeocoder):
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
-    """
-    For the moment we need an adapter clas to sit between
-    uk_geo_utils.geocoders.AddressBaseGeocoder
-    and the calling code which wraps up output from
-    uk_geo_utils.geocoders.AddressBaseGeocoder
-    in the data structure that the calling code is expecting.
-
-    Somewhere later in the refactoring process,
-    we can probably remove this abstraction layer
-    """
 
     def geocode(self):
         geocoder = AddressBaseGeocoder(self.postcode)
@@ -127,18 +96,7 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
             # because that is what the calling code expects to handle
             raise MultipleCouncilsException(str(e))
 
-        codes = [
-            geocoder.get_code('lad'),
-            geocoder.get_code('eer'),
-        ]
-
-        return {
-            'source': 'addressbase',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-            'council_gss': geocoder.get_code('lad'),
-            'gss_codes': codes,
-        }
+        return geocoder
 
     def geocode_point_only(self):
         return AddressBaseGeocoder(self.postcode)
@@ -199,22 +157,12 @@ def geocode(postcode):
 
 
 def get_council(geocode_result):
-    if 'council_gss' in geocode_result:
-        try:
-            return Council.objects.defer("area").get(
-                council_id=geocode_result['council_gss'])
-        except Council.DoesNotExist:
-            pass
-
-    if 'gss_codes' in geocode_result:
-        try:
-            return Council.objects.defer("area").get(
-                council_id__in=geocode_result['gss_codes'])
-        except Council.DoesNotExist:
-            pass
-
-    location = Point(geocode_result['wgs84_lon'], geocode_result['wgs84_lat'])
-    return Council.objects.defer("area").get(area__covers=location)
+    try:
+        return Council.objects.defer("area").get(
+            council_id=geocode_result.get_code('lad'))
+    except Council.DoesNotExist:
+        return Council.objects.defer("area").get(
+            area__covers=geocode_result.centroid)
 
 
 class EveryElectionWrapper:

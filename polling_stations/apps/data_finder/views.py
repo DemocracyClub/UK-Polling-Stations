@@ -143,7 +143,7 @@ class BasePollingStationView(
             # AddressView.get_location() may legitimately return None
             self.location = None
         else:
-            self.location = Point(loc['wgs84_lon'], loc['wgs84_lat'])
+            self.location = loc.centroid
 
         self.council = self.get_council(loc)
         self.station = self.get_station()
@@ -172,7 +172,7 @@ class BasePollingStationView(
                 context['custom'] = None
             else:
                 context['custom'] = CustomFinder.objects.get_custom_finder(
-                    loc['gss_codes'], self.postcode.without_space)
+                    loc, self.postcode.without_space)
 
         self.log_postcode(self.postcode, context, type(self).__name__)
 
@@ -270,11 +270,10 @@ class ExamplePostcodeView(BasePollingStationView):
         return self.render_to_response(context)
 
     def get_location(self):
-        return {
-            "wgs84_lat": 51.43921783606831,
-            "wgs84_lon": -2.54333651887832,
-            'gss_codes': [],
-        }
+        return type(
+            "Geocoder", (object, ),
+            { "centroid": Point(-2.54333651887832, 51.43921783606831, srid=4326) }
+        )
 
     def get_council(self, geocode_result):
         return Council.objects.defer("area").get(pk='E06000023')

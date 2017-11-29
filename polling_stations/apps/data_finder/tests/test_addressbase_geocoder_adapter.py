@@ -69,5 +69,5 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         """
         addressbase = AddressBaseGeocoderAdapter('bb 1   1B B')  # intentionally spurious whitespace and case
         result = addressbase.geocode()
-        self.assertEqual('addressbase', result['source'])
-        self.assertEqual('B01000001', result['council_gss'])
+        self.assertIsInstance(result, AddressBaseGeocoder)
+        self.assertEqual('B01000001', result.get_code('lad'))

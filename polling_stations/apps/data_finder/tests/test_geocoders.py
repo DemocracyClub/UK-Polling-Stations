@@ -6,14 +6,19 @@ from data_finder.helpers import (
 from uk_geo_utils.geocoders import AddressBaseGeocoder, OnspdGeocoder
 
 
+class StubOnspdGeocoder(OnspdGeocoder):
+
+    def __init__(self, postcode):
+        pass
+
+
 """
 Mock out a stub response from OnspdGeocoder
 we don't really care about the actual data for these tests
 just where it came from
 """
 def mock_geocode(self):
-    # TODO: return a OnspdGeocoder instance
-    return { 'source': 'onspd' }
+    return StubOnspdGeocoder('foo')
 
 
 class GeocodeTest(TestCase):
@@ -28,7 +33,7 @@ class GeocodeTest(TestCase):
         We should fall back to centroid-based geocoding using ONSPD
         """
         result = geocode('DD1 1DD')
-        self.assertEqual('onspd', result['source'])
+        self.assertIsInstance(result, OnspdGeocoder)
 
     @mock.patch("data_finder.helpers.OnspdGeocoderAdapter.geocode", mock_geocode)
     def test_no_codes(self):
@@ -39,7 +44,7 @@ class GeocodeTest(TestCase):
         We should fall back to centroid-based geocoding using ONSPD
         """
         result = geocode('AA11AA')
-        self.assertEqual('onspd', result['source'])
+        self.assertIsInstance(result, OnspdGeocoder)
 
     @mock.patch("data_finder.helpers.OnspdGeocoderAdapter.geocode", mock_geocode)
     def test_multiple_councils(self):
@@ -66,7 +71,7 @@ class GeocodeTest(TestCase):
         Valid result should be returned based on geocoding using AddressBase
         """
         result = geocode('BB1 1BB')
-        self.assertEqual('addressbase', result['source'])
+        self.assertIsInstance(result, AddressBaseGeocoder)
 
 
 class GeocodePointOnlyTest(TestCase):
@@ -81,8 +86,7 @@ class GeocodePointOnlyTest(TestCase):
         We should fall back to centroid-based geocoding using ONSPD
         """
         result = geocode_point_only('DD1 1DD')
-        # TODO: self.assertIsInstance(result, OnspdGeocoder)
-        self.assertEqual('onspd', result['source'])
+        self.assertIsInstance(result, OnspdGeocoder)
 
     @mock.patch("data_finder.helpers.OnspdGeocoderAdapter.geocode_point_only", mock_geocode)
     def test_valid(self):

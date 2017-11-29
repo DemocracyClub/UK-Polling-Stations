@@ -1,7 +1,6 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 from data_finder.views import LogLookUpMixin
@@ -53,8 +52,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         else:
             return None
 
-    def generate_custom_finder(self, gss_codes, postcode):
-        finder = CustomFinder.objects.get_custom_finder(gss_codes, postcode)
+    def generate_custom_finder(self, geocoder, postcode):
+        finder = CustomFinder.objects.get_custom_finder(geocoder, postcode)
         if finder and finder.base_url:
             if finder.can_pass_postcode:
                 return finder.base_url + finder.encoded_postcode
@@ -69,16 +68,16 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
         # attempt to attach point and gss_codes
         # in this situation, failure to geocode is fatal
-        # (we need 'gss_codes' to pass to get_custom_finder)
+        # (we need codes to pass to get_custom_finder)
         try:
             loc = geocoder(postcode)
-            location = Point(loc['wgs84_lon'], loc['wgs84_lat'])
+            location = loc.centroid
         except PostcodeError as e:
             return Response({'detail': e.args[0]}, status=400)
         except RateLimitError as e:
             return Response({'detail': e.args[0]}, status=403)
         except MultipleCouncilsException as e:
-            loc = {}
+            loc = None
             location = None
 
         ret['postcode_location'] = location
@@ -106,8 +105,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
         # get custom finder (if no polling station)
         ret['custom_finder'] = None
-        if not ret['polling_station_known'] and 'gss_codes' in loc:
-            ret['custom_finder'] = self.generate_custom_finder(loc['gss_codes'], postcode)
+        if not ret['polling_station_known'] and loc:
+            ret['custom_finder'] = self.generate_custom_finder(loc, postcode)
 
         # create log entry
         log_data = {}

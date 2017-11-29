@@ -135,9 +135,10 @@ class ResidentialAddress(models.Model):
 
 class CustomFinderManager(models.Manager):
 
-    def get_custom_finder(self, gss_codes, postcode):
+    def get_custom_finder(self, geocoder, postcode):
         try:
-            finder = self.get(pk__in=gss_codes)
+            finder = self.get(pk__in=[
+                geocoder.get_code('lad'), geocoder.get_code('eer')])
             finder.message = _(finder.message)
             """
             EONI's poling station finder requires postcode to have a space :(

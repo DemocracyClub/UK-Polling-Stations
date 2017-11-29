@@ -1,8 +1,22 @@
 from django.test import TestCase
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory
 from api.postcode import PostcodeViewSet
 from data_finder.helpers import MultipleCouncilsException
+
+
+class StubGeocoder:
+
+    def __init__(self, centroid, code):
+        self.centroid = centroid
+        self.code = code
+
+    def get_code(self, codetype):
+        if not self.code:
+            raise ObjectDoesNotExist
+        return self.code
 
 
 """
@@ -14,35 +28,23 @@ def mock_geocode(postcode):
     postcode = postcode.without_space
     # list of addresses
     if (postcode == 'AA11AA'):
-        return {
-            'wgs84_lon': 0.22247314453125,
-            'wgs84_lat': 53.149405955929744,
-            'gss_codes': [],
-        }
+        return StubGeocoder(
+            Point(0.22247314453125, 53.149405955929744, srid=4326), 'X01000001')
 
     # council with no data
     if (postcode == 'BB11BB'):
-        return {
-            'wgs84_lon': -3.54583740234375,
-            'wgs84_lat': 52.019712234868464,
-            'gss_codes': [],
-        }
+        return StubGeocoder(
+            Point(-3.54583740234375, 52.019712234868464, srid=4326), 'X01000002')
 
     # polling station 1
     if (postcode == 'CC11CC'):
-        return {
-            'wgs84_lon': -2.1533203125,
-            'wgs84_lat': 52.858517622387716,
-            'gss_codes': [],
-        }
+        return StubGeocoder(
+            Point(-2.1533203125, 52.858517622387716, srid=4326), 'X01000001')
 
     # no council
     if (postcode == 'DD11DD'):
-        return {
-            'wgs84_lon': -4.6142578125,
-            'wgs84_lat': 57.45913526799062,
-            'gss_codes': [],
-        }
+        return StubGeocoder(
+            Point(-4.6142578125, 57.45913526799062, srid=4326), None)
 
     # multiple councils
     if (postcode == 'EE11EE'):
