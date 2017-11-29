@@ -3,7 +3,6 @@ import logging
 import lxml.etree
 import re
 import requests
-import time
 from collections import namedtuple
 from operator import itemgetter
 
@@ -18,7 +17,7 @@ from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     OnspdGeocoder,
-    CodesNotFoundException,
+    AddressBaseException,
     MultipleCodesException
 )
 
@@ -32,12 +31,6 @@ class PostcodeError(Exception):
 
 class MultipleCouncilsException(MultipleCodesException):
     pass
-
-
-class RateLimitError(Exception):
-    def __init__(self, message):
-        logger = logging.getLogger('django.request')
-        logger.error(message)
 
 
 class BaseGeocoder(metaclass=abc.ABCMeta):
@@ -56,24 +49,8 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
     def geocode(self):
         pass
 
-    def run(self, point_only=False):
-        if point_only:
-            return self.geocode_point_only()
-        else:
-            return self.geocode()
-
 
 class OnspdGeocoderAdapter(BaseGeocoder):
-    """
-    For the moment we need an adapter clas to sit between
-    uk_geo_utils.geocoders.OnspdGeocoder
-    and the calling code which wraps up output from
-    uk_geo_utils.geocoders.OnspdGeocoder
-    in the data structure that the calling code is expecting.
-
-    Somewhere later in the refactoring process,
-    we can probably remove this abstraction layer
-    """
 
     def geocode(self):
         geocoder = OnspdGeocoder(self.postcode)
@@ -90,42 +67,17 @@ class OnspdGeocoderAdapter(BaseGeocoder):
         if not local_auth or local_auth in error_values:
             raise PostcodeError("No location information")
 
-        codes = [
-            geocoder.get_code('lad'),
-            geocoder.get_code('eer'),
-        ]
-
-        return {
-            'source': 'onspd',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-            'gss_codes': codes,
-            'council_gss': local_auth,
-        }
+        return geocoder
 
     def geocode_point_only(self):
         geocoder = OnspdGeocoder(self.postcode)
         centre = geocoder.centroid
         if not centre:
             raise PostcodeError("No location information")
-        return {
-            'source': 'onspd',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-        }
+        return geocoder
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
-    """
-    For the moment we need an adapter clas to sit between
-    uk_geo_utils.geocoders.AddressBaseGeocoder
-    and the calling code which wraps up output from
-    uk_geo_utils.geocoders.AddressBaseGeocoder
-    in the data structure that the calling code is expecting.
-
-    Somewhere later in the refactoring process,
-    we can probably remove this abstraction layer
-    """
 
     def geocode(self):
         geocoder = AddressBaseGeocoder(self.postcode)
@@ -138,57 +90,30 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
             # because that is what the calling code expects to handle
             raise MultipleCouncilsException(str(e))
 
-        codes = [
-            geocoder.get_code('lad'),
-            geocoder.get_code('eer'),
-        ]
-
-        return {
-            'source': 'addressbase',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-            'council_gss': geocoder.get_code('lad'),
-            'gss_codes': codes,
-        }
+        return geocoder
 
     def geocode_point_only(self):
-        geocoder = AddressBaseGeocoder(self.postcode)
-        centre = geocoder.centroid
-        return {
-            'source': 'addressbase',
-            'wgs84_lon': centre.x,
-            'wgs84_lat': centre.y,
-        }
+        return AddressBaseGeocoder(self.postcode)
 
 
-def geocode_point_only(postcode, sleep=True):
+def geocode_point_only(postcode):
     geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
-            return geocoder.run(True)
+            return geocoder.geocode_point_only()
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
+            # this might be because
+            # - The postcode isn't in AddressBase
+            # - The postcode is in Northern Ireland
+            # - AddressBase hasn;t been imported
             # fall back to the next source
-
-            # optional sleep to avoid hammering external services
-            if sleep:
-                time.sleep(1.3)
-
             continue
         except PostcodeError:
             # we were unable to geocode this postcode using ONSPD
             # re-raise the exception.
             # Note: in future we may want to fall back to yet another source
             raise
-        except:
-            # something else went wrong:
-            # lets give the next source a try anyway
-
-            # optional sleep to avoid hammering external services
-            if sleep:
-                time.sleep(1.3)
-
-            continue
 
     # All of our attempts to geocode this failed. Raise a generic exception
     raise PostcodeError('Could not geocode from any source')
@@ -198,50 +123,40 @@ def geocode(postcode):
     geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
-            return geocoder.run(False)
+            return geocoder.geocode()
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
+            # this might be because
+            # - The postcode isn't in AddressBase
+            # - The postcode is in Northern Ireland
+            # - AddressBase hasn;t been imported
             # fall back to the next source
-            continue
-        except CodesNotFoundException:
-            # we did find this postcode in AddressBase, but there were no
-            # corresponding codes in ONSUD: fall back to the next source
             continue
         except MultipleCouncilsException:
             # this postcode contains uprns in multiple local authorities
             # re-raise the exception.
             raise
+        except AddressBaseException:
+            # we did find this postcode in AddressBase, but there were no
+            # corresponding codes in ONSUD: fall back to the next source
+            continue
         except PostcodeError:
             # we were unable to geocode this postcode using ONSPD
             # re-raise the exception.
             # Note: in future we may want to fall back to yet another source
             raise
-        except:
-            # something else went wrong:
-            # lets give the next source a try anyway
-            continue
 
     # All of our attempts to geocode this failed. Raise a generic exception
     raise PostcodeError('Could not geocode from any source')
 
 
 def get_council(geocode_result):
-    if 'council_gss' in geocode_result:
-        try:
-            return Council.objects.defer("area").get(
-                council_id=geocode_result['council_gss'])
-        except Council.DoesNotExist:
-            pass
-
-    if 'gss_codes' in geocode_result:
-        try:
-            return Council.objects.defer("area").get(
-                council_id__in=geocode_result['gss_codes'])
-        except Council.DoesNotExist:
-            pass
-
-    location = Point(geocode_result['wgs84_lon'], geocode_result['wgs84_lat'])
-    return Council.objects.defer("area").get(area__covers=location)
+    try:
+        return Council.objects.defer("area").get(
+            council_id=geocode_result.get_code('lad'))
+    except Council.DoesNotExist:
+        return Council.objects.defer("area").get(
+            area__covers=geocode_result.centroid)
 
 
 class EveryElectionWrapper:

@@ -3,7 +3,6 @@ Import Rhondda Cynon Taf
 
 note: this script takes quite a long time to run
 """
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 from data_collection.google_geocoding_api_wrapper import (
@@ -58,8 +57,8 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         """
         if postcode:
             try:
-                gridref = geocode_point_only(postcode)
-                location = Point(gridref['wgs84_lon'], gridref['wgs84_lat'], srid=4326)
+                location_data = geocode_point_only(postcode)
+                location = location_data.centroid
             except PostcodeError:
                 location = None
         else:

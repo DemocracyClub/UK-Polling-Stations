@@ -1,8 +1,6 @@
 """
 Import Richmond
 """
-from django.contrib.gis.geos import Point
-
 from data_collection.slugger import Slugger
 from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode, geocode_point_only, PostcodeError
@@ -54,14 +52,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         if len(postcode) > 5:
             try:
                 location_data = geocode_point_only(postcode)
+                location = location_data.centroid
             except PostcodeError:
                 pass
-            if location_data:
-                location = Point(
-                    location_data['wgs84_lon'],
-                    location_data['wgs84_lat'],
-                    srid=4326)
-
 
         return {
             'internal_council_id': self._mk_place_id(record),

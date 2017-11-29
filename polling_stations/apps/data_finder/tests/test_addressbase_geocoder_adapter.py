@@ -1,7 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from data_finder.helpers import (
-    AddressBaseGeocoderAdapter, CodesNotFoundException, MultipleCouncilsException
+    AddressBaseGeocoderAdapter, MultipleCouncilsException)
+from uk_geo_utils.geocoders import (
+    AddressBaseGeocoder,
+    CodesNotFoundException
 )
 
 
@@ -36,7 +39,7 @@ class AddressBaseGeocoderAdapterTest(TestCase):
 
         # point only geocode should return a result anyway
         result = addressbase.geocode_point_only()
-        self.assertEqual('addressbase', result['source'])
+        self.assertIsInstance(result, AddressBaseGeocoder)
 
     def test_multiple_councils(self):
         """
@@ -52,7 +55,7 @@ class AddressBaseGeocoderAdapterTest(TestCase):
 
         # point only geocode should return a result anyway
         result = addressbase.geocode_point_only()
-        self.assertEqual('addressbase', result['source'])
+        self.assertIsInstance(result, AddressBaseGeocoder)
 
     def test_valid(self):
         """
@@ -66,5 +69,5 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         """
         addressbase = AddressBaseGeocoderAdapter('bb 1   1B B')  # intentionally spurious whitespace and case
         result = addressbase.geocode()
-        self.assertEqual('addressbase', result['source'])
-        self.assertEqual('B01000001', result['council_gss'])
+        self.assertIsInstance(result, AddressBaseGeocoder)
+        self.assertEqual('B01000001', result.get_code('lad'))

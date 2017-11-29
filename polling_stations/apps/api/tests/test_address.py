@@ -1,16 +1,16 @@
 from django.test import TestCase
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory
 from api.address import ResidentialAddressViewSet
 
 
 # Test double for geocode function: always returns the same point
-def mock_geocode(postcode, sleep):
-    return {
-        'wgs84_lon': 0.22247314453125,
-        'wgs84_lat': 53.149405955929744,
-        'gss_codes': [],
-    }
+def mock_geocode(postcode):
+    return type(
+        "Geocoder", (object, ),
+        { "centroid": Point(0.22247314453125, 53.149405955929744, srid=4326) }
+    )
 
 
 class AddressTest(TestCase):

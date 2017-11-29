@@ -52,14 +52,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
             # no points supplied, so attempt to attach them by geocoding
             try:
                 location_data = geocode_point_only(postcode)
+                location = location_data.centroid
             except PostcodeError:
                 pass
-
-            if location_data:
-                location = Point(
-                    location_data['wgs84_lon'],
-                    location_data['wgs84_lat'],
-                    srid=4326)
 
         return {
             'internal_council_id': record.poll_stn_number,

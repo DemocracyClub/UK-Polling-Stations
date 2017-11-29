@@ -2,13 +2,11 @@ from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     geocode_point_only,
     PostcodeError,
-    RateLimitError,
 )
 from pollingstations.models import PollingStation, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
@@ -68,9 +66,9 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
         try:
-            l = geocoder(address.postcode, sleep=False)
-            location = Point(l['wgs84_lon'], l['wgs84_lat'])
-        except (PostcodeError, RateLimitError) as e:
+            l = geocoder(address.postcode)
+            location = l.centroid
+        except PostcodeError as e:
             location = None
         ret['postcode_location'] = location
 

@@ -112,6 +112,14 @@ python manage.py migrate
 
 ### Import initial data
 
+#### Import ONSPD
+
+For development purposes, you can use the ONSPD for geocoding. Grab the latest release from http://geoportal.statistics.gov.uk/datasets?q=ONS%20Postcode%20Directory%20(ONSPD)&sort=-updatedAt unzip the data and import it using:
+
+```
+python manage.py import_onspd /path/to/data
+```
+
 #### Import Councils
 
 ```

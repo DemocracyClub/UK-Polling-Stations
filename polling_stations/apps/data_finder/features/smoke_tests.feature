@@ -34,3 +34,8 @@ Feature: Smoke tests
     When I visit site page "/nus_wales"
     Then I should see "Cymraeg"
     And No errors were thrown
+
+    Scenario: Check Example page
+    When I visit site page "/example"
+    Then I should see "Your polling station"
+    And No errors were thrown
