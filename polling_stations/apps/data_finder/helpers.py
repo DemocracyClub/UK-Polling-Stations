@@ -33,12 +33,6 @@ class MultipleCouncilsException(MultipleCodesException):
     pass
 
 
-class RateLimitError(Exception):
-    def __init__(self, message):
-        logger = logging.getLogger('django.request')
-        logger.error(message)
-
-
 class BaseGeocoder(metaclass=abc.ABCMeta):
 
     def __init__(self, postcode):

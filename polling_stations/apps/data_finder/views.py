@@ -31,7 +31,6 @@ from .helpers import (
     EveryElectionWrapper,
     MultipleCouncilsException,
     PostcodeError,
-    RateLimitError,
     RoutingHelper
 )
 
@@ -135,7 +134,7 @@ class BasePollingStationView(
 
         try:
             loc = self.get_location()
-        except (PostcodeError, RateLimitError) as e:
+        except PostcodeError as e:
             context['error'] = str(e)
             return context
 

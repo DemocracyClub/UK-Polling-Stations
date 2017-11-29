@@ -7,7 +7,6 @@ from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     geocode_point_only,
     PostcodeError,
-    RateLimitError,
 )
 from pollingstations.models import PollingStation, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
@@ -69,7 +68,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         try:
             l = geocoder(address.postcode)
             location = l.centroid
-        except (PostcodeError, RateLimitError) as e:
+        except PostcodeError as e:
             location = None
         ret['postcode_location'] = location
 

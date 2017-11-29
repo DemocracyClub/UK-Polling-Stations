@@ -8,7 +8,6 @@ from data_finder.helpers import (
     get_council,
     geocode,
     PostcodeError,
-    RateLimitError,
     MultipleCouncilsException,
     RoutingHelper
 )
@@ -74,8 +73,6 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             location = loc.centroid
         except PostcodeError as e:
             return Response({'detail': e.args[0]}, status=400)
-        except RateLimitError as e:
-            return Response({'detail': e.args[0]}, status=403)
         except MultipleCouncilsException as e:
             loc = None
             location = None
