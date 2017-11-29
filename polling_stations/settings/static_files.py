@@ -11,7 +11,6 @@ PIPELINE = get_pipeline_settings(
 )
 PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 PIPELINE['UGLIFYJS_BINARY'] = 'node_modules/uglify-js/bin/uglifyjs'
-PIPELINE['UGLIFYJS_ARGUMENTS'] = '--no-mangle'
 PIPELINE['STYLESHEETS']['map'] = {
     'source_filenames': [
         'leaflet/dist/leaflet.css',
