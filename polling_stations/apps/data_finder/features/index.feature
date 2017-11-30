@@ -62,3 +62,12 @@ Feature: Check Postcodes
     When I visit site page "/postcode/foo"
     Then I should see "This doesn't appear to be a valid postcode."
     And No errors were thrown
+
+    Scenario: Check Northern Ireland
+    When I visit site page "/"
+    Then I should see "Find your polling station"
+    Then I fill in "postcode" with "BT15 3JX"
+    Then I submit the only form
+    Then I should see "The Electoral Office for Northern Ireland"
+    And I should see "You will need photographic identification"
+    And No errors were thrown

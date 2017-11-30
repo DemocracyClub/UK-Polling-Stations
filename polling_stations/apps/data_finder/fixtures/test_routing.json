@@ -40,6 +40,19 @@
     },
     {
         "fields": {
+            "name": "Belfast",
+            "email": "",
+            "phone": "0800 4320 712",
+            "website": "http://www.eoni.org.uk/",
+            "postcode": "BT1 1ER",
+            "address": "The Electoral Office Headquarters\nSt Anne's House\n15 Church Street\nBelfast",
+            "area": null
+        },
+        "model": "councils.council",
+        "pk": "N09000003"
+    },
+    {
+        "fields": {
             "address": "1 Foo Street, Bar Town",
             "postcode": "AA11AA",
             "polling_station_id": "1",
@@ -140,5 +153,13 @@
         },
         "pk": 2,
         "model": "addressbase.blacklist"
+    },
+    {
+        "fields": {
+            "pcds": "BT15 3JX",
+            "oslaua": "N09000003",
+            "location": "SRID=4326;POINT(-5.923832 54.622642)"
+        },
+        "model": "uk_geo_utils.onspd"
     }
 ]
