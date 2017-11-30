@@ -21,32 +21,29 @@ class MockCouncilsImporter(Command):
             { 'code': "E09000005", 'name': "London Borough of Brent" },
             { 'code': "E09000006", 'name': "London Borough of Bromley" }
         ]
-        if url == settings.GB_BOUNDARIES_URL:
-            out = []
-            for auth in auths:
-                out.append({
-                    "type": "Feature",
-                    "properties": {
-                        "objectid": 1,
-                        "lad16cd": auth['code'],
-                        "lad16nm": auth['name'],
-                        "lad14nmw": " ",
-                        "st_areashape": 123,
-                        "st_lengthshape": 4564
-                    },
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [[
-                            [-0.354931354522705, 51.462162607847056],
-                            [-0.3518199920654297, 51.462162607847056],
-                            [-0.354931354522705, 51.46355294206526],
-                            [-0.354931354522705, 51.462162607847056]
-                        ]]
-                    }
-                })
-            return {'features': out}
-        if url == settings.NI_BOUNDARIES_URL:
-            return {'features': []}
+        out = []
+        for auth in auths:
+            out.append({
+                "type": "Feature",
+                "properties": {
+                    "objectid": 1,
+                    "lad16cd": auth['code'],
+                    "lad16nm": auth['name'],
+                    "lad14nmw": " ",
+                    "st_areashape": 123,
+                    "st_lengthshape": 4564
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-0.354931354522705, 51.462162607847056],
+                        [-0.3518199920654297, 51.462162607847056],
+                        [-0.354931354522705, 51.46355294206526],
+                        [-0.354931354522705, 51.462162607847056]
+                    ]]
+                }
+            })
+        return {'features': out}
 
 
 class TestCouncilImporter(TestCase):
