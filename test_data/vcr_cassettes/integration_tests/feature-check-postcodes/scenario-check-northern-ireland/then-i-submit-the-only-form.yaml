@@ -1,0 +1,23 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=BT15%203JX&future=1
+  response:
+    body: {string: '{"count":1,"next":null,"previous":null,"results":[{"election_id":"blablabla.bla"}]}'}
+    headers:
+      Allow: ['GET, OPTIONS']
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Thu, 30 Nov 2017 09:31:24 GMT']
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=15768000]
+      Vary: ['Accept, Cookie']
+      X-Frame-Options: [SAMEORIGIN]
+    status: {code: 200, message: OK}
+version: 1
