@@ -24,6 +24,12 @@
                     },
                     "type": {
                       "type": "string"
+                    },
+                    "properties": {
+                      "type": [
+                        "object",
+                        "null"
+                      ]
                     }
                   },
                   "description": "A GeoJSON Feature containing a Point object describing the centroid of the input postcode."
