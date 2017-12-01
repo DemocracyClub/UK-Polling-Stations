@@ -3,10 +3,12 @@ Specialised base import classes for handling data exported from
 popular Electoral Management Software packages
 """
 import abc
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
+from uk_geo_utils.geocoders import AddressBaseGeocoder, AddressBaseException
 
 
 """
@@ -48,6 +50,10 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
     def northing_field(self):
         pass
 
+    @property
+    def station_uprn_field(self):
+        return None
+
     def get_station_hash(self, record):
         return "-".join([
             getattr(record, self.station_id_field),
@@ -64,6 +70,16 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
     def get_station_postcode(self, record):
         return getattr(record, self.station_postcode_field).strip()
 
+    def geocode_from_postcode(self, record):
+        postcode = self.get_station_postcode(record)
+        if not postcode:
+            return None
+        try:
+            location_data = geocode_point_only(postcode)
+            return location_data.centroid
+        except PostcodeError:
+            return None
+
     def get_station_point(self, record):
         location = None
 
@@ -79,17 +95,17 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
                 float(getattr(record, self.easting_field)),
                 float(getattr(record, self.northing_field)),
                 srid=27700)
+        elif self.station_uprn_field and getattr(record, self.station_uprn_field).strip():
+            # if we have a UPRN, try that
+            try:
+                g = AddressBaseGeocoder(self.get_station_postcode(record))
+                location = g.get_point(getattr(record, self.station_uprn_field))
+            except (ObjectDoesNotExist, AddressBaseException) as e:
+                # if that fails, fall back to postcode
+                location = self.geocode_from_postcode(record)
         else:
             # otherwise, geocode using postcode
-            postcode = self.get_station_postcode(record)
-            if not postcode:
-                return None
-
-            try:
-                location_data = geocode_point_only(postcode)
-                location = location_data.centroid
-            except PostcodeError:
-                location = None
+            location = self.geocode_from_postcode(record)
 
         return location
 
@@ -156,6 +172,7 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter,
         'polling_place_address_4',
     ]
     station_id_field = 'polling_place_id'
+    station_uprn_field = 'polling_place_uprn'
     easting_field = 'polling_place_easting'
     northing_field = 'polling_place_northing'
 
