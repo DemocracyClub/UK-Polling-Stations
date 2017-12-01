@@ -1,14 +1,13 @@
             {
                 "polling_station_known": true,
                 "postcode_location": {
+                    "properties": null,
                     "geometry": {
-                        "point": {
-                            "type": "Point",
-                            "coordinates": [
-                                -0.26353977212676555,
-                                50.84477241345472
-                            ]
-                        }
+                        "type": "Point",
+                        "coordinates": [
+                            -0.26353977212676555,
+                            50.84477241345472
+                        ]
                     },
                     "type": "Feature"
                 },

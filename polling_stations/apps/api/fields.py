@@ -14,14 +14,13 @@ class PointField(serializers.Field):
 
         value = {
             "type": "Feature",
+            "properties": None,
             "geometry": {
-                "point": {
-                    "type": "Point",
-                    "coordinates": [
-                        value.x,
-                        value.y
-                    ],
-                },
+                "type": "Point",
+                "coordinates": [
+                    value.x,
+                    value.y
+                ],
             },
         }
         return value
