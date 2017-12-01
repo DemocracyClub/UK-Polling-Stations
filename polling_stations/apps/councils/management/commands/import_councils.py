@@ -107,12 +107,9 @@ class Command(BaseCommand):
             Council.objects.all().delete()
 
         councils = []
-        self.stdout.write("Downloading GB boundaries from ONS...")
+        self.stdout.write("Downloading boundaries from ONS...")
         councils = councils + self.get_councils(
-            settings.GB_BOUNDARIES_URL, id_field='lad16cd', name_field='lad16nm')
-        self.stdout.write("Downloading NI boundaries from ONS...")
-        councils = councils + self.get_councils(
-            settings.NI_BOUNDARIES_URL, id_field='LGDCode', name_field='LGDNAME')
+            settings.BOUNDARIES_URL, id_field='lad16cd', name_field='lad16nm')
 
         for council in councils:
             self.stdout.write("Getting contact info for %s from YourVoteMatters" %\
