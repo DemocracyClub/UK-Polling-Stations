@@ -65,24 +65,26 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         postcode = Postcode(postcode)
         ret = {}
 
+        rh = RoutingHelper(postcode)
+
         # attempt to attach point and gss_codes
-        # in this situation, failure to geocode is fatal
-        # (we need codes to pass to get_custom_finder)
         try:
             loc = geocoder(postcode)
             location = loc.centroid
         except PostcodeError as e:
-            return Response({'detail': e.args[0]}, status=400)
+            if rh.route_type == "single_address":
+                loc = None
+                location = None
+            else:
+                return Response({'detail': e.args[0]}, status=400)
         except MultipleCouncilsException as e:
             loc = None
             location = None
 
         ret['postcode_location'] = location
 
-        rh = RoutingHelper(postcode)
-
         # council object
-        if rh.route_type == "multiple_councils":
+        if rh.route_type == "multiple_councils" or not loc:
             # We can't assign this postcode to exactly one council
             council = None
         else:
@@ -99,6 +101,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         ret['polling_station'] = self.generate_polling_station(rh, council, location)
         if ret['polling_station']:
             ret['polling_station_known'] = True
+        if ret['polling_station'] and not ret['council']:
+            ret['council'] = ret['polling_station'].council
 
         # get custom finder (if no polling station)
         ret['custom_finder'] = None

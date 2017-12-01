@@ -136,5 +136,16 @@
         },
         "pk": 2,
         "model": "addressbase.blacklist"
+    },
+    {
+        "fields": {
+            "address": "1 Bar Street, Bar Town",
+            "postcode": "FF11FF",
+            "polling_station_id": "1",
+            "council": "X01000001",
+            "slug": "1-bar-street-bar-town"
+        },
+        "model": "pollingstations.residentialaddress",
+        "pk": 4
     }
 ]
