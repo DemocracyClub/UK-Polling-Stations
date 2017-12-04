@@ -43,7 +43,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         if postcode == "n/a":
             return
 
-        location_data = None
+        location = None
         try:
             location_data = geocode_point_only(postcode)
             location = location_data.centroid
