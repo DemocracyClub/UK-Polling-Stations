@@ -24,8 +24,15 @@ class Command(BaseCommand):
             default=False,
             action='store_true',
             required=False,
-            help="Clear Councils table before importing"
+            help="<Optional> Clear Councils table before importing"
         )
+        parser.add_argument(
+            '-u',
+            '--alt-url',
+            required=False,
+            help='<Optional> Alternative url to override settings.BOUNDARIES_URL',
+        )
+
 
     def feature_to_multipolygon(self, feature):
         geometry = GEOSGeometry(json.dumps(feature['geometry']), srid=4326)
@@ -106,10 +113,14 @@ class Command(BaseCommand):
             self.stdout.write('Clearing councils table..')
             Council.objects.all().delete()
 
+        boundaries_url = settings.BOUNDARIES_URL
+        if options['alt_url']:
+            boundaries_url = options['alt_url']
+
         councils = []
-        self.stdout.write("Downloading boundaries from ONS...")
+        self.stdout.write("Downloading ONS boundaries from %s..." % (boundaries_url))
         councils = councils + self.get_councils(
-            settings.BOUNDARIES_URL, id_field='lad16cd', name_field='lad16nm')
+            boundaries_url, id_field='lad16cd', name_field='lad16nm')
 
         for council in councils:
             self.stdout.write("Getting contact info for %s from YourVoteMatters" %\
