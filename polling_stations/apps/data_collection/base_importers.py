@@ -198,13 +198,25 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             apps.get_app_config('pollingstations')
         ])
 
+        """
+        Shove args and kwargs into some object properties. This means if
+        another class which extends BaseImporter defines additional custom
+        args, we don't have to override handle() to access them.
+        """
+        self.args = args
+        self.kwargs = kwargs
+
         verbosity = kwargs.get('verbosity')
         self.logger = LogHelper(verbosity)
         self.batch_size = kwargs.get('batch_size')
         self.validation_checks = not(kwargs.get('nochecks'))
 
         if self.council_id is None:
-            self.council_id = args[0]
+            if 'council_id' in kwargs:
+                self.council_id = kwargs['council_id']
+            else:
+                self.council_id = args[0]
+            # if args is empty, give up and let it throw an IndexError
 
         self.council = self.get_council(self.council_id)
 

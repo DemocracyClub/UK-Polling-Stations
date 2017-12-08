@@ -46,6 +46,9 @@ class Command(BaseCommand):
     requires_system_checks = False
 
     summary = []
+    exclude = [
+        'import_crowdsourced_csv.py'
+    ]
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -140,6 +143,10 @@ class Command(BaseCommand):
         # and build up a list of management commands to run
         for f in files:
             head, tail = os.path.split(f)
+
+            if tail in self.exclude:
+                continue
+
             try:
                 cmd = load_command(f)
             except:
