@@ -78,6 +78,10 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     logger = None
     batch_size = None
 
+    def write_info(self, message):
+        if self.verbosity > 0:
+            self.stdout.write(message)
+
     def add_arguments(self, parser):
         parser.add_argument(
             '-n',
@@ -198,8 +202,8 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             apps.get_app_config('pollingstations')
         ])
 
-        verbosity = kwargs.get('verbosity')
-        self.logger = LogHelper(verbosity)
+        self.verbosity = kwargs.get('verbosity')
+        self.logger = LogHelper(self.verbosity)
         self.batch_size = kwargs.get('batch_size')
         self.validation_checks = not(kwargs.get('nochecks'))
 
@@ -227,7 +231,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             self.clean_postcodes_overlapping_districts(self.batch_size, self.logger)
 
         # save and output data quality report
-        if verbosity > 0:
+        if self.verbosity > 0:
             self.report()
 
 
@@ -278,6 +282,9 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def import_polling_stations(self):
         stations = self.get_stations()
+        if not isinstance(self, BaseAddressesImporter):
+            self.write_info(
+                "Stations: Found %i features in input file" % (len(stations)))
         seen = set()
         for station in stations:
             """
@@ -403,6 +410,8 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def import_polling_districts(self):
         districts = self.get_districts()
+        self.write_info(
+            "Districts: Found %i features in input file" % (len(districts)))
         for district in districts:
             if self.districts_filetype in ['shp', 'shp.zip']:
                 district_info = self.district_record_to_dict(district.record)
@@ -488,6 +497,8 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def import_residential_addresses(self):
         addresses = self.get_addresses()
+        self.write_info(
+            "Addresses: Found {:,} rows in input file".format(len(addresses)))
         for address in addresses:
             address_info = self.address_record_to_dict(address)
             if address_info is None:
