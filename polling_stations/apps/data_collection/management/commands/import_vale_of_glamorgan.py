@@ -28,7 +28,6 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
     def station_record_to_dict(self, record):
 
-        address = record[2]
         if record[0] == 'FD1':
             address = self.fd1_address
         else:
