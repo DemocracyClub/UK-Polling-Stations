@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<div class="card">
+  {% if territory == 'NI' %}
+    <h3>The Electoral Office for Northern Ireland</h3>
+  {% else %}
+    <h3>{% trans "Council Contact info" %}</h3>
+  {% endif %}
+  <address>
+    {{ council.address|linebreaksbr }}<br>
+    {{ council.postcode }}<br><br>
+    <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
+    <abbr title="Email">{% trans "E:" context "Short for Email:" %}</abbr>
+    <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+  </address>
+</div>

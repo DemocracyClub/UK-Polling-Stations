@@ -7,7 +7,7 @@
 {% block extra_page_css %}
 
 {% if we_know_where_you_should_vote and station.location %}
-    {% stylesheet 'map' %}
+  {% stylesheet 'map' %}
 {% endif %}
 
 <style>
@@ -37,108 +37,25 @@
 <div class="row">
   <div class="columns large-8">
     <div class="card">
-    {% if error %}
 
-      {% if error == 'There are no upcoming elections in your area' %}
-
-        <h2>{{ error }}</h2>
-        {% if council.phone %}
-          {% blocktrans with council.name as council_name and council.phone as council_phone %}
-          <p>
-            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call your council to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
-            You can contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
-          </p>
-          {% endblocktrans %}
-        {% else %}
-          {% blocktrans with council.name as council_name %}
-          <p>
-            We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call {{ council_name }} to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
-          </p>
-          {% endblocktrans %}
-        {% endif %}
-        <p>
-          <small>
-            * Why can't we be certain? Because there is no definitive source of UK elections.
-            You can help us build the free, public database at <a href="https://elections.democracyclub.org.uk" target="_top">Every Election</a>.
-          </small>
-        </p>
-
+      {% if error %}
+        {% include "fragments/errors.html" %}
       {% else %}
 
-        {% blocktrans %}
-        <h2>Sorry, we can't find {{ postcode }}</h2>
-        <p>This doesn't appear to be a valid postcode.</p>
-        {% endblocktrans %}
-        <form method="post" action="{% url 'home' %}" class="form form-inline">
-            {% csrf_token %}
-            <label class="card_header">{% trans "Enter Your Postcode" %}
-              <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
-            </label>
-            <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
-        </form>
-
-      {% endif %}
-
-    {% else %}
-
-      {% if custom %}
-        {% include "custom_finder.html" %}
-      {% else %}
-
-        <h2>
-            {% if we_know_where_you_should_vote %}
-            {% trans "Your polling station" %}
-            {% else %}
-            {% blocktrans with council.name as council_name %}Contact {{ council_name }}{% endblocktrans %}
-            {% endif %}
-        </h2>
-
-        {% if we_know_where_you_should_vote %}
-            <div>
-            <address>
-                {% if station.formatted_address %}
-                {{ station.formatted_address|linebreaksbr }}<br />
-                {% endif %}
-
-                {% if station.postcode %}
-                  {% if not station.postcode in station.address %}
-                      {{ station.postcode }}
-                  {% endif %}
-                {% endif %}
-            </address>
-            </div>
-            {% if directions.time %}
-            <div id="directions">
-            <p>
-                {% blocktrans with directions.time as time and directions.dist as dist and directions.mode as mode %}
-                It's about {{ dist }} away or a {{ time }} {{ mode }} from {{ postcode }}.
-                {% endblocktrans %}</p>
-            Get
-            <a href="https://www.google.com/maps/dir/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}" target="_top">
-                {% trans "Walking directions from Google" %}
-            </a>
-            or
-            <a href="https://www.cyclestreets.net/journey/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}/" target="_top">
-                {% trans "Cycling directions from CycleStreets" %}
-            </a>
-            </div>
-            {% endif %}
+        {% if custom %}
+          {% include "custom_finder.html" %}
         {% else %}
-            {% blocktrans with council.phone as council_phone %}
-            <p>We don't have data for your area.</p>
 
-            <p>Your polling station address should be printed on your polling card, which is delivered by post before an election.</p>
-            <p>Or, you need to contact the council. You can call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-            {% endblocktrans %}
-        {% endif %}
+          {% if we_know_where_you_should_vote %}
+            {% include "fragments/polling_station_known.html" %}
+          {% else %}
+            {% include "fragments/polling_station_unknown.html" %}
+          {% endif %}
 
-        {% if we_know_where_you_should_vote and station.location %}
-        <div id="area_map" class="card_inset"></div>
         {% endif %}
 
       {% endif %}
 
-    {% endif %}
     </div>
 
     {% if we_know_where_you_should_vote and election_explainers %}
@@ -158,32 +75,19 @@
           <p>We can email you the next time there is an election in {{ postcode }}.</p>
           {% include "email_form/election_reminders_form.html" %}
         </div>
-        {% include "notifications/ical_feed.html" %}
+        {% include "fragments/ical_feed.html" %}
       {% endif %}
     {% endif %}
   </div>
 
-
+  {# sidebar #}
   <div class="columns large-4">
-    {% include "sidebar/you_dont_need_poll_card.html" %}
-    {% include "sidebar/register_to_vote.html" %}
-    {# include "sidebar/info_on_your_candidates.html" #}
+    {% include "fragments/you_dont_need_poll_card.html" %}
+    {% include "fragments/register_to_vote.html" %}
+    {# include "fragments/info_on_your_candidates.html" #}
 
     {% if council.address or council.postcode or council.phone or council.email %}
-    <div class="card">
-      {% if territory == 'NI' %}
-        <h3>The Electoral Office for Northern Ireland</h3>
-      {% else %}
-        <h3>{% trans "Council Contact info" %}</h3>
-      {% endif %}
-      <address>
-        {{ council.address|linebreaksbr }}<br>
-        {{ council.postcode }}<br><br>
-        <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
-        <abbr title="Email">{% trans "E:" context "Short for Email:" %}</abbr>
-        <a href="mailto:{{ council.email }}">{{ council.email }}</a>
-      </address>
-    </div>
+      {% include "fragments/contact_details.html" %}
     {% endif %}
 
   </div>

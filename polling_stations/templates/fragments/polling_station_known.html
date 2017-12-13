@@ -1,0 +1,39 @@
+{% load i18n %}
+
+<h2>{% trans "Your polling station" %}</h2>
+
+<div>
+  <address>
+    {% if station.formatted_address %}
+      {{ station.formatted_address|linebreaksbr }}<br />
+    {% endif %}
+
+    {% if station.postcode %}
+      {% if not station.postcode in station.address %}
+        {{ station.postcode }}
+      {% endif %}
+    {% endif %}
+  </address>
+</div>
+
+{% if directions.time %}
+  <div id="directions">
+    <p>
+      {% blocktrans with directions.time as time and directions.dist as dist and directions.mode as mode %}
+        It's about {{ dist }} away or a {{ time }} {{ mode }} from {{ postcode }}.
+      {% endblocktrans %}
+    </p>
+    Get
+    <a href="https://www.google.com/maps/dir/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}" target="_top">
+      {% trans "Walking directions from Google" %}
+    </a>
+    or
+    <a href="https://www.cyclestreets.net/journey/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}/" target="_top">
+      {% trans "Cycling directions from CycleStreets" %}
+    </a>
+  </div>
+{% endif %}
+
+{% if station.location %}
+  <div id="area_map" class="card_inset"></div>
+{% endif %}

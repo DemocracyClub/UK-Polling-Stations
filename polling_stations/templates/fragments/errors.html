@@ -1,0 +1,41 @@
+{% load i18n %}
+
+{% if error == 'There are no upcoming elections in your area' %}
+
+  <h2>{{ error }}</h2>
+  {% if council.phone %}
+    {% blocktrans with council.name as council_name and council.phone as council_phone %}
+    <p>
+      We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call your council to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
+      You can contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
+    </p>
+    {% endblocktrans %}
+  {% else %}
+    {% blocktrans with council.name as council_name %}
+    <p>
+      We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call {{ council_name }} to check and then <a href="https://democracyclub.org.uk/contact/" target="_top">let us know</a>.*
+    </p>
+    {% endblocktrans %}
+  {% endif %}
+  <p>
+    <small>
+      * Why can't we be certain? Because there is no definitive source of UK elections.
+      You can help us build the free, public database at <a href="https://elections.democracyclub.org.uk" target="_top">Every Election</a>.
+    </small>
+  </p>
+
+{% else %}
+
+  {% blocktrans %}
+  <h2>Sorry, we can't find {{ postcode }}</h2>
+  <p>This doesn't appear to be a valid postcode.</p>
+  {% endblocktrans %}
+  <form method="post" action="{% url 'home' %}" class="form form-inline">
+    {% csrf_token %}
+    <label class="card_header">{% trans "Enter Your Postcode" %}
+      <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
+    </label>
+    <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
+  </form>
+
+{% endif %}
