@@ -61,7 +61,7 @@ interactions:
     method: GET
     uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=NP205GN&future=1
   response:
-    body: {string: '{"count":1,"next":null,"previous":null,"results":[{"election_id":"blablabla.bla"}]}'}
+    body: {string: '{"count":1,"next":null,"previous":null,"results":[{"election_id":"blablabla.bla", "group_type":null}]}'}
     headers:
       Allow: ['GET, OPTIONS']
       Connection: [keep-alive]
