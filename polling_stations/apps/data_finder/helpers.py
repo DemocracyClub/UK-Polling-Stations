@@ -188,10 +188,12 @@ class EveryElectionWrapper:
             # assume there *is* an upcoming election
             return True
 
-        if len(self.elections) > 0:
+        ballots = filter(lambda e: e['group_type'] is None, self.elections)
+        try:
+            next(ballots)
             return True
-
-        return False
+        except StopIteration:
+            return False
 
     def get_explanations(self):
         explanations = []
