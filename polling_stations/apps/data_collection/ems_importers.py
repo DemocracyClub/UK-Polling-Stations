@@ -65,7 +65,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         ])
         while "\n\n" in address:
             address = address.replace("\n\n", "\n").strip()
-        return address
+        return address.strip()
 
     def get_station_postcode(self, record):
         return getattr(record, self.station_postcode_field).strip()
