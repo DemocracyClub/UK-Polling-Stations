@@ -1,10 +1,14 @@
 import os
 from io import StringIO
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from uk_geo_utils.models import Onsud
 from uk_geo_utils.management.commands.import_onsud import Command
 
 
+# TODO: This override can be removed when you spin this
+# out into a seperate package. It is only needed because
+# we're running the tests inside WhereDIV as a host app
+@override_settings(ONSUD_MODEL='uk_geo_utils.Onsud')
 class OnsudImportTest(TestCase):
 
     def test_import_onsud(self):

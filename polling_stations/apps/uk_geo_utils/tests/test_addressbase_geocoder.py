@@ -31,6 +31,7 @@ class FuzzyInt(int):
 # out into a seperate package. It is only needed because
 # we're running the tests inside WhereDIV as a host app
 @override_settings(ADDRESS_MODEL='uk_geo_utils.Address')
+@override_settings(ONSUD_MODEL='uk_geo_utils.Onsud')
 class AddressBaseGeocoderTest(TestCase):
 
     fixtures = [

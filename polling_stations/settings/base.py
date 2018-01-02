@@ -263,6 +263,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
 ADDRESS_MODEL = 'addressbase.Address'
+ONSUD_MODEL = 'addressbase.Onsud'
 
 
 EMAIL_SIGNUP_ENDPOINT = 'https://democracyclub.org.uk/mailing_list/api_signup/v1/'
