@@ -12,9 +12,7 @@ NOSE_ARGS = [
 ]
 
 MIGRATION_MODULES = {
-    app: '{}.nomigrations'.format(app)
-    for app in INSTALLED_APPS
-    if 'django' not in app
+    app: None for app in INSTALLED_APPS if 'django' not in app
 }
 
 MAPZEN_API_KEY = ''
