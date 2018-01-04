@@ -2,7 +2,7 @@
 
 
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
@@ -23,8 +23,7 @@ from data_finder.views import (
 )
 
 
-core_patterns = patterns(
-    '',
+core_patterns = [
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
     url(r'^postcode/$',
@@ -41,10 +40,9 @@ core_patterns = patterns(
     url(r'^privacy/$', PrivacyView.as_view(), name='privacy_view'),
     url(r'^robots\.txt$', TemplateView.as_view(
         template_name='robots.txt', content_type='text/plain')),
-)
+]
 
-extra_patterns = patterns(
-    '',
+extra_patterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^api/beta/', include(router.urls)),
     url(r'^api/$', ApiBlueprintView.as_view(
@@ -67,15 +65,14 @@ extra_patterns = patterns(
             url='https://democracyclub.org.uk/projects/polling-stations/',
             permanent=True
         ), name='about'),
-)
+]
 
 PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:
-    extra_patterns += patterns(
-        '',
+    extra_patterns += [
         url(r'^%s/' % EMBED, include('whitelabel.urls')),
-    )
+    ]
 
-urlpatterns =  extra_patterns + core_patterns+ static(
+urlpatterns = extra_patterns + core_patterns + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
