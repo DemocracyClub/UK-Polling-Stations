@@ -216,7 +216,7 @@ class DirectionsHelper():
 
     def get_directions(self, **kwargs):
         if kwargs['start_location'] and kwargs['end_location']:
-            clients = (MapzenDirectionsClient(), GoogleDirectionsClient(),)
+            clients = (GoogleDirectionsClient(),)
             for client in clients:
                 try:
                     return client.get_route(kwargs['start_location'], kwargs['end_location'])

@@ -1,6 +1,7 @@
 import mock
 from django.contrib.gis.geos import Point
 from django.test import TestCase
+from unittest import skip
 from data_finder.directions_clients import (
     Directions,
     DirectionsException,
@@ -58,6 +59,7 @@ class DirectionsTest(TestCase):
         result = d.get_directions(start_location=self.a, end_location=self.b)
         self.assertEqual('Google', result.source)
 
+    @skip("skip this test pending review of directions providers")
     @mock.patch("data_finder.directions_clients.MapzenDirectionsClient.get_route", mock_route_mapzen)
     @mock.patch("data_finder.directions_clients.GoogleDirectionsClient.get_route", mock_route_google)
     def test_mapzen(self):
