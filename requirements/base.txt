@@ -16,6 +16,6 @@ boto==2.48.0
 
 
 git+https://github.com/mysociety/django-pipeline-csscompressor
-libsass==0.13.5
+libsass==0.13.6
 git+git://github.com/DemocracyClub/dc_base_theme.git@94d172df89342072c25f29c4c2de34fe9a27886b
 git+https://github.com/DemocracyClub/dc_signup_form.git@1.0.0
