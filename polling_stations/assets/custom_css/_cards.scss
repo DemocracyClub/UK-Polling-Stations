@@ -1,0 +1,32 @@
+// Cards
+
+.card {
+  box-sizing: border-box;
+  float: left;
+  width: 100%;
+
+  a {
+    word-wrap: break-word;
+  }
+
+  h3 {
+    margin-bottom: 5px;
+  }
+
+  .small {
+    font-size: .8em;
+    font-weight: bold;
+  }
+}
+
+.postcode-card {
+  text-align: center;
+
+  h2 {
+    margin-bottom: .5em;
+  }
+
+  button {
+    margin-top: 1em;
+  }
+}

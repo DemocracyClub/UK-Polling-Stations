@@ -1,23 +1,27 @@
 @import 'dc_base';
-
-body {
-    background: #eee;
-}
+@import 'cards';
 
 body.embed {
     padding-top: 0px;
     margin-top: 0px;
 }
 
-footer {
-  margin-top: 2em;
+.container {
+  box-sizing: content-box;
+  overflow: auto;
+  padding: 20px;
+}
 
-  .dc-logo {
-      height: 45px;
-      margin-left: .5em;
+footer {
+  ul {
+    overflow: hidden;
   }
 
+  li {
+    float: left;
+  }
 }
+
 
 select.select_multirow {
     height: auto;
