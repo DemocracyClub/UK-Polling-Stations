@@ -34,8 +34,6 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="columns large-8">
     <div class="card">
 
       {% if error %}
@@ -78,10 +76,7 @@
         {% include "fragments/ical_feed.html" %}
       {% endif %}
     {% endif %}
-  </div>
 
-  {# sidebar #}
-  <div class="columns large-4">
     {% include "fragments/you_dont_need_poll_card.html" %}
     {% include "fragments/register_to_vote.html" %}
     {# include "fragments/info_on_your_candidates.html" #}
@@ -89,9 +84,6 @@
     {% if council.address or council.postcode or council.phone or council.email %}
       {% include "fragments/contact_details.html" %}
     {% endif %}
-
-  </div>
-</div>
 
 {% endblock content %}
 
