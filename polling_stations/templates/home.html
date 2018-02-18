@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load dc_forms %}
 
 {% load i18n %}
 
@@ -24,9 +25,7 @@
 
     <form method=post class="form form-inline">
       {% csrf_token %}
-      <label class="card_header">{% trans "Enter your postcode" %}
-        <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
-      </label>
+      {{ form|dc_form }}
       <button type="submit" class="button" id="submit-postcode">{% trans "Find your polling station" %}</button>
     </form>
   </div>
