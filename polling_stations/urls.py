@@ -21,6 +21,9 @@ from data_finder.views import (
     MultipleCouncilsView,
 )
 
+from django.contrib import admin
+admin.autodiscover()
+
 
 core_patterns = [
     url(r'^postcode/(?P<postcode>.+)/$',
@@ -53,6 +56,7 @@ extra_patterns = [
             'method_GET': {'class': 'badge success'},
         }), name='api_docs'
     ),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^feedback/', include('feedback.urls')),
     url(r'^league_table/', include('data_collection.urls')),
     url(r'^example/$', ExamplePostcodeView.as_view(), name='example'),

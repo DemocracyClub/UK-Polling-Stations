@@ -1,3 +1,4 @@
 from django.contrib import admin
 
-# Register your models here.
+# don't enable /admin for this model
+# these models don't live in the logger DB
