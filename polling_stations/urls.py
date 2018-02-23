@@ -56,11 +56,11 @@ extra_patterns = [
     ),
     url(r'^feedback/', include('feedback.urls')),
     url(r'^league_table/', include('data_collection.urls')),
-    url(r'^coverage$', CoverageView.as_view(), name='coverage'),
-    url(r'^example$', ExamplePostcodeView.as_view(), name='example'),
+    url(r'^coverage/$', CoverageView.as_view(), name='coverage'),
+    url(r'^example/$', ExamplePostcodeView.as_view(), name='example'),
     url(r'^email/', include('dc_signup_form.urls', namespace='dc_signup_form')),
 
-    url(r'^about$',
+    url(r'^about/$',
         RedirectView.as_view(
             url='https://democracyclub.org.uk/projects/polling-stations/',
             permanent=True
