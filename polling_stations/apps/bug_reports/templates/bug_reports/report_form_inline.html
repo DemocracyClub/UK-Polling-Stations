@@ -1,0 +1,17 @@
+{% load dc_forms %}
+
+<div class="card">
+  <form id="report_form" action="{% url 'bug_report_form_view' %}" method="post">
+      {% csrf_token %}
+      <div class="button">Report a Problem</div>
+      <div class="form-group">
+        {{ bug_report_form|dc_form }}
+        <p><small>
+          If you provide an email address, we may contact you to
+          request more information or notify you of improvements.
+          It will not be used for email marketing purposes.
+        </small></p>
+        <input type="submit" value="Send Report" class="button" />
+      </div>
+  </form>
+</div>
