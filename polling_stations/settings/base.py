@@ -163,6 +163,7 @@ PROJECT_APPS = (
     'dc_theme',
     'feedback',
     'pollingstations',
+    'bug_reports',
     'uk_geo_utils',
     'whitelabel',
 )

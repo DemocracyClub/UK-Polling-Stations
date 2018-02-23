@@ -58,6 +58,7 @@ extra_patterns = [
     ),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^feedback/', include('feedback.urls')),
+    url(r'^report_problem/', include('bug_reports.urls')),
     url(r'^league_table/', include('data_collection.urls')),
     url(r'^example/$', ExamplePostcodeView.as_view(), name='example'),
     url(r'^email/', include('dc_signup_form.urls', namespace='dc_signup_form')),
