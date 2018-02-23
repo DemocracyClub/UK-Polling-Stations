@@ -13,7 +13,6 @@ sys.path.insert(0, root('apps'))
 
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = ()
 
@@ -88,12 +87,6 @@ from .static_files import *  # noqa
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'asdasdasdasdasdasdasd'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -101,37 +94,45 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'data_finder.middleware.UTMTrackerMiddleware',
     'whitelabel.middleware.WhiteLabelMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    'django.core.context_processors.request',
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    "django.contrib.auth.context_processors.auth",
-    'dc_theme.context_processors.dc_theme_context',
-    'dc_signup_form.context_processors.signup_form',
-    'feedback.context_processors.feedback_form',
-    "pollingstations.context_processors.google_analytics",
-    "whitelabel.context_processors.base_template",
-)
-
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': [
+            root('templates'),
+        ],
+        'OPTIONS': {
+            'debug': DEBUG,
+            'context_processors': [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                'django.template.context_processors.request',
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+                "django.contrib.auth.context_processors.auth",
+                'dc_theme.context_processors.dc_theme_context',
+                'dc_signup_form.context_processors.signup_form',
+                'feedback.context_processors.feedback_form',
+                "pollingstations.context_processors.google_analytics",
+                "whitelabel.context_processors.base_template",
+            ],
+        },
+    }
+]
 
 ROOT_URLCONF = 'polling_stations.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'polling_stations.wsgi.application'
-
-TEMPLATE_DIRS = (
-    root('templates'),
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

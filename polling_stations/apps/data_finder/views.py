@@ -352,7 +352,7 @@ class AddressFormView(FormView):
         context['noindex'] = True
         return context
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=AddressSelectForm):
         self.postcode = Postcode(self.kwargs['postcode'])
         addresses = ResidentialAddress.objects.filter(
             postcode=self.postcode.without_space

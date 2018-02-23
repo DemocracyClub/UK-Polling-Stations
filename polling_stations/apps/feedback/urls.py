@@ -4,7 +4,7 @@ from .views import FeedbackFormView, RecordJsonFeedback
 
 urlpatterns = [
     url(
-        r'^submit_initial',
+        r'^submit_initial/',
         RecordJsonFeedback.as_view(),
         name='json_feedback_view'),
     url(

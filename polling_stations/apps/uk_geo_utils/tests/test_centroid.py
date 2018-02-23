@@ -7,18 +7,14 @@ class CentroidTest(TestCase):
 
     def test_centroid_one_point(self):
         qs = Address.objects.filter(pk=1)
-        self.assertEqual(
-            "POINT (0.7208994610313337 52.0965737442737833)",
-            qs.centroid.wkt
-        )
+        self.assertEqual(0.7208994610313337, qs.centroid.x)
+        self.assertEqual(52.0965737442737833, qs.centroid.y)
 
     def test_centroid_two_points(self):
         qs = Address.objects.filter(pk__lte=2)
 
-        self.assertEqual(
-            "POINT (0.7217038959382571 52.0970394718411853)",
-            qs.centroid.wkt
-        )
+        self.assertEqual(0.7217038959382571, qs.centroid.x)
+        self.assertEqual(52.0970394718411853, qs.centroid.y)
 
         # SRID 4326 is a spherical geometry, so these won't be exact but
         # when we're dealing with points that are very close together like
@@ -34,10 +30,8 @@ class CentroidTest(TestCase):
 
     def test_centroid_three_points(self):
         qs = Address.objects.filter(pk__lte=3)
-        self.assertEqual(
-            "POINT (0.7195476867864934 52.0965233704130242)",
-            qs.centroid.wkt
-        )
+        self.assertEqual(0.7195476867864934, qs.centroid.x)
+        self.assertEqual(52.0965233704130242, qs.centroid.y)
 
     def test_centroid_poles(self):
         qs = Address.objects.filter(pk__gte=4)
