@@ -155,7 +155,7 @@ class BasePollingStationView(
             context['has_election'] = settings.EVERY_ELECTION['HAS_ELECTION']
 
         if not context['has_election']:
-            context['error'] = 'There are no upcoming elections in your area'
+            context['error'] = "We don't know of any upcoming elections in your area"
         context['election_explainers'] = ee.get_explanations()
 
         context['postcode'] = self.postcode.with_space

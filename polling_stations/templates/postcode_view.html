@@ -68,7 +68,7 @@
       {% endif %}
     {% endif %}
 
-    {% if not error or error == 'There are no upcoming elections in your area' %}
+    {% if not error or error == "We don't know of any upcoming elections in your area" %}
       {% if request.brand == 'democracyclub' and not messages %}
         <div class="card">
           <h2>Free election reminders</h2>
