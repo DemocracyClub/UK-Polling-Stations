@@ -1,6 +1,5 @@
 import abc
 import logging
-import lxml.etree
 import re
 import requests
 from collections import namedtuple
