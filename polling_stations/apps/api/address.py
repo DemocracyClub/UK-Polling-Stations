@@ -1,3 +1,4 @@
+import urllib
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -15,6 +16,17 @@ from uk_geo_utils.helpers import Postcode
 from .councils import CouncilDataSerializer
 from .fields import PointField
 from .pollingstations import PollingStationGeoSerializer
+
+
+def get_bug_report_url(request, station_known):
+    if not station_known:
+        return None
+    return request.build_absolute_uri(
+        '/report_problem/?' + urllib.parse.urlencode({
+            'source': 'api',
+            'source_url': request.path,
+        })
+    )
 
 
 class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
@@ -35,6 +47,7 @@ class PostcodeResponseSerializer(serializers.Serializer):
     council = CouncilDataSerializer(read_only=True)
     polling_station = PollingStationGeoSerializer(read_only=True)
     addresses = ResidentialAddressSerializer(read_only=True, many=True)
+    report_problem_url = serializers.CharField(read_only=True)
 
 
 class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
@@ -103,6 +116,8 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         log_data['api_user'] = request.user
         if log:
             self.log_postcode(Postcode(address.postcode), log_data, 'api')
+
+        ret['report_problem_url'] = get_bug_report_url(request, ret['polling_station_known'])
 
         serializer = PostcodeResponseSerializer(
             ret, read_only=True, context={'request': request}

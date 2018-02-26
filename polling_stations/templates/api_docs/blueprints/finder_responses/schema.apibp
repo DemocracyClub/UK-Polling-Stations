@@ -148,6 +148,13 @@
                     "null"
                   ],
                   "description": "If we don't know a user's polling station, sometimes we can provide the URL of a polling station finder provided by their local council."
+                },
+                "report_problem_url": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data."
                 }
               }
             }

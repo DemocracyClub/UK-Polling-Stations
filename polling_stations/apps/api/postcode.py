@@ -14,7 +14,7 @@ from data_finder.helpers import (
 )
 from pollingstations.models import PollingStation, CustomFinder
 from uk_geo_utils.helpers import AddressSorter, Postcode
-from .address import PostcodeResponseSerializer
+from .address import PostcodeResponseSerializer, get_bug_report_url
 
 
 class PostcodeViewSet(ViewSet, LogLookUpMixin):
@@ -130,6 +130,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             if not ret['addresses']:
                 self.log_postcode(postcode, log_data, 'api')
             # don't log 'address select' hits
+
+        ret['report_problem_url'] = get_bug_report_url(request, ret['polling_station_known'])
 
         serializer = PostcodeResponseSerializer(
             ret, read_only=True, context={'request': request}
