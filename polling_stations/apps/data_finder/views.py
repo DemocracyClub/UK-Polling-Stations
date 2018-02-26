@@ -59,7 +59,7 @@ class LogLookUpMixin(object):
         }
         if 'api_user' in context:
             kwargs['api_user'] = context['api_user']
-        kwargs.update(self.request.session['utm_data'])
+        kwargs.update({k:v[0:100] for k, v in self.request.session['utm_data'].items()})
         LoggedPostcode.objects.create(**kwargs)
 
 
