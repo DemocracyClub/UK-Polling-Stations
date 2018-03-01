@@ -107,32 +107,24 @@ class AbstractOnspd(models.Model):
     dointr = models.CharField(blank=True, max_length=6)
     doterm = models.CharField(blank=True, max_length=6)
     oscty = models.CharField(blank=True, max_length=9)
+    ced = models.CharField(blank=True, max_length=9)
     oslaua = models.CharField(blank=True, max_length=9)
     osward = models.CharField(blank=True, max_length=9)
+    parish = models.CharField(blank=True, max_length=9)
     usertype = models.CharField(blank=True, max_length=1)
     oseast1m = models.CharField(blank=True, max_length=6)
     osnrth1m = models.CharField(blank=True, max_length=7)
     osgrdind = models.CharField(blank=True, max_length=1)
     oshlthau = models.CharField(blank=True, max_length=9)
-    hro = models.CharField(blank=True, max_length=9)
+    nhser = models.CharField(blank=True, max_length=9)
     ctry = models.CharField(blank=True, max_length=9)
-    gor = models.CharField(blank=True, max_length=9)
-    streg = models.CharField(blank=True, max_length=1)
+    rgn = models.CharField(blank=True, max_length=9)
     pcon = models.CharField(blank=True, max_length=9)
     eer = models.CharField(blank=True, max_length=9)
     teclec = models.CharField(blank=True, max_length=9)
     ttwa = models.CharField(blank=True, max_length=9)
     pct = models.CharField(blank=True, max_length=9)
     nuts = models.CharField(blank=True, max_length=10)
-    psed = models.CharField(blank=True, max_length=8)
-    cened = models.CharField(blank=True, max_length=6)
-    edind = models.CharField(blank=True, max_length=1)
-    oshaprev = models.CharField(blank=True, max_length=3)
-    lea = models.CharField(blank=True, max_length=3)
-    oldha = models.CharField(blank=True, max_length=3)
-    wardc91 = models.CharField(blank=True, max_length=6)
-    wardo91 = models.CharField(blank=True, max_length=6)
-    ward98 = models.CharField(blank=True, max_length=6)
     statsward = models.CharField(blank=True, max_length=6)
     oa01 = models.CharField(blank=True, max_length=10)
     casward = models.CharField(blank=True, max_length=6)
@@ -141,11 +133,9 @@ class AbstractOnspd(models.Model):
     msoa01 = models.CharField(blank=True, max_length=9)
     ur01ind = models.CharField(blank=True, max_length=1)
     oac01 = models.CharField(blank=True, max_length=3)
-    oldpct = models.CharField(blank=True, max_length=5)
     oa11 = models.CharField(blank=True, max_length=9)
     lsoa11 = models.CharField(blank=True, max_length=9)
     msoa11 = models.CharField(blank=True, max_length=9)
-    parish = models.CharField(blank=True, max_length=9)
     wz11 = models.CharField(blank=True, max_length=9)
     ccg = models.CharField(blank=True, max_length=9)
     bua11 = models.CharField(blank=True, max_length=9)
@@ -190,9 +180,6 @@ class AbstractOnspd(models.Model):
     def _get_hlthau(self):
         return self.oshlthau
 
-    def _get_rgn(self):
-        return self.gor
-
     def _get_ruc11(self):
         return self.ru11ind
 
@@ -200,7 +187,6 @@ class AbstractOnspd(models.Model):
     lad = property(_get_lad)
     ward = property(_get_ward)
     hlthau = property(_get_hlthau)
-    rgn = property(_get_rgn)
     ruc11 = property(_get_ruc11)
 
     class Meta:
