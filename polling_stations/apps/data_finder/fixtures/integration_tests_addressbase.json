@@ -53,7 +53,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "uk_geo_utils.onsud",
+        "model": "addressbase.onsud",
         "pk": "00000004"
     },
     {
@@ -83,7 +83,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "uk_geo_utils.onsud",
+        "model": "addressbase.onsud",
         "pk": "00000005"
     },
     {
@@ -113,7 +113,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "uk_geo_utils.onsud",
+        "model": "addressbase.onsud",
         "pk": "00000006"
     },
 
@@ -153,7 +153,7 @@
             "pfa": "",
             "imd": ""
         },
-        "model": "uk_geo_utils.onsud",
+        "model": "addressbase.onsud",
         "pk": "00000010"
     }
 

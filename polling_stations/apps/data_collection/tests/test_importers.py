@@ -23,6 +23,7 @@ class ImporterTest(TestCase):
 
     opts = {
         'noclean': False,
+        'nochecks': True,
         'verbosity': 0
     }
 

@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
-from uk_geo_utils.models import AbstractAddress, AbstractAddressManager
+from uk_geo_utils.models import (
+    AbstractAddress, AbstractAddressManager, AbstractOnsud)
 
 
 class AddressManager(AbstractAddressManager):
@@ -16,6 +17,11 @@ class AddressManager(AbstractAddressManager):
 
 class Address(AbstractAddress):
     objects = AddressManager()
+
+
+class Onsud(AbstractOnsud):
+    class Meta:
+        index_together = (('lad',))
 
 
 class Blacklist(models.Model):

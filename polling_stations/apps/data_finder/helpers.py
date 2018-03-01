@@ -11,7 +11,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 
 from addressbase.models import Address, Blacklist
-from uk_geo_utils.models import Onsud
 from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,

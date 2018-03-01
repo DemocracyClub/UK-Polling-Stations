@@ -30,6 +30,7 @@ from data_collection.data_quality_report import (
     DistrictReport,
     ResidentialAddressReport
 )
+from data_collection.contexthelpers import Dwellings
 from data_collection.filehelpers import FileHelperFactory
 from data_collection.loghelper import LogHelper
 from data_collection.slugger import Slugger
@@ -109,7 +110,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
         parser.add_argument(
             '--nochecks',
-            help='<Optional> Do not perform validation checks',
+            help='<Optional> Do not perform validation checks or display context information',
             action='store_true',
             required=False,
             default=False
@@ -211,6 +212,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             self.council_id = args[0]
 
         self.council = self.get_council(self.council_id)
+        self.write_info("Importing data for %s..." % self.council.name)
 
         # Delete old data for this council
         self.teardown(self.council)
@@ -495,7 +497,24 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
     def address_record_to_dict(self, record):
         pass
 
+    def write_context_data(self):
+        dwellings = Dwellings()
+        self.write_info('----------------------------------')
+        self.write_info('Contextual Data:')
+        self.write_info("Total UPRNs in ONSUD: {:,}".format(
+            dwellings.from_onsud(self.council_id))
+        )
+        self.write_info("Total UPRNs in AddressBase Standard: {:,}".format(
+            dwellings.from_addressbase(self.council.area))
+        )
+        self.write_info("Total Dwellings from 2011 Census: {:,}".format(
+            dwellings.from_census(self.council_id))
+        )
+        self.write_info('----------------------------------')
+
     def import_residential_addresses(self):
+        if self.validation_checks:
+            self.write_context_data()
         addresses = self.get_addresses()
         self.write_info(
             "Addresses: Found {:,} rows in input file".format(len(addresses)))
