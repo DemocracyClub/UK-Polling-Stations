@@ -65,7 +65,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         ])
         while "\n\n" in address:
             address = address.replace("\n\n", "\n").strip()
-        return address
+        return address.strip()
 
     def get_station_postcode(self, record):
         return getattr(record, self.station_postcode_field).strip()
@@ -272,10 +272,10 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
 
     def get_station_address(self, record):
         address = "\n".join([
-            getattr(record, field) for field in self.station_address_fields
+            getattr(record, field).strip()\
+            for field in self.station_address_fields\
+            if getattr(record, field).strip()
         ])
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
         return address
 
     def get_station_point(self, record):
@@ -331,7 +331,7 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         while "\n\n" in address:
             address = address.replace("\n\n", "\n").strip()
 
-        return address
+        return address.strip()
 
     def address_record_to_dict(self, record):
         if record.streetname.lower().strip() == 'other electors':
@@ -346,10 +346,15 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
 
         address = self.get_residential_address(record)
 
+        if record.pollingstationnumber.strip() == 'n/a':
+            station_id = ''
+        else:
+            station_id = self.get_station_hash(record)
+
         return {
             'address'           : address,
             'postcode'          : record.housepostcode.strip(),
-            'polling_station_id': self.get_station_hash(record),
+            'polling_station_id': station_id,
         }
 
 
