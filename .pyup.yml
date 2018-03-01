@@ -1,6 +1,5 @@
 update: all
 pin: True
-schedule: "every day"
 search: True
 
 requirements:
