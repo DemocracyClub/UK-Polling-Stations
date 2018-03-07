@@ -6,6 +6,10 @@ import abc
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
+from data_collection.addresshelpers import (
+    format_residential_address,
+    format_polling_station_address
+)
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 from uk_geo_utils.geocoders import AddressBaseGeocoder, AddressBaseException
@@ -60,12 +64,10 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         ])
 
     def get_station_address(self, record):
-        address = "\n".join([
+        address = format_polling_station_address([
             getattr(record, field) for field in self.station_address_fields
         ])
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
-        return address.strip()
+        return address
 
     def get_station_postcode(self, record):
         return getattr(record, self.station_postcode_field).strip()
@@ -180,17 +182,13 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter,
         if record.addressline6.strip() == '':
             return None
 
-        address = ", ".join([
+        address = format_residential_address([
             record.addressline1,
             record.addressline2,
             record.addressline3,
             record.addressline4,
             record.addressline5,
         ])
-        while ", , " in address:
-            address = address.replace(", , ", ", ")
-        if address[-2:] == ', ':
-            address = address[:-2]
 
         return {
             'address'           : address.strip(),
@@ -271,7 +269,7 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         ])
 
     def get_station_address(self, record):
-        address = "\n".join([
+        address = format_polling_station_address([
             getattr(record, field).strip()\
             for field in self.station_address_fields\
             if getattr(record, field).strip()
@@ -321,15 +319,12 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         street_address = street_address.strip()
         address_line_1 = address_line_1 + ' ' + street_address
 
-        address = "\n".join([
+        address = format_residential_address([
             address_line_1.strip(),
             replace_na(record.locality),
             replace_na(record.town),
             replace_na(record.adminarea),
         ])
-
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
 
         return address.strip()
 
@@ -388,13 +383,9 @@ class BaseDemocracyCountsCsvImporter(BaseCsvStationsCsvAddressesImporter,
         if not getattr(record, self.postcode_field).strip():
             return None
 
-        address = ", ".join([
+        address = format_residential_address([
             getattr(record, field) for field in self.address_fields
         ])
-        while ", , " in address:
-            address = address.replace(", , ", ", ")
-        if address[-2:] == ', ':
-            address = address[:-2]
 
         if 'Dummy Record' in address:
             return None
@@ -428,11 +419,9 @@ class BaseDemocracyCountsCsvImporter(BaseCsvStationsCsvAddressesImporter,
 
     def station_record_to_dict(self, record):
 
-        address = "\n".join(
+        address = format_polling_station_address(
             [getattr(record, self.station_name_field)] +
             [getattr(record, field) for field in self.address_fields])
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
 
         location = self.get_station_point(record)
 
