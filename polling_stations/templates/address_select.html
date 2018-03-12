@@ -1,30 +1,24 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load dc_forms %}
 
 {% block content %}
 
-<div class="row">
-  <div class="columns large-12">
-    <div class="card">
-      <h2 id="address_picker">
-        {% trans "Choose Your Address / Street" %}
-      </h2>
+<div class="card">
+  <h2 id="address_picker">
+    {% trans "Choose Your Address / Street" %}
+  </h2>
 
-      <form method=post class="form form-inline">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_p }}
-            <button type="submit" class="button" id="submit-address">
-              {% trans "Find my Polling Station" %}
-            </button>
-        </div>
-      </form>
-
-    </div>
-
-  </div>
+  <form method=post class="form form-inline">
+    {% csrf_token %}
+    {{ form|dc_form }}
+    <button type="submit" class="button" id="submit-address">
+      {% trans "Find my Polling Station" %}
+    </button>
+  </form>
 </div>
+
 
 {% endblock content %}
 
