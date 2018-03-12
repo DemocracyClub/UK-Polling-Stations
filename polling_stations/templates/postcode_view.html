@@ -66,6 +66,15 @@
       {% endif %}
     {% endif %}
 
+
+    {% include "fragments/you_dont_need_poll_card.html" %}
+    {% include "fragments/register_to_vote.html" %}
+    {# include "fragments/info_on_your_candidates.html" #}
+
+    {% if council.address or council.postcode or council.phone or council.email %}
+      {% include "fragments/contact_details.html" %}
+    {% endif %}
+
     {% if not error or error == "We don't know of any upcoming elections in your area" %}
       {% if request.brand == 'democracyclub' and not messages %}
         <div class="card">
@@ -75,14 +84,6 @@
         </div>
         {% include "fragments/ical_feed.html" %}
       {% endif %}
-    {% endif %}
-
-    {% include "fragments/you_dont_need_poll_card.html" %}
-    {% include "fragments/register_to_vote.html" %}
-    {# include "fragments/info_on_your_candidates.html" #}
-
-    {% if council.address or council.postcode or council.phone or council.email %}
-      {% include "fragments/contact_details.html" %}
     {% endif %}
 
 {% endblock content %}
