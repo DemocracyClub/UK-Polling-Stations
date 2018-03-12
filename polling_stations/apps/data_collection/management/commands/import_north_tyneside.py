@@ -1,64 +1,62 @@
-"""
-Import North Tyneside
-"""
-import sys
-from django.contrib.gis.geos import Point
+from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
+from data_finder.helpers import geocode_point_only, PostcodeError
+from data_collection.addresshelpers import (
+    format_residential_address,
+    format_polling_station_address
+)
 
-from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 
-class Command(BaseCsvStationsShpDistrictsImporter):
-    """
-    Imports the Polling Station data from North Tyneside
-    """
-    council_id     = 'E08000022'
-    districts_name = 'NT_Polling_Districts_2014'
-    stations_name  = 'NT_Polling_Stations_2015.csv'
-    elections      = ['parl.2015-05-07']
+class Command(BaseCsvStationsCsvAddressesImporter):
+    council_id      = 'E08000022'
+    addresses_name  = 'local.2018-05-03/Version 1/Democracy Club.csv'
+    stations_name   = 'local.2018-05-03/Version 1/Democracy Club.csv'
+    elections       = ['local.2018-05-03']
 
     def get_station_hash(self, record):
         return "-".join([
-            record.pd,
-            record.place_desc,
-            record.place_pnam,
-            record.place_add1,
-            record.place_add2,
-            record.place_add3,
-            record.place_pcod,
+            record.col12.strip(),
         ])
 
-    def district_record_to_dict(self, record):
-        return {
-            'internal_council_id': record[-1],
-            'name': "%s - %s" % (record[3], record[-1]),
-            'polling_station_id': record[-1]
-        }
+    def get_station_address(self, record):
+        return format_polling_station_address([
+            record.col23.strip(),
+            record.col24.strip(),
+            record.col25.strip(),
+            record.col26.strip(),
+            record.col27.strip(),
+        ])
+
+    def get_station_point(self, record):
+        postcode = record.col32.strip()
+        if postcode == '':
+            return None
+
+        try:
+            location_data = geocode_point_only(postcode)
+            location = location_data.centroid
+        except PostcodeError:
+            location = None
+        return location
 
     def station_record_to_dict(self, record):
-        try:
-            location = Point(int(record.mapeast), int(record.mapnorth), srid=self.srid)
-        except ValueError:
-            location = Point(float(record.mapeast), float(record.mapnorth), srid=self.srid)
-        address_parts = [
-            record.place_pnam,
-            record.place_add1,
-            record.place_add2,
-            record.place_add3,
-            record.place_add4,
-            record.place_add5
-        ]
-        address = "\n".join(address_parts).strip()
-
-        """
-        In this file, some of the polling stations have a grid ref but no address
-        Insert them in the DB with address = "Address not supplied"
-        on the basis we can still provide directions to the grid ref.
-        """
-        if address == '' and record.place_pcod == '':
-            address = "Address not supplied"
-
+        location = self.get_station_point(record)
         return {
-            'internal_council_id': record.pd,
-            'postcode'           : record.place_pcod,
-            'address'            : address,
+            'internal_council_id': record.col12.strip(),
+            'postcode'           : record.col32.strip(),
+            'address'            : self.get_station_address(record),
             'location'           : location
+        }
+
+    def address_record_to_dict(self, record):
+        address = format_residential_address([
+            record.col13.strip(),
+            record.col14.strip(),
+            record.col15.strip(),
+            record.col16.strip(),
+            record.col17.strip()
+        ])
+        return {
+            'address'           : address.strip(),
+            'postcode'          : record.col21.strip(),
+            'polling_station_id': record.col12.strip(),
         }

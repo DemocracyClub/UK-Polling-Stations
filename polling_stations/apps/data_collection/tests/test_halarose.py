@@ -28,8 +28,8 @@ class HalaroseImportTests(TestCase):
         # and discarded 3 due to error conditions
         self.assertEqual(3, len(addresses))
         expected = set([
-            '1 Heol Elfed\nGorseinon\nSwansea',
-            '47 Heol Dylan\nGorseinon\nSwansea',
+            '1 Heol Elfed, Gorseinon, Swansea',
+            '47 Heol Dylan, Gorseinon, Swansea',
             '2, Dogkennel Farm Cottages',
         ])
         self.assertEqual(set(addresses), expected)
