@@ -24,11 +24,9 @@
 
 {% block in_page_javascript %}
 <script type="text/javascript">
-$(document).ready(function() {
-    var isAndroid = /(android)/i.test(navigator.userAgent);
-    if (isAndroid) {
-        $('.select_multirow').css('-webkit-appearance', 'menulist');
-    }
-});
+  var isAndroid = /(android)/i.test(navigator.userAgent);
+  if (isAndroid) {
+      $('.select_multirow').css('-webkit-appearance', 'menulist');
+  }
 </script>
 {% endblock in_page_javascript %}
