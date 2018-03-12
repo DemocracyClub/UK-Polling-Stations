@@ -360,9 +360,19 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 'location' from station_record_to_dict()
                 """
                 if self.stations_filetype in ['shp', 'shp.zip'] and 'location' not in station_record:
-                    station_record['location'] = Point(
-                        *station.shape.points[0],
-                        srid=self.get_srid())
+                    if len(station.shape.points) == 1:
+                        # we've got a point
+                        station_record['location'] = Point(
+                            *station.shape.points[0],
+                            srid=self.get_srid())
+                    else:
+                        # its a polygon: simplify it to a centroid and warn
+                        self.logger.log_message(logging.WARNING,
+                            "Implicitly converting station geometry to point")
+                        geojson = json.dumps(station.shape.__geo_interface__)
+                        poly = self.clean_poly(
+                            GEOSGeometry(geojson, srid=self.get_srid()))
+                        station_record['location'] = poly.centroid
 
                 if self.validation_checks:
                     self.check_station_point(station_record)
