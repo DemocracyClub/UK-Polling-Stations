@@ -9,7 +9,6 @@
   },
   "homepage": "https://github.com/chris48s/UK-Polling-Stations#readme",
   "dependencies": {
-    "uglify-js": "~2.6.0",
     "leaflet": "~0.7.7",
     "leaflet-extra-markers": "~1.0.6",
     "@mapbox/polyline": "~0.2.0",
