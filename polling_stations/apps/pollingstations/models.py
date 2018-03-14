@@ -122,6 +122,8 @@ class ResidentialAddress(models.Model):
     council            = models.ForeignKey(Council, null=True)
     polling_station_id = models.CharField(blank=True, max_length=100)
     slug               = models.SlugField(blank=False, null=False, db_index=True, unique=True, max_length=255)
+    uprn               = models.CharField(max_length=100, blank=True)
+    location           = models.PointField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         """
