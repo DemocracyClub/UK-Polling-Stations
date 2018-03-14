@@ -159,20 +159,36 @@ def get_council(geocode_result):
 
 class EveryElectionWrapper:
 
-    def __init__(self, postcode):
+    def __init__(self, postcode=None, point=None):
+        if not postcode and not point:
+            raise ValueError('Expected either a point or a postcode')
         try:
-            self.elections = self.get_data(Postcode(postcode).with_space)
-            self.request_success = True
-        except:
+            self.request_success = False
+            if postcode:
+                self.elections = self.get_data_by_postcode(Postcode(postcode).with_space)
+                self.request_success = True
+            elif point:
+                self.elections = self.get_data_by_point(point)
+                self.request_success = True
+        except Exception:
             self.request_success = False
 
-    def get_data(self, postcode):
+    def get_data_by_postcode(self, postcode):
+        query_url = "%sapi/elections.json?postcode=%s&future=1" % (
+            settings.EE_BASE, postcode)
+        return self.get_data(query_url)
+
+    def get_data_by_point(self, point):
+        query_url = "%sapi/elections.json?coords=%s,%s&future=1" % (
+            settings.EE_BASE, point.y, point.x)
+        return self.get_data(query_url)
+
+    def get_data(self, query_url):
         headers = {}
         if hasattr(settings, 'CUSTOM_UA'):
             headers['User-Agent'] = settings.CUSTOM_UA
 
-        res = requests.get("%sapi/elections.json?postcode=%s&future=1" % (
-            settings.EE_BASE, postcode), timeout=4, headers=headers)
+        res = requests.get(query_url, timeout=4, headers=headers)
 
         if res.status_code != 200:
             res.raise_for_status()
@@ -181,6 +197,9 @@ class EveryElectionWrapper:
         return res_json['results']
 
     def has_election(self):
+        if not settings.EVERY_ELECTION['CHECK']:
+            return settings.EVERY_ELECTION['HAS_ELECTION']
+
         if not self.request_success:
             # if the request was unsucessful for some reason,
             # assume there *is* an upcoming election
