@@ -26,7 +26,16 @@
 <script type="text/javascript">
   var isAndroid = /(android)/i.test(navigator.userAgent);
   if (isAndroid) {
-      $('.select_multirow').css('-webkit-appearance', 'menulist');
+    var elements = document.querySelectorAll('.select_multirow');
+    var className = 'android_menu_list';
+    Array.prototype.forEach.call(elements, function(el, i){
+      if (el.classList) {
+        el.classList.add(className);
+      } else {
+        el.className += ' ' + className;
+      }
+    });
+
   }
 </script>
 {% endblock in_page_javascript %}
