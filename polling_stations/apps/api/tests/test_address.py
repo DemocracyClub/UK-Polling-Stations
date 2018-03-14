@@ -13,6 +13,16 @@ def mock_geocode(postcode):
     )
 
 
+class EEMockWithElection:
+    def has_election(self):
+        return True
+
+
+class EEMockWithoutElection:
+    def has_election(self):
+        return False
+
+
 class AddressTest(TestCase):
     fixtures = ['polling_stations/apps/api/fixtures/test_address_postcode.json']
 
@@ -21,6 +31,7 @@ class AddressTest(TestCase):
         self.request = factory.get('/foo', format='json')
         self.request.user = AnonymousUser()
         self.endpoint = ResidentialAddressViewSet()
+        self.endpoint.get_ee_wrapper = lambda x: EEMockWithElection()
 
     def test_station_found(self):
         response = self.endpoint.retrieve(self.request,
@@ -31,6 +42,17 @@ class AddressTest(TestCase):
         self.assertTrue(response.data['polling_station_known'])
         self.assertEqual("Foo Street Primary School, Bar Town",
             response.data['polling_station']['properties']['address'])
+        self.assertEqual(1, len(response.data['addresses']))
+
+    def test_station_found_but_no_election(self):
+        self.endpoint.get_ee_wrapper = lambda x: EEMockWithoutElection()
+        response = self.endpoint.retrieve(self.request,
+            '1-foo-street-bar-town', 'json', geocoder=mock_geocode, log=False)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('X01000001', response.data['council']['council_id'])
+        self.assertFalse(response.data['polling_station_known'])
+        self.assertEqual(None, response.data['polling_station'])
         self.assertEqual(1, len(response.data['addresses']))
 
     def test_station_not_found(self):

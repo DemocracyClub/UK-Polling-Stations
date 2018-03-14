@@ -5,8 +5,10 @@ from rest_framework.viewsets import ViewSet
 from django.core.exceptions import ObjectDoesNotExist
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
+    EveryElectionWrapper,
     geocode_point_only,
     PostcodeError,
+    RoutingHelper,
 )
 from pollingstations.models import PollingStation, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
@@ -46,6 +48,13 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         assert 'slug' in kwargs
         return ResidentialAddress.objects.get(slug=kwargs['slug'])
 
+    def get_ee_wrapper(self, address):
+        rh = RoutingHelper(address.postcode)
+        if not rh.address_have_single_station:
+            if address.location:
+                return EveryElectionWrapper(point=address.location)
+        return EveryElectionWrapper(postcode=address.postcode)
+
     def retrieve(self, request, slug=None, format=None, geocoder=geocode_point_only, log=True):
         ret = {}
         ret['custom_finder'] = None
@@ -72,14 +81,17 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
             location = None
         ret['postcode_location'] = location
 
-        # get polling station
-        polling_station = PollingStation.objects.get_polling_station_by_id(
-            address.polling_station_id, address.council_id)
         ret['polling_station_known'] = False
         ret['polling_station'] = None
-        if polling_station:
-            ret['polling_station'] = polling_station
-            ret['polling_station_known'] = True
+
+        ee = self.get_ee_wrapper(address)
+        if ee.has_election():
+            # get polling station if there is an election in this area
+            polling_station = PollingStation.objects.get_polling_station_by_id(
+                address.polling_station_id, address.council_id)
+            if polling_station:
+                ret['polling_station'] = polling_station
+                ret['polling_station_known'] = True
 
         # create log entry
         log_data = {}

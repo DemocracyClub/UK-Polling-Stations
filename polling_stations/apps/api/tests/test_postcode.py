@@ -19,6 +19,16 @@ class StubGeocoder:
         return self.code
 
 
+class EEMockWithElection:
+    def has_election(self):
+        return True
+
+
+class EEMockWithoutElection:
+    def has_election(self):
+        return False
+
+
 """
 Test double for geocode function
 allows us to use fake postcodes and return known
@@ -66,6 +76,7 @@ class PostcodeTest(TestCase):
         self.request = factory.get('/foo', format='json')
         self.request.user = AnonymousUser()
         self.endpoint = PostcodeViewSet()
+        self.endpoint.get_ee_wrapper = lambda x: EEMockWithElection()
 
     def test_address_list(self):
         response = self.endpoint.retrieve(self.request, 'AA11AA', 'json',
@@ -100,6 +111,19 @@ class PostcodeTest(TestCase):
         self.assertTrue(response.data['polling_station_known'])
         self.assertEqual("St Foo's Church Hall, Bar Town",
             response.data['polling_station']['properties']['address'])
+        self.assertEqual([], response.data['addresses'])
+        self.assertIsNone(response.data['custom_finder'])
+        self.assertIsInstance(response.data['postcode_location'], dict)
+
+    def test_station_found_but_no_election(self):
+        self.endpoint.get_ee_wrapper = lambda x: EEMockWithoutElection()
+        response = self.endpoint.retrieve(self.request, 'CC11CC', 'json',
+            geocoder=mock_geocode, log=False)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('X01000001', response.data['council']['council_id'])
+        self.assertFalse(response.data['polling_station_known'])
+        self.assertEqual(None, response.data['polling_station'])
         self.assertEqual([], response.data['addresses'])
         self.assertIsNone(response.data['custom_finder'])
         self.assertIsInstance(response.data['postcode_location'], dict)

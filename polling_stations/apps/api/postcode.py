@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
+    EveryElectionWrapper,
     get_council,
     geocode,
     PostcodeError,
@@ -61,6 +62,9 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         else:
             return None
 
+    def get_ee_wrapper(self, postcode):
+        return EveryElectionWrapper(postcode)
+
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
         postcode = Postcode(postcode)
         ret = {}
@@ -96,13 +100,18 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
         ret['addresses'] = self.generate_addresses(rh)
 
-        # get polling station
         ret['polling_station_known'] = False
-        ret['polling_station'] = self.generate_polling_station(rh, council, location)
-        if ret['polling_station']:
-            ret['polling_station_known'] = True
-        if ret['polling_station'] and not ret['council']:
-            ret['council'] = ret['polling_station'].council
+        ret['polling_station'] = None
+
+        ee = self.get_ee_wrapper(postcode)
+        if ee.has_election():
+            # get polling station if there is an election in this area
+            ret['polling_station_known'] = False
+            ret['polling_station'] = self.generate_polling_station(rh, council, location)
+            if ret['polling_station']:
+                ret['polling_station_known'] = True
+            if ret['polling_station'] and not ret['council']:
+                ret['council'] = ret['polling_station'].council
 
         # get custom finder (if no polling station)
         ret['custom_finder'] = None
