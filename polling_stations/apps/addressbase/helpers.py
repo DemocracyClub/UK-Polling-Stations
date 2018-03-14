@@ -13,7 +13,9 @@ AddressTuple = namedtuple('Address', [
     'postcode',
     'council_id',
     'polling_station_id',
-    'slug'])
+    'slug',
+    'uprn',
+    'location'])
 
 
 class AddressSet(set):
@@ -28,6 +30,8 @@ class AddressSet(set):
                 polling_station_id=address.polling_station_id,
                 council_id=address.council_id,
                 slug=address.slug,
+                uprn=address.uprn,
+                location=address.location
             )
             addresses_db.append(record)
 
@@ -170,6 +174,8 @@ class EdgeCaseFixer:
                 self.target_council_id,
                 station_id,
                 address.uprn,
+                address.uprn,
+                address.location
             ))
 
     def get_address_set(self):
