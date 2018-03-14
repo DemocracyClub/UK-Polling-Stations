@@ -83,3 +83,25 @@ class EveryElectionWrapperTest(TestCase):
         self.assertTrue(ee.request_success)
         self.assertTrue(ee.has_election())
         self.assertEqual([], ee.get_explanations())
+
+    @override_settings(EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': False})
+    @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot)
+    def test_settings_override1(self):
+        ee = EveryElectionWrapper(postcode='AA11AA')
+        # election is really happening here
+        self.assertTrue(ee.has_election())
+        # manually override it to false
+        with override_settings(EVERY_ELECTION={'CHECK': False, 'HAS_ELECTION': False}):
+            ee = EveryElectionWrapper(postcode='AA11AA')
+            self.assertFalse(ee.has_election())
+
+    @override_settings(EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': False})
+    @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_only_group)
+    def test_settings_override2(self):
+        ee = EveryElectionWrapper(postcode='AA11AA')
+        # election is not really happening here
+        self.assertFalse(ee.has_election())
+        # manually override it to true
+        with override_settings(EVERY_ELECTION={'CHECK': False, 'HAS_ELECTION': True}):
+            ee = EveryElectionWrapper(postcode='AA11AA')
+            self.assertTrue(ee.has_election())
