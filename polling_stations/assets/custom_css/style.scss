@@ -31,3 +31,14 @@ select.select_multirow {
 select[size], select[multiple] {
     background-image: none;
 }
+
+.api-method {
+  @extend code;
+  border-radius: 5px;
+  padding:0.2em 0.5em;
+}
+
+.api-method-GET {
+  background-color: $dc-green;
+  color: #FFF;
+}
