@@ -8,9 +8,9 @@
             <th>ID</th>
             <th>Council</th>
             <th>Example</th>
-            <th>Polling Stations</th>
-            <th>Polling Districts</th>
-            <th>Addresses</th>
+            <th class="number">Polling Stations</th>
+            <th class="number">Polling Districts</th>
+            <th class="number">Addresses</th>
             {% if request.user.is_staff %}
             <th>Edit</th>
             {% endif %}
@@ -31,13 +31,13 @@
                 <a href="{% url "postcode_view" postcode=council.council.postcode %}">{{ council.council.postcode }}</a>
                 {% endif %}
                 </td>
-                <td>
+                <td class="number">
                 {{ council.num_stations }}
                 </td>
-                <td>
+                <td class="number">
                 {{ council.num_districts }}
                 </td>
-                <td>
+                <td class="number">
                 {{ council.num_addresses }}
                 </td>
                 {% if request.user.is_staff %}
