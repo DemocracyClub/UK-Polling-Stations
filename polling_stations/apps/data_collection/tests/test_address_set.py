@@ -289,3 +289,108 @@ class AddressSetTest(TestCase):
         result = address_list.remove_ambiguous_addresses()
 
         self.assertEqual(expected, result)
+
+    def test_attach_doorstep_grid_refs(self):
+        in_list = [
+            {
+                'address': '1 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'a',
+                'uprn': '00001',
+            },
+            {
+                'address': '4 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'd',
+                'uprn': '00004',
+            },
+        ]
+
+        address_set = AddressSet(MockLogger())
+        for el in in_list:
+            address_set.add(el)
+
+        addressbase = {
+            # 00001 is in here but 00004 isn't
+            '00001': {'location': "SRID=4326;POINT(-0.9288492 53.3119342)"}
+        }
+
+        address_set.elements = address_set.attach_doorstep_gridrefs(addressbase)
+
+        self.assertEqual(2, len(address_set.elements))
+        for el in address_set.elements:
+            if el.uprn == '00001':
+                self.assertEqual("SRID=4326;POINT(-0.9288492 53.3119342)", el.location)
+            if el.uprn == '00004':
+                self.assertEqual(None, el.location)
+
+    def test_remove_invalid_uprns(self):
+        in_list = [
+            {
+                'address': '1 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'a',
+                'uprn': '00001',
+            },
+            {
+                'address': '2 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'b',
+                'uprn': '00002',
+            },
+            {
+                'address': '3 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AB',
+                'council': '',
+                'slug': 'c',
+                'uprn': '00003',
+            },
+            {
+                'address': '4 Abbeyvale Dr, Liverpool',
+                'postcode': 'L252NW',
+                'polling_station_id': 'AA',
+                'council': '',
+                'slug': 'd',
+                'uprn': '00004',
+            },
+        ]
+
+        address_set = AddressSet(MockLogger())
+        for el in in_list:
+            address_set.add(el)
+
+        addressbase = {
+            '00001': {
+                'postcode': 'L252NW',
+                'address': '1 Abbeyvale Dr, Liverpool',
+                'location': "SRID=4326;POINT(-0.9288492 53.3119342)",
+            },
+            '00002': {
+                'postcode': 'L252NW',
+                'address': '2 Abbeyvale Dr, Liverpool',
+                'location': "SRID=4326;POINT(-0.9288480 53.3119345)",
+            },
+            '00003': {
+                'postcode': 'L252XX',  # this postcode doesn't match with the input record
+                'address': '2 Abbeyvale Dr, Liverpool',
+                'location': "SRID=4326;POINT(-0.9288400 53.3119332)",
+            }
+            # 00004 is not in here
+        }
+
+        address_set.elements = address_set.remove_invalid_uprns(addressbase)
+
+        # 00003 and 00004 should still be in the set
+        self.assertEqual(4, len(address_set.elements))
+        # but those records should now have a blank uprn
+        for el in address_set.elements:
+            assert el.uprn in ['00001', '00002', '']
