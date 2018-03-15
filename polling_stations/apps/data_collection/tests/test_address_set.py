@@ -23,11 +23,11 @@ class AddressSetTest(TestCase):
                 address='bar', slug='bar', postcode='', council='', polling_station_id='', uprn='', location=None),
         ])
 
-        address_list = AddressSet(MockLogger())
+        address_set = AddressSet(MockLogger())
         for el in in_list:
-            address_list.add(el)
+            address_set.add(el)
 
-        self.assertEqual(expected, address_list.elements)
+        self.assertEqual(expected, address_set.elements)
 
     def test_remove_ambiguous_addresses_exactmatch(self):
         in_list = [
@@ -57,10 +57,10 @@ class AddressSetTest(TestCase):
             },
         ]
 
-        address_list = AddressSet(MockLogger())
+        address_set = AddressSet(MockLogger())
         for el in in_list:
-            address_list.add(el)
-        result = address_list.remove_ambiguous_addresses()
+            address_set.add(el)
+        result = address_set.remove_ambiguous_addresses()
 
         self.assertEqual(set(), result)
 
@@ -147,10 +147,10 @@ class AddressSetTest(TestCase):
                 location=None),
         ])
 
-        address_list = AddressSet(MockLogger())
+        address_set = AddressSet(MockLogger())
         for el in in_list:
-            address_list.add(el)
-        result = address_list.remove_ambiguous_addresses()
+            address_set.add(el)
+        result = address_set.remove_ambiguous_addresses()
 
         self.assertEqual(expected, result)
 
@@ -191,10 +191,10 @@ class AddressSetTest(TestCase):
             },
         ]
 
-        address_list = AddressSet(MockLogger())
+        address_set = AddressSet(MockLogger())
         for el in in_list:
-            address_list.add(el)
-        result = address_list.remove_ambiguous_addresses()
+            address_set.add(el)
+        result = address_set.remove_ambiguous_addresses()
 
         self.assertEqual(set(), result)
 
@@ -236,10 +236,10 @@ class AddressSetTest(TestCase):
             },
         ]
 
-        address_list = AddressSet(MockLogger())
+        address_set = AddressSet(MockLogger())
         for el in in_list:
-            address_list.add(el)
-        result = address_list.remove_ambiguous_addresses()
+            address_set.add(el)
+        result = address_set.remove_ambiguous_addresses()
 
         self.assertEqual(set(), result)
 
@@ -282,11 +282,11 @@ class AddressSetTest(TestCase):
             },
         ]
 
-        address_list = AddressSet(MockLogger())
+        address_set = AddressSet(MockLogger())
         for el in in_list:
-            address_list.add(el)
-        expected = set(address_list.elements)
-        result = address_list.remove_ambiguous_addresses()
+            address_set.add(el)
+        expected = set(address_set.elements)
+        result = address_set.remove_ambiguous_addresses()
 
         self.assertEqual(expected, result)
 
