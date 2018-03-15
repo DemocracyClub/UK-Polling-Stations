@@ -5,6 +5,7 @@ Data type classes used by base importers
 import abc
 import logging
 from collections import namedtuple
+from django.db import connection
 from data_collection.slugger import Slugger
 from pollingstations.models import (
     PollingStation,
@@ -36,7 +37,9 @@ Address = namedtuple('Address', [
     'postcode',
     'council',
     'polling_station_id',
-    'slug'])
+    'slug',
+    'uprn',
+    'location'])
 
 
 class CustomSet(metaclass=abc.ABCMeta):
@@ -131,6 +134,8 @@ class AddressSet(CustomSet):
             element['council'],
             element['polling_station_id'],
             element['slug'],
+            element['uprn'],
+            element.get("location", None),
         )
 
     def add(self, address):
@@ -141,6 +146,17 @@ class AddressSet(CustomSet):
             self.logger.log_message(
                 logging.DEBUG, "Duplicate address found:\n%s",
                 variable=address, pretty=True)
+
+    def _to_list(self, myset):
+        l = list(self.elements)
+        return [x._asdict() for x in l]
+
+    def _to_set(self, mylist):
+        s = set()
+        for el in mylist:
+            if el:
+                s.add(self.build_namedtuple(el))
+        return s
 
     def get_address_lookup(self, addresses):
         # for each address, build a lookup of address -> list of station ids
@@ -168,14 +184,10 @@ class AddressSet(CustomSet):
         return ambiguous_postcodes
 
     def remove_ambiguous_addresses(self):
-
-        # convert our set of tuples into a list of dicts
-        tmp_addresses = list(self.elements)
-        tmp_addresses = [x._asdict() for x in tmp_addresses]
+        tmp_addresses = self._to_list(self.elements)
 
         address_lookup = self.get_address_lookup(tmp_addresses)
         ambiguous_postcodes = self.get_ambiguous_postcodes(tmp_addresses, address_lookup)
-        out_addresses = set()
 
         # discard all addresses with an ambiguous postcode
         for i, record in enumerate(tmp_addresses):
@@ -193,15 +205,82 @@ class AddressSet(CustomSet):
                     logging.INFO, "Ambiguous addresses discarded: %s: %s",
                     variable=(record['address_slug'], reason))
 
-        for record in tmp_addresses:
-            if record:
-                out_addresses.add(self.build_namedtuple(record))
+        return self._to_set(tmp_addresses)
 
-        return out_addresses
+    def attach_doorstep_gridrefs(self, addressbase_data):
+        tmp_addresses = self._to_list(self.elements)
+
+        for record in tmp_addresses:
+            if record['uprn'] in addressbase_data:
+                record['location'] = addressbase_data[record['uprn']]['location']
+
+        return self._to_set(tmp_addresses)
+
+    def remove_invalid_uprns(self, addressbase_data):
+        tmp_addresses = self._to_list(self.elements)
+
+        for record in tmp_addresses:
+
+            # if the UPRN attached to the input record isn't present
+            # in the data we fetched from AddressBase, discard the UPRN
+            if record['uprn'] not in addressbase_data:
+                self.logger.log_message(
+                    logging.DEBUG, "Removing unknown UPRN %s from record:\n%s",
+                    variable=(record['uprn'], record))
+                record['uprn']  = ''
+                continue
+
+            # if the UPRN attached to the input record is present
+            # in the data we fetched from AddressBase, but the postcode
+            # on the input record doesn't match the postcode on the
+            # record from AddressBase, discard the UPRN
+            if record['postcode'] != addressbase_data[record['uprn']]['postcode']:
+                self.logger.log_message(
+                    logging.INFO,
+                    "Removing UPRN due to postcode mismatch.\nInput Record:\n%s\nAddressbase record:\n%s",
+                    variable=(record, addressbase_data[record['uprn']]))
+                record['uprn']  = ''
+
+            # TODO: for future, look at levenshtein distance between
+            # input address and result from addressbase?
+
+        return self._to_set(tmp_addresses)
+
+    def get_uprns_from_addressbase(self):
+        # get all the UPRNs in target local auth
+        # which exist in both Addressbase and ONSUD
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT
+                a.uprn,
+                a.address,
+                REPLACE(a.postcode, ' ', ''),
+                a.location
+            FROM addressbase_address a
+            JOIN addressbase_onsud o ON a.uprn=o.uprn
+            WHERE o.lad=%s;
+        """, [self.council_id])
+        # return result a hash table keyed by UPRN
+        return {
+            row[0]: {
+                'address': row[1],
+                'postcode': row[2],
+                'location': row[3],
+            } for row in cursor.fetchall()
+        }
+
+    @property
+    def council_id(self):
+        for e in self.elements:
+            return e.council.council_id
 
     def save(self, batch_size):
 
         self.elements = self.remove_ambiguous_addresses()
+        addressbase_data = self.get_uprns_from_addressbase()
+        self.elements = self.remove_invalid_uprns(addressbase_data)
+        self.elements = self.attach_doorstep_gridrefs(addressbase_data)
+
         addresses_db = []
 
         for address in self.elements:
@@ -211,6 +290,8 @@ class AddressSet(CustomSet):
                 polling_station_id=address.polling_station_id,
                 council=address.council,
                 slug=address.slug,
+                uprn=address.uprn,
+                location=address.location
             )
             addresses_db.append(record)
 

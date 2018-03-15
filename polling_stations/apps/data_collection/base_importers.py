@@ -486,13 +486,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         return self.get_data(self.addresses_filetype, addresses_file)
 
     def get_slug(self, address_info):
-        # if we have a uprn, use that as the slug
-        if 'uprn' in address_info:
-            if address_info['uprn']:
-                self.logger.log_message(logging.DEBUG, "Using UPRN as slug")
-                return address_info['uprn']
-
-        # otherwise build a slug from the other data we have
         self.logger.log_message(logging.DEBUG, "Generating custom slug")
         return Slugger.slugify(
             "%s-%s-%s-%s" % (
@@ -530,22 +523,26 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
             "Addresses: Found {:,} rows in input file".format(len(addresses)))
         for address in addresses:
             address_info = self.address_record_to_dict(address)
+
             if address_info is None:
                 self.logger.log_message(
                     logging.INFO,
                     "address_record_to_dict() returned None with input:\n%s",
                     variable=address, pretty=True)
                 continue
-            if 'council' not in address_info:
-                address_info['council'] = self.council
+
             self.add_residential_address(address_info)
 
     def add_residential_address(self, address_info):
 
-        """
-        strip all whitespace from postcode and convert to uppercase
-        this will make it easier to query this based on user-supplied postcode
-        """
+        if 'council' not in address_info:
+            address_info['council'] = self.council
+
+        if 'uprn' not in address_info:
+            address_info['uprn'] = ''
+        else:
+            address_info['uprn'] = str(address_info['uprn']).lstrip('0')
+
         address_info['postcode'] = Postcode(address_info['postcode']).without_space
 
         # generate a unique slug so we can provide a consistent url
