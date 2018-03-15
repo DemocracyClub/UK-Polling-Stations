@@ -141,6 +141,7 @@ class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter,
     station_id_field = 'pollingplaceid'
     easting_field = 'pollingplaceeasting'
     northing_field = 'pollingplacenorthing'
+    residential_uprn_field = 'uprn'
 
     def address_record_to_dict(self, record):
         if record.postcode.strip() == '':
@@ -151,10 +152,13 @@ class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter,
         else:
             address = '%s %s' % (record.propertynumber.strip(), record.streetname.strip())
 
+        uprn = getattr(record, self.residential_uprn_field).strip()
+
         return {
             'address'           : address.strip(),
             'postcode'          : record.postcode.strip(),
-            'polling_station_id': getattr(record, self.station_id_field).strip()
+            'polling_station_id': getattr(record, self.station_id_field).strip(),
+            'uprn'              : uprn,
         }
 
 
@@ -177,6 +181,7 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter,
     station_uprn_field = 'polling_place_uprn'
     easting_field = 'polling_place_easting'
     northing_field = 'polling_place_northing'
+    residential_uprn_field = 'property_urn'
 
     def address_record_to_dict(self, record):
         if record.addressline6.strip() == '':
@@ -190,10 +195,13 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter,
             record.addressline5,
         ])
 
+        uprn = getattr(record, self.residential_uprn_field).strip()
+
         return {
             'address'           : address.strip(),
             'postcode'          : record.addressline6.strip(),
-            'polling_station_id': getattr(record, self.station_id_field).strip()
+            'polling_station_id': getattr(record, self.station_id_field).strip(),
+            'uprn'              : uprn,
         }
 
 
@@ -261,6 +269,7 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         'pollingstationaddress_4',
         'pollingstationaddress_5',
     ]
+    residential_uprn_field = 'uprn'
 
     def get_station_hash(self, record):
         return "-".join([
@@ -346,10 +355,13 @@ class BaseHalaroseCsvImporter(BaseCsvStationsCsvAddressesImporter,
         else:
             station_id = self.get_station_hash(record)
 
+        uprn = getattr(record, self.residential_uprn_field).strip()
+
         return {
             'address'           : address,
             'postcode'          : record.housepostcode.strip(),
             'polling_station_id': station_id,
+            'uprn'              : uprn,
         }
 
 
@@ -377,6 +389,7 @@ class BaseDemocracyCountsCsvImporter(BaseCsvStationsCsvAddressesImporter,
     ]
     postcode_field = 'postcode'
     station_id_field = 'stationcode'
+    residential_uprn_field = 'uprn'
 
     def address_record_to_dict(self, record):
 
@@ -390,10 +403,13 @@ class BaseDemocracyCountsCsvImporter(BaseCsvStationsCsvAddressesImporter,
         if 'Dummy Record' in address:
             return None
 
+        uprn = getattr(record, self.residential_uprn_field).strip()
+
         return {
             'address'           : address,
             'postcode'          : getattr(record, self.postcode_field).strip(),
             'polling_station_id': getattr(record, self.station_id_field).strip(),
+            'uprn'              : uprn,
         }
 
     def get_station_point(self, record):
