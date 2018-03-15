@@ -11,16 +11,16 @@ class AddressSetTest(TestCase):
 
     def test_add_with_duplicates(self):
         in_list = [
-            {'address': 'foo', 'slug': 'foo', 'postcode': '', 'council': '', 'polling_station_id': ''},
-            {'address': 'bar', 'slug': 'bar', 'postcode': '', 'council': '', 'polling_station_id': ''},
-            {'address': 'foo', 'slug': 'foo', 'postcode': '', 'council': '', 'polling_station_id': ''},
+            {'address': 'foo', 'slug': 'foo', 'postcode': '', 'council': '', 'polling_station_id': '', 'uprn': '',},
+            {'address': 'bar', 'slug': 'bar', 'postcode': '', 'council': '', 'polling_station_id': '', 'uprn': '',},
+            {'address': 'foo', 'slug': 'foo', 'postcode': '', 'council': '', 'polling_station_id': '', 'uprn': '',},
         ]
 
         expected = set([
             Address(
-                address='foo', slug='foo', postcode='', council='', polling_station_id=''),
+                address='foo', slug='foo', postcode='', council='', polling_station_id='', uprn='', location=None),
             Address(
-                address='bar', slug='bar', postcode='', council='', polling_station_id=''),
+                address='bar', slug='bar', postcode='', council='', polling_station_id='', uprn='', location=None),
         ])
 
         address_list = AddressSet(MockLogger())
@@ -36,21 +36,24 @@ class AddressSetTest(TestCase):
                 'postcode': 'N89JG',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'haringey-park-london-n89jg-aa'
+                'slug': 'haringey-park-london-n89jg-aa',
+                'uprn': '',
             },
             {
                 'address': 'Haringey Park, London',
                 'postcode': 'N89JG',
                 'polling_station_id': 'AB',
                 'council': '',
-                'slug': 'haringey-park-london-n89jg-ab'
+                'slug': 'haringey-park-london-n89jg-ab',
+                'uprn': '',
             },
             {
                 'address': 'Haringey Park, London',
                 'postcode': 'N89JG',
                 'polling_station_id': 'AC',
                 'council': '',
-                'slug': 'haringey-park-london-n89jg-ac'
+                'slug': 'haringey-park-london-n89jg-ac',
+                'uprn': '',
             },
         ]
 
@@ -80,42 +83,48 @@ class AddressSetTest(TestCase):
                 'postcode': 'PR82QX',
                 'polling_station_id': 'A01',
                 'council': '',
-                'slug': 'a'
+                'slug': 'a',
+                'uprn': '',
             },
             {
                 'address': '5/6, Mickleton Dr.  Southport',
                 'postcode': 'PR82QX',
                 'polling_station_id': 'A02',
                 'council': '',
-                'slug': 'b'
+                'slug': 'b',
+                'uprn': '',
             },
             {
                 'address': '5-6 mickleton dr southport',
                 'postcode': 'PR82QX',
                 'polling_station_id': 'A03',
                 'council': '',
-                'slug': 'c'
+                'slug': 'c',
+                'uprn': '',
             },
             {
                 'address': '56 Mickleton Dr, Southport',
                 'postcode': 'PR82QX',
                 'polling_station_id': 'A04',
                 'council': '',
-                'slug': 'd'
+                'slug': 'd',
+                'uprn': '',
             },
             {
                 'address': '5-6 Mickleton Dr, Southport',
                 'postcode': 'BT281QZ',
                 'polling_station_id': 'A05',
                 'council': '',
-                'slug': 'e'
+                'slug': 'e',
+                'uprn': '',
             },
             {
                 'address': '56 Mickleton Dr, Southport',
                 'postcode': 'BT281QZ',
                 'polling_station_id': 'A04',
                 'council': '',
-                'slug': 'f'
+                'slug': 'f',
+                'uprn': '',
             },
         ]
 
@@ -125,13 +134,17 @@ class AddressSetTest(TestCase):
                 postcode='BT281QZ',
                 polling_station_id='A05',
                 council='',
-                slug='e'),
+                slug='e',
+                uprn='',
+                location=None),
             Address(
                 address='56 Mickleton Dr, Southport',
                 postcode='BT281QZ',
                 polling_station_id='A04',
                 council='',
-                slug='f'),
+                slug='f',
+                uprn='',
+                location=None),
         ])
 
         address_list = AddressSet(MockLogger())
@@ -149,28 +162,32 @@ class AddressSetTest(TestCase):
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'a'
+                'slug': 'a',
+                'uprn': '',
             },
             {
                 'address': 'Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'b'
+                'slug': 'b',
+                'uprn': '',
             },
             {
                 'address': 'Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AB',
                 'council': '',
-                'slug': 'c'
+                'slug': 'c',
+                'uprn': '',
             },
             {
                 'address': 'Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'd'
+                'slug': 'd',
+                'uprn': '',
             },
         ]
 
@@ -190,28 +207,32 @@ class AddressSetTest(TestCase):
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'a'
+                'slug': 'a',
+                'uprn': '',
             },
             {
                 'address': '2 Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'b'
+                'slug': 'b',
+                'uprn': '',
             },
             {
                 'address': '3 Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AB',
                 'council': '',
-                'slug': 'c'
+                'slug': 'c',
+                'uprn': '',
             },
             {
                 'address': '3 Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'd'
+                'slug': 'd',
+                'uprn': '',
             },
         ]
 
@@ -232,28 +253,32 @@ class AddressSetTest(TestCase):
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'a'
+                'slug': 'a',
+                'uprn': '',
             },
             {
                 'address': '2 Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'b'
+                'slug': 'b',
+                'uprn': '',
             },
             {
                 'address': '3 Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AB',
                 'council': '',
-                'slug': 'c'
+                'slug': 'c',
+                'uprn': '',
             },
             {
                 'address': '4 Abbeyvale Dr, Liverpool',
                 'postcode': 'L252NW',
                 'polling_station_id': 'AA',
                 'council': '',
-                'slug': 'd'
+                'slug': 'd',
+                'uprn': '',
             },
         ]
 
