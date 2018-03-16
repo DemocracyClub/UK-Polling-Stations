@@ -35,6 +35,9 @@ select[size], select[multiple] {
   @extend code;
   border-radius: 5px;
   padding: 0.2em 0.5em;
+}
+
+.api-http-code {
   cursor: pointer;
 }
 
