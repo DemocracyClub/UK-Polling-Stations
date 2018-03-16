@@ -29,7 +29,8 @@ select[size], select[multiple] {
 .api-method {
   @extend code;
   border-radius: 5px;
-  padding:0.2em 0.5em;
+  padding: 0.2em 0.5em;
+  cursor: pointer;
 }
 
 .api-method-GET {
