@@ -33,7 +33,7 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
         geometry_collection = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid('districts')))
 
         try:
-            poly = MultiPolygon(geometry_collection[-1])
+            poly = MultiPolygon(geometry_collection[-1], srid=self.get_srid('districts'))
         except TypeError:
             poly = geometry_collection[-1]
 
