@@ -55,7 +55,7 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
     @transaction.atomic
     def fix_bad_polygon(self):
-        # fix self-intersecting polygon
+        # fix self-intersecting polygons
         self.stdout.write("running fixup SQL")
         table_name = PollingDistrict()._meta.db_table
 
