@@ -6,32 +6,26 @@
 {% block page_title %}{% trans "Your Polling Station" %}{% endblock page_title %}
 
 {% block content %}
-<div class="row">
-  <div class="columns large-8">
-    <div class="card">
-        <h2>{% blocktrans %}Contact Your Council{% endblocktrans %}</h2>
+<div class="card">
+  <h2>{% blocktrans %}Contact Your Council{% endblocktrans %}</h2>
 
-        {% blocktrans with council.phone as council_phone %}
-        <p>We don't have data for your area.</p>
+  {% blocktrans with council.phone as council_phone %}
+  <p>We don't have data for your area.</p>
 
-        <p>Your polling station address should be printed on your polling card, which is delivered by post before an election.</p>
-        <p>Or, you need to contact your council. Residents in {{ postcode }} may be in one of the following council areas:</p>
-        {% endblocktrans %}
+  <p>Your polling station address should be printed on your polling card, which is delivered by post before an election.</p>
+  <p>Or, you need to contact your council. Residents in {{ postcode }} may be in one of the following council areas:</p>
+  {% endblocktrans %}
 
-        {% for council in councils %}
-        <p>
-          <h3>{{ council.name }}</h3>
-          <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
-          <abbr title="Email">{% trans "E:" context "Short for Email:" %}</abbr>
-          <a href="mailto:{{ council.email }}">{{ council.email }}</a>
-        </p>
-        {% endfor %}
-    </div>
-  </div>
-
-  <div class="columns large-4">
-    {% include "fragments/you_dont_need_poll_card.html" %}
-    {# include "fragments/register_to_vote.html" #}
-  </div>
+  {% for council in councils %}
+  <p>
+    <h3>{{ council.name }}</h3>
+    <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
+    <abbr title="Email">{% trans "E:" context "Short for Email:" %}</abbr>
+    <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+  </p>
+  {% endfor %}
 </div>
+
+{% include "fragments/you_dont_need_poll_card.html" %}
+{# include "fragments/register_to_vote.html" #}
 {% endblock content %}

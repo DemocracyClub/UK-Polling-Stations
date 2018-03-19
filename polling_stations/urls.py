@@ -76,3 +76,4 @@ for EMBED in PREFIXED_URLS:
 urlpatterns = extra_patterns + core_patterns + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+handler500 = 'dc_theme.urls.dc_server_error'

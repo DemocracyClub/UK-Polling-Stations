@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load dc_forms %}
 
 {% load i18n %}
 
@@ -7,29 +8,26 @@
 {% block content %}
 
 {% block extra_content %}{% endblock extra_content %}
-<div class="row">
-  <div class="columns large-centered columns large-6 card">
-    {% if not is_whitelabel and not form.errors %}
+<div class="card centered-card">
+    {% if form.errors %}
+      <div class="error-summary">
+        {% blocktrans %}
+        <h2>Sorry, we can't find {{ postcode }}</h2>
+        <p>This doesn't appear to be a valid postcode.</p>
+        {% endblocktrans %}
+      </div>
+    {% endif %}
+
+    {% if not is_whitelabel %}
     <header>
       <h2>{% trans "Find your polling station" %}</h2>
     </header>
     {% endif %}
-
-    {% if form.errors %}
-      {% blocktrans %}
-      <h2>Sorry, we can't find {{ postcode }}</h2>
-      <p>This doesn't appear to be a valid postcode.</p>
-      {% endblocktrans %}
-    {% endif %}
-
-    <form method=post class="form form-inline">
+    <form method="post" class="form form-inline">
       {% csrf_token %}
-      <label class="card_header">{% trans "Enter your postcode" %}
-        <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
-      </label>
+      {{ form|dc_form }}
       <button type="submit" class="button" id="submit-postcode">{% trans "Find your polling station" %}</button>
     </form>
-  </div>
 </div>
 
 {% endblock content %}

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load dc_forms %}
 
 {% if error == "We don't know of any upcoming elections in your area" %}
 
@@ -32,9 +33,7 @@
   {% endblocktrans %}
   <form method="post" action="{% url 'home' %}" class="form form-inline">
     {% csrf_token %}
-    <label class="card_header">{% trans "Enter Your Postcode" %}
-      <input id="id_postcode" name="postcode" type="text" aria-describedby="postcode_help_text" autofocus >
-    </label>
+    {{ postcode_form|dc_form }}
     <button type="submit" class="button" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
   </form>
 

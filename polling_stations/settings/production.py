@@ -28,3 +28,5 @@ DATABASES = {
         }
 }
 DATABASE_ROUTERS = ['polling_stations.db_routers.LoggerRouter',]
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'

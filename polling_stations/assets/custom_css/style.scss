@@ -1,23 +1,27 @@
 @import 'dc_base';
-
-body {
-    background: #eee;
-}
+@import 'cards';
+@import 'feedback_form';
 
 body.embed {
     padding-top: 0px;
     margin-top: 0px;
+
+    footer {
+      background-color: transparent;
+      color: $body-text-colour;
+    }
 }
 
 footer {
-  margin-top: 2em;
-
-  .dc-logo {
-      height: 45px;
-      margin-left: .5em;
+  ul {
+    overflow: hidden;
   }
 
+  li {
+    float: left;
+  }
 }
+
 
 select.select_multirow {
     height: auto;
@@ -25,4 +29,19 @@ select.select_multirow {
 
 select[size], select[multiple] {
     background-image: none;
+}
+
+.api-method {
+  @extend code;
+  border-radius: 5px;
+  padding: 0.2em 0.5em;
+}
+
+.api-http-code {
+  cursor: pointer;
+}
+
+.api-method-GET {
+  background-color: $dc-green;
+  color: #FFF;
 }

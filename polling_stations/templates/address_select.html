@@ -1,40 +1,42 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load dc_forms %}
 
 {% block content %}
 
-<div class="row">
-  <div class="columns large-12">
-    <div class="card">
-      <h2 id="address_picker">
-        {% trans "Choose Your Address / Street" %}
-      </h2>
+<div class="card">
+  <h2 id="address_picker">
+    {% trans "Choose Your Address / Street" %}
+  </h2>
 
-      <form method=post class="form form-inline">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_p }}
-            <button type="submit" class="button" id="submit-address">
-              {% trans "Find my Polling Station" %}
-            </button>
-        </div>
-      </form>
-
-    </div>
-
-  </div>
+  <form method=post class="form form-inline">
+    {% csrf_token %}
+    {{ form|dc_form }}
+    <button type="submit" class="button" id="submit-address">
+      {% trans "Find my Polling Station" %}
+    </button>
+  </form>
 </div>
+
 
 {% endblock content %}
 
 {% block in_page_javascript %}
 <script type="text/javascript">
-$(document).ready(function() {
-    var isAndroid = /(android)/i.test(navigator.userAgent);
-    if (isAndroid) {
-        $('.select_multirow').css('-webkit-appearance', 'menulist');
+  var isAndroid = /(android)/i.test(navigator.userAgent);
+  if (isAndroid) {
+    var elements = document.querySelectorAll('.select_multirow');
+    var className = 'android_menu_list';
+
+    for (var i = 0; i < elements.length; i++) {
+      var el = elements[i];
+      if (el.classList) {
+        el.classList.add(className);
+      } else {
+        el.className += ' ' + className;
+      }
     }
-});
+  }
 </script>
 {% endblock in_page_javascript %}

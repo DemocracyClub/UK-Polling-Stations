@@ -139,6 +139,7 @@ class BasePollingStationView(
             loc = self.get_location()
         except PostcodeError as e:
             context['error'] = str(e)
+            context['postcode_form'] = PostcodeLookupForm
             return context
 
         if loc is None:

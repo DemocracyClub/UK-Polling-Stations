@@ -24,31 +24,33 @@
 
 {% block site_footer %}
 <footer class="footer">
-  <div class="row">
-    <div class="small-12 medium-7 columns">
-      <p class="footer-links">
-        <a href="{% url 'home' %}">Home</a>
-        <a href="https://democracyclub.org.uk/projects/polling-stations/">About</a>
-        <a href="{% url 'privacy_view' %}">Privacy</a>
-        <a href="https://democracyclub.org.uk/blog/">Blog</a>
-        <a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a>
-        <a href="https://democracyclub.org.uk/contact/">Contact</a>
-        <a href="https://democracyclub.org.uk/donate/">Donate</a>
-      </p>
-      <p>Democracy Club is a UK based Community Interest Company that builds
-        the digital infrastructure needed for a 21st century democracy</p>
-      <p class="inline-list social">
-        <a href="https://www.facebook.com/democracyclub/" target="_top">
-            <i class="fa fa-facebook-square" aria-hidden="true" style="color: white"></i>
-        </a>
-        <a href="https://twitter.com/democlub" target="_top">
-            <i class="fa fa-twitter-square" aria-hidden="true" style="color: white"></i>
-        </a>
-        <a href="https://github.com/DemocracyClub/UK-Polling-Stations" target="_top">
-            <i class="fa fa-github" aria-hidden="true" style="color: white"></i>
-        </a>
-      </p>
-    </div>
+  <div class="container">
+    <h3>{{ site_title }}</h3>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="https://democracyclub.org.uk/projects/polling-stations/">About</a></li>
+      <li><a href="{% url 'privacy_view' %}">Privacy</a></li>
+      <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
+      <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
+      <li><a href="https://democracyclub.org.uk/contact/">Contact</a></li>
+      <li><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
+    </ul>
+
+    <h3>Made by Democracy Club</h3>
+    <p>Democracy Club is a UK based Community Interest Company that builds
+      the digital infrastructure needed for a 21st century democracy</p>
+    <ul>
+      <li><a href="https://democracyclub.org.uk/about/">About Democracy Club</a></li>
+      <li><a href="https://democracyclub.org.uk/contact/">Contact Us</a></li>
+      <li><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
+      <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
+      <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
+      <li><a href="https://twitter.com/democlub">Twitter</a></li>
+      <li><a href="https://facebook.com/DemocracyClub">Facebook</a></li>
+      <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
+    </ul>
+    <p>Copyright © 2017 Democracy Club Community Interest Company Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
+
   </div>
 </footer>
 {% endblock site_footer %}
