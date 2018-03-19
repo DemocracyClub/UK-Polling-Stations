@@ -426,7 +426,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 logging.INFO,
                 "District %s is fully contained by target local auth",
                 variable=district_record['internal_council_id'])
-            return
+            return 100
 
         try:
             intersection = self.council.area.intersection(
@@ -451,6 +451,8 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 overlap_percentage
             )
         )
+
+        return overlap_percentage
 
     def import_polling_districts(self):
         districts = self.get_districts()
