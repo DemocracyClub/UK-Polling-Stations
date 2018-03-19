@@ -59,4 +59,5 @@ class Command(BaseCsvStationsCsvAddressesImporter):
             'address'           : address.strip(),
             'postcode'          : record.col21.strip(),
             'polling_station_id': record.col12.strip(),
+            'uprn'              : record.col22.strip(),
         }

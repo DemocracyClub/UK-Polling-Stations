@@ -252,6 +252,11 @@ class ResidentialAddressReport():
             council_id=self.council_id
         ).count()
 
+    def get_uprns_imported(self):
+        return ResidentialAddress.objects.filter(
+            council_id=self.council_id,
+        ).exclude(uprn='').count()
+
     def get_addresses_with_valid_station_id_ref(self):
         cursor = connection.cursor()
         cursor.execute("""
@@ -443,6 +448,12 @@ class DataQualityReportBuilder():
 
             self.report.append({ 'style': 'warning',
                 'text': " - without station id            : %i" % (address_report.get_addresses_without_station_id())
+            })
+            self.report.append({ 'style': None,
+                'text': "----------------------------------"
+            })
+            self.report.append({ 'style': 'warning',
+                'text': " - with UPRN                     : %i" % (address_report.get_uprns_imported())
             })
             self.report.append({ 'style': None,
                 'text': "\n"

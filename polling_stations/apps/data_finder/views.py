@@ -118,6 +118,9 @@ class BasePollingStationView(
     def get_station(self):
         pass
 
+    def get_ee_wrapper(self):
+        return EveryElectionWrapper(postcode=self.postcode)
+
     def get_directions(self):
         if self.location and self.station and self.station.location:
             dh = DirectionsHelper()
@@ -148,11 +151,8 @@ class BasePollingStationView(
         self.station = self.get_station()
         self.directions = self.get_directions()
 
-        ee = EveryElectionWrapper(self.postcode)
-        if settings.EVERY_ELECTION['CHECK']:
-            context['has_election'] = ee.has_election()
-        else:
-            context['has_election'] = settings.EVERY_ELECTION['HAS_ELECTION']
+        ee = self.get_ee_wrapper()
+        context['has_election'] = ee.has_election()
 
         if not context['has_election']:
             context['error'] = "We don't know of any upcoming elections in your area"
@@ -255,6 +255,12 @@ class AddressView(BasePollingStationView):
             self.address.polling_station_id,
             self.address.council_id)
 
+    def get_ee_wrapper(self):
+        rh = RoutingHelper(self.postcode)
+        if not rh.address_have_single_station:
+            if self.address.location:
+                return EveryElectionWrapper(point=self.address.location)
+        return EveryElectionWrapper(postcode=self.postcode)
 
 class ExamplePostcodeView(BasePollingStationView):
 
