@@ -51,7 +51,10 @@ class Command(BaseGenericApiImporter):
         geometry_collection = self.clean_poly(
             GEOSGeometry(record.geometry.wkt, srid=self.get_srid('districts'))
         )
-        poly = convert_linestring_to_multiploygon(geometry_collection)
+        poly = GEOSGeometry(
+            convert_linestring_to_multiploygon(geometry_collection),
+            srid=self.get_srid('districts')
+        )
 
         # meta-data
         extended_data = self.parse_extended_data(record)
