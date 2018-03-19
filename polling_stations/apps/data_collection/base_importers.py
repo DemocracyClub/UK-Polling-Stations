@@ -14,7 +14,7 @@ from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.gis import geos
-from django.contrib.gis.geos import Point, GEOSGeometry
+from django.contrib.gis.geos import Point, GEOSGeometry, GEOSException
 from django.db import connection
 from django.db import transaction
 
@@ -420,6 +420,38 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def district_record_to_dict(self, record):
         pass
 
+    def check_district_overlap(self, district_record):
+        if self.council.area.contains(district_record['area']):
+            self.logger.log_message(
+                logging.INFO,
+                "District %s is fully contained by target local auth",
+                variable=district_record['internal_council_id'])
+            return
+
+        try:
+            intersection = self.council.area.intersection(
+                district_record['area'].transform(4326, clone=True))
+            district_area = district_record['area'].transform(27700, clone=True).area
+            intersection_area = intersection.transform(27700, clone=True).area
+        except GEOSException as e:
+            self.logger.log_message(logging.ERROR, str(e))
+            return
+
+        overlap_percentage = (intersection_area/district_area)*100
+        if overlap_percentage > 99:
+            # meh - close enough
+            level = logging.INFO
+        else:
+            level = logging.WARNING
+
+        self.logger.log_message(
+            level,
+            "District {0} is {1:.2f}% contained by target local auth".format(
+                district_record['internal_council_id'],
+                overlap_percentage
+            )
+        )
+
     def import_polling_districts(self):
         districts = self.get_districts()
         self.write_info(
@@ -461,6 +493,8 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
                     GEOSGeometry(geojson, srid=self.get_srid('districts')))
                 district_info['area'] = poly
 
+            if self.validation_checks:
+                self.check_district_overlap(district_info)
             self.add_polling_district(district_info)
 
     def add_polling_district(self, district_info):
