@@ -134,24 +134,11 @@ a number of councils who publish their data at a public location.
 
 For example:
 
-* `python manage.py import_barrow_in_furness`
-* `python manage.py import_canterbury`
-* `python manage.py import_doncaster`
-* `python manage.py import_dover`
-* `python manage.py import_dundee`
-* `python manage.py import_eden`
-* `python manage.py import_edinburgh`
-* `python manage.py import_epsom_and_ewell`
-* `python manage.py import_fife`
-* `python manage.py import_guildford`
-* `python manage.py import_hastings`
-* `python manage.py import_lancaster`
+* `python manage.py import_camden`
+* `python manage.py import_lambeth`
 * `python manage.py import_salford`
-* `python manage.py import_shepway`
-* `python manage.py import_thanet`
-* `python manage.py import_tonbridge`
+* `python manage.py import_southampton`
 * `python manage.py import_tunbridge_wells`
-* `python manage.py import_wolverhampton`
 
 all reference data which is publicly available.
 
