@@ -28,17 +28,3 @@ def data_quality(request, council_id):
         'summary': data
     }
     return render(request, 'data_collection/dataquality_detail.html', context)
-
-
-class TimeHelper:
-
-    @staticmethod
-    def parse_timestamp(timestamp, tz=True):
-        if tz:
-            return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%f+00:00')
-        else:
-            return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%f')
-
-    @staticmethod
-    def days_ago(timestamp):
-        return abs(datetime.utcnow() - timestamp).days
