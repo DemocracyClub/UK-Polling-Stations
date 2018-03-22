@@ -11,7 +11,7 @@ class TestBugReport(TestCase):
         expected_strings = [
             '<textarea name="description" required id="id_description" rows="3" cols="40" class=" form-control">\n</textarea>',
             '<input type="email" name="email" id="id_email" maxlength="100" class=" form-control" />',
-            '<input type="submit" value="Send Report" class="button" />',
+            '<button type="submit" class="button">Send Report</button>',
         ]
         for string in expected_strings:
             self.assertContains(response, string, html=True)
