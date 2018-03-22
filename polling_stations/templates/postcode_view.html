@@ -64,7 +64,10 @@
       {% if request.brand == 'democracyclub' and not error %}
         <div class="card">
           <p align="right">
-            <a href="{% url 'bug_report_form_view' %}?source=wheredoivote&amp;source_url={{ request.path|urlencode }}">
+            <a
+              href="{% url 'bug_report_form_view' %}?source=wheredoivote&amp;source_url={{ request.path|urlencode }}"
+              class="link-button"
+            >
               Is there anything wrong with this page?
             </a>
           </p>

@@ -6,24 +6,21 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="columns large-8">
-    <div class="card">
-      <form action="" method="post">
-          {% csrf_token %}
-          <h3>Report a Problem</h3>
-          <div class="form-group">
-            {{ form|dc_form }}
-            <p><small>
-              If you provide an email address, we may contact you to
-              request more information or notify you of improvements.
-              It will not be used for email marketing purposes.
-            </small></p>
-            <input type="submit" value="Send Report" class="button" />
-          </div>
-      </form>
-    </div>
-  </div>
+
+<div class="card">
+  <form action="" method="post">
+      {% csrf_token %}
+      <h3>Report a Problem</h3>
+      <div class="form-group">
+        {{ form|dc_form }}
+        <p><small>
+          If you provide an email address, we may contact you to
+          request more information or notify you of improvements.
+          It will not be used for email marketing purposes.
+        </small></p>
+        <button type="submit" class="button">Send Report</button>
+      </div>
+  </form>
 </div>
 
 {% endblock content %}
