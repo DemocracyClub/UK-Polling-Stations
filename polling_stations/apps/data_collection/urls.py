@@ -1,10 +1,11 @@
 from django.conf.urls import include, url
 from django.conf import settings
-from django.views.decorators.cache import cache_page
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import RedirectView
 
-from .views import LeagueTable, data_quality
+from .views import data_quality
 
 urlpatterns = [
-    url(r'^$', LeagueTable.as_view(), name='league_table'),
+    url(r'^$', RedirectView.as_view(url=reverse_lazy("home")), name='league_table'),
     url(r'data_quality/(?P<council_id>.+)/$', data_quality, name='data_quality'),
 ]

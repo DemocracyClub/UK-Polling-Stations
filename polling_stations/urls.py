@@ -15,7 +15,6 @@ from data_finder.views import (
     PrivacyView,
     PostcodeView,
     ExamplePostcodeView,
-    CoverageView,
     AddressView,
     AddressFormView,
     WeDontKnowView,
@@ -56,7 +55,6 @@ extra_patterns = [
     ),
     url(r'^feedback/', include('feedback.urls')),
     url(r'^league_table/', include('data_collection.urls')),
-    url(r'^coverage/$', CoverageView.as_view(), name='coverage'),
     url(r'^example/$', ExamplePostcodeView.as_view(), name='example'),
     url(r'^email/', include('dc_signup_form.urls', namespace='dc_signup_form')),
 
