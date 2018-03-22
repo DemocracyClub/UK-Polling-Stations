@@ -162,7 +162,6 @@ PROJECT_APPS = (
     'data_finder',
     'dc_theme',
     'feedback',
-    'nus_wales',
     'pollingstations',
     'uk_geo_utils',
     'whitelabel',
@@ -246,9 +245,7 @@ EMBED_PREFIXES = (
     'embed',
 )
 
-WHITELABEL_PREFIXES = (
-    'nus_wales',
-)
+WHITELABEL_PREFIXES = ()
 
 # CorsMiddleware config
 CORS_ORIGIN_ALLOW_ALL = True
