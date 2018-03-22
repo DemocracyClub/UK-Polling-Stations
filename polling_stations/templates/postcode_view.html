@@ -63,15 +63,15 @@
     {% if we_know_where_you_should_vote or custom %}
       {% if request.brand == 'democracyclub' and not error %}
         <div class="card">
-          <p align="right">
+          {% include "feedback/feedback_form.html" %}
+          <p>
             <a
               href="{% url 'bug_report_form_view' %}?source=wheredoivote&amp;source_url={{ request.path|urlencode }}"
               class="link-button"
             >
-              Is there anything wrong with this page?
+              Report a problem with this page
             </a>
           </p>
-          {% include "feedback/feedback_form.html" %}
         </div>
       {% endif %}
     {% endif %}
