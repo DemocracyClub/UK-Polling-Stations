@@ -237,8 +237,7 @@ class EveryElectionWrapper:
                     continue
                 if not election['metadata']:
                     continue
-                if election['group_type'] == 'organisation':
-                    return election['metadata']
+                return election['metadata']
         return None
 
 
