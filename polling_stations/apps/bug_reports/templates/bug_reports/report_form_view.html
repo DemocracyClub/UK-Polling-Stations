@@ -12,12 +12,8 @@
       {% csrf_token %}
       <h3>Report a Problem</h3>
       <div class="form-group">
-        {{ form|dc_form }}
-        <p><small>
-          If you provide an email address, we may contact you to
-          request more information or notify you of improvements.
-          It will not be used for email marketing purposes.
-        </small></p>
+        <p>{{ form|dc_form }}</p>
+        {% include "bug_reports/disclaimer.html" %}
         <button type="submit" class="button">Send Report</button>
       </div>
   </form>
