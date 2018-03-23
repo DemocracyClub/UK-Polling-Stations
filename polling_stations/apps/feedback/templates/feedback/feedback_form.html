@@ -4,10 +4,12 @@
   {{ feedback_form.source_url }}
 
   <h3>Did you find this useful?</h3>
-  {% for choice in feedback_form.found_useful %}
-    {{ choice.tag }}
-    <label class="link-button" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
-  {% endfor %}
+  <span id="feedback_choices_container">
+    {% for choice in feedback_form.found_useful %}
+      {{ choice.tag }}
+      <label class="link-button" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+    {% endfor %}
+  </span>
 
   <div class="comments_container">
     <p>Can you tell us anything more?</p>

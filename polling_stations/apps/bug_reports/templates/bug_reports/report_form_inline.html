@@ -2,7 +2,6 @@
 
 <form id="report_form" action="{% url 'bug_report_form_view' %}" method="post">
   {% csrf_token %}
-  <div class="link-button">Report a Problem</div>
   <div class="form-group">
     <p>{{ bug_report_form|dc_form }}</p>
     {% include "bug_reports/disclaimer.html" %}

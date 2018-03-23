@@ -64,14 +64,9 @@
       {% if request.brand == 'democracyclub' and not error %}
         <div class="card">
           {% include "feedback/feedback_form.html" %}
-          <p>
-            <a
-              href="{% url 'bug_report_form_view' %}?source=wheredoivote&amp;source_url={{ request.path|urlencode }}"
-              class="link-button"
-            >
-              Report a problem with this page
-            </a>
-          </p>
+          <div id="report_form_container" style="display: none;">
+          {% include "bug_reports/report_form_inline.html" %}
+          </div>
         </div>
       {% endif %}
     {% endif %}
