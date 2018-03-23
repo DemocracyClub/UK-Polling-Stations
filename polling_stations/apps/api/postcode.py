@@ -118,6 +118,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         if not ret['polling_station_known'] and loc:
             ret['custom_finder'] = self.generate_custom_finder(loc, postcode)
 
+        ret['metadata'] = ee.get_metadata()
+
         # create log entry
         log_data = {}
         log_data['we_know_where_you_should_vote'] = ret['polling_station_known']

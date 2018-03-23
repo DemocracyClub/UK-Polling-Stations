@@ -48,6 +48,7 @@ class PostcodeResponseSerializer(serializers.Serializer):
     polling_station = PollingStationGeoSerializer(read_only=True)
     addresses = ResidentialAddressSerializer(read_only=True, many=True)
     report_problem_url = serializers.CharField(read_only=True)
+    metadata = serializers.DictField(read_only=True)
 
 
 class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
@@ -105,6 +106,8 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
             if polling_station:
                 ret['polling_station'] = polling_station
                 ret['polling_station_known'] = True
+
+        ret['metadata'] = ee.get_metadata()
 
         # create log entry
         log_data = {}
