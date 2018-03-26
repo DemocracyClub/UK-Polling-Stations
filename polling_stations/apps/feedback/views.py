@@ -16,7 +16,7 @@ class FeedbackFormView(UpdateView):
         try:
             return Feedback.objects.get(token=token)
         except Feedback.DoesNotExist:
-            return Feedback()
+            return Feedback(token=token)
 
     def get_success_url(self):
 
