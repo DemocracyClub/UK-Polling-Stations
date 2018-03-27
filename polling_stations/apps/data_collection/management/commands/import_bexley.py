@@ -1,81 +1,17 @@
-"""
-Import Bexley
-"""
-from time import sleep
+from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
-from django.contrib.gis.geos import Point
-
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode, geocode_point_only, PostcodeError
-from addressbase.models import Address
-
-
-class Command(BaseCsvStationsCsvAddressesImporter):
-    """
-    Imports the Polling Station data from Bexley Council
-    """
+class Command(BaseXpressWebLookupCsvImporter):
     council_id      = 'E09000004'
-    addresses_name  = 'Copy of GLA POLLING STATION FINDER.csv'
-    stations_name   = 'Copy of GLA POLLING STATION FINDER.csv'
-    csv_delimiter   = ','
-    elections       = [
-        'ref.2016-06-23'
-    ]
-
-    def get_station_hash(self, record):
-        return "-".join([
-            record.poll_stn_number,
-            record.polling_station_name.strip(),
-            record.ps_postcode,
-        ])
+    addresses_name  = 'local.2018-05-03/Version 1/PropertyPostCodePollingStationWebLookup-2018-03-21.TSV'
+    stations_name   = 'local.2018-05-03/Version 1/PropertyPostCodePollingStationWebLookup-2018-03-21.TSV'
+    elections       = ['local.2018-05-03']
+    csv_delimiter = '\t'
 
     def station_record_to_dict(self, record):
-        # format address
-        address = "\n".join([
-            record.ps_address_1,
-            record.ps_address_2,
-            record.ps_address_3,
-            record.ps_address_4,
-        ])
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
 
-        postcode = record.post_code
+        # Point supplied for Footscray Baptist Church is miles off
+        if record.pollingplaceid == '869':
+            record = record._replace(pollingplaceeasting = '0')
+            record = record._replace(pollingplacenorthing = '0')
 
-        location = None
-        if record.northings and record.eastings:
-            location = Point(
-                float(record.eastings),
-                float(record.northings),
-                srid=27700)
-        else:
-            # no points supplied, so attempt to attach them by geocoding
-            try:
-                location_data = geocode_point_only(postcode)
-                location = location_data.centroid
-            except PostcodeError:
-                pass
-
-        return {
-            'internal_council_id': record.poll_stn_number,
-            'postcode'           : postcode,
-            'address'            : address,
-            'location'           : location
-        }
-
-    def address_record_to_dict(self, record):
-        address = ", ".join([ r.strip() for r in [
-            record.address_1,
-            record.address_2,
-            record.address_3,
-            record.address_4,
-            record.address_5,
-            record.address_6,
-
-        ] if r])
-
-        return {
-            'address'           : address,
-            'postcode'          : record.post_code.strip(),
-            'polling_station_id': record.poll_stn_number
-        }
+        return super().station_record_to_dict(record)
