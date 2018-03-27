@@ -65,3 +65,25 @@ class TestBugReport(TestCase):
         reports = BugReport.objects.all()
         self.assertEqual(0, len(reports))
         self.assertIn('<div class="form-group has-error">', str(response.content))
+
+    def test_no_malicious_redirects_post_body(self):
+        c = Client()
+        response = c.post('/report_problem/?source=foo', {
+            # malicious url in the post body
+            'source_url': 'https://badstuff.com/steal-all-your-data',
+            'source': '',
+            'description': 'some text in here',
+            'email': '',
+        })
+        self.assertRedirects(response, '/', status_code=302)
+
+    def test_no_malicious_redirects_url_param(self):
+        c = Client()
+        # malicious url in a GET param
+        response = c.post('/report_problem/?source=foo&source_url=https%3A%2F%2Fbadstuff.com%2Fstealallyourdata', {
+            'source_url': '',
+            'source': '',
+            'description': 'some text in here',
+            'email': '',
+        })
+        self.assertRedirects(response, '/', status_code=302)
