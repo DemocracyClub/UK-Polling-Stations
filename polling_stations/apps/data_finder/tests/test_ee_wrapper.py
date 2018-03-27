@@ -26,17 +26,21 @@ def get_data_with_elections(self, query_url):
     return [
         {
             'election_title': 'some election',
-            'group_type': 'organisation'
-        },  # no explanation key
+            'group_type': 'organisation',
+        },  # no explanation or metadata keys
         {
             'election_title': 'some election',
             'group_type': None,
-            'explanation': None  # null explanation key
-        },
+            'explanation': None,
+            'metadata': None
+        },  # null explanation and metsdata keys
         {
             'election_title': 'some election',
             'group_type': None,
-            'explanation': 'some text'  # explanation key contains text
+            'explanation': 'some text',  # explanation key contains text
+            'metadata': {
+                'this election': 'has some metadata'
+            }  # metadata key is an object
         },
     ]
 
@@ -49,6 +53,7 @@ class EveryElectionWrapperTest(TestCase):
         self.assertFalse(ee.request_success)
         self.assertTrue(ee.has_election())
         self.assertEqual([], ee.get_explanations())
+        self.assertEqual(None, ee.get_metadata())
 
     @override_settings(EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': True})
     @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_no_elections)
@@ -57,6 +62,7 @@ class EveryElectionWrapperTest(TestCase):
         self.assertTrue(ee.request_success)
         self.assertFalse(ee.has_election())
         self.assertEqual([], ee.get_explanations())
+        self.assertEqual(None, ee.get_metadata())
 
     @override_settings(EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': True})
     @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections)
@@ -67,6 +73,7 @@ class EveryElectionWrapperTest(TestCase):
         self.assertEqual([
             {'title': 'some election', 'explanation': 'some text'}
         ], ee.get_explanations())
+        self.assertEqual({'this election': 'has some metadata'}, ee.get_metadata())
 
     @override_settings(EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': True})
     @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_only_group)
@@ -75,6 +82,7 @@ class EveryElectionWrapperTest(TestCase):
         self.assertTrue(ee.request_success)
         self.assertFalse(ee.has_election())
         self.assertEqual([], ee.get_explanations())
+        self.assertEqual(None, ee.get_metadata())
 
     @override_settings(EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': True})
     @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot)
@@ -83,6 +91,7 @@ class EveryElectionWrapperTest(TestCase):
         self.assertTrue(ee.request_success)
         self.assertTrue(ee.has_election())
         self.assertEqual([], ee.get_explanations())
+        self.assertEqual(None, ee.get_metadata())
 
     @override_settings(EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': False})
     @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot)
