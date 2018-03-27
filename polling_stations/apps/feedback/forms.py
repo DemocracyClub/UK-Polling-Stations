@@ -27,6 +27,6 @@ class FeedbackForm(forms.ModelForm):
     source_url = forms.CharField(widget=forms.HiddenInput())
     token = forms.CharField(widget=forms.HiddenInput())
     comments = forms.CharField(
-        widget=forms.Textarea(attrs={'rows': 10}),
+        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
         required=False
     )

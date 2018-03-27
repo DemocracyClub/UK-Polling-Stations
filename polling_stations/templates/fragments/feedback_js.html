@@ -15,10 +15,23 @@
     });
 
     if ($('#feedback_form input[name=found_useful]:checked').val() === undefined) {
+
       $("#feedback_form .comments_container").hide();
+      $('<input type="radio" name="found_useful" value="PROBLEM" required data-toggle="button" id="report_problem" />'+
+        '<label class="link-button" for="report_problem">Report a problem with this page</label>'
+      ).insertAfter("#feedback_choices_container");
+
       $('#feedback_form input[name=found_useful]').click(function() {
-        $("#feedback_form .comments_container").show();
-      })
+        var radio_value = $('#feedback_form input[name=found_useful]:checked').val();
+        if ((radio_value === 'YES') || (radio_value === 'NO')) {
+          $("#feedback_form .comments_container").show();
+          $("#report_form_container").hide();
+        }
+        if ((radio_value === 'PROBLEM')) {
+          $("#feedback_form .comments_container").hide();
+          $("#report_form_container").show();
+        }
+      });
     }
 
   });

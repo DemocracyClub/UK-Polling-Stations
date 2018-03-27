@@ -1,29 +1,28 @@
 from django.contrib import admin
-
 from .models import LoggedPostcode
-
-
-class ReadOnlyAdminMixIn(admin.ModelAdmin):
-    def get_readonly_fields(self, request, obj=None):
-        if self.declared_fieldsets:
-            return flatten_fieldsets(self.declared_fieldsets)
-        else:
-            readonly_fields = set(
-                [field.name for field in self.opts.local_fields] +
-                [field.name for field in self.opts.local_many_to_many]
-            ) - set(getattr(self, 'exclude_from_read_only', []))
-
-            return list(readonly_fields)
 
 
 class LoggedPostcodeAdmin(admin.ModelAdmin):
     list_display = (
+        'created',
         'postcode',
         'had_data',
+        'council',
         'brand',
         'utm_source',
         'utm_medium',
         'utm_campaign',
+        'language',
+        'view_used',
+        'api_user',
     )
+    readonly_fields = [f.name for f in LoggedPostcode._meta.get_fields()]
+    ordering = ('-created', 'id')
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 admin.site.register(LoggedPostcode, LoggedPostcodeAdmin)

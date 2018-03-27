@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load dc_forms %}
+{% load i18n %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+
+<div class="card">
+  <form action="" method="post">
+      {% csrf_token %}
+      <h3>Report a Problem</h3>
+      <div class="form-group">
+        <p>{{ form|dc_form }}</p>
+        {% include "bug_reports/disclaimer.html" %}
+        <button type="submit" class="button">Send Report</button>
+      </div>
+  </form>
+</div>
+
+{% endblock content %}

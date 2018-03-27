@@ -62,7 +62,12 @@
 
     {% if we_know_where_you_should_vote or custom %}
       {% if request.brand == 'democracyclub' and not error %}
-        {% include "feedback/feedback_form.html" %}
+        <div class="card">
+          {% include "feedback/feedback_form.html" %}
+          <div id="report_form_container" style="display: none;">
+          {% include "bug_reports/report_form_inline.html" %}
+          </div>
+        </div>
       {% endif %}
     {% endif %}
 
@@ -132,6 +137,6 @@
     {% javascript 'map' %}
   {% endif %}
 
-  {% include "feedback/feedback_js.html" %}
+  {% include "fragments/feedback_js.html" %}
 
 {% endblock extra_javascript %}

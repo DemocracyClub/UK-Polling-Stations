@@ -43,5 +43,6 @@
                     "website": "http://www.ashfield-dc.gov.uk/residents/democracy,-elections-and-legal/elections/registering-to-vote.aspx",
                     "postcode": "NG17 8DA",
                     "address": "Ashfield District Council\nCouncil Offices\nUrban Road\nKirkby-in-Ashfield\nNottingham"
-                }
+                },
+                "report_problem_url": "https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json"
             }

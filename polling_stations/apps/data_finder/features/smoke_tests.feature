@@ -25,6 +25,11 @@ Feature: Smoke tests
     Then I should see "Did you find this useful?"
     And No errors were thrown
 
+    Scenario: Check bug report form
+    When I visit site page "/report_problem"
+    Then I should see "Report a Problem"
+    And No errors were thrown
+
     Scenario: Check embed version
     When I visit site page "/embed"
     Then I should see "Enter your postcode"

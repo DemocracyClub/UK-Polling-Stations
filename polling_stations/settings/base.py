@@ -122,6 +122,7 @@ TEMPLATES = [
                 'dc_theme.context_processors.dc_theme_context',
                 'dc_signup_form.context_processors.signup_form',
                 'feedback.context_processors.feedback_form',
+                'bug_reports.context_processors.bug_report_form',
                 "pollingstations.context_processors.google_analytics",
                 "whitelabel.context_processors.base_template",
             ],
@@ -163,6 +164,7 @@ PROJECT_APPS = (
     'dc_theme',
     'feedback',
     'pollingstations',
+    'bug_reports',
     'uk_geo_utils',
     'whitelabel',
 )
