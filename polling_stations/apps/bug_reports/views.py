@@ -28,10 +28,7 @@ class BugReportFormView(CreateView):
 
             report.status = 'OPEN'
             report.report_type = 'OTHER'
-            try:
-                report.user_agent = request.META['HTTP_USER_AGENT']
-            except KeyError:
-                report.user_agent = ''
+            report.user_agent = request.META.get('HTTP_USER_AGENT', '')
 
             # if the source_url came from our hidden field
             # we'll try to redirect to it if it passes 'is_safe_url()'
