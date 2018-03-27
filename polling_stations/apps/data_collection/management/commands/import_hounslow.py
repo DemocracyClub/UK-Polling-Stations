@@ -15,6 +15,15 @@ class Command(BaseHalaroseCsvImporter):
             record.pollingstationnumber.strip(),
         ])
 
+    def address_record_to_dict(self, record):
+        if record.houseid == '104146':
+            return None
+
+        if record.houseid == '107635':
+            return None
+
+        return super().address_record_to_dict(record)
+
     # Hounslow have supplied an additional file with
     # better grid references for the polling stations
     def post_import(self):
