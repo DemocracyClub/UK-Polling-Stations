@@ -16,7 +16,8 @@ A `200 OK` response from `/postcode` or `/address` is an object containing the f
   sometimes we can provide the URL of a polling station finder provided by their local council.
 * `report_problem_url`: (string, nullable) - If we provide a polling station result,
   this URL may be used to provide a user with a back-channel to report inaccurate data.
-
+* `metadata`: (object, nullable) - This field may be used to supply additional information about
+  an election, particularly if there is some unusual condition or event for voters to be aware of.
 
 
 ## Postcode search [/postcode/{postcode}.json]

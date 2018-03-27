@@ -67,5 +67,6 @@
                     "address": "Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex",
                     "email": "elections@adur-worthing.gov.uk"
                 },
-                "report_problem_url": null
+                "report_problem_url": null,
+                "metadata": null
             }
