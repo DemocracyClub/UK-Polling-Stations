@@ -155,6 +155,13 @@
                     "null"
                   ],
                   "description": "If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data."
-                }
+                },
+                "metadata": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "description": "This field may be used to supply additional information about an election."
+                },
               }
             }

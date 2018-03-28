@@ -228,6 +228,18 @@ class EveryElectionWrapper:
                     })
         return explanations
 
+    def get_metadata(self):
+        if not self.request_success:
+            return None
+        if len(self.elections) > 0:
+            for election in self.elections:
+                if not 'metadata' in election:
+                    continue
+                if not election['metadata']:
+                    continue
+                return election['metadata']
+        return None
+
 
 class DirectionsHelper():
 

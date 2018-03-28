@@ -3,6 +3,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory
 from api.address import ResidentialAddressViewSet
+from .mocks import EEMockWithElection, EEMockWithoutElection
 
 
 # Test double for geocode function: always returns the same point
@@ -11,16 +12,6 @@ def mock_geocode(postcode):
         "Geocoder", (object, ),
         { "centroid": Point(0.22247314453125, 53.149405955929744, srid=4326) }
     )
-
-
-class EEMockWithElection:
-    def has_election(self):
-        return True
-
-
-class EEMockWithoutElection:
-    def has_election(self):
-        return False
 
 
 class AddressTest(TestCase):

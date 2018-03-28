@@ -52,5 +52,6 @@
                     "postcode": "BN11 1HA",
                     "address": "Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex"
                 },
-                "report_problem_url": "https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json"
+                "report_problem_url": "https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json",
+                "metadata": null
             }

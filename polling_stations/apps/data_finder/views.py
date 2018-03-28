@@ -158,6 +158,10 @@ class BasePollingStationView(
         if not context['has_election']:
             context['error'] = "We don't know of any upcoming elections in your area"
         context['election_explainers'] = ee.get_explanations()
+        metadata = ee.get_metadata()
+        context['voter_id_pilot'] = None
+        if metadata and '2018-05-03-id-pilot' in metadata:
+            context['voter_id_pilot'] = metadata['2018-05-03-id-pilot']
 
         context['postcode'] = self.postcode.with_space
         context['location'] = self.location

@@ -5,6 +5,7 @@ from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory
 from api.postcode import PostcodeViewSet
 from data_finder.helpers import MultipleCouncilsException, PostcodeError
+from .mocks import EEMockWithElection, EEMockWithoutElection
 
 
 class StubGeocoder:
@@ -17,16 +18,6 @@ class StubGeocoder:
         if not self.code:
             raise ObjectDoesNotExist
         return self.code
-
-
-class EEMockWithElection:
-    def has_election(self):
-        return True
-
-
-class EEMockWithoutElection:
-    def has_election(self):
-        return False
 
 
 """
