@@ -1,75 +1,71 @@
-"""
-Import Southwark
-"""
-from time import sleep
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode, geocode_point_only, PostcodeError
-from addressbase.models import Address
-
-
-class Command(BaseCsvStationsCsvAddressesImporter):
-    """
-    Imports the Polling Station data from Southwark Council
-    """
+class Command(BaseHalaroseCsvImporter):
     council_id      = 'E09000033'
-    addresses_name  = 'Westminster polling_station_export-2016-03-01.csv'
-    stations_name   = 'Westminster polling_station_export-2016-03-01.csv'
-    csv_delimiter   = ','
-    elections       = [
-        'ref.2016-06-23'
-    ]
-
-    def get_station_hash(self, record):
-        return "-".join([
-            record.pollingstationaddress_1,
-            record.pollingstationnumber,
-            record.pollingstationname,
-        ])
-
-    def station_record_to_dict(self, record):
-        # format address
-        address = "\n".join([
-            record.pollingstationaddress_1,
-            record.pollingstationaddress_2,
-            record.pollingstationaddress_3,
-            record.pollingstationaddress_4,
-            record.pollingstationaddress_5,
-        ])
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
-
-        postcode = record.pollingstationpostcode
-        if postcode == "n/a":
-            return
-
-        location = None
-        try:
-            location_data = geocode_point_only(postcode)
-            location = location_data.centroid
-        except PostcodeError:
-            pass
-
-        return {
-            'internal_council_id': record.pollingstationnumber,
-            'postcode'           : postcode,
-            'address'            : address,
-            'location'           : location
-        }
+    addresses_name  = 'local.2018-05-03/Version 1/polling_station_export-2018-03-20 Westminster.csv'
+    stations_name   = 'local.2018-05-03/Version 1/polling_station_export-2018-03-20 Westminster.csv'
+    elections       = ['local.2018-05-03']
 
     def address_record_to_dict(self, record):
-        address = ", ".join([ r.strip() for r in [
-            record.housename,
-            record.housenumber,
-            record.substreetname,
-            record.streetname,
-            record.locality,
-            record.town,
-            record.adminarea,
-        ] if r])
 
-        return {
-            'address'           : address,
-            'postcode'          : record.housepostcode.strip(),
-            'polling_station_id': record.pollingstationnumber
-        }
+        if record.housepostcode == 'SW1P 4FF':
+            return None
+
+        if record.housepostcode == 'SW11 1DB':
+            return None
+
+        if record.uprn == '100023479764':
+            return None
+
+        if record.uprn == '10033574601':
+            return None
+
+        if record.housepostcode == 'SE1P 4SA':
+            return None
+
+        if record.houseid == '10010188' or record.houseid == '3114346':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'W1S 1NH'
+            return rec
+
+        if record.uprn == '10033633050':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'W2 3JT'
+            return rec
+
+        if record.houseid == '10007854':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'NW1 6DS'
+            return rec
+
+        if record.uprn == '10033555281':
+            return None
+
+        if record.houseid == '10002115':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'SW1X 7LJ'
+            return rec
+
+        if record.houseid == '3007640':
+            return None
+
+        if record.houseid == '10004469':
+            return None
+
+        if record.houseid == '10009330':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'W9 3QF'
+            return rec
+
+        if record.houseid == '10007728':
+            return None
+
+        if record.housepostcode == 'W2 6PD':
+            return None
+
+        if record.houseid == '10010095':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'W9 2DL'
+            return rec
+
+        return super().address_record_to_dict(record)

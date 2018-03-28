@@ -48,6 +48,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         }
 
     def address_record_to_dict(self, record):
+        if record.col22.strip() == '47237285':
+            return None
+
         address = format_residential_address([
             record.col13.strip(),
             record.col14.strip(),

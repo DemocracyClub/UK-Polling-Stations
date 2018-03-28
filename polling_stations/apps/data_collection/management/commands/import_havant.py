@@ -10,6 +10,5 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def address_record_to_dict(self, record):
         if record.addressline6 == 'PO11 0PJ':
-            print('ello')
             return None
         return super().address_record_to_dict(record)
