@@ -38,7 +38,7 @@ Retrieve meta-data about a council in JSON format.
 
 ## Councils: GeoJSON [/councils/{council_id}/geo.json]
 
-Retrieve a [GeoJSON Feature](http://geojson.org/geojson-spec.html#feature-objects) containing a GIS boundary and meta-data about a council.
+Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a GIS boundary and meta-data about a council.
 
 + Parameters
     + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council

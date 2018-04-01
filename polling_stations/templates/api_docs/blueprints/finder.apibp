@@ -5,8 +5,8 @@ This allows you to leverage Democracy Club's data to integrate a polling station
 
 A `200 OK` response from `/postcode` or `/address` is an object containing the following top-level keys:
 * `polling_station_known`: (boolean) - Do we know where this user should vote?
-* `postcode_location`: (object, nullable) - A [GeoJSON Feature](http://geojson.org/geojson-spec.html#feature-objects)
-  containing a [Point object](http://geojson.org/geojson-spec.html#point) describing the centroid of the input postcode.
+* `postcode_location`: (object, nullable) - A [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2)
+  containing a [Point object](https://tools.ietf.org/html/rfc7946#section-3.1.2) describing the centroid of the input postcode.
 * `polling_station`: (object, nullable) - A GeoJSON [polling station feature](#polling-stations-geojson-3)
 * `addresses`: (array) - An array of address objects listing the addresses applicable to this request (if necessary).
 * `council`: (object, nullable) - A [Council](#councils-json-3) object describing the local authority which covers this postcode.
