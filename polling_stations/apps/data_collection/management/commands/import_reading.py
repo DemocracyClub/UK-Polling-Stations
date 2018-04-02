@@ -20,7 +20,7 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
 
         if record.property_urn.strip() == '310080353':
             rec = super().address_record_to_dict(record)
-            rec['postcode'] = 'RG6 1DJ'
+            rec['postcode'] = 'RG6 1DL'
             return rec
 
         return super().address_record_to_dict(record)
