@@ -10,7 +10,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         if record.property_urn == '10000159530':
             rec = super().address_record_to_dict(record)
-            rec['postcode'] = 'PE28 2UB'
+            rec['postcode'] = 'PE28 2UD'
             return rec
 
         return super().address_record_to_dict(record)

@@ -1,9 +1,17 @@
-from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseXpressWebLookupCsvImporter):
     council_id = 'E07000110'
-    addresses_name = 'parl.2017-06-08/Version 1/Maidstone Democracy_Club__08June2017.tsv'
-    stations_name = 'parl.2017-06-08/Version 1/Maidstone Democracy_Club__08June2017.tsv'
-    elections = ['parl.2017-06-08']
+    addresses_name = 'local.2018-05-03/Version 2/PropertyPostCodePollingStationWebLookup-2018-03-23.TSV'
+    stations_name = 'local.2018-05-03/Version 2/PropertyPostCodePollingStationWebLookup-2018-03-23.TSV'
+    elections = ['local.2018-05-03']
     csv_delimiter = '\t'
     csv_encoding = 'windows-1252'
+
+
+    def address_record_to_dict(self, record):
+
+        if record.postcode == 'ME18 5PB':
+            return None
+
+        return super().address_record_to_dict(record)

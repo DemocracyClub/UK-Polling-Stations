@@ -1,7 +1,6 @@
 from django.db import transaction
-from django.db import connection
 from data_collection.data_types import StationSet
-from pollingstations.models import PollingDistrict
+from data_collection.geo_utils import fix_bad_polygons
 from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
 
 
@@ -83,4 +82,4 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
     def post_import(self):
         self.fill_the_blanks()
-        self.fix_bad_polygon()
+        fix_bad_polygons()

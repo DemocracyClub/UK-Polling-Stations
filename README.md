@@ -135,10 +135,13 @@ a number of councils who publish their data at a public location.
 For example:
 
 * `python manage.py import_camden`
+* `python manage.py import_doncaster`
 * `python manage.py import_lambeth`
 * `python manage.py import_salford`
 * `python manage.py import_southampton`
+* `python manage.py import_st_albans`
 * `python manage.py import_tunbridge_wells`
+* `python manage.py import_wolverhampton`
 
 all reference data which is publicly available.
 

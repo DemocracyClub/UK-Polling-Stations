@@ -5,7 +5,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid  = 4326
     council_id = 'E08000017'
-    elections = ['parl.2017-06-08']
+    elections = ['mayor.sheffield-city-ca.2018-05-03']
     scraper_name = 'wdiv-scrapers/DC-PollingStations-Doncaster'
     geom_type = 'geojson'
 
