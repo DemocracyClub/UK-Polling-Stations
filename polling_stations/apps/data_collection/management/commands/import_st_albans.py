@@ -1,5 +1,6 @@
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos.collections import MultiPolygon, Polygon
+from data_collection.geo_utils import fix_bad_polygons
 from data_collection.github_importer import BaseGitHubImporter
 
 class Command(BaseGitHubImporter):
@@ -7,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 27700
     districts_srid = 27700
     council_id = 'E07000240'
-    elections = ['parl.2017-06-08']
+    elections = ['local.2018-05-03']
     scraper_name = 'wdiv-scrapers/DC-PollingStations-StAlbans'
     geom_type = 'geojson'
 
@@ -49,3 +50,6 @@ class Command(BaseGitHubImporter):
             'postcode': '',
             'location': location,
         }
+
+    def post_import(self):
+        fix_bad_polygons()
