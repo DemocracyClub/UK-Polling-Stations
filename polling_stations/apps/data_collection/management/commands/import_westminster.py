@@ -6,6 +6,14 @@ class Command(BaseHalaroseCsvImporter):
     stations_name   = 'local.2018-05-03/Version 1/polling_station_export-2018-03-20 Westminster.csv'
     elections       = ['local.2018-05-03']
 
+    def station_record_to_dict(self, record):
+
+        # Spelling error in original data
+        if record.pollingstationnumber == '68':
+            record = record._replace(pollingstationaddress_1='Broadbent Room')
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
 
         if record.housepostcode == 'SW1P 4FF':
