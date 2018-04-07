@@ -4,7 +4,7 @@ Feature: Check Postcodes
     Then I should see "Find your polling station"
     Then I fill in "postcode" with "BB11BB"
     Then I submit the only form
-    Then I should see "Choose Your Address / Street"
+    Then I should see "Choose Your Address"
     And I should see option "2 Baz Street, Bar Town" in selector "address"
     Then I select "2 Baz Street, Bar Town" from "address"
     Then I submit the only form
@@ -18,7 +18,7 @@ Feature: Check Postcodes
     Then I should see "Find your polling station"
     Then I fill in "postcode" with "BB11BB"
     Then I submit the only form
-    Then I should see "Choose Your Address / Street"
+    Then I should see "Choose Your Address"
     And I should see option "3 Baz Street, Bar Town" in selector "address"
     Then I select "3 Baz Street, Bar Town" from "address"
     Then I submit the only form
@@ -42,7 +42,7 @@ Feature: Check Postcodes
     Then I should see "Find your polling station"
     Then I fill in "postcode" with "BB11BB"
     Then I submit the only form
-    Then I should see "Choose Your Address / Street"
+    Then I should see "Choose Your Address"
     Then I select "My address is not in the list" from "address"
     Then I submit the only form
     Then I should see "Contact Foo Council"
