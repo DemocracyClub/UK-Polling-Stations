@@ -2,7 +2,7 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E07000199'
-    addresses_name = 'parl.2017-06-08/Version 1/Tamworth Democracy_Club__08June2017.tsv'
-    stations_name = 'parl.2017-06-08/Version 1/Tamworth Democracy_Club__08June2017.tsv'
-    elections = ['parl.2017-06-08']
+    addresses_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 (1) Tamworth.tsv'
+    stations_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 (1) Tamworth.tsv'
+    elections = ['local.2018-05-03']
     csv_delimiter = '\t'
