@@ -100,6 +100,8 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
         elif self.station_uprn_field and getattr(record, self.station_uprn_field).strip():
             # if we have a UPRN, try that
             try:
+                uprn = getattr(record, self.station_uprn_field)
+                uprn = uprn.lstrip('0')
                 g = AddressBaseGeocoder(self.get_station_postcode(record))
                 location = g.get_point(getattr(record, self.station_uprn_field))
             except (ObjectDoesNotExist, AddressBaseException) as e:
