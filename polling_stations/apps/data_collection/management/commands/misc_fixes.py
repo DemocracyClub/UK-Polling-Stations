@@ -31,6 +31,12 @@ class Command(BaseCommand):
         westminster.save()
         print("..updated")
 
+        print("updating Southend email address...")
+        southend = Council.objects.get(pk='E06000033')
+        southend.email = 'elections@southend.gov.uk'
+        southend.save()
+        print("..updated")
+
 
         deleteme = [
             # nothing yet
