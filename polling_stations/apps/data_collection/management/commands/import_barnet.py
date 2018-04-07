@@ -8,10 +8,6 @@ class Command(BaseDemocracyCountsCsvImporter):
 
     def address_record_to_dict(self, record):
 
-        if record.postcode == 'A1 1AA':
-            # this is a dummy record
-            return None
-
         if record.uprn == '-2709':
             rec = super().address_record_to_dict(record)
             rec['polling_station_id'] = ''
