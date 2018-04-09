@@ -8,9 +8,11 @@ class Command(BaseHalaroseCsvImporter):
 
     def station_record_to_dict(self, record):
 
-        # Spelling error in original data
+        # Spelling errors in original data
         if record.pollingstationnumber == '68':
             record = record._replace(pollingstationaddress_1='Broadbent Room')
+        if record.pollingstationnumber == '81':
+            record = record._replace(pollingstationaddress_2='Alderney Street')
 
         return super().station_record_to_dict(record)
 
