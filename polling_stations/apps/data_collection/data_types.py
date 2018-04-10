@@ -12,6 +12,8 @@ from pollingstations.models import (
     PollingDistrict,
     ResidentialAddress
 )
+from uk_geo_utils.helpers import Postcode
+from uk_geo_utils.models import Onspd
 
 
 Station = namedtuple('Station', [
@@ -269,6 +271,60 @@ class AddressSet(CustomSet):
             } for row in cursor.fetchall()
         }
 
+    def remove_addresses_outside_target_auth(self):
+        """
+        Remove any addresses with a postcode which appears in our input data
+        but where the postcode centroid is outside the target local auth.
+
+        As long as we're calling this after remove_invalid_uprns()
+        We can take a massive shortcut for performance here
+        and only look at input records where the uprn is empty
+        because by definition (see get_uprns_from_addressbase() )
+        any record left with a UPRN must be inside the target local auth.
+
+        If we've got records in the input file with a postcode centroid
+        outside the target local auth this either indicates:
+        a) A mistake (in which case we want to remove this bad data), or
+        b) This is legit data but the postcode is split across
+        multiple local authorities (in which case we just show the
+        multiple_councils view, even if we hold data).
+
+        In either case, we might as well bin the data here.
+        Note if we were to get rid of the multiple_councils view
+        and try to make a better job of that then we might need
+        to take a more sophisticated approach here.
+        """
+        query_postcodes = set([
+            Postcode(record.postcode).with_space\
+            for record in self.elements\
+            if not record.uprn
+        ])
+        db_postcodes = Onspd.objects.filter(
+            pcds__in=query_postcodes,
+            doterm=''
+        ).only('pcds', 'oslaua')
+        bad_postcodes = set([
+            Postcode(record.pcds).without_space\
+            for record in db_postcodes\
+            if record.oslaua != self.council_id
+        ])
+
+        if not bad_postcodes:
+            return self.elements
+
+        # if we found any postcodes,
+        # remove all records matching any of these postcodes
+        tmp_addresses = self._to_list(self.elements)
+        for i, record in enumerate(tmp_addresses):
+            if record['postcode'] in bad_postcodes:
+                tmp_addresses[i] = None
+
+                self.logger.log_message(logging.INFO,
+                    "Discarding record: Postcode centroid is outside target local authority:\n%s",
+                    variable=record, pretty=True
+                )
+        return self._to_set(tmp_addresses)
+
     @property
     def council_id(self):
         for e in self.elements:
@@ -280,6 +336,7 @@ class AddressSet(CustomSet):
         addressbase_data = self.get_uprns_from_addressbase()
         self.elements = self.remove_invalid_uprns(addressbase_data)
         self.elements = self.attach_doorstep_gridrefs(addressbase_data)
+        self.elements = self.remove_addresses_outside_target_auth()
 
         addresses_db = []
 
