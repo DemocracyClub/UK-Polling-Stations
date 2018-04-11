@@ -1,8 +1,25 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E09000019'
-    addresses_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 4.tsv'
-    stations_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 4.tsv'
-    elections = ['parl.2017-06-08']
+    addresses_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018.tsv'
+    stations_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018.tsv'
+    elections = ['local.2018-05-03']
     csv_delimiter = '\t'
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip('0')
+
+        if record.addressline6 == 'N7 9RE':
+            return None
+
+        return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
+
+        if rec['internal_council_id'] == '1404':
+            rec['location'] = Point(-0.104049, 51.560139, srid=4326)
+
+        return rec
