@@ -14,8 +14,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_northing = '91778')
 
         if record.polling_place_id == '3257':
-            record = record._replace(polling_place_easting = '')
-            record = record._replace(polling_place_northing = '')
+            record = record._replace(polling_place_easting = '292200')
+            record = record._replace(polling_place_northing = '93789')
 
         return super().station_record_to_dict(record)
 
