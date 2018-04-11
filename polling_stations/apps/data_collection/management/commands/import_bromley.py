@@ -1,56 +1,29 @@
-"""
-Import Bromley
-"""
-from time import sleep
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode, PostcodeError
-from addressbase.models import Address
-
-
-class Command(BaseCsvStationsCsvAddressesImporter):
-    """
-    Imports the Polling Station data from Bromley Council
-    """
-    private = True
-    council_id      = 'E09000006'
-    addresses_name  = 'addresses.csv'
-    stations_name   = 'stations.csv'
-    csv_delimiter   = ','
-    elections       = [
-        'ref.2016-06-23'
-    ]
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = 'E09000006'
+    addresses_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 (1).tsv'
+    stations_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 (1).tsv'
+    elections = ['local.2018-05-03']
+    csv_delimiter = '\t'
+    csv_encoding = 'windows-1252'
 
     def station_record_to_dict(self, record):
-        address = record.situation_of_polling_station
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
 
-        location = None
-        location_data = None
-        if record.postcode_if_available:
-            try:
-                location_data = geocode_point_only(postcode_if_available)
-                location = location_data.centroid
-            except PostcodeError:
-                pass
+        if record.polling_place_id == '8547':
+            record = record._replace(polling_place_easting='')
+            record = record._replace(polling_place_northing='')
 
-        desc = record.description_of_persons_entitled_to_vote
-        district = desc.split('-')[0].strip()
+        if record.polling_place_id == '8694':
+            record = record._replace(polling_place_easting='')
+            record = record._replace(polling_place_northing='')
 
-        return {
-            'internal_council_id': district,
-            'polling_district_id': district,
-            'postcode'           : None,
-            'address'            : address,
-            'location'           : location
-        }
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        address = record.address
+        uprn = record.property_urn.strip().lstrip('0')
 
-        return {
-            'address'           : address,
-            'postcode'          : record.postcode.strip(),
-            'polling_station_id': record.district
-        }
+        if record.addressline6 == 'BR7 6HL':
+            return None
+
+        return super().address_record_to_dict(record)
