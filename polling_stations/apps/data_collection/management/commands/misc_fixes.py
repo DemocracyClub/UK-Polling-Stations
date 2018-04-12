@@ -37,6 +37,11 @@ class Command(BaseCommand):
         southend.save()
         print("..updated")
 
+        print("updating Hull phone number...")
+        hull = Council.objects.get(pk='E06000010')
+        hull.phone = '01482 300 302'
+        hull.save()
+        print("..updated")
 
         deleteme = [
             # nothing yet
