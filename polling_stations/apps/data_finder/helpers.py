@@ -281,20 +281,14 @@ class RoutingHelper():
 
     @property
     def has_addresses(self):
-        if not getattr(self, 'addresses', None):
-            self.get_addresses()
         return bool(self.addresses)
 
     @property
     def has_single_address(self):
-        if not getattr(self, 'addresses', None):
-            self.get_addresses()
         return self.addresses.count == 1
 
     @property
     def address_have_single_station(self):
-        if not getattr(self, 'addresses', None):
-            self.get_addresses()
         stations = self.addresses.values('polling_station_id').distinct()
         return len(stations) == 1
 
