@@ -2,7 +2,30 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E08000034'
-    addresses_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 5.tsv'
-    stations_name = 'parl.2017-06-08/Version 1/Democracy_Club__08June2017 5.tsv'
-    elections = ['parl.2017-06-08']
+    addresses_name = 'local.2018-05-03/Version 2/Democracy_Club__03May2018.tsv'
+    stations_name = 'local.2018-05-03/Version 2/Democracy_Club__03May2018.tsv'
+    elections = ['local.2018-05-03']
     csv_delimiter = '\t'
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip('0')
+
+        if uprn == '83099017':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'BD19 5EY'
+            return rec
+
+        if uprn == '200003798939':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'HD7 5TU'
+            return rec
+
+        if uprn == '83242159':
+            return None
+
+        if uprn == '83246005':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'HD2 1HA'
+            return rec
+
+        return super().address_record_to_dict(record)

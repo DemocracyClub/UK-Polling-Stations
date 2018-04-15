@@ -1,27 +1,18 @@
-"""
-Import Watford
-"""
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    """
-    Imports the Polling Station data from Watford
-    """
-    council_id     = 'E07000103'
-    districts_name = 'Watford_Polling_Districts'
-    stations_name  = 'Watford_Polling_Stations.shp'
-    elections      = ['parl.2015-05-07']
+class Command(BaseHalaroseCsvImporter):
+    council_id      = 'E07000103'
+    addresses_name  = 'local.2018-05-03/Version 1/polling_station_export-2018-04-06.csv'
+    stations_name   = 'local.2018-05-03/Version 1/polling_station_export-2018-04-06.csv'
+    elections       = ['local.2018-05-03']
+    csv_encoding    = 'windows-1252'
 
-    def district_record_to_dict(self, record):
-        return {
-            'internal_council_id': record[2],
-            'name': record[2],
-        }
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip('0')
 
-    def station_record_to_dict(self, record):
-        return {
-            'internal_council_id': record[0],
-            'postcode'           : record[5],
-            'address'            : "\n".join([record[3], record[4]]),
-            'polling_district_id': record[2]
-        }
+        if uprn in ['100080947255', '100080947259']:
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'WD18 7JT'
+            return rec
+
+        return super().address_record_to_dict(record)
