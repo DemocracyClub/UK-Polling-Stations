@@ -25,13 +25,13 @@ class Command(BaseXpressWebLookupCsvImporter):
 
         # Correction requested
         if record.pollingplaceid == '878':
-            record = record._replace(pollingplaceaddress2 = 'Temp Poll Stn (SN1B/E) - Aveley Close')
+            record = record._replace(pollingplaceaddress1 = 'Temp Poll Stn (SN1B/E)')
             record = record._replace(pollingplaceaddress2 = 'Reddy Road')
             record = record._replace(pollingplaceaddress3 = 'Slade Green')
             record = record._replace(pollingplaceaddress4 = '')
             record = record._replace(pollingplaceaddress5 = '')
             record = record._replace(pollingplaceaddress6 = '')
-            record = record._replace(pollingplaceaddress7 = 'DA8 2BU')
+            record = record._replace(pollingplaceaddress7 = 'DA8 2AY')
             record = record._replace(pollingplaceeasting = '0')
             record = record._replace(pollingplacenorthing = '0')
 
