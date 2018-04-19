@@ -2,8 +2,8 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id      = 'E08000025'
-    addresses_name  = 'local.2018-05-03/Version 2/polling_station_export-2018-03-29.csv'
-    stations_name   = 'local.2018-05-03/Version 2/polling_station_export-2018-03-29.csv'
+    addresses_name  = 'local.2018-05-03/Version 3/polling_station_export-2018-04-17.csv'
+    stations_name   = 'local.2018-05-03/Version 3/polling_station_export-2018-04-17.csv'
     elections       = ['local.2018-05-03']
     csv_encoding    = 'windows-1252'
 
