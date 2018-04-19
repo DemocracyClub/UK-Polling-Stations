@@ -12,29 +12,48 @@ def get_data_no_elections(self, query_url):
 
 def get_data_only_group(self, query_url):
     return [
-        { 'election_title': 'some election', 'group_type': 'election' },
-        { 'election_title': 'some election', 'group_type': 'organisation' }
+        {
+            'election_id': 'foo.date',
+            'election_title': 'some election',
+            'group_type': 'election'
+        },
+        {
+            'election_id': 'foo.bar.date',
+            'election_title': 'some election',
+            'group_type': 'organisation'
+        }
     ]
 
 def get_data_group_and_ballot(self, query_url):
     return [
-        { 'election_title': 'some election', 'group_type': 'organisation' },
-        { 'election_title': 'some election', 'group_type': None }
+        {
+            'election_id': 'foo.bar.date',
+            'election_title': 'some election',
+            'group_type': 'organisation'
+        },
+        {
+            'election_id': 'foo.bar.baz.date',
+            'election_title': 'some election',
+            'group_type': None
+        }
     ]
 
 def get_data_with_elections(self, query_url):
     return [
         {
+            'election_id': 'foo.bar.date',
             'election_title': 'some election',
             'group_type': 'organisation',
         },  # no explanation or metadata keys
         {
+            'election_id': 'foo.bar.baz.date',
             'election_title': 'some election',
             'group_type': None,
             'explanation': None,
             'metadata': None
-        },  # null explanation and metsdata keys
+        },  # null explanation and metadata keys
         {
+            'election_id': 'foo.bar.qux.date',
             'election_title': 'some election',
             'group_type': None,
             'explanation': 'some text',  # explanation key contains text
@@ -114,3 +133,23 @@ class EveryElectionWrapperTest(TestCase):
         with override_settings(EVERY_ELECTION={'CHECK': False, 'HAS_ELECTION': True}):
             ee = EveryElectionWrapper(postcode='AA11AA')
             self.assertTrue(ee.has_election())
+
+    @override_settings(
+        EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': True},
+        ELECTION_BLACKLIST=['foo.bar.baz.date']
+    )
+    @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections)
+    def test_some_blacklisted(self):
+        ee = EveryElectionWrapper(postcode='AA11AA')
+        self.assertTrue(ee.request_success)
+        self.assertTrue(ee.has_election())
+
+    @override_settings(
+        EVERY_ELECTION={'CHECK': True, 'HAS_ELECTION': True},
+        ELECTION_BLACKLIST=['foo.bar.baz.date', 'foo.bar.qux.date']
+    )
+    @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections)
+    def test_all_blacklisted(self):
+        ee = EveryElectionWrapper(postcode='AA11AA')
+        self.assertTrue(ee.request_success)
+        self.assertFalse(ee.has_election())

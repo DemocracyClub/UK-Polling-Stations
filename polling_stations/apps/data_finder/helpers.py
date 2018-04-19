@@ -206,6 +206,8 @@ class EveryElectionWrapper:
             return True
 
         ballots = filter(lambda e: e['group_type'] is None, self.elections)
+        ballots = filter(lambda e: e['election_id'] not in settings.ELECTION_BLACKLIST, ballots)
+
         try:
             next(ballots)
             return True
