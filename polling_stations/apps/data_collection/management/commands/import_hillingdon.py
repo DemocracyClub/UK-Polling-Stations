@@ -1,76 +1,43 @@
-"""
-Import Hillingdon
-"""
-from django.contrib.gis.geos import Point
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode, geocode_point_only, PostcodeError
-from addressbase.models import Address
-
-
-class Command(BaseCsvStationsCsvAddressesImporter):
-    """
-    Imports the Polling Station data from Hillingdon Council
-    """
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E09000017'
-    addresses_name = 'Hillingdon PropertyPostCodePollingStationWebLookup-2016-06-08 2.TSV'
-    stations_name = 'Hillingdon PropertyPostCodePollingStationWebLookup-2016-06-08 2.TSV'
+    addresses_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 (3) Hillingdon.tsv'
+    stations_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 (3) Hillingdon.tsv'
+    elections = ['local.2018-05-03']
     csv_delimiter = '\t'
-    elections = ['ref.2016-06-23']
-
-    def get_station_hash(self, record):
-        return "-".join([
-            record.pollingplaceaddress7,
-            record.pollingplaceid,
-            record.pollingdistrictreference,
-        ])
-
-    def station_record_to_dict(self, record):
-        # format address
-        address = "\n".join([
-            record.pollingplaceaddress1,
-            record.pollingplaceaddress2,
-            record.pollingplaceaddress3,
-            record.pollingplaceaddress4,
-            record.pollingplaceaddress5,
-            record.pollingplaceaddress6,
-            record.pollingplaceaddress7,
-        ])
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
-
-        location = None
-        location_data = None
-        if int(record.pollingplaceeasting) and int(record.pollingplacenorthing):
-            location = Point(
-                float(record.pollingplaceeasting),
-                float(record.pollingplacenorthing),
-                srid=27700)
-        else:
-            # no points supplied, so attempt to attach them by geocoding
-            try:
-                location_data = geocode_point_only(record.pollingplaceaddress7)
-                location = location_data.centroid
-            except PostcodeError:
-                pass
-
-        return {
-            'internal_council_id': record.pollingplaceid,
-            'polling_district_id': record.pollingdistrictreference,
-            'postcode'           : record.pollingplaceaddress7,
-            'address'            : address,
-            'location'           : location
-        }
 
     def address_record_to_dict(self, record):
-        if record.propertynumber.strip() == '0':
-            address = record.streetname.strip()
-        else:
-            address = '%s %s' % (
-                record.propertynumber.strip(), record.streetname.strip())
+        uprn = record.property_urn.strip().lstrip('0')
 
-        return {
-            'address'           : address,
-            'postcode'          : record.postcode.strip(),
-            'polling_station_id': record.pollingplaceid
-        }
+        if uprn == '10090329328':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'UB4 9LW'
+            return rec
+
+        if uprn == '10092980468':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'UB8 3PF'
+            return rec
+
+        if uprn in ['10092982613', '10092982616', '10092982617']:
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'UB4 0SE'
+            return rec
+
+        if uprn == '10022797188':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'UB8 1UJ'
+            return rec
+
+        if uprn == '10009948891':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'UB4 0RJ'
+            return rec
+
+        if uprn == '10022805692':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'UB10 0BQ'
+            return rec
+
+        return super().address_record_to_dict(record)
