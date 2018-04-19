@@ -1,11 +1,19 @@
-from data_collection.management.commands import BaseXpressWebLookupCsvImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-class Command(BaseXpressWebLookupCsvImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id      = 'E07000127'
-    addresses_name  = 'West Lancashire - PropertyPostCodePollingStationWebLookup-2017-03-08.TSV'
-    stations_name   = 'West Lancashire - PropertyPostCodePollingStationWebLookup-2017-03-08.TSV'
-    elections       = [
-        'local.lancashire.2017-05-04',
-        'parl.2017-06-08'
-    ]
+    addresses_name  = 'local.2018-05-03/Version 1/WLBC-Democracy_Club__03May2018 West Lancashire.TSV'
+    stations_name   = 'local.2018-05-03/Version 1/WLBC-Democracy_Club__03May2018 West Lancashire.TSV'
+    elections       = ['local.2018-05-03']
     csv_delimiter = '\t'
+
+    def address_record_to_dict(self, record):
+
+        uprn = record.property_urn.strip().lstrip('0')
+
+        if uprn == '10012344883':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'L40 9RL'
+            return rec
+
+        return super().address_record_to_dict(record)
