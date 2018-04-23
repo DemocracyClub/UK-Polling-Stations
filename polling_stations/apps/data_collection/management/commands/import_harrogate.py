@@ -1,39 +1,31 @@
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from django.contrib.gis.geos import Point
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    srid = 27700
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E07000165'
-    districts_name = 'parl.2017-06-08/Version 1/POLLDISTOPEN'
-    stations_name = 'parl.2017-06-08/Version 1/POLLSTAOPEN.shp'
-    elections = [
-        'local.north-yorkshire.2017-05-04',
-        'parl.2017-06-08'
-    ]
-
-    def district_record_to_dict(self, record):
-        code = str(record[0]).strip()
-        return {
-            'internal_council_id': code,
-            'name': code,
-            'polling_station_id': code,
-        }
-
-    def format_address(self, record):
-        address_parts = [record[x].strip() for x in range(4, 9)]
-        for i, part in enumerate(address_parts):
-            if part == b'':
-                address_parts[i] = ''
-        if record[3].strip() != b'':
-            address_parts.insert(0, str(record[3]).strip())
-        address = "\n".join(address_parts)
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
-        return address
+    addresses_name = 'local.2018-05-03/Version 3/Democracy_Club__03May2018.tsv'
+    stations_name = 'local.2018-05-03/Version 3/Democracy_Club__03May2018.tsv'
+    elections = ['local.2018-05-03']
+    csv_delimiter = '\t'
 
     def station_record_to_dict(self, record):
-        return {
-            'internal_council_id': str(record[0]).strip(),
-            'postcode': '',
-            'address': self.format_address(record),
-            'polling_district_id': str(record[0]).strip(),
-        }
+
+        if record.polling_place_id == '10513':
+            record = record._replace(polling_place_postcode='HG4 5ET')
+
+        if record.polling_place_id == '10374':
+            rec = super().station_record_to_dict(record)
+            rec['location'] = Point(-1.845862, 54.156945, srid=4326)
+            return rec
+
+        return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip('0')
+
+        if uprn == '100052009106':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'HG3 5AT'
+            return rec
+
+        return super().address_record_to_dict(record)
