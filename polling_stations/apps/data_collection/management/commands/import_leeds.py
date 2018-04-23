@@ -1,60 +1,23 @@
-from data_collection.github_importer import BaseGitHubImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-class Command(BaseGitHubImporter):
-
-    srid = 4326
-    districts_srid  = 4326
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E08000035'
-    elections = ['parl.2017-06-08']
-    scraper_name = 'wdiv-scrapers/DC-PollingStations-Leeds'
-    geom_type = 'geojson'
-    split_districts = set()
+    addresses_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018.tsv'
+    stations_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018.tsv'
+    elections = ['local.2018-05-03']
+    csv_delimiter = '\t'
 
-    def pre_import(self):
-        self.find_split_districts()
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip('0')
 
-    def find_split_districts(self):
-        'Identify districts mapped to more than one polling station.'
-        stations = self.get_stations()
-        for station1 in stations:
-            for station2 in stations:
-                if station1['POLLING_DI'] == station2['POLLING_DI'] and\
-                    station1['OBJECTID'] != station2['OBJECTID']:
-                    self.split_districts.add(station1['POLLING_DI'])
+        if uprn == '72740327':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'LS14 2EZ'
+            return rec
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid('districts'))
-        return {
-            'internal_council_id': record['POLLING_DI'],
-            'name': '%s - %s' % (record['WARD'], record['POLLING_DI']),
-            'area': poly
-        }
+        if uprn == '72034142':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'LS18 4HN'
+            return rec
 
-    def station_record_to_dict(self, record):
-
-        # Handle split districts
-        if record['POLLING_DI'] in self.split_districts:
-            return None
-
-        location = self.extract_geometry(record, self.geom_type, self.get_srid('stations'))
-        internal_ids = record['POLLING_DI'].split("-")
-
-        if len(internal_ids) == 1:
-            return {
-                'internal_council_id': record['POLLING_DI'],
-                'postcode': '',
-                'address': record['POLLING_ST'],
-                'location': location,
-                'polling_district_id': record['POLLING_DI']
-            }
-        else:
-            stations = []
-            for id in internal_ids:
-                stations.append({
-                    'internal_council_id': id,
-                    'postcode': '',
-                    'address': record['POLLING_ST'],
-                    'location': location,
-                    'polling_district_id': id
-                })
-            return stations
+        return super().address_record_to_dict(record)
