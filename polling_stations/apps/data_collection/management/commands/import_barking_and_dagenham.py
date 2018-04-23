@@ -1,37 +1,56 @@
-"""
-Import Barking-and-Dagenham
-"""
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    """
-    Imports the Polling Station data from Barking-and-Dagenham
-    """
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E09000002'
-    districts_name = 'Barking_n_Dag_completed_PDs_region_updated/Barking_n_Dag_completed_PDs_region_updated'
-    stations_name = 'parl.2017-06-08/Version 1/Polling_Stations2017DemocracyClub'
-    elections = ['parl.2017-06-08']
-    seen_stations = set()
+    addresses_name = 'local.2018-05-03/Version 3/EC & Democracy Club Polling Place Lookup Barking and Dagenham.csv'
+    stations_name = 'local.2018-05-03/Version 3/EC & Democracy Club Polling Place Lookup Barking and Dagenham.csv'
+    elections = ['local.2018-05-03']
 
-    def district_record_to_dict(self, record):
-        return {
-            'internal_council_id': record[0],
-            'name': record[1],
-        }
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip('0')
 
-    def station_record_to_dict(self, record):
-
-        address = record[3].strip()
-        postcode = " ".join(address.split(' ')[-2:])
-        code = record[4].strip()
-
-        if code in self.seen_stations:
+        if record.addressline6 == 'IG11 8RF':
             return None
 
-        self.seen_stations.add(code)
-        return {
-            'internal_council_id': code,
-            'polling_district_id': code,
-            'postcode' : postcode,
-            'address' : address,
-        }
+        barnmead = [
+            '100001639',
+            '100001637',
+            '100001635',
+            '100001633',
+            '100001631',
+            '100001629',
+            '100001627',
+            '100001624',
+            '100001622',
+        ]
+        if uprn in barnmead:
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'RM9 5DX'
+            return rec
+
+        if uprn == '100012133':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'RM8 1DJ'
+            return rec
+
+        if uprn == '100033274':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'IG11 9ES'
+            return rec
+
+        if uprn == '100041457':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'RM10 9BX'
+            return rec
+
+        if uprn == '100033020':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'RM6 6RJ'
+            return rec
+
+        if uprn == '10002171985':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'RM10 7XJ'
+            return rec
+
+        return super().address_record_to_dict(record)

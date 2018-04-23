@@ -1,57 +1,26 @@
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    srid = 27700
-    council_id = 'E07000078'
-    districts_name = 'fixed_districts/Polling_districts'
-    stations_name = 'Cheltenham_Polling_stations.shp'
-    elections = [
-        'parl.2017-06-08'
-    ]
+class Command(BaseHalaroseCsvImporter):
+    council_id      = 'E07000078'
+    addresses_name  = 'local.2018-05-03/Version 1/polling_station_export-2018-04-20 Cheltenham.csv'
+    stations_name   = 'local.2018-05-03/Version 1/polling_station_export-2018-04-20 Cheltenham.csv'
+    elections       = ['local.2018-05-03']
+    csv_encoding    = 'windows-1252'
 
-    def district_record_to_dict(self, record):
-        return {
-            'internal_council_id': record[2].strip(),
-            'name': "%s - %s" % (record[2], record[1]),
-            'polling_station_id': record[2].strip()
-        }
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip('0')
 
-    def station_record_to_dict(self, record):
+        if uprn in ['100121231365', '100121231366']:
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'GL51 6QL'
+            return rec
 
-        if '/' in record[2]:
-            codes = record[2].split('/')
-        elif ',' in record[2]:
-            codes = record[2].split(',')
-        else:
-            codes = [record[2]]
+        if uprn == '100120389274':
+            rec = super().address_record_to_dict(record)
+            rec['postcode'] = 'GL52 2BT'
+            return rec
 
-        stations = []
-        for code in codes:
+        if record.houseid == '63059':
+            return None
 
-            if code == 'LA':
-                address = "\n".join([
-                    'Pittville Pump Room',
-                    str(record[0]).strip()
-                ])
-            else:
-                address = "\n".join([
-                    str(record[1]).strip(),
-                    str(record[0]).strip()
-                ])
-
-            station = {
-                'internal_council_id': code.strip(),
-                'postcode'           : '',
-                'address'            : address,
-            }
-
-            if code.strip() == 'MA1' or code.strip() == 'MA2':
-                station['internal_council_id'] = 'MA'
-                return station
-            elif code.strip() == 'DA1' or code.strip() == 'DA2':
-                station['internal_council_id'] = 'DA'
-                return station
-            else:
-                stations.append(station)
-
-        return stations
+        return super().address_record_to_dict(record)
