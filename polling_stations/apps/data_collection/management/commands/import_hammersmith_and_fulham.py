@@ -4,8 +4,8 @@ class Command(BaseShpStationsShpDistrictsImporter):
     srid = 27700
     council_id = 'E09000013'
     districts_name = 'parl.2017-06-08/Version 1/POLLING_HF/POLLING_DISTRICTS'
-    stations_name = 'parl.2017-06-08/Version 1/POLLING_HF/POLLING_STATIONS.shp'
-    elections = ['parl.2017-06-08']
+    stations_name = 'local.2018-05-03/Version 1/PollingStations.shp'
+    elections = ['local.2018-05-03']
 
     def district_record_to_dict(self, record):
         return {
@@ -16,7 +16,7 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
     def station_record_to_dict(self, record):
         return {
-            'internal_council_id': record[1].strip(),
-            'postcode': record[3].strip(),
-            'address': record[2].strip(),
+            'internal_council_id': record[2].strip(),
+            'postcode': record[4].strip(),
+            'address': record[3].strip(),
         }
