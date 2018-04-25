@@ -5,6 +5,7 @@ Disallow: /address_select/
 Disallow: /email/
 Disallow: /embed/
 Disallow: /i18n/
+Disallow: /league_table/
 Disallow: /nus_wales/
 Disallow: /postcode/
 Disallow: /static/
