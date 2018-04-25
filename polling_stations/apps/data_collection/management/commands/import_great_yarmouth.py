@@ -10,7 +10,7 @@ class Command(BaseHalaroseCsvImporter):
     def station_record_to_dict(self, record):
 
         if record.pollingstationnumber == '15':
-            record = record._replace(pollingstationpostcode='')
+            record = record._replace(pollingstationpostcode='NR29 4NH')
 
         return super().station_record_to_dict(record)
 
