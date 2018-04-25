@@ -11,12 +11,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
 
         if record.polling_place_id == '8547':
-            record = record._replace(polling_place_easting='')
-            record = record._replace(polling_place_northing='')
+            record = record._replace(polling_place_easting='537322')
+            record = record._replace(polling_place_northing='170426')
 
         if record.polling_place_id == '8694':
-            record = record._replace(polling_place_easting='')
-            record = record._replace(polling_place_northing='')
+            record = record._replace(polling_place_easting='542751')
+            record = record._replace(polling_place_northing='172102')
 
         return super().station_record_to_dict(record)
 
