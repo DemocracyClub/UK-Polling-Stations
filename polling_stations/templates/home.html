@@ -8,7 +8,7 @@
 {% block content %}
 
 {% block extra_content %}{% endblock extra_content %}
-<div class="card centered-card">
+<section class="card centered-card">
     {% if form.errors %}
       <div class="error-summary">
         {% blocktrans %}
@@ -20,7 +20,7 @@
 
     {% if not is_whitelabel %}
     <header>
-      <h2>{% trans "Find your polling station" %}</h2>
+      <h1>{% trans "Find your polling station" %}</h1>
     </header>
     {% endif %}
     <form method="post" class="form form-inline">
@@ -28,6 +28,6 @@
       {{ form|dc_form }}
       <button type="submit" class="button" id="submit-postcode">{% trans "Find your polling station" %}</button>
     </form>
-</div>
+</section>
 
 {% endblock content %}
