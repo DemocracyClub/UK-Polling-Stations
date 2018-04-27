@@ -29,30 +29,34 @@
 <footer class="footer">
   <div class="container">
     <h3>{{ site_title }}</h3>
-    <ul>
-      <li><a href="{% url 'home' %}">Home</a></li>
-      <li><a href="https://democracyclub.org.uk/projects/polling-stations/">About</a></li>
-      <li><a href="{% url 'privacy_view' %}">Privacy</a></li>
-      <li><a href="{% url 'api_docs' %}">API</a></li>
-      <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
-      <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
-      <li><a href="https://democracyclub.org.uk/contact/">Contact</a></li>
-      <li><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
-    </ul>
+    <nav aria-label="primary">
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="https://democracyclub.org.uk/projects/polling-stations/">About</a></li>
+        <li><a href="{% url 'privacy_view' %}">Privacy</a></li>
+        <li><a href="{% url 'api_docs' %}">API</a></li>
+        <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
+        <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
+        <li><a href="https://democracyclub.org.uk/contact/">Contact</a></li>
+        <li><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
+      </ul>
+    </nav>
 
     <h3>Made by Democracy Club</h3>
     <p>Democracy Club is a UK based Community Interest Company that builds
       the digital infrastructure needed for a 21st century democracy</p>
-    <ul>
-      <li><a href="https://democracyclub.org.uk/about/">About Democracy Club</a></li>
-      <li><a href="https://democracyclub.org.uk/contact/">Contact Us</a></li>
-      <li><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
-      <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
-      <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
-      <li><a href="https://twitter.com/democlub">Twitter</a></li>
-      <li><a href="https://facebook.com/DemocracyClub">Facebook</a></li>
-      <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
-    </ul>
+    <nav aria-label="secondary">
+      <ul>
+        <li><a href="https://democracyclub.org.uk/about/">About Democracy Club</a></li>
+        <li><a href="https://democracyclub.org.uk/contact/">Contact Us</a></li>
+        <li><a href="https://democracyclub.org.uk/donate/">Donate</a></li>
+        <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
+        <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
+        <li><a href="https://twitter.com/democlub">Twitter</a></li>
+        <li><a href="https://facebook.com/DemocracyClub">Facebook</a></li>
+        <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
+      </ul>
+    </nav>
 
     <p>Copyright © {% now "Y" %} Democracy Club Community Interest Company Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
     <p>
