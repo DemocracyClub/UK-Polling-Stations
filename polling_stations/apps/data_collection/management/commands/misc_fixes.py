@@ -43,6 +43,20 @@ class Command(BaseCommand):
         hull.save()
         print("..updated")
 
+
+        print("updating: Islington/St Joan of Arc Community Centre...")
+        stations = PollingStation.objects.filter(
+            council_id='E09000019', internal_council_id='1401')
+        if len(stations) == 1:
+            for station in stations:
+                station.address = "St Joan of Arc Community Centre\nKelross Road\nLondon"
+                station.postcode = "N5 2QN"
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
+
+
         deleteme = [
             # nothing yet
         ]
