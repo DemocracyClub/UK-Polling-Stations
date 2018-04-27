@@ -22,4 +22,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if rec['internal_council_id'] == '1404':
             rec['location'] = Point(-0.104049, 51.560139, srid=4326)
 
+        if rec['internal_council_id'] == '1401':
+            rec['address'] = "St Joan of Arc Community Centre\nKelross Road\nLondon"
+            rec['postcode'] = "N5 2QN"
+
         return rec
