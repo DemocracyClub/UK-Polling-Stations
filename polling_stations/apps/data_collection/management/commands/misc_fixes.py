@@ -44,6 +44,18 @@ class Command(BaseCommand):
         print("..updated")
 
 
+        print("updating point for: Alf Marshall Community Centre, Hull...")
+        update_station_point(
+            'E06000010',
+            '8515',
+            Point(-0.321628, 53.787659, srid=4326))
+
+        print("updating point for: All Saints Church Hall, Hastings...")
+        update_station_point(
+            'E07000062',
+            '23-all-saints-church-hall',
+            Point(0.595763, 50.859451, srid=4326))
+
 
         deleteme = [
             # nothing yet
