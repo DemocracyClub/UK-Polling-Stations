@@ -20,4 +20,5 @@ ELECTION_BLACKLIST = [
     'local.epping-forest.moreton-and-fyfield.by.2018-05-03',  # uncontested
     'local.stockport.edgeley-and-cheadle-heath.2018-05-03',  # cancelled
     'local.cherwell.bicester-west.2018-05-03',  # cancelled
+    'local.tamworth.glascote.2018-05-03',  # cancelled
 ]
