@@ -21,4 +21,5 @@ ELECTION_BLACKLIST = [
     'local.stockport.edgeley-and-cheadle-heath.2018-05-03',  # cancelled
     'local.cherwell.bicester-west.2018-05-03',  # cancelled
     'local.tamworth.glascote.2018-05-03',  # cancelled
+    'local.brent.willesden-green.2018-05-03',  # cancelled
 ]
