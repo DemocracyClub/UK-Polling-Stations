@@ -56,6 +56,12 @@ class Command(BaseCommand):
             '23-all-saints-church-hall',
             Point(0.595763, 50.859451, srid=4326))
 
+        print("updating point for: Salvation Army Hall, South Cambs...")
+        update_station_point(
+            'E07000012',
+            '6555',
+            Point(0.191974, 52.264660, srid=4326))
+
 
         deleteme = [
             # nothing yet
