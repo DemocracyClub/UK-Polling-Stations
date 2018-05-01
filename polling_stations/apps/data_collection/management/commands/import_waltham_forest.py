@@ -3,17 +3,12 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E09000031'
-    addresses_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 Waltham Forest.tsv'
-    stations_name = 'local.2018-05-03/Version 1/Democracy_Club__03May2018 Waltham Forest.tsv'
+    addresses_name = 'local.2018-05-03/Version 2/Democracy_Club__03May2018 (1) Waltham Forest.tsv'
+    stations_name = 'local.2018-05-03/Version 2/Democracy_Club__03May2018 (1) Waltham Forest.tsv'
     elections = ['local.2018-05-03']
     csv_delimiter = '\t'
 
     def station_record_to_dict(self, record):
-
-        # Postcode supplied for Downsell Primary School is incorrect
-        if record.polling_place_id == '2989':
-            record = record._replace(polling_place_postcode='E15 2BS')
-
         rec = super().station_record_to_dict(record)
 
         # better point for Mission Grove South Site
