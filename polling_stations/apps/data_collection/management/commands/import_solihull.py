@@ -1,4 +1,9 @@
+import os
+from django.core.exceptions import ObjectDoesNotExist
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from pollingstations.models import PollingStation
+from uk_geo_utils.geocoders import AddressBaseGeocoder, AddressBaseException
+
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = 'E08000029'
@@ -36,3 +41,39 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    # Solihull have supplied an additional file with
+    # UPRNs for the polling stations
+    def post_import(self):
+        filepath = os.path.join(
+            self.base_folder_path,
+            'local.2018-05-03/Version 2 - UPRN/uprns.csv'
+        )
+        self.csv_delimiter = ','
+        uprns = self.get_data('csv', filepath)
+
+        print("Updating UPRNs...")
+        for record in uprns:
+            stations = PollingStation.objects.filter(
+                council_id=self.council_id,
+                internal_council_id=record.polling_place_id
+            )
+            if len(stations) == 1:
+                station = stations[0]
+
+                try:
+                    uprn = record.uprn.lstrip('0')
+                    g = AddressBaseGeocoder(record.polling_place_postcode)
+                    location = g.get_point(uprn)
+                except (ObjectDoesNotExist, AddressBaseException) as e:
+                    location = None
+                station.location = location
+
+                self.check_station_point({
+                    'location': station.location,
+                    'council_id': station.council_id,
+                })
+                station.save()
+            else:
+                print("Could not find station id " + self.get_station_hash(record))
+        print("...done")
