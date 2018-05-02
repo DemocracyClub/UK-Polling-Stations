@@ -62,6 +62,41 @@ class Command(BaseCommand):
             '6555',
             Point(0.191974, 52.264660, srid=4326))
 
+        # bug report #5
+        print("updating point for: St. Luke's Church Hall, Sefton...")
+        update_station_point(
+            'E08000014',
+            '4529',
+            Point(-2.985813, 53.646988, srid=4326))
+
+        # 2x reports from Halton council
+        print("updating point for: St Marys Halton Ce Primary School, Halton...")
+        update_station_point(
+            'E06000006',
+            '308',
+            Point(-2.690746, 53.331598, srid=4326))
+
+        print("updating: St Edwards Parish Centre, Halton...")
+        stations = PollingStation.objects.filter(
+            council_id='E06000006',
+            internal_council_id='283'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-2.728014, 53.335534, srid=4326)
+            station.postcode = 'WA7 5PB'
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # bug report #6
+        print("updating point for: Holy Trinity Church Centre, Sutton...")
+        update_station_point(
+            'E09000029',
+            'OB_1',
+            Point(-0.151435, 51.364474, srid=4326))
+
 
         deleteme = [
             # nothing yet
