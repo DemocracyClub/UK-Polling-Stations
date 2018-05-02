@@ -97,6 +97,36 @@ class Command(BaseCommand):
             'OB_1',
             Point(-0.151435, 51.364474, srid=4326))
 
+        # bug report #7
+        print("updating: Berkley Street Methodist Church, Huntingdonshire...")
+        stations = PollingStation.objects.filter(
+            council_id='E07000011',
+            internal_council_id='5860'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-0.266772, 52.223385, srid=4326)
+            station.postcode = 'PE19 2NB'
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # request from council
+        print("updating: St George`s Church, Reading...")
+        stations = PollingStation.objects.filter(
+            council_id='E06000038',
+            internal_council_id='2701'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "St George`s Church\nSt George`s Road\nTilehurst\nReading\nRG30 2RG"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
 
         deleteme = [
             # nothing yet
