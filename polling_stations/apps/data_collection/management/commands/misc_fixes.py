@@ -126,6 +126,13 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # bug report #8
+        print("updating point for: Macaulay CE Primary School, Lambeth...")
+        update_station_point(
+            'E09000022',
+            'VHC',
+            Point(-0.148103, 51.463782, srid=4326))
+
 
 
         deleteme = [
