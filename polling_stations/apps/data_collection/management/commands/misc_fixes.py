@@ -183,6 +183,13 @@ class Command(BaseCommand):
             '4793',
             Point(-1.265459, 51.778845, srid=4326))
 
+        # bug report #14
+        print("updating point for: Cutteslowe Community Centre, Oxford...")
+        update_station_point(
+            'E07000178',
+            '4796',
+            Point(-1.260158, 51.786878, srid=4326))
+
 
 
         deleteme = [
