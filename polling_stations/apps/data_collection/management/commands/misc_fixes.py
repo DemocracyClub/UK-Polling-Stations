@@ -242,6 +242,10 @@ class Command(BaseCommand):
             '73-castle-street-centre',
             Point(-2.739782, 54.330235, srid=4326))
 
+        # feedback
+        print("updating: Ainsworth Parish Church Hall, Bury...")
+        update_station_point('E08000002', '2548', None)
+
 
 
         deleteme = [
