@@ -190,6 +190,21 @@ class Command(BaseCommand):
             '4796',
             Point(-1.260158, 51.786878, srid=4326))
 
+        # bug report 15
+        print("updating: GUIDE & SCOUT H.Q, North Tyeside...")
+        stations = PollingStation.objects.filter(
+            council_id='E08000022',
+            internal_council_id='OE'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = ''
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
 
 
         deleteme = [
