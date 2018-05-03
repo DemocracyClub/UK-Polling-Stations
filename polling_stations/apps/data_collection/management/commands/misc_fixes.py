@@ -170,6 +170,13 @@ class Command(BaseCommand):
             Point(-1.904365, 52.458623, srid=4326))
 
 
+        print("updating point for: St Cuthbert`s Centre, Kensington & Chelsea...")
+        update_station_point(
+            'E09000020',
+            '672',
+            Point(-0.200082, 51.491363, srid=4326))
+
+
 
         deleteme = [
             # nothing yet
