@@ -162,6 +162,14 @@ class Command(BaseCommand):
             print("..NOT updated")
 
 
+        # bug report #12
+        print("updating point for: St Mary and Ambrose Church Hall, Birmingham...")
+        update_station_point(
+            'E08000025',
+            '122-st-mary-and-ambrose-church-hall',
+            Point(-1.904365, 52.458623, srid=4326))
+
+
 
         deleteme = [
             # nothing yet
