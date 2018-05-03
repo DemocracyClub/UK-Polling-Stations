@@ -212,6 +212,13 @@ class Command(BaseCommand):
             '5624',
             Point(-0.069540, 51.652642, srid=4326))
 
+        # feedback
+        print("updating point for: All Saints Community Centre, Lewisham...")
+        update_station_point(
+            'E09000023',
+            '14514',
+            Point(-0.048807, 51.476468, srid=4326))
+
 
 
 
