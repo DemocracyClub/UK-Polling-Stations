@@ -176,6 +176,13 @@ class Command(BaseCommand):
             '672',
             Point(-0.200082, 51.491363, srid=4326))
 
+        # bug report #13
+        print("updating point for: Summertown United Reformed Church, Oxford...")
+        update_station_point(
+            'E07000178',
+            '4793',
+            Point(-1.265459, 51.778845, srid=4326))
+
 
 
         deleteme = [
