@@ -253,6 +253,10 @@ class Command(BaseCommand):
             '4000',
             Point(-0.003917, 51.540183, srid=4326))
 
+        # feedback
+        print("updating: Osprey Tenants Hall, Southwark...")
+        update_station_point('E09000028', '10692', None)
+
 
 
         deleteme = [
