@@ -219,7 +219,20 @@ class Command(BaseCommand):
             '14514',
             Point(-0.048807, 51.476468, srid=4326))
 
-
+        # bug report 18
+        print("updating: Whiston & Goldsmith Community Hall, Hackney...")
+        stations = PollingStation.objects.filter(
+            council_id='E09000012',
+            internal_council_id='3055'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = 'E2 8QY'
+            station.location = Point(-0.064828, 51.533471, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
 
 
         deleteme = [
