@@ -246,6 +246,13 @@ class Command(BaseCommand):
         print("updating: Ainsworth Parish Church Hall, Bury...")
         update_station_point('E08000002', '2548', None)
 
+        # bug report #23
+        print("updating: Carpenters and Docklands Centre, Newham...")
+        update_station_point(
+            'E09000025',
+            '4000',
+            Point(-0.003917, 51.540183, srid=4326))
+
 
 
         deleteme = [
