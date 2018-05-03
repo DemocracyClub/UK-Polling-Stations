@@ -133,6 +133,13 @@ class Command(BaseCommand):
             'VHC',
             Point(-0.148103, 51.463782, srid=4326))
 
+        # bug report #9
+        print("updating point for: METHODIST CHURCH HALL, Great Yarmouth...")
+        update_station_point(
+            'E07000145',
+            '24-methodist-church-hall',
+            Point(1.714309, 52.572677, srid=4326))
+
 
 
         deleteme = [
