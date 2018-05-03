@@ -141,6 +141,27 @@ class Command(BaseCommand):
             Point(1.714309, 52.572677, srid=4326))
 
 
+        # 2x reports from Islington council
+        print("updating point for: St Joan of Arc Community Centre, Islington...")
+        update_station_point(
+            'E09000019',
+            '1401',
+            Point(-0.0966823, 51.5559102, srid=4326))
+
+        print("updating: St. Thomas` Church Hall, Islington...")
+        stations = PollingStation.objects.filter(
+            council_id='E09000019',
+            internal_council_id='1404'
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = "N4 2QP"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+
 
         deleteme = [
             # nothing yet
