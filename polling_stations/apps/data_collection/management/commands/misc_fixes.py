@@ -235,6 +235,14 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # bug report #19
+        print("updating: Castle Street Centre, South Lakeland...")
+        update_station_point(
+            'E07000031',
+            '73-castle-street-centre',
+            Point(-2.739782, 54.330235, srid=4326))
+
+
 
         deleteme = [
             # nothing yet
