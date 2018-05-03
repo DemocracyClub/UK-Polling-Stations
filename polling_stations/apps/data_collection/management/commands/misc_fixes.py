@@ -205,6 +205,14 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # bug report 16
+        print("updating point for: Ellenborough Table Tennis Club, Enfield...")
+        update_station_point(
+            'E09000010',
+            '5624',
+            Point(-0.069540, 51.652642, srid=4326))
+
+
 
 
         deleteme = [
