@@ -57,7 +57,7 @@
     </div>
 
     {% include "fragments/you_dont_need_poll_card.html" %}
-    {# include "fragments/register_to_vote.html" #}
+    {% include "fragments/register_to_vote.html" %}
 
     {% if we_know_where_you_should_vote and election_explainers %}
       {% include "election_explainers.html" %}
