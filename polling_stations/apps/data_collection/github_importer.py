@@ -59,10 +59,7 @@ class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(force_bytes(record['geometry']))
             tmp.seek(0)
-            try:
-                ds = DataSource(tmp.name)
-            except:
-                ds = DataSource(tmp.name)
+            ds = DataSource(tmp.name)
             if len(ds[0]) == 1:
                 geojson = next(iter(ds[0])).geom.geojson
                 return self.clean_poly(GEOSGeometry(geojson, srid=srid))
