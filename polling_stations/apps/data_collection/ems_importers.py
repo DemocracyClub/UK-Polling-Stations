@@ -3,6 +3,7 @@ Specialised base import classes for handling data exported from
 popular Electoral Management Software packages
 """
 import abc
+import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
@@ -97,6 +98,10 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
                 float(getattr(record, self.easting_field)),
                 float(getattr(record, self.northing_field)),
                 srid=27700)
+            self.logger.log_message(logging.INFO,
+                "using grid reference for station %s",
+                getattr(record, self.station_id_field)
+            )
         elif self.station_uprn_field and getattr(record, self.station_uprn_field).strip():
             # if we have a UPRN, try that
             try:
@@ -104,12 +109,24 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
                 uprn = uprn.lstrip('0')
                 g = AddressBaseGeocoder(self.get_station_postcode(record))
                 location = g.get_point(getattr(record, self.station_uprn_field))
+                self.logger.log_message(logging.INFO,
+                    "using UPRN for station %s",
+                    getattr(record, self.station_id_field)
+                )
             except (ObjectDoesNotExist, AddressBaseException) as e:
                 # if that fails, fall back to postcode
                 location = self.geocode_from_postcode(record)
+                self.logger.log_message(logging.INFO,
+                    "using postcode for station %s",
+                    getattr(record, self.station_id_field)
+                )
         else:
             # otherwise, geocode using postcode
             location = self.geocode_from_postcode(record)
+            self.logger.log_message(logging.INFO,
+                "using postcode for station %s",
+                getattr(record, self.station_id_field)
+            )
 
         return location
 
