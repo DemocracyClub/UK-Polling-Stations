@@ -36,9 +36,7 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
 ```
 or on Ubuntu 16.04 (Xenial):
 ```
-sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev nodejs npm
-
-sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev nodejs-legacy npm
 ```
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
