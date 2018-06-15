@@ -70,16 +70,29 @@ npm install
 ```
 
 ### Install testing dependencies
-The integration tests require [PhantomJS](http://phantomjs.org/) to be installed globally.
+We have a suite of end-to-end integration tests. We use [ChromeDriver](http://chromedriver.chromium.org/) to drive headless Chrome or Chromuim. This step isn't required to get a dev install running but will be required to run the full test suite.
 
-On Mac OSX, this can be installed by running
+On ubuntu, run
+
 ```
-brew install phantomjs
+sudo apt-get install chromium-browser chromium-chromedriver
 ```
 
-On Ubunutu, run:
+to install the dependencies. The chromedriver executable needs to be in `PATH`, so either add `/usr/lib/chromium-browser/chromedriver` to `PATH` or create a symlink e.g:
+
 ```
-sudo npm install -g phantomjs-prebuilt
+sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
+```
+
+On Mac OSX, run:
+```
+brew tap homebrew/cask
+brew cask install chromedriver
+```
+
+and if you don't already have Chrome installed:
+```
+brew cask install google-chrome
 ```
 
 ### Install testing requirements
