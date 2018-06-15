@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import os
 import shutil
 import signal
@@ -72,7 +73,7 @@ def each_step(step):
 def mock_http_calls(step):
     feature = slugify(step.feature.text)
     scenario = slugify(step.scenario.text)
-    step_slug = slugify(step.text)
+    step_slug = slugify(re.sub(r'localhost:(\d+)/', 'localhost/', step.text))
     path = 'test_data/vcr_cassettes/integration_tests/{}/{}/{}.yaml'
     with selenium_vcr.use_cassette(path.format(feature, scenario, step_slug)):
         yield
