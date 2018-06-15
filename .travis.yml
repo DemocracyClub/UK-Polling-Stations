@@ -4,6 +4,7 @@ language: python
 python:
   - '3.5'
 addons:
+  chrome: stable
   postgresql: '9.5'
   apt:
     sources:
@@ -12,6 +13,7 @@ addons:
       - postgresql-9.5-postgis-2.3
       - gcc-5
       - g++-5
+      - chromium-chromedriver
 
 before_cache:
     - rm -f .tox/py35-django111/log/*.log
@@ -25,6 +27,9 @@ cache:
     - $HOME/.tox/
     - .tox
     - $HOME/drafter-v3.2.7/build/
+
+before_install:
+  - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
 
 install:
   - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
