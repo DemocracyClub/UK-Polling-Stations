@@ -7,9 +7,8 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
-from apiblueprint_view.views import ApiBlueprintView
-
 from api.router import router
+from api.docs import ApiDocsView
 from data_finder.views import (
     HomeView,
     PrivacyView,
@@ -47,15 +46,7 @@ core_patterns = [
 extra_patterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^api/beta/', include(router.urls)),
-    url(r'^api/$', ApiBlueprintView.as_view(
-        blueprint='polling_stations/templates/api_docs/blueprints/wheredoivote.apibp',
-        template_name='api_docs/api_base_template.html',
-        styles={
-            'resource': {'class': 'card'},
-            'resource_group': {'class': 'card'},
-            'method_GET': {'class': 'badge success'},
-        }), name='api_docs'
-    ),
+    url(r'^api/$', ApiDocsView.as_view(), name='api_docs'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^feedback/', include('feedback.urls')),
     url(r'^report_problem/', include('bug_reports.urls')),
