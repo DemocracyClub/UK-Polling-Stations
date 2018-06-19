@@ -8,7 +8,7 @@ import zipfile
 
 from collections import namedtuple
 
-from django.contrib.gis.gdal import DataSource, GDALException
+from django.contrib.gis.gdal import DataSource
 
 
 def recursive_find(path, pattern):
@@ -125,12 +125,7 @@ class KmlHelper:
         self.filepath = filepath
 
     def parse_features(self, kml):
-        try:
-            ds = DataSource(kml)
-        except GDALException:
-            # This is very strange – sometimes the above will fail the first
-            # time, but not the second. Seen on OS X with GDAL 2.2.0
-            ds = DataSource(kml)
+        ds = DataSource(kml)
         return ds[0]
 
     def get_features(self):
