@@ -36,9 +36,7 @@ sudo ln -s /usr/bin/nodejs /usr/bin/node
 ```
 or on Ubuntu 16.04 (Xenial):
 ```
-sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev nodejs npm
-
-sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev nodejs-legacy npm
 ```
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
@@ -69,20 +67,33 @@ pip install -r requirements/base.txt
 npm install
 ```
 
-### Install testing dependencies
-The integration tests require [PhantomJS](http://phantomjs.org/) to be installed globally.
+### Install testing system dependencies
+We have a suite of end-to-end integration tests. We use [ChromeDriver](http://chromedriver.chromium.org/) to drive headless Chrome or Chromuim. This step isn't required to get a dev install running but will be required to run the full test suite.
 
-On Mac OSX, this can be installed by running
-```
-brew install phantomjs
-```
+On ubuntu, run
 
-On Ubunutu, run:
 ```
-sudo npm install -g phantomjs-prebuilt
+sudo apt-get install chromium-browser chromium-chromedriver
 ```
 
-### Install testing requirements
+to install the dependencies. The chromedriver executable needs to be in `PATH`, so either add `/usr/lib/chromium-browser/chromedriver` to `PATH` or create a symlink e.g:
+
+```
+sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
+```
+
+On Mac OSX, run:
+```
+brew tap homebrew/cask
+brew cask install chromedriver
+```
+
+and if you don't already have Chrome installed:
+```
+brew cask install google-chrome
+```
+
+### Install testing python dependencies
 ```
 pip install -r requirements/testing.txt
 ```

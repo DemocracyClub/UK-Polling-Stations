@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import os
 import shutil
 import signal
@@ -9,26 +10,9 @@ from django.conf import settings
 from django.core.management import call_command
 from aloe import before, after, around, step, world
 import aloe_webdriver.django
-from selenium.webdriver import PhantomJS
+from selenium.webdriver import Chrome, ChromeOptions
 from selenium.common.exceptions import TimeoutException
 import vcr
-
-
-class PhantomWithRetry(PhantomJS):
-
-    # Override execute() so it will retry if we get a TimeoutException
-    # this is a hack to work around an underlying
-    # issue in selenium or phantomjs or something.
-    # It is not pretty, but it gets the job done.
-    def execute(self, driver_command, params=None):
-        for _ in range(3):
-            try:
-                return super().execute(driver_command, params)
-            except TimeoutException as e:
-                print('trying again...')
-                error = e
-        print('giving up! :(')
-        raise error
 
 
 selenium_vcr = vcr.VCR()
@@ -52,7 +36,10 @@ def after_all():
 
 @before.each_example
 def setup(scenario, outline, steps):
-    world.browser = PhantomWithRetry()
+    options = ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    world.browser = Chrome(options=options)
     world.browser.set_page_load_timeout(10)
     world.browser.set_script_timeout(10)
 
@@ -86,7 +73,7 @@ def each_step(step):
 def mock_http_calls(step):
     feature = slugify(step.feature.text)
     scenario = slugify(step.scenario.text)
-    step_slug = slugify(step.text)
+    step_slug = slugify(re.sub(r'localhost:(\d+)/', 'localhost/', step.text))
     path = 'test_data/vcr_cassettes/integration_tests/{}/{}/{}.yaml'
     with selenium_vcr.use_cassette(path.format(feature, scenario, step_slug)):
         yield
