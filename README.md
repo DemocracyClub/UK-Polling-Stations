@@ -67,7 +67,7 @@ pip install -r requirements/base.txt
 npm install
 ```
 
-### Install testing dependencies
+### Install testing system dependencies
 We have a suite of end-to-end integration tests. We use [ChromeDriver](http://chromedriver.chromium.org/) to drive headless Chrome or Chromuim. This step isn't required to get a dev install running but will be required to run the full test suite.
 
 On ubuntu, run
@@ -93,7 +93,7 @@ and if you don't already have Chrome installed:
 brew cask install google-chrome
 ```
 
-### Install testing requirements
+### Install testing python dependencies
 ```
 pip install -r requirements/testing.txt
 ```
