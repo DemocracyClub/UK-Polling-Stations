@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIRequestFactory, APITestCase
 from api.postcode import PostcodeViewSet
 from data_finder.helpers import MultipleCouncilsException, PostcodeError
 from .mocks import EEMockWithElection, EEMockWithoutElection
@@ -59,7 +59,7 @@ def mock_geocode(postcode):
         raise PostcodeError('oh noes!!')
 
 
-class PostcodeTest(TestCase):
+class PostcodeTest(APITestCase):
     fixtures = ['polling_stations/apps/api/fixtures/test_address_postcode.json']
 
     def setUp(self):
@@ -156,3 +156,8 @@ class PostcodeTest(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertIsNone(response.data['council'])
         self.assertFalse(response.data['polling_station_known'])
+
+    def test_cors_header(self):
+        resp = self.client.get(
+            '/api/postcode/AA11AA/', format='json', HTTP_ORIGIN='foo.bar/baz')
+        self.assertEqual(resp.get('Access-Control-Allow-Origin'), '*')
