@@ -12,7 +12,7 @@ lxml==4.2.3
 psycopg2-binary==2.7.5
 pyshp==1.2.12
 requests==2.19.1
-boto==2.48.0
+boto==2.49.0
 uk-geo-utils==0.5.0
 
 git+git://github.com/DemocracyClub/dc_base_theme.git@0.3.7
