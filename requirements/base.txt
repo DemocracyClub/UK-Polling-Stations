@@ -16,4 +16,4 @@ boto==2.49.0
 uk-geo-utils==0.5.0
 
 git+git://github.com/DemocracyClub/dc_base_theme.git@0.3.7
-git+https://github.com/DemocracyClub/dc_signup_form.git@2.0.0
+git+https://github.com/DemocracyClub/dc_signup_form.git@2.0.1
