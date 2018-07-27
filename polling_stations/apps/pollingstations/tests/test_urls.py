@@ -21,6 +21,7 @@ class UrlTests(TestCase):
                 "decorator": [],
                 "format_style": "json",
                 "urlconf": "ROOT_URLCONF",
+                'no_color': True,
             })
         )
         urls = [rec['url'] for rec in data]
