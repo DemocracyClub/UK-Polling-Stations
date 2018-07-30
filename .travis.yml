@@ -30,7 +30,6 @@ cache:
 
 before_install:
   - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
-  - npm install -g greenkeeper-lockfile
 
 install:
   - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
@@ -51,13 +50,8 @@ install:
 before_script:
   - psql -U postgres -c "create extension postgis"
   - export BOTO_CONFIG=/dev/null
-  - greenkeeper-lockfile-update
-
 script:
   - tox
-
-after_script:
-  - greenkeeper-lockfile-upload
 
 after_success:
   - coveralls
@@ -65,7 +59,3 @@ after_success:
 notifications:
   slack:
     secure: XDoMlbyJR1HOfF3ibOGNEizbb7MYGG8abDPrVTdTBscV5d3vm7qE0Uvd7Hq7YefwhSv8dJ+psrnWwMxBH7Z8zQmyLDyeVCNysOIfc3JfLi/cgrxZ0x0GoqUiiW8sgMl4Um/9jlEpcd5te5HpIeCFp0PHDO3GIWpzxx7xMbS6/0Q=
-
-env:
-  global:
-    secure: eVOPFkgEc94XlURUren+zrSRGRsFZo1ayp+BfctIPfdXx5Zb8gc1l/0eZPH6W9iEHycNSLWs/JyCt/ZFiiFQCEvqqcLfmtoiPMfcQPhSXZgbsjxIDLgb2n2LDIhEUw4sjeVTHmXe16RFQKNBeFssaPPfhMFN3W5TbgHcGs2+9+L2MYnHFW1Y+itKJR9wzZTrMxatANTemFLBKw2sELF9Gf1mOsPdUr6sT9Ao+rzNknnyt6l7SGxmspWji4IYYZxGT0tCr9bybE/URTgLkUM2HAqWysHe3hEpMIFNwPCnC6XnzgHp+838VSQb1SuCTCS6j9U3JWcXFf8eLBnCTTgUnYU/KrUCs0FRC+NF8T4A7KX5YjQDDAK9hb7ffkn/Vzfk4rkgSAlKYh9KKQ9HWMTpHNjCFz9Ng/tuA8u8gKvzxyiwy2i0NqnNr1kUGCdvEQ6JJLoGhlWSpBrS1464mktRNsXx5sN1h6mM/5nw3kl7R0myu7BB2Q2qoOp22S0mzscB0AMD0gJPUtVGiW/tgoKiMpASpfzov3VuaBSHMvq/oC/epMDF1ozOF7jyNZopi+NnqLjKs58u1gvB5I2BMblSKDuzFLdemB7Hpp9EYOl0sFa7nD+2Gu2n3jIf0WVsU5S+TrVV6Fb8+95wMFBAGrROJli98GGXNDpNc25/aJPo0/E=
