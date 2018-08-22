@@ -97,10 +97,6 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         return self.render_to_response(context)
 
 
-class PrivacyView(WhiteLabelTemplateOverrideMixin, TemplateView):
-    template_name = "privacy.html"
-
-
 class BasePollingStationView(
     TemplateView, LogLookUpMixin, LanguageMixin, metaclass=abc.ABCMeta):
 

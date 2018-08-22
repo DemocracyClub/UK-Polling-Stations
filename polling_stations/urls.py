@@ -11,7 +11,6 @@ from api.router import router
 from api.docs import ApiDocsView
 from data_finder.views import (
     HomeView,
-    PrivacyView,
     PostcodeView,
     ExamplePostcodeView,
     AddressView,
@@ -38,7 +37,12 @@ core_patterns = [
     url(r'^address_select/(?P<postcode>.+)/$',
         AddressFormView.as_view(), name='address_select_view'),
     url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^privacy/$', PrivacyView.as_view(), name='privacy_view'),
+    url(r'^privacy/$',
+        RedirectView.as_view(
+            url='https://democracyclub.org.uk/privacy/',
+            permanent=True
+        ), name='privacy_view'
+    ),
     url(r'^robots\.txt$', TemplateView.as_view(
         template_name='robots.txt', content_type='text/plain')),
 ]
