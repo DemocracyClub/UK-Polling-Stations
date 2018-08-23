@@ -10,11 +10,6 @@ Feature: Smoke tests
     Then I should see "Api Root"
     And No errors were thrown
 
-    Scenario: Check privacy policy
-    When I visit site page "/privacy"
-    Then I should see "Simple Version"
-    And No errors were thrown
-
     Scenario: Check email signup form
     When I visit site page "/email/mailing_list"
     Then I should see "Join our mailing list"
