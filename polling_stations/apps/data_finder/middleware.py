@@ -3,6 +3,15 @@ from django.core.urlresolvers import set_script_prefix
 
 
 class UTMTrackerMiddleware(object):
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request)
+        return response
+
     def process_request(self, request):
         def _get_value_from_req(key):
             return (key, request.GET.get(key, None))
