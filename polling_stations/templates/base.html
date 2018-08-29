@@ -5,7 +5,15 @@
     {% stylesheet 'styles' %}
 {% endblock extra_site_css %}
 
-
+{% block top_banner %}
+{% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
+<div class="container">
+  <div class="card centered-card banner_message">
+    <p>This is a staging site.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock top_banner %}
 
 {% block ga_tracking_code %}
 {% if not debug and not disable_ga %}

@@ -125,6 +125,7 @@ TEMPLATES = [
                 'feedback.context_processors.feedback_form',
                 'bug_reports.context_processors.bug_report_form',
                 "pollingstations.context_processors.google_analytics",
+                "pollingstations.context_processors.global_settings",
                 "whitelabel.context_processors.base_template",
             ],
         },
