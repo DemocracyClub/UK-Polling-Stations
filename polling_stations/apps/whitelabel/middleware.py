@@ -4,6 +4,16 @@ from django.utils import translation
 
 
 class WhiteLabelMiddleware(object):
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.process_response(
+            request, self.get_response(request))
+        return response
+
     def process_request(self, request):
         base_path = request.path.split('/')[1]
         request.brand = "democracyclub"
@@ -12,13 +22,6 @@ class WhiteLabelMiddleware(object):
             set_script_prefix("/%s" % base_path)
         if base_path in settings.WHITELABEL_PREFIXES:
             request.brand = base_path
-        if request.brand == 'nus_wales':
-            if request.GET.get('lang', '') == 'en':
-                request.session[translation.LANGUAGE_SESSION_KEY] = 'en'
-                translation.activate('en')
-            if request.GET.get('lang', '') == 'cy':
-                request.session[translation.LANGUAGE_SESSION_KEY] = 'cy-gb'
-                translation.activate('cy-gb')
 
     def process_response(self, request, response):
         base_path = request.path.split('/')[1]

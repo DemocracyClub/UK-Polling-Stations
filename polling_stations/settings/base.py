@@ -87,7 +87,7 @@ from .static_files import *  # noqa
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'asdasdasdasdasdasdasd'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -99,6 +99,7 @@ MIDDLEWARE_CLASSES = (
     'data_finder.middleware.UTMTrackerMiddleware',
     'whitelabel.middleware.WhiteLabelMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pollingstations.middleware.BasicAuthMiddleware',
 )
 
 TEMPLATES = [
@@ -124,6 +125,7 @@ TEMPLATES = [
                 'feedback.context_processors.feedback_form',
                 'bug_reports.context_processors.bug_report_form',
                 "pollingstations.context_processors.google_analytics",
+                "pollingstations.context_processors.global_settings",
                 "whitelabel.context_processors.base_template",
             ],
         },
@@ -269,6 +271,11 @@ ONSUD_MODEL = 'addressbase.Onsud'
 
 EMAIL_SIGNUP_ENDPOINT = 'https://democracyclub.org.uk/mailing_list/api_signup/v1/'
 EMAIL_SIGNUP_API_KEY = ''
+
+
+# Disable Basic Auth by default
+# We only want to use this on staging deploys
+BASICAUTH_DISABLE = True
 
 
 # import application constants
