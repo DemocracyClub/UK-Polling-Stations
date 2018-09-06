@@ -18,12 +18,14 @@ from data_finder.views import (
     WeDontKnowView,
     MultipleCouncilsView,
 )
+from pollingstations.views import status_check
 
 from django.contrib import admin
 admin.autodiscover()
 
 
 core_patterns = [
+    url(r'^status_check/$', status_check, name='status_check'),
     url(r'^postcode/(?P<postcode>.+)/$',
         PostcodeView.as_view(), name='postcode_view'),
     url(r'^postcode/$',
