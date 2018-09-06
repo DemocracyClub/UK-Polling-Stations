@@ -278,6 +278,11 @@ EMAIL_SIGNUP_API_KEY = ''
 BASICAUTH_DISABLE = True
 
 
+# settings for load balancer status check
+CHECK_SERVER_CLEAN = True
+CLEAN_SERVER_FILE = '~/clean'
+
+
 # import application constants
 from .constants.councils import *  # noqa
 from .constants.directions import *  # noqa
