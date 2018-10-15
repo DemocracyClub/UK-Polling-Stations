@@ -1,7 +1,7 @@
 -r base.txt
 
 ec2_tag_conditional==0.1.2
-gunicorn==19.8.1
+gunicorn==19.9.0
 raven
 django-redis
 hiredis
