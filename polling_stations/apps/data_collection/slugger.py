@@ -31,5 +31,5 @@ class Slugger:
         value = force_text(value)
         value = unicodedata.normalize(
             'NFKD', value).encode('ascii', 'ignore').decode('ascii')
-        value = re.sub('[^\w\s-]', '-', value).strip().lower()
-        return mark_safe(re.sub('[-\s]+', '-', value))
+        value = re.sub(r'[^\w\s-]', '-', value).strip().lower()
+        return mark_safe(re.sub(r'[-\s]+', '-', value))
