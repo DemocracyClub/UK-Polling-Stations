@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.urlresolvers import set_script_prefix
 
 
 class UTMTrackerMiddleware(object):
