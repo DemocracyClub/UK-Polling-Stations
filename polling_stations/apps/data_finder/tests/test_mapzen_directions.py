@@ -1,7 +1,7 @@
 import json
 from django.contrib.gis.geos import Point
 from django.test import TestCase
-from data_finder.directions_clients import (
+from data_finder.helpers.directions import (
     DirectionsException, MapzenDirectionsClient)
 
 
