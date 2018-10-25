@@ -1,3 +1,4 @@
+from datetime import datetime
 import requests
 from django.conf import settings
 from uk_geo_utils.helpers import Postcode
@@ -16,7 +17,9 @@ class EveryElectionWrapper:
             elif point:
                 self.elections = self.get_data_by_point(point)
                 self.request_success = True
-        except Exception:
+            self.ballots = self.get_ballots_for_next_date()
+            self.cancelled_ballots = self.get_cancelled_ballots()
+        except requests.exceptions.RequestException:
             self.request_success = False
 
     def get_data_by_postcode(self, postcode):
@@ -40,7 +43,81 @@ class EveryElectionWrapper:
             res.raise_for_status()
 
         res_json = res.json()
-        return res_json['results']
+        if 'results' in res_json:
+            return res_json['results']
+        return res_json
+
+    def get_ballots_for_next_date(self):
+        ballots = [e for e in self.elections if e['group_type'] is None]
+        ballots = [e for e in ballots if e['election_id'] not in settings.ELECTION_BLACKLIST]
+        if len(ballots) == 0:
+            return ballots
+        dates = [datetime.strptime(b['poll_open_date'], "%Y-%m-%d") for b in ballots]
+        dates.sort()
+        next_election_date = dates[0].strftime("%Y-%m-%d")
+        ballots = [e for e in ballots if e['poll_open_date'] == next_election_date]
+        return ballots
+
+    def get_cancelled_ballots(self):
+        return [b for b in self.ballots if b['cancelled']]
+
+    @property
+    def all_ballots_cancelled(self):
+        return len(self.cancelled_ballots) > 0 and\
+            len(self.ballots) == len(self.cancelled_ballots)
+
+    def get_cancelled_election_info(self):
+        rec = {
+            'cancelled': None,
+            'name': None,
+            'rescheduled_date': None,
+            'metadata': None,
+        }
+
+        # bypass the rest of this if we're not checking EE
+        # or we failed to contact EE
+        if not settings.EVERY_ELECTION['CHECK'] or not self.request_success:
+            rec['cancelled'] = False
+            return rec
+
+        rec['cancelled'] = self.all_ballots_cancelled
+        # What we care about here is if _all_
+        # applicable ballot objects are cancelled.
+
+        # i.e: If the user has a local election and a mayoral election
+        # and the local one is cancelled but the mayoral one is going ahead
+        # we just want to tell them where the polling station is.
+
+        # For the purposes of WhereDIV we can abstract
+        # the complexity that they will receive a different
+        # number of ballots than expected when they get there.
+        if not rec['cancelled']:
+            return rec
+
+        if len(self.cancelled_ballots) > 1:
+            # If there were 2 or more elections scheduled to happen
+            # on this day and all of them got cancelled
+            # its diffuclt to know how to present this info in the abstract
+            # lets just say something generic
+            return rec
+
+        # there is exactly one cancelled election
+        cancelled_ballot = self.cancelled_ballots[0]
+        rec['name'] = cancelled_ballot['election_title']
+        rec['metadata'] = cancelled_ballot['metadata']
+
+        if cancelled_ballot['replaced_by']:
+            try:
+                query_url = "%sapi/elections/%s.json" % (
+                    settings.EE_BASE, cancelled_ballot['replaced_by'])
+                new_ballot = self.get_data(query_url)
+                rec['rescheduled_date'] = datetime.strptime(
+                    new_ballot['poll_open_date'], "%Y-%m-%d"
+                ).strftime("%-d %B %Y")
+            except requests.exceptions.RequestException:
+                rec['rescheduled_date'] = None
+
+        return rec
 
     def has_election(self):
         if not settings.EVERY_ELECTION['CHECK']:
@@ -51,14 +128,9 @@ class EveryElectionWrapper:
             # assume there *is* an upcoming election
             return True
 
-        ballots = filter(lambda e: e['group_type'] is None, self.elections)
-        ballots = filter(lambda e: e['election_id'] not in settings.ELECTION_BLACKLIST, ballots)
-
-        try:
-            next(ballots)
+        if len(self.ballots) > 0 and not self.all_ballots_cancelled:
             return True
-        except StopIteration:
-            return False
+        return False
 
     def get_explanations(self):
         explanations = []
