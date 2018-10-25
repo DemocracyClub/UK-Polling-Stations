@@ -9,7 +9,9 @@ interactions:
     method: GET
     uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=BT15%203JX&future=1
   response:
-    body: {string: '{"count":1,"next":null,"previous":null,"results":[{"election_id":"blablabla.bla", "group_type":null}]}'}
+    body: {string: '{"count":1,"next":null,"previous":null,"results":[
+      {"election_id":"blablabla.bla", "group_type":null, "cancelled":false, "poll_open_date":"2099-12-31"}
+    ]}'}
     headers:
       Allow: ['GET, OPTIONS']
       Connection: [keep-alive]
