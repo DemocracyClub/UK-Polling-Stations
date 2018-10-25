@@ -150,10 +150,8 @@ class BasePollingStationView(
 
         ee = self.get_ee_wrapper()
         context['has_election'] = ee.has_election()
-
-        if not context['has_election']:
-            context['error'] = "We don't know of any upcoming elections in your area"
         context['election_explainers'] = ee.get_explanations()
+        context['cancelled_election'] = ee.get_cancelled_election_info()
         metadata = ee.get_metadata()
         context['voter_id_pilot'] = None
         if metadata and '2018-05-03-id-pilot' in metadata:
