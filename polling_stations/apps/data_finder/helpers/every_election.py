@@ -149,6 +149,10 @@ class EveryElectionWrapper:
         return explanations
 
     def get_metadata(self):
+        # FIXME: this does the wrong thing
+        # if >1 elections have meta-data attached
+        # and doesn't account for
+        # elections on >1 future dates
         if not self.request_success:
             return None
         if len(self.elections) > 0:
