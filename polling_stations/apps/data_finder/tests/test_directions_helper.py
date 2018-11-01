@@ -2,7 +2,7 @@ import mock
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 from unittest import skip
-from data_finder.directions_clients import (
+from data_finder.helpers.directions import (
     Directions,
     DirectionsException,
     GoogleDirectionsClient,
@@ -41,8 +41,8 @@ class DirectionsTest(TestCase):
         result = d.get_directions(start_location=False, end_location=False)
         self.assertIsNone(result)
 
-    @mock.patch("data_finder.directions_clients.MapzenDirectionsClient.get_route", mock_route_exception)
-    @mock.patch("data_finder.directions_clients.GoogleDirectionsClient.get_route", mock_route_exception)
+    @mock.patch("data_finder.helpers.directions.MapzenDirectionsClient.get_route", mock_route_exception)
+    @mock.patch("data_finder.helpers.directions.GoogleDirectionsClient.get_route", mock_route_exception)
     def test_all_bad(self):
         # all directions providers throw a DirectionsException
         # get_directions() should return None
@@ -50,8 +50,8 @@ class DirectionsTest(TestCase):
         result = d.get_directions(start_location=self.a, end_location=self.b)
         self.assertIsNone(result)
 
-    @mock.patch("data_finder.directions_clients.MapzenDirectionsClient.get_route", mock_route_exception)
-    @mock.patch("data_finder.directions_clients.GoogleDirectionsClient.get_route", mock_route_google)
+    @mock.patch("data_finder.helpers.directions.MapzenDirectionsClient.get_route", mock_route_exception)
+    @mock.patch("data_finder.helpers.directions.GoogleDirectionsClient.get_route", mock_route_google)
     def test_google(self):
         # Mapzen throws an exception
         # Fall back to google
@@ -60,8 +60,8 @@ class DirectionsTest(TestCase):
         self.assertEqual('Google', result.source)
 
     @skip("skip this test pending review of directions providers")
-    @mock.patch("data_finder.directions_clients.MapzenDirectionsClient.get_route", mock_route_mapzen)
-    @mock.patch("data_finder.directions_clients.GoogleDirectionsClient.get_route", mock_route_google)
+    @mock.patch("data_finder.helpers.directions.MapzenDirectionsClient.get_route", mock_route_mapzen)
+    @mock.patch("data_finder.helpers.directions.GoogleDirectionsClient.get_route", mock_route_google)
     def test_mapzen(self):
         # Mapzen returns a valid result
         d = DirectionsHelper()

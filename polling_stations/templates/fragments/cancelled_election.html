@@ -1,0 +1,22 @@
+{% load markdown_deux_tags %}
+<h2>Cancelled Election</h2>
+
+{% if cancelled_election.name %}
+  {% if cancelled_election.rescheduled_date %}
+    <p>The poll for <strong>{{ cancelled_election.name }}</strong> has been rescheduled.</p>
+    <p>It will now take place on {{ cancelled_election.rescheduled_date }}</p>
+  {% else %}
+  <p>The poll for <strong>{{ cancelled_election.name }}</strong> has been cancelled.</p>
+  {% endif %}
+{% endif %}
+
+{% if cancelled_election.metadata.cancelled_election.detail %}
+  {% filter markdown %}
+{{ cancelled_election.metadata.cancelled_election.detail }}
+  {% endfilter %}
+{% else %}
+  <p>For more information contact {{ council.name }}
+  {% if council.phone %}
+  on <strong><a href="tel:{{ council_phone }}">{{ council.phone }}</a></strong>
+  {% endif %}</p>
+{% endif %}

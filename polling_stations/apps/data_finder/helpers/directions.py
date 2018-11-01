@@ -124,3 +124,18 @@ class MapzenDirectionsClient(DirectionsClient):
 
         return Directions(
             time, dist, 'walk', json.dumps(route), self.precision, 'Mapzen')
+
+
+class DirectionsHelper():
+
+    def get_directions(self, **kwargs):
+        if kwargs['start_location'] and kwargs['end_location']:
+            clients = (GoogleDirectionsClient(),)
+            for client in clients:
+                try:
+                    return client.get_route(kwargs['start_location'], kwargs['end_location'])
+                except DirectionsException:
+                    pass
+            return None
+        else:
+            return None
