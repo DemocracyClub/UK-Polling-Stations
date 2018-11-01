@@ -3,10 +3,10 @@
 
 {% if cancelled_election.name %}
   {% if cancelled_election.rescheduled_date %}
-    <p><strong>{{ cancelled_election.name }}</strong> has been rescheduled.</p>
+    <p>The poll for <strong>{{ cancelled_election.name }}</strong> has been rescheduled.</p>
     <p>It will now take place on {{ cancelled_election.rescheduled_date }}</p>
   {% else %}
-  <p><strong>{{ cancelled_election.name }}</strong> has been cancelled.</p>
+  <p>The poll for <strong>{{ cancelled_election.name }}</strong> has been cancelled.</p>
   {% endif %}
 {% endif %}
 
