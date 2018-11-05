@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import set_script_prefix
+from django.urls import set_script_prefix
 from django.utils import translation
 
 

@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from django.conf import settings
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 
 from .views import data_quality

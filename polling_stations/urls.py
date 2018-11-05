@@ -53,7 +53,7 @@ extra_patterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^api/beta/', include(router.urls)),
     url(r'^api/$', ApiDocsView.as_view(), name='api_docs'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^feedback/', include('feedback.urls')),
     url(r'^report_problem/', include('bug_reports.urls')),
     url(r'^league_table/', include('data_collection.urls')),

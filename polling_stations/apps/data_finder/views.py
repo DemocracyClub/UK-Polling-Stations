@@ -3,7 +3,7 @@ import json
 
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import validate_email
 from django.forms import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, Http404
