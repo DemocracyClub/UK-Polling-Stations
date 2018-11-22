@@ -47,9 +47,13 @@ class EveryElectionWrapper:
             return res_json['results']
         return res_json
 
-    def get_ballots_for_next_date(self):
+    def get_all_ballots(self):
         ballots = [e for e in self.elections if e['group_type'] is None]
         ballots = [e for e in ballots if e['election_id'] not in settings.ELECTION_BLACKLIST]
+        return sorted(ballots, key=lambda k: k['poll_open_date'])
+
+    def get_ballots_for_next_date(self):
+        ballots = self.get_all_ballots()
         if len(ballots) == 0:
             return ballots
         dates = [datetime.strptime(b['poll_open_date'], "%Y-%m-%d") for b in ballots]

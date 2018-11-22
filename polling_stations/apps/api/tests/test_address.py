@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory
+from rest_framework.views import APIView
 from api.address import ResidentialAddressViewSet
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
@@ -21,6 +22,7 @@ class AddressTest(TestCase):
         factory = APIRequestFactory()
         self.request = factory.get('/foo', format='json')
         self.request.user = AnonymousUser()
+        self.request = APIView().initialize_request(self.request)
         self.endpoint = ResidentialAddressViewSet()
         self.endpoint.get_ee_wrapper = lambda x: EEMockWithElection()
 
@@ -34,6 +36,7 @@ class AddressTest(TestCase):
         self.assertEqual("Foo Street Primary School, Bar Town",
             response.data['polling_station']['properties']['address'])
         self.assertEqual(1, len(response.data['addresses']))
+        self.assertEqual(1, len(response.data['ballots']))
 
     def test_station_found_but_no_election(self):
         self.endpoint.get_ee_wrapper = lambda x: EEMockWithoutElection()
@@ -45,6 +48,7 @@ class AddressTest(TestCase):
         self.assertFalse(response.data['polling_station_known'])
         self.assertEqual(None, response.data['polling_station'])
         self.assertEqual(1, len(response.data['addresses']))
+        self.assertEqual(0, len(response.data['ballots']))
 
     def test_station_not_found(self):
         response = self.endpoint.retrieve(self.request,
@@ -55,6 +59,7 @@ class AddressTest(TestCase):
         self.assertFalse(response.data['polling_station_known'])
         self.assertEqual(None, response.data['polling_station'])
         self.assertEqual(1, len(response.data['addresses']))
+        self.assertEqual(1, len(response.data['ballots']))
 
     def test_bad_slug(self):
         # this address is not in our fixture
