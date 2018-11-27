@@ -25,7 +25,9 @@
 
 ## Point (object)
 - type: `Point` (string)
-- coordinates: `...` (array)
+- coordinates: (array[number], fixed-type)
+  - ` -1.247996`
+  - `53.101285`
 
 ## StationURLs (object)
 - detail: `https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&station_id=SUM4` (string) - URL to retrieve JSON meta-data about this polling station
