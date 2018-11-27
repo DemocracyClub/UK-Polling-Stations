@@ -1,7 +1,7 @@
 FORMAT: 1A
 HOST: https://wheredoivote.co.uk/api/beta
 
-# wheredoivote.co.uk Beta API
+## Group wheredoivote.co.uk Beta API
 
 Open access to the data powering [wheredoivote.co.uk](https://wheredoivote.co.uk/):
 A website to help people in the UK find their polling station, built by [Democracy Club](https://democracyclub.org.uk/).
