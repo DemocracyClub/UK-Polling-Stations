@@ -37,7 +37,31 @@ class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
             'url': {'view_name': 'address-detail', 'lookup_field': 'slug'}
         }
 
-        fields = ('url', 'address', 'postcode', 'council', 'polling_station_id')
+        fields = (
+            'url',
+            'address',
+            'postcode',
+            'council',
+            'polling_station_id',
+            'slug',
+        )
+
+
+class BallotSerializer(serializers.Serializer):
+    ballot_paper_id = serializers.SerializerMethodField()
+    ballot_title = serializers.SerializerMethodField()
+    poll_open_date = serializers.CharField(read_only=True)
+    elected_role = serializers.CharField(read_only=True, allow_null=True)
+    metadata = serializers.DictField(read_only=True, allow_null=True)
+    cancelled = serializers.BooleanField(read_only=True)
+    replaced_by = serializers.CharField(read_only=True, allow_null=True)
+    replaces = serializers.CharField(read_only=True, allow_null=True)
+
+    def get_ballot_paper_id(self, obj):
+        return obj['election_id']
+
+    def get_ballot_title(self, obj):
+        return obj['election_title']
 
 
 class PostcodeResponseSerializer(serializers.Serializer):
@@ -49,6 +73,7 @@ class PostcodeResponseSerializer(serializers.Serializer):
     addresses = ResidentialAddressSerializer(read_only=True, many=True)
     report_problem_url = serializers.CharField(read_only=True)
     metadata = serializers.DictField(read_only=True)
+    ballots = BallotSerializer(read_only=True, many=True)
 
 
 class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
@@ -107,7 +132,12 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
                 ret['polling_station'] = polling_station
                 ret['polling_station_known'] = True
 
-        ret['metadata'] = ee.get_metadata()
+        ret['metadata'] = None
+
+        if request.query_params.get('all_future_ballots', None):
+            ret['ballots'] = ee.get_all_ballots()
+        else:
+            ret['ballots'] = ee.get_ballots_for_next_date()
 
         # create log entry
         log_data = {}

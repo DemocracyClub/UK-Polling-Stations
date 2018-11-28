@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.views import APIView
 from api.postcode import PostcodeViewSet
 from data_finder.helpers import MultipleCouncilsException, PostcodeError
 from .mocks import EEMockWithElection, EEMockWithoutElection
@@ -66,6 +67,7 @@ class PostcodeTest(APITestCase):
         factory = APIRequestFactory()
         self.request = factory.get('/foo', format='json')
         self.request.user = AnonymousUser()
+        self.request = APIView().initialize_request(self.request)
         self.endpoint = PostcodeViewSet()
         self.endpoint.get_ee_wrapper = lambda x: EEMockWithElection()
 
@@ -80,6 +82,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual(3, len(response.data['addresses']))
         self.assertIsNone(response.data['custom_finder'])
         self.assertIsInstance(response.data['postcode_location'], dict)
+        self.assertEqual(1, len(response.data['ballots']))
 
     def test_station_not_found(self):
         response = self.endpoint.retrieve(self.request, 'BB11BB', 'json',
@@ -92,6 +95,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual([], response.data['addresses'])
         self.assertIsNone(response.data['custom_finder'])
         self.assertIsInstance(response.data['postcode_location'], dict)
+        self.assertEqual(1, len(response.data['ballots']))
 
     def test_station_found(self):
         response = self.endpoint.retrieve(self.request, 'CC11CC', 'json',
@@ -105,6 +109,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual([], response.data['addresses'])
         self.assertIsNone(response.data['custom_finder'])
         self.assertIsInstance(response.data['postcode_location'], dict)
+        self.assertEqual(1, len(response.data['ballots']))
 
     def test_station_found_but_no_election(self):
         self.endpoint.get_ee_wrapper = lambda x: EEMockWithoutElection()
@@ -118,6 +123,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual([], response.data['addresses'])
         self.assertIsNone(response.data['custom_finder'])
         self.assertIsInstance(response.data['postcode_location'], dict)
+        self.assertEqual(0, len(response.data['ballots']))
 
     def test_station_found_no_source_point(self):
         response = self.endpoint.retrieve(self.request, 'FF11FF', 'json',
@@ -130,6 +136,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual([], response.data['addresses'])
         self.assertIsNone(response.data['custom_finder'])
         self.assertIsNone(response.data['postcode_location'])
+        self.assertEqual(1, len(response.data['ballots']))
 
     def test_no_council(self):
         response = self.endpoint.retrieve(self.request, 'DD11DD', 'json',
