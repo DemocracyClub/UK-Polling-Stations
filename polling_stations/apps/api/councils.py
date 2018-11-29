@@ -34,7 +34,7 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
 
 
 class CouncilViewSet(ReadOnlyModelViewSet):
-    queryset = Council.objects.all()
+    queryset = Council.objects.all().defer("area")
     serializer_class = CouncilDataSerializer
 
     @detail_route(url_path='geo')
