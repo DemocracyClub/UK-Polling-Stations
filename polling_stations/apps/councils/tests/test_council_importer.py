@@ -58,6 +58,14 @@ class TestCouncilImporter(TestCase):
     def test_import_councils(self):
         assert Council.objects.count() == 0
         cmd = MockCouncilsImporter()
+        cmd.get_contact_info_from_yvm = lambda x: {
+            'name': "",
+            'website': "",
+            'email': "",
+            'phone': "",
+            'address': "",
+            'postcode': "",
+        }
 
         # supress output
         out = StringIO()

@@ -1,0 +1,38 @@
+{
+    "polling_station_known": false,
+    "postcode_location": {
+        "properties": null,
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -0.26353977212676555,
+                50.84477241345472
+            ]
+        },
+        "type": "Feature"
+    },
+    "custom_finder": null,
+    "addresses": [
+        {
+            "url": "https://wheredoivote.co.uk/api/beta/sandbox/address/e07000223-524-2-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/",
+            "polling_station_id": "524",
+            "postcode": "BN436HW",
+            "council": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
+            "address": "2 Truleigh Way, Shoreham-by-Sea, West Sussex"
+        }
+    ],
+    "polling_station": null,
+    "council": {
+        "url": "https://wheredoivote.co.uk/api/beta/councils/E07000223/",
+        "council_id": "E07000223",
+        "name": "Adur District Council",
+        "email": "elections@adur-worthing.gov.uk",
+        "phone": "01903 221014/5/6",
+        "website": "http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/",
+        "postcode": "BN11 1HA",
+        "address": "Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex"
+    },
+    "report_problem_url": "https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json",
+    "metadata": null,
+    "ballots": []
+}
