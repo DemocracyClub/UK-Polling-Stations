@@ -49,20 +49,12 @@ the following conditions can be observed in the response body:
             + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
                 + type: `Point` (string)
                 + coordinates: (array[number], fixed-type)
-                    + `-1.2491514412601963`
-                    + `53.09878716696975`
+                    + `-0.2770293269230769` (number)
+                    + `50.83664266538461` (number)
         + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
         + `polling_station` (GeoPollingStation, nullable) - A GeoJSON polling station feature
-        + council (object, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
-            + url: `https://wheredoivote.co.uk/api/beta/councils/E07000170/` (string) - URL for this resource
-            + `council_id`: `E07000170` (string) - GSS code for this council
-            + name: `Ashfield District Council` (string) - Name of this council
-            + email: `regelec@ashfield-dc.gov.uk` (string) - Contact email address for this council's Electoral Services team
-            + phone: `01623 457321` (string) - Telephone number for this council's Electoral Services team
-            + website: `http://www.ashfield-dc.gov.uk/residents/democracy,-elections-and-legal/elections/registering-to-vote.aspx` (string) - URL for this council's website
-            + postcode: `NG17 8DA` (string) - Postcode component of contact address for this council
-            + address: `Ashfield District Council\nCouncil Offices\nUrban Road\nKirkby-in-Ashfield\nNottingham` (string) - Contact address for this council
+        + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
         + `report_problem_url`: `https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json` (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
         + metadata: (object, nullable) - This field may be used to supply additional information about an election.
 
@@ -95,8 +87,8 @@ the following conditions can be observed in the response body:
             + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
                 + type: `Point` (string)
                 + coordinates: (array[number], fixed-type)
-                    + `-0.26353977212676555`
-                    + `50.84477241345472`
+                    + `-0.26353977212676555` (number)
+                    + `50.84477241345472` (number)
         + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
             + (object)
@@ -114,15 +106,7 @@ the following conditions can be observed in the response body:
                 + slug: `e07000223-524-2-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
                 + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
         + `polling_station` (object, nullable) - A GeoJSON polling station feature
-        + council (object, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
-            + url: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string) - URL for this resource
-            + `council_id`: `E07000223` (string) - GSS code for this council
-            + name: `Adur District Council` (string) - Name of this council
-            + email: `elections@adur-worthing.gov.uk` (string) - Contact email address for this council's Electoral Services team
-            + phone: `01903 221014/5/6` (string) - Telephone number for this council's Electoral Services team
-            + website: `http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/` (string) - URL for this council's website
-            + postcode: `BN11 1HA` (string) - Postcode component of contact address for this council
-            + address: `Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex` (string) - Contact address for this council
+        + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
         + `report_problem_url`: (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
         + metadata: (object, nullable) - This field may be used to supply additional information about an election.
 
@@ -154,8 +138,8 @@ the following conditions can be observed in the response body:
             + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
                 + type: `Point` (string)
                 + coordinates: (array[number], fixed-type)
-                    + `-3.165885`
-                    + `51.465197`
+                    + `-0.2770293269230769` (number)
+                    + `50.83664266538461` (number)
         + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
         + `polling_station` (object, nullable) - A GeoJSON polling station feature
@@ -194,8 +178,8 @@ the following conditions can be observed in the response body:
             + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
                 + type: `Point` (string)
                 + coordinates: (array[number], fixed-type)
-                    + `-0.26353977212676555`
-                    + `50.84477241345472`
+                    + `-0.26353977212676555` (number)
+                    + `50.84477241345472` (number)
         + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
             + (object)
@@ -205,31 +189,8 @@ the following conditions can be observed in the response body:
                 + address: `5 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
                 + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
                 + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
-        + `polling_station` (object, nullable) - A GeoJSON polling station feature
-            + id: `E07000223.527` (string)
-            + type: `Feature` (string)
-            + geometry (object, nullable) - A GeoJSON Point object describing the location of this polling station. Optionally null if we do not hold this information
-                + type: `Point` (string)
-                + coordinates: (array[number], fixed-type)
-                    + `-0.2693240568181819`
-                    + `50.83494864772728`
-            + properties (object)
-                + urls (object)
-                    + detail: `https://wheredoivote.co.uk/api/beta/pollingstations/?station_id=527&council_id=E07000223` (string) - URL to retrieve JSON meta-data about this polling station
-                    + geo: `https://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=527&council_id=E07000223` (string) - URL to retrieve GeoJSON feature describing this polling station
-                + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string) - URL to retrieve JSON meta-data about the council which administers this polling station
-                + `station_id`: `527` (string) - An identifier for this polling station. Station IDs are unique within councils, but are not unique nationally
-                + address: `Shoreham Free Church Hall\nBuckingham Road/Gordon Road\nShoreham-by-Sea` (string) - Address for this polling station
-                + postcode: `BN43 6WF` (string) - Postcode for this polling station
-        + council (object, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
-            + url: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string) - URL for this resource
-            + `council_id`: `E07000223` (string) - GSS code for this council
-            + name: `Adur District Council` (string) - Name of this council
-            + email: `elections@adur-worthing.gov.uk` (string) - Contact email address for this council's Electoral Services team
-            + phone: `01903 221014/5/6` (string) - Telephone number for this council's Electoral Services team
-            + website: `http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/` (string) - URL for this council's website
-            + postcode: `BN11 1HA` (string) - Postcode component of contact address for this council
-            + address: `Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex` (string) - Contact address for this council
+        + `polling_station` (GeoPollingStation, nullable) - A GeoJSON polling station feature
+        + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
         + `report_problem_url`: `https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json` (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
         + metadata: (object, nullable) - This field may be used to supply additional information about an election.
 

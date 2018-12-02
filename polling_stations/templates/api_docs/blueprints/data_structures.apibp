@@ -6,44 +6,44 @@
 - coordinates: `...` (array)
 
 ## Council (object)
-- url: `https://wheredoivote.co.uk/api/beta/councils/W06000015.json` (string) - URL for this resource
-- `council_id`: `W06000015` (string) - GSS code for this council
-- name: `Cardiff Council` (string) - Name of this council
-- address: `Electoral Registration Officer\nCity of Cardiff Council\nCounty Hall Atlantic Wharf` (string) - Contact address for this council
-- postcode: `CF10 4UW` (string) - Postcode component of contact address for this council
-- email: `electoralservices@cardiff.gov.uk` (string) - Contact email address for this council's Electoral Services team
-- phone: `029 2087 2034` (string) - Telephone number for this council's Electoral Services team
-- website: `http://www.cardiff.gov.uk/` (string) - URL for this council's website
+- url: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string) - URL for this resource
+- `council_id`: `E07000223` (string) - GSS code for this council
+- name: `Adur District Council` (string) - Name of this council
+- email: `elections@adur-worthing.gov.uk` (string) - Contact email address for this council's Electoral Services team
+- phone: `01903 221014/5/6` (string) - Telephone number for this council's Electoral Services team
+- website: `http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/` (string) - URL for this council's website
+- postcode: `BN11 1HA` (string) - Postcode component of contact address for this council
+- address: `Adur District Council\nTown Hall\nChapel Road\nWorthing\nWest Sussex` (string) - Contact address for this council
 
 ## GeoCouncil (object)
 - geometry (MultiPolygon) - A GeoJSON object describing the boundary of this area
 - type: `Feature` (string)
-- id: `W06000015` (string) - GSS code for this council
+- id: `E07000223` (string) - GSS code for this council
 - properties (Council)
 
 
 
-## Point (object)
+## StationPoint (object)
 - type: `Point` (string)
 - coordinates: (array[number], fixed-type)
-  - ` -1.247996`
-  - `53.101285`
+  - `-0.2693240568181819` (number)
+  - `50.83494864772728` (number)
 
 ## StationURLs (object)
-- detail: `https://wheredoivote.co.uk/api/beta/pollingstations/?council_id=E07000170&station_id=SUM4` (string) - URL to retrieve JSON meta-data about this polling station
-- geo: `https://wheredoivote.co.uk/api/beta/pollingstations/geo/?council_id=E07000170&station_id=SUM4` (string) - URL to retrieve GeoJSON feature describing this polling station
+- detail: `https://wheredoivote.co.uk/api/beta/pollingstations/?station_id=527&council_id=E07000223` (string) - URL to retrieve JSON meta-data about this polling station
+- geo: `https://wheredoivote.co.uk/api/beta/pollingstations/geo/?station_id=527&council_id=E07000223` (string) - URL to retrieve GeoJSON feature describing this polling station
 
 ## PollingStation (object)
 - urls (StationURLs)
-- council: `https://wheredoivote.co.uk/api/beta/councils/E07000170.json` (string) - URL to retrieve JSON meta-data about the council which administers this polling station
-- `station_id`: `SUM4` (string) - An identifier for this polling station. Station IDs are unique within councils, but are not unique nationally
-- address: `Ashwood Centre\nPortland Street, Kirkby in Ashfield` (string) - Address for this polling station
-- postcode: ` ` (string) - Postcode for this polling station
+- council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string) - URL to retrieve JSON meta-data about the council which administers this polling station
+- `station_id`: `527` (string) - An identifier for this polling station. Station IDs are unique within councils, but are not unique nationally
+- address: `Shoreham Free Church Hall\nBuckingham Road/Gordon Road\nShoreham-by-Sea` (string) - Address for this polling station
+- postcode: `BN43 6WF` (string) - Postcode for this polling station
 
 ## GeoPollingStation (object)
-- geometry (Point, nullable) - A GeoJSON Point object describing the location of this polling station. Optionally null if we do not hold this information
+- geometry (StationPoint, nullable) - A GeoJSON Point object describing the location of this polling station. Optionally null if we do not hold this information
 - type: `Feature` (string)
-- id: `E07000170.SUM4` (string)
+- id: `E07000223.527` (string)
 - properties (PollingStation)
 
 
