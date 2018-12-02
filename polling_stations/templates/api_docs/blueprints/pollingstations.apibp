@@ -9,7 +9,7 @@ List all polling stations in a local authority.
 Returns an array of [polling station objects](#polling-stations-json-3)
 
 + Parameters
-    + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
 ### List All Polling Stations in a Local Authority: JSON [GET]
 
@@ -25,7 +25,7 @@ Returns a [GeoJSON FeatureCollection](https://tools.ietf.org/html/rfc7946#sectio
 of [polling station features](#polling-stations-geojson-3)
 
 + Parameters
-    + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
 ### List All Polling Stations in a Local Authority: GeoJSON [GET]
 
@@ -41,8 +41,8 @@ of [polling station features](#polling-stations-geojson-3)
 Retrieve meta-data about a polling station in JSON format.
 
 + Parameters
-    + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
-    + station_id: `SUM4` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
+    + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `station_id`: `SUM4` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
 
 ### Retrieve a Polling Station: JSON [GET]
 
@@ -62,8 +62,8 @@ Retrieve meta-data about a polling station in JSON format.
 Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) describing a polling station.
 
 + Parameters
-    + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
-    + station_id: `SUM4` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
+    + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `station_id`: `SUM4` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
 
 ### Retrieve a Polling Station: GeoJSON [GET]
 

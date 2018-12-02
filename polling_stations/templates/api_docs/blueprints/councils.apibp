@@ -21,7 +21,7 @@ List all councils. Returns an array of [council objects](#retrieve-a-council-jso
 Retrieve meta-data about a council in JSON format.
 
 + Parameters
-    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `council_id`: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
 ### Retrieve a Council: JSON [GET]
 
@@ -41,7 +41,7 @@ Retrieve meta-data about a council in JSON format.
 Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a GIS boundary and meta-data about a council.
 
 + Parameters
-    + council_id: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `council_id`: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
 ### Retrieve a Council: GeoJSON [GET]
 
