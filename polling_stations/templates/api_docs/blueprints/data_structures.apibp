@@ -63,3 +63,15 @@
 - type: `Feature` (string)
 - id: `E07000170.SUM4` (string)
 - properties (PollingDistrict)
+
+
+
+## Ballot (object)
+- `ballot_paper_id`: `local.adur.buckingham.2018-05-03` (string) - Identifier for this ballot
+- `ballot_title`: `Adur local election Buckingham` (string) - Friendly name for this ballot
+- `poll_open_date`: `2018-05-03` (string) - Polling day for this ballot
+- `elected_role`: `Local Councillor` (string) - Name of the role the winner(s) of this election will assume
+- `metadata`: (object, nullable) - Object containing information about special conditions for the user to be aware about (e.g: cancelled elections, voter id pilot).
+- `cancelled`: `false` (boolean) - True if this ballot has been cancelled
+- `replaced_by`: (string, nullable) - If a ballot has been cancelled (cancelled = true) and rescheduled for a later date, this key will hold the ballot_paper_id of the ballot that replaces it.
+- `replaces`: (string, nullable) - If this ballot replaces another cancelled ballot, this key will hold the ballot_paper_id of the ballot that it replaces.

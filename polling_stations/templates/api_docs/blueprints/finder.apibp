@@ -18,6 +18,8 @@ A `200 OK` response from `/postcode` or `/address` is an object containing the f
   this URL may be used to provide a user with a back-channel to report inaccurate data.
 * `metadata`: (object, nullable) - This field may be used to supply additional information about
   an election, particularly if there is some unusual condition or event for voters to be aware of.
+* `ballots`: (array) - An array of ballot objects listing the elections applicable to this request.
+  It is possible for more than one ballot to occur on the same date. For example, a user may vote in a local council election and mayoral election on the same day.
 
 The entry point to a polling station search is a call to the `/postcode` endpoint.
 A valid postcode search may result in one of 3 outcomes:
@@ -57,6 +59,7 @@ the following conditions can be observed in the response body:
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
         + `report_problem_url`: `https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json` (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
         + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
 
 + Response 400 (application/json)
 
@@ -109,6 +112,7 @@ the following conditions can be observed in the response body:
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
         + `report_problem_url`: (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
         + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
 
 + Response 400 (application/json)
 
@@ -146,6 +150,7 @@ the following conditions can be observed in the response body:
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
         + `report_problem_url`: (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
         + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
 
 + Response 400 (application/json)
 
@@ -193,6 +198,7 @@ the following conditions can be observed in the response body:
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
         + `report_problem_url`: `https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json` (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
         + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
 
 + Response 404 (application/json)
 
