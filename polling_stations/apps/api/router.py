@@ -11,8 +11,8 @@ router = routers.DefaultRouter()
 router.register(r'councils', CouncilViewSet)
 router.register(r'pollingstations', PollingStationViewSet)
 router.register(r'pollingdistricts', PollingDistrictViewSet)
-router.register(r'postcode', PostcodeViewSet, base_name="postcode")
-router.register(r'address', ResidentialAddressViewSet, base_name="address")
+router.register(r'postcode', PostcodeViewSet, basename="postcode")
+router.register(r'address', ResidentialAddressViewSet, basename="address")
 
 
 from django.conf.urls import url
