@@ -1,4 +1,4 @@
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 
@@ -68,7 +68,7 @@ class PollingEntityMixin():
         self.geo = False
         return self.output(request)
 
-    @list_route(url_path='geo')
+    @action(detail=False, url_path='geo')
     def geo(self, request, format=None):
         self.geo = True
         return self.output(request)

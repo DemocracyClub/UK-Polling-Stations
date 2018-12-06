@@ -1,4 +1,4 @@
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -37,7 +37,7 @@ class CouncilViewSet(ReadOnlyModelViewSet):
     queryset = Council.objects.all().defer("area")
     serializer_class = CouncilDataSerializer
 
-    @detail_route(url_path='geo')
+    @action(detail=True, url_path='geo')
     def geo(self, request, pk=None, format=None):
         try:
             council = Council.objects.get(pk=pk)
