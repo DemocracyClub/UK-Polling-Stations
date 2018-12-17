@@ -7,14 +7,14 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bug_reports', '0002_auto_20180222_1659'),
-    ]
+    dependencies = [("bug_reports", "0002_auto_20180222_1659")]
 
     operations = [
         migrations.AlterField(
-            model_name='bugreport',
-            name='email',
-            field=models.EmailField(blank=True, max_length=100, verbose_name='(Optional) Email address:'),
-        ),
+            model_name="bugreport",
+            name="email",
+            field=models.EmailField(
+                blank=True, max_length=100, verbose_name="(Optional) Email address:"
+            ),
+        )
     ]

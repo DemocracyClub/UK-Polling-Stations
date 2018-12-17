@@ -6,14 +6,10 @@ from django.db import models, migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('data_collection', '0004_auto_20160121_1522'),
-    ]
+    dependencies = [("data_collection", "0004_auto_20160121_1522")]
 
     operations = [
         migrations.AddField(
-            model_name='dataquality',
-            name='report',
-            field=models.TextField(blank=True),
-        ),
+            model_name="dataquality", name="report", field=models.TextField(blank=True)
+        )
     ]

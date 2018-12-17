@@ -6,15 +6,9 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('data_finder', '0007_auto_20170426_0951'),
-    ]
+    dependencies = [("data_finder", "0007_auto_20170426_0951")]
 
     operations = [
-        migrations.DeleteModel(
-            name='CampaignSignup',
-        ),
-        migrations.DeleteModel(
-            name='ElectionNotificationSignup',
-        ),
+        migrations.DeleteModel(name="CampaignSignup"),
+        migrations.DeleteModel(name="ElectionNotificationSignup"),
     ]

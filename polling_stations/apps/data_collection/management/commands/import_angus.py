@@ -1,10 +1,11 @@
 from data_collection.management.commands import BaseScotlandSpatialHubImporter
 
+
 class Command(BaseScotlandSpatialHubImporter):
-    council_id = 'S12000041'
-    council_name = 'Angus'
+    council_id = "S12000041"
+    council_name = "Angus"
     elections = [
-        'local.angus.2017-05-04',
+        "local.angus.2017-05-04",
         #'parl.2017-06-08'
     ]
     """
@@ -28,13 +29,6 @@ class Command(BaseScotlandSpatialHubImporter):
         if not code:
             return None
 
-        address = "\n".join([
-            self.station_addresses[code],
-            str(record[0]).strip()
-        ])
+        address = "\n".join([self.station_addresses[code], str(record[0]).strip()])
 
-        return {
-            'internal_council_id': code,
-            'postcode': '',
-            'address': address,
-        }
+        return {"internal_council_id": code, "postcode": "", "address": address}

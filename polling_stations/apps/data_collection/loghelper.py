@@ -7,7 +7,7 @@ class LogHelper:
     logger = None
 
     def __init__(self, verbosity):
-        logformat = '%(levelname)s: %(message)s'
+        logformat = "%(levelname)s: %(message)s"
         logging.basicConfig(format=logformat)
         logger = logging.getLogger(__name__)
         if verbosity == 0:
@@ -25,8 +25,7 @@ class LogHelper:
         if variable:
             if pretty:
                 try:
-                    log_str = message % pprint.pformat(
-                        variable._asdict(), indent=4)
+                    log_str = message % pprint.pformat(variable._asdict(), indent=4)
                 except AttributeError:
                     log_str = message % pprint.pformat(variable, indent=4)
             else:

@@ -1,10 +1,11 @@
 from data_collection.management.commands import BaseScotlandSpatialHubImporter
 
+
 class Command(BaseScotlandSpatialHubImporter):
-    council_id = 'S12000019'
-    council_name = 'Midlothian'
+    council_id = "S12000019"
+    council_name = "Midlothian"
     elections = [
-        'local.midlothian.2017-05-04',
+        "local.midlothian.2017-05-04",
         #'parl.2017-06-08'
     ]
 
@@ -19,7 +20,7 @@ class Command(BaseScotlandSpatialHubImporter):
         station, so in this case we can fix it by just not importing MN4G.
         If they didn't use the same polling station, this would be an issue.
         """
-        if code == 'MN4H':
+        if code == "MN4H":
             return None
 
         return super().district_record_to_dict(record)

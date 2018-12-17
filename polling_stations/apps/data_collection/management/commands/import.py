@@ -15,10 +15,12 @@ def match_in(regex, lst):
             return True
     return False
 
+
 # load a django management command from file f
 def load_command(f):
     command = SourceFileLoader("module.name", f).load_module()
     return command.Command()
+
 
 # run a django management command from file f
 def run_cmd(f, opts):
@@ -29,6 +31,7 @@ def run_cmd(f, opts):
         traceback.print_exc()
         raise e
 
+
 """
 Run all of the import scripts relating to a particular election or elections
 
@@ -36,6 +39,8 @@ Election id may be either a string or regex. For example:
 python manage.py import -e local.buckinghamshire.2017-05-04
 python manage.py import -r -e 'local.[a-z]+.2017-05-04'
 """
+
+
 class Command(BaseCommand):
 
     """
@@ -43,47 +48,50 @@ class Command(BaseCommand):
     We will maunally run system checks only for the
     'data_collection' and 'pollingstations' apps
     """
+
     requires_system_checks = False
 
     summary = []
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '-e',
-            '--elections',
-            nargs='+',
-            help='<Required> List of one or more election ids to import data for',
-            required=True
+            "-e",
+            "--elections",
+            nargs="+",
+            help="<Required> List of one or more election ids to import data for",
+            required=True,
         )
 
         parser.add_argument(
-            '-r',
-            '--regex',
-            help='<Optional> Election ids should be matched as regular expressions',
-            action='store_true',
+            "-r",
+            "--regex",
+            help="<Optional> Election ids should be matched as regular expressions",
+            action="store_true",
             required=False,
-            default=False
+            default=False,
         )
 
         parser.add_argument(
-            '-o',
-            '--overwrite',
-            help='<Optional> Force deleting of existing data',
-            action='store_true',
+            "-o",
+            "--overwrite",
+            help="<Optional> Force deleting of existing data",
+            action="store_true",
             required=False,
-            default=False
+            default=False,
         )
 
         parser.add_argument(
-            '-m',
-            '--multiprocessing',
-            help='<Optional> Use multiprocessing for import',
-            action='store_true',
+            "-m",
+            "--multiprocessing",
+            help="<Optional> Use multiprocessing for import",
+            action="store_true",
             required=False,
-            default=False
+            default=False,
         )
 
-    def importer_covers_these_elections(self, args_elections, importer_elections, regex):
+    def importer_covers_these_elections(
+        self, args_elections, importer_elections, regex
+    ):
         for election in args_elections:
             if regex:
                 if match_in(election, importer_elections):
@@ -95,9 +103,9 @@ class Command(BaseCommand):
 
     def output_summary(self):
         for line in self.summary:
-            if line[0] == 'INFO':
+            if line[0] == "INFO":
                 self.stdout.write(line[1])
-            elif line[0] == 'WARNING':
+            elif line[0] == "WARNING":
                 self.stdout.write(self.style.ERROR(line[1]))
             else:
                 self.stdout.write(line[1])
@@ -119,22 +127,24 @@ class Command(BaseCommand):
         Management commands can ignore checks that only apply to
         the apps supporting the website part of the project
         """
-        self.check([
-            apps.get_app_config('data_collection'),
-            apps.get_app_config('pollingstations')
-        ])
+        self.check(
+            [
+                apps.get_app_config("data_collection"),
+                apps.get_app_config("pollingstations"),
+            ]
+        )
 
         base_path = os.path.dirname(__file__)
-        files = glob.glob(base_path + '/import_*.py')
+        files = glob.glob(base_path + "/import_*.py")
 
         if not files:
             raise ValueError("No importers matched")
 
         commands_series = []
         commands_parallel = []
-        opts = {'noclean': False, 'nochecks': True, 'verbosity': 1}
-        if kwargs['multiprocessing']:
-            opts = {'noclean': False, 'nochecks': True, 'verbosity': 0}
+        opts = {"noclean": False, "nochecks": True, "verbosity": 1}
+        if kwargs["multiprocessing"]:
+            opts = {"noclean": False, "nochecks": True, "verbosity": 0}
 
         # loop over all the import scripts
         # and build up a list of management commands to run
@@ -146,30 +156,34 @@ class Command(BaseCommand):
                 # usually we want to handle a specific exception, but in in this situation
                 # if there is any issue (at all) trying to load the module,
                 # we just want to log it and move on to the next script
-                self.summary.append(('WARNING', "%s could not be loaded!" % tail))
+                self.summary.append(("WARNING", "%s could not be loaded!" % tail))
                 continue
 
-            if hasattr(cmd, 'elections'):
-                if self.importer_covers_these_elections(kwargs['elections'], cmd.elections, kwargs['regex']):
+            if hasattr(cmd, "elections"):
+                if self.importer_covers_these_elections(
+                    kwargs["elections"], cmd.elections, kwargs["regex"]
+                ):
                     # Only run if
                     existing_data = PollingStation.objects.filter(
-                        council_id=cmd.council_id).exists()
-                    if not existing_data or kwargs.get('overwrite'):
-                        self.summary.append(
-                            ('INFO', "Ran import script %s" % tail))
-                        if hasattr(cmd, 'run_in_series'):
+                        council_id=cmd.council_id
+                    ).exists()
+                    if not existing_data or kwargs.get("overwrite"):
+                        self.summary.append(("INFO", "Ran import script %s" % tail))
+                        if hasattr(cmd, "run_in_series"):
                             commands_series.append((f, opts))
                         else:
                             commands_parallel.append((f, opts))
             else:
-                self.summary.append(('WARNING', "%s does not contain elections property!" % tail))
+                self.summary.append(
+                    ("WARNING", "%s does not contain elections property!" % tail)
+                )
 
         print(
-            "running %i import scripts..." %\
-            (len(commands_series) + len(commands_parallel))
+            "running %i import scripts..."
+            % (len(commands_series) + len(commands_parallel))
         )
         # run all the import scripts
-        if kwargs['multiprocessing']:
+        if kwargs["multiprocessing"]:
             # do anything we want to run in series first
             self.run_commands_in_series(commands_series)
 

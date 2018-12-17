@@ -1,13 +1,14 @@
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 
+
 class Command(BaseCsvStationsShpDistrictsImporter):
     srid = 27700
-    council_id = 'E07000221'
-    districts_name = 'Polling_Districts'
-    stations_name = 'Copy of Polling Station Details - Revised.csv'
+    council_id = "E07000221"
+    districts_name = "Polling_Districts"
+    stations_name = "Copy of Polling Station Details - Revised.csv"
     elections = [
-        'local.warwickshire.2017-05-04',
+        "local.warwickshire.2017-05-04",
         #'parl.2017-06-08'
     ]
 
@@ -30,18 +31,18 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     This mapping allows us to assign the correct stations to the orphan districts
     """
     districts_map = {
-        'JD': 'JD1',
-        'DK1': 'DK2',
-        'EB': 'EB2',
-        'DJ1': 'DJ2',
-        'DH1': 'DH2',
-        'DU': 'DU1',
+        "JD": "JD1",
+        "DK1": "DK2",
+        "EB": "EB2",
+        "DJ1": "DJ2",
+        "DH1": "DH2",
+        "DU": "DU1",
     }
 
     def district_record_to_dict(self, record):
         return {
-            'internal_council_id': str(record[0]).strip(),
-            'name': "%s - %s" % (str(record[3]).strip(), str(record[0]).strip()),
+            "internal_council_id": str(record[0]).strip(),
+            "name": "%s - %s" % (str(record[3]).strip(), str(record[0]).strip()),
         }
 
     def station_record_to_dict(self, record):
@@ -49,20 +50,19 @@ class Command(BaseCsvStationsShpDistrictsImporter):
         stations = []
         district_id = record.district_s_.strip()
         station = {
-            'internal_council_id': district_id,
-            'address' : "\n".join(
-                [record.name.strip(), record.address.strip()]),
-            'postcode': '',
-            'polling_district_id': district_id,
-            'location': location,
+            "internal_council_id": district_id,
+            "address": "\n".join([record.name.strip(), record.address.strip()]),
+            "postcode": "",
+            "polling_district_id": district_id,
+            "location": location,
         }
         stations.append(station)
 
         # apply manual corrections
         if district_id in self.districts_map:
             station2 = station.copy()
-            station2['internal_council_id'] = self.districts_map[district_id]
-            station2['polling_district_id'] = self.districts_map[district_id]
+            station2["internal_council_id"] = self.districts_map[district_id]
+            station2["polling_district_id"] = self.districts_map[district_id]
             stations.append(station2)
 
         return stations

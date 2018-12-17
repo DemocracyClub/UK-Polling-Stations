@@ -8,30 +8,60 @@ import django_extensions.db.fields
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('councils', '0002_auto_20160121_1522'),
-    ]
+    dependencies = [("councils", "0002_auto_20160121_1522")]
 
     operations = [
         migrations.CreateModel(
-            name='LoggedPostcode',
+            name="LoggedPostcode",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
-                ('created', django_extensions.db.fields.CreationDateTimeField(verbose_name='created', auto_now_add=True)),
-                ('modified', django_extensions.db.fields.ModificationDateTimeField(auto_now=True, verbose_name='modified')),
-                ('postcode', models.CharField(max_length=100)),
-                ('had_data', models.BooleanField(db_index=True, default=False)),
-                ('council', models.ForeignKey(null=True, to='councils.Council')),
-                ('location', django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326)),
-                ('brand', models.CharField(db_index=True, blank=True, max_length=100)),
-                ('utm_campaign', models.CharField(db_index=True, blank=True, max_length=100)),
-                ('utm_medium', models.CharField(db_index=True, blank=True, max_length=100)),
-                ('utm_source', models.CharField(db_index=True, blank=True, max_length=100)),
+                (
+                    "id",
+                    models.AutoField(
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                        auto_created=True,
+                    ),
+                ),
+                (
+                    "created",
+                    django_extensions.db.fields.CreationDateTimeField(
+                        verbose_name="created", auto_now_add=True
+                    ),
+                ),
+                (
+                    "modified",
+                    django_extensions.db.fields.ModificationDateTimeField(
+                        auto_now=True, verbose_name="modified"
+                    ),
+                ),
+                ("postcode", models.CharField(max_length=100)),
+                ("had_data", models.BooleanField(db_index=True, default=False)),
+                ("council", models.ForeignKey(null=True, to="councils.Council")),
+                (
+                    "location",
+                    django.contrib.gis.db.models.fields.PointField(
+                        blank=True, null=True, srid=4326
+                    ),
+                ),
+                ("brand", models.CharField(db_index=True, blank=True, max_length=100)),
+                (
+                    "utm_campaign",
+                    models.CharField(db_index=True, blank=True, max_length=100),
+                ),
+                (
+                    "utm_medium",
+                    models.CharField(db_index=True, blank=True, max_length=100),
+                ),
+                (
+                    "utm_source",
+                    models.CharField(db_index=True, blank=True, max_length=100),
+                ),
             ],
             options={
-                'abstract': False,
-                'ordering': ('-modified', '-created'),
-                'get_latest_by': 'modified',
+                "abstract": False,
+                "ordering": ("-modified", "-created"),
+                "get_latest_by": "modified",
             },
-        ),
+        )
     ]

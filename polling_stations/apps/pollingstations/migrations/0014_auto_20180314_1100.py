@@ -8,19 +8,19 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('pollingstations', '0013_customfinders'),
-    ]
+    dependencies = [("pollingstations", "0013_customfinders")]
 
     operations = [
         migrations.AddField(
-            model_name='residentialaddress',
-            name='location',
-            field=django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326),
+            model_name="residentialaddress",
+            name="location",
+            field=django.contrib.gis.db.models.fields.PointField(
+                blank=True, null=True, srid=4326
+            ),
         ),
         migrations.AddField(
-            model_name='residentialaddress',
-            name='uprn',
+            model_name="residentialaddress",
+            name="uprn",
             field=models.CharField(blank=True, max_length=100),
         ),
     ]

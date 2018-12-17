@@ -14,17 +14,17 @@ from uk_geo_utils.helpers import Postcode
 
 
 class PollingDistrict(models.Model):
-    name                = models.CharField(blank=True, null=True, max_length=255)
-    council             = models.ForeignKey(Council, null=True)
+    name = models.CharField(blank=True, null=True, max_length=255)
+    council = models.ForeignKey(Council, null=True)
     internal_council_id = models.CharField(blank=True, max_length=100)
-    extra_id            = models.CharField(blank=True, null=True, max_length=100)
-    area                = models.MultiPolygonField(null=True, blank=True)
+    extra_id = models.CharField(blank=True, null=True, max_length=100)
+    area = models.MultiPolygonField(null=True, blank=True)
     # This is NOT a FK, as we might not have the polling station at
     # the point of import
-    polling_station_id  = models.CharField(blank=True, max_length=255)
+    polling_station_id = models.CharField(blank=True, max_length=255)
 
     class Meta:
-        unique_together = (("council", "internal_council_id"))
+        unique_together = ("council", "internal_council_id")
 
     objects = models.GeoManager()
 
@@ -34,14 +34,12 @@ class PollingDistrict(models.Model):
 
 
 class PollingStationManager(models.GeoManager):
-    def get_polling_station(self, council_id,
-                            location=None, polling_district=None):
+    def get_polling_station(self, council_id, location=None, polling_district=None):
         assert any((polling_district, location))
 
         if not polling_district:
             try:
-                polling_district = PollingDistrict.objects.get(
-                    area__covers=location)
+                polling_district = PollingDistrict.objects.get(area__covers=location)
             except PollingDistrict.DoesNotExist:
                 return None
             except PollingDistrict.MultipleObjectsReturned:
@@ -51,7 +49,7 @@ class PollingStationManager(models.GeoManager):
             # always attempt to look up district id in stations table
             station = self.filter(
                 polling_district_id=polling_district.internal_council_id,
-                council_id=council_id
+                council_id=council_id,
             )
 
             if len(station) == 1:
@@ -65,7 +63,7 @@ class PollingStationManager(models.GeoManager):
             # only try to look up station id if it is a sensible value
             station = self.get_polling_station_by_id(
                 internal_council_id=polling_district.polling_station_id,
-                council_id=council_id
+                council_id=council_id,
             )
             # if polling_station_id is set and we don't get a station back
             # or it maps to more than one station due to dodgy data
@@ -77,8 +75,7 @@ class PollingStationManager(models.GeoManager):
 
     def get_polling_station_by_id(self, internal_council_id, council_id):
         station = self.filter(
-            internal_council_id=internal_council_id,
-            council_id=council_id
+            internal_council_id=internal_council_id, council_id=council_id
         )
         if len(station) == 1:
             return station[0]
@@ -88,8 +85,7 @@ class PollingStationManager(models.GeoManager):
 
 class PollingStation(models.Model):
     council = models.ForeignKey(Council, null=True, db_index=True)
-    internal_council_id = models.CharField(
-        blank=True, max_length=100, db_index=True)
+    internal_council_id = models.CharField(blank=True, max_length=100, db_index=True)
     postcode = models.CharField(blank=True, null=True, max_length=100)
     address = models.TextField(blank=True, null=True)
     location = models.PointField(null=True, blank=True)
@@ -98,10 +94,10 @@ class PollingStation(models.Model):
     polling_district_id = models.CharField(blank=True, max_length=255)
 
     class Meta:
-        unique_together = (("council", "internal_council_id"))
+        unique_together = ("council", "internal_council_id")
         index_together = [
             ["council", "internal_council_id"],
-            ["council", "polling_district_id"]
+            ["council", "polling_district_id"],
         ]
 
     objects = PollingStationManager()
@@ -113,17 +109,19 @@ class PollingStation(models.Model):
     def formatted_address(self):
         if not self.address:
             return None
-        return "\n".join([x[0] for x in groupby(self.address.split(','))])
+        return "\n".join([x[0] for x in groupby(self.address.split(","))])
 
 
 class ResidentialAddress(models.Model):
-    address            = models.TextField(blank=True, null=True)
-    postcode           = models.CharField(blank=True, null=True, max_length=100, db_index=True)
-    council            = models.ForeignKey(Council, null=True)
+    address = models.TextField(blank=True, null=True)
+    postcode = models.CharField(blank=True, null=True, max_length=100, db_index=True)
+    council = models.ForeignKey(Council, null=True)
     polling_station_id = models.CharField(blank=True, max_length=100)
-    slug               = models.SlugField(blank=False, null=False, db_index=True, unique=True, max_length=255)
-    uprn               = models.CharField(max_length=100, blank=True)
-    location           = models.PointField(null=True, blank=True)
+    slug = models.SlugField(
+        blank=False, null=False, db_index=True, unique=True, max_length=255
+    )
+    uprn = models.CharField(max_length=100, blank=True)
+    location = models.PointField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         """
@@ -134,13 +132,12 @@ class ResidentialAddress(models.Model):
         super().save(*args, **kwargs)
 
 
-
 class CustomFinderManager(models.Manager):
-
     def get_custom_finder(self, geocoder, postcode):
         try:
-            finder = self.get(pk__in=[
-                geocoder.get_code('lad'), geocoder.get_code('eer')])
+            finder = self.get(
+                pk__in=[geocoder.get_code("lad"), geocoder.get_code("eer")]
+            )
             finder.message = _(finder.message)
             """
             EONI's poling station finder requires postcode to have a space :(
@@ -153,8 +150,7 @@ class CustomFinderManager(models.Manager):
             that accept postcodes (e.g: a postcode format flag in the database).
             At the moment I only have this one to work with.
             """
-            finder.encoded_postcode = urllib.parse.quote(
-                Postcode(postcode).with_space)
+            finder.encoded_postcode = urllib.parse.quote(Postcode(postcode).with_space)
 
             return finder
         except ObjectDoesNotExist:
@@ -194,13 +190,20 @@ class CustomFinder(models.Model):
     )
     record.save()
     """
-    area_code = models.CharField(max_length=9, primary_key=True,
-        help_text="The GSS code for this area")
-    base_url = models.CharField(blank=True, max_length=255,
-        help_text="The landing page for the polling station finder")
-    can_pass_postcode = models.BooleanField(default=False,
-        help_text="Does the URL have '?postcode=' in it?")
-    message = models.TextField(blank=True,
-        default="This council has its own polling station finder:")
+
+    area_code = models.CharField(
+        max_length=9, primary_key=True, help_text="The GSS code for this area"
+    )
+    base_url = models.CharField(
+        blank=True,
+        max_length=255,
+        help_text="The landing page for the polling station finder",
+    )
+    can_pass_postcode = models.BooleanField(
+        default=False, help_text="Does the URL have '?postcode=' in it?"
+    )
+    message = models.TextField(
+        blank=True, default="This council has its own polling station finder:"
+    )
 
     objects = CustomFinderManager()

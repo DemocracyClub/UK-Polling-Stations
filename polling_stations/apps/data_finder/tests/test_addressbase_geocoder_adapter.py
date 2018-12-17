@@ -1,16 +1,15 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from data_finder.helpers.geocoders import (
-    AddressBaseGeocoderAdapter, MultipleCouncilsException)
-from uk_geo_utils.geocoders import (
-    AddressBaseGeocoder,
-    CodesNotFoundException
+    AddressBaseGeocoderAdapter,
+    MultipleCouncilsException,
 )
+from uk_geo_utils.geocoders import AddressBaseGeocoder, CodesNotFoundException
 
 
 class AddressBaseGeocoderAdapterTest(TestCase):
 
-    fixtures = ['test_addressbase.json']
+    fixtures = ["test_addressbase.json"]
 
     def test_no_records(self):
         """
@@ -18,7 +17,7 @@ class AddressBaseGeocoderAdapterTest(TestCase):
 
         Exception of class ObjectDoesNotExist should be thrown
         """
-        addressbase = AddressBaseGeocoderAdapter('DD1 1DD')
+        addressbase = AddressBaseGeocoderAdapter("DD1 1DD")
         with self.assertRaises(ObjectDoesNotExist):
             addressbase.geocode()
 
@@ -33,7 +32,7 @@ class AddressBaseGeocoderAdapterTest(TestCase):
 
         Exception of class CodesNotFoundException should be thrown
         """
-        addressbase = AddressBaseGeocoderAdapter('AA11AA')
+        addressbase = AddressBaseGeocoderAdapter("AA11AA")
         with self.assertRaises(CodesNotFoundException):
             result = addressbase.geocode()
 
@@ -49,7 +48,7 @@ class AddressBaseGeocoderAdapterTest(TestCase):
 
         Exception of class MultipleCouncilsException should be thrown
         """
-        addressbase = AddressBaseGeocoderAdapter('CC11CC')
+        addressbase = AddressBaseGeocoderAdapter("CC11CC")
         with self.assertRaises(MultipleCouncilsException):
             result = addressbase.geocode()
 
@@ -67,7 +66,9 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         Note that in this case, the ONSUD table does not contain corresponding
         records for *all* of the UPRNs we found, but we accept the result anyway
         """
-        addressbase = AddressBaseGeocoderAdapter('bb 1   1B B')  # intentionally spurious whitespace and case
+        addressbase = AddressBaseGeocoderAdapter(
+            "bb 1   1B B"
+        )  # intentionally spurious whitespace and case
         result = addressbase.geocode()
         self.assertIsInstance(result, AddressBaseGeocoder)
-        self.assertEqual('B01000001', result.get_code('lad'))
+        self.assertEqual("B01000001", result.get_code("lad"))

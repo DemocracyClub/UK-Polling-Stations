@@ -7,18 +7,17 @@ from django.conf import settings
 
 
 class S3Wrapper:
-
     def __init__(self):
         config = Config()
-        access_key = config.get_value(settings.BOTO_SECTION, 'aws_access_key_id')
-        secret_key = config.get_value(settings.BOTO_SECTION, 'aws_secret_access_key')
+        access_key = config.get_value(settings.BOTO_SECTION, "aws_access_key_id")
+        secret_key = config.get_value(settings.BOTO_SECTION, "aws_secret_access_key")
 
         # connect to S3 + get ref to our data bucket
         conn = S3Connection(access_key, secret_key)
         self.bucket = conn.get_bucket(settings.S3_DATA_BUCKET)
 
         # this is where our local data will live
-        self.base_path = os.path.abspath('./s3cache/')
+        self.base_path = os.path.abspath("./s3cache/")
 
     @property
     def data_path(self):
@@ -34,7 +33,8 @@ class S3Wrapper:
             shutil.rmtree(local_paths[0])
         elif len(local_paths) > 1:
             raise ValueError(
-                "Pattern '%s' matched more than one directory" % local_pattern)
+                "Pattern '%s' matched more than one directory" % local_pattern
+            )
         else:
             # if local dir does not exist, no worries. We will create
             # any necessary directories when we pull data down from s3
@@ -46,7 +46,7 @@ class S3Wrapper:
         for key in keys:
 
             # ignore directories
-            if key.key[-8:] == '$folder$' or key.key[-1] == '/':
+            if key.key[-8:] == "$folder$" or key.key[-1] == "/":
                 continue
 
             local_file = os.path.join(self.base_path, key.key)

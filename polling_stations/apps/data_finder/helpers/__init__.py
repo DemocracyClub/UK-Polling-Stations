@@ -8,4 +8,3 @@ from .geocoders import (
 )
 from .every_election import EveryElectionWrapper
 from .routing import RoutingHelper
-

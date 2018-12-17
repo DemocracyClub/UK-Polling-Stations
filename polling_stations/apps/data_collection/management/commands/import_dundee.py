@@ -2,27 +2,24 @@ from django.core.exceptions import ObjectDoesNotExist
 from addressbase.models import Address
 from data_collection.github_importer import BaseGitHubImporter
 
+
 class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = 'S12000042'
-    elections = ['parl.2017-06-08']
-    scraper_name = 'wdiv-scrapers/DC-PollingStations-Dundee'
-    geom_type = 'geojson'
+    council_id = "S12000042"
+    elections = ["parl.2017-06-08"]
+    scraper_name = "wdiv-scrapers/DC-PollingStations-Dundee"
+    geom_type = "geojson"
 
     def district_record_to_dict(self, record):
-        poly = self.extract_geometry(
-            record,
-            self.geom_type,
-            self.get_srid('districts')
-        )
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
 
         return {
-            'internal_council_id': record['POLLING_DISTRICT'],
-            'name': record['POLLING_DISTRICT'],
-            'area': poly,
-            'polling_station_id': record['POLLING_STATION_ID'],
+            "internal_council_id": record["POLLING_DISTRICT"],
+            "name": record["POLLING_DISTRICT"],
+            "area": poly,
+            "polling_station_id": record["POLLING_STATION_ID"],
         }
 
     def get_address(self, uprn):
@@ -31,21 +28,19 @@ class Command(BaseGitHubImporter):
 
     def station_record_to_dict(self, record):
         location = self.extract_geometry(
-            record,
-            self.geom_type,
-            self.get_srid('stations')
+            record, self.geom_type, self.get_srid("stations")
         )
 
         # Get full address from AddressBase if we can
         try:
-            address, postcode = self.get_address(record['UPRN'])
+            address, postcode = self.get_address(record["UPRN"])
         except ObjectDoesNotExist:
-            address = record['NAME']
-            postcode = ''
+            address = record["NAME"]
+            postcode = ""
 
         return {
-            'internal_council_id': record['ID'],
-            'address': address,
-            'postcode': postcode,
-            'location': location,
+            "internal_council_id": record["ID"],
+            "address": address,
+            "postcode": postcode,
+            "location": location,
         }

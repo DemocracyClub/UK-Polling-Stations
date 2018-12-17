@@ -1,17 +1,16 @@
 from django.contrib.gis.db import models
-from uk_geo_utils.models import (
-    AbstractAddress, AbstractAddressManager, AbstractOnsud)
+from uk_geo_utils.models import AbstractAddress, AbstractAddressManager, AbstractOnsud
 
 
 class AddressManager(AbstractAddressManager):
     def postcodes_for_district(self, district):
         qs = self.filter(location__within=district.area)
-        qs = qs.values_list('postcode', flat=True).distinct()
+        qs = qs.values_list("postcode", flat=True).distinct()
         return list(qs)
 
     def points_for_postcode(self, postcode):
         qs = self.filter(postcode=postcode)
-        qs = qs.values_list('location', flat=True)
+        qs = qs.values_list("location", flat=True)
         return list(qs)
 
 
@@ -21,7 +20,7 @@ class Address(AbstractAddress):
 
 class Onsud(AbstractOnsud):
     class Meta:
-        index_together = (('lad',))
+        index_together = ("lad",)
 
 
 class Blacklist(models.Model):
@@ -31,8 +30,9 @@ class Blacklist(models.Model):
     Ideally ('postcode', 'lad') should be a composite PK,
     but django's ORM doesn't support them.
     """
+
     postcode = models.CharField(blank=False, max_length=15, db_index=True)
     lad = models.CharField(blank=False, max_length=9)
 
     class Meta:
-        unique_together = (('postcode', 'lad'))
+        unique_together = ("postcode", "lad")

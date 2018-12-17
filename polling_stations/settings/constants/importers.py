@@ -11,5 +11,5 @@ See: http://boto.cloudhackers.com/en/latest/boto_config_tut.html
 
 We can change the section name using the BOTO_SECTION setting
 """
-BOTO_SECTION = 'wheredoivote'
-S3_DATA_BUCKET = 'pollingstations-data'
+BOTO_SECTION = "wheredoivote"
+S3_DATA_BUCKET = "pollingstations-data"

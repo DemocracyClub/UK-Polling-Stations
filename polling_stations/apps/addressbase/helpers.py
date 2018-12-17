@@ -7,18 +7,21 @@ from uk_geo_utils.helpers import Postcode
 from addressbase.models import Address
 
 
-AddressTuple = namedtuple('Address', [
-    'address',
-    'postcode',
-    'council_id',
-    'polling_station_id',
-    'slug',
-    'uprn',
-    'location'])
+AddressTuple = namedtuple(
+    "Address",
+    [
+        "address",
+        "postcode",
+        "council_id",
+        "polling_station_id",
+        "slug",
+        "uprn",
+        "location",
+    ],
+)
 
 
 class AddressSet(set):
-
     def save(self, batch_size):
 
         addresses_db = []
@@ -30,39 +33,38 @@ class AddressSet(set):
                 council_id=address.council_id,
                 slug=address.slug,
                 uprn=address.uprn,
-                location=address.location
+                location=address.location,
             )
             addresses_db.append(record)
 
-        ResidentialAddress.objects.bulk_create(
-            addresses_db, batch_size=batch_size)
+        ResidentialAddress.objects.bulk_create(addresses_db, batch_size=batch_size)
 
 
 class EdgeCaseFixer:
-
     def __init__(self, target_council_id, logger):
         self.address_set = AddressSet()
         self.target_council_id = target_council_id
         self.logger = logger
-        self.AddressRecord = namedtuple('AddressRecord', [
-            'uprn',
-            'address',
-            'postcode',
-            'district_id',
-            'station_id',
-            'council_id',
-            'count',
-            'location',
-        ])
+        self.AddressRecord = namedtuple(
+            "AddressRecord",
+            [
+                "uprn",
+                "address",
+                "postcode",
+                "district_id",
+                "station_id",
+                "council_id",
+                "count",
+                "location",
+            ],
+        )
 
     def unpack_address(self, record):
         return self.AddressRecord(*record)
 
     def get_station_id(self, address):
         if not address.council_id:
-            c = Council.objects\
-                .defer("area")\
-                .get(area__covers=address.location)
+            c = Council.objects.defer("area").get(area__covers=address.location)
             council_id = c.council_id
         else:
             council_id = address.council_id
@@ -86,7 +88,7 @@ class EdgeCaseFixer:
             Because we have no way of knowing what the correct station is, intentionally insert a record with an empty station id
             This allows us to *list* the address, but if the user *chooses* it, we will show "we don't know: call your council"
             """
-            polling_station = ''
+            polling_station = ""
 
         return polling_station
 
@@ -133,7 +135,8 @@ class EdgeCaseFixer:
             ON ab.uprn=ct.uprn
 
             WHERE ab.postcode=%s
-            """, [postcode, postcode]
+            """,
+            [postcode, postcode],
         )
         addresses = cursor.fetchall()
 
@@ -157,25 +160,29 @@ class EdgeCaseFixer:
                 self.logger.log_message(
                     logging.WARNING,
                     "Found address contained by >1 polling districts - data may contain overlapping polygons:\n%s\n%s\n",
-                    variable=(address.address, address.postcode))
+                    variable=(address.address, address.postcode),
+                )
 
-                station_id = ''
+                station_id = ""
             except Council.DoesNotExist:
                 self.logger.log_message(
                     logging.WARNING,
                     "Skipping address which could not be assigned to a local authority:\n%s\n%s\n",
-                    variable=(address.address, address.postcode))
+                    variable=(address.address, address.postcode),
+                )
                 continue
 
-            self.address_set.add(AddressTuple(
-                address.address,
-                postcode,
-                self.target_council_id,
-                station_id,
-                address.uprn,
-                address.uprn,
-                address.location
-            ))
+            self.address_set.add(
+                AddressTuple(
+                    address.address,
+                    postcode,
+                    self.target_council_id,
+                    station_id,
+                    address.uprn,
+                    address.uprn,
+                    address.location,
+                )
+            )
 
     def get_address_set(self):
         return self.address_set
@@ -186,39 +193,39 @@ def district_contains_all_points(district, points):
 
 
 def postcodes_not_contained_by_district(district):
-    data = {
-        'not_contained': [],
-        'total': 0
-    }
+    data = {"not_contained": [], "total": 0}
 
     for postcode in Address.objects.postcodes_for_district(district):
         points = Address.objects.points_for_postcode(postcode)
-        data['total'] += 1
+        data["total"] += 1
         if not district_contains_all_points(district, points):
-            data['not_contained'].append(postcode)
+            data["not_contained"].append(postcode)
     return data
 
 
 def create_address_records_for_council(council, batch_size, logger):
     postcode_report = {
-        'no_attention_needed': 0,
-        'addresses_created': 0,
-        'postcodes_needing_address_lookup': set(),
+        "no_attention_needed": 0,
+        "addresses_created": 0,
+        "postcodes_needing_address_lookup": set(),
     }
 
     fixer = EdgeCaseFixer(council.pk, logger)
     for district in PollingDistrict.objects.filter(council=council):
         data = postcodes_not_contained_by_district(district)
 
-        postcode_report['no_attention_needed'] += \
-            data['total'] - len(data['not_contained'])
-        postcode_report['postcodes_needing_address_lookup'].update(data['not_contained'])
+        postcode_report["no_attention_needed"] += data["total"] - len(
+            data["not_contained"]
+        )
+        postcode_report["postcodes_needing_address_lookup"].update(
+            data["not_contained"]
+        )
 
-        for postcode in data['not_contained']:
+        for postcode in data["not_contained"]:
             fixer.make_addresses_for_postcode(postcode)
 
     address_set = fixer.get_address_set()
     address_set.save(batch_size)
-    postcode_report['addresses_created'] = len(address_set)
+    postcode_report["addresses_created"] = len(address_set)
 
     return postcode_report

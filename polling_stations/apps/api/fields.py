@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 
 class PointField(serializers.Field):
-    type_name = 'PointField'
-    type_label = 'point'
+    type_name = "PointField"
+    type_label = "point"
 
     def to_representation(self, value):
         """
@@ -15,12 +15,6 @@ class PointField(serializers.Field):
         value = {
             "type": "Feature",
             "properties": None,
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    value.x,
-                    value.y
-                ],
-            },
+            "geometry": {"type": "Point", "coordinates": [value.x, value.y]},
         }
         return value

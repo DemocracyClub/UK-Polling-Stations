@@ -3,23 +3,26 @@ from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseHalaroseCsvImporter
 from pollingstations.models import PollingStation
 
+
 class Command(BaseHalaroseCsvImporter):
-    council_id      = 'E09000018'
-    addresses_name  = 'local.2018-05-03/Version 1/polling_station_export-2018-02-21 (1) Hounslow.csv'
-    stations_name   = 'local.2018-05-03/Version 1/polling_station_export-2018-02-21 (1) Hounslow.csv'
-    elections       = ['local.2018-05-03']
-    csv_encoding    = 'windows-1252'
+    council_id = "E09000018"
+    addresses_name = (
+        "local.2018-05-03/Version 1/polling_station_export-2018-02-21 (1) Hounslow.csv"
+    )
+    stations_name = (
+        "local.2018-05-03/Version 1/polling_station_export-2018-02-21 (1) Hounslow.csv"
+    )
+    elections = ["local.2018-05-03"]
+    csv_encoding = "windows-1252"
 
     def get_station_hash(self, record):
-        return "-".join([
-            record.pollingstationnumber.strip(),
-        ])
+        return "-".join([record.pollingstationnumber.strip()])
 
     def address_record_to_dict(self, record):
-        if record.houseid == '104146':
+        if record.houseid == "104146":
             return None
 
-        if record.houseid == '107635':
+        if record.houseid == "107635":
             return None
 
         return super().address_record_to_dict(record)
@@ -29,27 +32,24 @@ class Command(BaseHalaroseCsvImporter):
     def post_import(self):
         filepath = os.path.join(
             self.base_folder_path,
-            'local.2018-05-03/Version 1/2018 Hounslow polling stations - GIS co-ordinates.csv'
+            "local.2018-05-03/Version 1/2018 Hounslow polling stations - GIS co-ordinates.csv",
         )
-        gridrefs = self.get_data('csv', filepath)
+        gridrefs = self.get_data("csv", filepath)
 
         print("Updating grid refs...")
         for record in gridrefs:
             stations = PollingStation.objects.filter(
                 council_id=self.council_id,
-                internal_council_id=self.get_station_hash(record)
+                internal_council_id=self.get_station_hash(record),
             )
             if len(stations) == 1:
                 station = stations[0]
                 station.location = Point(
-                    float(record.cntr_x),
-                    float(record.cntr_y),
-                    srid=27700
+                    float(record.cntr_x), float(record.cntr_y), srid=27700
                 )
-                self.check_station_point({
-                    'location': station.location,
-                    'council_id': station.council_id,
-                })
+                self.check_station_point(
+                    {"location": station.location, "council_id": station.council_id}
+                )
                 station.save()
             else:
                 print("Could not find station id " + self.get_station_hash(record))

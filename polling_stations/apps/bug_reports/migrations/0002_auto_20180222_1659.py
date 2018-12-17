@@ -7,19 +7,21 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('bug_reports', '0001_initial'),
-    ]
+    dependencies = [("bug_reports", "0001_initial")]
 
     operations = [
         migrations.AlterField(
-            model_name='bugreport',
-            name='description',
-            field=models.TextField(verbose_name='Provide information about the problem to help us improve our service:'),
+            model_name="bugreport",
+            name="description",
+            field=models.TextField(
+                verbose_name="Provide information about the problem to help us improve our service:"
+            ),
         ),
         migrations.AlterField(
-            model_name='bugreport',
-            name='email',
-            field=models.CharField(blank=True, max_length=100, verbose_name='(Optional) Email address:'),
+            model_name="bugreport",
+            name="email",
+            field=models.CharField(
+                blank=True, max_length=100, verbose_name="(Optional) Email address:"
+            ),
         ),
     ]
