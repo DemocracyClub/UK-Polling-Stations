@@ -20,7 +20,7 @@ class Command(BaseCommand):
             ON AB.uprn = ONSUD.uprn
             GROUP BY postcode
             HAVING COUNT(DISTINCT(LAD))>1;
-        """
+            """
         )
         postcodes = self.cursor.fetchall()
         return [postcode[0] for postcode in postcodes]
@@ -34,7 +34,7 @@ class Command(BaseCommand):
             JOIN addressbase_onsud ONSUD
             ON AB.uprn = ONSUD.uprn
             WHERE AB.postcode=%s;
-        """,
+            """,
             [postcode],
         )
         councils = self.cursor.fetchall()
@@ -57,7 +57,7 @@ class Command(BaseCommand):
             """
             UPDATE addressbase_blacklist
             SET postcode=REPLACE(postcode, ' ', '')
-        """
+            """
         )
 
         print("...done")

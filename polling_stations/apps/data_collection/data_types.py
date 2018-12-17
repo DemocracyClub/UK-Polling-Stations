@@ -276,7 +276,7 @@ class AddressSet(CustomSet):
             FROM addressbase_address a
             JOIN addressbase_onsud o ON a.uprn=o.uprn
             WHERE o.lad=%s;
-        """,
+            """,
             [self.council_id],
         )
         # return result a hash table keyed by UPRN

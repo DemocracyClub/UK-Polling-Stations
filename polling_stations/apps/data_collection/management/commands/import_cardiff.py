@@ -66,10 +66,10 @@ class Command(BaseShpStationsShpDistrictsImporter):
         cursor = connection.cursor()
         cursor.execute(
             """
-        UPDATE {0}
-         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
-         WHERE NOT ST_IsValid(area);
-        """.format(
+            UPDATE {0}
+            SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
+            WHERE NOT ST_IsValid(area);
+            """.format(
                 table_name
             )
         )

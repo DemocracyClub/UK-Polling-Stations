@@ -27,10 +27,10 @@ def fix_bad_polygons():
     cursor = connection.cursor()
     cursor.execute(
         """
-    UPDATE {0}
+        UPDATE {0}
         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
         WHERE NOT ST_IsValid(area);
-    """.format(
+        """.format(
             table_name
         )
     )

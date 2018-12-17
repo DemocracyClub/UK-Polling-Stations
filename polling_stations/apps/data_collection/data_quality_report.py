@@ -33,7 +33,13 @@ class OutputFormatter:
 class StationReport:
     def __init__(self, council_id):
         self.council_id = council_id
-        self.counts = {"0": 0, "1": 0, ">1": 0}
+        # fmt: off
+        self.counts = {
+            "0": 0,
+            "1": 0,
+            ">1": 0
+        }
+        # fmt: on
         self.generate_counts()
 
     def get_stations_imported(self):
@@ -65,7 +71,7 @@ class StationReport:
             AND council_id=%s
             AND polling_district_id != ''
             AND polling_district_id IS NOT NULL;
-        """,
+            """,
             [self.council_id, self.council_id],
         )
         results = cursor.fetchall()
@@ -82,7 +88,7 @@ class StationReport:
             AND council_id=%s
             AND polling_district_id != ''
             AND polling_district_id IS NOT NULL;
-        """,
+            """,
             [self.council_id, self.council_id],
         )
         results = cursor.fetchall()
@@ -144,7 +150,13 @@ class StationReport:
 class DistrictReport:
     def __init__(self, council_id):
         self.council_id = council_id
-        self.counts = {"0": 0, "1": 0, ">1": 0}
+        # fmt: off
+        self.counts = {
+            "0": 0,
+            "1": 0,
+            ">1": 0
+        }
+        # fmt: on
         self.generate_counts()
 
     def get_districts_imported(self):
@@ -176,7 +188,7 @@ class DistrictReport:
             AND council_id=%s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
-        """,
+            """,
             [self.council_id, self.council_id],
         )
         results = cursor.fetchall()
@@ -193,7 +205,7 @@ class DistrictReport:
             AND council_id=%s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
-        """,
+            """,
             [self.council_id, self.council_id],
         )
         results = cursor.fetchall()
@@ -268,7 +280,7 @@ class ResidentialAddressReport:
             AND council_id=%s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
-        """,
+            """,
             [self.council_id, self.council_id],
         )
         results = cursor.fetchall()
@@ -285,7 +297,7 @@ class ResidentialAddressReport:
             AND council_id=%s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
-        """,
+            """,
             [self.council_id, self.council_id],
         )
         results = cursor.fetchall()
