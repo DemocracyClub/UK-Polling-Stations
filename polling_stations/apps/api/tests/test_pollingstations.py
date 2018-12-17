@@ -52,7 +52,7 @@ class PollingStationsTest(TestCase):
         # set up json request for station X01000001.1
         request = factory.get(
             '/foo?council_id=X01000001&station_id=1', format='json')
-        response = PollingStationViewSet.as_view({'get': 'list'})(geo_request)
+        response = PollingStationViewSet.as_view({'get': 'list'})(request)
 
         # geo_response should contain geometry
         self.assertEqual(True, ('geometry' in geo_response.data))

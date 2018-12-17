@@ -20,11 +20,11 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         """
         addressbase = AddressBaseGeocoderAdapter('DD1 1DD')
         with self.assertRaises(ObjectDoesNotExist):
-            result = addressbase.geocode()
+            addressbase.geocode()
 
         # point only geocode should also fail
         with self.assertRaises(ObjectDoesNotExist):
-            result = addressbase.geocode_point_only()
+            addressbase.geocode_point_only()
 
     def test_no_codes(self):
         """

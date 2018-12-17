@@ -1,5 +1,3 @@
-import os
-
 """
 Amazon S3 config:
 By default, we will look for a section

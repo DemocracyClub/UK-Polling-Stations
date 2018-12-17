@@ -41,11 +41,10 @@ class Command(BaseCsvStationsCsvAddressesImporter):
 
     def get_station_point(self, record):
         if record.uprn and record.uprn != '0':
-            uprn = record.uprn.lstrip('0')
             try:
                 g = AddressBaseGeocoder(record.postcode)
                 return g.get_point(record.uprn)
-            except (ObjectDoesNotExist, AddressBaseException) as e:
+            except (ObjectDoesNotExist, AddressBaseException):
                 return self.geocode_from_postcode(record)
         else:
             return self.geocode_from_postcode(record)

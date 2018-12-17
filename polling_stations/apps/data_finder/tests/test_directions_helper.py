@@ -4,9 +4,7 @@ from django.test import TestCase
 from unittest import skip
 from data_finder.helpers.directions import (
     Directions,
-    DirectionsException,
-    GoogleDirectionsClient,
-    MapzenDirectionsClient
+    DirectionsException
 )
 from data_finder.helpers import DirectionsHelper
 

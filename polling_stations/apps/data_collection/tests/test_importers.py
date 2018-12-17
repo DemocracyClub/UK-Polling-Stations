@@ -1,5 +1,3 @@
-import os
-
 from django.db.utils import IntegrityError
 from django.test import TestCase
 

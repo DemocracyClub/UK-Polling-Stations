@@ -68,10 +68,10 @@ class AddressBaseGeocoderAdapter(BaseGeocoder):
 
     def geocode(self):
         geocoder = AddressBaseGeocoder(self.postcode)
-        centre = geocoder.centroid
+        geocoder.centroid
 
         try:
-            lad = geocoder.get_code('lad')
+            geocoder.get_code('lad')
         except MultipleCodesException as e:
             # re-raise as a more specific MultipleCouncilsException
             # because that is what the calling code expects to handle

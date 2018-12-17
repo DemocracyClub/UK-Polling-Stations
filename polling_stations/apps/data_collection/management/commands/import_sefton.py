@@ -8,8 +8,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = '\t'
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip('0')
-
         if record.addressline6 == 'L20 9AH':
             return None
 

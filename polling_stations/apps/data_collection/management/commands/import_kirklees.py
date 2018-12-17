@@ -56,7 +56,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 uprn = uprn.lstrip('0')
                 g = AddressBaseGeocoder(self.get_station_postcode(record))
                 location = g.get_point(getattr(record, self.station_uprn_field))
-            except (ObjectDoesNotExist, AddressBaseException) as e:
+            except (ObjectDoesNotExist, AddressBaseException):
                 # otherwise, don't set a point
                 location = None
         else:

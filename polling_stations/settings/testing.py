@@ -1,8 +1,9 @@
-from .base import *
+from .base import *  # noqa
 
-EVERY_ELECTION['CHECK'] = True
+EVERY_ELECTION['CHECK'] = True  # noqa
 DISABLE_GA = True  # don't log to Google Analytics when we are running tests
-INSTALLED_APPS = list(INSTALLED_APPS)
+
+INSTALLED_APPS = list(INSTALLED_APPS)  # noqa
 INSTALLED_APPS.append('aloe_django',)
 
 NOSE_ARGS = [

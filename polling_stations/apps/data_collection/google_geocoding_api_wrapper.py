@@ -1,5 +1,4 @@
-from django.conf import settings
-import urllib.parse, urllib.request, requests
+import urllib.parse, urllib.request
 import json
 from time import sleep
 

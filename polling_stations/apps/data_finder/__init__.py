@@ -1,1 +1,1 @@
-from . import checks
+from . import checks  # noqa

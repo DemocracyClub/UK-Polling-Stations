@@ -15,8 +15,6 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.gis import geos
 from django.contrib.gis.geos import Point, GEOSGeometry, GEOSException
-from django.db import connection
-from django.db import transaction
 
 from councils.models import Council
 from data_collection.data_types import (
@@ -828,12 +826,12 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
 
     def get_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
+            urllib.request.urlretrieve(self.districts_url, tmp.name)
             return self.get_data(self.districts_filetype, tmp.name)
 
     def get_stations(self):
         with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
+            urllib.request.urlretrieve(self.stations_url, tmp.name)
             return self.get_data(self.stations_filetype, tmp.name)
 
 

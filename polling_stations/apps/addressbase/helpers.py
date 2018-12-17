@@ -2,8 +2,7 @@ import logging
 from collections import namedtuple
 from django.db import connection
 from councils.models import Council
-from pollingstations.models import (PollingDistrict, ResidentialAddress,
-                                    PollingStation)
+from pollingstations.models import PollingDistrict, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
 from addressbase.models import Address
 

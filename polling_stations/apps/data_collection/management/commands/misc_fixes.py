@@ -1,8 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
-from django.contrib.gis.geos import GEOSGeometry
-
-from addressbase.models import Address, Blacklist
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from councils.models import Council
 

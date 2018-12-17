@@ -1,6 +1,3 @@
-from django.conf import settings
-
-
 class UTMTrackerMiddleware(object):
 
     def __init__(self, get_response):

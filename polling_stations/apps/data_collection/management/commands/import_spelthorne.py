@@ -1,10 +1,7 @@
 """
 Imports Spelthorne Council.
 """
-import json 
-
-from django.contrib.gis.geos import Point, GEOSGeometry
-
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
 
 class Command(BaseCsvStationsKmlDistrictsImporter):

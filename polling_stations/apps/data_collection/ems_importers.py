@@ -113,7 +113,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter,
                     "using UPRN for station %s",
                     getattr(record, self.station_id_field)
                 )
-            except (ObjectDoesNotExist, AddressBaseException) as e:
+            except (ObjectDoesNotExist, AddressBaseException):
                 # if that fails, fall back to postcode
                 location = self.geocode_from_postcode(record)
                 self.logger.log_message(logging.INFO,

@@ -1,4 +1,3 @@
-import os
 import sys
 from os.path import join, abspath, dirname
 
@@ -214,7 +213,6 @@ LOGGING = {
 }
 
 
-from django.utils.translation import ugettext_lazy as _
 LANGUAGE_CODE = 'en'
 LANGUAGES = [
   ('en', 'English'),
@@ -296,7 +294,7 @@ try:
     from .local import *  # noqa
 
     try:
-        INSTALLED_APPS += PROD_APPS
+        INSTALLED_APPS += PROD_APPS  # noqa
     except NameError:
         pass
 

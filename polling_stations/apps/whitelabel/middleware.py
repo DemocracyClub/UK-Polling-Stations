@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.urls import set_script_prefix
-from django.utils import translation
 
 
 class WhiteLabelMiddleware(object):

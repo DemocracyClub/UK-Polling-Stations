@@ -1,5 +1,4 @@
-from django.shortcuts import render
-
+from django.core.exceptions import ImproperlyConfigured
 
 class WhiteLabelTemplateOverrideMixin(object):
     def get_template_names(self):

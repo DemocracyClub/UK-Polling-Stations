@@ -1,11 +1,8 @@
 import abc
 import json
 import tempfile
-from django.apps import apps
-from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.gdal import DataSource
-from django.core.checks import Error, register
 from django.utils.encoding import force_bytes
 from data_collection.base_importers import BaseGenericApiImporter
 

@@ -1,6 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
 from data_collection.base_importers import BaseStationsAddressesImporter
-from addressbase.models import Address
 
 
 class Command(BaseStationsAddressesImporter):

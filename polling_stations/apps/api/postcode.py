@@ -2,7 +2,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.core.exceptions import ObjectDoesNotExist
-from councils.models import Council
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     EveryElectionWrapper,
@@ -81,7 +80,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
                 location = None
             else:
                 return Response({'detail': e.args[0]}, status=400)
-        except MultipleCouncilsException as e:
+        except MultipleCouncilsException:
             loc = None
             location = None
 

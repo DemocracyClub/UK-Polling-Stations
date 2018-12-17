@@ -1,5 +1,5 @@
 from dc_theme.settings import get_pipeline_settings
-from dc_theme.settings import STATICFILES_FINDERS, STATICFILES_STORAGE
+from dc_theme.settings import STATICFILES_FINDERS, STATICFILES_STORAGE  # noqa
 
 PIPELINE = get_pipeline_settings(
     extra_css=[

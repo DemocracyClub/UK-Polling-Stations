@@ -102,7 +102,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         # if we fail, return an error response
         try:
             address = self.get_object(slug=slug)
-        except ObjectDoesNotExist as e:
+        except ObjectDoesNotExist:
             return Response({'detail': 'Address not found'}, status=404)
 
         # create singleton list for consistency with /postcode endpoint
@@ -116,7 +116,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         try:
             l = geocoder(address.postcode)
             location = l.centroid
-        except PostcodeError as e:
+        except PostcodeError:
             location = None
         ret['postcode_location'] = location
 

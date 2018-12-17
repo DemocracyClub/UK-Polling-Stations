@@ -9,8 +9,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def address_record_to_dict(self, record):
 
-        uprn = record.property_urn.strip().lstrip('0')
-
         if record.addressline6 == 'BB9 5LQ' and record.addressline1 == '14 Walton Place':
             rec = super().address_record_to_dict(record)
             rec['postcode'] = 'BB9 8DQ'

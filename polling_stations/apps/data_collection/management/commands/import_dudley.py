@@ -17,8 +17,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def address_record_to_dict(self, record):
 
-        uprn = record.property_urn.strip().lstrip('0')
-
         if record.addressline6.strip() == 'B63 4BN':
             return None
         if record.addressline6.strip() == 'B62 9EN':

@@ -41,7 +41,7 @@ class Command(BaseGenericApiImporter):
 
     def get_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.districts_url, tmp.name)
+            urllib.request.urlretrieve(self.districts_url, tmp.name)
             data = open(tmp.name, 'r').read()
             return self.parse_kml_features(data)
 
@@ -69,7 +69,7 @@ class Command(BaseGenericApiImporter):
 
     def get_stations(self):
         with tempfile.NamedTemporaryFile() as tmp:
-            req = urllib.request.urlretrieve(self.stations_url, tmp.name)
+            urllib.request.urlretrieve(self.stations_url, tmp.name)
             xml = etree.parse(tmp.name)
             return xml.getroot()[0]
 

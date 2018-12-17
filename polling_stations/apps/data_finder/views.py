@@ -1,16 +1,12 @@
 import abc
-import json
 
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.urls import reverse
-from django.core.validators import validate_email
-from django.forms import ValidationError
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
-from django.views.generic import FormView, DetailView, TemplateView
+from django.views.generic import FormView, TemplateView
 from django.utils import translation
-from django.utils.translation import ugettext as _
 
 from councils.models import Council
 from data_finder.models import (

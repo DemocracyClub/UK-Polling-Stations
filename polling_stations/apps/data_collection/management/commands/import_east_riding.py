@@ -1,7 +1,6 @@
 """
 Import East Riding
 """
-import os
 from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
 

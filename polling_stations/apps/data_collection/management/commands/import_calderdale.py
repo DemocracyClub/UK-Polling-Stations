@@ -53,19 +53,6 @@ class Command(BaseShpStationsShpDistrictsImporter):
         }
 
     @transaction.atomic
-    def fix_bad_polygon(self):
-        # fix self-intersecting polygons
-        self.stdout.write("running fixup SQL")
-        table_name = PollingDistrict()._meta.db_table
-
-        cursor = connection.cursor()
-        cursor.execute("""
-        UPDATE {0}
-         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
-         WHERE NOT ST_IsValid(area);
-        """.format(table_name))
-
-    @transaction.atomic
     def fill_the_blanks(self):
         # mop up any districts where we have a station address
         # attached to a district code but no point

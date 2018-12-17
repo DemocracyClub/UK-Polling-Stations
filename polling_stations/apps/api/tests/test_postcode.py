@@ -1,4 +1,3 @@
-from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point

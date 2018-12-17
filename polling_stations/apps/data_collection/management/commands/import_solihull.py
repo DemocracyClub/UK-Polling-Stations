@@ -65,7 +65,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                     uprn = record.uprn.lstrip('0')
                     g = AddressBaseGeocoder(record.polling_place_postcode)
                     location = g.get_point(uprn)
-                except (ObjectDoesNotExist, AddressBaseException) as e:
+                except (ObjectDoesNotExist, AddressBaseException):
                     location = None
                 station.location = location
 

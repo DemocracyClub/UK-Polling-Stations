@@ -21,7 +21,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip('0')
 
         if record.addressline6 == 'BR7 6HL':
             return None

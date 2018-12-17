@@ -9,9 +9,8 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.core.management import call_command
 from aloe import before, after, around, step, world
-import aloe_webdriver.django
+import aloe_webdriver.django  # noqa
 from selenium.webdriver import Chrome, ChromeOptions
-from selenium.common.exceptions import TimeoutException
 import vcr
 
 

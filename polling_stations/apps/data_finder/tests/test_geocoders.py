@@ -1,7 +1,7 @@
 import mock
 from django.test import TestCase
 from data_finder.helpers.geocoders import (
-    geocode, geocode_point_only, OnspdGeocoderAdapter, MultipleCouncilsException
+    geocode, geocode_point_only, MultipleCouncilsException
 )
 from uk_geo_utils.geocoders import AddressBaseGeocoder, OnspdGeocoder
 
@@ -55,12 +55,8 @@ class GeocodeTest(TestCase):
 
         Exception of class MultipleCouncilsException should be thrown
         """
-        exception_thrown = False
-        try:
-            result = geocode('CC11CC')
-        except MultipleCouncilsException:
-            exception_thrown = True
-        self.assertTrue(exception_thrown)
+        with self.assertRaises(MultipleCouncilsException):
+            geocode('CC11CC')
 
     @mock.patch("data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode)
     def test_valid(self):
