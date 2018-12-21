@@ -15,10 +15,10 @@ If you are interested in helping out in any way at all, please contact sym@democ
 ## Getting Started
 
 ### Python
-UK-Polling-Stations requires python 3.4 or 3.5
+UK-Polling-Stations requires python 3.6
 
 ### Install system dependencies
-UK-Polling-Stations requires Python 3, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
+UK-Polling-Stations requires Python 3.6, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
 
 On Mac OSX, run:
 ```
@@ -28,18 +28,15 @@ brew install geos
 brew install gdal
 brew install node
 ```
-From a clean install of Ubuntu 14.04 (Trusty):
-```
-sudo apt-get install postgresql-9.3 postgresql-server-dev-9.3 python-psycopg2 python3-dev postgis postgresql-9.3-postgis-2.1 libxml2-dev libxslt-dev nodejs npm
 
-sudo ln -s /usr/bin/nodejs /usr/bin/node
+From a clean install of Ubuntu 18.04 (Bionic):
 ```
-or on Ubuntu 16.04 (Xenial):
-```
-sudo apt-get install postgresql-9.5 postgresql-server-dev-9.5 python-psycopg2 python3-dev postgis postgresql-9.5-postgis-2.2 libxml2-dev libxslt1-dev nodejs-legacy npm
+sudo apt-get install postgresql-10 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-10-postgis-2.4 libxml2-dev libxslt1-dev nodejs npm
+
+sudo npm install -g npm
 ```
 
-For other linux distributions, see [here](https://docs.djangoproject.com/en/1.8/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
+For other linux distributions, see [here](https://docs.djangoproject.com/en/1.11/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
 The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing API Blueprint. On OSX this can be installed using
 ```
