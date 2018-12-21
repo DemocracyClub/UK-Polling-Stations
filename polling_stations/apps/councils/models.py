@@ -18,4 +18,4 @@ class Council(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('council', (), {'pk': self.pk})
+        return ("council", (), {"pk": self.pk})

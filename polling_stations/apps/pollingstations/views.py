@@ -9,7 +9,7 @@ def status_check(request):
 
     if settings.CHECK_SERVER_CLEAN:
         if not os.path.exists(os.path.expanduser(settings.CLEAN_SERVER_FILE)):
-            return HttpResponse('service unavailable', status=503)
+            return HttpResponse("service unavailable", status=503)
 
     # check we can connect to all our DBs
     # (default + logger)
@@ -17,6 +17,6 @@ def status_check(request):
         try:
             connections[conn].cursor()
         except OperationalError:
-            return HttpResponse('service unavailable', status=503)
+            return HttpResponse("service unavailable", status=503)
 
-    return HttpResponse('OK', status=200)
+    return HttpResponse("OK", status=200)

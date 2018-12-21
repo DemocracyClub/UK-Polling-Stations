@@ -6,7 +6,7 @@ def format_residential_address(address_parts):
     address = ", ".join(address_parts)
     while ", , " in address:
         address = address.replace(", , ", ", ")
-    if address[-2:] == ', ':
+    if address[-2:] == ", ":
         address = address[:-2]
     return address
 

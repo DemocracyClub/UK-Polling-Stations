@@ -18,9 +18,5 @@ class LoggedPostcode(TimeStampedModel):
     view_used = models.CharField(blank=True, max_length=100)
     api_user = models.CharField(blank=True, null=True, max_length=30)
 
-
     def __str__(self):
-        return "{0} ({1})".format(
-            self.postcode,
-            self.brand,
-        )
+        return "{0} ({1})".format(self.postcode, self.brand)

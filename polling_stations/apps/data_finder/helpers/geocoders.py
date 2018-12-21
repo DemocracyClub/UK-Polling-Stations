@@ -7,7 +7,7 @@ from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     OnspdGeocoder,
     AddressBaseException,
-    MultipleCodesException
+    MultipleCodesException,
 )
 
 from pollingstations.models import Council
@@ -16,12 +16,12 @@ from pollingstations.models import Council
 class PostcodeError(Exception):
     pass
 
+
 class MultipleCouncilsException(MultipleCodesException):
     pass
 
 
 class BaseGeocoder(metaclass=abc.ABCMeta):
-
     def __init__(self, postcode):
         self.postcode = self.format_postcode(postcode)
 
@@ -38,18 +38,17 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
 
 
 class OnspdGeocoderAdapter(BaseGeocoder):
-
     def geocode(self):
         geocoder = OnspdGeocoder(self.postcode)
         centre = geocoder.centroid
         if not centre:
             raise PostcodeError("No location information")
 
-        local_auth = geocoder.get_code('lad')
+        local_auth = geocoder.get_code("lad")
         error_values = [
-            'L99999999', # Channel Islands
-            'M99999999', # Isle of Man
-            '' # Terminated Postcode or other
+            "L99999999",  # Channel Islands
+            "M99999999",  # Isle of Man
+            "",  # Terminated Postcode or other
         ]
         if not local_auth or local_auth in error_values:
             raise PostcodeError("No location information")
@@ -65,13 +64,12 @@ class OnspdGeocoderAdapter(BaseGeocoder):
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
-
     def geocode(self):
         geocoder = AddressBaseGeocoder(self.postcode)
-        centre = geocoder.centroid
+        geocoder.centroid
 
         try:
-            lad = geocoder.get_code('lad')
+            geocoder.get_code("lad")
         except MultipleCodesException as e:
             # re-raise as a more specific MultipleCouncilsException
             # because that is what the calling code expects to handle
@@ -103,7 +101,7 @@ def geocode_point_only(postcode):
             raise
 
     # All of our attempts to geocode this failed. Raise a generic exception
-    raise PostcodeError('Could not geocode from any source')
+    raise PostcodeError("Could not geocode from any source")
 
 
 def geocode(postcode):
@@ -134,13 +132,13 @@ def geocode(postcode):
             raise
 
     # All of our attempts to geocode this failed. Raise a generic exception
-    raise PostcodeError('Could not geocode from any source')
+    raise PostcodeError("Could not geocode from any source")
 
 
 def get_council(geocode_result):
     try:
         return Council.objects.defer("area").get(
-            council_id=geocode_result.get_code('lad'))
+            council_id=geocode_result.get_code("lad")
+        )
     except Council.DoesNotExist:
-        return Council.objects.defer("area").get(
-            area__covers=geocode_result.centroid)
+        return Council.objects.defer("area").get(area__covers=geocode_result.centroid)

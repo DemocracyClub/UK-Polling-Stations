@@ -2,16 +2,12 @@ from django.db import models
 
 from django_extensions.db.models import TimeStampedModel
 
-FOUND_USEFUL_CHOICES = (
-    ('YES', 'Yes'),
-    ('NO', 'No'),
-)
+FOUND_USEFUL_CHOICES = (("YES", "Yes"), ("NO", "No"))
+
 
 class Feedback(TimeStampedModel):
     found_useful = models.CharField(
-        blank=True,
-        max_length=100,
-        choices=FOUND_USEFUL_CHOICES,
+        blank=True, max_length=100, choices=FOUND_USEFUL_CHOICES
     )
     comments = models.TextField(blank=True)
     source_url = models.CharField(blank=True, max_length=800)

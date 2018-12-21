@@ -1,46 +1,49 @@
 import abc
 import json
 import tempfile
-from django.apps import apps
-from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.gdal import DataSource
-from django.core.checks import Error, register
 from django.utils.encoding import force_bytes
 from data_collection.base_importers import BaseGenericApiImporter
 
 
 class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
 
-    base_url = 'https://raw.githubusercontent.com/wdiv-scrapers/data/master/%s/%s.%s'
-    stations_query = 'stations'
-    districts_query = 'districts'
-    stations_filetype = 'json'
-    districts_filetype = 'json'
+    base_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/%s/%s.%s"
+    stations_query = "stations"
+    districts_query = "districts"
+    stations_filetype = "json"
+    districts_filetype = "json"
     srid = 4326
     districts_srid = 4326
 
     @property
     def stations_url(self):
         return self.base_url % (
-            self.council_id, self.stations_query, self.stations_filetype)
+            self.council_id,
+            self.stations_query,
+            self.stations_filetype,
+        )
 
     @property
     def districts_url(self):
         return self.base_url % (
-            self.council_id, self.districts_query, self.districts_filetype)
+            self.council_id,
+            self.districts_query,
+            self.districts_filetype,
+        )
 
     def extract_geometry(self, record, format, srid):
-        if format == 'geojson':
+        if format == "geojson":
             return self.extract_json_geometry(record, srid)
-        elif format == 'gml':
+        elif format == "gml":
             return self.extract_gml_geometry(record, srid)
         else:
             raise ValueError("Unsupported format: %s" % (format))
 
     def extract_json_geometry(self, record, srid):
-        geom = json.loads(record['geometry'])
-        geojson = json.dumps(geom['geometry'])
+        geom = json.loads(record["geometry"])
+        geojson = json.dumps(geom["geometry"])
         return self.clean_poly(GEOSGeometry(geojson, srid=srid))
 
     def extract_gml_geometry(self, record, srid):
@@ -57,7 +60,7 @@ class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
         """
 
         with tempfile.NamedTemporaryFile() as tmp:
-            tmp.write(force_bytes(record['geometry']))
+            tmp.write(force_bytes(record["geometry"]))
             tmp.seek(0)
             ds = DataSource(tmp.name)
             if len(ds[0]) == 1:

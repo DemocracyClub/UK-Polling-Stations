@@ -1,21 +1,22 @@
 from data_collection.github_importer import BaseGitHubImporter
 
+
 class Command(BaseGitHubImporter):
 
     srid = 4326
-    districts_srid  = 4326
-    council_id = 'E06000023'
-    elections = ['parl.2017-06-08']
-    scraper_name = 'wdiv-scrapers/DC-PollingStations-Bristol'
-    geom_type = 'geojson'
+    districts_srid = 4326
+    council_id = "E06000023"
+    elections = ["parl.2017-06-08"]
+    scraper_name = "wdiv-scrapers/DC-PollingStations-Bristol"
+    geom_type = "geojson"
 
     def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid('districts'))
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
         return {
-            'internal_council_id': record['POLLING_DIST_ID'].strip(),
-            'name': record['POLLING_DIST_NAME'].strip(),
-            'area': poly,
-            'polling_station_id': record['POLLING_DIST_ID'].strip(),
+            "internal_council_id": record["POLLING_DIST_ID"].strip(),
+            "name": record["POLLING_DIST_NAME"].strip(),
+            "area": poly,
+            "polling_station_id": record["POLLING_DIST_ID"].strip(),
         }
 
     def extract_codes(self, text):
@@ -32,16 +33,16 @@ class Command(BaseGitHubImporter):
         Attempt to make sense of this
         """
         stations = text
-        stations = stations.replace('Used by', '')
-        stations = stations.replace('Used bu', '')
-        stations = stations.replace('Used for', '')
+        stations = stations.replace("Used by", "")
+        stations = stations.replace("Used bu", "")
+        stations = stations.replace("Used for", "")
         codes = []
-        if 'and' in stations:
-            codes = stations.split('and')
-        elif 'amd' in stations:
-            codes = stations.split('amd')
-        elif '&' in stations:
-            codes = stations.split('&')
+        if "and" in stations:
+            codes = stations.split("and")
+        elif "amd" in stations:
+            codes = stations.split("amd")
+        elif "&" in stations:
+            codes = stations.split("&")
         else:
             raise ValueError("Could not parse 'DUAL_STN' field: %s" % text)
 
@@ -53,28 +54,32 @@ class Command(BaseGitHubImporter):
         return codes
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(record, self.geom_type, self.get_srid('stations'))
+        location = self.extract_geometry(
+            record, self.geom_type, self.get_srid("stations")
+        )
 
-        address_parts = [record['PAO'].strip(), record['STREET'].strip()]
-        if record['LOCALITY']:
-            address_parts.append(record['LOCALITY'].strip())
+        address_parts = [record["PAO"].strip(), record["STREET"].strip()]
+        if record["LOCALITY"]:
+            address_parts.append(record["LOCALITY"].strip())
         address = "\n".join(address_parts)
 
-        postcode = ''
-        if record['POSTCODE']:
-            postcode = record['POSTCODE'].strip()
+        postcode = ""
+        if record["POSTCODE"]:
+            postcode = record["POSTCODE"].strip()
 
-        if record['DUAL_STN']:
-            codes = self.extract_codes(record['DUAL_STN'])
+        if record["DUAL_STN"]:
+            codes = self.extract_codes(record["DUAL_STN"])
         else:
-            codes = [record['POLLING_DISTRICT'].strip()]
+            codes = [record["POLLING_DISTRICT"].strip()]
 
         stations = []
         for code in codes:
-            stations.append({
-                'internal_council_id': code,
-                'postcode': postcode,
-                'address': address,
-                'location': location,
-            })
+            stations.append(
+                {
+                    "internal_council_id": code,
+                    "postcode": postcode,
+                    "address": address,
+                    "location": location,
+                }
+            )
         return stations

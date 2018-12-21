@@ -1,4 +1,4 @@
-EE_BASE = 'https://elections.democracyclub.org.uk/'
+EE_BASE = "https://elections.democracyclub.org.uk/"
 
 """
 Every Election settings
@@ -11,11 +11,8 @@ Set CHECK to False to return the value of HAS_ELECTION instead
 This is mostly useful in development when we want
 to see results even if there is no election happening
 """
-EVERY_ELECTION = {
-    'CHECK': True,
-    'HAS_ELECTION': True
-}
+EVERY_ELECTION = {"CHECK": True, "HAS_ELECTION": True}
 
 ELECTION_BLACKLIST = [
-    'local.epping-forest.moreton-and-fyfield.by.2018-05-03',  # uncontested
+    "local.epping-forest.moreton-and-fyfield.by.2018-05-03"  # uncontested
 ]

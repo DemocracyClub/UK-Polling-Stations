@@ -1,14 +1,15 @@
 from django.conf import settings
 from data_collection.github_importer import BaseGitHubImporter
 
+
 class Command(BaseGitHubImporter):
 
     srid = 27700
-    districts_srid  = 27700
-    council_id = 'E07000212'
-    elections = ['parl.2017-06-08']
-    scraper_name = 'wdiv-scrapers/DC-PollingStations-Runnymede'
-    geom_type = 'gml'
+    districts_srid = 27700
+    council_id = "E07000212"
+    elections = ["parl.2017-06-08"]
+    scraper_name = "wdiv-scrapers/DC-PollingStations-Runnymede"
+    geom_type = "gml"
 
     # stations data has duplicate ids and codes that don't match,
     # but we can grab a valid addresses for each district
@@ -23,19 +24,19 @@ class Command(BaseGitHubImporter):
         )
 
     def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid('districts'))
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
         return {
-            'internal_council_id': record['Poling_Districts'],
-            'name'               : record['Poling_Districts'],
-            'area'               : poly,
+            "internal_council_id": record["Poling_Districts"],
+            "name": record["Poling_Districts"],
+            "area": poly,
         }
 
     def station_record_to_dict(self, record):
         location = None
         return {
-            'internal_council_id': record['Poling_Districts'],
-            'postcode':            '',
-            'address':             record['Premises'],
-            'location':            location,
-            'polling_district_id': record['Poling_Districts']
+            "internal_council_id": record["Poling_Districts"],
+            "postcode": "",
+            "address": record["Premises"],
+            "location": location,
+            "polling_district_id": record["Poling_Districts"],
         }

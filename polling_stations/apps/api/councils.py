@@ -8,28 +8,36 @@ from councils.models import Council
 
 
 class CouncilDataSerializer(HyperlinkedModelSerializer):
-
     class Meta:
         model = Council
-        lookup_field = 'council_id'
+        lookup_field = "council_id"
         fields = (
-            'url', 'council_id', 'name',
-            'email', 'phone', 'website', 'postcode', 'address',
+            "url",
+            "council_id",
+            "name",
+            "email",
+            "phone",
+            "website",
+            "postcode",
+            "address",
         )
 
 
 class CouncilGeoSerializer(GeoFeatureModelSerializer):
-
     class Meta:
         model = Council
-        geo_field = 'area'
-        id_field = 'council_id'
-        extra_kwargs = {
-            'url': {'view_name': 'council-geo', 'lookup_field': 'pk'}
-        }
+        geo_field = "area"
+        id_field = "council_id"
+        extra_kwargs = {"url": {"view_name": "council-geo", "lookup_field": "pk"}}
         fields = (
-            'url', 'council_id', 'name',
-            'email', 'phone', 'website', 'postcode', 'address',
+            "url",
+            "council_id",
+            "name",
+            "email",
+            "phone",
+            "website",
+            "postcode",
+            "address",
         )
 
 
@@ -37,14 +45,15 @@ class CouncilViewSet(ReadOnlyModelViewSet):
     queryset = Council.objects.all().defer("area")
     serializer_class = CouncilDataSerializer
 
-    @action(detail=True, url_path='geo')
+    @action(detail=True, url_path="geo")
     def geo(self, request, pk=None, format=None):
         try:
             council = Council.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response({'detail': 'Not found.'}, 404)
+            return Response({"detail": "Not found."}, 404)
         except:
-            return Response({'detail': 'Internal server error'}, 500)
+            return Response({"detail": "Internal server error"}, 500)
 
         return Response(
-            CouncilGeoSerializer(council, context={'request': request}).data)
+            CouncilGeoSerializer(council, context={"request": request}).data
+        )

@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations
 
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('pollingstations', '0007_dataqualityreport'),
-    ]
+    dependencies = [("pollingstations", "0007_dataqualityreport")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='dataqualityreport',
-            name='council',
-        ),
-        migrations.DeleteModel(
-            name='DataQualityReport',
-        ),
+        migrations.RemoveField(model_name="dataqualityreport", name="council"),
+        migrations.DeleteModel(name="DataQualityReport"),
     ]

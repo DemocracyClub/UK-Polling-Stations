@@ -4,6 +4,9 @@ mock
 aloe
 aloe_django
 aloe_webdriver
+
+black
+
 vcrpy==1.11.0
 
 pytest

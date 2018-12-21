@@ -5,14 +5,15 @@ from uk_geo_utils.helpers import Postcode
 
 
 class EveryElectionWrapper:
-
     def __init__(self, postcode=None, point=None):
         if not postcode and not point:
-            raise ValueError('Expected either a point or a postcode')
+            raise ValueError("Expected either a point or a postcode")
         try:
             self.request_success = False
             if postcode:
-                self.elections = self.get_data_by_postcode(Postcode(postcode).with_space)
+                self.elections = self.get_data_by_postcode(
+                    Postcode(postcode).with_space
+                )
                 self.request_success = True
             elif point:
                 self.elections = self.get_data_by_point(point)
@@ -24,18 +25,23 @@ class EveryElectionWrapper:
 
     def get_data_by_postcode(self, postcode):
         query_url = "%sapi/elections.json?postcode=%s&future=1" % (
-            settings.EE_BASE, postcode)
+            settings.EE_BASE,
+            postcode,
+        )
         return self.get_data(query_url)
 
     def get_data_by_point(self, point):
         query_url = "%sapi/elections.json?coords=%s,%s&future=1" % (
-            settings.EE_BASE, point.y, point.x)
+            settings.EE_BASE,
+            point.y,
+            point.x,
+        )
         return self.get_data(query_url)
 
     def get_data(self, query_url):
         headers = {}
-        if hasattr(settings, 'CUSTOM_UA'):
-            headers['User-Agent'] = settings.CUSTOM_UA
+        if hasattr(settings, "CUSTOM_UA"):
+            headers["User-Agent"] = settings.CUSTOM_UA
 
         res = requests.get(query_url, timeout=4, headers=headers)
 
@@ -43,16 +49,18 @@ class EveryElectionWrapper:
             res.raise_for_status()
 
         res_json = res.json()
-        if 'results' in res_json:
-            return res_json['results']
+        if "results" in res_json:
+            return res_json["results"]
         return res_json
 
     def get_all_ballots(self):
         if not self.request_success:
             return []
-        ballots = [e for e in self.elections if e['group_type'] is None]
-        ballots = [e for e in ballots if e['election_id'] not in settings.ELECTION_BLACKLIST]
-        return sorted(ballots, key=lambda k: k['poll_open_date'])
+        ballots = [e for e in self.elections if e["group_type"] is None]
+        ballots = [
+            e for e in ballots if e["election_id"] not in settings.ELECTION_BLACKLIST
+        ]
+        return sorted(ballots, key=lambda k: k["poll_open_date"])
 
     def get_ballots_for_next_date(self):
         if not self.request_success:
@@ -60,35 +68,36 @@ class EveryElectionWrapper:
         ballots = self.get_all_ballots()
         if len(ballots) == 0:
             return ballots
-        dates = [datetime.strptime(b['poll_open_date'], "%Y-%m-%d") for b in ballots]
+        dates = [datetime.strptime(b["poll_open_date"], "%Y-%m-%d") for b in ballots]
         dates.sort()
         next_election_date = dates[0].strftime("%Y-%m-%d")
-        ballots = [e for e in ballots if e['poll_open_date'] == next_election_date]
+        ballots = [e for e in ballots if e["poll_open_date"] == next_election_date]
         return ballots
 
     def get_cancelled_ballots(self):
-        return [b for b in self.ballots if b['cancelled']]
+        return [b for b in self.ballots if b["cancelled"]]
 
     @property
     def all_ballots_cancelled(self):
-        return len(self.cancelled_ballots) > 0 and\
-            len(self.ballots) == len(self.cancelled_ballots)
+        return len(self.cancelled_ballots) > 0 and len(self.ballots) == len(
+            self.cancelled_ballots
+        )
 
     def get_cancelled_election_info(self):
         rec = {
-            'cancelled': None,
-            'name': None,
-            'rescheduled_date': None,
-            'metadata': None,
+            "cancelled": None,
+            "name": None,
+            "rescheduled_date": None,
+            "metadata": None,
         }
 
         # bypass the rest of this if we're not checking EE
         # or we failed to contact EE
-        if not settings.EVERY_ELECTION['CHECK'] or not self.request_success:
-            rec['cancelled'] = False
+        if not settings.EVERY_ELECTION["CHECK"] or not self.request_success:
+            rec["cancelled"] = False
             return rec
 
-        rec['cancelled'] = self.all_ballots_cancelled
+        rec["cancelled"] = self.all_ballots_cancelled
         # What we care about here is if _all_
         # applicable ballot objects are cancelled.
 
@@ -99,7 +108,7 @@ class EveryElectionWrapper:
         # For the purposes of WhereDIV we can abstract
         # the complexity that they will receive a different
         # number of ballots than expected when they get there.
-        if not rec['cancelled']:
+        if not rec["cancelled"]:
             return rec
 
         if len(self.cancelled_ballots) > 1:
@@ -111,25 +120,27 @@ class EveryElectionWrapper:
 
         # there is exactly one cancelled election
         cancelled_ballot = self.cancelled_ballots[0]
-        rec['name'] = cancelled_ballot['election_title']
-        rec['metadata'] = cancelled_ballot['metadata']
+        rec["name"] = cancelled_ballot["election_title"]
+        rec["metadata"] = cancelled_ballot["metadata"]
 
-        if cancelled_ballot['replaced_by']:
+        if cancelled_ballot["replaced_by"]:
             try:
                 query_url = "%sapi/elections/%s.json" % (
-                    settings.EE_BASE, cancelled_ballot['replaced_by'])
+                    settings.EE_BASE,
+                    cancelled_ballot["replaced_by"],
+                )
                 new_ballot = self.get_data(query_url)
-                rec['rescheduled_date'] = datetime.strptime(
-                    new_ballot['poll_open_date'], "%Y-%m-%d"
+                rec["rescheduled_date"] = datetime.strptime(
+                    new_ballot["poll_open_date"], "%Y-%m-%d"
                 ).strftime("%-d %B %Y")
             except requests.exceptions.RequestException:
-                rec['rescheduled_date'] = None
+                rec["rescheduled_date"] = None
 
         return rec
 
     def has_election(self):
-        if not settings.EVERY_ELECTION['CHECK']:
-            return settings.EVERY_ELECTION['HAS_ELECTION']
+        if not settings.EVERY_ELECTION["CHECK"]:
+            return settings.EVERY_ELECTION["HAS_ELECTION"]
 
         if not self.request_success:
             # if the request was unsucessful for some reason,
@@ -149,11 +160,13 @@ class EveryElectionWrapper:
 
         if len(self.elections) > 0:
             for election in self.elections:
-                if 'explanation' in election and election['explanation']:
-                    explanations.append({
-                        'title': election['election_title'],
-                        'explanation': election['explanation'],
-                    })
+                if "explanation" in election and election["explanation"]:
+                    explanations.append(
+                        {
+                            "title": election["election_title"],
+                            "explanation": election["explanation"],
+                        }
+                    )
         return explanations
 
     def get_metadata(self):
@@ -165,9 +178,9 @@ class EveryElectionWrapper:
             return None
         if len(self.elections) > 0:
             for election in self.elections:
-                if not 'metadata' in election:
+                if not "metadata" in election:
                     continue
-                if not election['metadata']:
+                if not election["metadata"]:
                     continue
-                return election['metadata']
+                return election["metadata"]
         return None

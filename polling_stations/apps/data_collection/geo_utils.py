@@ -3,6 +3,7 @@ from django.db import connection
 from pollingstations.models import PollingDistrict
 from django.contrib.gis.geos import MultiPolygon, Polygon, LinearRing
 
+
 def convert_linestring_to_multiploygon(linestring):
     points = linestring.coords
 
@@ -16,6 +17,7 @@ def convert_linestring_to_multiploygon(linestring):
     multipoly = MultiPolygon(poly)
     return multipoly
 
+
 @transaction.atomic
 def fix_bad_polygons():
     # fix self-intersecting polygons
@@ -23,8 +25,12 @@ def fix_bad_polygons():
     table_name = PollingDistrict()._meta.db_table
 
     cursor = connection.cursor()
-    cursor.execute("""
-    UPDATE {0}
+    cursor.execute(
+        """
+        UPDATE {0}
         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
         WHERE NOT ST_IsValid(area);
-    """.format(table_name))
+        """.format(
+            table_name
+        )
+    )

@@ -7,45 +7,52 @@ import logging
 from collections import namedtuple
 from django.db import connection
 from data_collection.slugger import Slugger
-from pollingstations.models import (
-    PollingStation,
-    PollingDistrict,
-    ResidentialAddress
-)
+from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.models import Onspd
 
 
-Station = namedtuple('Station', [
-    'council',
-    'internal_council_id',
-    'postcode',
-    'address',
-    'location',
-    'polling_district_id'])
+Station = namedtuple(
+    "Station",
+    [
+        "council",
+        "internal_council_id",
+        "postcode",
+        "address",
+        "location",
+        "polling_district_id",
+    ],
+)
 
 
-District = namedtuple('District', [
-    'name',
-    'council',
-    'internal_council_id',
-    'extra_id',
-    'area',
-    'polling_station_id'])
+District = namedtuple(
+    "District",
+    [
+        "name",
+        "council",
+        "internal_council_id",
+        "extra_id",
+        "area",
+        "polling_station_id",
+    ],
+)
 
 
-Address = namedtuple('Address', [
-    'address',
-    'postcode',
-    'council',
-    'polling_station_id',
-    'slug',
-    'uprn',
-    'location'])
+Address = namedtuple(
+    "Address",
+    [
+        "address",
+        "postcode",
+        "council",
+        "polling_station_id",
+        "slug",
+        "uprn",
+        "location",
+    ],
+)
 
 
 class CustomSet(metaclass=abc.ABCMeta):
-
     def __init__(self):
         self.elements = set()
 
@@ -58,22 +65,21 @@ class CustomSet(metaclass=abc.ABCMeta):
 
 
 class StationSet(CustomSet):
-
     def build_namedtuple(self, element):
 
         # Point is mutable, so we must serialize it to store in a tuple
-        if 'location' in element and element['location']:
-            location = element['location'].ewkb  # use ewkb so it encodes srid
+        if "location" in element and element["location"]:
+            location = element["location"].ewkb  # use ewkb so it encodes srid
         else:
             location = None
 
         return Station(
-            element['council'],
-            element['internal_council_id'],
-            element.get('postcode', ''),
-            element.get('address', ''),
+            element["council"],
+            element["internal_council_id"],
+            element.get("postcode", ""),
+            element.get("address", ""),
             location,
-            element.get('polling_district_id', ''),
+            element.get("polling_district_id", ""),
         )
 
     def save(self):
@@ -92,19 +98,18 @@ class StationSet(CustomSet):
 
 
 class DistrictSet(CustomSet):
-
     def build_namedtuple(self, element):
 
         # MultiPolygon is mutable, so we must serialize it to store in a tuple
-        area = element['area'].ewkb  # use ewkb so it encodes srid
+        area = element["area"].ewkb  # use ewkb so it encodes srid
 
         return District(
-            element.get('name', ''),
-            element['council'],
-            element['internal_council_id'],
-            element.get('extra_id', ''),
+            element.get("name", ""),
+            element["council"],
+            element["internal_council_id"],
+            element.get("extra_id", ""),
             area,
-            element.get('polling_station_id', ''),
+            element.get("polling_station_id", ""),
         )
 
     def save(self):
@@ -123,7 +128,6 @@ class DistrictSet(CustomSet):
 
 
 class AddressSet(CustomSet):
-
     def __init__(self, logger):
         super().__init__()
         self.seen = set()
@@ -131,23 +135,26 @@ class AddressSet(CustomSet):
 
     def build_namedtuple(self, element):
         return Address(
-            element['address'],
-            element['postcode'],
-            element['council'],
-            element['polling_station_id'],
-            element['slug'],
-            element['uprn'],
+            element["address"],
+            element["postcode"],
+            element["council"],
+            element["polling_station_id"],
+            element["slug"],
+            element["uprn"],
             element.get("location", None),
         )
 
     def add(self, address):
-        if address['slug'] not in self.seen:
+        if address["slug"] not in self.seen:
             self.elements.add(self.build_namedtuple(address))
-            self.seen.add(address['slug'])
+            self.seen.add(address["slug"])
         else:
             self.logger.log_message(
-                logging.DEBUG, "Duplicate address found:\n%s",
-                variable=address, pretty=True)
+                logging.DEBUG,
+                "Duplicate address found:\n%s",
+                variable=address,
+                pretty=True,
+            )
 
     def _to_list(self, myset):
         l = list(self.elements)
@@ -165,13 +172,13 @@ class AddressSet(CustomSet):
         address_lookup = {}
         for i, record in enumerate(addresses):
             address_slug = Slugger.slugify(
-                "-".join([record['address'], record['postcode']]))
-            addresses[i]['address_slug'] = address_slug
+                "-".join([record["address"], record["postcode"]])
+            )
+            addresses[i]["address_slug"] = address_slug
             if address_slug in address_lookup:
-                address_lookup[address_slug].append(
-                    record['polling_station_id'])
+                address_lookup[address_slug].append(record["polling_station_id"])
             else:
-                address_lookup[address_slug] = [record['polling_station_id']]
+                address_lookup[address_slug] = [record["polling_station_id"]]
 
         return address_lookup
 
@@ -180,8 +187,8 @@ class AddressSet(CustomSet):
         # an address that maps to >1 polling stations
         ambiguous_postcodes = set()
         for record in address_list:
-            if len(address_lookup[record['address_slug']]) != 1:
-                ambiguous_postcodes.add(record['postcode'])
+            if len(address_lookup[record["address_slug"]]) != 1:
+                ambiguous_postcodes.add(record["postcode"])
 
         return ambiguous_postcodes
 
@@ -189,23 +196,27 @@ class AddressSet(CustomSet):
         tmp_addresses = self._to_list(self.elements)
 
         address_lookup = self.get_address_lookup(tmp_addresses)
-        ambiguous_postcodes = self.get_ambiguous_postcodes(tmp_addresses, address_lookup)
+        ambiguous_postcodes = self.get_ambiguous_postcodes(
+            tmp_addresses, address_lookup
+        )
 
         # discard all addresses with an ambiguous postcode
         for i, record in enumerate(tmp_addresses):
-            if record['postcode'] in ambiguous_postcodes:
+            if record["postcode"] in ambiguous_postcodes:
                 tmp_addresses[i] = None
-                if len(address_lookup[record['address_slug']]) != 1:
+                if len(address_lookup[record["address_slug"]]) != 1:
                     # we discard it because the address itself is ambiguous
-                    reason = address_lookup[record['address_slug']]
+                    reason = address_lookup[record["address_slug"]]
                 else:
                     # we've discarded it because it has the same postcode
                     # as some other addresses we have discarded
-                    reason = record['postcode']
+                    reason = record["postcode"]
 
                 self.logger.log_message(
-                    logging.INFO, "Ambiguous addresses discarded: %s: %s",
-                    variable=(record['address_slug'], reason))
+                    logging.INFO,
+                    "Ambiguous addresses discarded: %s: %s",
+                    variable=(record["address_slug"], reason),
+                )
 
         return self._to_set(tmp_addresses)
 
@@ -213,8 +224,8 @@ class AddressSet(CustomSet):
         tmp_addresses = self._to_list(self.elements)
 
         for record in tmp_addresses:
-            if record['uprn'] in addressbase_data:
-                record['location'] = addressbase_data[record['uprn']]['location']
+            if record["uprn"] in addressbase_data:
+                record["location"] = addressbase_data[record["uprn"]]["location"]
 
         return self._to_set(tmp_addresses)
 
@@ -225,23 +236,26 @@ class AddressSet(CustomSet):
 
             # if the UPRN attached to the input record isn't present
             # in the data we fetched from AddressBase, discard the UPRN
-            if record['uprn'] not in addressbase_data:
+            if record["uprn"] not in addressbase_data:
                 self.logger.log_message(
-                    logging.DEBUG, "Removing unknown UPRN %s from record:\n%s",
-                    variable=(record['uprn'], record))
-                record['uprn']  = ''
+                    logging.DEBUG,
+                    "Removing unknown UPRN %s from record:\n%s",
+                    variable=(record["uprn"], record),
+                )
+                record["uprn"] = ""
                 continue
 
             # if the UPRN attached to the input record is present
             # in the data we fetched from AddressBase, but the postcode
             # on the input record doesn't match the postcode on the
             # record from AddressBase, discard the UPRN
-            if record['postcode'] != addressbase_data[record['uprn']]['postcode']:
+            if record["postcode"] != addressbase_data[record["uprn"]]["postcode"]:
                 self.logger.log_message(
                     logging.INFO,
                     "Removing UPRN due to postcode mismatch.\nInput Record:\n%s\nAddressbase record:\n%s",
-                    variable=(record, addressbase_data[record['uprn']]))
-                record['uprn']  = ''
+                    variable=(record, addressbase_data[record["uprn"]]),
+                )
+                record["uprn"] = ""
 
             # TODO: for future, look at levenshtein distance between
             # input address and result from addressbase?
@@ -252,7 +266,8 @@ class AddressSet(CustomSet):
         # get all the UPRNs in target local auth
         # which exist in both Addressbase and ONSUD
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT
                 a.uprn,
                 a.address,
@@ -261,14 +276,13 @@ class AddressSet(CustomSet):
             FROM addressbase_address a
             JOIN addressbase_onsud o ON a.uprn=o.uprn
             WHERE o.lad=%s;
-        """, [self.council_id])
+            """,
+            [self.council_id],
+        )
         # return result a hash table keyed by UPRN
         return {
-            row[0]: {
-                'address': row[1],
-                'postcode': row[2],
-                'location': row[3],
-            } for row in cursor.fetchall()
+            row[0]: {"address": row[1], "postcode": row[2], "location": row[3]}
+            for row in cursor.fetchall()
         }
 
     def remove_addresses_outside_target_auth(self):
@@ -294,20 +308,23 @@ class AddressSet(CustomSet):
         and try to make a better job of that then we might need
         to take a more sophisticated approach here.
         """
-        query_postcodes = set([
-            Postcode(record.postcode).with_space\
-            for record in self.elements\
-            if not record.uprn
-        ])
-        db_postcodes = Onspd.objects.filter(
-            pcds__in=query_postcodes,
-            doterm=''
-        ).only('pcds', 'oslaua')
-        bad_postcodes = set([
-            Postcode(record.pcds).without_space\
-            for record in db_postcodes\
-            if record.oslaua != self.council_id
-        ])
+        query_postcodes = set(
+            [
+                Postcode(record.postcode).with_space
+                for record in self.elements
+                if not record.uprn
+            ]
+        )
+        db_postcodes = Onspd.objects.filter(pcds__in=query_postcodes, doterm="").only(
+            "pcds", "oslaua"
+        )
+        bad_postcodes = set(
+            [
+                Postcode(record.pcds).without_space
+                for record in db_postcodes
+                if record.oslaua != self.council_id
+            ]
+        )
 
         if not bad_postcodes:
             return self.elements
@@ -316,12 +333,14 @@ class AddressSet(CustomSet):
         # remove all records matching any of these postcodes
         tmp_addresses = self._to_list(self.elements)
         for i, record in enumerate(tmp_addresses):
-            if record['postcode'] in bad_postcodes:
+            if record["postcode"] in bad_postcodes:
                 tmp_addresses[i] = None
 
-                self.logger.log_message(logging.INFO,
+                self.logger.log_message(
+                    logging.INFO,
                     "Discarding record: Postcode centroid is outside target local authority:\n%s",
-                    variable=record, pretty=True
+                    variable=record,
+                    pretty=True,
                 )
         return self._to_set(tmp_addresses)
 
@@ -348,9 +367,8 @@ class AddressSet(CustomSet):
                 council=address.council,
                 slug=address.slug,
                 uprn=address.uprn,
-                location=address.location
+                location=address.location,
             )
             addresses_db.append(record)
 
-        ResidentialAddress.objects.bulk_create(
-            addresses_db, batch_size=batch_size)
+        ResidentialAddress.objects.bulk_create(addresses_db, batch_size=batch_size)

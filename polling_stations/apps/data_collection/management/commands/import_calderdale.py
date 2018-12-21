@@ -5,15 +5,15 @@ from data_collection.management.commands import BaseShpStationsShpDistrictsImpor
 
 
 class Command(BaseShpStationsShpDistrictsImporter):
-    council_id        = 'E08000033'
-    districts_name    = 'local.2018-05-03/Version 1/POLLING_DISTRICTS_region.shp'
-    stations_name     = 'local.2018-05-03/Version 1/POLLING_STATIONS_region.shp'
-    elections         = ['local.2018-05-03']
+    council_id = "E08000033"
+    districts_name = "local.2018-05-03/Version 1/POLLING_DISTRICTS_region.shp"
+    stations_name = "local.2018-05-03/Version 1/POLLING_STATIONS_region.shp"
+    elections = ["local.2018-05-03"]
     station_addresses = {}
 
     def parse_string(self, text):
         try:
-            return text.strip().decode('utf-8')
+            return text.strip().decode("utf-8")
         except AttributeError:
             return text.strip()
 
@@ -28,42 +28,21 @@ class Command(BaseShpStationsShpDistrictsImporter):
         We can use these to fill the gaps in later.
         """
         self.station_addresses[code] = address
-        return {
-            'internal_council_id': code,
-            'name': name,
-            'polling_station_id': code,
-        }
+        return {"internal_council_id": code, "name": name, "polling_station_id": code}
 
     def station_record_to_dict(self, record):
         code = self.parse_string(record[1])
         address = self.parse_string(record[0])
 
-        if code == '' and address == '':
+        if code == "" and address == "":
             return None
 
         # remove station addresses from the districts file
         # as we find them in the stations file
         if code in self.station_addresses:
-            del(self.station_addresses[code])
+            del (self.station_addresses[code])
 
-        return {
-            'internal_council_id': code,
-            'address': address,
-            'postcode': '',
-        }
-
-    @transaction.atomic
-    def fix_bad_polygon(self):
-        # fix self-intersecting polygons
-        self.stdout.write("running fixup SQL")
-        table_name = PollingDistrict()._meta.db_table
-
-        cursor = connection.cursor()
-        cursor.execute("""
-        UPDATE {0}
-         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
-         WHERE NOT ST_IsValid(area);
-        """.format(table_name))
+        return {"internal_council_id": code, "address": address, "postcode": ""}
 
     @transaction.atomic
     def fill_the_blanks(self):
@@ -71,13 +50,15 @@ class Command(BaseShpStationsShpDistrictsImporter):
         # attached to a district code but no point
         self.stations = StationSet()
         for code in self.station_addresses:
-            self.add_polling_station({
-                'internal_council_id': code,
-                'postcode': '',
-                'address': self.station_addresses[code],
-                'location': None,
-                'council': self.council
-            })
+            self.add_polling_station(
+                {
+                    "internal_council_id": code,
+                    "postcode": "",
+                    "address": self.station_addresses[code],
+                    "location": None,
+                    "council": self.council,
+                }
+            )
         self.stations.save()
 
     def post_import(self):
