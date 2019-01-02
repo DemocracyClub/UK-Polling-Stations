@@ -18,9 +18,8 @@ A `200 OK` response from `/postcode` or `/address` is an object containing the f
   this URL may be used to provide a user with a back-channel to report inaccurate data.
 * `metadata`: (object, nullable) - This field may be used to supply additional information about
   an election, particularly if there is some unusual condition or event for voters to be aware of.
-
-
-## Postcode search [/postcode/{postcode}.json]
+* `ballots`: (array) - An array of ballot objects listing the elections applicable to this request.
+  It is possible for more than one ballot to occur on the same date. For example, a user may vote in a local council election and mayoral election on the same day.
 
 The entry point to a polling station search is a call to the `/postcode` endpoint.
 A valid postcode search may result in one of 3 outcomes:
@@ -29,75 +28,145 @@ A valid postcode search may result in one of 3 outcomes:
   To find the user's polling station, we must make a second API call to the `/address` endpoint.
 * We do not hold data for this area.
 
+## Postcode search: Result found [/postcode/{postcode}.json]
+
+When we hold data for this area and all voters with this postcode vote at the same polling station,
+the following conditions can be observed in the response body:
+* `polling_station_known` is `true`
+* `polling_station` is a GeoJSON [polling station feature](#polling-stations-geojson-3)
+* `addresses` is an empty array
+
 + Parameters
     + postcode: `SW1A1AA` (required, string) - Whitespace in postcodes is ignored, so format may be `SW1A1AA` or `SW1A 1AA`
 
-### Postcode search [GET]
+### Postcode search: Result found [GET]
 
 + Response 200 (application/json)
 
-    When we hold data for this area and all voters with this postcode vote at the same polling station,
-    the following conditions can be observed in the response body:
-    * `polling_station_known` is `true`
-    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-geojson-3)
-    * `addresses` is an empty array
-
-    + Body
-
-<!-- include(finder_responses/NG178AA.apibp) -->
-
-    + Schema
-
-<!-- include(finder_responses/schema.apibp) -->
-
-
-+ Response 200 (application/json)
-
-    When we hold data for this area but voters with this postcode don't all vote at the same polling station,
-    the following conditions can be observed in the response body:
-    * `polling_station_known` is `false`
-    * `polling_station` is `null`
-    * `addresses` is an array of address objects covered by the input postcode.
-      This can be used to request the user's address and make a second API call to the `/address` endpoint.
-
-    + Body
-
-<!-- include(finder_responses/BN436HW.apibp) -->
-
-    + Schema
-
-<!-- include(finder_responses/schema.apibp) -->
-
-
-+ Response 200 (application/json)
-
-    When we do not hold data for the area described by the postcode provided,
-    the following conditions can be observed in the response body:
-    * `polling_station_known` is `false`
-    * `polling_station` is `null`
-    * `addresses` is an empty array
-
-    + Body
-
-<!-- include(finder_responses/SW1A1AA.apibp) -->
-
-    + Schema
-
-<!-- include(finder_responses/schema.apibp) -->
-
+    + Attributes
+        + `polling_station_known`: `true` (boolean) - Do we know where this user should vote?
+        + `postcode_location` (object, fixed-type, nullable) - A [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a [Point object](https://tools.ietf.org/html/rfc7946#section-3.1.2) describing the centroid of the input postcode. If providing a map or directions for a polling station journey, use this as the start point. This may be `null` if we are not able to accurately geocode.
+            + type: `Feature` (string)
+            + properties: (object, nullable)
+            + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
+                + type: `Point` (string)
+                + coordinates: (array[number], fixed-type)
+                    + `-0.2770293269230769` (number)
+                    + `50.83664266538461` (number)
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
+        + `polling_station` (GeoPollingStation, nullable) - A GeoJSON polling station feature
+        + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
+        + `report_problem_url`: `https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json` (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
+        + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
 
 + Response 400 (application/json)
 
-        {
-          "detail": "Could not geocode from any source"
-        }
+        { "detail": "Could not geocode from any source" }
 
+
+## Postcode search: Address picker [/postcode/{postcode}.json]
+
+When we hold data for this area but voters with this postcode don't all vote at the same polling station,
+the following conditions can be observed in the response body:
+* `polling_station_known` is `false`
+* `polling_station` is `null`
+* `addresses` is an array of address objects covered by the input postcode.
+    This can be used to request the user's address and make a second API call to the `/address` endpoint.
+
++ Parameters
+    + postcode: `SW1A1AA` (required, string) - Whitespace in postcodes is ignored, so format may be `SW1A1AA` or `SW1A 1AA`
+
+### Postcode search: Address picker [GET]
+
++ Response 200 (application/json)
+
+    + Attributes
+        + `polling_station_known`: `false` (boolean) - Do we know where this user should vote?
+        + `postcode_location` (object, fixed-type, nullable) - A [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a [Point object](https://tools.ietf.org/html/rfc7946#section-3.1.2) describing the centroid of the input postcode. If providing a map or directions for a polling station journey, use this as the start point. This may be `null` if we are not able to accurately geocode.
+            + type: `Feature` (string)
+            + properties: (object, nullable)
+            + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
+                + type: `Point` (string)
+                + coordinates: (array[number], fixed-type)
+                    + `-0.26353977212676555` (number)
+                    + `50.84477241345472` (number)
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
+            + (object)
+                + url: `https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/` (string) - Call this URL to get data for this registered address
+                + `polling_station_id`: `527` (string)
+                + postcode: `BN436HW` (string)
+                + address: `5 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
+                + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
+                + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
+            + (object)
+                + url: `https://wheredoivote.co.uk/api/beta/address/e07000223-524-2-truleigh-way-shoreham-by-sea-west-sussex-bn436hw?` (string) - Call this URL to get data for this registered address
+                + `polling_station_id`: `524` (string)
+                + postcode: `BN436HW` (string)
+                + address: `2 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
+                + slug: `e07000223-524-2-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
+                + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
+        + `polling_station` (object, nullable) - A GeoJSON polling station feature
+        + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
+        + `report_problem_url`: (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
+        + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
+
++ Response 400 (application/json)
+
+        { "detail": "Could not geocode from any source" }
+
+
+## Postcode search: Result not Found [/postcode/{postcode}.json]
+
+When we do not hold data for the area described by the postcode provided,
+the following conditions can be observed in the response body:
+* `polling_station_known` is `false`
+* `polling_station` is `null`
+* `addresses` is an empty array
+
++ Parameters
+    + postcode: `SW1A1AA` (required, string) - Whitespace in postcodes is ignored, so format may be `SW1A1AA` or `SW1A 1AA`
+
+### Postcode search: Result not Found [GET]
+
++ Response 200 (application/json)
+
+    + Attributes
+        + `polling_station_known`: `false` (boolean) - Do we know where this user should vote?
+        + `postcode_location` (object, fixed-type, nullable) - A [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a [Point object](https://tools.ietf.org/html/rfc7946#section-3.1.2) describing the centroid of the input postcode. If providing a map or directions for a polling station journey, use this as the start point. This may be `null` if we are not able to accurately geocode.
+            + type: `Feature` (string)
+            + properties: (object, nullable)
+            + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
+                + type: `Point` (string)
+                + coordinates: (array[number], fixed-type)
+                    + `-0.2770293269230769` (number)
+                    + `50.83664266538461` (number)
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
+        + `polling_station` (object, nullable) - A GeoJSON polling station feature
+        + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
+        + `report_problem_url`: (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
+        + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
+
++ Response 400 (application/json)
+
+        { "detail": "Could not geocode from any source" }
 
 
 ## Address search [/address/{slug}.json]
 
 In the event that the addresses described by a postcode are not all assigned to the same polling station,
 an array of address objects will be returned, each of which corresponds to a call to the `/address` endpoint.
+
+When we make a valid call to the `/address` endpoint,
+the following conditions can be observed in the response body:
+* `polling_station_known` is `true`
+* `polling_station` is a GeoJSON [polling station feature](#polling-stations-geojson-3)
+* `addresses` is an array of length one containing a single address object describing the requested address
 
 + Parameters
     + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (required, string) - A unique slug describing a residential address
@@ -106,23 +175,31 @@ an array of address objects will be returned, each of which corresponds to a cal
 
 + Response 200 (application/json)
 
-    When we make a valid call to the `/address` endpoint,
-    the following conditions can be observed in the response body:
-    * `polling_station_known` is `true`
-    * `polling_station` is a GeoJSON [polling station feature](#polling-stations-geojson-3)
-    * `addresses` is an array of length one containing a single address object describing the requested address
-
-    + Body
-
-<!-- include(finder_responses/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw.apibp) -->
-
-    + Schema
-
-<!-- include(finder_responses/schema.apibp) -->
-
+    + Attributes
+        + `polling_station_known`: `true` (boolean) - Do we know where this user should vote?
+        + `postcode_location` (object, fixed-type, nullable) - A [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a [Point object](https://tools.ietf.org/html/rfc7946#section-3.1.2) describing the centroid of the input postcode. If providing a map or directions for a polling station journey, use this as the start point. This may be `null` if we are not able to accurately geocode.
+            + type: `Feature` (string)
+            + properties: (object, nullable)
+            + geometry (object, fixed-type) - A GeoJSON Point object describing the centroid of the input postcode
+                + type: `Point` (string)
+                + coordinates: (array[number], fixed-type)
+                    + `-0.26353977212676555` (number)
+                    + `50.84477241345472` (number)
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
+            + (object)
+                + url: `https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/` (string) - Call this URL to get data for this registered address
+                + `polling_station_id`: `527` (string)
+                + postcode: `BN436HW` (string)
+                + address: `5 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
+                + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
+                + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
+        + `polling_station` (GeoPollingStation, nullable) - A GeoJSON polling station feature
+        + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
+        + `report_problem_url`: `https://wheredoivote.co.uk/report_problem/?source=api&source_url=%2Fapi%2Fbeta%2FTEST.json` (string, nullable) - If we provide a polling station result, this URL may be used to provide a user with a back-channel to report inaccurate data.
+        + metadata: (object, nullable) - This field may be used to supply additional information about an election.
+        + ballots: (array[Ballot], fixed-type) - An array of ballot objects listing the elections applicable to this request
 
 + Response 404 (application/json)
 
-        {
-          "detail": "Address not found"
-        }
+        { "detail": "Address not found" }

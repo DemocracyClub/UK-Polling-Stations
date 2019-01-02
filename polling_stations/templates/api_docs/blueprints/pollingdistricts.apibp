@@ -13,7 +13,7 @@ List all polling districts in a local authority.
 Returns an array of [polling district objects](#polling-districts-json-3)
 
 + Parameters
-    + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
 ### List All Polling Districts in a Local Authority: JSON [GET]
 
@@ -29,7 +29,7 @@ Returns a [GeoJSON FeatureCollection](https://tools.ietf.org/html/rfc7946#sectio
 of [polling district features](#polling-districts-geojson-3)
 
 + Parameters
-    + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
 ### List All Polling Districts in a Local Authority: GeoJSON [GET]
 
@@ -45,8 +45,8 @@ of [polling district features](#polling-districts-geojson-3)
 Retrieve meta-data about a polling district in JSON format.
 
 + Parameters
-    + council_id: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
-    + district_id: `SUM4` (required, string) - Polling District ID. Polling District IDs are unique within councils, but are not unique nationally
+    + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
+    + `district_id`: `SUM4` (required, string) - Polling District ID. Polling District IDs are unique within councils, but are not unique nationally
 
 ### Retrieve a Polling District: JSON [GET]
 
