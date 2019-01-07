@@ -5,6 +5,8 @@ from django.apps import apps
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from requests.exceptions import HTTPError
+from retry import retry
 from councils.models import Council
 
 
@@ -39,9 +41,23 @@ class Command(BaseCommand):
             return MultiPolygon(geometry)
         return geometry
 
+    @retry(HTTPError, tries=2, delay=30)
     def get_json(self, url):
         r = requests.get(url)
         r.raise_for_status()
+        """
+        When an ArcGIS server can't generate a response
+        within X amount of time, it will return a 202 ACCEPTED
+        response with a body like
+        {
+            "processingTime": "27.018 seconds",
+            "status": "Processing",
+            "generating": {}
+        }
+        and expects the client to poll it.
+        """
+        if r.status_code == 202:
+            raise HTTPError("202 Accepted", response=r)
         return r.json()
 
     def get_councils(self, url, id_field, name_field):
