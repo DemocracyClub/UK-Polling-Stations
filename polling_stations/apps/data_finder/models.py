@@ -9,7 +9,13 @@ class LoggedPostcode(TimeStampedModel):
     postcode = models.CharField(max_length=100)
     had_data = models.BooleanField(default=False, db_index=True)
     location = models.PointField(null=True, blank=True)
-    council = models.ForeignKey(Council, null=True, db_index=True)
+    council = models.ForeignKey(
+        Council,
+        null=True,
+        db_index=True,
+        db_constraint=False,
+        on_delete=models.DO_NOTHING,
+    )
     brand = models.CharField(blank=True, max_length=100, db_index=True)
     utm_source = models.CharField(blank=True, max_length=100, db_index=True)
     utm_medium = models.CharField(blank=True, max_length=100, db_index=True)
