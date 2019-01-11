@@ -142,10 +142,7 @@ class BasePollingStationView(
         context["has_election"] = ee.has_election()
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()
-        metadata = ee.get_metadata()
-        context["voter_id_pilot"] = None
-        if metadata and "2018-05-03-id-pilot" in metadata:
-            context["voter_id_pilot"] = metadata["2018-05-03-id-pilot"]
+        context["voter_id_pilot"] = ee.get_id_pilot_info()
 
         context["postcode"] = self.postcode.with_space
         context["location"] = self.location
