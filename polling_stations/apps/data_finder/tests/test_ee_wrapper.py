@@ -58,6 +58,7 @@ def get_data_with_elections(self, query_url):
             "election_id": "foo.bar.date",
             "election_title": "some election",
             "group_type": "organisation",
+            "metadata": None,
             "cancelled": False,
             "poll_open_date": datetime.now().strftime("%Y-%m-%d"),
         },  # no explanation or metadata keys
@@ -76,7 +77,7 @@ def get_data_with_elections(self, query_url):
             "group_type": None,
             "explanation": "some text",  # explanation key contains text
             "metadata": {
-                "this election": "has some metadata"
+                "2019-05-02-id-pilot": {"this election": "has an ID pilot"}
             },  # metadata key is an object
             "cancelled": False,
             "poll_open_date": datetime.now().strftime("%Y-%m-%d"),
@@ -95,6 +96,7 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
+        self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True})
     @mock.patch(
@@ -108,6 +110,7 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
+        self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True})
     @mock.patch(
@@ -123,7 +126,10 @@ class EveryElectionWrapperTests(TestCase):
         )
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
-        self.assertEqual({"this election": "has some metadata"}, ee.get_metadata())
+        self.assertEqual(
+            {"voter_id": {"this election": "has an ID pilot"}}, ee.get_metadata()
+        )
+        self.assertEqual({"this election": "has an ID pilot"}, ee.get_id_pilot_info())
 
     @override_settings(EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True})
     @mock.patch(
@@ -137,6 +143,7 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
+        self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True})
     @mock.patch(
@@ -150,6 +157,7 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
+        self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False})
     @mock.patch(

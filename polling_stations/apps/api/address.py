@@ -123,7 +123,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
                 ret["polling_station"] = polling_station
                 ret["polling_station_known"] = True
 
-        ret["metadata"] = None
+        ret["metadata"] = ee.get_metadata()
 
         if request.query_params.get("all_future_ballots", None):
             ret["ballots"] = ee.get_all_ballots()

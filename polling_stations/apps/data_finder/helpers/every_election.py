@@ -170,17 +170,27 @@ class EveryElectionWrapper:
         return explanations
 
     def get_metadata(self):
-        # FIXME: this does the wrong thing
-        # if >1 elections have meta-data attached
-        # and doesn't account for
-        # elections on >1 future dates
-        if not self.request_success:
-            return None
-        if len(self.elections) > 0:
-            for election in self.elections:
-                if not "metadata" in election:
-                    continue
-                if not election["metadata"]:
-                    continue
-                return election["metadata"]
+        cancelled = self.get_cancelled_election_info()
+        if cancelled["cancelled"]:
+            return {"cancelled_election": cancelled["metadata"]}
+
+        # merge Voter id pilot in England and
+        # Standard Northern Ireland ID requirement
+        # in the API outputs
+        voter_id = self.get_id_pilot_info() or self.get_metadata_by_key("ni-voter-id")
+        if voter_id:
+            return {"voter_id": voter_id}
+
         return None
+
+    def get_metadata_by_key(self, key):
+        if not settings.EVERY_ELECTION["CHECK"] or not self.request_success:
+            return None
+
+        for b in self.ballots:
+            if "metadata" in b and b["metadata"] and key in b["metadata"]:
+                return b["metadata"][key]
+        return None
+
+    def get_id_pilot_info(self):
+        return self.get_metadata_by_key("2019-05-02-id-pilot")
