@@ -551,7 +551,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
             "Total UPRNs in ONSUD: {:,}".format(dwellings.from_onsud(self.council_id))
         )
         self.write_info(
-            "Total UPRNs in AddressBase Standard: {:,}".format(
+            "Total UPRNs in AddressBase: {:,}".format(
                 dwellings.from_addressbase(self.council.area)
             )
         )
