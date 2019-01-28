@@ -11,7 +11,7 @@ class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = "S12000015"
+    council_id = "S12000047"
     elections = ["parl.2017-06-08"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Fife"
     geom_type = "geojson"

@@ -16,6 +16,6 @@ some issues with overlapping polygons etc so could also be problematic
 
 
 class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000024"
+    council_id = "S12000048"
     council_name = "Perth and Kinross"
     elections = ["parl.2017-06-08"]

@@ -1,10 +1,13 @@
 import html
 import json
+from json.decoder import JSONDecodeError
 import requests
 from django.apps import apps
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from requests.exceptions import HTTPError
+from retry import retry
 from councils.models import Council
 
 
@@ -39,9 +42,23 @@ class Command(BaseCommand):
             return MultiPolygon(geometry)
         return geometry
 
+    @retry(HTTPError, tries=2, delay=30)
     def get_json(self, url):
         r = requests.get(url)
         r.raise_for_status()
+        """
+        When an ArcGIS server can't generate a response
+        within X amount of time, it will return a 202 ACCEPTED
+        response with a body like
+        {
+            "processingTime": "27.018 seconds",
+            "status": "Processing",
+            "generating": {}
+        }
+        and expects the client to poll it.
+        """
+        if r.status_code == 202:
+            raise HTTPError("202 Accepted", response=r)
         return r.json()
 
     def get_councils(self, url, id_field, name_field):
@@ -71,13 +88,29 @@ class Command(BaseCommand):
             url = "http://{}".format(url)
         return url
 
-    def get_contact_info_from_yvm(self, council_id):
+    def get_from_yvm(self, council_id):
         url = "{}{}".format(settings.YVM_LA_URL, council_id)
-
         req = requests.get(url)
         content = req.text
+        return json.loads(str(content))
 
-        council_data = json.loads(str(content))["registrationOffice"]
+    def get_contact_info_from_yvm(self, council_id):
+        try:
+            data = self.get_from_yvm(council_id)
+        except JSONDecodeError as e:
+            # YNM returns a 200 OK with HTML body if code not found
+            # If YVM isn't using the new codes yet, use the old codes
+            # to fetch the electoral services contact info
+            if council_id == "S12000047":
+                # Fife
+                data = self.get_from_yvm("S12000015")
+            elif council_id == "S12000048":
+                # Perth & Kinross
+                data = self.get_from_yvm("S12000024")
+            else:
+                raise e
+
+        council_data = data["registrationOffice"]
         info = {}
         info["name"] = html.unescape(council_data.get("office"))
         info["website"] = self.clean_url(council_data.get("website"))
@@ -117,7 +150,7 @@ class Command(BaseCommand):
         councils = []
         self.stdout.write("Downloading ONS boundaries from %s..." % (boundaries_url))
         councils = councils + self.get_councils(
-            boundaries_url, id_field="lad16cd", name_field="lad16nm"
+            boundaries_url, id_field="lad18cd", name_field="lad18nm"
         )
 
         for council in councils:
