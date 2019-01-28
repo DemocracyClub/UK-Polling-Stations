@@ -11,6 +11,56 @@ from retry import retry
 from councils.models import Council
 
 
+def union_areas(a1, a2):
+    if not a1:
+        return a2
+    return MultiPolygon(a1.union(a2))
+
+
+TEMP_CONTACT_DETAILS = {
+    "E07000246": {
+        "name": "Somerset West & Taunton Council",
+        "website": "",
+        "email": "",
+        "phone": "",
+        "address": "",
+        "postcode": "",
+    },
+    "E06000058": {
+        "name": "Bournemouth, Christchurch & Poole Council",
+        "website": "",
+        "email": "",
+        "phone": "",
+        "address": "",
+        "postcode": "",
+    },
+    "E06000059": {
+        "name": "Dorset Council",
+        "website": "",
+        "email": "elections@dorset.gov.uk",
+        "phone": "01305 838299",
+        "address": "",
+        "postcode": "",
+    },
+    "E07000244": {
+        "name": "East Suffolk Council",
+        "website": "https://www.eastsuffolk.gov.uk/",
+        "email": "elections@eastsuffolk.gov.uk",
+        "phone": "01394 444422 / 01502 523320",
+        "address": "",
+        "postcode": "",
+    },
+    "E07000245": {
+        "name": "West Suffolk Council",
+        "website": "https://www.westsuffolk.gov.uk/",
+        "email": "elections@westsuffolk.gov.uk",
+        "phone": "01638 719366 / 01284 757131",
+        "address": "",
+        "postcode": "",
+    },
+}
+
+
 class Command(BaseCommand):
     """
     Turn off auto system check for all apps
@@ -77,6 +127,47 @@ class Command(BaseCommand):
             councils.append(Council(council_id=council_id, area=poly))
         return councils
 
+    def pre_process_councils(self, councils):
+        """
+        if the new councils for 2019 don't already
+        exist in the input file we need to:
+        - build the boundaries as a union of
+          the old authorities that they replace
+        - delete the old ones out of the councils array so
+          we don't have >1 polygons covering the same area
+        """
+
+        new_council_objects = {}
+        for code in settings.NEW_COUNCILS:
+            # only attempt to build the new areas if they don't already exist
+            if code not in [c.council_id for c in councils]:
+                new_council_objects[code] = Council(council_id=code, area=None)
+
+        self.stdout.write(
+            "building new areas: {}".format(str(list(new_council_objects.keys())))
+        )
+
+        # ids of any councils we're going to delete
+        deleteme = []
+
+        for council in councils:
+            if not council.council_id in settings.OLD_TO_NEW_MAP:
+                continue
+            code = settings.OLD_TO_NEW_MAP[council.council_id]
+            if code in new_council_objects:
+                new_council_objects[code].area = union_areas(
+                    new_council_objects[code].area, council.area
+                )
+                self.stdout.write("{} --> {}".format(council.council_id, code))
+                deleteme.append(council.council_id)
+
+        councils = [c for c in councils if c.council_id not in deleteme]
+
+        for code, council in new_council_objects.items():
+            councils.append(council)
+
+        return councils
+
     def _save_council(self, council):
         # write council object to ALL databases
         for db in settings.DATABASES.keys():
@@ -107,6 +198,9 @@ class Command(BaseCommand):
             elif council_id == "S12000048":
                 # Perth & Kinross
                 data = self.get_from_yvm("S12000024")
+            elif council_id in TEMP_CONTACT_DETAILS:
+                self.stdout.write("No contact details available from YVM")
+                return TEMP_CONTACT_DETAILS[council_id]
             else:
                 raise e
 
@@ -153,11 +247,14 @@ class Command(BaseCommand):
             boundaries_url, id_field="lad18cd", name_field="lad18nm"
         )
 
+        councils = self.pre_process_councils(councils)
+
         for council in councils:
             self.stdout.write(
                 "Getting contact info for %s from YourVoteMatters"
                 % (council.council_id)
             )
+
             info = self.get_contact_info_from_yvm(council.council_id)
             council.name = info["name"]
             council.website = info["website"]
@@ -165,6 +262,7 @@ class Command(BaseCommand):
             council.phone = info["phone"]
             council.address = info["address"]
             council.postcode = info["postcode"]
+
             self._save_council(council)
 
         self.stdout.write("..done")
