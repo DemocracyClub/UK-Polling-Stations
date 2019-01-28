@@ -1,5 +1,6 @@
 import abc
 
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
 from uk_geo_utils.helpers import Postcode
@@ -91,7 +92,7 @@ def geocode_point_only(postcode):
             # this might be because
             # - The postcode isn't in AddressBase
             # - The postcode is in Northern Ireland
-            # - AddressBase hasn;t been imported
+            # - AddressBase hasn't been imported
             # fall back to the next source
             continue
         except PostcodeError:
@@ -108,13 +109,26 @@ def geocode(postcode):
     geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
-            return geocoder.geocode()
+            gc = geocoder.geocode()
+
+            # Declare a new subclass of whatever type `gc` is on-the-fly
+            # this allows us to monkey-patch `get_code()` with a function that
+            # can translate old codes if our data source isn't up-to-date yet
+            class PatchedGeocoder(type(gc)):
+                def get_code(self, code_type, *args, **kwargs):
+                    code = super().get_code(code_type, *args, **kwargs)
+                    if code_type == "lad" and code in settings.OLD_TO_NEW_MAP:
+                        return settings.OLD_TO_NEW_MAP[code]
+                    return code
+
+            return PatchedGeocoder(postcode)
+
         except ObjectDoesNotExist:
             # we couldn't find this postcode in AddressBase
             # this might be because
             # - The postcode isn't in AddressBase
             # - The postcode is in Northern Ireland
-            # - AddressBase hasn;t been imported
+            # - AddressBase hasn't been imported
             # fall back to the next source
             continue
         except MultipleCouncilsException:

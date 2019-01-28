@@ -1,5 +1,5 @@
 import mock
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from data_finder.helpers.geocoders import (
     geocode,
     geocode_point_only,
@@ -79,6 +79,14 @@ class GeocodeTest(TestCase):
         """
         result = geocode("BB1 1BB")
         self.assertIsInstance(result, AddressBaseGeocoder)
+
+    @mock.patch(
+        "data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode
+    )
+    @override_settings(OLD_TO_NEW_MAP={"B01000001": "fake temp gss code"})
+    def test_manual_pverride(self):
+        result = geocode("BB1 1BB")
+        self.assertEqual(result.get_code("lad"), "fake temp gss code")
 
 
 class GeocodePointOnlyTest(TestCase):
