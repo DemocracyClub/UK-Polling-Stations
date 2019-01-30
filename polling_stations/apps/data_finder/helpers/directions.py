@@ -12,6 +12,16 @@ Directions = namedtuple(
 )
 
 
+def get_distance(start, end):
+    # convert the points to British National Grid first
+    # so that .distance() will give us a distance in meters
+    start_bng = start.transform(27700, clone=True)
+    end_bng = end.transform(27700, clone=True)
+
+    distance_km = start_bng.distance(end_bng) / 1000
+    return distance_km
+
+
 class DirectionsException(Exception):
     pass
 
@@ -40,8 +50,15 @@ class GoogleDirectionsClient(DirectionsClient):
         return resp.json()
 
     def get_route(self, start, end):
-        url = "{base_url}&mode=walking&origin={origin}&destination={destination}".format(
+        distance_km = get_distance(start, end)
+        if distance_km > 1.5:
+            transport_verb = {"base": "drive", "gerund": "driving"}
+        else:
+            transport_verb = {"base": "walk", "gerund": "walking"}
+
+        url = "{base_url}&mode={mode}&origin={origin}&destination={destination}".format(
             base_url=self.get_base_url(),
+            mode=transport_verb["gerund"],
             origin="{0},{1}".format(start.y, start.x),
             destination="{0},{1}".format(end.y, end.x),
         )
@@ -64,7 +81,12 @@ class GoogleDirectionsClient(DirectionsClient):
         )
 
         return Directions(
-            time, dist, "walk", json.dumps(route), self.precision, "Google"
+            time,
+            dist,
+            transport_verb["base"],
+            json.dumps(route),
+            self.precision,
+            "Google",
         )
 
 
