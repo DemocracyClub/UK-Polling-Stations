@@ -38,6 +38,11 @@ class LogLookUpMixin(object):
         else:
             brand = self.request.brand
 
+        if "has_election" in context:
+            has_election = context["has_election"]
+        else:
+            has_election = None
+
         kwargs = {
             "postcode": postcode.without_space,
             "had_data": bool(context["we_know_where_you_should_vote"]),
@@ -46,6 +51,7 @@ class LogLookUpMixin(object):
             "brand": brand,
             "language": language,
             "view_used": view_used,
+            "has_election": has_election,
         }
         if "api_user" in context:
             kwargs["api_user"] = context["api_user"]

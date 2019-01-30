@@ -114,7 +114,8 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         ret["polling_station"] = None
 
         ee = self.get_ee_wrapper(address)
-        if ee.has_election():
+        has_election = ee.has_election()
+        if has_election:
             # get polling station if there is an election in this area
             polling_station = PollingStation.objects.get_polling_station_by_id(
                 address.polling_station_id, address.council_id
@@ -138,6 +139,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         log_data["brand"] = "api"
         log_data["language"] = ""
         log_data["api_user"] = request.user
+        log_data["has_election"] = has_election
         if log:
             self.log_postcode(Postcode(address.postcode), log_data, "api")
 

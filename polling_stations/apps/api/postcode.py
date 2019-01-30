@@ -99,7 +99,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         ret["polling_station"] = None
 
         ee = self.get_ee_wrapper(postcode)
-        if ee.has_election():
+        has_election = ee.has_election()
+        if has_election:
             # get polling station if there is an election in this area
             ret["polling_station_known"] = False
             ret["polling_station"] = self.generate_polling_station(
@@ -130,6 +131,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         log_data["brand"] = "api"
         log_data["language"] = ""
         log_data["api_user"] = request.user
+        log_data["has_election"] = has_election
         if log:
             if not ret["addresses"]:
                 self.log_postcode(postcode, log_data, "api")
