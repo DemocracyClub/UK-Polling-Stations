@@ -13,7 +13,7 @@ class AddressSetTest(TestCase):
             {
                 "address": "foo",
                 "slug": "foo",
-                "postcode": "",
+                "postcode": "AA11AA",
                 "council": "",
                 "polling_station_id": "",
                 "uprn": "",
@@ -21,7 +21,7 @@ class AddressSetTest(TestCase):
             {
                 "address": "bar",
                 "slug": "bar",
-                "postcode": "",
+                "postcode": "AA11AA",
                 "council": "",
                 "polling_station_id": "",
                 "uprn": "",
@@ -29,7 +29,7 @@ class AddressSetTest(TestCase):
             {
                 "address": "foo",
                 "slug": "foo",
-                "postcode": "",
+                "postcode": "AA11AA",
                 "council": "",
                 "polling_station_id": "",
                 "uprn": "",
@@ -41,7 +41,7 @@ class AddressSetTest(TestCase):
                 Address(
                     address="foo",
                     slug="foo",
-                    postcode="",
+                    postcode="AA11AA",
                     council="",
                     polling_station_id="",
                     uprn="",
@@ -50,7 +50,7 @@ class AddressSetTest(TestCase):
                 Address(
                     address="bar",
                     slug="bar",
-                    postcode="",
+                    postcode="AA11AA",
                     council="",
                     polling_station_id="",
                     uprn="",

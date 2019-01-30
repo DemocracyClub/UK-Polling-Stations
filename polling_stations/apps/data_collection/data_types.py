@@ -5,7 +5,11 @@ Data type classes used by base importers
 import abc
 import logging
 from collections import namedtuple
+
 from django.db import connection
+from django.forms import ValidationError
+from localflavor.gb.forms import GBPostcodeField
+
 from data_collection.slugger import Slugger
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
@@ -50,6 +54,8 @@ Address = namedtuple(
         "location",
     ],
 )
+
+postcode_validator = GBPostcodeField()
 
 
 class CustomSet(metaclass=abc.ABCMeta):
@@ -146,8 +152,17 @@ class AddressSet(CustomSet):
 
     def add(self, address):
         if address["slug"] not in self.seen:
-            self.elements.add(self.build_namedtuple(address))
-            self.seen.add(address["slug"])
+            try:
+                postcode_validator.clean(address["postcode"])
+                self.elements.add(self.build_namedtuple(address))
+                self.seen.add(address["slug"])
+            except ValidationError:
+                self.logger.log_message(
+                    logging.INFO,
+                    "Discarding record with invalid postcode:\n%s",
+                    variable=address,
+                    pretty=True,
+                )
         else:
             self.logger.log_message(
                 logging.DEBUG,
