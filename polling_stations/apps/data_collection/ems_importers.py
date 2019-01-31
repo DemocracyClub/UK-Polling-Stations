@@ -82,6 +82,12 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         except PostcodeError:
             return None
 
+    def geocode_from_uprn(self, record):
+        uprn = getattr(record, self.station_uprn_field)
+        uprn = uprn.lstrip("0")
+        g = AddressBaseGeocoder(self.get_station_postcode(record))
+        return g.get_point(getattr(record, self.station_uprn_field))
+
     def get_station_point(self, record):
         location = None
 
@@ -110,10 +116,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         ):
             # if we have a UPRN, try that
             try:
-                uprn = getattr(record, self.station_uprn_field)
-                uprn = uprn.lstrip("0")
-                g = AddressBaseGeocoder(self.get_station_postcode(record))
-                location = g.get_point(getattr(record, self.station_uprn_field))
+                location = self.geocode_from_uprn(record)
                 self.logger.log_message(
                     logging.INFO,
                     "using UPRN for station %s",
