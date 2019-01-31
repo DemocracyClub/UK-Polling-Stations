@@ -15,6 +15,7 @@
 {% endif %}
 {% endblock top_banner %}
 
+
 {% block ga_tracking_code %}
 {% if not debug and not disable_ga %}
 <script type="text/javascript">
@@ -77,6 +78,13 @@
 </footer>
 {% endblock site_footer %}
 
+
 {% block extra_javascript %}
+{% if RAVEN_CONFIG %}
+  {% load raven %}
+  <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js"></script>
+  <script>Raven.config('{% sentry_public_dsn %}').install()</script>
+{% endif %}
+
 {% javascript 'scripts' %}
 {% endblock extra_javascript %}
