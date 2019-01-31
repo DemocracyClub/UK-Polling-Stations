@@ -31,6 +31,10 @@ This is the parent class for both of them.
 class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta):
     csv_delimiter = ","
 
+    # Set this to false in an import script if we want to only set a station
+    # point based on UPRN or co-ordinates (even if we've got a valid postcode)
+    allow_station_point_from_postcode = True
+
     @property
     @abc.abstractmethod
     def station_postcode_field(self):
@@ -73,6 +77,9 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         return getattr(record, self.station_postcode_field).strip()
 
     def geocode_from_postcode(self, record):
+        if not self.allow_station_point_from_postcode:
+            return None
+
         postcode = self.get_station_postcode(record)
         if not postcode:
             return None
