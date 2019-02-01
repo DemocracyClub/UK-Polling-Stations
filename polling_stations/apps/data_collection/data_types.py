@@ -140,9 +140,9 @@ class AddressList:
             )
             record["address_slug"] = address_slug
             if address_slug in address_lookup:
-                address_lookup[address_slug].append(record["polling_station_id"])
+                address_lookup[address_slug].add(record["polling_station_id"])
             else:
-                address_lookup[address_slug] = [record["polling_station_id"]]
+                address_lookup[address_slug] = set([record["polling_station_id"]])
 
         return address_lookup
 
