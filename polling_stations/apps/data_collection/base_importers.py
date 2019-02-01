@@ -17,7 +17,7 @@ from django.contrib.gis import geos
 from django.contrib.gis.geos import Point, GEOSGeometry, GEOSException
 
 from councils.models import Council
-from data_collection.data_types import AddressSet, DistrictSet, StationSet
+from data_collection.data_types import AddressList, DistrictSet, StationSet
 from data_collection.data_quality_report import (
     DataQualityReportBuilder,
     StationReport,
@@ -599,7 +599,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         slug = self.get_slug(address_info)
         address_info["slug"] = slug
 
-        self.addresses.add(address_info)
+        self.addresses.append(address_info)
 
 
 class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter):
@@ -635,7 +635,7 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
             pass
 
         self.stations = StationSet()
-        self.addresses = AddressSet(self.logger)
+        self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
         self.import_polling_stations()
         self.addresses.save(self.batch_size)

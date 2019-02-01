@@ -38,20 +38,6 @@ District = namedtuple(
 )
 
 
-Address = namedtuple(
-    "Address",
-    [
-        "address",
-        "postcode",
-        "council",
-        "polling_station_id",
-        "slug",
-        "uprn",
-        "location",
-    ],
-)
-
-
 class CustomSet(metaclass=abc.ABCMeta):
     def __init__(self):
         self.elements = set()
@@ -127,26 +113,15 @@ class DistrictSet(CustomSet):
         PollingDistrict.objects.bulk_create(districts_db)
 
 
-class AddressSet(CustomSet):
+class AddressList:
     def __init__(self, logger):
-        super().__init__()
+        self.elements = []
         self.seen = set()
         self.logger = logger
 
-    def build_namedtuple(self, element):
-        return Address(
-            element["address"],
-            element["postcode"],
-            element["council"],
-            element["polling_station_id"],
-            element["slug"],
-            element["uprn"],
-            element.get("location", None),
-        )
-
-    def add(self, address):
+    def append(self, address):
         if address["slug"] not in self.seen:
-            self.elements.add(self.build_namedtuple(address))
+            self.elements.append(address)
             self.seen.add(address["slug"])
         else:
             self.logger.log_message(
@@ -156,25 +131,14 @@ class AddressSet(CustomSet):
                 pretty=True,
             )
 
-    def _to_list(self, myset):
-        l = list(self.elements)
-        return [x._asdict() for x in l]
-
-    def _to_set(self, mylist):
-        s = set()
-        for el in mylist:
-            if el:
-                s.add(self.build_namedtuple(el))
-        return s
-
-    def get_address_lookup(self, addresses):
+    def get_address_lookup(self):
         # for each address, build a lookup of address -> list of station ids
         address_lookup = {}
-        for i, record in enumerate(addresses):
+        for record in self.elements:
             address_slug = Slugger.slugify(
                 "-".join([record["address"], record["postcode"]])
             )
-            addresses[i]["address_slug"] = address_slug
+            record["address_slug"] = address_slug
             if address_slug in address_lookup:
                 address_lookup[address_slug].append(record["polling_station_id"])
             else:
@@ -182,28 +146,22 @@ class AddressSet(CustomSet):
 
         return address_lookup
 
-    def get_ambiguous_postcodes(self, address_list, address_lookup):
+    def get_ambiguous_postcodes(self, address_lookup):
         # build a set of postcodes containing
         # an address that maps to >1 polling stations
         ambiguous_postcodes = set()
-        for record in address_list:
+        for record in self.elements:
             if len(address_lookup[record["address_slug"]]) != 1:
                 ambiguous_postcodes.add(record["postcode"])
 
         return ambiguous_postcodes
 
     def remove_ambiguous_addresses(self):
-        tmp_addresses = self._to_list(self.elements)
+        address_lookup = self.get_address_lookup()
+        ambiguous_postcodes = self.get_ambiguous_postcodes(address_lookup)
 
-        address_lookup = self.get_address_lookup(tmp_addresses)
-        ambiguous_postcodes = self.get_ambiguous_postcodes(
-            tmp_addresses, address_lookup
-        )
-
-        # discard all addresses with an ambiguous postcode
-        for i, record in enumerate(tmp_addresses):
+        def keep_record(record):
             if record["postcode"] in ambiguous_postcodes:
-                tmp_addresses[i] = None
                 if len(address_lookup[record["address_slug"]]) != 1:
                     # we discard it because the address itself is ambiguous
                     reason = address_lookup[record["address_slug"]]
@@ -217,22 +175,23 @@ class AddressSet(CustomSet):
                     "Ambiguous addresses discarded: %s: %s",
                     variable=(record["address_slug"], reason),
                 )
+                return False
+            return True
 
-        return self._to_set(tmp_addresses)
+        if not ambiguous_postcodes:
+            return
+
+        # if we found any postcodes
+        # remove all records matching any of these postcodes
+        self.elements = [e for e in self.elements if keep_record(e)]
 
     def attach_doorstep_gridrefs(self, addressbase_data):
-        tmp_addresses = self._to_list(self.elements)
-
-        for record in tmp_addresses:
+        for record in self.elements:
             if record["uprn"] in addressbase_data:
                 record["location"] = addressbase_data[record["uprn"]]["location"]
 
-        return self._to_set(tmp_addresses)
-
     def remove_invalid_uprns(self, addressbase_data):
-        tmp_addresses = self._to_list(self.elements)
-
-        for record in tmp_addresses:
+        for record in self.elements:
 
             # if the UPRN attached to the input record isn't present
             # in the data we fetched from AddressBase, discard the UPRN
@@ -256,11 +215,6 @@ class AddressSet(CustomSet):
                     variable=(record, addressbase_data[record["uprn"]]),
                 )
                 record["uprn"] = ""
-
-            # TODO: for future, look at levenshtein distance between
-            # input address and result from addressbase?
-
-        return self._to_set(tmp_addresses)
 
     def get_uprns_from_addressbase(self):
         # get all the UPRNs in target local auth
@@ -310,9 +264,9 @@ class AddressSet(CustomSet):
         """
         query_postcodes = set(
             [
-                Postcode(record.postcode).with_space
+                Postcode(record["postcode"]).with_space
                 for record in self.elements
-                if not record.uprn
+                if not record["uprn"]
             ]
         )
         db_postcodes = Onspd.objects.filter(pcds__in=query_postcodes, doterm="").only(
@@ -326,48 +280,48 @@ class AddressSet(CustomSet):
             ]
         )
 
-        if not bad_postcodes:
-            return self.elements
-
-        # if we found any postcodes,
-        # remove all records matching any of these postcodes
-        tmp_addresses = self._to_list(self.elements)
-        for i, record in enumerate(tmp_addresses):
+        def keep_record(record):
             if record["postcode"] in bad_postcodes:
-                tmp_addresses[i] = None
-
                 self.logger.log_message(
                     logging.INFO,
                     "Discarding record: Postcode centroid is outside target local authority:\n%s",
                     variable=record,
                     pretty=True,
                 )
-        return self._to_set(tmp_addresses)
+                return False
+            return True
+
+        if not bad_postcodes:
+            return
+
+        # if we found any postcodes,
+        # remove all records matching any of these postcodes
+        self.elements = [e for e in self.elements if keep_record(e)]
 
     @property
     def council_id(self):
         for e in self.elements:
-            return e.council.council_id
+            return e["council"].council_id
 
     def save(self, batch_size):
 
-        self.elements = self.remove_ambiguous_addresses()
+        self.remove_ambiguous_addresses()
         addressbase_data = self.get_uprns_from_addressbase()
-        self.elements = self.remove_invalid_uprns(addressbase_data)
-        self.elements = self.attach_doorstep_gridrefs(addressbase_data)
-        self.elements = self.remove_addresses_outside_target_auth()
+        self.remove_invalid_uprns(addressbase_data)
+        self.attach_doorstep_gridrefs(addressbase_data)
+        self.remove_addresses_outside_target_auth()
+
 
         addresses_db = []
-
         for address in self.elements:
             record = ResidentialAddress(
-                address=address.address,
-                postcode=address.postcode,
-                polling_station_id=address.polling_station_id,
-                council=address.council,
-                slug=address.slug,
-                uprn=address.uprn,
-                location=address.location,
+                address=address["address"],
+                postcode=address["postcode"],
+                polling_station_id=address["polling_station_id"],
+                council=address["council"],
+                slug=address["slug"],
+                uprn=address["uprn"],
+                location=address.get("location", None),
             )
             addresses_db.append(record)
 
