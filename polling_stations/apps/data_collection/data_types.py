@@ -192,6 +192,12 @@ class AddressList:
         self.remove_ambiguous_addresses(address_lookup, "address_slug")
 
     def remove_ambiguous_addresses_by_uprn(self):
+        """
+        Note this function assumes that UPRNs and postcodes match
+        this means we either need to ensure this function is called
+        _after_ remove_invalid_uprns() (which is what we're doing now)
+        or we'd need to switch it to index the dict on (UPRN, Postcode)
+        """
         uprn_lookup = self.get_uprn_lookup()
         self.remove_ambiguous_addresses(uprn_lookup, "uprn")
 
