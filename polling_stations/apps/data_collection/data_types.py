@@ -120,6 +120,21 @@ class AddressList:
         self.logger = logger
 
     def append(self, address):
+
+        if (
+            not address["address"]
+            or not address["postcode"]
+            or not address["council"]
+            or not address["slug"]
+        ):
+            self.logger.log_message(
+                logging.DEBUG,
+                "Record with empty required fields found:\n%s",
+                variable=address,
+                pretty=True,
+            )
+            return
+
         if address["slug"] not in self.seen:
             self.elements.append(address)
             self.seen.add(address["slug"])
