@@ -190,6 +190,9 @@ class AddressList:
     def remove_ambiguous_addresses_by_address(self):
         address_lookup = self.get_address_lookup()
         self.remove_ambiguous_addresses(address_lookup, "address_slug")
+        # cleanup
+        for el in self.elements:
+            el.pop("address_slug")
 
     def remove_ambiguous_addresses_by_uprn(self):
         """
