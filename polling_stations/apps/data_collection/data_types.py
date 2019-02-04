@@ -189,44 +189,20 @@ class AddressList:
 
     def remove_ambiguous_addresses_by_address(self):
         address_lookup = self.get_address_lookup()
-        ambiguous_postcodes = self.get_ambiguous_postcodes(
-            address_lookup, "address_slug"
-        )
-
-        def keep_record(record):
-            if record["postcode"] in ambiguous_postcodes:
-                if len(address_lookup[record["address_slug"]]) != 1:
-                    # we discard it because the address itself is ambiguous
-                    reason = address_lookup[record["address_slug"]]
-                else:
-                    # we've discarded it because it has the same postcode
-                    # as some other addresses we have discarded
-                    reason = record["postcode"]
-
-                self.logger.log_message(
-                    logging.INFO,
-                    "Ambiguous addresses discarded: %s: %s",
-                    variable=(record["address_slug"], reason),
-                )
-                return False
-            return True
-
-        if not ambiguous_postcodes:
-            return
-
-        # if we found any postcodes
-        # remove all records matching any of these postcodes
-        self.elements = [e for e in self.elements if keep_record(e)]
+        self.remove_ambiguous_addresses(address_lookup, "address_slug")
 
     def remove_ambiguous_addresses_by_uprn(self):
         uprn_lookup = self.get_uprn_lookup()
-        ambiguous_postcodes = self.get_ambiguous_postcodes(uprn_lookup, "uprn")
+        self.remove_ambiguous_addresses(uprn_lookup, "uprn")
+
+    def remove_ambiguous_addresses(self, lookup, key):
+        ambiguous_postcodes = self.get_ambiguous_postcodes(lookup, key)
 
         def keep_record(record):
             if record["postcode"] in ambiguous_postcodes:
-                if record["uprn"] and len(uprn_lookup[record["uprn"]]) != 1:
-                    # we discard it because the uprn itself is ambiguous
-                    reason = uprn_lookup[record["uprn"]]
+                if record[key] and len(lookup[record[key]]) != 1:
+                    # we discard it because the key itself is ambiguous
+                    reason = lookup[record[key]]
                 else:
                     # we've discarded it because it has the same postcode
                     # as some other addresses we have discarded
@@ -235,7 +211,7 @@ class AddressList:
                 self.logger.log_message(
                     logging.INFO,
                     "Ambiguous addresses discarded: %s: %s",
-                    variable=(record["address_slug"], reason),
+                    variable=(record[key], reason),
                 )
                 return False
             return True
@@ -373,7 +349,6 @@ class AddressList:
         self.attach_doorstep_gridrefs(addressbase_data)
         self.remove_addresses_outside_target_auth()
         self.remove_ambiguous_addresses_by_uprn()
-
 
         addresses_db = []
         for address in self.elements:
