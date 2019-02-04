@@ -1,5 +1,6 @@
-from data_collection.data_types import Address, AddressSet
+from copy import deepcopy
 from django.test import TestCase
+from data_collection.data_types import AddressList
 
 
 class MockLogger:
@@ -7,63 +8,59 @@ class MockLogger:
         pass
 
 
-class AddressSetTest(TestCase):
+class AddressListTest(TestCase):
     def test_add_with_duplicates(self):
         in_list = [
             {
                 "address": "foo",
                 "slug": "foo",
-                "postcode": "",
-                "council": "",
-                "polling_station_id": "",
+                "postcode": "AA11AA",
+                "council": "X01000001",
+                "polling_station_id": "01",
                 "uprn": "",
             },
             {
                 "address": "bar",
                 "slug": "bar",
-                "postcode": "",
-                "council": "",
-                "polling_station_id": "",
+                "postcode": "AA11AA",
+                "council": "X01000001",
+                "polling_station_id": "01",
                 "uprn": "",
             },
             {
                 "address": "foo",
                 "slug": "foo",
-                "postcode": "",
-                "council": "",
-                "polling_station_id": "",
+                "postcode": "AA11AA",
+                "council": "X01000001",
+                "polling_station_id": "01",
                 "uprn": "",
             },
         ]
 
-        expected = set(
-            [
-                Address(
-                    address="foo",
-                    slug="foo",
-                    postcode="",
-                    council="",
-                    polling_station_id="",
-                    uprn="",
-                    location=None,
-                ),
-                Address(
-                    address="bar",
-                    slug="bar",
-                    postcode="",
-                    council="",
-                    polling_station_id="",
-                    uprn="",
-                    location=None,
-                ),
-            ]
-        )
+        expected = [
+            {
+                "address": "foo",
+                "slug": "foo",
+                "postcode": "AA11AA",
+                "council": "X01000001",
+                "polling_station_id": "01",
+                "uprn": "",
+            },
+            {
+                "address": "bar",
+                "slug": "bar",
+                "postcode": "AA11AA",
+                "council": "X01000001",
+                "polling_station_id": "01",
+                "uprn": "",
+            },
+        ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
+            address_list.append(el)
 
-        self.assertEqual(expected, address_set.elements)
+        self.assertEqual(expected, address_list.elements)
 
     def test_remove_ambiguous_addresses_exactmatch(self):
         in_list = [
@@ -71,7 +68,7 @@ class AddressSetTest(TestCase):
                 "address": "Haringey Park, London",
                 "postcode": "N89JG",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "haringey-park-london-n89jg-aa",
                 "uprn": "",
             },
@@ -79,7 +76,7 @@ class AddressSetTest(TestCase):
                 "address": "Haringey Park, London",
                 "postcode": "N89JG",
                 "polling_station_id": "AB",
-                "council": "",
+                "council": "X01000001",
                 "slug": "haringey-park-london-n89jg-ab",
                 "uprn": "",
             },
@@ -87,18 +84,18 @@ class AddressSetTest(TestCase):
                 "address": "Haringey Park, London",
                 "postcode": "N89JG",
                 "polling_station_id": "AC",
-                "council": "",
+                "council": "X01000001",
                 "slug": "haringey-park-london-n89jg-ac",
                 "uprn": "",
             },
         ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
-        result = address_set.remove_ambiguous_addresses()
+            address_list.append(el)
+        address_list.remove_ambiguous_addresses_by_address()
 
-        self.assertEqual(set(), result)
+        self.assertEqual([], address_list.elements)
 
     def test_remove_ambiguous_addresses_fuzzymatch(self):
         """
@@ -118,7 +115,7 @@ class AddressSetTest(TestCase):
                 "address": "5-6 Mickleton Dr, Southport",
                 "postcode": "PR82QX",
                 "polling_station_id": "A01",
-                "council": "",
+                "council": "X01000001",
                 "slug": "a",
                 "uprn": "",
             },
@@ -126,7 +123,7 @@ class AddressSetTest(TestCase):
                 "address": "5/6, Mickleton Dr.  Southport",
                 "postcode": "PR82QX",
                 "polling_station_id": "A02",
-                "council": "",
+                "council": "X01000001",
                 "slug": "b",
                 "uprn": "",
             },
@@ -134,7 +131,7 @@ class AddressSetTest(TestCase):
                 "address": "5-6 mickleton dr southport",
                 "postcode": "PR82QX",
                 "polling_station_id": "A03",
-                "council": "",
+                "council": "X01000001",
                 "slug": "c",
                 "uprn": "",
             },
@@ -142,7 +139,7 @@ class AddressSetTest(TestCase):
                 "address": "56 Mickleton Dr, Southport",
                 "postcode": "PR82QX",
                 "polling_station_id": "A04",
-                "council": "",
+                "council": "X01000001",
                 "slug": "d",
                 "uprn": "",
             },
@@ -150,7 +147,7 @@ class AddressSetTest(TestCase):
                 "address": "5-6 Mickleton Dr, Southport",
                 "postcode": "BT281QZ",
                 "polling_station_id": "A05",
-                "council": "",
+                "council": "X01000001",
                 "slug": "e",
                 "uprn": "",
             },
@@ -158,41 +155,37 @@ class AddressSetTest(TestCase):
                 "address": "56 Mickleton Dr, Southport",
                 "postcode": "BT281QZ",
                 "polling_station_id": "A04",
-                "council": "",
+                "council": "X01000001",
                 "slug": "f",
                 "uprn": "",
             },
         ]
 
-        expected = set(
-            [
-                Address(
-                    address="5-6 Mickleton Dr, Southport",
-                    postcode="BT281QZ",
-                    polling_station_id="A05",
-                    council="",
-                    slug="e",
-                    uprn="",
-                    location=None,
-                ),
-                Address(
-                    address="56 Mickleton Dr, Southport",
-                    postcode="BT281QZ",
-                    polling_station_id="A04",
-                    council="",
-                    slug="f",
-                    uprn="",
-                    location=None,
-                ),
-            ]
-        )
+        expected = [
+            {
+                "address": "5-6 Mickleton Dr, Southport",
+                "postcode": "BT281QZ",
+                "polling_station_id": "A05",
+                "council": "X01000001",
+                "slug": "e",
+                "uprn": "",
+            },
+            {
+                "address": "56 Mickleton Dr, Southport",
+                "postcode": "BT281QZ",
+                "polling_station_id": "A04",
+                "council": "X01000001",
+                "slug": "f",
+                "uprn": "",
+            },
+        ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
-        result = address_set.remove_ambiguous_addresses()
+            address_list.append(el)
+        address_list.remove_ambiguous_addresses_by_address()
 
-        self.assertEqual(expected, result)
+        self.assertEqual(expected, address_list.elements)
 
     def test_remove_ambiguous_addresses_some_stations_match(self):
         # if one polling station doesn't match, we should remove all of them
@@ -201,7 +194,7 @@ class AddressSetTest(TestCase):
                 "address": "Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "a",
                 "uprn": "",
             },
@@ -209,7 +202,7 @@ class AddressSetTest(TestCase):
                 "address": "Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "b",
                 "uprn": "",
             },
@@ -217,7 +210,7 @@ class AddressSetTest(TestCase):
                 "address": "Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AB",
-                "council": "",
+                "council": "X01000001",
                 "slug": "c",
                 "uprn": "",
             },
@@ -225,18 +218,19 @@ class AddressSetTest(TestCase):
                 "address": "Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "d",
                 "uprn": "",
             },
         ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
-        result = address_set.remove_ambiguous_addresses()
+            address_list.append(el)
 
-        self.assertEqual(set(), result)
+        self.assertEqual(4, len(address_list.elements))
+        address_list.remove_ambiguous_addresses_by_address()
+        self.assertEqual([], address_list.elements)
 
     def test_remove_ambiguous_addresses_whole_postcode(self):
         # if we've got one ambiguous address,
@@ -246,7 +240,7 @@ class AddressSetTest(TestCase):
                 "address": "1 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "a",
                 "uprn": "",
             },
@@ -254,7 +248,7 @@ class AddressSetTest(TestCase):
                 "address": "2 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "b",
                 "uprn": "",
             },
@@ -262,7 +256,7 @@ class AddressSetTest(TestCase):
                 "address": "3 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AB",
-                "council": "",
+                "council": "X01000001",
                 "slug": "c",
                 "uprn": "",
             },
@@ -270,18 +264,19 @@ class AddressSetTest(TestCase):
                 "address": "3 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "d",
                 "uprn": "",
             },
         ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
-        result = address_set.remove_ambiguous_addresses()
+            address_list.append(el)
 
-        self.assertEqual(set(), result)
+        self.assertEqual(4, len(address_list.elements))
+        address_list.remove_ambiguous_addresses_by_address()
+        self.assertEqual([], address_list.elements)
 
     def test_remove_ambiguous_addresses_no_issues(self):
         # if there are no ambiguous addresses,
@@ -292,7 +287,7 @@ class AddressSetTest(TestCase):
                 "address": "1 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "a",
                 "uprn": "",
             },
@@ -300,7 +295,7 @@ class AddressSetTest(TestCase):
                 "address": "2 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "b",
                 "uprn": "",
             },
@@ -308,7 +303,7 @@ class AddressSetTest(TestCase):
                 "address": "3 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AB",
-                "council": "",
+                "council": "X01000001",
                 "slug": "c",
                 "uprn": "",
             },
@@ -316,19 +311,19 @@ class AddressSetTest(TestCase):
                 "address": "4 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "d",
                 "uprn": "",
             },
         ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
-        expected = set(address_set.elements)
-        result = address_set.remove_ambiguous_addresses()
+            address_list.append(el)
 
-        self.assertEqual(expected, result)
+        expected = deepcopy(address_list.elements)
+        address_list.remove_ambiguous_addresses_by_address()
+        self.assertEqual(expected, address_list.elements)
 
     def test_attach_doorstep_grid_refs(self):
         in_list = [
@@ -336,7 +331,7 @@ class AddressSetTest(TestCase):
                 "address": "1 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "a",
                 "uprn": "00001",
             },
@@ -344,29 +339,31 @@ class AddressSetTest(TestCase):
                 "address": "4 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "d",
                 "uprn": "00004",
             },
         ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
+            address_list.append(el)
 
         addressbase = {
             # 00001 is in here but 00004 isn't
             "00001": {"location": "SRID=4326;POINT(-0.9288492 53.3119342)"}
         }
 
-        address_set.elements = address_set.attach_doorstep_gridrefs(addressbase)
+        address_list.attach_doorstep_gridrefs(addressbase)
 
-        self.assertEqual(2, len(address_set.elements))
-        for el in address_set.elements:
-            if el.uprn == "00001":
-                self.assertEqual("SRID=4326;POINT(-0.9288492 53.3119342)", el.location)
-            if el.uprn == "00004":
-                self.assertEqual(None, el.location)
+        self.assertEqual(2, len(address_list.elements))
+        for el in address_list.elements:
+            if el["uprn"] == "00001":
+                self.assertEqual(
+                    "SRID=4326;POINT(-0.9288492 53.3119342)", el["location"]
+                )
+            if el["uprn"] == "00004":
+                self.assertEqual(None, el.get("location", None))
 
     def test_remove_invalid_uprns(self):
         in_list = [
@@ -374,7 +371,7 @@ class AddressSetTest(TestCase):
                 "address": "1 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "a",
                 "uprn": "00001",
             },
@@ -382,7 +379,7 @@ class AddressSetTest(TestCase):
                 "address": "2 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "b",
                 "uprn": "00002",
             },
@@ -390,7 +387,7 @@ class AddressSetTest(TestCase):
                 "address": "3 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AB",
-                "council": "",
+                "council": "X01000001",
                 "slug": "c",
                 "uprn": "00003",
             },
@@ -398,15 +395,15 @@ class AddressSetTest(TestCase):
                 "address": "4 Abbeyvale Dr, Liverpool",
                 "postcode": "L252NW",
                 "polling_station_id": "AA",
-                "council": "",
+                "council": "X01000001",
                 "slug": "d",
                 "uprn": "00004",
             },
         ]
 
-        address_set = AddressSet(MockLogger())
+        address_list = AddressList(MockLogger())
         for el in in_list:
-            address_set.add(el)
+            address_list.append(el)
 
         addressbase = {
             "00001": {
@@ -427,10 +424,10 @@ class AddressSetTest(TestCase):
             # 00004 is not in here
         }
 
-        address_set.elements = address_set.remove_invalid_uprns(addressbase)
+        address_list.remove_invalid_uprns(addressbase)
 
         # 00003 and 00004 should still be in the set
-        self.assertEqual(4, len(address_set.elements))
+        self.assertEqual(4, len(address_list.elements))
         # but those records should now have a blank uprn
-        for el in address_set.elements:
-            assert el.uprn in ["00001", "00002", ""]
+        for el in address_list.elements:
+            assert el["uprn"] in ["00001", "00002", ""]
