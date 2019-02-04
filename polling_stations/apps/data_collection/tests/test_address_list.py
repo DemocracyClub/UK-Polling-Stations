@@ -62,7 +62,7 @@ class AddressListTest(TestCase):
 
         self.assertEqual(expected, address_list.elements)
 
-    def test_remove_ambiguous_addresses_exactmatch(self):
+    def test_remove_ambiguous_addresses_by_address_exactmatch(self):
         in_list = [
             {
                 "address": "Haringey Park, London",
@@ -97,7 +97,98 @@ class AddressListTest(TestCase):
 
         self.assertEqual([], address_list.elements)
 
-    def test_remove_ambiguous_addresses_fuzzymatch(self):
+    def test_remove_ambiguous_addresses_by_uprn_nomatches(self):
+        in_list = [
+            {
+                "address": "1 Haringey Park, London",
+                "postcode": "N89JG",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "1-haringey-park-london-n89jg-aa",
+                "uprn": "1001",
+            },
+            {
+                "address": "2 Haringey Park, London",
+                "postcode": "N89JG",
+                "polling_station_id": "AB",
+                "council": "X01000001",
+                "slug": "2-haringey-park-london-n89jg-ab",
+                "uprn": "1002",
+            },
+            {
+                "address": "3 Haringey Park, London",
+                "postcode": "N89JG",
+                "polling_station_id": "AB",
+                "council": "X01000001",
+                "slug": "3-haringey-park-london-n89jg-ab",
+                "uprn": "1003",
+            },
+        ]
+
+        # Everything has a unique UPRN
+        # so we shouldn't remove anything
+        expected = in_list
+
+        address_list = AddressList(MockLogger())
+        for el in in_list:
+            address_list.append(el)
+        address_list.remove_ambiguous_addresses_by_uprn()
+
+        self.assertEqual(expected, address_list.elements)
+
+    def test_remove_ambiguous_addresses_by_uprn_withmatches(self):
+        in_list = [
+            {
+                "address": "1 Haringey Park, London",
+                "postcode": "N89JG",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "1-haringey-park-london-n89jg-aa",
+                "uprn": "1001",
+            },
+            {
+                "address": "2 Haringey Park, London",
+                "postcode": "N89JG",
+                "polling_station_id": "AB",
+                "council": "X01000001",
+                "slug": "2-haringey-park-london-n89jg-ab",
+                "uprn": "1001",
+            },
+            {
+                "address": "3 Haringey Park, London",
+                "postcode": "N89JG",
+                "polling_station_id": "AB",
+                "council": "X01000001",
+                "slug": "3-haringey-park-london-n89jg-ab",
+                "uprn": "1003",
+            },
+            {
+                "address": "4 Haringey Park, London",
+                "postcode": "N89JH",
+                "polling_station_id": "AC",
+                "council": "X01000001",
+                "slug": "4-haringey-park-london-n89jh-ac",
+                "uprn": "1004",
+            },
+        ]
+
+        """
+        1 Haringey Park, London and
+        2 Haringey Park, London
+        both have the same UPRN (1001) but they map to different stations
+        so we should remove all the N89JG addresses, leaving only
+        4 Haringey Park, London
+        """
+        expected = [in_list[3]]
+
+        address_list = AddressList(MockLogger())
+        for el in in_list:
+            address_list.append(el)
+        address_list.remove_ambiguous_addresses_by_uprn()
+
+        self.assertEqual(expected, address_list.elements)
+
+    def test_remove_ambiguous_addresses_by_address_fuzzymatch(self):
         """
         The addresses:
         - 5-6 Mickleton Dr, Southport, PR82QX
@@ -187,7 +278,7 @@ class AddressListTest(TestCase):
 
         self.assertEqual(expected, address_list.elements)
 
-    def test_remove_ambiguous_addresses_some_stations_match(self):
+    def test_remove_ambiguous_addresses_by_address_some_stations_match(self):
         # if one polling station doesn't match, we should remove all of them
         in_list = [
             {
@@ -232,7 +323,7 @@ class AddressListTest(TestCase):
         address_list.remove_ambiguous_addresses_by_address()
         self.assertEqual([], address_list.elements)
 
-    def test_remove_ambiguous_addresses_whole_postcode(self):
+    def test_remove_ambiguous_addresses_by_address_whole_postcode(self):
         # if we've got one ambiguous address,
         # we should remove all addresse with the same postcode
         in_list = [
@@ -278,7 +369,7 @@ class AddressListTest(TestCase):
         address_list.remove_ambiguous_addresses_by_address()
         self.assertEqual([], address_list.elements)
 
-    def test_remove_ambiguous_addresses_no_issues(self):
+    def test_remove_ambiguous_addresses_by_address_no_issues(self):
         # if there are no ambiguous addresses,
         # we shouldn't do anything
 
