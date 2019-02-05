@@ -5,6 +5,7 @@ class LoggerRouter(object):
         "auth",
         "authtoken",
         "bug_reports",
+        "contenttypes",
         "data_finder",
         "feedback",
     ]
