@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_gis",
+    "raven.contrib.django.raven_compat",
     "django_extensions",
     "markdown_deux",
     "corsheaders",

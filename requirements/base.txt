@@ -12,6 +12,7 @@ fastkml==0.11
 lxml==4.3.0
 psycopg2-binary==2.7.7
 pyshp==2.0.1
+raven==6.10.0
 requests==2.21.0
 retry==0.9.2
 boto==2.49.0

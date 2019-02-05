@@ -6,4 +6,7 @@ def google_analytics(request):
 
 
 def global_settings(request):
-    return {"SERVER_ENVIRONMENT": getattr(settings, "SERVER_ENVIRONMENT", None)}
+    return {
+        "RAVEN_CONFIG": getattr(settings, "RAVEN_CONFIG", None),
+        "SERVER_ENVIRONMENT": getattr(settings, "SERVER_ENVIRONMENT", None),
+    }
