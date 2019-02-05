@@ -366,6 +366,26 @@ class AddressList:
         for e in self.elements:
             return e["council"].council_id
 
+    def report_duplicate_uprns(self):
+        uprn_counts = {}
+
+        for e in self.elements:
+            if not e["uprn"]:
+                continue
+            if e["uprn"] in uprn_counts:
+                uprn_counts[e["uprn"]] += 1
+            else:
+                uprn_counts[e["uprn"]] = 1
+
+        for uprn, count in uprn_counts.items():
+            if count > 1:
+                self.logger.log_message(
+                    logging.INFO,
+                    "Found duplicate UPRN {uprn} in Residential Addresses ({count} occurrences)".format(
+                        uprn=uprn, count=count
+                    ),
+                )
+
     def save(self, batch_size):
 
         self.remove_ambiguous_addresses_by_address()
@@ -374,6 +394,7 @@ class AddressList:
         self.attach_doorstep_gridrefs(addressbase_data)
         self.remove_addresses_outside_target_auth()
         self.remove_ambiguous_addresses_by_uprn()
+        self.report_duplicate_uprns()
 
         addresses_db = []
         for address in self.elements:
