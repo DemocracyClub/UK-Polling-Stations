@@ -7,13 +7,14 @@ import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
+from addressbase.models import Address
 from data_collection.addresshelpers import (
     format_residential_address,
     format_polling_station_address,
 )
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
-from uk_geo_utils.geocoders import AddressBaseGeocoder, AddressBaseException
+from uk_geo_utils.helpers import Postcode
 
 
 """
@@ -30,6 +31,10 @@ This is the parent class for both of them.
 
 class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta):
     csv_delimiter = ","
+
+    # Set this to false in an import script if we want to only set a station
+    # point based on UPRN or co-ordinates (even if we've got a valid postcode)
+    allow_station_point_from_postcode = True
 
     @property
     @abc.abstractmethod
@@ -73,6 +78,9 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         return getattr(record, self.station_postcode_field).strip()
 
     def geocode_from_postcode(self, record):
+        if not self.allow_station_point_from_postcode:
+            return None
+
         postcode = self.get_station_postcode(record)
         if not postcode:
             return None
@@ -81,6 +89,24 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
             return location_data.centroid
         except PostcodeError:
             return None
+
+    def geocode_from_uprn(self, record):
+        uprn = getattr(record, self.station_uprn_field)
+        uprn = uprn.lstrip("0")
+        ab_rec = Address.objects.get(uprn=uprn)
+        ab_postcode = Postcode(ab_rec.postcode)
+        station_postcode = Postcode(self.get_station_postcode(record))
+        if ab_postcode != station_postcode:
+            self.logger.log_message(
+                logging.WARNING,
+                "Using UPRN {uprn} for station ID {station_id}, but '{pc1}' != '{pc2}'".format(
+                    uprn=uprn,
+                    station_id=getattr(record, self.station_id_field),
+                    pc1=ab_postcode.with_space,
+                    pc2=station_postcode.with_space,
+                ),
+            )
+        return ab_rec.location
 
     def get_station_point(self, record):
         location = None
@@ -110,16 +136,13 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         ):
             # if we have a UPRN, try that
             try:
-                uprn = getattr(record, self.station_uprn_field)
-                uprn = uprn.lstrip("0")
-                g = AddressBaseGeocoder(self.get_station_postcode(record))
-                location = g.get_point(getattr(record, self.station_uprn_field))
+                location = self.geocode_from_uprn(record)
                 self.logger.log_message(
                     logging.INFO,
                     "using UPRN for station %s",
                     getattr(record, self.station_id_field),
                 )
-            except (ObjectDoesNotExist, AddressBaseException):
+            except (ObjectDoesNotExist):
                 # if that fails, fall back to postcode
                 location = self.geocode_from_postcode(record)
                 self.logger.log_message(
