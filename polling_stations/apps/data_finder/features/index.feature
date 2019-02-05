@@ -10,7 +10,7 @@ Feature: Check Postcodes
     Then I submit the only form
     Then The browser's URL should contain "/address/4/"
     And I should see "Your polling station"
-    And I should see "Walking directions"
+    And I should see "Walking/driving directions"
     And No errors were thrown
 
     Scenario: Check postcode with address picker invalid station id
@@ -34,7 +34,7 @@ Feature: Check Postcodes
     Then I submit the only form
     Then The browser's URL should contain "/postcode/NP205GN/"
     And I should see "Your polling station"
-    And I should see "Walking directions"
+    And I should see "Walking/driving directions"
     And No errors were thrown
 
     Scenario: Check my address not in list

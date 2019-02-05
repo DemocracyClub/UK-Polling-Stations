@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
     method: GET
-    uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=walking&origin=51.13333333333333,-3.8333333333333335&destination=51.595814835763214,-2.995147704661227
+    uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=driving&origin=51.13333333333333,-3.8333333333333335&destination=51.595814835763214,-2.995147704661227
   response:
     body:
       string: !!binary |
