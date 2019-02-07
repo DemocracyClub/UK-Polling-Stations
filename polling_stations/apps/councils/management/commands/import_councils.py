@@ -30,7 +30,7 @@ TEMP_CONTACT_DETAILS = {
         "name": "Bournemouth, Christchurch & Poole Council",
         "website": "",
         "email": "",
-        "phone": "",
+        "phone": "01202 633097",
         "address": "",
         "postcode": "",
     },
