@@ -4,7 +4,7 @@ django-basicauth==0.5.1
 django-extensions==2.1.5
 django-localflavor==2.1
 django-markdown-deux==1.0.5
-django==1.11.18  # pyup: >=1.11,<2.0
+django==1.11.19  # pyup: >=1.11,<2.0
 djangorestframework==3.9.1
 djangorestframework-gis==0.14
 django-cors-headers==2.4.0
