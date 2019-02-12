@@ -6,7 +6,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E07000116"
-    elections = ["local.2018-05-03"]
+    elections = ["local.2019-05-02"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-TunbridgeWells"
     geom_type = "geojson"
 
