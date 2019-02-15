@@ -109,7 +109,7 @@ class PollingStation(models.Model):
     def formatted_address(self):
         if not self.address:
             return None
-        return "\n".join([x[0] for x in groupby(self.address.split(","))])
+        return "\n".join([x[0].strip() for x in groupby(self.address.split(","))])
 
 
 class ResidentialAddress(models.Model):
