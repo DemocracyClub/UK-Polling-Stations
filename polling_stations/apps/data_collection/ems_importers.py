@@ -70,7 +70,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
 
     def get_station_address(self, record):
         address = format_polling_station_address(
-            [getattr(record, field) for field in self.station_address_fields]
+            [getattr(record, field).strip() for field in self.station_address_fields]
         )
         return address
 
