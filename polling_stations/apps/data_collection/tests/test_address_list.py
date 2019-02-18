@@ -456,7 +456,7 @@ class AddressListTest(TestCase):
             if el["uprn"] == "00004":
                 self.assertEqual(None, el.get("location", None))
 
-    def test_remove_invalid_uprns(self):
+    def test_remove_invalid_uprns_autofix_postcode(self):
         in_list = [
             {
                 "address": "1 Abbeyvale Dr, Liverpool",
@@ -476,7 +476,65 @@ class AddressListTest(TestCase):
             },
             {
                 "address": "3 Abbeyvale Dr, Liverpool",
+                "postcode": "L252XX",
+                "polling_station_id": "AB",
+                "council": "X01000001",
+                "slug": "c",
+                "uprn": "00003",
+            },
+        ]
+
+        address_list = AddressList(MockLogger())
+        for el in in_list:
+            address_list.append(el)
+
+        addressbase = {
+            "00001": {
                 "postcode": "L252NW",
+                "address": "1 Abbeyvale Dr, Liverpool",
+                "location": "SRID=4326;POINT(-0.9288492 53.3119342)",
+            },
+            "00002": {
+                "postcode": "L252NW",
+                "address": "2 Abbeyvale Dr, Liverpool",
+                "location": "SRID=4326;POINT(-0.9288480 53.3119345)",
+            },
+            "00003": {
+                "postcode": "L252NW",  # this postcode doesn't match with the input record
+                "address": "3 Abbeyvale Dr, Liverpool",
+                "location": "SRID=4326;POINT(-0.9288400 53.3119332)",
+            },
+        }
+
+        address_list.handle_invalid_uprns(addressbase)
+
+        # all the records should still be in the set
+        self.assertEqual(3, len(address_list.elements))
+        # We should have auto-corrected L252XX to L252NW
+        for el in address_list.elements:
+            self.assertEqual(el["postcode"], "L252NW")
+
+    def test_remove_invalid_uprns_remove_uprn(self):
+        in_list = [
+            {
+                "address": "1 Abbeyvale Dr, Liverpool",
+                "postcode": "L252NW",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "a",
+                "uprn": "00001",
+            },
+            {
+                "address": "2 Abbeyvale Dr, Liverpool",
+                "postcode": "L252NW",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "b",
+                "uprn": "00002",
+            },
+            {
+                "address": "3 Abbeyvale Street, Liverpool",
+                "postcode": "L252XX",
                 "polling_station_id": "AB",
                 "council": "X01000001",
                 "slug": "c",
@@ -508,14 +566,14 @@ class AddressListTest(TestCase):
                 "location": "SRID=4326;POINT(-0.9288480 53.3119345)",
             },
             "00003": {
-                "postcode": "L252XX",  # this postcode doesn't match with the input record
-                "address": "2 Abbeyvale Dr, Liverpool",
+                "postcode": "L252NW",  # this postcode doesn't match with the input record
+                "address": "3 Abbeyvale Dr, Liverpool",  # and neither does this address
                 "location": "SRID=4326;POINT(-0.9288400 53.3119332)",
             }
             # 00004 is not in here
         }
 
-        address_list.remove_invalid_uprns(addressbase)
+        address_list.handle_invalid_uprns(addressbase)
 
         # 00003 and 00004 should still be in the set
         self.assertEqual(4, len(address_list.elements))
