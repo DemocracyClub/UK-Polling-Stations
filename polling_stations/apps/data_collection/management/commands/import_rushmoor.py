@@ -1,11 +1,9 @@
-from data_collection.management.commands import (
-    BaseXpressDCCsvInconsistentPostcodesImporter,
-)
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000092"
-    addresses_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018.tsv"
-    stations_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018.tsv"
-    elections = ["local.2018-05-03"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019 Rushmoor.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019 Rushmoor.tsv"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
