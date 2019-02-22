@@ -3,21 +3,18 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000041"
-    addresses_name = (
-        "local.2018-05-03/Version 1/Democracy_Club__03May2018 (1) Wokingham.csv"
-    )
-    stations_name = (
-        "local.2018-05-03/Version 1/Democracy_Club__03May2018 (1) Wokingham.csv"
-    )
-    elections = ["local.2018-05-03"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Woke.CSV"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Woke.CSV"
+    elections = ["local.2019-05-02"]
     csv_delimiter = ","
 
-    def station_record_to_dict(self, record):
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
 
-        if record.polling_place_id == "1347":
-            record = record._replace(polling_place_postcode="RG6 3HE")
+        if record.addressline6 in ["RG7 1ZE", "RG7 1ZG"]:
+            rec["postcode"] = "RG7 1FQ"
 
-        if record.polling_place_id == "1371":
-            record = record._replace(polling_place_postcode="RG40 1XS")
+        if record.property_urn.strip().lstrip("0") == "14005649":
+            rec["postcode"] = "RG2 9QG"
 
-        return super().station_record_to_dict(record)
+        return rec
