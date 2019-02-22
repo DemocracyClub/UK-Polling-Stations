@@ -1,36 +1,21 @@
-"""
-Imports Spelthorne Council.
-"""
-from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseCsvStationsKmlDistrictsImporter):
-    """
-    Imports the Polling Station data from Spelthorne Council
-    """
-
+class Command(BaseHalaroseCsvImporter):
     council_id = "E07000213"
-    districts_name = "Polling_Districts.kmz"
-    stations_name = "Polling_Stations.csv"
-    elections = ["parl.2015-05-07"]
+    addresses_name = (
+        "local.2019-05-02/Version 1/polling_station_export Spelthorne-2019-02-07.csv"
+    )
+    stations_name = (
+        "local.2019-05-02/Version 1/polling_station_export Spelthorne-2019-02-07.csv"
+    )
+    elections = ["local.2019-05-02"]
 
-    def get_station_hash(self, record):
-        return "-".join(
-            [record.polling_di, record.building, record.road, record.town_villa]
-        )
+    def address_record_to_dict(self, record):
 
-    def station_record_to_dict(self, record):
-        try:
-            location = Point(int(record.point_x), int(record.point_y), srid=self.srid)
-        except ValueError:
-            location = Point(
-                float(record.point_x), float(record.point_y), srid=self.srid
-            )
-        return {
-            "internal_council_id": record.polling_di,
-            "postcode": "",
-            "address": "\n".join([record.building, record.road, record.town_villa]),
-            "location": location,
-            "polling_district_id": record.polling_di,
-        }
+        if record.houseid == "43674":
+            rec = super().address_record_to_dict(record)
+            rec["postcode"] = "TW15 2SH"
+            return rec
+
+        return super().address_record_to_dict(record)

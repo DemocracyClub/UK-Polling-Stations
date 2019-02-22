@@ -1,9 +1,42 @@
-from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_collection.github_importer import BaseGitHubImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseGitHubImporter):
     council_id = "E07000121"
-    addresses_name = "parl.2017-06-08/Version 1/Lancaster (and Fleetwood) && (Morecambe and Lunesdale) Democracy_Club__08June2017.tsv"
-    stations_name = "parl.2017-06-08/Version 1/Lancaster (and Fleetwood) && (Morecambe and Lunesdale) Democracy_Club__08June2017.tsv"
-    elections = ["parl.2017-06-08"]
-    csv_delimiter = "\t"
+    elections = ["local.2019-05-02"]
+    geom_type = "geojson"
+    srid = 27700
+    districts_srid = 27700
+    seen_stations = set()
+
+    def district_record_to_dict(self, record):
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+        return {
+            "internal_council_id": record["PD_REF"],
+            "name": record["PD_NAME"],
+            "area": poly,
+            "polling_station_id": record["PD_REF"],
+        }
+
+    def station_record_to_dict(self, record):
+        location = self.extract_geometry(
+            record, self.geom_type, self.get_srid("stations")
+        )
+        stations = []
+        codes = record["DISTRICT"].split(" ")
+
+        for code in codes:
+            if (code, record["POLLING_PL"]) in self.seen_stations:
+                stations.append(None)
+            else:
+                self.seen_stations.add((code, record["POLLING_PL"]))
+                stations.append(
+                    {
+                        "internal_council_id": code,
+                        "postcode": "",
+                        "address": record["POLLING_PL"],
+                        "location": location,
+                    }
+                )
+
+        return stations
