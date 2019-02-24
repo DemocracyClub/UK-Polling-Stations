@@ -623,6 +623,10 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
 
 
 class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter):
+
+    fuzzy_match = True
+    match_threshold = 100
+
     def pre_import(self):
         raise NotImplementedError
 
@@ -638,7 +642,7 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
         self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
         self.import_polling_stations()
-        self.addresses.save(self.batch_size)
+        self.addresses.save(self.batch_size, self.fuzzy_match, self.match_threshold)
         self.stations.save()
 
 
