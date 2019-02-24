@@ -149,7 +149,7 @@ class AddressList:
                 self.seen.add(address["slug"])
             except ValidationError:
                 self.logger.log_message(
-                    logging.INFO,
+                    logging.WARNING,
                     "Discarding record with invalid postcode:\n%s",
                     variable=address,
                     pretty=True,
