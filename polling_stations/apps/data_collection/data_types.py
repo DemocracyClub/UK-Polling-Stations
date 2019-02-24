@@ -10,6 +10,7 @@ from django.db import connection
 from django.forms import ValidationError
 from localflavor.gb.forms import GBPostcodeField
 
+from addressbase.models import Blacklist
 from data_collection.slugger import Slugger
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
@@ -345,8 +346,12 @@ class AddressList:
 
         def keep_record(record):
             if record["postcode"] in bad_postcodes:
+                if len(Blacklist.objects.filter(postcode=record["postcode"])) > 0:
+                    loglevel = logging.INFO
+                else:
+                    loglevel = logging.WARNING
                 self.logger.log_message(
-                    logging.INFO,
+                    loglevel,
                     "Discarding record: Postcode centroid is outside target local authority:\n%s",
                     variable=record,
                     pretty=True,
