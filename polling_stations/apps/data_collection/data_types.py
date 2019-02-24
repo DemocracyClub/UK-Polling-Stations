@@ -6,12 +6,11 @@ import abc
 import logging
 from collections import namedtuple
 
-from django.db import connection
 from django.forms import ValidationError
 from fuzzywuzzy import fuzz
 from localflavor.gb.forms import GBPostcodeField
 
-from addressbase.models import Blacklist
+from addressbase.models import Blacklist, get_uprn_hash_table
 from data_collection.slugger import Slugger
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
@@ -349,29 +348,6 @@ class AddressList:
                     )
                     record["uprn"] = ""
 
-    def get_uprns_from_addressbase(self):
-        # get all the UPRNs in target local auth
-        # which exist in both Addressbase and ONSUD
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT
-                a.uprn,
-                a.address,
-                REPLACE(a.postcode, ' ', ''),
-                a.location
-            FROM addressbase_address a
-            JOIN addressbase_onsud o ON a.uprn=o.uprn
-            WHERE o.lad=%s;
-            """,
-            [self.council_id],
-        )
-        # return result a hash table keyed by UPRN
-        return {
-            row[0]: {"address": row[1], "postcode": row[2], "location": row[3]}
-            for row in cursor.fetchall()
-        }
-
     def remove_addresses_outside_target_auth(self):
         """
         Remove any addresses with a postcode which appears in our input data
@@ -380,7 +356,7 @@ class AddressList:
         As long as we're calling this after handle_invalid_uprns()
         We can take a massive shortcut for performance here
         and only look at input records where the uprn is empty
-        because by definition (see get_uprns_from_addressbase() )
+        because by definition (see get_uprn_hash_table() )
         any record left with a UPRN must be inside the target local auth.
 
         If we've got records in the input file with a postcode centroid
@@ -463,7 +439,7 @@ class AddressList:
     def save(self, batch_size, fuzzy_match, match_threshold):
 
         self.remove_ambiguous_addresses_by_address()
-        addressbase_data = self.get_uprns_from_addressbase()
+        addressbase_data = get_uprn_hash_table(self.council_id)
         self.handle_invalid_uprns(addressbase_data, fuzzy_match, match_threshold)
         self.attach_doorstep_gridrefs(addressbase_data)
         self.remove_addresses_outside_target_auth()

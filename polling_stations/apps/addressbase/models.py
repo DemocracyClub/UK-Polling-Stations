@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.db import connection
 from uk_geo_utils.models import AbstractAddress, AbstractAddressManager, AbstractOnsud
 
 
@@ -36,3 +37,27 @@ class Blacklist(models.Model):
 
     class Meta:
         unique_together = ("postcode", "lad")
+
+
+def get_uprn_hash_table(council_id):
+    # get all the UPRNs in target local auth
+    # which exist in both Addressbase and ONSUD
+    cursor = connection.cursor()
+    cursor.execute(
+        """
+        SELECT
+            a.uprn,
+            a.address,
+            REPLACE(a.postcode, ' ', ''),
+            a.location
+        FROM addressbase_address a
+        JOIN addressbase_onsud o ON a.uprn=o.uprn
+        WHERE o.lad=%s;
+        """,
+        [council_id],
+    )
+    # return result a hash table keyed by UPRN
+    return {
+        row[0]: {"address": row[1], "postcode": row[2], "location": row[3]}
+        for row in cursor.fetchall()
+    }
