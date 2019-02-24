@@ -514,7 +514,7 @@ class AddressListTest(TestCase):
         for el in address_list.elements:
             self.assertEqual(el["postcode"], "L252NW")
 
-    def test_remove_invalid_uprns_remove_uprn(self):
+    def test_remove_invalid_uprns_delete(self):
         in_list = [
             {
                 "address": "1 Abbeyvale Dr, Liverpool",
@@ -542,11 +542,19 @@ class AddressListTest(TestCase):
             },
             {
                 "address": "4 Abbeyvale Dr, Liverpool",
-                "postcode": "L252NW",
+                "postcode": "L252XX",
                 "polling_station_id": "AA",
                 "council": "X01000001",
                 "slug": "d",
                 "uprn": "00004",
+            },
+            {
+                "address": "5 Abbeyvale Dr, Liverpool",
+                "postcode": "L252XY",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "e",
+                "uprn": "00005",
             },
         ]
 
@@ -569,14 +577,12 @@ class AddressListTest(TestCase):
                 "postcode": "L252NW",  # this postcode doesn't match with the input record
                 "address": "3 Abbeyvale Dr, Liverpool",  # and neither does this address
                 "location": "SRID=4326;POINT(-0.9288400 53.3119332)",
-            }
-            # 00004 is not in here
+            },
         }
 
         address_list.handle_invalid_uprns(addressbase, True, 100)
 
-        # 00003 and 00004 should still be in the set
-        self.assertEqual(4, len(address_list.elements))
-        # but those records should now have a blank uprn
-        for el in address_list.elements:
-            assert el["uprn"] in ["00001", "00002", ""]
+        # this should delete all the L252NW and L252XX properties
+        # but leave L252XY intact
+        self.assertEqual(1, len(address_list.elements))
+        self.assertEqual(address_list.elements[0]["postcode"], "L252XY")
