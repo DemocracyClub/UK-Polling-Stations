@@ -309,7 +309,10 @@ class AddressList:
                     addressbase_record["address"].lower().replace(",", ""),
                 )
 
-                if match_quality >= match_threshold:
+                accept_suggestion = record.get(
+                    "accept_suggestion", (match_quality >= match_threshold)
+                )
+                if accept_suggestion:
                     # If [input record address] and [addressbase record address]
                     # are match_threshold% the same, assume the postcode on
                     # [input record] is wrong and fix [input record]
@@ -333,8 +336,14 @@ class AddressList:
                     ):
                         # this needs manual review
                         loglevel = logging.WARNING
-                        bad_postcodes.add(record["postcode"])
-                        bad_postcodes.add(addressbase_record["postcode"])
+
+                        if record.get("accept_suggestion", True):
+                            bad_postcodes.add(record["postcode"])
+                            bad_postcodes.add(addressbase_record["postcode"])
+                        # if we _explicitly_ set
+                        # record["accept_suggestion"] = False
+                        # in the import script, don't delete anything
+
                     else:
                         # if neither postcode it split or if moving the address
                         # from one district to the other would make no difference
