@@ -151,7 +151,7 @@ class AddressList:
             except ValidationError:
                 self.logger.log_message(
                     logging.WARNING,
-                    "Discarding record with invalid postcode:\n%s",
+                    "Discarding record with invalid postcode:\n%s\n",
                     variable=address,
                     pretty=True,
                 )
@@ -429,7 +429,7 @@ class AddressList:
                     loglevel = logging.WARNING
                 self.logger.log_message(
                     loglevel,
-                    "Discarding record: Postcode centroid is outside target local authority:\n%s",
+                    "Discarding record: Postcode centroid is outside target local authority:\n%s\n",
                     variable=record,
                     pretty=True,
                 )
