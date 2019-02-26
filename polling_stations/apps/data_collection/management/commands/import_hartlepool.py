@@ -33,13 +33,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         }
 
         # corrections
-        if postcode == "TS22 5QE":
-            ret["postcode"] = "TS22 5FY"
-        if postcode == "TS25 2HE":
+        if postcode in ["TS25 2HE", "TS24 0HJ"]:
             return None
-        if uprn == "10090070423":
-            ret["postcode"] = "TS25 2DY"
-        if uprn == "10090070227":
-            ret["postcode"] = "TS25 2BF"
+
+        if uprn in ["10090068484", "10009734034", "100110786034"]:
+            ret["accept_suggestion"] = True
+
+        if uprn in ["100110673453", "100110673049"]:
+            ret["accept_suggestion"] = False
 
         return ret

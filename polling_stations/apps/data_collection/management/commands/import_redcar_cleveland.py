@@ -9,26 +9,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "100110675731":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "TS134EA"
-            return rec
+        if uprn in [
+            "10034518861",
+            "100110675731",
+            "200002523561",
+            "10023902772",
+            "10023902773",
+            "200002523768",
+            "200002523076",
+        ]:
+            rec["accept_suggestion"] = True
 
-        if uprn == "10034518861":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "TS79LF"
-            return rec
+        if uprn in ["10023906550"]:
+            rec["accept_suggestion"] = False
 
-        if uprn == "10023906866":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "TS9 6QR"
-            return rec
-
-        if uprn == "10034529574":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "TS11 7HP"
-            return rec
-
-        return super().address_record_to_dict(record)
+        return rec

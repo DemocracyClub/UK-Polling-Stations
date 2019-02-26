@@ -8,4 +8,10 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["local.2019-05-02"]
 
     def address_record_to_dict(self, record):
-        return super().address_record_to_dict(record)
+        rec = super().address_record_to_dict(record)
+        uprn = record.uprn.strip().lstrip("0")
+
+        if uprn in ["10010331972", "10010331834", "10070090689"]:
+            rec["accept_suggestion"] = True
+
+        return rec

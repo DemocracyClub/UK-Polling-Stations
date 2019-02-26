@@ -13,16 +13,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
 
         if record.addressline6 == "PO4 099":
             rec["postcode"] = "PO4 0PL"
 
-        if record.property_urn.strip().lstrip("0") in [
-            "1775122942",
-            "1775122943",
-            "1775122944",
-        ]:
-            rec["postcode"] = "PO5 2BZ"
+        if uprn in ["1775078308", "1775035998", "1775002824", "1775002823"]:
+            rec = super().address_record_to_dict(record)
+            rec["accept_suggestion"] = True
+            return rec
 
         return rec
 
