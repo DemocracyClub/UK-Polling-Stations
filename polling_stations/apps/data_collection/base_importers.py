@@ -253,7 +253,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 if council.council_id != self.council_id:
                     self.logger.log_message(
                         logging.WARNING,
-                        "Polling station %s is in %s (%s) but target council is %s (%s) - manual check recommended",
+                        "Polling station %s is in %s (%s) but target council is %s (%s) - manual check recommended\n",
                         variable=(
                             station_record["internal_council_id"],
                             council.name,
@@ -265,7 +265,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             except Council.DoesNotExist:
                 self.logger.log_message(
                     logging.WARNING,
-                    "Polling station %s is not covered by any council area - manual check recommended",
+                    "Polling station %s is not covered by any council area - manual check recommended\n",
                     variable=(station_record["internal_council_id"]),
                 )
 
@@ -569,6 +569,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.write_info(
             "Addresses: Found {:,} rows in input file".format(len(addresses))
         )
+        self.write_info("----------------------------------")
         for address in addresses:
             address_info = self.address_record_to_dict(address)
 
@@ -623,6 +624,10 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
 
 
 class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter):
+
+    fuzzy_match = True
+    match_threshold = 100
+
     def pre_import(self):
         raise NotImplementedError
 
@@ -638,7 +643,7 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
         self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
         self.import_polling_stations()
-        self.addresses.save(self.batch_size)
+        self.addresses.save(self.batch_size, self.fuzzy_match, self.match_threshold)
         self.stations.save()
 
 

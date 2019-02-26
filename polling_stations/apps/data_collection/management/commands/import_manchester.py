@@ -48,4 +48,14 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         ):
             rec["postcode"] = "M14 5EU"
 
+        # invalid postcodes
+        if record.addressline6.strip() == "M13 OFN":
+            rec["postcode"] = "M13 0FN"
+
+        if record.addressline6.strip() == "M11 IJJ":
+            rec["postcode"] = "M11 1JJ"
+
+        if record.addressline6.strip() == "M22 OJA":
+            rec["postcode"] = "M22 0JA"
+
         return rec

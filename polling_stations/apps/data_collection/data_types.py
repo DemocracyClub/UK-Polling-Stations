@@ -6,11 +6,11 @@ import abc
 import logging
 from collections import namedtuple
 
-from django.db import connection
 from django.forms import ValidationError
+from fuzzywuzzy import fuzz
 from localflavor.gb.forms import GBPostcodeField
 
-from addressbase.models import Blacklist
+from addressbase.models import Blacklist, get_uprn_hash_table
 from data_collection.slugger import Slugger
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from uk_geo_utils.helpers import Postcode
@@ -151,7 +151,7 @@ class AddressList:
             except ValidationError:
                 self.logger.log_message(
                     logging.WARNING,
-                    "Discarding record with invalid postcode:\n%s",
+                    "Discarding record with invalid postcode:\n%s\n",
                     variable=address,
                     pretty=True,
                 )
@@ -164,7 +164,7 @@ class AddressList:
             )
 
     def get_address_lookup(self):
-        # for each address, build a lookup of address -> list of station ids
+        # for each address, build a lookup of address -> set of station ids
         address_lookup = {}
         for record in self.elements:
             address_slug = Slugger.slugify(
@@ -179,7 +179,7 @@ class AddressList:
         return address_lookup
 
     def get_uprn_lookup(self):
-        # for each address, build a lookup of uprn -> list of station ids
+        # for each address, build a lookup of uprn -> set of station ids
         uprn_lookup = {}
         for record in self.elements:
             uprn = record["uprn"]
@@ -191,6 +191,18 @@ class AddressList:
                 uprn_lookup[uprn] = set([record["polling_station_id"]])
 
         return uprn_lookup
+
+    def get_postcode_lookup(self):
+        # for each address, build a lookup of address -> set of station ids
+        postcode_lookup = {}
+        for record in self.elements:
+            postcode = record["postcode"]
+            if postcode in postcode_lookup:
+                postcode_lookup[postcode].add(record["polling_station_id"])
+            else:
+                postcode_lookup[postcode] = set([record["polling_station_id"]])
+
+        return postcode_lookup
 
     def get_ambiguous_postcodes(self, lookup, key):
         # build a set of postcodes containing
@@ -215,7 +227,7 @@ class AddressList:
         """
         Note this function assumes that UPRNs and postcodes match
         this means we either need to ensure this function is called
-        _after_ remove_invalid_uprns() (which is what we're doing now)
+        _after_ handle_invalid_uprns() (which is what we're doing now)
         or we'd need to switch it to index the dict on (UPRN, Postcode)
         """
         uprn_lookup = self.get_uprn_lookup()
@@ -254,8 +266,16 @@ class AddressList:
             if record["uprn"] in addressbase_data:
                 record["location"] = addressbase_data[record["uprn"]]["location"]
 
-    def remove_invalid_uprns(self, addressbase_data):
+    def handle_invalid_uprns(self, addressbase_data, fuzzy_match, match_threshold):
+        postcode_lookup = self.get_postcode_lookup()
+
+        def is_split_postcode(postcode):
+            return postcode in postcode_lookup and len(postcode_lookup[postcode]) > 1
+
+        bad_postcodes = set()
         for record in self.elements:
+            if not record["uprn"]:
+                continue
 
             # if the UPRN attached to the input record isn't present
             # in the data we fetched from AddressBase, discard the UPRN
@@ -268,50 +288,107 @@ class AddressList:
                 record["uprn"] = ""
                 continue
 
-            # if the UPRN attached to the input record is present
-            # in the data we fetched from AddressBase, but the postcode
-            # on the input record doesn't match the postcode on the
-            # record from AddressBase, discard the UPRN
-            if record["postcode"] != addressbase_data[record["uprn"]]["postcode"]:
-                self.logger.log_message(
-                    logging.INFO,
-                    "Removing UPRN due to postcode mismatch.\nInput Record:\n%s\nAddressbase record:\n%s",
-                    variable=(record, addressbase_data[record["uprn"]]),
-                )
-                record["uprn"] = ""
+            addressbase_record = addressbase_data[record["uprn"]]
+            if record["postcode"] != addressbase_record["postcode"]:
+                # The UPRN attached to the input record is present
+                # in the data we fetched from AddressBase, but the postcode
+                # on the input record doesn't match the postcode on the
+                # record from AddressBase
 
-    def get_uprns_from_addressbase(self):
-        # get all the UPRNs in target local auth
-        # which exist in both Addressbase and ONSUD
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT
-                a.uprn,
-                a.address,
-                REPLACE(a.postcode, ' ', ''),
-                a.location
-            FROM addressbase_address a
-            JOIN addressbase_onsud o ON a.uprn=o.uprn
-            WHERE o.lad=%s;
-            """,
-            [self.council_id],
-        )
-        # return result a hash table keyed by UPRN
-        return {
-            row[0]: {"address": row[1], "postcode": row[2], "location": row[3]}
-            for row in cursor.fetchall()
-        }
+                if not fuzzy_match:
+                    self.logger.log_message(
+                        logging.INFO,
+                        "Removing UPRN due to postcode mismatch.\nInput Record:\n%s\nAddressbase record:\n%s",
+                        variable=(record, addressbase_data[record["uprn"]]),
+                    )
+                    record["uprn"] = ""
+                    continue
+
+                match_quality = fuzz.partial_ratio(
+                    record["address"].lower().replace(",", ""),
+                    addressbase_record["address"].lower().replace(",", ""),
+                )
+
+                accept_suggestion = record.get(
+                    "accept_suggestion", (match_quality >= match_threshold)
+                )
+                if accept_suggestion:
+                    # If [input record address] and [addressbase record address]
+                    # are match_threshold% the same, assume the postcode on
+                    # [input record] is wrong and fix [input record]
+                    # with the postcode from addressbase
+                    self.logger.log_message(
+                        logging.INFO,
+                        "Correcting postcode based on UPRN and fuzzy match.\nInput Record:\n%s\nAddressbase record:\n%s\nMatch quality: %s\n",
+                        variable=(record, addressbase_record, match_quality),
+                    )
+                    record["postcode"] = addressbase_record["postcode"]
+                else:
+                    if (
+                        is_split_postcode(record["postcode"])
+                        or is_split_postcode(addressbase_record["postcode"])
+                        or (
+                            record["postcode"] in postcode_lookup
+                            and addressbase_record["postcode"] in postcode_lookup
+                            and postcode_lookup[record["postcode"]]
+                            != postcode_lookup[addressbase_record["postcode"]]
+                        )
+                    ):
+                        # this needs manual review
+                        loglevel = logging.WARNING
+
+                        if record.get("accept_suggestion", True):
+                            bad_postcodes.add(record["postcode"])
+                            bad_postcodes.add(addressbase_record["postcode"])
+                        # if we _explicitly_ set
+                        # record["accept_suggestion"] = False
+                        # in the import script, don't delete anything
+
+                    else:
+                        # if neither postcode it split or if moving the address
+                        # from one district to the other would make no difference
+                        # this _probably_ doesn't matter
+                        loglevel = logging.INFO
+
+                    # If [input record address] and [addressbase record address]
+                    # are less than match_threshold% the same, assume the UPRN on
+                    # [input record] is wrong and remove the UPRN from [input record]
+                    self.logger.log_message(
+                        loglevel,
+                        "Removing UPRN due to postcode mismatch.\nInput Record:\n%s\nAddressbase record:\n%s\nMatch quality: %s\n",
+                        variable=(record, addressbase_record, match_quality),
+                    )
+                    record["uprn"] = ""
+
+        if fuzzy_match:
+
+            def keep_record(record):
+                if record["postcode"] in bad_postcodes:
+                    self.logger.log_message(
+                        logging.INFO,
+                        "Discarding record: Postcode is split and contains UPRN/postcode conflicts not resolved by fuzzy matching:\n%s",
+                        variable=record,
+                        pretty=True,
+                    )
+                    return False
+                return True
+
+            if not bad_postcodes:
+                return
+
+            # if we found any postcodes,
+            # remove all records matching any of these postcodes
+            self.elements = [e for e in self.elements if keep_record(e)]
 
     def remove_addresses_outside_target_auth(self):
         """
         Remove any addresses with a postcode which appears in our input data
         but where the postcode centroid is outside the target local auth.
 
-        As long as we're calling this after remove_invalid_uprns()
+        As long as we're calling this after handle_invalid_uprns()
         We can take a massive shortcut for performance here
         and only look at input records where the uprn is empty
-        because by definition (see get_uprns_from_addressbase() )
+        because by definition (see get_uprn_hash_table() )
         any record left with a UPRN must be inside the target local auth.
 
         If we've got records in the input file with a postcode centroid
@@ -352,7 +429,7 @@ class AddressList:
                     loglevel = logging.WARNING
                 self.logger.log_message(
                     loglevel,
-                    "Discarding record: Postcode centroid is outside target local authority:\n%s",
+                    "Discarding record: Postcode centroid is outside target local authority:\n%s\n",
                     variable=record,
                     pretty=True,
                 )
@@ -391,11 +468,11 @@ class AddressList:
                     ),
                 )
 
-    def save(self, batch_size):
+    def save(self, batch_size, fuzzy_match, match_threshold):
 
         self.remove_ambiguous_addresses_by_address()
-        addressbase_data = self.get_uprns_from_addressbase()
-        self.remove_invalid_uprns(addressbase_data)
+        addressbase_data = get_uprn_hash_table(self.council_id)
+        self.handle_invalid_uprns(addressbase_data, fuzzy_match, match_threshold)
         self.attach_doorstep_gridrefs(addressbase_data)
         self.remove_addresses_outside_target_auth()
         self.remove_ambiguous_addresses_by_uprn()

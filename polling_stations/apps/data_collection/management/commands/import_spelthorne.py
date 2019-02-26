@@ -10,12 +10,14 @@ class Command(BaseHalaroseCsvImporter):
         "local.2019-05-02/Version 1/polling_station_export Spelthorne-2019-02-07.csv"
     )
     elections = ["local.2019-05-02"]
+    match_threshold = 98
 
     def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
 
-        if record.houseid == "43674":
+        if uprn in ["33040703", "33040704", "33048602", "33051119"]:
             rec = super().address_record_to_dict(record)
-            rec["postcode"] = "TW15 2SH"
+            rec["accept_suggestion"] = True
             return rec
 
         return super().address_record_to_dict(record)
