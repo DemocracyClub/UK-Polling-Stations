@@ -7,7 +7,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Woke.CSV"
     elections = ["local.2019-05-02"]
     csv_delimiter = ","
-    fuzzy_match = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
