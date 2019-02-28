@@ -355,8 +355,16 @@ class AddressList:
                     # [input record] is wrong and remove the UPRN from [input record]
                     self.logger.log_message(
                         loglevel,
-                        "Removing UPRN due to postcode mismatch.\nInput Record:\n%s\nAddressbase record:\n%s\nMatch quality: %s\n",
-                        variable=(record, addressbase_record, match_quality),
+                        'Removing UPRN due to postcode mismatch.\nSUGGESTION: "%s",  # %s -> %s : %s\nInput Record:\n%s\nAddressbase record:\n%s\nMatch quality: %s\n',
+                        variable=(
+                            record["uprn"],
+                            record["postcode"],
+                            addressbase_record["postcode"],
+                            record["address"],
+                            record,
+                            addressbase_record,
+                            match_quality,
+                        ),
                     )
                     record["uprn"] = ""
 
