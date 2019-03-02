@@ -21,10 +21,10 @@ TEMP_CONTACT_DETAILS = {
     "E07000246": {
         "name": "Somerset West & Taunton Council",
         "website": "",
-        "email": "",
-        "phone": "",
-        "address": "",
-        "postcode": "",
+        "email": "elections@somersetwestandtaunton.gov.uk",
+        "phone": "01823 358692",
+        "address": "Electoral Services\nWest Somerset House\nKillick Way\nWilliton",
+        "postcode": "TA4 4QA",
     },
     "E06000058": {
         "name": "Bournemouth, Christchurch & Poole Council",
