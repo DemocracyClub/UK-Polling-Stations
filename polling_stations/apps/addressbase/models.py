@@ -39,7 +39,7 @@ class Blacklist(models.Model):
         unique_together = ("postcode", "lad")
 
 
-def get_uprn_hash_table(council_id):
+def get_uprn_hash_table(council_ids):
     # get all the UPRNs in target local auth
     # which exist in both Addressbase and ONSUD
     cursor = connection.cursor()
@@ -52,9 +52,9 @@ def get_uprn_hash_table(council_id):
             a.location
         FROM addressbase_address a
         JOIN addressbase_onsud o ON a.uprn=o.uprn
-        WHERE o.lad=%s;
+        WHERE o.lad IN %s;
         """,
-        [council_id],
+        [council_ids],
     )
     # return result a hash table keyed by UPRN
     return {
