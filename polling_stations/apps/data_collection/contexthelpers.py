@@ -7,8 +7,11 @@ def get_stat_from_nomis(dataset, measure, gss_code):
         dataset=dataset, gss_code=gss_code, measures=measure
     )
     r = requests.get(url)
-    r.raise_for_status()
+    if r.status_code != 200:
+        return 0
     data = r.json()
+    if "error" in data:
+        return 0
     return data["obs"][0]["obs_value"]["value"]
 
 
