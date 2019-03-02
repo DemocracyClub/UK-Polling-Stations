@@ -157,9 +157,8 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
     @property
     def data_path(self):
-        data_private = getattr(self, "private", False)
-        if data_private:
-            path = getattr(settings, "PRIVATE_DATA_PATH", "../polling_station_data/")
+        if getattr(settings, "PRIVATE_DATA_PATH", None):
+            path = settings.PRIVATE_DATA_PATH
         else:
             s3 = S3Wrapper()
             s3.fetch_data_by_council(self.council_id)
@@ -722,9 +721,8 @@ class BaseScotlandSpatialHubImporter(
 
     @property
     def data_path(self):
-        data_private = getattr(self, "private", False)
-        if data_private:
-            path = getattr(settings, "PRIVATE_DATA_PATH", "../polling_station_data/")
+        if getattr(settings, "PRIVATE_DATA_PATH", None):
+            path = settings.PRIVATE_DATA_PATH
         else:
             s3 = S3Wrapper()
             s3.fetch_data(self.data_prefix)
