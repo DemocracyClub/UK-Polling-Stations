@@ -2,13 +2,26 @@
 
 <h2>{% blocktrans with council.name as council_name %}Contact {{ council_name }}{% endblocktrans %}</h2>
 
-{% blocktrans with council.phone as council_phone and council.name as council_name %}
+{% blocktrans %}
   <p>We don't have data for your area.</p>
   <p>
     Your polling station address should be printed on your polling card, which is delivered by post before an election.
   </p>
+{% endblocktrans %}
+
   <p>
-    Or, you need to contact your local council. You can call {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
+    {% if council.phone %}
+      {% blocktrans with council.phone as council_phone and council.name as council_name %}
+        Or, you need to contact your local council.
+        You can call {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
+      {% endblocktrans %}
+    {% else %}
+      {% blocktrans with council.name as council_name %}
+        Or, you need to contact {{ council_name }}
+      {% endblocktrans %}
+    {% endif %}
   </p>
+
+{% blocktrans %}
   <p><strong>Polling stations are open from 7am to 10pm.</strong></p>
 {% endblocktrans %}

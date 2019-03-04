@@ -6,6 +6,7 @@ import abc
 import logging
 from collections import namedtuple
 
+from django.conf import settings
 from django.forms import ValidationError
 from fuzzywuzzy import fuzz
 from localflavor.gb.forms import GBPostcodeField
@@ -425,7 +426,7 @@ class AddressList:
             [
                 Postcode(record.pcds).without_space
                 for record in db_postcodes
-                if record.oslaua != self.council_id
+                if record.oslaua not in self.council_ids
             ]
         )
 
@@ -456,6 +457,17 @@ class AddressList:
         for e in self.elements:
             return e["council"].council_id
 
+    @property
+    def council_ids(self):
+        # hack to deal with new local auths
+        # some councils won't exist in all the data yet
+        if self.council_id in settings.NEW_COUNCILS:
+            return tuple(
+                [k for k, v in settings.OLD_TO_NEW_MAP.items() if v == self.council_id]
+            )
+        else:
+            return (self.council_id,)
+
     def report_duplicate_uprns(self):
         uprn_counts = {}
 
@@ -479,7 +491,7 @@ class AddressList:
     def save(self, batch_size, fuzzy_match, match_threshold):
 
         self.remove_ambiguous_addresses_by_address()
-        addressbase_data = get_uprn_hash_table(self.council_id)
+        addressbase_data = get_uprn_hash_table(self.council_ids)
         self.handle_invalid_uprns(addressbase_data, fuzzy_match, match_threshold)
         self.attach_doorstep_gridrefs(addressbase_data)
         self.remove_addresses_outside_target_auth()

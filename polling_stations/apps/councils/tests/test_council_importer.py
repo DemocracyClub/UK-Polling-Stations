@@ -1,6 +1,6 @@
 from io import StringIO
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 import vcr
 
@@ -54,6 +54,7 @@ class TestCouncilImporter(TestCase):
         assert council_info["name"] == "South Hams District Council"
         assert council_info["website"].startswith("http://")
 
+    @override_settings(NEW_COUNCILS=[])
     def test_import_councils(self):
         assert Council.objects.count() == 0
         cmd = MockCouncilsImporter()
