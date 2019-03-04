@@ -50,12 +50,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="502596")
             record = record._replace(polling_place_northing="370730")
 
-        """
-        File supplied contained obviously inaccurate point
-        remove it and fall back to geocoding
-        """
         if record.polling_place_id == "5181":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_postcode="NG34 7HH")
+            record = record._replace(polling_place_easting="507252")
+            record = record._replace(polling_place_northing="345802")
 
         return super().station_record_to_dict(record)
