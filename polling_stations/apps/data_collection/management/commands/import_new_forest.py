@@ -3,8 +3,8 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000091"
-    addresses_name = "parl.2017-06-08/Version 1/Democracy_Club__08June2017 (1).tsv"
-    stations_name = "parl.2017-06-08/Version 1/Democracy_Club__08June2017 (1).tsv"
-    elections = ["parl.2017-06-08"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019newforest.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019newforest.tsv"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
