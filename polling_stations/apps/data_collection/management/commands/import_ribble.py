@@ -1,15 +1,16 @@
-from django.contrib.gis.geos import Point
-from data_collection.base_importers import BaseStationsDistrictsImporter
+from data_collection.base_importers import BaseShpStationsShpDistrictsImporter
 
 
-class Command(BaseStationsDistrictsImporter):
-    stations_filetype = "geojson"
-    districts_filetype = "shp"
+class Command(BaseShpStationsShpDistrictsImporter):
     srid = 27700
     council_id = "E07000124"
-    elections = ["local.lancashire.2017-05-04", "parl.2017-06-08"]
-    districts_name = "Ribble Valley 2017 Polling Disricts/Polling Districts"
-    stations_name = "Ribble Valley 2017 Polling Stations/Polling Stations-fixed.geojson"
+    elections = ["local.2019-05-02"]
+    districts_name = (
+        "local.2019-05-02/Version 1/RVBC - Polling Districts/RVBC - Polling Districts"
+    )
+    stations_name = (
+        "local.2019-05-02/Version 1/RVBC - Polling Stations/RVBC - Polling Stations"
+    )
 
     def district_record_to_dict(self, record):
         return {"internal_council_id": record[0], "name": record[1]}
@@ -17,32 +18,20 @@ class Command(BaseStationsDistrictsImporter):
     def station_record_to_dict(self, record):
         stations = []
 
-        location = Point(
-            record["geometry"]["coordinates"][0],
-            record["geometry"]["coordinates"][1],
-            srid=self.srid,
-        )
+        name = record[0].strip()
+        address = record[1].strip()
+        postcode = record[2].strip()
 
-        district_codes = []
-        if record["properties"]["CODE"]:
-            district_codes.append(record["properties"]["CODE"].strip())
-        if record["properties"]["CODE 2"]:
-            district_codes.append(record["properties"]["CODE 2"].strip())
-        if record["properties"]["CODE 3"]:
-            district_codes.append(record["properties"]["CODE 3"].strip())
+        district_codes = [record[3].strip(), record[4].strip(), record[5].strip()]
+        district_codes = [code for code in district_codes if code]
 
         for code in district_codes:
             stations.append(
                 {
                     "internal_council_id": code,
-                    "address": "%s\n%s"
-                    % (
-                        record["properties"]["Name"].strip(),
-                        record["properties"]["Address"].strip(),
-                    ),
-                    "postcode": record["properties"]["Postcode"].strip(),
+                    "address": "%s\n%s" % (name, address),
+                    "postcode": postcode,
                     "polling_district_id": code,
-                    "location": location,
                 }
             )
 
