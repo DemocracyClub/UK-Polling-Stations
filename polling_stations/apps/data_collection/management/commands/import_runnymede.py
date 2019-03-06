@@ -1,42 +1,27 @@
-from django.conf import settings
-from data_collection.github_importer import BaseGitHubImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseGitHubImporter):
-
-    srid = 27700
-    districts_srid = 27700
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000212"
-    elections = ["parl.2017-06-08"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Runnymede"
-    geom_type = "gml"
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Runny.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Runny.tsv"
+    elections = ["local.2019-05-02"]
+    csv_delimiter = "\t"
 
-    # stations data has duplicate ids and codes that don't match,
-    # but we can grab a valid addresses for each district
-    # from the districts file
-    @property
-    def stations_url(self):
-        return "%s%s%s&key=%s" % (
-            self.base_url,
-            self.scraper_name,
-            self.districts_query,
-            settings.MORPH_API_KEY,
-        )
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        return {
-            "internal_council_id": record["Poling_Districts"],
-            "name": record["Poling_Districts"],
-            "area": poly,
-        }
+        if uprn in [
+            "100061498464",  # TW200BJ -> TW200BQ : Chestnuts, Royal Holloway University - Halls of Residence, Englefield Green, Egham, Surrey
+            "200001732773",  # TW208HJ -> TW200HJ : Brook Lodge, Wick Road, Englefield Green, Egham, Surrey
+            "10002019662",  # KT153NT -> KT153QE : Accomodation at The Black Prince, Woodham Lane
+            "100061503485",  # TW209UY -> TW209UX : Hogsters Farm, Stroude Road
+            "100061499461",  # TW208LQ -> TW208QN : Rose Cottage, Green Road, Thorpe, Egham, Surrey
+        ]:
+            rec["accept_suggestion"] = True
 
-    def station_record_to_dict(self, record):
-        location = None
-        return {
-            "internal_council_id": record["Poling_Districts"],
-            "postcode": "",
-            "address": record["Premises"],
-            "location": location,
-            "polling_district_id": record["Poling_Districts"],
-        }
+        if uprn in []:
+            rec["accept_suggestion"] = False
+
+        return rec
