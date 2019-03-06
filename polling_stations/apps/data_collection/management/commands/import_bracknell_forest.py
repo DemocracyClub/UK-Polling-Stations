@@ -3,7 +3,25 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000036"
-    addresses_name = "parl.2017-06-08/Version 2/Democracy_Club__08June2017 (1).tsv"
-    stations_name = "parl.2017-06-08/Version 2/Democracy_Club__08June2017 (1).tsv"
-    elections = ["parl.2017-06-08"]
+    addresses_name = (
+        "local.2019-05-02/Version 1/Democracy_Club__02May2019 (Bracknell Forest).tsv"
+    )
+    stations_name = (
+        "local.2019-05-02/Version 1/Democracy_Club__02May2019 (Bracknell Forest).tsv"
+    )
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
+
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in []:
+            rec["accept_suggestion"] = True
+
+        if uprn in [
+            "10022826533"  # RG403DN -> RG403YZ : The Bungalow, Easthampstead Park Crematorium, South Road, WOKINGHAM
+        ]:
+            rec["accept_suggestion"] = False
+
+        return rec
