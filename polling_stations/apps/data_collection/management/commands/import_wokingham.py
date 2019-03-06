@@ -5,7 +5,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000041"
     addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Woke.CSV"
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Woke.CSV"
-    elections = ["local.2019-05-02"]
+    elections = []
     csv_delimiter = ","
 
     def address_record_to_dict(self, record):
