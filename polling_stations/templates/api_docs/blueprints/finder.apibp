@@ -19,14 +19,16 @@ A `200 OK` response from `/postcode` or `/address` is an object containing the f
 * `metadata`: (object, nullable) - This field may be used to supply additional information about
   an election, particularly if there is some unusual condition or event for voters to be aware of.
 * `ballots`: (array) - An array of ballot objects listing the elections applicable to this request.
-  It is possible for more than one ballot to occur on the same date. For example, a user may vote in a local council election and mayoral election on the same day.
+  It is possible for more than one ballot to occur on the same date.
+  For example, a user may vote in a local council election and mayoral election on the same day.
+  If `ballots` is an empty array `[]`, there are no upcoming elections in this area.
 
 The entry point to a polling station search is a call to the `/postcode` endpoint.
 A valid postcode search may result in one of 3 outcomes:
-* We hold data for this area and all voters with this postcode vote at the same polling station.
-* We hold data for this area but voters with this postcode don't all vote at the same polling station.
-  To find the user's polling station, we must make a second API call to the `/address` endpoint.
-* We do not hold data for this area.
+* <a href="#postcode-search-result-found-3">Result found</a>: We hold data for this area and all voters with this postcode vote at the same polling station.
+* <a href="#postcode-search-address-picker-3">Address picker</a>: We hold data for this area but voters with this postcode don't all vote at the same polling station.
+  To find the user's polling station, we must make a second API call to the <a href="#address-search-3">`/address` endpoint</a>.
+* <a href="#postcode-search-result-not-found-3">Result not Found</a>: We do not hold data for this area.
 
 ## Postcode search: Result found [/postcode/{postcode}.json]
 
@@ -203,3 +205,76 @@ the following conditions can be observed in the response body:
 + Response 404 (application/json)
 
         { "detail": "Address not found" }
+
+## Group Local Elections May 2019
+
+On 2 May 2019, local elections take place in England and Northern Ireland.
+
+### Ballots
+
+Local council elections will be taking place in 250 local authorities in England. Some areas also have mayoral elections. We are able to provide information about mayoral and local elections down to district/borough ward level. In some areas, there may also be parish/town/community council elections happening. We are currently not able to provide information about these election types.
+
+The `ballots` array can be used to provide information about scheduled elections. If `ballots` is an empty array, we do not hold the details of any scheduled election (excluding parish/town/community councils). Where elections are scheduled, `ballots` may contain multiple objects. For example, a user may vote in a district council election and mayoral election on the same day.
+
+Occasionally a ballot needs to be cancelled. The most common reason for this is if one of the candidates dies between close of nominations and polling day, but there are other situations where this may happen. In the case where a poll is cancelled, the `metadata` object will contain a key `cancelled_election` with the information necessary to provide the user with a notification. e.g:
+
+<pre><code>{
+...
+  "metadata": {
+    "cancelled_election": {
+      "title": "Cancelled Election",
+      "url": "http://www.tamworth.gov.uk/election-news",
+      "detail": "The election for a Borough Councillor to represent the Glascote Ward has now been postponed following the sad death of one of the standing candidates."
+    }
+  }
+}
+</code></pre>
+
+This information will be provided in all responses from the
+`/address` and `/postcode` API endpoints,
+even if we are not able to provide a polling station result.
+
+### Northern Ireland
+
+WhereDoIVote will not hold any polling station data for Northern Ireland in 2019.
+
+If we don't know a user's polling station, sometimes we may provide an
+external link for more info in the `custom_finder` key. This will always
+be populated for users in Northern Ireland where the
+Electoral Office for Northern Ireland run their own service. e.g:
+
+<pre><code>{
+...
+  "custom_finder": "http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT28%202EY"
+}
+</code></pre>
+
+### ID Requirements
+
+All voters in Northern Ireland must present photo ID to vote at a polling station.
+
+Additionally, following on from the pilots in 2018, voters in 11 local
+authorities in England will be required to present identification in order
+to vote at a polling station. Each area has slightly different requirements.
+API responses for a postcode or address in an authority where
+identification is required will have a key `voter_id` under the
+`metadata` object with the information necessary to provide the
+user with a notification. e.g:
+
+<pre><code>{
+...
+  "metadata": {
+    "voter_id": {
+      "title": "You need to show ID to vote at this election",
+      "url": "https://www.woking.gov.uk/voterid",
+      "detail": "Voters in Woking will be required to show photo ID before they can vote."
+    }
+  }
+}
+</code></pre>
+
+This information will be provided in all responses from the
+`/address` and `/postcode` API endpoints,
+even if we are not able to provide a polling station result.
+We encourage our API consumers to provide users in these areas with
+information about the pilots.
