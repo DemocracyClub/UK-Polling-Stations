@@ -1,76 +1,52 @@
-import os
-from django.core.exceptions import ObjectDoesNotExist
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
-from pollingstations.models import PollingStation
-from uk_geo_utils.geocoders import AddressBaseGeocoder, AddressBaseException
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000029"
-    addresses_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018 Solihull.tsv"
-    stations_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018 Solihull.tsv"
-    elections = ["local.2018-05-03"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019soli.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019soli.tsv"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
+
+    def station_record_to_dict(self, record):
+        if record.polling_place_id == "6826":
+            record = record._replace(polling_place_uprn="010023647341")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
+        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 == "CV7 7SQ":
-            return None
+        if uprn == "10090949380":
+            rec["postcode"] = "B93 0FH"
 
-        if uprn == "10090945566":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "B94 6BD"
-            return rec
+        if uprn in [
+            "10090945527",  # B377RN -> B376RL : 3C Woodlands Way, Chelmsley Wood
+            "10090945525",  # B377RN -> B376RL : 3A Woodlands Way, Chelmsley Wood
+        ]:
+            rec["accept_suggestion"] = True
 
-        if uprn in ["10090946240", "10090946268"]:
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "B93 8NA"
-            return rec
+        if uprn in [
+            "100071001341",  # B911DA -> B911JW : 90 Grange Road, Solihull
+            "10090946742",  # B901FT -> B930EJ : Apartment 16, Leasowes House, 3 Main Street, Dickens Heath, Solihull
+            "10090948318",  # B901GL -> B913AB : Apartment 5, Market Court, 61 Old Dickens Heath Road, Shirley, Solihull
+            "200003823593",  # B904EA -> B946QT : The Flat Cheswick Green Inn, Tanworth Lane, Shirley, Solihull
+            "10090947460",  # B904LG -> B377NZ : 18 Archer Drive, Solihull
+            "10090947804",  # CV49BN -> B901FT : 12 Eagle Drive, Solihull
+            "200003834455",  # B927AW -> B927AH : St Michaels Residential Home, 251 Warwick Road, Solihull
+            "10090946771",  # B920JP -> B930FD : Caravan Firs Farm, Barston Lane, Solihull
+            "10090946731",  # B377WA -> B930EJ : Apartment 23, Fillingham Court, 66 Fillingham Close, Chelmsley Wood
+            "10090946121",  # B913EP -> B920LD : Apartment 10, Scarlet Oak, 911-913 Warwick Road, Solihull
+            "10090948319",  # B912AW -> B913AB : Flat 2, 58 Lode Lane, Solihull
+            "100070965323",  # B376ES -> B376EU : 77 Overgreen Drive, Kingshurst
+            "100070965320",  # B376ES -> B376EU : 77A Overgreen Drive, Kingshurst
+            "100070965321",  # B376ES -> B376EU : 77B Overgreen Drive, Kingshurst
+            "100070965322",  # B376ES -> B376EU : 77C Overgreen Drive, Kingshurst
+            "10023648240",  # B946DQ -> B946DE : 66B Salter Street, Hockley Heath
+            "200003831389",  # B360UD -> B360UF : 275 Windward Way, Smith`s Wood
+        ]:
+            rec["accept_suggestion"] = False
 
-        if uprn in ["10008211727", "10008211728"]:
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "B91 2JJ"
-            return rec
-
-        if record.addressline6 == "CV7 7HN":
-            return None
-
-        if record.addressline6 == "CV7 7HL":
-            return None
-
-        return super().address_record_to_dict(record)
-
-    # Solihull have supplied an additional file with
-    # UPRNs for the polling stations
-    def post_import(self):
-        filepath = os.path.join(
-            self.base_folder_path, "local.2018-05-03/Version 2 - UPRN/uprns.csv"
-        )
-        self.csv_delimiter = ","
-        uprns = self.get_data("csv", filepath)
-
-        print("Updating UPRNs...")
-        for record in uprns:
-            stations = PollingStation.objects.filter(
-                council_id=self.council_id, internal_council_id=record.polling_place_id
-            )
-            if len(stations) == 1:
-                station = stations[0]
-
-                try:
-                    uprn = record.uprn.lstrip("0")
-                    g = AddressBaseGeocoder(record.polling_place_postcode)
-                    location = g.get_point(uprn)
-                except (ObjectDoesNotExist, AddressBaseException):
-                    location = None
-                station.location = location
-
-                self.check_station_point(
-                    {"location": station.location, "council_id": station.council_id}
-                )
-                station.save()
-            else:
-                print("Could not find station id " + self.get_station_hash(record))
-        print("...done")
+        return rec
