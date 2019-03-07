@@ -9,7 +9,7 @@ class Command(BaseHalaroseCsvImporter):
     stations_name = (
         "local.2019-05-02/Version 1/polling_station_export-2019-02-18Lewes.csv"
     )
-    elections = ["local.2019-05-02"]
+    elections = []
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
