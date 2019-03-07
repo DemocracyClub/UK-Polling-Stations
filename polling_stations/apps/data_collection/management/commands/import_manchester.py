@@ -11,7 +11,7 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     stations_name = (
         "local.2019-05-02/Version 1/Democracy_Club__02May2019 Manchester.tsv"
     )
-    elections = ["local.2019-05-02"]
+    elections = []
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
 
