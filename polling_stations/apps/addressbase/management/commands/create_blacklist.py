@@ -1,4 +1,5 @@
 from django.db import connection
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from addressbase.models import Blacklist
 
@@ -38,7 +39,17 @@ class Command(BaseCommand):
             [postcode],
         )
         councils = self.cursor.fetchall()
-        return [council[0] for council in councils]
+
+        # merge/de-dupe any new councils not in ONSUD
+        gss_codes = [council[0] for council in councils]
+        gss_codes = [
+            settings.OLD_TO_NEW_MAP[code] if code in settings.OLD_TO_NEW_MAP else code
+            for code in gss_codes
+        ]
+        gss_codes = list(set(gss_codes))
+        if len(gss_codes) == 1:
+            return []
+        return gss_codes
 
     def handle(self, *args, **kwargs):
         self.cursor = connection.cursor()
