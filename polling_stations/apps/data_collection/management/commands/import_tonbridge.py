@@ -6,7 +6,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E07000115"
-    elections = ["parl.2017-06-08"]
+    elections = ["local.2019-05-02"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-TonbridgeMalling"
     geom_type = "geojson"
 
@@ -23,10 +23,10 @@ class Command(BaseGitHubImporter):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
-        address = ", ".join([record["POLLING_PL"], record["ADDRESS"]])
+        address = record["ADDRESS"]
 
         return {
-            "internal_council_id": record["OBJECTID"],
+            "internal_council_id": record["OBJECTID_1"],
             "address": address,
             "postcode": "",
             "location": location,
