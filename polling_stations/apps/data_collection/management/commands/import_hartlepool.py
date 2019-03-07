@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 from data_collection.addresshelpers import format_residential_address
 
@@ -11,6 +12,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     # Hartlepool use Xpress, but they've provided a slightly trimmed down
     # version of the export. We need to customise a bit..
     station_uprn_field = None
+
+    def station_record_to_dict(self, record):
+
+        if record.polling_place_id == "8017":
+            record = record._replace(polling_place_name="Warrior Park Care Home")
+            record = record._replace(polling_place_address_1="Queen Street")
+            record = record._replace(polling_place_address_2="Seaton Carew")
+            record = record._replace(polling_place_address_3="Stockport")
+            record = record._replace(polling_place_address_4="Hartlepool")
+            record = record._replace(polling_place_postcode="TS25 1EZ")
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.191945, 54.664709, srid=4326)
+            return rec
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         if record.post_code.strip() == "":
