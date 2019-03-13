@@ -5,27 +5,11 @@ from data_collection.management.commands import (
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "E08000003"
-    addresses_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 Manchester.tsv"
-    )
-    stations_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 Manchester.tsv"
-    )
-    elections = []
+    addresses_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019v2Manc.TSV"
+    stations_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019v2Manc.TSV"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
-
-    def station_record_to_dict(self, record):
-
-        """
-        File supplied contained obviously inaccurate point
-        remove it and fall back to geocoding postcode
-        """
-        if record.polling_place_id == "5720":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)

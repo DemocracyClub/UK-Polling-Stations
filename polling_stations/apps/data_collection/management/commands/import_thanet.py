@@ -6,7 +6,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E07000114"
-    elections = ["parl.2017-06-08"]
+    elections = ["local.2019-05-02"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Thanet"
     geom_type = "geojson"
 
@@ -23,9 +23,20 @@ class Command(BaseGitHubImporter):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
-        return {
-            "internal_council_id": record["DISTRICT"],
-            "postcode": record["POSTCODE"],
-            "address": record["ADDRESS"],
-            "location": location,
-        }
+        codes = record["DISTRICT"].split("&")
+        address = record["ADDRESS"]
+        postcode = record["POSTCODE"]
+        if postcode and postcode in address:
+            address = address.replace(postcode, "").strip()
+
+        stations = []
+        for code in codes:
+            stations.append(
+                {
+                    "internal_council_id": code.strip(),
+                    "postcode": postcode,
+                    "address": address,
+                    "location": location,
+                }
+            )
+        return stations
