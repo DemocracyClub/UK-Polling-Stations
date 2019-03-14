@@ -336,7 +336,11 @@ class AddressList:
                         )
                     ):
                         # this needs manual review
-                        loglevel = logging.WARNING
+
+                        if "accept_suggestion" in record:
+                            loglevel = logging.INFO
+                        else:
+                            loglevel = logging.WARNING
 
                         if record.get("accept_suggestion", True):
                             bad_postcodes.add(record["postcode"])
