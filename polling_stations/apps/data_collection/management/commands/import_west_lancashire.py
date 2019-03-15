@@ -8,6 +8,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+
+        if record.polling_place_district_reference == "SBE":
+            record = record._replace(polling_place_name="The Farmers Arms")
+            record = record._replace(polling_place_address_1="36 New Lane")
+            record = record._replace(polling_place_address_2="Burscough")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="L40 8JA")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
