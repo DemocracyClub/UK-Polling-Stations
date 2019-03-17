@@ -3,23 +3,60 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000143"
-    addresses_name = (
-        "parl.2017-06-08/Version 1/Breckland Update Democracy_Club__08June2017.tsv"
-    )
-    stations_name = (
-        "parl.2017-06-08/Version 1/Breckland Update Democracy_Club__08June2017.tsv"
-    )
-    elections = ["parl.2017-06-08"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Breckland.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Breckland.tsv"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
+    csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
 
-        """
-        File supplied contained obviously inaccurate points
-        remove and fall back to geocoding
-        """
-        if record.polling_place_id in ["5875", "5779", "6008", "5926"]:
+        if record.polling_place_id in ["7051", "7105", "7289"]:
+            # The E/N points are the wrong way round for these 3
+            # perform the old switcheroo
+            easting = record.polling_place_northing
+            northing = record.polling_place_easting
+            record = record._replace(polling_place_easting=easting)
+            record = record._replace(polling_place_northing=northing)
+
+        if record.polling_place_id == "7149":
+            # this one is just miles off
+            # remove it and fall back to geocoding by postcode
             record = record._replace(polling_place_easting="0")
             record = record._replace(polling_place_northing="0")
 
         return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn == "10011992099":
+            rec["postcode"] = "PE32 2DQ"
+        if uprn == "10011984924":
+            rec["postcode"] = "NR20 4FW"
+
+        if uprn == "10011991979":
+            return None
+
+        if (
+            record.addressline1 == "122/123"
+            and record.addressline2 == "Green Lane Quidenham"
+            and record.addressline3 == "Norwich"
+            and record.addressline4 == "Norfolk"
+        ):
+            return None
+
+        if uprn in [
+            "10011984733"  # PE322NB -> PE322RP : Lilac Cottages, 2 Litcham Road, Beeston, Kings Lynn, Norfolk
+        ]:
+            rec["accept_suggestion"] = True
+
+        if uprn in [
+            "100091305655",  # NR171DY -> NR171EA : Red Lodge, Watton Road, Shropham, Attleborough, Norfolk
+            "100090787475",  # IP257AX -> IP257BL : Flint Cottage, Hale Road, Ashill, Thetford, Norfolk
+            "100091311394",  # IP256RS -> IP257JJ : Wood Farm Estate, Dereham Road, Ovington, Thetford, Norfolk
+        ]:
+            rec["accept_suggestion"] = False
+
+        return rec
