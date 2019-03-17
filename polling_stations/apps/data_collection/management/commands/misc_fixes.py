@@ -30,6 +30,9 @@ class Command(BaseCommand):
             "10007921239",
             "10007920387",
             "10007920390",
+            "10024288188",
+            "10024288190",
+            "10024288189",
         ]
         addresses = Address.objects.filter(pk__in=bad_uprns)
         for address in addresses:
@@ -39,6 +42,17 @@ class Command(BaseCommand):
 
         print("removing dodgy blacklist entries (result of bad point in AddressBase)..")
         blacklist = Blacklist.objects.filter(postcode="RH122LP")
+        if len(blacklist) == 2:
+            for b in blacklist:
+                b.delete()
+                print("..deleted")
+        else:
+            print("..NOT deleted")
+
+        print(
+            "removing dodgy blacklist entries (result of bad points in AddressBase).."
+        )
+        blacklist = Blacklist.objects.filter(postcode="S24AX")
         if len(blacklist) == 2:
             for b in blacklist:
                 b.delete()
