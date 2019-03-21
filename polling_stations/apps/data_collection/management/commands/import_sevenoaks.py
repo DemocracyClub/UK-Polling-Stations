@@ -1,24 +1,29 @@
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.github_importer import BaseGitHubImporter
 
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    srid = 27700
+class Command(BaseGitHubImporter):
+    srid = 4326
     council_id = "E07000111"
-    districts_name = "New May 2017/SDC_PollingDistricts_2017"
-    stations_name = "New May 2017/SDC_CouncilElections2017.shp"
-    elections = ["local.kent.2017-05-04", "parl.2017-06-08"]
+    elections = ["local.2019-05-02"]
+    scraper_name = "wdiv-scrapers/DC-PollingStations-Sevenoaks"
+    geom_type = "geojson"
 
     def district_record_to_dict(self, record):
-        code = str(record[3]).strip()
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
         return {
-            "internal_council_id": code,
-            "name": str(record[0]).strip(),
-            "polling_station_id": code,
+            "internal_council_id": record["AREA_CODE"],
+            "name": "%s - %s" % (record["Name"], record["AREA_CODE"]),
+            "area": poly,
+            "polling_station_id": record["AREA_CODE"],
         }
 
     def station_record_to_dict(self, record):
+        location = self.extract_geometry(
+            record, self.geom_type, self.get_srid("stations")
+        )
         return {
-            "internal_council_id": str(record[2]).strip(),
+            "internal_council_id": record["AreaCode"],
             "postcode": "",
-            "address": str(record[10]).strip(),
+            "address": record["Address"],
+            "location": location,
         }
