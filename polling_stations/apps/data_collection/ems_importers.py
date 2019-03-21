@@ -461,7 +461,7 @@ class BaseDemocracyCountsCsvImporter(
 
     def address_record_to_dict(self, record):
 
-        if record.postcode == "A1 1AA":
+        if getattr(record, self.postcode_field).strip() == "A1 1AA":
             # this is a dummy record
             return None
 

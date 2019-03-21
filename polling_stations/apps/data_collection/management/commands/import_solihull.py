@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
@@ -10,8 +11,38 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
+
+        # The Loft Above Asda
         if record.polling_place_id == "6826":
             record = record._replace(polling_place_uprn="010023647341")
+
+        # Tudor Grange Leisure Centre
+        if record.polling_place_id == "7027":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.7881577, 52.4124167, srid=4326)
+            return rec
+
+        # Three Trees Community Centre
+        if record.polling_place_id == "6824":
+            record = record._replace(polling_place_uprn="100071461342")
+
+        # Elmwood Place
+        if record.polling_place_id in ["7041", "7011"]:
+            record = record._replace(polling_place_uprn="10090946409")
+
+        # Auckland Hall
+        if record.polling_place_id == "7004":
+            record = record._replace(polling_place_uprn="200003829755")
+
+        # Dorridge Methodist Church
+        if record.polling_place_id == "7081":
+            record = record._replace(polling_place_uprn="100071001475")
+
+        # Catherine de Barnes Village Hall
+        if record.polling_place_id == "6777":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.7382134, 52.4203089, srid=4326)
+            return rec
 
         return super().station_record_to_dict(record)
 
