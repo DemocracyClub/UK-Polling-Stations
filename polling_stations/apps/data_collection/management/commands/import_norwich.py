@@ -3,18 +3,28 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000148"
-    addresses_name = "local.2018-05-03/Version 1/polling_station_export-2018-03-06.csv"
-    stations_name = "local.2018-05-03/Version 1/polling_station_export-2018-03-06.csv"
-    elections = ["local.2018-05-03"]
+    addresses_name = (
+        "local.2019-05-02/Version 1/polling_station_export-2019-03-06Norwich.csv"
+    )
+    stations_name = (
+        "local.2019-05-02/Version 1/polling_station_export-2019-03-06Norwich.csv"
+    )
+    elections = ["local.2019-05-02"]
 
     def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.uprn.strip().lstrip("0")
 
-        if record.housepostcode == "NR1 2EE":
+        if record.housepostcode.strip() in ["NR4 7FW", "RG8 0RR"]:
             return None
 
-        if record.houseid == "71720":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR1 4AB"
-            return rec
+        if record.housepostcode.strip() == "NR3 4EB":
+            # this one is just.. odd
+            return None
 
-        return super().address_record_to_dict(record)
+        if uprn in [
+            "100091553263"  # NR23AT -> NR23AU : ST JOHNS HOUSE 38 HEIGHAM ROAD, NORWICH
+        ]:
+            rec["accept_suggestion"] = True
+
+        return rec
