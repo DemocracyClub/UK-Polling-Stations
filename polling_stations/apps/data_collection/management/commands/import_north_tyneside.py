@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 from data_collection.addresshelpers import (
@@ -8,9 +9,14 @@ from data_collection.addresshelpers import (
 
 class Command(BaseCsvStationsCsvAddressesImporter):
     council_id = "E08000022"
-    addresses_name = "local.2018-05-03/Version 1/Democracy Club.csv"
-    stations_name = "local.2018-05-03/Version 1/Democracy Club.csv"
-    elections = ["local.2018-05-03"]
+    addresses_name = (
+        "local.2019-05-02/Version 1/North Tyneside Council - Polling Station Data.tsv"
+    )
+    stations_name = (
+        "local.2019-05-02/Version 1/North Tyneside Council - Polling Station Data.tsv"
+    )
+    elections = ["local.2019-05-02"]
+    csv_delimiter = "\t"
 
     def get_station_hash(self, record):
         return "-".join([record.col12.strip()])
@@ -18,16 +24,16 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     def get_station_address(self, record):
         return format_polling_station_address(
             [
-                record.col23.strip(),
-                record.col24.strip(),
-                record.col25.strip(),
-                record.col26.strip(),
-                record.col27.strip(),
+                record.col37.strip(),
+                record.col38.strip(),
+                record.col39.strip(),
+                record.col40.strip(),
+                record.col41.strip(),
             ]
         )
 
     def get_station_point(self, record):
-        postcode = record.col32.strip()
+        postcode = record.col46.strip()
         if postcode == "":
             return None
 
@@ -40,29 +46,55 @@ class Command(BaseCsvStationsCsvAddressesImporter):
 
     def station_record_to_dict(self, record):
         location = self.get_station_point(record)
+        code = record.col12.strip()
+        postcode = record.col46.strip()
+
+        if code == "OE":
+            postcode = "NE30 4RH"
+            location = Point(-1.429405, 55.019131, srid=4326)
+
         return {
-            "internal_council_id": record.col12.strip(),
-            "postcode": record.col32.strip(),
+            "internal_council_id": code,
+            "postcode": postcode,
             "address": self.get_station_address(record),
             "location": location,
         }
 
     def address_record_to_dict(self, record):
-        if record.col22.strip() == "47237285":
+        uprn = record.col36.strip()
+
+        if uprn == "47237285":
             return None
 
         address = format_residential_address(
             [
-                record.col13.strip(),
-                record.col14.strip(),
-                record.col15.strip(),
-                record.col16.strip(),
-                record.col17.strip(),
+                record.col27.strip(),
+                record.col28.strip(),
+                record.col29.strip(),
+                record.col30.strip(),
+                record.col31.strip(),
+                record.col32.strip(),
             ]
         )
-        return {
+        rec = {
             "address": address.strip(),
-            "postcode": record.col21.strip(),
+            "postcode": record.col35.strip(),
             "polling_station_id": record.col12.strip(),
-            "uprn": record.col22.strip(),
+            "uprn": uprn,
         }
+
+        if address == "30 PHOENIX RISE, MOOR PARK NORTH SHIELDS":
+            return None
+
+        if uprn in [
+            "47029975",  # NE237JT -> NE237JU : EAST BARNS, GREENS HOUSES FARM, DUDLEY LANE, SEATON BURN
+            "47035320",  # NE237AG -> NE237AF : RESIDENTIAL HOUSE AT, 83 FERN DRIVE, DUDLEY
+            "47024602",  # NE289ED -> NE289HP : BATTLE HILL VICARAGE, BERWICK DRIVE, WALLSEND
+            "47093421",  # NE299JU -> NE296SL : THE OLD VICARAGE, PRESTON ROAD, NORTH SHIELDS
+            "47102033",  # NE304HQ -> NE304NU : FLAT 3, 45 PERCY GARDENS, TYNEMOUTH
+            "47072822",  # NE258RU -> NE270XL : 18 PRIORY AVENUE, WHITLEY BAY
+            "47072818",  # NE258RU -> NE270XL : 14 PRIORY AVENUE, WHITLEY BAY
+        ]:
+            rec["accept_suggestion"] = False
+
+        return rec
