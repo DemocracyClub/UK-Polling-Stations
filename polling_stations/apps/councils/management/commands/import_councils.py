@@ -28,19 +28,19 @@ TEMP_CONTACT_DETAILS = {
     },
     "E06000058": {
         "name": "Bournemouth, Christchurch & Poole Council",
-        "website": "",
+        "website": "https://www.bcpcouncil.gov.uk",
         "email": "",
         "phone": "01202 633097",
-        "address": "",
-        "postcode": "",
+        "address": "Town Hall\nBourne Avenue\nBournemouth",
+        "postcode": "BH2 6DY",
     },
     "E06000059": {
         "name": "Dorset Council",
-        "website": "",
+        "website": "https://www.dorset.gov.uk/",
         "email": "elections@dorset.gov.uk",
         "phone": "01305 838299",
-        "address": "",
-        "postcode": "",
+        "address": "South Walks House\nSouth Walks Road\nDorchester",
+        "postcode": "DT1 1UZ",
     },
     "E07000244": {
         "name": "East Suffolk Council",
@@ -55,8 +55,8 @@ TEMP_CONTACT_DETAILS = {
         "website": "https://www.westsuffolk.gov.uk/",
         "email": "elections@westsuffolk.gov.uk",
         "phone": "01638 719366 / 01284 757131",
-        "address": "",
-        "postcode": "",
+        "address": "Suffolk House\nWestern Way\nBury St Edmunds\nSuffolk",
+        "postcode": "IP33 3YU",
     },
 }
 
