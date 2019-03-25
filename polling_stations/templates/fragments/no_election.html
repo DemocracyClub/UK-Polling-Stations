@@ -5,17 +5,18 @@
   {% include "fragments/cancelled_election.html" %}
 {% else %}
   <h2>We don't know of any upcoming elections in your area</h2>
-  {% if council.phone %}
-    {% blocktrans with council.name as council_name and council.phone as council_phone %}
+  {% if council.phone and council.website %}
+    {% blocktrans with council.name as council_name and council.phone as council_phone and council.website as council_website %}
     <p>
-      We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call your council to check.
-      You can contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
+      There are no district council or mayoral elections in your area. There may be parish, town or community council elections in some areas.
+      Check your local <a href="{{ council_website }}">council website</a> for more information, or contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
     </p>
     {% endblocktrans %}
   {% else %}
     {% blocktrans with council.name as council_name %}
     <p>
-      We're not aware of any upcoming elections in your area. If you think there may be elections in your area, please call {{ council_name }} to check.
+        There are no district council or mayoral elections in your area. There may be parish, town or community council elections in some areas.
+        If you think there may be elections in your area, call {{ council_name }} to check.
     </p>
     {% endblocktrans %}
   {% endif %}
