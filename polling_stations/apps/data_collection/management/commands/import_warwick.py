@@ -10,9 +10,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
 
+        # The Church Room (next to Holy Trinity Church)
         if record.polling_place_id == "7562":
             record = record._replace(polling_place_postcode="CV35 8JE")
-
         # Wasperton Village Hall, Wasperton
         if record.polling_place_id == "7232":
             record = record._replace(polling_place_postcode="CV35 8EB")
@@ -27,7 +27,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_postcode="CV32 7AG")
         # Lowsonford Village Hall, Lowsonford
         if record.polling_place_id == "7280":
-            record = record._replace(polling_place_postcode="CV35 8JE")
+            record = record._replace(polling_place_postcode="B95 5ER")
         # Church of Jesus Christ Of Latter Day Saints, Saltisford/Birmingham Road/A425, Warwick
         if record.polling_place_id in ["7526", "7476", "7479"]:
             record = record._replace(polling_place_postcode="CV34 4TT")
