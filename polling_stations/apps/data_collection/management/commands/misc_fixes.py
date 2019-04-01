@@ -46,6 +46,19 @@ class Command(BaseCommand):
         broxbourne.save()
         print("..updated")
 
+        print("updating Wyre Forest email...")
+        wyre_forest = Council.objects.get(pk="E07000239")
+        wyre_forest.email = "customerservice@wyreforestdc.gov.uk"
+        wyre_forest.save()
+        print("..updated")
+
+        print("updating Watford address...")
+        watford = Council.objects.get(pk="E07000103")
+        watford.address = "Electoral Services Office\nRoom 22\nTown Hall\nWatford"
+        watford.postcode = "WD17 3EX"
+        watford.save()
+        print("..updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             "10023906550",
