@@ -20,7 +20,7 @@ def union_areas(a1, a2):
 TEMP_CONTACT_DETAILS = {
     "E07000246": {
         "name": "Somerset West & Taunton Council",
-        "website": "",
+        "website": "https://www.somersetwestandtaunton.gov.uk/",
         "email": "elections@somersetwestandtaunton.gov.uk",
         "phone": "01823 358692",
         "address": "Electoral Services\nWest Somerset House\nKillick Way\nWilliton",
