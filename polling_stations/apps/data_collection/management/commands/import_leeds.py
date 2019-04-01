@@ -7,6 +7,35 @@ class Command(BaseXpressWebLookupCsvImporter):
     stations_name = "local.2019-05-02/Version 3/Democracy_Club_2.5.2019.CSV"
     elections = ["local.2019-05-02"]
 
+    def station_record_to_dict(self, record):
+
+        """
+        Sorry to bother you but we have come across an error in the data that
+        we sent to you the Polling Stations for BHB & BHK have been transposed
+        BHB should be Mill Hill Unitarian Chapel
+        BHK should be Holbeck Working Mens Club
+        """
+
+        if record.pollingdistrictreference == "BHK":
+            record = record._replace(pollingplaceaddress1="Holbeck Working Mens Club")
+            record = record._replace(pollingplaceaddress2="(The Lounge)")
+            record = record._replace(pollingplaceaddress3="Jenkinson Lawn")
+            record = record._replace(pollingplaceaddress4="Holbeck")
+            record = record._replace(pollingplaceaddress5="Leeds")
+            record = record._replace(pollingplaceaddress6="")
+            record = record._replace(pollingplaceaddress7="LS11 9QX")
+
+        if record.pollingdistrictreference == "BHB":
+            record = record._replace(pollingplaceaddress1="Mill Hill Unitarian Chapel")
+            record = record._replace(pollingplaceaddress2="City Square")
+            record = record._replace(pollingplaceaddress3="Leeds")
+            record = record._replace(pollingplaceaddress4="")
+            record = record._replace(pollingplaceaddress5="")
+            record = record._replace(pollingplaceaddress6="")
+            record = record._replace(pollingplaceaddress7="LS1 5EB")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
