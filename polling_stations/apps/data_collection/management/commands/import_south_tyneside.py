@@ -3,12 +3,21 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000023"
-    addresses_name = (
-        "local.2018-05-03/Version 2/Democracy_Club__03May2018 - South Tyneside.tsv"
-    )
-    stations_name = (
-        "local.2018-05-03/Version 2/Democracy_Club__03May2018 - South Tyneside.tsv"
-    )
-    elections = ["local.2018-05-03"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019sts.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019sts.tsv"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
-    csv_encoding = "windows-1252"
+
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn == "100000345804":
+            return None
+
+        if uprn in [
+            "200000002007"  # NE340PW -> NE340YE : Staff Residence, 169 Harton Lane, South Shields
+        ]:
+            rec["accept_suggestion"] = True
+
+        return rec
