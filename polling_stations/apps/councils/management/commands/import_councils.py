@@ -20,7 +20,7 @@ def union_areas(a1, a2):
 TEMP_CONTACT_DETAILS = {
     "E07000246": {
         "name": "Somerset West & Taunton Council",
-        "website": "",
+        "website": "https://www.somersetwestandtaunton.gov.uk/",
         "email": "elections@somersetwestandtaunton.gov.uk",
         "phone": "01823 358692",
         "address": "Electoral Services\nWest Somerset House\nKillick Way\nWilliton",
@@ -182,8 +182,7 @@ class Command(BaseCommand):
     def get_from_yvm(self, council_id):
         url = "{}{}".format(settings.YVM_LA_URL, council_id)
         req = requests.get(url)
-        content = req.text
-        return json.loads(str(content))
+        return req.json()
 
     def get_contact_info_from_yvm(self, council_id):
         try:
@@ -208,7 +207,7 @@ class Command(BaseCommand):
         info = {}
         info["name"] = html.unescape(council_data.get("office"))
         info["website"] = self.clean_url(council_data.get("website"))
-        info["email"] = council_data.get("email")
+        info["email"] = council_data.get("email").strip()
         info["phone"] = (
             council_data.get("telephone", "").replace("</a>", "").split(">")[-1]
         )
