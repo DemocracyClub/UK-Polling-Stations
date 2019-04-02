@@ -22,30 +22,6 @@ def update_station_point(council_id, station_id, point):
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
-        print("updating Breckland phone number...")
-        breckland = Council.objects.get(pk="E07000143")
-        breckland.phone = "01362 656870"
-        breckland.save()
-        print("..updated")
-
-        print("updating Norwich phone number...")
-        norwich = Council.objects.get(pk="E07000148")
-        norwich.phone = "0344 980 3333"
-        norwich.save()
-        print("..updated")
-
-        print("updating Darlington phone number...")
-        darlington = Council.objects.get(pk="E06000005")
-        darlington.phone = "01325 406444"
-        darlington.save()
-        print("..updated")
-
-        print("updating Broxbourne phone number...")
-        broxbourne = Council.objects.get(pk="E07000095")
-        broxbourne.phone = "01992 785577"
-        broxbourne.save()
-        print("..updated")
-
         print("updating Wyre Forest email...")
         wyre_forest = Council.objects.get(pk="E07000239")
         wyre_forest.email = "customerservice@wyreforestdc.gov.uk"

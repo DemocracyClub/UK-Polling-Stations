@@ -16,6 +16,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if "Marl Park" in address:
             rec["polling_station_id"] = "9663"
 
+        if "Larkin Lane" in address:
+            rec["polling_station_id"] = "9610"
+
+        if "Joe Tasker Way" in address:
+            rec["polling_station_id"] = "9684"
+
         if uprn in [
             "21111021",  # HU52QS -> HU52RA : 44A Princes Road, Kingston Upon Hull
             "21124359",  # HU53LT -> HU53LR : 110 Belvoir Street, Kingston upon Hull
