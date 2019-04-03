@@ -34,15 +34,15 @@ class Command(BaseHalaroseCsvImporter):
             rec["accept_suggestion"] = True
 
         if uprn in [
-            "100052084411",  # S118RQ -> S118RP : Coach House 11 Brocco Bank, Sheffield
+            "100052084411",  # S118RQ -> S118RP : Coach House, Westwood House, 11 Brocco Bank, Sheffield
             "10023155059",  # S11HA -> S57EH : Archer Project Sheffield Cathedral Church Street, Sheffield
             "10090614322",  # S80ZH -> S87LD : 88 Chippinghouse Road, Sheffield
             "100051004490",  # S117TG -> S103TE : School House Ivy Cottage Lane, Sheffield
             "100050928743",  # S104PE -> S104QX : Soughley Cottage Brown Hills Lane, Sheffield
             "10003573730",  # S66GH -> S66GD : Fern Hill Hollow Meadows, Sheffield
-            "10013159987",  # S66GQ -> S66LJ : 1 Trouble Wood Lane, Sheffield
-            "10013159991",  # S66GQ -> S66LJ : 2 Trouble Wood Lane, Sheffield
-            "10094032044",  # S66GQ -> S66LJ : 3 Trouble Wood Lane, Sheffield
+            "10013159987",  # S66GQ -> S66LJ : 1 Matley Farm Cottages, Trouble Wood Lane, Sheffield
+            "10013159991",  # S66GQ -> S66LJ : 2 Matley Farm Cottages, Trouble Wood Lane, Sheffield
+            "10094032044",  # S66GQ -> S66LJ : 3 Matley Farm Cottages, Trouble Wood Lane, Sheffield
             "100051072776",  # S124LW -> S124LT : The Fairway 162 Sheffield Road, Hackenthorpe, Sheffield
             "200002991853",  # S137PL -> S124LP : 1 Beighton Road, Sheffield
             "200003018213",  # S101QS -> S101QN : 8 Northfield Road, Sheffield
@@ -58,7 +58,7 @@ class Command(BaseHalaroseCsvImporter):
             "200002999315",  # S25RH -> S25QQ : 222 Norwich Row, Sheffield
             "200002999318",  # S25RH -> S25QQ : 225 Norwich Row, Sheffield
             "200002999858",  # S25RG -> S25QQ : 98 Norwich Row, Sheffield
-            "200003016406",  # S66LJ -> S66LH : Ashley Cottage High Bradfield, Sheffield
+            "200003016406",  # S66LJ -> S66LH : Ashley Cottage, Moor Road, High Bradfield, Sheffield
             "200003021852",  # S363ZB -> S363ZA : Yew Trees Cottage Yew Trees Lane, Bolsterstone, Sheffield
             "200003021853",  # S363ZB -> S363ZA : Yew Trees Farm Yew Trees Lane, Bolsterstone, Sheffield
             "100050981171",  # S361LL -> S364GH : The Cruck Barn Green Farm Green Lane, Stocksbridge, Sheffield
