@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
@@ -7,6 +8,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019easthants.tsv"
     elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
+
+    def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
+        if record.polling_place_id == "10278":
+            rec["location"] = Point(-1.013446, 50.916221, srid=4326)
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
