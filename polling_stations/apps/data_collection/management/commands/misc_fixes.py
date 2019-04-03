@@ -22,6 +22,12 @@ def update_station_point(council_id, station_id, point):
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
+        print("updating Southend email...")
+        southend = Council.objects.get(pk="E06000033")
+        southend.email = "elections@southend.gov.uk"
+        southend.save()
+        print("..updated")
+
         print("updating Wyre Forest email...")
         wyre_forest = Council.objects.get(pk="E07000239")
         wyre_forest.email = "customerservice@wyreforestdc.gov.uk"
