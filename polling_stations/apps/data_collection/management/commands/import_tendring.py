@@ -3,12 +3,8 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000076"
-    addresses_name = (
-        "local.2019-05-02/Version 2/Tendring Eastings & Northings GIS References.TSV"
-    )
-    stations_name = (
-        "local.2019-05-02/Version 2/Tendring Eastings & Northings GIS References.TSV"
-    )
+    addresses_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019Tendring.tsv"
+    stations_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019Tendring.tsv"
     elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
 
