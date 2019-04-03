@@ -12,6 +12,8 @@ class Command(BaseHalaroseCsvImporter):
         rec = super().station_record_to_dict(record)
         if rec["internal_council_id"] == "7-meden-vale-methodist-church":
             rec["location"] = Point(-1.1309629, 53.2221165, srid=4326)
+        if rec["internal_council_id"] == "18-chesterfield-road-south-methodist-church":
+            rec["location"] = Point(-1.209920, 53.154687, srid=4326)
         return rec
 
     def address_record_to_dict(self, record):
