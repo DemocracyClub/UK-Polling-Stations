@@ -61,6 +61,9 @@ class Command(BaseHalaroseCsvImporter):
         if record.pollingstationnumber == "40":
             record = record._replace(pollingstationpostcode="WV13 1QG")
 
+        if record.pollingstationnumber == "10":
+            record = record._replace(pollingstationaddress_1="50 RYECROFT PLACE")
+
         rec = super().station_record_to_dict(record)
 
         if record.pollingstationnumber == "68":
