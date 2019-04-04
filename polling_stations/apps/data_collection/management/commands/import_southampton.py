@@ -72,7 +72,7 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
         address_parts = address.split(", ")
         if address_parts[-1][:2] == "SO":
             postcode = address_parts[-1]
-            del (address_parts[-1])
+            del address_parts[-1]
         else:
             postcode = ""
         address = "\n".join(address_parts)
