@@ -39,7 +39,7 @@ class Command(BaseGitHubImporter):
     def station_record_to_dict(self, record):
         code = record["Polling_di"].strip()
         address = self.station_addresses[code]
-        del (self.station_addresses[code])  # remove station addresses as we use them
+        del self.station_addresses[code]  # remove station addresses as we use them
 
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")

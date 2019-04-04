@@ -18,7 +18,7 @@ class Command(BaseCsvStationsShpDistrictsImporter):
     def format_address(self, address):
         address_parts = address.split(",")
         postcode = address_parts[-1].strip()
-        del (address_parts[-1])
+        del address_parts[-1]
         address_text = "\n".join([a.strip() for a in address_parts])
         return (address_text, postcode)
 
