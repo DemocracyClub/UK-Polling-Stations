@@ -388,19 +388,25 @@ class BaseHalaroseCsvImporter(
                 return ""
             return text.strip()
 
-        address_line_1 = (
-            replace_na(record.housename) + " " + replace_na(record.housenumber)
-        )
-        address_line_1 = address_line_1.strip()
-        street_address = (
-            replace_na(record.streetnumber) + " " + replace_na(record.streetname)
-        )
-        street_address = street_address.strip()
-        address_line_1 = address_line_1 + " " + street_address
+        address_line_1 = replace_na(record.housename)
+        if replace_na(record.substreetname):
+            address_line_2 = (
+                replace_na(record.housenumber) + " " + replace_na(record.substreetname)
+            ).strip()
+            address_line_3 = (
+                replace_na(record.streetnumber) + " " + replace_na(record.streetname)
+            ).strip()
+        else:
+            address_line_2 = (
+                replace_na(record.housenumber) + " " + replace_na(record.streetname)
+            ).strip()
+            address_line_3 = ""
 
         address = format_residential_address(
             [
                 address_line_1.strip(),
+                address_line_2.strip(),
+                address_line_3.strip(),
                 replace_na(record.locality),
                 replace_na(record.town),
                 replace_na(record.adminarea),

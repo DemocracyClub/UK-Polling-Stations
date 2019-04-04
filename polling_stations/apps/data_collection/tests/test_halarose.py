@@ -1,3 +1,4 @@
+from collections import namedtuple
 from django.test import TestCase
 
 from councils.models import Council
@@ -70,3 +71,102 @@ class HalaroseImportTests(TestCase):
             ]
         )
         self.assertEqual(set(stations), expected)
+
+    def test_address_formatter(self):
+        HalaroseAddress = namedtuple(
+            "HalaroseAddress",
+            [
+                "housename",
+                "housenumber",
+                "substreetname",
+                "streetnumber",
+                "streetname",
+                "locality",
+                "town",
+                "adminarea",
+            ],
+        )
+
+        test_cases = [
+            {
+                "in": HalaroseAddress(
+                    housename="Mill Cottage",
+                    housenumber="",
+                    substreetname="",
+                    streetnumber="",
+                    streetname="Parkside",
+                    locality="",
+                    town="Cleator Moor",
+                    adminarea="Cumbria",
+                ),
+                "out": "Mill Cottage, Parkside, Cleator Moor, Cumbria",
+            },
+            {
+                "in": HalaroseAddress(
+                    housename="The Elders",
+                    housenumber="6",
+                    substreetname="",
+                    streetnumber="",
+                    streetname="Church Street",
+                    locality="",
+                    town="Frizington",
+                    adminarea="Cumbria",
+                ),
+                "out": "The Elders, 6 Church Street, Frizington, Cumbria",
+            },
+            {
+                "in": HalaroseAddress(
+                    housename="",
+                    housenumber="1",
+                    substreetname="The Croft",
+                    streetnumber="",
+                    streetname="Wilton",
+                    locality="",
+                    town="Egremont",
+                    adminarea="Cumbria",
+                ),
+                "out": "1 The Croft, Wilton, Egremont, Cumbria",
+            },
+            {
+                "in": HalaroseAddress(
+                    housename="Flat 1",
+                    housenumber="",
+                    substreetname="Wulstan Hall",
+                    streetnumber="139",
+                    streetname="Queen Street",
+                    locality="",
+                    town="Whitehaven",
+                    adminarea="Cumbria",
+                ),
+                "out": "Flat 1, Wulstan Hall, 139 Queen Street, Whitehaven, Cumbria",
+            },
+            {
+                "in": HalaroseAddress(
+                    housename="The Cottage",
+                    housenumber="",
+                    substreetname="Laurel Court",
+                    streetnumber="",
+                    streetname="Rheda Park",
+                    locality="",
+                    town="Frizington",
+                    adminarea="Cumbria",
+                ),
+                "out": "The Cottage, Laurel Court, Rheda Park, Frizington, Cumbria",
+            },
+            {
+                "in": HalaroseAddress(
+                    housename="",
+                    housenumber="3B",
+                    substreetname="CLIVE COURT",
+                    streetnumber="24",
+                    streetname="GRAND PARADE",
+                    locality="",
+                    town="EASTBOURNE",
+                    adminarea="EAST SUSSEX",
+                ),
+                "out": "3B CLIVE COURT, 24 GRAND PARADE, EASTBOURNE, EAST SUSSEX",
+            },
+        ]
+        cmd = stub_halaroseimport.Command()
+        for case in test_cases:
+            self.assertEqual(case["out"], cmd.get_residential_address(case["in"]))
