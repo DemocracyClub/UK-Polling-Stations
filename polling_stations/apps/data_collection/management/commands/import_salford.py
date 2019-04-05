@@ -31,6 +31,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return rec
 
     def station_record_to_dict(self, record):
+        if record.polling_place_id == "4087":
+            record = record._replace(polling_place_name="The Angel Centre")
+            record = record._replace(polling_place_address_1="1 St Philips Place")
+            record = record._replace(polling_place_address_2="")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="Salford")
+            record = record._replace(polling_place_postcode="M3 6FA")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+
         rec = super().station_record_to_dict(record)
 
         if record.polling_place_id == "3897":
