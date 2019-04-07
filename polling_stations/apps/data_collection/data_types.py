@@ -324,6 +324,11 @@ class AddressList:
                         variable=(record, addressbase_record, match_quality),
                     )
                     record["postcode"] = addressbase_record["postcode"]
+                elif match_quality <= 50:
+                    # If [input record address] and [addressbase record address]
+                    # are less than 50% the same
+                    # don't bother flagging this one for manual review
+                    loglevel = logging.INFO
                 else:
                     if (
                         is_split_postcode(record["postcode"])
