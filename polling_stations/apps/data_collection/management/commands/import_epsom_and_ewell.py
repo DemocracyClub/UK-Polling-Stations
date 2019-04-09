@@ -1,3 +1,5 @@
+from addressbase.models import Address
+from uk_geo_utils.helpers import Postcode
 from data_collection.github_importer import BaseGitHubImporter
 
 
@@ -9,45 +11,44 @@ class Command(BaseGitHubImporter):
     elections = ["local.2019-05-02"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-EpsomAndEwell"
     geom_type = "gml"
-    duplicate_districts = set()
+    # districts file has station address and UPRN for district
+    # parse the districts file twice
+    stations_query = "districts"
 
-    def pre_import(self):
-        self.find_duplicate_districts()
-
-    def find_duplicate_districts(self):
-        # identify any district codes which appear
-        # more than once (with 2 different polygons)
-        # We do not want to import these.
-        seen = set()
-        districts = self.get_districts()
-        for district in districts:
-            if str(district["wardcode"]) in seen:
-                self.duplicate_districts.add(str(district["wardcode"]))
-            seen.add(str(district["wardcode"]))
-
-    def get_station_hash(self, record):
-        # handle exact dupes on code/address
-        return "-".join([record["wardname"], record["uprn"]])
+    def geocode_from_uprn(self, uprn, station_postcode):
+        uprn = uprn.lstrip("0").strip()
+        ab_rec = Address.objects.get(uprn=uprn)
+        ab_postcode = Postcode(ab_rec.postcode)
+        station_postcode = Postcode(station_postcode)
+        if ab_postcode != station_postcode:
+            print(
+                "Using UPRN {uprn} for station ID but '{pc1}' != '{pc2}'".format(
+                    uprn=uprn,
+                    pc1=ab_postcode.with_space,
+                    pc2=station_postcode.with_space,
+                )
+            )
+        return ab_rec.location
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        if record["wardcode"] in self.duplicate_districts:
-            return None
-        else:
-            return {
-                "internal_council_id": record["wardcode"],
-                "name": record["wardcode"],
-                "area": poly,
-                "polling_station_id": record["wardcode"],
-            }
+        return {
+            "internal_council_id": record["wardcode"],
+            "name": record["wardcode"],
+            "area": poly,
+            "polling_station_id": record["wardcode"],
+        }
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
+        postcode = " ".join(record["address"].split(" ")[-2:])
+        try:
+            location = self.geocode_from_uprn(record["uprn"].strip(), postcode)
+        except Address.DoesNotExist:
+            location = None
+
         return {
-            "internal_council_id": record["wardname"],
-            "postcode": "",
+            "internal_council_id": record["wardcode"],
             "address": record["address"],
+            "postcode": "",
             "location": location,
         }
