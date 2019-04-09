@@ -46,9 +46,9 @@ TEMP_CONTACT_DETAILS = {
         "name": "East Suffolk Council",
         "website": "https://www.eastsuffolk.gov.uk/",
         "email": "elections@eastsuffolk.gov.uk",
-        "phone": "01394 444422 / 01502 523320",
-        "address": "",
-        "postcode": "",
+        "phone": "01394 444422",
+        "address": "East Suffolk House\nStation Road\nMelton\nWoodbridge",
+        "postcode": "IP12 1RT",
     },
     "E07000245": {
         "name": "West Suffolk Council",
