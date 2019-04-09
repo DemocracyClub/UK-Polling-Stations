@@ -62,15 +62,28 @@ class EveryElectionWrapper:
         ]
         return sorted(ballots, key=lambda k: k["poll_open_date"])
 
+    def _get_next_election_date(self):
+        ballots = self.get_all_ballots()
+        next_charismatic_election_date = getattr(
+            settings, "NEXT_CHARISMATIC_ELECTION_DATE", None
+        )
+        if len(ballots) == 0:
+            return next_charismatic_election_date
+        dates = [datetime.strptime(b["poll_open_date"], "%Y-%m-%d") for b in ballots]
+        dates.sort()
+        return (
+            next_charismatic_election_date
+            if next_charismatic_election_date
+            else dates[0].strftime("%Y-%m-%d")
+        )
+
     def get_ballots_for_next_date(self):
         if not self.request_success:
             return []
         ballots = self.get_all_ballots()
         if len(ballots) == 0:
             return ballots
-        dates = [datetime.strptime(b["poll_open_date"], "%Y-%m-%d") for b in ballots]
-        dates.sort()
-        next_election_date = dates[0].strftime("%Y-%m-%d")
+        next_election_date = self._get_next_election_date()
         ballots = [e for e in ballots if e["poll_open_date"] == next_election_date]
         return ballots
 
@@ -160,7 +173,11 @@ class EveryElectionWrapper:
 
         if len(self.elections) > 0:
             for election in self.elections:
-                if "explanation" in election and election["explanation"]:
+                if (
+                    "explanation" in election
+                    and election["explanation"]
+                    and election["poll_open_date"] == self._get_next_election_date()
+                ):
                     explanations.append(
                         {
                             "title": election["election_title"],
