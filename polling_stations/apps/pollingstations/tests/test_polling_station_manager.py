@@ -61,5 +61,5 @@ class PollingStationsPointInPolygonTest(TestCase, PollingStationsTestBase):
         station = PollingStation.objects.get_polling_station(
             "X01000001", location=point
         )
-        # district AA has a blank station refernce
+        # district AA has a blank station reference
         self.assertIsNone(station)

@@ -156,7 +156,7 @@ class EveryElectionWrapper:
             return settings.EVERY_ELECTION["HAS_ELECTION"]
 
         if not self.request_success:
-            # if the request was unsucessful for some reason,
+            # if the request was unsuccessful for some reason,
             # assume there *is* an upcoming election
             return True
 
@@ -167,7 +167,7 @@ class EveryElectionWrapper:
     def get_explanations(self):
         explanations = []
         if not self.request_success:
-            # if the request was unsucessful for some reason,
+            # if the request was unsuccessful for some reason,
             # return no explanations
             return explanations
 

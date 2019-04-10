@@ -3,7 +3,7 @@
 The `/pollingdistricts` endpoint provides access to the polling district data underpinning our polling station finder.
 Where possible a polling district contains a [polling station object](#polling-stations-json-3)
 describing the station which serves this district. This may optionally be null if this district is an orphan district.
-An orphan district occurrs where we hold the boundary of a polling district but we don't know the corresponding polling station.
+An orphan district occurs where we hold the boundary of a polling district but we don't know the corresponding polling station.
 The polling station which serves a district does not necessarily have to be located inside the district it serves.
 
 
