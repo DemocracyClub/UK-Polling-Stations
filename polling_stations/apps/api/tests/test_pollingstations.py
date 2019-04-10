@@ -57,7 +57,7 @@ class PollingStationsTest(TestCase):
         self.assertEqual(True, ("geometry" in geo_response.data))
         self.assertEqual("Point", geo_response.data["geometry"]["type"])
 
-        # (non-geo) response should not contain gemoetry
+        # (non-geo) response should not contain geometry
         self.assertEqual(True, ("geometry" not in response.data))
 
         # properties key of geo_response should be the same as (non-geo) response

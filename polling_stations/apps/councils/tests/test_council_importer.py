@@ -67,7 +67,7 @@ class TestCouncilImporter(TestCase):
             "postcode": "",
         }
 
-        # supress output
+        # suppress output
         out = StringIO()
         cmd.stdout = out
         cmd.handle(**{"teardown": False, "alt_url": None})
