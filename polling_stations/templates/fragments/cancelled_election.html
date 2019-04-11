@@ -1,5 +1,9 @@
 {% load markdown_deux_tags %}
-<h2>Cancelled Election</h2>
+{% if cancelled_election.metadata.cancelled_election.title %}
+  <h2>{{ cancelled_election.metadata.cancelled_election.title }}</h2>
+{% else %}
+  <h2>Cancelled Election</h2>
+{% endif %}
 
 {% if cancelled_election.name %}
   {% if cancelled_election.rescheduled_date %}
@@ -17,6 +21,6 @@
 {% else %}
   <p>For more information contact {{ council.name }}
   {% if council.phone %}
-  on <strong><a href="tel:{{ council_phone }}">{{ council.phone }}</a></strong>
+  on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
   {% endif %}</p>
 {% endif %}
