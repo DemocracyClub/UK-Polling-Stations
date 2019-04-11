@@ -29,7 +29,7 @@ TEMP_CONTACT_DETAILS = {
     "E06000058": {
         "name": "Bournemouth, Christchurch & Poole Council",
         "website": "https://www.bcpcouncil.gov.uk",
-        "email": "",
+        "email": "elections@bcpcouncil.gov.uk",
         "phone": "01202 633097",
         "address": "Town Hall\nBourne Avenue\nBournemouth",
         "postcode": "BH2 6DY",
@@ -54,7 +54,7 @@ TEMP_CONTACT_DETAILS = {
         "name": "West Suffolk Council",
         "website": "https://www.westsuffolk.gov.uk/",
         "email": "elections@westsuffolk.gov.uk",
-        "phone": "01638 719366 / 01284 757131",
+        "phone": "01284 757131",
         "address": "Suffolk House\nWestern Way\nBury St Edmunds\nSuffolk",
         "postcode": "IP33 3YU",
     },
