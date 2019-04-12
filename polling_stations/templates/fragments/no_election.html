@@ -4,20 +4,17 @@
 {% if cancelled_election.cancelled %}
   {% include "fragments/cancelled_election.html" %}
 {% else %}
-  <h2>We don't know of any upcoming elections in your area</h2>
-  {% if council.phone and council.website %}
-    {% blocktrans with council.name as council_name and council.phone as council_phone and council.website as council_website %}
-    <p>
-      There are no district council or mayoral elections in your area. There may be parish, town or community council elections in some areas.
-      Check your local <a href="{{ council_website }}">council website</a> for more information, or contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
-    </p>
-    {% endblocktrans %}
-  {% else %}
-    {% blocktrans with council.name as council_name %}
-    <p>
-        There are no district council or mayoral elections in your area. There may be parish, town or community council elections in some areas.
-        If you think there may be elections in your area, call {{ council_name }} to check.
-    </p>
-    {% endblocktrans %}
-  {% endif %}
+  {# <h2>We don't know of any upcoming elections in your area</h2> #}
+  <h2>Upcoming Elections</h2>
+  {% blocktrans with council.name as council_name and council.phone as council_phone and council.website as council_website %}
+  <p>
+    <h3>2 May 2019</h3>
+    There are no district council or mayoral elections in your area on 2 May. There may be parish, town or community council elections in some areas.
+    Check your local <a href="{{ council_website }}">council website</a> for more information, or contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
+  </p>
+  <p>
+    <h3>23 May 2019</h3>
+    The UK is currently scheduled to participate in European Parliament Election on 23 May. Check back before 23 May to find out where to vote.
+  </p>
+  {% endblocktrans %}
 {% endif %}
