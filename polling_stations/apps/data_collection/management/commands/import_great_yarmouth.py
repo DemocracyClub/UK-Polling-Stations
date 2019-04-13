@@ -1,96 +1,71 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000145"
-    addresses_name = "local.2018-05-03/Version 1/polling_station_export-2018-04-20.csv"
-    stations_name = "local.2018-05-03/Version 1/polling_station_export-2018-04-20.csv"
-    elections = ["local.2018-05-03"]
+    addresses_name = (
+        "local.2019-05-02/Version 1/polling_station_export-2019-03-25G Yar.csv"
+    )
+    stations_name = (
+        "local.2019-05-02/Version 1/polling_station_export-2019-03-25G Yar.csv"
+    )
+    elections = ["local.2019-05-02"]
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
 
-        if record.pollingstationnumber == "15":
-            record = record._replace(pollingstationpostcode="NR29 4NH")
+        if rec["internal_council_id"] == "28-methodist-church-hall":
+            rec["location"] = Point(1.714309, 52.572677, srid=4326)
 
-        return super().station_record_to_dict(record)
+        return rec
 
     def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
+        if uprn == "100091323182":
+            rec["postcode"] = "NR31 0DX"
+
+        if uprn == "10023461966":
+            rec["postcode"] = "NR31 9HF"
+
         if record.houseid == "48125":
-            rec = super().address_record_to_dict(record)
             rec["postcode"] = "NR31 9EP"
-            return rec
 
         if uprn == "100091559681":
-            rec = super().address_record_to_dict(record)
             rec["postcode"] = "NR29 3PF"
-            return rec
-
-        if uprn == "10012182814":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR31 9FH"
-            return rec
 
         if uprn == "10012179821":
-            rec = super().address_record_to_dict(record)
             rec["postcode"] = "NR30 3LD"
-            return rec
 
         if uprn == "10012182400":
-            rec = super().address_record_to_dict(record)
             rec["postcode"] = "NR31 9EB"
-            return rec
 
         if record.houseid == "46097":
-            rec = super().address_record_to_dict(record)
             rec["postcode"] = "NR31 6LP"
-            return rec
-
-        if uprn == "10023460781":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR29 3DG"
-            return rec
-
-        if uprn == "10023466148":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR30 1EL"
-            return rec
-
-        if uprn == "10023466449":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR30 2GB"
-            return rec
-
-        if uprn == "10012180406":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR29 4JL"
-            return rec
 
         if uprn in ["100091318449", "100091616205"]:
-            rec = super().address_record_to_dict(record)
             rec["postcode"] = "NR29 4HZ"
-            return rec
 
         if record.houseid == "48177":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR31 6SG"
-            return rec
+            rec["postcode"] = "NR31 6SG"  # NR31 9AH
 
         if record.houseid == "48376":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR31 6QT"
-            return rec
-
-        if uprn == "10023460310":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR31 9FN"
-            return rec
+            rec["postcode"] = "NR31 6QT"  # NR30 2JT
 
         if record.houseid == "48841":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "NR30 3AY"
-            return rec
+            rec["postcode"] = "NR30 3AY"  # NR30 5AY
 
-        return super().address_record_to_dict(record)
+        if uprn in [
+            "10012182814",  # NR319TY -> NR319FH : 20 HERON WAY, KINGFISHER PARK, BUTT LANE, BURGH CASTLE, GREAT YARMOUTH
+            "10023466148",  # NR305EL -> NR301EL : FLAT 6 DEXLYN COURT, 8 9 NORFOLK SQUARE, GREAT YARMOUTH
+            "10012180406",  # NR294SL -> NR294JL : APHRODITE, 44 FAKES ROAD, NEWPORT, HEMSBY, GREAT YARMOUTH
+            "100091616205",  # NR293NF -> NR294HZ : 285 BELLE AIRE, BEACH ROAD, HEMSBY, GREAT YARMOUTH
+            "10023460310",  # NR319PN -> NR319FN : 15 WAVENEY VALLEY HOLIDAY VILLAGE, BUTT LANE, BURGH CASTLE, GREAT YARMOUTH
+            "10023467196",  # NR319AH -> NR316SG : 3 LOWESTOFT ROAD, HOPTON, GREAT YARMOUTH
+        ]:
+            rec["accept_suggestion"] = True
+
+        return rec
