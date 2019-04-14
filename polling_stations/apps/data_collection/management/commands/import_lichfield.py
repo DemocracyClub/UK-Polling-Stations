@@ -1,36 +1,30 @@
-from data_collection.management.commands import (
-    BaseApiShpZipStationsShpZipDistrictsImporter,
-)
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseApiShpZipStationsShpZipDistrictsImporter):
-    srid = 27700
-    districts_srid = 27700
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000194"
-    districts_url = "https://www.lichfielddc.gov.uk/Inspire-data-sets/Lichfield%20District%20Council%20Polling%20Districts/Lichfield%20District%20Council%20Polling%20Districts%20Shapefile.zip"
-    stations_url = "https://www.lichfielddc.gov.uk/Inspire-data-sets/Lichfield%20District%20Council%20Polling%20Stations/LDC_Polling_Stations_Shapefile.zip"
-    elections = ["local.staffordshire.2017-05-04", "parl.2017-06-08"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Lich.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Lich.tsv"
+    elections = ["local.2019-05-02"]
+    csv_delimiter = "\t"
 
-    def district_record_to_dict(self, record):
-        return {
-            "internal_council_id": str(record[4]).strip(),
-            "name": str(record[4]).strip(),
-            "polling_station_id": str(record[4]).strip(),
-        }
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
 
-    def station_record_to_dict(self, record):
-        address = "\n".join([str(record[1]).strip(), str(record[4]).strip()])
-        postcode = str(record[5]).strip()
-        codes = [record[9].strip(), record[10].strip(), record[11].strip()]
+        if uprn in [
+            "10013216157"  # WS70HZ -> WS70HT : The Coach House, Edial House Farm, Lichfield Road, Burntwood, Staffs
+        ]:
+            rec["accept_suggestion"] = True
 
-        stations = []
-        for code in codes:
-            if code != b"":
-                stations.append(
-                    {
-                        "internal_council_id": str(code),
-                        "postcode": postcode,
-                        "address": address,
-                    }
-                )
-        return stations
+        if uprn in [
+            "10002777436",  # B783TW -> B783SR : Longwood House, Drayton Manor Park, Tamworth, Staffs
+            "10024113376",  # B783TW -> B783TJ : Manor Lodge, Drayton Manor Park, Tamworth, Staffs
+            "10013216554",  # WS70BJ -> WS70BG : White Swan, 2 Cannock Road, Burntwood, Staffs
+            "100032225996",  # WS140ET -> WS140EU : Hilton Studio, Pouk Lane, Hilton, Lichfield, Staffs
+            "100031687250",  # WS70HY -> WS70HZ : Edial House, 415 Lichfield Road, Burntwood, Staffs
+            "10013848296",  # WS140EN -> WS140ER : Lynn Lane Farm, Lynn Lane, Shenstone, Lichfield, Staffs
+        ]:
+            rec["accept_suggestion"] = False
+
+        return rec
