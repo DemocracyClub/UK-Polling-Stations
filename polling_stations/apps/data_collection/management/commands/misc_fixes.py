@@ -41,6 +41,13 @@ class Command(BaseCommand):
         watford.save()
         print("..updated")
 
+        print("updating Harrogate address...")
+        harrogate = Council.objects.get(pk="E07000165")
+        harrogate.address = "Civic Centre\nSt Lukes Avenue\nHarrogate"
+        harrogate.postcode = "HG1 2AE"
+        harrogate.save()
+        print("..updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             "10023906550",

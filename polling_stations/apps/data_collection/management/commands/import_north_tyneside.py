@@ -53,6 +53,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
             postcode = "NE30 4RH"
             location = Point(-1.429405, 55.019131, srid=4326)
 
+        if code == "ME":
+            location = Point(-1.457842, 55.025205, srid=4326)
+
         return {
             "internal_council_id": code,
             "postcode": postcode,
