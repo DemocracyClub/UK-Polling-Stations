@@ -8,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "S12000042"
-    elections = ["parl.2017-06-08"]
+    elections = ["local.dundee-city.north-east.by.2019-05-02"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Dundee"
     geom_type = "geojson"
 
