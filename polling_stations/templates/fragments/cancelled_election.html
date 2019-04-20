@@ -21,6 +21,6 @@
 {% else %}
   <p>For more information contact {{ council.name }}
   {% if council.phone %}
-  on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
+  on <strong><a href="tel:{{ council.phone }}">{{ council.phone }}</a></strong>
   {% endif %}</p>
 {% endif %}
