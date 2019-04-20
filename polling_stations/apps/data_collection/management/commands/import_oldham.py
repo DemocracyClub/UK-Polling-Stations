@@ -3,55 +3,31 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000004"
-    addresses_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018 Oldham.tsv"
-    stations_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018 Oldham.tsv"
-    elections = ["local.2018-05-03"]
+    addresses_name = "local.2019-05-02/Version 1/oldham.gov.uk-1555340067000-.tsv"
+    stations_name = "local.2019-05-02/Version 1/oldham.gov.uk-1555340067000-.tsv"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "422000018374":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL9 9PW"
-            return rec
+        if record.addressline6.strip() == "M35 09D":
+            rec["postcode"] = "M35 0PD"
 
-        if uprn == "422000006570":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL9 9BA"
-            return rec
+        if uprn in [
+            "422000076707",  # OL83LB -> OL45LN : Hawthorne Inn, 365 Roundthorn Road, Oldham
+            "100012737571",  # OL35QL -> OL35AG : Ladbrook, Sandy Lane, Dobcross
+        ]:
+            rec["accept_suggestion"] = True
 
-        if record.addressline6 == "OL3 5GL":
-            return None
+        if uprn in [
+            "422000111697",  # OL45SN -> OL35SP : 150 Oldham Road, Springhead
+            "422000111695",  # OL45SN -> OL35SP : 146 Oldham Road, Springhead
+            "422000111696",  # OL45SN -> OL35SP : 148 Oldham Road, Springhead
+            "422000034208",  # M359JN -> M359JR : 69 Church Street, Failsworth
+            "422000126515",  # OL43FS -> OL43QA : 1 Old Manor Farm Close, Oldham
+        ]:
+            rec["accept_suggestion"] = False
 
-        if uprn == "422000046844":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL2 5DR"
-            return rec
-
-        if uprn == "422000011979":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL9 0EW"
-            return rec
-
-        if uprn == "422000076707":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL4 5LN"
-            return rec
-
-        if uprn == "422000044527":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL8 4QG"
-            return rec
-
-        if uprn == "422000104304":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL9 9DX"
-            return rec
-
-        if uprn == "422000086761":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL4 1NQ"
-            return rec
-
-        return super().address_record_to_dict(record)
+        return rec

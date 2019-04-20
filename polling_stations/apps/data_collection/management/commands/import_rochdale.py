@@ -1,73 +1,70 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000005"
-    addresses_name = "local.2018-05-03/Version 1/DC.TSV"
-    stations_name = "local.2018-05-03/Version 1/DC.TSV"
-    elections = ["local.2018-05-03"]
+    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Rochdale.tsv"
+    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Rochdale.tsv"
+    elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "2162":
+        # Mobile Unit at Black Dog Pub
+        if record.polling_place_id == "2829":
             record = record._replace(polling_place_postcode="OL12 7JG")
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-2.186986, 53.631252, srid=4326)
+            return rec
 
-        if record.polling_place_id == "1958":
+        # Bowls Pavilion
+        if record.polling_place_id == "2577":
             record = record._replace(polling_place_postcode="")
+
+        # The Coach House
+        if record.polling_place_id == "2469":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-2.0961003, 53.6444469, srid=4326)
+            return rec
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
 
-        if record.property_urn.strip() == "23108461":
-            return None
+        if uprn == "23033168":
+            rec["postcode"] = "OL10 4NS"
 
-        if record.property_urn.strip() == "23081457":
-            rec = super().address_record_to_dict(record)
+        if uprn == "23025164":
+            rec["postcode"] = "M24 2SD"
+
+        if record.addressline6.strip() == "OL15 OHX":
+            rec["postcode"] = "OL15 0HX"
+
+        if uprn == "23037819":
+            rec["postcode"] = "OL11 5HR"
+
+        if uprn == "23081457":
             rec["postcode"] = "OL12 9AA"
-            return rec
 
-        if record.addressline6 == "OL16 3BX":
+        if record.addressline6.strip() == "OL16 3BX":
             return None
 
-        if record.property_urn.strip() == "10023364627":
-            rec = super().address_record_to_dict(record)
-            rec["polling_station_id"] = ""
-            return rec
-
-        if record.addressline6 == "OL16 4RF":
+        if record.addressline6.strip() == "M24 5TG":
             return None
 
-        if record.addressline6 == "OL12 8DW":
-            return None
-
-        if record.property_urn.strip() == "10090921994":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "OL12 7RF"
-            return rec
-
-        if record.addressline6 == "OL12 8TN":
-            return None
-
-        if record.property_urn.strip() == "23099282":
-            rec = super().address_record_to_dict(record)
+        if uprn == "23099282":
             rec["postcode"] = "OL11 3AU"
-            return rec
 
-        if record.addressline6 == "OL16 1FD":
+        if record.addressline6.strip() == "OL16 5SJ":
             return None
 
-        if record.addressline6 == "M24 2SA":
+        if record.addressline6.strip() == "M24 2YS":
             return None
 
-        if record.addressline6 == "OL12 9BA":
-            return None
+        if uprn in ["23095362", "23095226"]:
+            rec["postcode"] = "OL12 9NE"
 
-        if record.property_urn.strip() == "10023364816":
-            return None
-
-        if record.addressline6 == "OL16 5SJ":
-            return None
-
-        return super().address_record_to_dict(record)
+        return rec

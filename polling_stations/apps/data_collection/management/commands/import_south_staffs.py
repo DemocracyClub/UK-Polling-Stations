@@ -1,3 +1,4 @@
+import os
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
@@ -7,6 +8,35 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019SST.tsv"
     elections = ["local.2019-05-02"]
     csv_delimiter = "\t"
+
+    def pre_import(self):
+        gridrefs_file = os.path.join(
+            self.base_folder_path, "local.2019-05-02/Version 1/grid_refs.tsv"
+        )
+        gridrefs = self.get_data("csv", gridrefs_file)
+        self.gridrefs = {
+            row.polling_station_id: {
+                "easting": row.easting,
+                "northing": row.northing,
+                "uprn": row.uprn,
+            }
+            for row in gridrefs
+        }
+
+    def station_record_to_dict(self, record):
+        polling_place_id = record.polling_place_id
+        if polling_place_id == "2864":
+            record = record._replace(
+                polling_place_uprn=self.gridrefs[polling_place_id]["uprn"]
+            )
+        else:
+            record = record._replace(
+                polling_place_easting=self.gridrefs[polling_place_id]["easting"]
+            )
+            record = record._replace(
+                polling_place_northing=self.gridrefs[polling_place_id]["northing"]
+            )
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
