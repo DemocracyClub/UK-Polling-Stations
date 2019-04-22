@@ -17,6 +17,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "4210":
             record = record._replace(polling_place_easting="458380")
 
+        # this one is a last-minute change of venue, not fixing an error
+        if record.polling_place_id == "4107":
+            record = record._replace(polling_place_name="Cotgrave Scout Hall")
+            record = record._replace(polling_place_address_1="Chapel Lane")
+            record = record._replace(polling_place_address_2="Cotgrave")
+            record = record._replace(polling_place_address_3="Nottingham")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="NG12 3JU")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):

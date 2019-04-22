@@ -13,8 +13,8 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     def station_record_to_dict(self, record):
 
         if record.polling_place_id == "10177":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_easting="510086")
+            record = record._replace(polling_place_northing="242021")
 
         return super().station_record_to_dict(record)
 
