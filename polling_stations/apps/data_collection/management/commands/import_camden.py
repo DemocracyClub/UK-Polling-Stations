@@ -23,7 +23,7 @@ class Command(BaseGenericApiImporter):
     districts_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E09000007/districts.kml"
     # This is just a bespoke XML format
     stations_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E09000007/stations.xml"
-    elections = ["local.2018-05-03"]
+    elections = ["europarl.2019-05-23"]
 
     def parse_kml_features(self, data):
         k = kml.KML()

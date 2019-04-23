@@ -22,18 +22,6 @@ def update_station_point(council_id, station_id, point):
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
-        print("updating Southend email...")
-        southend = Council.objects.get(pk="E06000033")
-        southend.email = "elections@southend.gov.uk"
-        southend.save()
-        print("..updated")
-
-        print("updating Wyre Forest email...")
-        wyre_forest = Council.objects.get(pk="E07000239")
-        wyre_forest.email = "customerservice@wyreforestdc.gov.uk"
-        wyre_forest.save()
-        print("..updated")
-
         print("updating Watford address...")
         watford = Council.objects.get(pk="E07000103")
         watford.address = "Electoral Services Office\nRoom 22\nTown Hall\nWatford"
@@ -46,6 +34,18 @@ class Command(BaseCommand):
         harrogate.address = "Civic Centre\nSt Lukes Avenue\nHarrogate"
         harrogate.postcode = "HG1 2AE"
         harrogate.save()
+        print("..updated")
+
+        print("updating Oadby & Wigston name...")
+        oadby = Council.objects.get(pk="E07000135")
+        oadby.name = "Oadby & Wigston Borough Council"
+        oadby.save()
+        print("..updated")
+
+        print("updating Swansea name...")
+        swansea = Council.objects.get(pk="W06000011")
+        swansea.name = "City & County of Swansea"
+        swansea.save()
         print("..updated")
 
         print("removing bad points from AddressBase")

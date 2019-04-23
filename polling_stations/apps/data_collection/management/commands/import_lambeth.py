@@ -6,7 +6,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E09000022"
-    elections = ["local.2018-05-03"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Lambeth"
     geom_type = "geojson"
 
@@ -26,6 +26,6 @@ class Command(BaseGitHubImporter):
         return {
             "internal_council_id": record["DISTRICT_C"],
             "postcode": record["POSTCODE"],
-            "address": "%s\n%s" % (record["VENUE"], record["ADDRESS"]),
+            "address": "%s\n%s" % (record["VENUE"], record["ADDRESS_1"]),
             "location": location,
         }
