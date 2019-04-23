@@ -36,6 +36,18 @@ class Command(BaseCommand):
         harrogate.save()
         print("..updated")
 
+        print("updating Oadby & Wigston name...")
+        oadby = Council.objects.get(pk="E07000135")
+        oadby.name = "Oadby & Wigston Borough Council"
+        oadby.save()
+        print("..updated")
+
+        print("updating Swansea name...")
+        swansea = Council.objects.get(pk="W06000011")
+        swansea.name = "City & County of Swansea"
+        swansea.save()
+        print("..updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             "10023906550",
