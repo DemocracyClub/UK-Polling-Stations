@@ -13,7 +13,6 @@ addons:
       - postgresql-10-postgis-2.4
       - gcc-5
       - g++-5
-      - chromium-chromedriver
 
 before_cache:
     - rm -f .tox/py36-django111/log/*.log
@@ -27,9 +26,6 @@ cache:
     - $HOME/.tox/
     - .tox
     - $HOME/drafter-v3.2.7/build/
-
-before_install:
-  - ln -s /usr/lib/chromium-browser/chromedriver ~/bin/chromedriver
 
 install:
   - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
@@ -46,6 +42,11 @@ install:
   - sudo cp src/drafter.h /usr/include/drafter/drafter.h
   - cd ..
   - rm -rf drafter-v3.2.7/
+  - wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - sudo chown root:root ./chromedriver
+  - sudo chmod 755 ./chromedriver
+  - sudo mv ./chromedriver ~/bin/chromedriver
 
 before_script:
   - psql -U postgres -c "create extension postgis"
