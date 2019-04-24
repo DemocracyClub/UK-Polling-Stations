@@ -712,7 +712,6 @@ class BaseScotlandSpatialHubImporter(
     districts_name = "parl.2017-06-08/polling_districts_20170526.shp"
     stations_name = "parl.2017-06-08/polling_places_20170526.shp"
     data_prefix = "Scotland May 2017"
-    run_in_series = True
 
     @property
     @abc.abstractmethod
