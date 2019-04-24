@@ -1,5 +1,6 @@
 import abc
 import json
+import random
 import requests
 import urllib
 from collections import namedtuple
@@ -10,6 +11,13 @@ from django.utils.translation import ugettext as _
 Directions = namedtuple(
     "Directions", ["time", "dist", "mode", "route", "precision", "source"]
 )
+
+
+def get_google_directions_token():
+    keys = settings.GOOGLE_API_KEYS
+    if len(keys) == 0:
+        return ""
+    return random.choice(keys)
 
 
 def get_distance(start, end):
@@ -38,7 +46,7 @@ class GoogleDirectionsClient(DirectionsClient):
 
     def get_base_url(self):
         return "{base}&key={key}".format(
-            base=settings.BASE_GOOGLE_URL, key=settings.GOOGLE_API_KEY
+            base=settings.BASE_GOOGLE_URL, key=get_google_directions_token()
         )
 
     def get_data(self, url):
