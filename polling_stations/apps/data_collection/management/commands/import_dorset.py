@@ -33,10 +33,21 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
             rec["location"] = Point(-2.567644, 50.668385, srid=4326)
             return rec
 
+        # user issue report #39
+        if record.polling_place_id == "30876":
+            record = record._replace(polling_place_uprn="100041099964")
+
         # user issue report #40
         if record.polling_place_id == "30606":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.437757, 50.915554, srid=4326)
+            return rec
+
+        # user issue report #41
+        if record.polling_place_id in ["30693", "30697"]:
+            record = record._replace(polling_place_postcode="BH24 2NS")
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.834570, 50.831005, srid=4326)
             return rec
 
         # user issue report #42
