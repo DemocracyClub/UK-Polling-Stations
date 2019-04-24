@@ -4,7 +4,7 @@ from data_collection.github_importer import BaseGitHubImporter
 
 class Command(BaseGitHubImporter):
     council_id = "E07000172"
-    elections = ["local.2019-05-02"]
+    elections = ["local.2019-05-02", "europarl.2019-05-23"]
 
     # This one is a bit of a mish-mash
     # The stations are on GitHub
