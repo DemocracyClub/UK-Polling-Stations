@@ -60,6 +60,12 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         if record.polling_place_id == "30783":
             record = record._replace(polling_place_postcode="BH20 4BA")
 
+        if record.polling_place_id == "30258":
+            record = record._replace(polling_place_address_3="DT1 2HJ")
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-2.443608, 50.709373, srid=4326)
+            return rec
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
