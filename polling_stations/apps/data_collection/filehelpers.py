@@ -74,9 +74,10 @@ Helper class for reading geographic data from ESRI SHP files
 
 
 class ShpHelper:
-    def __init__(self, filepath, zip=False):
+    def __init__(self, filepath, zip=False, encoding="utf-8"):
         self.filepath = filepath
         self.zip = zip
+        self.encoding = encoding
 
     def get_features(self):
         # If our shapefile is in a zip, extract it
@@ -91,10 +92,10 @@ class ShpHelper:
                 raise ValueError("Found %i shapefiles in archive" % len(shp_files))
             shp_file = shp_files[0]
 
-            sf = shapefile.Reader(shp_file)
+            sf = shapefile.Reader(shp_file, encoding=self.encoding)
             return sf.shapeRecords()
         else:
-            sf = shapefile.Reader(self.filepath)
+            sf = shapefile.Reader(self.filepath, encoding=self.encoding)
             return sf.shapeRecords()
 
 
@@ -167,9 +168,9 @@ class FileHelperFactory:
     @staticmethod
     def create(filetype, filepath, options):
         if filetype == "shp":
-            return ShpHelper(filepath)
+            return ShpHelper(filepath, zip=False, encoding=options["shp_encoding"])
         elif filetype == "shp.zip":
-            return ShpHelper(filepath, zip=True)
+            return ShpHelper(filepath, zip=True, encoding=options["shp_encoding"])
         elif filetype == "kml":
             return KmlHelper(filepath)
         elif filetype == "geojson":
@@ -177,6 +178,8 @@ class FileHelperFactory:
         elif filetype == "json":
             return JsonHelper(filepath)
         elif filetype == "csv":
-            return CsvHelper(filepath, options["encoding"], options["delimiter"])
+            return CsvHelper(
+                filepath, options["csv_encoding"], options["csv_delimiter"]
+            )
         else:
             raise ValueError("Unexpected file type: %s" % (filetype))
