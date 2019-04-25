@@ -709,9 +709,9 @@ class BaseScotlandSpatialHubImporter(
     """
 
     srid = 27700
-    districts_name = "parl.2017-06-08/polling_districts_20170526.shp"
-    stations_name = "parl.2017-06-08/polling_places_20170526.shp"
-    data_prefix = "Scotland May 2017"
+    districts_name = "euro.2019-05-23/Polling-Districts/pub_poldi.shp"
+    stations_name = "euro.2019-05-23/Polling-Places/pub_polpl.shp"
+    data_prefix = "Scotland-May-2019"
     run_in_series = True
 
     @property
@@ -743,7 +743,7 @@ class BaseScotlandSpatialHubImporter(
             return text.strip()
 
     def district_record_to_dict(self, record):
-        council_name = self.parse_string(record[3])
+        council_name = self.parse_string(record[2])
         if council_name != self.council_name:
             return None
 
@@ -758,15 +758,15 @@ class BaseScotlandSpatialHubImporter(
         return {"internal_council_id": code, "name": name, "polling_station_id": code}
 
     def station_record_to_dict(self, record):
-        council_name = self.parse_string(record[3])
+        council_name = self.parse_string(record[2])
         if council_name != self.council_name:
             return None
 
-        code = self.parse_string(record[1])
+        code = self.parse_string(record[0])
         if not code:
             return None
 
-        address = self.parse_string(record[0])
+        address = self.parse_string(record[3])
 
         return {"internal_council_id": code, "postcode": "", "address": address}
 
