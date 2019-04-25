@@ -27,11 +27,11 @@ def google_api_check(app_configs, **kwargs):
 
     if app_configs is None or apps.get_app_config("data_finder") in app_configs:
 
-        if settings.GOOGLE_API_KEY == "":
+        if not settings.GOOGLE_API_KEYS:
             errors.append(
                 Info(
-                    "Google API Key is not set - usage limits will apply",
-                    hint="Define GOOGLE_API_KEY as an env var or in local.py",
+                    "No Google API Keys are set - usage limits will apply",
+                    hint="Define GOOGLE_API_KEYS in local.py",
                     obj="data_finder",
                     id="data_finder.I002",
                 )

@@ -12,4 +12,4 @@ NOSE_ARGS = ["--verbosity=2", "--nologcapture", "--nocapture"]
 MIGRATION_MODULES = {app: None for app in INSTALLED_APPS if "django" not in app}
 
 MAPZEN_API_KEY = ""
-GOOGLE_API_KEY = ""
+GOOGLE_API_KEYS = []
