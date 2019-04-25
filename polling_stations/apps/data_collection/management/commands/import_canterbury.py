@@ -1,4 +1,4 @@
-from django.contrib.gis.geos import MultiPoint
+from django.contrib.gis.geos import Point, MultiPoint
 from data_collection.data_types import StationSet
 from data_collection.github_importer import BaseGitHubImporter
 
@@ -46,6 +46,11 @@ class Command(BaseGitHubImporter):
         )
         if isinstance(location, MultiPoint) and len(location) == 1:
             location = location[0]
+
+        # point supplied is bang on the building
+        # but causes google directions API to give us a strange route
+        if code == "CWE2" and address.startswith("St Dunstan"):
+            location = Point(1.070064, 51.283614, srid=4326)
 
         return {
             "internal_council_id": code,
