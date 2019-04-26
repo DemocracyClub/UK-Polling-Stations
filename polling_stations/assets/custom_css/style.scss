@@ -45,3 +45,20 @@ select[size], select[multiple] {
   background-color: $dc-green;
   color: #FFF;
 }
+
+
+.donate_card em {
+  background-color: yellow;
+  font-style: normal;
+  padding: 0.1em;
+}
+
+.donate_card .link-button {
+  background-color: #00AEEF;
+  border: 0;
+  padding: 0.4em 0.6em;
+  margin: 0.5em 0;
+  font-size: 1em;
+  color: #FFF;
+  border-bottom: 3px solid #0089bc;
+}
