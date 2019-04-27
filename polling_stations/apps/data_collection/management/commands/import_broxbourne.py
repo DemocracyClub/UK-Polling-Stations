@@ -7,6 +7,13 @@ class Command(BaseDemocracyCountsCsvImporter):
     stations_name = "local.2019-05-02/Version 1/Democracy club- polling stations for Borough of Broxbourne.csv"
     elections = ["local.2019-05-02"]
 
+    def station_record_to_dict(self, record):
+        # user issue report #46
+        if record.stationcode == "AHC_1":
+            record = record._replace(xordinate="0")
+            record = record._replace(yordinate="0")
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
