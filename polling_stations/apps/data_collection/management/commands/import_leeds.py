@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
 
@@ -33,6 +34,12 @@ class Command(BaseXpressWebLookupCsvImporter):
             record = record._replace(pollingplaceaddress5="")
             record = record._replace(pollingplaceaddress6="")
             record = record._replace(pollingplaceaddress7="LS1 5EB")
+
+        # user error report
+        if record.pollingplaceid == "93":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.580224, 53.852590, srid=4326)
+            return rec
 
         return super().station_record_to_dict(record)
 
