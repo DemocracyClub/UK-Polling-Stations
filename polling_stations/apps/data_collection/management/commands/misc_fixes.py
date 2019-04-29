@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-# from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from councils.models import Council
 from addressbase.models import Address, Blacklist
@@ -87,6 +87,21 @@ class Command(BaseCommand):
                 print("..deleted")
         else:
             print("..NOT deleted")
+
+        print("updating Meppershall Village Hall...")
+        stations = PollingStation.objects.filter(
+            council_id="E06000056", internal_council_id="10361"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-0.340481, 52.018151, srid=4326)
+            station.address = (
+                "Meppershall Village Hall\nWalnut Tree Way\nMeppershall\nSG17 5AB"
+            )
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
 
         deleteme = [
             # nothing yet
