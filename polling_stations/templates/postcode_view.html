@@ -92,6 +92,10 @@
         {% include "email_form/election_reminders_form.html" %}
       </div>
       {% include "fragments/ical_feed.html" %}
+
+      {% if we_know_where_you_should_vote %}
+        {% include "fragments/donate.html" %}
+      {% endif %}
     {% endif %}
 
 {% endblock content %}
