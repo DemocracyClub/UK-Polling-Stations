@@ -68,6 +68,8 @@
       {% include "election_explainers.html" %}
     {% endif %}
 
+    {% include "fragments/info_on_your_candidates.html" %}
+
     {% if we_know_where_you_should_vote or custom %}
       {% if request.brand == 'democracyclub' and has_election and not error %}
         <div class="card">
@@ -82,8 +84,6 @@
     {% if council.address or council.postcode or council.phone or council.email %}
       {% include "fragments/contact_details.html" %}
     {% endif %}
-
-    {% include "fragments/info_on_your_candidates.html" %}
 
     {% if not error and request.brand == 'democracyclub' and not messages %}
       <div class="card">
