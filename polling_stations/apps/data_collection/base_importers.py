@@ -212,7 +212,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
         # For areas with shape data, use AddressBase
         # to clean up overlapping postcode
-        if not kwargs.get("noclean"):
+        if not kwargs.get("noclean") and hasattr(self, "district_record_to_dict"):
             self.clean_postcodes_overlapping_districts(self.batch_size, self.logger)
 
         # save and output data quality report
