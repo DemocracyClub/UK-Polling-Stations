@@ -88,7 +88,7 @@ class Command(BaseCommand):
         else:
             print("..NOT deleted")
 
-        print("updating Meppershall Village Hall...")
+        print("updating: Meppershall Village Hall...")
         stations = PollingStation.objects.filter(
             council_id="E06000056", internal_council_id="10361"
         )
@@ -98,6 +98,29 @@ class Command(BaseCommand):
             station.address = (
                 "Meppershall Village Hall\nWalnut Tree Way\nMeppershall\nSG17 5AB"
             )
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # user issue report #49
+        print("updating: WI Hall, Faversham Road...")
+        update_station_point("E07000105", "5707", Point(0.885308, 51.169796, srid=4326))
+
+        # user issue report #50
+        print("updating: Sandhurst School Sports Hall...")
+        update_station_point(
+            "E06000036", "4019", Point(-0.782442, 51.350179, srid=4326)
+        )
+
+        # user issue report #47 (again)
+        print("updating: Southill Community Centre...")
+        stations = PollingStation.objects.filter(
+            council_id="E06000059", internal_council_id="30560"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = "DT4 9SS"
             station.save()
             print("..updated")
         else:
