@@ -134,6 +134,23 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        print("updating: SW&T station 6753...")
+        # All those electors who were going to Staplegrove Church School
+        # are actually going to
+        # Staplegrove Village Hall, 214 Staplegrove Road, Taunton TA2 6AL
+        stations = PollingStation.objects.filter(
+            council_id="E07000246", internal_council_id="6753"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-3.122027, 51.028508, srid=4326)
+            station.address = "Staplegrove Village Hall\n214 Staplegrove Road\nTaunton"
+            station.postcode = "TA2 6AL"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         deleteme = [
             # nothing yet
         ]
