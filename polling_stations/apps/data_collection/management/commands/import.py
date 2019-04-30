@@ -116,7 +116,7 @@ class Command(BaseCommand):
 
     def run_commands_in_parallel(self, commands):
         pool = Pool()
-        pool.starmap(run_cmd, commands)
+        pool.starmap_async(run_cmd, commands)
         pool.close()
         pool.join()
 
