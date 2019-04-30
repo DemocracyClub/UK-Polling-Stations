@@ -113,6 +113,14 @@ class Command(BaseCommand):
             "E06000036", "4019", Point(-0.782442, 51.350179, srid=4326)
         )
 
+        # user issue report #51
+        print("updating: Weobley Village Hall...")
+        update_station_point(
+            "E06000019",
+            "99-weobley-village-hall",
+            Point(-2.869103, 52.159915, srid=4326),
+        )
+
         # user issue report #47 (again)
         print("updating: Southill Community Centre...")
         stations = PollingStation.objects.filter(
