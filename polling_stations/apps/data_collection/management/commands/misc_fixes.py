@@ -134,6 +134,16 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # user issue report #52
+        print("updating: Rhodes Arts Complex...")
+        update_station_point("E07000242", "1919", Point(0.163535, 51.863442, srid=4326))
+
+        # user issue report #53
+        print("updating: Moose Lodge...")
+        update_station_point(
+            "E06000059", "30570", Point(-2.466883, 50.606307, srid=4326)
+        )
+
         print("updating: SW&T station 6753...")
         # All those electors who were going to Staplegrove Church School
         # are actually going to
