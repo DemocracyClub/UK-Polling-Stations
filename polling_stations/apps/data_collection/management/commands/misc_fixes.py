@@ -161,6 +161,15 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # user issue report #54
+        print("updating: West Moors Memorial Hall...")
+        update_station_point(
+            "E06000059", "30798", Point(-1.889868, 50.828982, srid=4326)
+        )
+        update_station_point(
+            "E06000059", "30801", Point(-1.889868, 50.828982, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
