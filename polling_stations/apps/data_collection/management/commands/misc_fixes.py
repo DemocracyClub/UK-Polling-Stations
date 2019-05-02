@@ -205,6 +205,13 @@ class Command(BaseCommand):
             "E08000013", "2618", Point(-2.686908, 53.447048, srid=4326)
         )
 
+        # user issue report #68
+        for ps_id in ["BCL-11/1", "BCA-11", "BNB-18", "BEL-17"]:
+            print("updating: Alton Manor Community Centre {}...".format(ps_id))
+            update_station_point(
+                "E07000032", ps_id, Point(-1.462416, 53.030518, srid=4326)
+            )
+
         deleteme = [
             # nothing yet
         ]
