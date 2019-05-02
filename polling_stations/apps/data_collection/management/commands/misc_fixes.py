@@ -176,6 +176,12 @@ class Command(BaseCommand):
             "E06000059", "30244", Point(-2.471750, 50.713013, srid=4326)
         )
 
+        # user issue report #56
+        print("updating: Higher Failsworth Primary School...")
+        update_station_point(
+            "E08000004", "5063", Point(-2.148726, 53.514296, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
