@@ -212,6 +212,24 @@ class Command(BaseCommand):
                 "E07000032", ps_id, Point(-1.462416, 53.030518, srid=4326)
             )
 
+        print("updating: Seabrook Curch 5290...")
+        # All those electors who were going to Seabrook Church, 141 Seabrook Road
+        # are actually going to
+        # The Fountain Pub 171 Seabrook Road Hythe Kent CT21 5RT UPRN: 50022189
+        # Council request.
+        stations = PollingStation.objects.filter(
+            council_id="E07000112", internal_council_id="5290"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(1.119211, 51.072634, srid=4326)
+            station.address = "The Fountain Pub\n171 Seabrook Road\nHythe\nKent"
+            station.postcode = "CT21 5RT"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         deleteme = [
             # nothing yet
         ]
