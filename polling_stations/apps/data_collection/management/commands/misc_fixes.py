@@ -170,6 +170,66 @@ class Command(BaseCommand):
             "E06000059", "30801", Point(-1.889868, 50.828982, srid=4326)
         )
 
+        # user issue report #55
+        print("updating: Dorset Fire & Rescue, Peverell Avenue West...")
+        update_station_point(
+            "E06000059", "30244", Point(-2.471750, 50.713013, srid=4326)
+        )
+
+        # user issue report #56
+        print("updating: Higher Failsworth Primary School...")
+        update_station_point(
+            "E08000004", "5063", Point(-2.148726, 53.514296, srid=4326)
+        )
+
+        # user issue report #65
+        print("updating: Penistone Cricket Club...")
+        update_station_point("E08000016", "110", Point(-1.618343, 53.525626, srid=4326))
+
+        # user issue report #66
+        print("updating: St Mary's Catholic Primary School...")
+        update_station_point(
+            "E06000040",
+            "23-st-marys-catholic-primary-school",
+            Point(-0.724786, 51.535229, srid=4326),
+        )
+        update_station_point(
+            "E06000040",
+            "24-st-marys-catholic-primary-school",
+            Point(-0.724786, 51.535229, srid=4326),
+        )
+
+        # user issue report #67
+        print("updating: St Philips Church...")
+        update_station_point(
+            "E08000013", "2618", Point(-2.686908, 53.447048, srid=4326)
+        )
+
+        # user issue report #68
+        for ps_id in ["BCL-11/1", "BCA-11", "BNB-18", "BEL-17"]:
+            print("updating: Alton Manor Community Centre {}...".format(ps_id))
+            update_station_point(
+                "E07000032", ps_id, Point(-1.462416, 53.030518, srid=4326)
+            )
+
+        print("updating: Seabrook Curch 5290...")
+        # All those electors who were going to Seabrook Church, 141 Seabrook Road
+        # are actually going to
+        # The Fountain Pub 171 Seabrook Road Hythe Kent CT21 5RT UPRN: 50022189
+        # Council request.
+        stations = PollingStation.objects.filter(
+            council_id="E07000112", internal_council_id="5290"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(1.119211, 51.072634, srid=4326)
+            station.address = "The Fountain Pub\n171 Seabrook Road\nHythe\nKent"
+            station.postcode = "CT21 5RT"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         deleteme = [
             # nothing yet
         ]
