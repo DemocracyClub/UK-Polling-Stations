@@ -309,6 +309,34 @@ class Command(BaseCommand):
         print("updating: Removing point from Charminster Village Hall...")
         update_station_point("E06000059", "30105", None)
 
+        # user issue report #83
+        print("updating: Trust Hall-Stoke Gifford...")
+        update_station_point(
+            "E06000025", "10161", Point(-2.540965, 51.516655, srid=4326)
+        )
+
+        # user issue report #95
+        print("updating: Hinks Meadow Hall...")
+        update_station_point("E07000144", "BW1", Point(1.193280, 52.689556, srid=4326))
+
+        # user issue report #95
+        print("updating: Unitarian Church Hall...")
+        update_station_point(
+            "E08000006", "3976", Point(-2.355723, 53.492923, srid=4326)
+        )
+
+        # user issue report #91
+        print("updating: Irlam and Cadishead Leisure Centre...")
+        update_station_point(
+            "E08000006", "3943", Point(-2.422425, 53.442976, srid=4326)
+        )
+
+        # user issue report #92
+        print("updating: Charlton Marshall...")
+        update_station_point(
+            "E06000059", "30910", Point(-2.141113, 50.834366, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
