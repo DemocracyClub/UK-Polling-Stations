@@ -387,6 +387,26 @@ class Command(BaseCommand):
             Point(0.106029, 52.207284, srid=4326),
         )
 
+        # user issue report #108
+        print("updating: Greenbrook Methodist Church...")
+        update_station_point(
+            "E07000117", "3664", Point(-2.292241, 53.790222, srid=4326)
+        )
+
+        # user issue report #111
+        print("updating: Mobile Unit at the Black Dog Pub...")
+        update_station_point(
+            "E08000005", "2356", Point(-2.186648, 53.631097, srid=4326)
+        )
+
+        # user issue report #112
+        print("updating: St Philips Church...")
+        update_station_point("E07000244", "181", Point(1.335067, 51.962539, srid=4326))
+
+        # user issue report #113
+        print("updating: Broomfield Road Evangelical Church...")
+        update_station_point("E07000070", "8741", Point(0.46652, 51.74498, srid=4326))
+
         deleteme = [
             # nothing yet
         ]
