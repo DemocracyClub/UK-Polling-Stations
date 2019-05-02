@@ -170,6 +170,12 @@ class Command(BaseCommand):
             "E06000059", "30801", Point(-1.889868, 50.828982, srid=4326)
         )
 
+        # user issue report #55
+        print("updating: Dorset Fire & Rescue, Peverell Avenue West...")
+        update_station_point(
+            "E06000059", "30244", Point(-2.471750, 50.713013, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
