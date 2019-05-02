@@ -263,6 +263,14 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # user issue report #82
+        print("updating: Hillsborough Trinity Methodist Church...")
+        update_station_point(
+            "E08000019",
+            "116-hillsborough-trinity-methodist-church-lennox-rd-entrance",
+            Point(-1.504240, 53.408718, srid=4326),
+        )
+
         deleteme = [
             # nothing yet
         ]
