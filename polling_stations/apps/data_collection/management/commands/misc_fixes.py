@@ -230,6 +230,12 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # user issue report #71
+        print("updating: Bletchingdon Village Hall...")
+        update_station_point(
+            "E07000177", "17104", Point(-1.275286, 51.856428, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
