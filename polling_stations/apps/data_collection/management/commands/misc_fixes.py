@@ -407,6 +407,10 @@ class Command(BaseCommand):
         print("updating: Broomfield Road Evangelical Church...")
         update_station_point("E07000070", "8741", Point(0.46652, 51.74498, srid=4326))
 
+        # user issue report #114
+        print("updating: Westminster Community Centre...")
+        update_station_point("E06000050", "2867", None)
+
         deleteme = [
             # nothing yet
         ]
