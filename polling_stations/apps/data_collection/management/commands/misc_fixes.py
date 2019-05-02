@@ -182,6 +182,10 @@ class Command(BaseCommand):
             "E08000004", "5063", Point(-2.148726, 53.514296, srid=4326)
         )
 
+        # user issue report #65
+        print("updating: Penistone Cricket Club...")
+        update_station_point("E08000016", "110", Point(-1.618343, 53.525626, srid=4326))
+
         deleteme = [
             # nothing yet
         ]
