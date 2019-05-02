@@ -387,6 +387,12 @@ class Command(BaseCommand):
             Point(0.106029, 52.207284, srid=4326),
         )
 
+        # user issue report #108
+        print("updating: Greenbrook Methodist Church...")
+        update_station_point(
+            "E07000117", "3664", Point(-2.292241, 53.790222, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
