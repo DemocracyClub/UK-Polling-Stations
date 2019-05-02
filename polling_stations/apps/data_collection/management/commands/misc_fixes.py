@@ -230,6 +230,47 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # user issue report #71
+        print("updating: Bletchingdon Village Hall...")
+        update_station_point(
+            "E07000177", "17104", Point(-1.275286, 51.856428, srid=4326)
+        )
+
+        # user issue report #76
+        print("updating: Heatherside Community Centre...")
+        update_station_point(
+            "E07000214", "2275", Point(-0.702364, 51.329003, srid=4326)
+        )
+
+        # user issue report #80
+        print("updating: Darby and Joan Club...")
+        update_station_point(
+            "E08000034", "7820", Point(-1.6100925, 53.5945822, srid=4326)
+        )
+
+        # user issue report #81
+        print("updating: Radford Semele Community Hall {}...".format(ps_id))
+        stations = PollingStation.objects.filter(
+            council_id="E07000222", internal_council_id__in=["7471", "7467"]
+        )
+        if len(stations) == 2:
+            for station in stations:
+                station.location = Point(-1.496585, 52.274189, srid=4326)
+                station.address = "Radford Semele Community Hall\n68 Lewis Road\nRadford Semele\nLeamington Spa"
+                station.postcode = "CV31 1UQ"
+                station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # user issue report #82
+        print("updating: Hillsborough Trinity Methodist Church...")
+        update_station_point(
+            "E08000019",
+            "116-hillsborough-trinity-methodist-church-lennox-rd-entrance",
+            Point(-1.504240, 53.408718, srid=4326),
+        )
+
         deleteme = [
             # nothing yet
         ]
