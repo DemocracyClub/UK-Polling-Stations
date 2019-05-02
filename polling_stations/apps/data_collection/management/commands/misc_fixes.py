@@ -349,6 +349,12 @@ class Command(BaseCommand):
             "E07000246", "6869", Point(-3.091719, 51.017816, srid=4326)
         )
 
+        # user issue report #97
+        print(
+            "updating: Removing point from Sleaford Cadet Training Centre (Drill Hall)..."
+        )
+        update_station_point("E07000139", "5200", None)
+
         deleteme = [
             # nothing yet
         ]
