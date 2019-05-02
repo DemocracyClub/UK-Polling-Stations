@@ -319,6 +319,12 @@ class Command(BaseCommand):
         print("updating: Hinks Meadow Hall...")
         update_station_point("E07000144", "BW1", Point(1.193280, 52.689556, srid=4326))
 
+        # user issue report #95
+        print("updating: Unitarian Church Hall...")
+        update_station_point(
+            "E08000006", "3976", Point(-2.355723, 53.492923, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
