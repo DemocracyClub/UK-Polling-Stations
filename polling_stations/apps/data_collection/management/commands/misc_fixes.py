@@ -411,6 +411,14 @@ class Command(BaseCommand):
         print("updating: Westminster Community Centre...")
         update_station_point("E06000050", "2867", None)
 
+        # user issue report #118
+        print("updating: Village Hall Barsham...")
+        update_station_point("E07000244", "8", Point(1.522623, 52.450787, srid=4326))
+
+        # user issue report #119
+        print("updating: Banister Primary School...")
+        update_station_point("E06000045", "GC", Point(-1.409071, 50.916527, srid=4326))
+
         deleteme = [
             # nothing yet
         ]
