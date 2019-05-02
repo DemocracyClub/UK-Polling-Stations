@@ -271,6 +271,44 @@ class Command(BaseCommand):
             Point(-1.504240, 53.408718, srid=4326),
         )
 
+        # user issue report #86
+        print("updating: Guildhall, Lichfield...")
+        stations = PollingStation.objects.filter(
+            council_id="E07000194", internal_council_id="4413"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-1.827210, 52.683079, srid=4326)
+            station.postcode = "WS13 6LU"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # user issue report #87
+        print("updating: The Grange Public House...")
+        update_station_point(
+            "E08000015", "4862", Point(-3.122875, 53.396797, srid=4326)
+        )
+
+        # user issue report #88
+        print("updating: St Margaret's Parish Centre...")
+        stations = PollingStation.objects.filter(
+            council_id="E06000044", internal_council_id="3516"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-1.067090, 50.786643, srid=4326)
+            station.postcode = ""
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # user issue report #90
+        print("updating: Removing point from Charminster Village Hall...")
+        update_station_point("E06000059", "30105", None)
+
         deleteme = [
             # nothing yet
         ]
