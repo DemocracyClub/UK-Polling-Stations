@@ -355,6 +355,11 @@ class Command(BaseCommand):
         )
         update_station_point("E07000139", "5200", None)
 
+        # user issue report #99
+        print("updating: Mobile Station at DFS Car Park...")
+        update_station_point(
+            "E06000027", "6291", Point(-3.556830, 50.488924, srid=4326)
+        )
         deleteme = [
             # nothing yet
         ]
