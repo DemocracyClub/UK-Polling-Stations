@@ -325,6 +325,12 @@ class Command(BaseCommand):
             "E08000006", "3976", Point(-2.355723, 53.492923, srid=4326)
         )
 
+        # user issue report #91
+        print("updating: Irlam and Cadishead Leisure Centre...")
+        update_station_point(
+            "E08000006", "3943", Point(-2.422425, 53.442976, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
