@@ -331,6 +331,12 @@ class Command(BaseCommand):
             "E08000006", "3943", Point(-2.422425, 53.442976, srid=4326)
         )
 
+        # user issue report #92
+        print("updating: Charlton Marshall...")
+        update_station_point(
+            "E06000059", "30910", Point(-2.141113, 50.834366, srid=4326)
+        )
+
         deleteme = [
             # nothing yet
         ]
