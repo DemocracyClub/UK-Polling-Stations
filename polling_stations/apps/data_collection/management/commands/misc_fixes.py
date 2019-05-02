@@ -48,6 +48,12 @@ class Command(BaseCommand):
         swansea.save()
         print("..updated")
 
+        print("updating Wyre Forest phone number")
+        wyre_forest = Council.objects.get(pk="E07000239")
+        wyre_forest.phone = "01562 732928 / 01562 732733"
+        wyre_forest.save()
+        print("..updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             "10023906550",
@@ -319,7 +325,7 @@ class Command(BaseCommand):
         print("updating: Hinks Meadow Hall...")
         update_station_point("E07000144", "BW1", Point(1.193280, 52.689556, srid=4326))
 
-        # user issue report #95
+        # user issue report #85
         print("updating: Unitarian Church Hall...")
         update_station_point(
             "E08000006", "3976", Point(-2.355723, 53.492923, srid=4326)
@@ -335,6 +341,12 @@ class Command(BaseCommand):
         print("updating: Charlton Marshall...")
         update_station_point(
             "E06000059", "30910", Point(-2.141113, 50.834366, srid=4326)
+        )
+
+        # reported by phone
+        print("updating: Victoria Park Pavilion...")
+        update_station_point(
+            "E07000246", "6869", Point(-3.091719, 51.017816, srid=4326)
         )
 
         deleteme = [
