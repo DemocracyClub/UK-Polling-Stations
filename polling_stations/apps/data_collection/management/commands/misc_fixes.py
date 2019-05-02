@@ -248,6 +248,21 @@ class Command(BaseCommand):
             "E08000034", "7820", Point(-1.6100925, 53.5945822, srid=4326)
         )
 
+        # user issue report #81
+        print("updating: Radford Semele Community Hall {}...".format(ps_id))
+        stations = PollingStation.objects.filter(
+            council_id="E07000222", internal_council_id__in=["7471", "7467"]
+        )
+        if len(stations) == 2:
+            for station in stations:
+                station.location = Point(-1.496585, 52.274189, srid=4326)
+                station.address = "Radford Semele Community Hall\n68 Lewis Road\nRadford Semele\nLeamington Spa"
+                station.postcode = "CV31 1UQ"
+                station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         deleteme = [
             # nothing yet
         ]
