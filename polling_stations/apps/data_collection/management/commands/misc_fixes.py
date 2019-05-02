@@ -360,6 +360,33 @@ class Command(BaseCommand):
         update_station_point(
             "E06000027", "6291", Point(-3.556830, 50.488924, srid=4326)
         )
+
+        # user issue report #98
+        print("updating: Avenue Hall at Avenue St. Andrews URC...")
+        update_station_point("E06000045", "CA", Point(-1.404693, 50.921401, srid=4326))
+
+        # user issue report #102
+        print("updating: Christ Church United Reformed Church...")
+        update_station_point("E07000114", "MA", Point(1.338154, 51.38301, srid=4326))
+
+        # user issue report #94
+        print("updating: Albury Village Hall...")
+        update_station_point("E07000242", "2098", Point(0.094440, 51.903865, srid=4326))
+
+        # user issue report #96
+        print("updating: Williams Hall...")
+        update_station_point(
+            "E07000246", "6734", Point(-2.930949, 51.041262, srid=4326)
+        )
+
+        # user issue report #105
+        print("updating: TRINITY OLD FIELD PAVILION...")
+        update_station_point(
+            "E07000008",
+            "31-trinity-old-field-pavilion",
+            Point(0.106029, 52.207284, srid=4326),
+        )
+
         deleteme = [
             # nothing yet
         ]
