@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from uk_geo_utils.helpers import Postcode
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
@@ -42,9 +43,14 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         return location
 
     def station_record_to_dict(self, record):
+        district = record.district.strip()
         location = self.get_station_point(record)
+
+        if district == "BW1":
+            location = Point(1.193280, 52.689556, srid=4326)
+
         return {
-            "internal_council_id": record.district.strip(),
+            "internal_council_id": district,
             "postcode": record.placepcode.strip(),
             "address": self.get_station_address(record),
             "location": location,

@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import (
     BaseXpressDCCsvInconsistentPostcodesImporter,
 )
@@ -44,5 +45,11 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
 
         if record.polling_place_id == "3656":
             record = record._replace(polling_place_postcode="BB11 5LZ")
+
+        if record.polling_place_id == "3664":
+            record = record._replace(polling_place_postcode="")
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-2.292241, 53.790222, srid=4326)
+            return rec
 
         return super().station_record_to_dict(record)
