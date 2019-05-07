@@ -11,7 +11,7 @@
   "dependencies": {
     "leaflet": "^1.4.0",
     "leaflet-extra-markers": "^1.1.0",
-    "@mapbox/polyline": "^1.0.0",
+    "@mapbox/polyline": "^1.1.0",
     "font-awesome": "^4.7.0"
   }
 }
