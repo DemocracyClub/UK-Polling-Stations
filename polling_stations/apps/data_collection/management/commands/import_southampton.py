@@ -2,7 +2,7 @@
 Imports Southampton
 """
 from lxml import etree
-from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Point
 from data_collection.management.commands import BaseApiKmlStationsKmlDistrictsImporter
 
 
@@ -16,7 +16,7 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
     council_id = "E06000045"
     districts_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E06000045/districts.kml"
     stations_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E06000045/stations.kml"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
 
     def extract_info_from_district_description(self, description):
         # lxml needs everything to be enclosed in one root element
@@ -77,10 +77,19 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
             postcode = ""
         address = "\n".join(address_parts)
 
+        code = info["POLLING_DISTRICT_REF"]
+        # fiddle a couple of points slightly to make the directions work better
+        # user issue report #98
+        if code == "CA" and address.startswith("Avenue Hall at Avenue St"):
+            location = Point(-1.404693, 50.921401, srid=4326)
+        # user issue report #119
+        if code == "GC" and address.startswith("Banister Primary School"):
+            location = Point(-1.409071, 50.916527, srid=4326)
+
         return {
-            "internal_council_id": info["POLLING_DISTRICT_REF"],
+            "internal_council_id": code,
             "postcode": postcode,
             "address": address,
             "location": location,
-            "polling_district_id": info["POLLING_DISTRICT_REF"],
+            "polling_district_id": code,
         }
