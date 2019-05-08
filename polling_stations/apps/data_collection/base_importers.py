@@ -723,7 +723,6 @@ class BaseScotlandSpatialHubImporter(
     districts_name = "europarl.2019-05-23/Polling-Districts/pub_poldi.shp"
     stations_name = "europarl.2019-05-23/Polling-Places/pub_polpl.shp"
     data_prefix = "Scotland-May-2019"
-    run_in_series = True
     shp_encoding = "latin-1"
 
     @property
