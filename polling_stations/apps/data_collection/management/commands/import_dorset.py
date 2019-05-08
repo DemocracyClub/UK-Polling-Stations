@@ -6,9 +6,9 @@ from data_collection.management.commands import (
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "E06000059"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019dorset.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019dorset.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019dorset.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019dorset.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
     station_postcode_search_fields = [
         "polling_place_postcode",
@@ -19,58 +19,64 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id in ["30165", "30169"]:
+        # Corfe Mullen Village Hall
+        if record.polling_place_id in ["31780", "31784"]:
             record = record._replace(polling_place_postcode="")
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.017478, 50.774375, srid=4326)
             return rec
 
+        # Portesham Village Hall
         # user issue report #38
-        if record.polling_place_id == "30137":
-            record = record._replace(polling_place_address_2="")
-            record = record._replace(polling_place_postcode="DT3 4NS")
+        if record.polling_place_id == "31330":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.567644, 50.668385, srid=4326)
             return rec
 
+        # Allendale House
         # user issue report #39
-        if record.polling_place_id == "30876":
+        if record.polling_place_id == "31869":
             record = record._replace(polling_place_uprn="100041099964")
 
+        # Bishops Caundle Village Hall
         # user issue report #40
-        if record.polling_place_id == "30606":
+        if record.polling_place_id == "31411":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.437757, 50.915554, srid=4326)
             return rec
 
+        # All Saints Church Hall
         # user issue report #41
-        if record.polling_place_id in ["30693", "30697"]:
-            record = record._replace(polling_place_postcode="BH24 2NS")
+        if record.polling_place_id in ["31873", "31877"]:
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-1.834570, 50.831005, srid=4326)
             return rec
 
+        # Ferndown Village Hall
         # user issue report #42
-        if record.polling_place_id == "30307":
+        if record.polling_place_id == "31741":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-1.896419, 50.801961, srid=4326)
             return rec
 
-        # user issue report #45
-        if record.polling_place_id == "30783":
-            record = record._replace(polling_place_postcode="BH20 4BA")
-
-        if record.polling_place_id == "30258":
-            record = record._replace(polling_place_address_3="DT1 2HJ")
+        # St Marys Church Hall
+        if record.polling_place_id == "31277":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.443608, 50.709373, srid=4326)
             return rec
 
+        # Southill Community Centre
         # user issue report #47
-        if record.polling_place_id == "30560":
-            record = record._replace(polling_place_address_3="")
+        if record.polling_place_id == "31053":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.477398, 50.623534, srid=4326)
+            return rec
+
+        # Moose Lodge
+        # user issue report #43
+        if record.polling_place_id == "31021":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-2.466883, 50.606307, srid=4326)
             return rec
 
         return super().station_record_to_dict(record)

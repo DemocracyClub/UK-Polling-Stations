@@ -3,9 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000093"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019test.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019test.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019test.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019test.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
 
@@ -15,6 +15,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 == "S051 0JQ":
             rec["postcode"] = "SO51 0JH"
+
+        if uprn == "200010019086":
+            rec["postcode"] = "SP11 0JY"
+
+        if uprn in ["200000704765", "200000712354"]:
+            rec["postcode"] = "SO51 0QW"
 
         if uprn in [
             "200010018966",  # SO206AZ -> SO206AX : The Mayfly, Testcombe, Wherwell, Andover, Hampshire
@@ -50,10 +56,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "200000712580",  # SO206AB -> SO206AZ : Down End, Drove Road, Chilbolton, Stockbridge, Hampshire
-            "200000712580",  # SO206AB -> SO206AZ : Down End, Drove Road, Chilbolton, Stockbridge, Hampshire
-            "100062540094",  # SO208QB -> SP103EL : 2 The Avenue, Middle Wallop, Stockbridge, Hampshire
             "100062539681",  # SO519AL -> SP102EG : 2 Winchester Road, Crampmoor, Romsey, Hampshire
-            "200010015207",  # SP11 6JH -> SP118PW : 4 Woodhouse Smannell, Andover   Hampshire
+            "200010015207",  # SP116JH -> SP118PW : 4 Woodhouse Smannell, Andover   Hampshire
         ]:
             rec["accept_suggestion"] = False
 

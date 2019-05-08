@@ -1,41 +1,16 @@
-import os
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000045"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.CSV"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.CSV"
-    elections = ["local.2019-05-02"]
-    csv_delimiter = ","
-
-    def pre_import(self):
-        gridrefs_file = os.path.join(
-            self.base_folder_path, "local.2019-05-02/Version 1/grid_refs.csv"
-        )
-        gridrefs = self.get_data("csv", gridrefs_file)
-        self.gridrefs = {
-            row.polling_station_id: {"easting": row.easting, "northing": row.northing}
-            for row in gridrefs
-        }
-
-    def station_record_to_dict(self, record):
-        polling_place_id = record.polling_place_id
-        record = record._replace(
-            polling_place_easting=self.gridrefs[polling_place_id]["easting"]
-        )
-        record = record._replace(
-            polling_place_northing=self.gridrefs[polling_place_id]["northing"]
-        )
-        return super().station_record_to_dict(record)
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019teign.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019teign.tsv"
+    elections = ["europarl.2019-05-23"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
-
-        # most of these UPRNs are junk
-        if uprn.endswith("000000"):
-            rec["uprn"] = ""
 
         if record.addressline6.strip() == "TQ13 8JG":
             rec["postcode"] = "TQ13 9JG"
