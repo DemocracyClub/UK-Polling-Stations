@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
@@ -7,6 +8,35 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019kirklees.CSV"
     elections = ["local.2019-05-02"]
     allow_station_point_from_postcode = False
+
+    def station_record_to_dict(self, record):
+        # station changes for EU election
+        if record.polling_place_id == "7685":
+            record = record._replace(
+                polling_place_name="Temporary Polling Station, BBG Academy"
+            )
+
+        if record.polling_place_id == "8151":
+            record = record._replace(polling_place_name="Battyeford J & I School")
+            record = record._replace(polling_place_address_1="Nab Lane")
+            record = record._replace(polling_place_address_2="Battyeford")
+            record = record._replace(polling_place_address_3="Mirfield")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_uprn="")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.706736, 53.681520, srid=4326)
+            return rec
+
+        # user issue report #80
+        if record.polling_place_id == "7820":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.6100925, 53.5945822, srid=4326)
+            return rec
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")

@@ -3,9 +3,12 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000032"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Brad.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Brad.tsv"
-    elections = ["local.2019-05-02"]
+    # you manually created this file to include one edit:
+    # Polling district 12B
+    # will be at St Martin’s Church, Haworth Road, Bradford, BD9 6LL
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__02May2019Brad.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__02May2019Brad.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):

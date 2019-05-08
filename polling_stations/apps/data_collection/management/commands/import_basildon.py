@@ -5,8 +5,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000066"
     addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019 basildon.tsv"
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019 basildon.tsv"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
+
+    def station_record_to_dict(self, record):
+
+        # station changes for EU election
+        if record.polling_place_id == "3968":
+            record = record._replace(
+                polling_place_name="Portacabin at Brightside County Primary School"
+            )
+        if record.polling_place_id == "4095":
+            record = record._replace(
+                polling_place_name="Portacabin at Ryedene Primary & Nursery School"
+            )
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
