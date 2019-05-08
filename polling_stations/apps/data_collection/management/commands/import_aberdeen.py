@@ -10,7 +10,7 @@ due to incomplete/poor quality data
 class Command(BaseScotlandSpatialHubImporter):
     council_id = "S12000033"
     council_name = "Aberdeen City"
-    elections = ["europarl.2019-05-23"]
+    # elections = ["europarl.2019-05-23"]
 
     def station_record_to_dict(self, record):
         # exclude duplicate/ambiguous codes
