@@ -6,7 +6,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000015"
     addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wirr.tsv"
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wirr.tsv"
-    elections = ["local.2019-05-02"]
+    elections = ["local.2019-05-02", "europarl.2019-05-23"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
 
@@ -15,6 +15,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "4836":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-3.050648, 53.417306, srid=4326)
+            return rec
+
+        # user issue report #87
+        # The Grange Public House
+        if record.polling_place_id == "4862":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-3.122875, 53.396797, srid=4326)
             return rec
 
         return super().station_record_to_dict(record)
