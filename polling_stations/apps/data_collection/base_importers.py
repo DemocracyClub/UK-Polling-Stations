@@ -46,8 +46,15 @@ class CsvMixin:
     csv_encoding = "utf-8"
     csv_delimiter = ","
 
-    def get_file_options(self):
-        return {"encoding": self.csv_encoding, "delimiter": self.csv_delimiter}
+    def get_csv_options(self):
+        return {"csv_encoding": self.csv_encoding, "csv_delimiter": self.csv_delimiter}
+
+
+class ShpMixin:
+    shp_encoding = "utf-8"
+
+    def get_shp_options(self):
+        return {"shp_encoding": self.shp_encoding}
 
 
 class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
@@ -112,10 +119,12 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         return Council.objects.get(pk=council_id)
 
     def get_data(self, filetype, filename):
-        if hasattr(self, "get_file_options"):
-            options = self.get_file_options()
-        else:
-            options = {}
+        options = {}
+        if hasattr(self, "get_csv_options"):
+            options.update(self.get_csv_options())
+        if hasattr(self, "get_shp_options"):
+            options.update(self.get_shp_options())
+
         helper = FileHelperFactory.create(filetype, filename, options)
         return helper.get_features()
 
@@ -646,7 +655,9 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
         self.stations.save()
 
 
-class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
+class BaseCsvStationsShpDistrictsImporter(
+    BaseStationsDistrictsImporter, CsvMixin, ShpMixin
+):
     """
     Stations in CSV format
     Districts in SHP format
@@ -656,7 +667,7 @@ class BaseCsvStationsShpDistrictsImporter(BaseStationsDistrictsImporter, CsvMixi
     districts_filetype = "shp"
 
 
-class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter):
+class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter, ShpMixin):
     """
     Stations in SHP format
     Districts in SHP format
@@ -709,10 +720,10 @@ class BaseScotlandSpatialHubImporter(
     """
 
     srid = 27700
-    districts_name = "parl.2017-06-08/polling_districts_20170526.shp"
-    stations_name = "parl.2017-06-08/polling_places_20170526.shp"
-    data_prefix = "Scotland May 2017"
-    run_in_series = True
+    districts_name = "europarl.2019-05-23/Polling-Districts/pub_poldi.shp"
+    stations_name = "europarl.2019-05-23/Polling-Places/pub_polpl.shp"
+    data_prefix = "Scotland-May-2019"
+    shp_encoding = "latin-1"
 
     @property
     @abc.abstractmethod
@@ -737,13 +748,10 @@ class BaseScotlandSpatialHubImporter(
         return self.base_folder_path
 
     def parse_string(self, text):
-        try:
-            return text.strip().decode("windows-1252")
-        except AttributeError:
-            return text.strip()
+        return text.strip()
 
     def district_record_to_dict(self, record):
-        council_name = self.parse_string(record[3])
+        council_name = self.parse_string(record[2])
         if council_name != self.council_name:
             return None
 
@@ -758,15 +766,15 @@ class BaseScotlandSpatialHubImporter(
         return {"internal_council_id": code, "name": name, "polling_station_id": code}
 
     def station_record_to_dict(self, record):
-        council_name = self.parse_string(record[3])
+        council_name = self.parse_string(record[2])
         if council_name != self.council_name:
             return None
 
-        code = self.parse_string(record[1])
+        code = self.parse_string(record[0])
         if not code:
             return None
 
-        address = self.parse_string(record[0])
+        address = self.parse_string(record[3])
 
         return {"internal_council_id": code, "postcode": "", "address": address}
 
@@ -781,7 +789,9 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
     addresses_filetype = "csv"
 
 
-class BaseShpStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixin):
+class BaseShpStationsCsvAddressesImporter(
+    BaseStationsAddressesImporter, CsvMixin, ShpMixin
+):
     """
     Stations in SHP format
     Addresses in CSV format
@@ -844,7 +854,7 @@ class BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter):
     districts_filetype = "kml"
 
 
-class BaseApiShpZipStationsShpZipDistrictsImporter(BaseGenericApiImporter):
+class BaseApiShpZipStationsShpZipDistrictsImporter(BaseGenericApiImporter, ShpMixin):
     """
     Stations in Zipped SHP format
     Districts in Zipped SHP format
@@ -854,7 +864,9 @@ class BaseApiShpZipStationsShpZipDistrictsImporter(BaseGenericApiImporter):
     districts_filetype = "shp.zip"
 
 
-class BaseApiCsvStationsShpZipDistrictsImporter(BaseGenericApiImporter, CsvMixin):
+class BaseApiCsvStationsShpZipDistrictsImporter(
+    BaseGenericApiImporter, CsvMixin, ShpMixin
+):
     """
     Stations in CSV format
     Districts in Zipped SHP format
