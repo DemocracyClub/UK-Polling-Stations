@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 
 
@@ -5,7 +6,25 @@ class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E07000244"
     addresses_name = "local.2019-05-02/Version 1/EastSuffolkCouncil - PDs.csv"
     stations_name = "local.2019-05-02/Version 1/EastSuffolkCouncil - Stations.csv"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
+
+    def station_record_to_dict(self, record):
+
+        # St Philips Church
+        # user issue report #112
+        if record.stationcode == "181":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(1.335067, 51.962539, srid=4326)
+            return rec
+
+        # Village Hall Barsham
+        # user issue report #118
+        if record.stationcode == "8":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(1.522623, 52.450787, srid=4326)
+            return rec
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
