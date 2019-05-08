@@ -9,7 +9,7 @@ class Command(BaseHalaroseCsvImporter):
     stations_name = (
         "local.2019-05-02/Version 1/polling_station_export Spelthorne-2019-02-07.csv"
     )
-    elections = ["local.2019-05-02"]
+    elections = ["local.2019-05-02", "europarl.2019-05-23"]
     match_threshold = 98
 
     def address_record_to_dict(self, record):

@@ -5,7 +5,7 @@ class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E07000009"
     addresses_name = "local.2019-05-02/Version 1/Democracy Club - Polling Districts.csv"
     stations_name = "local.2019-05-02/Version 1/Democracy Club - Polling Stations.csv"
-    elections = ["local.2019-05-02"]
+    elections = ["local.2019-05-02", "europarl.2019-05-23"]
 
     def station_record_to_dict(self, record):
 

@@ -8,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 27700
     districts_srid = 27700
     council_id = "E07000208"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-EpsomAndEwell"
     geom_type = "gml"
     # districts file has station address and UPRN for district

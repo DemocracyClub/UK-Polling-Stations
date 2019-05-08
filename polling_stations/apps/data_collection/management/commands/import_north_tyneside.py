@@ -15,7 +15,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     stations_name = (
         "local.2019-05-02/Version 1/North Tyneside Council - Polling Station Data.tsv"
     )
-    elections = ["local.2019-05-02"]
+    elections = ["local.2019-05-02", "europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def get_station_hash(self, record):

@@ -4,7 +4,7 @@ from data_collection.github_importer import BaseGitHubImporter
 class Command(BaseGitHubImporter):
     srid = 4326
     council_id = "E07000111"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Sevenoaks"
     geom_type = "geojson"
 
