@@ -13,6 +13,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "4483":
             record = record._replace(polling_place_easting="538526.11")
             record = record._replace(polling_place_northing="184252.81")
+
+        if record.polling_place_id == "4234":
+            record = record._replace(polling_place_name="Sandringham Primary School")
+            record = record._replace(polling_place_address_1="Sandringham Road")
+            record = record._replace(polling_place_address_2="Forest Gate")
+            record = record._replace(polling_place_address_3="London")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="E7 8ED")
+            record = record._replace(polling_place_uprn="")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
