@@ -3,12 +3,17 @@ from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E06000055"
-    addresses_name = "local.2019-05-02/Version 1/Democracy Club polling districts.csv"
-    stations_name = "local.2019-05-02/Version 1/Democracy Club Polling Stations.csv"
-    elections = ["local.2019-05-02"]
+    addresses_name = (
+        "europarl.2019-05-23/Version 1/Democracy Club - Polling Districts.csv"
+    )
+    stations_name = (
+        "europarl.2019-05-23/Version 1/Democracy Club - Polling Stations.csv"
+    )
+    elections = ["europarl.2019-05-23"]
 
+    # KEMPSTON WEST METHODIST CHURCH Carried forward from local.2019-05-02
     def station_record_to_dict(self, record):
-        if record.stationcode == "BAS_1":
+        if record.stationcode == "50":
             record = record._replace(xordinate="0")
             record = record._replace(yordinate="0")
 
