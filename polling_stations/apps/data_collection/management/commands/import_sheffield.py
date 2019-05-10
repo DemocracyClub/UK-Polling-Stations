@@ -1,16 +1,30 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "E08000019"
     addresses_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-03-19sheff.csv"
+        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-01shef.csv"
     )
     stations_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-03-19sheff.csv"
+        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-01shef.csv"
     )
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_encoding = "windows-1252"
+
+    def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
+
+        # user issue report #82
+        if (
+            rec
+            and rec["internal_council_id"]
+            == "113-hillsborough-trinity-methodist-church-lennox-rd-entrance"
+        ):
+            rec["location"] = Point(-1.504240, 53.408718, srid=4326)
+
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
