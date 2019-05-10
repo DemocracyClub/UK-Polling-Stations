@@ -7,7 +7,7 @@ class Command(BaseGitHubImporter):
     srid = 27700
     districts_srid = 27700
     council_id = "E07000209"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Guildford"
     geom_type = "gml"
 
