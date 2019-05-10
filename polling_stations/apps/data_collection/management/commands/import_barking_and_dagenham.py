@@ -3,55 +3,29 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E09000002"
-    addresses_name = "local.2018-05-03/Version 3/EC & Democracy Club Polling Place Lookup Barking and Dagenham.csv"
-    stations_name = "local.2018-05-03/Version 3/EC & Democracy Club Polling Place Lookup Barking and Dagenham.csv"
-    elections = ["local.2018-05-03"]
+    addresses_name = "europarl.2019-05-23/Version 2/Democracy_2Club__23May2019.tsv"
+    stations_name = "europarl.2019-05-23/Version 2/Democracy_2Club__23May2019.tsv"
+    elections = ["europarl.2019-05-23"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
+        rec = super().address_record_to_dict(record)
 
-        if record.addressline6 == "IG11 8RF":
+        if record.addressline6.strip() == "RM6 5AN":
             return None
 
-        barnmead = [
-            "100001639",
-            "100001637",
-            "100001635",
-            "100001633",
-            "100001631",
-            "100001629",
-            "100001627",
-            "100001624",
-            "100001622",
-        ]
-        if uprn in barnmead:
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "RM9 5DX"
-            return rec
+        if record.addressline6.strip() in ["RM9 5DX", "RM9 4DX"]:
+            return None
 
         if uprn == "100012133":
-            rec = super().address_record_to_dict(record)
             rec["postcode"] = "RM8 1DJ"
-            return rec
+            rec["accept_suggestion"] = False
 
-        if uprn == "100033274":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "IG11 9ES"
-            return rec
+        if uprn in [
+            "100041457",  # RM108BX -> RM109BX : 17 Dunchurch House, Ford Road, Dagenham, Essex
+            "100033020",  # RM81BJ -> RM66RJ : 464A Whalebone Lane North, Chadwell Heath, Romford, Essex
+        ]:
+            rec["accept_suggestion"] = True
 
-        if uprn == "100041457":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "RM10 9BX"
-            return rec
-
-        if uprn == "100033020":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "RM6 6RJ"
-            return rec
-
-        if uprn == "10002171985":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "RM10 7XJ"
-            return rec
-
-        return super().address_record_to_dict(record)
+        return rec
