@@ -3,14 +3,23 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000141"
-    addresses_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019.tsv"
-    stations_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019SK.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019SK.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn == "10007252542":
+            rec["postcode"] = "NG32 3NG"
+
+        if uprn == "10007257471":
+            rec["postcode"] = "NG34 0NJ"
+
+        if uprn == "10007257235":
+            rec["postcode"] = "PE9 4NT"
 
         if uprn in [
             "10007246648",  # PE100TT -> PE100UH : The Old Gatehouse, Fen Road, Dunsby, Bourne, Lincs
