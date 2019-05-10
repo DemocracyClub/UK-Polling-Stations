@@ -1,5 +1,6 @@
-from django.contrib.gis.geos import MultiPoint
+from django.contrib.gis.geos import Point, MultiPoint
 from data_collection.github_importer import BaseGitHubImporter
+from pollingstations.models import ResidentialAddress
 
 
 class Command(BaseGitHubImporter):
@@ -7,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E07000108"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Dover"
     geom_type = "geojson"
 
@@ -48,3 +49,17 @@ class Command(BaseGitHubImporter):
                 }
             )
         return stations
+
+    def post_import(self):
+        # user error report #61
+        # https://trello.com/c/LFxuqKjY
+        # say "we don't know" for this one postcode
+        ResidentialAddress.objects.create(
+            address="CT162GZ",
+            postcode="CT162GZ",
+            polling_station_id="",
+            council_id=self.council_id,
+            slug="CT162GZ",
+            location=Point(1.291082, 51.152949, srid=4326),
+            uprn="",
+        )
