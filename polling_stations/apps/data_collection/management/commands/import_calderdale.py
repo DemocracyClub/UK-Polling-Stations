@@ -4,24 +4,19 @@ from data_collection.management.commands import BaseShpStationsShpDistrictsImpor
 
 class Command(BaseShpStationsShpDistrictsImporter):
     council_id = "E08000033"
-    districts_name = "local.2019-05-02/Version 1/Polling Districts 2019 Shp/POLLING_DISTRICTS_2019_region.shp"
-    stations_name = "local.2019-05-02/Version 1/Polling Stations Shp 2019/POLLING_STATIONS_region.shp"
-    elections = ["local.2019-05-02"]
-
-    def parse_string(self, text):
-        try:
-            return text.strip().decode("utf-8")
-        except AttributeError:
-            return text.strip()
+    districts_name = "europarl.2019-05-23/Version 1/Polling districts shp files/POLLING_DISTRICTS.shp"
+    stations_name = "europarl.2019-05-23/Version 1/Polling stations shape files/POLLING_STATIONS.shp"
+    elections = ["europarl.2019-05-23"]
+    shp_encoding = "utf-8"
 
     def district_record_to_dict(self, record):
-        code = self.parse_string(record[0])
-        name = self.parse_string(record[1])
+        code = record[0].strip()
+        name = record[1].strip()
         return {"internal_council_id": code, "name": name, "polling_station_id": code}
 
     def station_record_to_dict(self, record):
-        code = self.parse_string(record[1])
-        address = self.parse_string(record[0])
+        code = record[1].strip()
+        address = record[0].strip()
 
         if code == "" and address == "":
             return None
