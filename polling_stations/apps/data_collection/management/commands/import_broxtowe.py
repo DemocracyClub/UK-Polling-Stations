@@ -1,8 +1,9 @@
 import os
+from data_collection.base_importers import ShpMixin
 from data_collection.github_importer import BaseGitHubImporter
 
 
-class Command(BaseGitHubImporter):
+class Command(BaseGitHubImporter, ShpMixin):
     council_id = "E07000172"
     elections = ["local.2019-05-02", "europarl.2019-05-23"]
 

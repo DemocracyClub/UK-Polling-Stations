@@ -3,9 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000235"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019malvern.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019malvern.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019malv.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019malv.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -14,6 +14,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in ["10014094039", "10014094040"]:
             return None
+
+        if uprn == "10014091874":
+            rec["postcode"] = "DY13 0SQ"
+
+        if uprn == "10024319007":
+            rec["postcode"] = "WR2 4SF"
+
+        if uprn == "10014091918":
+            rec["postcode"] = "DY13 0SQ"
 
         if uprn in [
             "10014093545",  # WR158QY -> WR158QW : Garwood Cottage, Hanley Childe, Tenbury Wells, Worcestershire
