@@ -13,19 +13,7 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["europarl.2019-05"]
 
     def station_record_to_dict(self, record):
-        def make_station_id(record):
-            number = record.pollingstationnumber
-            name = (
-                record.pollingstationname.lower()
-                .replace(" - ", "-")
-                .replace(".", "")
-                .replace(",", "")
-                .replace("'", "")
-                .replace(" ", "-")
-            )
-            return f"{number}-{name}"
-
-        station_id = make_station_id(record)
+        station_id = self.get_station_hash(record)
 
         rec = super().station_record_to_dict(record)
 
