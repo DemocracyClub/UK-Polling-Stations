@@ -10,7 +10,7 @@ class Command(BaseHalaroseCsvImporter):
     stations_name = (
         "europarl.2019-05-23/Version 1/polling_station_export-2019-04-25.csv"
     )
-    elections = ["europarl.2019-05"]
+    elections = ["europarl.2019-05-23"]
 
     def station_record_to_dict(self, record):
         station_id = self.get_station_hash(record)
