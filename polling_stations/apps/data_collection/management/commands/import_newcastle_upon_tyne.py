@@ -5,7 +5,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000021"
     addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019new.CSV"
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019new.CSV"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
@@ -15,6 +15,31 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_address_2="Blucher")
             record = record._replace(polling_place_address_3="Newcastle upon Tyne")
             record = record._replace(polling_place_postcode="NE15 9SD")
+
+        # Station changes for EU election
+        if record.polling_place_id == "8809":
+            record = record._replace(
+                polling_place_name="Stanton Street Community Lounge"
+            )
+            record = record._replace(polling_place_address_1="Stanton Street")
+            record = record._replace(polling_place_address_2="Newcastle upon Tyne")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="NE4 5LH")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="")
+
+        if record.polling_place_id == "9008":
+            record = record._replace(polling_place_name="St Charles Church")
+            record = record._replace(polling_place_address_1="Church Road")
+            record = record._replace(polling_place_address_2="Gosforth")
+            record = record._replace(polling_place_address_3="Newcastle upon Tyne")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="NE3 1TX")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="")
 
         return super().station_record_to_dict(record)
 
