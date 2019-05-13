@@ -328,7 +328,12 @@ class AddressList:
                     # If [input record address] and [addressbase record address]
                     # are less than 50% the same
                     # don't bother flagging this one for manual review
-                    loglevel = logging.INFO
+                    self.logger.log_message(
+                        logging.INFO,
+                        "Removing UPRN due to postcode mismatch.\nInput Record:\n%s\nAddressbase record:\n%s",
+                        variable=(record, addressbase_data[record["uprn"]]),
+                    )
+                    record["uprn"] = ""
                 else:
                     if (
                         is_split_postcode(record["postcode"])
