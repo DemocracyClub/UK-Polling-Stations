@@ -6,10 +6,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000037"
     addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wberks.tsv"
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wberks.tsv"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
+
+        # Station change for EU election
+        if record.polling_place_id == "3832":
+            record = record._replace(polling_place_name="Bradfield Village Hall")
+            record = record._replace(polling_place_address_1="Southend Road")
+            record = record._replace(polling_place_address_2="Bradfield Southend")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="RG7 6EY")
+            record = record._replace(polling_place_easting="459649")
+            record = record._replace(polling_place_northing="170731")
+            record = record._replace(polling_place_uprn="")
+
         # Leckhampstead Village Hall
         if record.polling_place_id == "3915":
             record = record._replace(polling_place_postcode="RG20 8QZ")
