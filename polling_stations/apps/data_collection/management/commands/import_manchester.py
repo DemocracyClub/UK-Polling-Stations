@@ -5,9 +5,9 @@ from data_collection.management.commands import (
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "E08000003"
-    addresses_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019v2Manc.TSV"
-    stations_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019v2Manc.TSV"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019MAN.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019MAN.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
 
