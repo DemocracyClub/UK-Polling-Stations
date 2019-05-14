@@ -4,24 +4,27 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000012"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Liverpool.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Liverpool.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019liver.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019liver.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
 
-        if record.polling_place_id == "5351":
-            rec = super().station_record_to_dict(record)
+        # From: 1977a6:polling_stations/apps/data_collection/management/commands/misc_fixes.py-345-
+        if rec["internal_council_id"] == "6025":  # Kensington Primary School
             rec["location"] = Point(-2.9532108, 53.4082081, srid=4326)
-            return rec
 
-        return super().station_record_to_dict(record)
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+        if uprn == "38303584":
+            rec["postcode"] = "L40UQ"
 
+        # The following UPRN corrections are from local.2019-05-02 but have been checked to still be relevant.
         if uprn in [
             "38002209",  # L199DG -> L199BN : Lone Oak, Aigburth Hall Road, Liverpool
             "38287679",  # L77EZ -> L77BL : Flat 4.06 Tudor Close, Mulberry Street, Liverpool
