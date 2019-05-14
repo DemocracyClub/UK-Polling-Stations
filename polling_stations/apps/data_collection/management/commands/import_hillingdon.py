@@ -1,48 +1,36 @@
-from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseXpressWebLookupCsvImporter):
     council_id = "E09000017"
-    addresses_name = (
-        "local.2018-05-03/Version 1/Democracy_Club__03May2018 (3) Hillingdon.tsv"
-    )
-    stations_name = (
-        "local.2018-05-03/Version 1/Democracy_Club__03May2018 (3) Hillingdon.tsv"
-    )
-    elections = ["local.2018-05-03"]
+    addresses_name = "europarl.2019-05-23/Version 1/PropertyPostCodePollingStationWebLookup-2019-04-29.TSV"
+    stations_name = "europarl.2019-05-23/Version 1/PropertyPostCodePollingStationWebLookup-2019-04-29.TSV"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.uprn.strip().lstrip("0")
+        rec = super().address_record_to_dict(record)
 
-        if uprn == "10090329328":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "UB4 9LW"
-            return rec
-
-        if uprn == "10092980468":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "UB8 3PF"
-            return rec
-
-        if uprn in ["10092982613", "10092982616", "10092982617"]:
-            rec = super().address_record_to_dict(record)
+        if uprn == "10092982613":
             rec["postcode"] = "UB4 0SE"
-            return rec
 
-        if uprn == "10022797188":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "UB8 1UJ"
-            return rec
+        if uprn == "100021447278":
+            rec["postcode"] = "HA6 3SJ"
 
-        if uprn == "10009948891":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "UB4 0RJ"
-            return rec
+        if uprn == "10093736200":
+            rec["postcode"] = "UB10 0TX"
 
-        if uprn == "10022805692":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "UB10 0BQ"
-            return rec
+        if uprn == "100023413509":
+            rec["postcode"] = "UB10 8AQ"
 
-        return super().address_record_to_dict(record)
+        if uprn in [
+            "10090329328",  # UB79LW -> UB49LW : 11  Adelaide House Perth Avenue
+            "10092980468",  # UB33PF -> UB83PF : 9A  10A Carlton Court Bosanquet Close
+            "10092982616",  # HA40SE -> UB40SE : Flat 5  366-370 Uxbridge Road
+            "10092982617",  # HA40SE -> UB40SE : Flat 6  366-370 Uxbridge Road
+            "10022805692",  # UB100QB -> UB100BQ : Flat 3  134 Jefferson Court Vine Lane
+        ]:
+            rec["accept_suggestion"] = True
+
+        return rec
