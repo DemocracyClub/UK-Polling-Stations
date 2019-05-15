@@ -5,7 +5,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000015"
     addresses_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019derby.tsv"
     stations_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019derby.tsv"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
@@ -13,6 +13,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "7944":
             record = record._replace(polling_place_easting="0")
             record = record._replace(polling_place_northing="0")
+
+        # station change for EU Parl elections
+        if record.polling_place_id == "7793":
+            record = record._replace(
+                polling_place_name="The Serbian Orthodox Church Hall"
+            )
+            record = record._replace(polling_place_address_1="Normanton Road")
+            record = record._replace(polling_place_address_2="Derby")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="DE1 2GJ")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="")
 
         return super().station_record_to_dict(record)
 
