@@ -78,6 +78,12 @@ class Command(BaseCommand):
             "120024279",
             "120047832",
             "120034278",
+            "118191899",
+            "118192006",
+            "118190963",
+            "118052842",
+            "118126542",
+            "118174746",
         ]
         addresses = Address.objects.filter(pk__in=bad_uprns)
         for address in addresses:
