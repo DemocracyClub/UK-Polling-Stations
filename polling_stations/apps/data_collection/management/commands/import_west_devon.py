@@ -20,12 +20,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn == "10013755070":
             rec["postcode"] = "EX201FQ"
 
+        return rec
+
     def station_record_to_dict(self, record):
 
-        # Charter Hall (Polling Station No.3)
+        if record.polling_place_id == "6451":
+            record = record._replace(polling_place_uprn="10013752301")
+
+        if record.polling_place_id == "6477":
+            record = record._replace(polling_place_uprn="10013752301")
+
         if record.polling_place_id == "6524":
             record = record._replace(polling_place_uprn="10013752301")
 
-        # Milton Abbot Village Hall
         if record.polling_place_id == "6502":
             record = record._replace(polling_place_uprn="10001329795")
+            record = record._replace(polling_place_postcode="")
+
+        return super().station_record_to_dict(record)
