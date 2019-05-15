@@ -3,9 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000181"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019WO.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019WO.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -19,6 +19,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["postcode"] = "OX29 9UH"
 
         if record.addressline1.strip() == "Horseshoe Island":
+            return None
+
+        if record.addressline6.strip() in ["OX29 4SZ", "GL56 0SU", "OX7 5YE"]:
             return None
 
         if uprn in [

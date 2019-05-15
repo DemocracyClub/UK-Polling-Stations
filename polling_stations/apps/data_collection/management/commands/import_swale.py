@@ -5,12 +5,12 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000113"
     addresses_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-02-28Swle.csv"
+        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-06Swale.csv"
     )
     stations_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-02-28Swle.csv"
+        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-06Swale.csv"
     )
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -38,11 +38,7 @@ class Command(BaseHalaroseCsvImporter):
         if uprn in [
             "100062087806",  # ME121TP -> ME122RT : Flat 2 36A Broadway, Sheerness, Kent
             "100062087803",  # ME121TP -> ME122RT : Flat 1 36A Broadway, Sheerness, Kent
-            "200002535746",  # ME121NX -> ME102RD : 45A High Street, Sheerness, Kent
-            "10013741961",  # ME130SG -> ME104ES : Winterbourne Cottage Annexe Rushett Lane, Norton, Faversham, Kent
             "10023196555",  # ME122DH -> ME121AG : 3 The Crescent Parklands Village The Broadway, Minster-on-Sea, Sheerness, Kent
-            "10023196556",  # ME122DH -> ME121AG : 1 The Crescent Parklands Village The Broadway, Minster-on-Sea, Sheerness, Kent
-            "10023200723",  # ME137JG -> ME98XF : 23 West Street, Faversham, Kent
         ]:
             rec["accept_suggestion"] = False
 
@@ -51,7 +47,7 @@ class Command(BaseHalaroseCsvImporter):
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        if record.pollingstationnumber in ["113", "114"]:
+        if record.pollingstationnumber in ["112", "113"]:
             rec["location"] = Point(0.735912, 51.337309, srid=4326)
 
         return rec

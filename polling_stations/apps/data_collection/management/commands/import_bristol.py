@@ -1,4 +1,6 @@
+import re
 from data_collection.github_importer import BaseGitHubImporter
+from data_collection.addresshelpers import format_polling_station_address
 
 
 class Command(BaseGitHubImporter):
@@ -6,17 +8,19 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E06000023"
-    elections = ["parl.2017-06-08"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Bristol"
     geom_type = "geojson"
+    stations_query = "stations_opend"
+    districts_query = "districts_opend"
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
         return {
-            "internal_council_id": record["POLLING_DIST_ID"].strip(),
-            "name": record["POLLING_DIST_NAME"].strip(),
+            "internal_council_id": record["polling_dist_id"].strip(),
+            "name": record["polling_dist_id"].strip(),
             "area": poly,
-            "polling_station_id": record["POLLING_DIST_ID"].strip(),
+            "polling_station_id": record["polling_dist_id"].strip(),
         }
 
     def extract_codes(self, text):
@@ -29,6 +33,7 @@ class Command(BaseGitHubImporter):
         Used by CLIB and CLIA
         Used by REDC amd REDG
         Used by BEDA & BEDC
+        STWB, STWA1 and STWA2
 
         Attempt to make sense of this
         """
@@ -38,11 +43,11 @@ class Command(BaseGitHubImporter):
         stations = stations.replace("Used for", "")
         codes = []
         if "and" in stations:
-            codes = stations.split("and")
+            codes = re.split("and|,", stations)
         elif "amd" in stations:
-            codes = stations.split("amd")
+            codes = re.split("amd|,", stations)
         elif "&" in stations:
-            codes = stations.split("&")
+            codes = re.split("&|,", stations)
         else:
             raise ValueError("Could not parse 'DUAL_STN' field: %s" % text)
 
@@ -58,19 +63,27 @@ class Command(BaseGitHubImporter):
             record, self.geom_type, self.get_srid("stations")
         )
 
-        address_parts = [record["PAO"].strip(), record["STREET"].strip()]
-        if record["LOCALITY"]:
-            address_parts.append(record["LOCALITY"].strip())
-        address = "\n".join(address_parts)
-
+        address = format_polling_station_address(
+            [
+                record["pao"] if record["pao"] else "",
+                record["street"] if record["street"] else "",
+                record["locality"] if record["locality"] else "",
+            ]
+        )
         postcode = ""
-        if record["POSTCODE"]:
-            postcode = record["POSTCODE"].strip()
+        if record["postcode"]:
+            postcode = record["postcode"].strip()
 
-        if record["DUAL_STN"]:
-            codes = self.extract_codes(record["DUAL_STN"])
+        if record["dual_stn"]:
+            codes = self.extract_codes(record["dual_stn"])
         else:
-            codes = [record["POLLING_DISTRICT"].strip()]
+            codes = [record["polling_district"].strip()]
+
+        if (
+            record["pao"] == "Stockwood Library"
+            and record["polling_district"].strip() == "STWD"
+        ):
+            codes = ["STWE"]
 
         stations = []
         for code in codes:

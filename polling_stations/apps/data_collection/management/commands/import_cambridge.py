@@ -5,12 +5,12 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000008"
     addresses_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-03-25Cam.csv"
+        "europarl.2019-05-23/Version 1/polling_station_export-2019-04-28cambs.csv"
     )
     stations_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-03-25Cam.csv"
+        "europarl.2019-05-23/Version 1/polling_station_export-2019-04-28cambs.csv"
     )
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
@@ -18,6 +18,10 @@ class Command(BaseHalaroseCsvImporter):
 
         if rec["internal_council_id"] == "42-the-c3-centre":
             rec["location"] = Point(0.1572, 52.2003, srid=4326)
+
+        # user issue report #105
+        if rec["internal_council_id"] == "31-trinity-old-field-pavilion":
+            rec["location"] = Point(0.106029, 52.207284, srid=4326)
 
         return rec
 

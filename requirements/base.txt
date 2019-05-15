@@ -5,9 +5,9 @@ django-extensions==2.1.6
 django-localflavor==2.2
 django-markdown-deux==1.0.5
 django==1.11.20  # pyup: >=1.11,<2.0
-djangorestframework==3.9.3
+djangorestframework==3.9.4
 djangorestframework-gis==0.14
-django-cors-headers==2.5.3
+django-cors-headers==3.0.1
 fastkml==0.11
 fuzzywuzzy==0.17.0
 lxml==4.3.3

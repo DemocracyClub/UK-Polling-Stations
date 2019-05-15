@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.github_importer import BaseGitHubImporter
 
 
@@ -6,7 +7,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E07000114"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Thanet"
     geom_type = "geojson"
 
@@ -31,6 +32,14 @@ class Command(BaseGitHubImporter):
 
         stations = []
         for code in codes:
+
+            # point supplied is bang on the building
+            # but causes google directions API to give us a strange route
+            if code == "MA" and address.startswith(
+                "Christ Church United Reformed Church"
+            ):
+                location = Point(1.338154, 51.38301, srid=4326)
+
             stations.append(
                 {
                     "internal_council_id": code.strip(),

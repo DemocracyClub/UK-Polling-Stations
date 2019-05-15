@@ -3,9 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000090"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Havant.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Havant.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019havant.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019havant.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -20,6 +20,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100062455644",  # PO88BB -> PO78NU : Plough & Barleycorn, Tempest Avenue, Cowplain, Waterlooville, Hampshire
             "10013680951",  # PO107NH -> PO107DN : 1E St James Road, Emsworth, Hampshire
             "10013675502",  # PO89UB -> PO89GX : 7A The Kestrels, 76 Eagle Avenue, Waterlooville, Hampshire
+            "10013679840",  # PO93EZ -> PO95EZ : 41 Tyler House, Bishopstoke Road, Havant, Hampshire
+            "10013679413",  # PO92DT -> PO93DT : 2 Mead Terrace, Hooks Lane, Bedhampton, Havant, Hampshire
         ]:
             rec["accept_suggestion"] = True
 

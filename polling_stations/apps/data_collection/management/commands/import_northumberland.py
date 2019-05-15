@@ -11,7 +11,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     council_id = "E06000057"
     addresses_name = "mayor.2019-05-02/Version 1/MAYORAL DATA.csv"
     stations_name = "mayor.2019-05-02/Version 1/MAYORAL DATA.csv"
-    elections = ["mayor.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = ","
 
     def get_station_hash(self, record):

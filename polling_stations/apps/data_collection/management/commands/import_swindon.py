@@ -1,22 +1,16 @@
-from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseXpressWebLookupCsvImporter):
     council_id = "E06000030"
-    addresses_name = "local.2019-05-02/Version 1/Swindon.CSV"
-    stations_name = "local.2019-05-02/Version 1/Swindon.CSV"
-    elections = ["local.2019-05-02"]
-
-    def station_record_to_dict(self, record):
-
-        if record.polling_place_id == "8564":
-            record = record._replace(polling_place_postcode="SN4 0LS")
-
-        return super().station_record_to_dict(record)
+    addresses_name = "europarl.2019-05-23/Version 1/PropertyPostCodePollingStationWebLookup-2019-05-10.TSV"
+    stations_name = "europarl.2019-05-23/Version 1/PropertyPostCodePollingStationWebLookup-2019-05-10.TSV"
+    elections = ["europarl.2019-05-23"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.uprn.strip().lstrip("0")
 
         if uprn in ["10093398297", "10093400685"]:
             return None
