@@ -6,11 +6,47 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000029"
     addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019soli.tsv"
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019soli.tsv"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
     allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
+
+        # 3x station changes for EU Parl elections
+        if record.polling_place_id == "6775":
+            record = record._replace(polling_place_name="Arden Library")
+            record = record._replace(polling_place_address_1="39 Fentham Road")
+            record = record._replace(polling_place_address_2="Hampton in Arden")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="B92 0AY")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="200003829766")
+
+        if record.polling_place_id == "7075":
+            record = record._replace(
+                polling_place_name="Monkspath Junior and Infant School"
+            )
+            record = record._replace(polling_place_address_1="Farmhouse Way")
+            record = record._replace(polling_place_address_2="")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="B90 4EH")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="100071489020")
+
+        if record.polling_place_id == "7049":
+            record = record._replace(polling_place_name="Sharmans Cross Junior School")
+            record = record._replace(polling_place_address_1="Sharmans Cross Road")
+            record = record._replace(polling_place_address_2="")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="B91 1PH")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="100071401403")
 
         # The Loft Above Asda
         if record.polling_place_id == "6826":
