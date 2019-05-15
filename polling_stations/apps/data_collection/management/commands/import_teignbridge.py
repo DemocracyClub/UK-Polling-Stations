@@ -8,6 +8,25 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+
+        # Dawlish Leisure Centre
+        if record.polling_place_id == "6620":
+            record = record._replace(polling_place_easting="296596")
+            record = record._replace(polling_place_northing="77519")
+
+        # St Pancras Church
+        if record.polling_place_id == "6606":
+            record = record._replace(polling_place_easting="271881")
+            record = record._replace(polling_place_northing="76793")
+
+        # The Church House Inn
+        if record.polling_place_id == "6636":
+            record = record._replace(polling_place_easting="291609")
+            record = record._replace(polling_place_northing="70499")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
