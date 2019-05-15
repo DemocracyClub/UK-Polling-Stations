@@ -9,8 +9,23 @@ class Command(BaseHalaroseCsvImporter):
     stations_name = (
         "local.2019-05-02/Version 1/polling_station_export-2019-02-28Grave.csv"
     )
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_encoding = "windows-1252"
+
+    def get_station_hash(self, record):
+        return "-".join([record.pollingstationnumber.strip()])
+
+    def station_record_to_dict(self, record):
+        # one station change for EU election
+        if record.pollingstationnumber in ["27", "28"]:
+            record = record._replace(pollingstationname="Elite Venue")
+            record = record._replace(pollingstationaddress_1="Dunkirk Close")
+            record = record._replace(pollingstationaddress_2="Gravesend")
+            record = record._replace(pollingstationaddress_3="Kent")
+            record = record._replace(pollingstationaddress_4="")
+            record = record._replace(pollingstationaddress_5="")
+            record = record._replace(pollingstationpostcode="DA12 5ND")
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
