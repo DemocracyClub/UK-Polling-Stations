@@ -9,10 +9,35 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     stations_name = (
         "local.2019-05-02/Version 1/Democracy Club Data Vale of White Horse.tsv"
     )
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
+
+        # 2x station changes for EU Parl elections
+        if record.polling_place_id == "6990":
+            record = record._replace(polling_place_name="Reading Room")
+            record = record._replace(polling_place_address_1="Littleworth")
+            record = record._replace(polling_place_address_2="")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="SN7 8ED")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="")
+
+        if record.polling_place_id == "6968":
+            record = record._replace(polling_place_name="St Michaels Church Hall")
+            record = record._replace(
+                polling_place_address_1="The Church of St Michaels and All Angels Church"
+            )
+            record = record._replace(polling_place_address_2="Church Lane")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="OX13 6SN")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_uprn="")
 
         # Polling place grid ref wrong.
         if record.polling_place_id in ["6822"]:

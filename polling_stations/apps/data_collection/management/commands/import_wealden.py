@@ -3,20 +3,12 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000065"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019weal.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019weal.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = (
+        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Wealdon.tsv"
+    )
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Wealdon.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # Ashurst Wood Village Centre
-        if record.polling_place_id == "5831":
-            record = record._replace(polling_place_postcode="RH19 3QN")
-
-        if record.polling_place_id == "5845":
-            record = record._replace(polling_place_postcode="TN7 4BD")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -36,13 +28,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100062557927",  # BN86HE -> TN225NR : Old Post House, The Street, Chiddingly, Lewes, East Sussex
             "100060123569",  # RH177LS -> RH177JQ : Anderida, Stone Quarry Road, Chelwood Gate, Haywards Heath, West Sussex
             "10033406575",  # TN39HG -> TN39HA : Singlegate Lodge, Frant Road, Frant, Tunbridge Wells, East Sussex
-            "10033401288",  # RH185JS -> RH185JH : Honeywell Cottage, Hindleap Warren, Lewes Road, Forest Row, East Sussex
             "10033408533",  # TN56PQ -> TN56PG : The Oasthouse, Mousehall, Tidebrook Road, Wadhurst, East Sussex
             "10033413710",  # RH193PG -> RH193PE : Dutton Homestall Lodge, Homestall Road, Ashurst Wood, East Grinstead, West Sussex
             "10033413711",  # RH193PG -> RH193PE : Wilkey Down, Homestall Road, Ashurst Wood, East Grinstead, West Sussex
             "10033409990",  # BN271SF -> BN271SE : Larksmoor, Rickney Lane, Hailsham, East Sussex
             "10070938384",  # TN74LB -> TN74LA : The Caravan, North Clays, Butcherfield Lane, Hartfield, East Sussex
-            "10033413802",  # TN339EJ -> BN86HB : 2 Highland, Top Road, Hooe Common, Hooe, Battle
             "10033399568",  # TN223AS -> TN223AE : Chile Pine, 51 Millwood Lane, Maresfield, Uckfield, East Sussex
             "10093175153",  # TN219QB -> TN219QA : Mobile Home Little Harness Farm, Cowbeech Road, Rushlake Green, Heathfield, East Sussex
         ]:

@@ -4,7 +4,7 @@ from data_collection.base_importers import BaseShpStationsShpDistrictsImporter
 class Command(BaseShpStationsShpDistrictsImporter):
     srid = 27700
     council_id = "E07000124"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     districts_name = (
         "local.2019-05-02/Version 1/RVBC - Polling Districts/RVBC - Polling Districts"
     )
