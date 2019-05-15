@@ -3,9 +3,13 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000076"
-    addresses_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019Tendring.tsv"
-    stations_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019Tendring.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = (
+        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019tendring.tsv"
+    )
+    stations_name = (
+        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019tendring.tsv"
+    )
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -50,8 +54,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "200001737111",  # CO168TA -> CO168SG : 101A Priory Close, Bel Air Chalet Estate, St Osyth, Clacton-on-Sea, Essex
-            "100091274872",  # CO153DL -> CO111BU : 57 Empire Court, Warwick Road, Clacton-on-Sea, Essex
-            "10090656718",  # CO125JE -> CO148BG : 52A Harwich Road, Little Oakley, Harwich, Essex
             "100091463343",  # CO123LD -> CO151PP : 18 Orwell Road, Harwich, Essex
             "100090623245",  # CO70AG -> CO111AH : 25A High Street, Brightlingsea, Colchester, Essex
         ]:
