@@ -3,10 +3,10 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E09000015"
-    addresses_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018 Harrow 1.tsv"
-    stations_name = "local.2018-05-03/Version 1/Democracy_Club__03May2018 Harrow 1.tsv"
-    elections = ["local.2018-05-03"]
-    csv_delimiter = "\t"
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019.csv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019.csv"
+    elections = ["europarl.2019-05-23"]
+    csv_delimiter = ","
 
     def station_record_to_dict(self, record):
 
@@ -17,10 +17,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
+        rec = super().address_record_to_dict(record)
 
-        if uprn == "100023030633":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "HA2 9JE"
-            return rec
+        if uprn == "10091092216":
+            rec["postcode"] = "HA2 0LH"
 
-        return super().address_record_to_dict(record)
+        if uprn in ["10070264489", "10091094715", "10091094714"]:
+            rec["accept_suggestion"] = False
+
+        return rec
