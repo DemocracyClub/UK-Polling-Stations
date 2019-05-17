@@ -748,7 +748,7 @@ class BaseScotlandSpatialHubImporter(
         return self.base_folder_path
 
     def parse_string(self, text):
-        return text.strip()
+        return text.strip().strip("\x00")
 
     def district_record_to_dict(self, record):
         council_name = self.parse_string(record[2])
