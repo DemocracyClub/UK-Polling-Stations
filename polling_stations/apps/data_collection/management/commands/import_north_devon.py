@@ -3,13 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000043"
-    addresses_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 North Devon.CSV"
-    )
-    stations_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 North Devon.CSV"
-    )
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 European ElectionND.CSV"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 European ElectionND.CSV"
+    elections = ["europarl.2019-05-23"]
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -67,7 +63,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10000484624",  # EX349EN -> EX349EL : Flat 5, Parliament Court Quayfield Road, Ilfracombe, Devon
             "10012112614",  # EX349HR -> EX349NR : Flat 1 Stafford House, 8 Hillsborough Terrace, Ilfracombe, Devon
             "100040265928",  # EX348PD -> EX348JL : Cedars, Marlborough Road, Ilfracombe, Devon
-            "100041038674",  # EX348LS -> EX348HD : The Old Stonemasons, Scamps Yard, Ilfracombe, Devon
             "100041138737",  # EX348HA -> EX348LA : 2 Winsham Terrace, Ilfracombe, Devon
             "100041138738",  # EX348HA -> EX348LA : 3 Winsham Terrace, Ilfracombe, Devon
             "10094236734",  # EX348FS -> EX348ER : Beau Lodge, Footpath 58, Ilfracombe, Devon
@@ -109,9 +104,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10012102258",  # EX328LL -> EX328LS : Flat 3 Lloyds Chambers, The Square, Barnstaple, Devon.
             "10000486532",  # EX340AS -> EX340AT : Flat 2 Bay View, Woodlands, Combe Martin, Devon
             "10000487730",  # EX313PH -> EX313PP : Hopesay Barn, East Woodlands, Newton Tracey, Barnstaple, Devon
-            "100041139363",  # EX356BS -> EX356EW : Horseshoe Cottage, Lee Road, Lynton, Devon
             "10090337291",  # EX347HH -> EX347AT : Mobile Home 1 Smallacre Cottages, Mortehoe Station Road, Mortehoe, Woolacombe, Devon
-            "100041138928",  # EX320RP -> EX349EE : Oakland Farm, Hill Village, South Molton, Devon
             "10090337978",  # EX363EF -> EX314QN : Woodland Hideaway, Drewstone Farm, Bishops Nympton, South Molton, Devon
             "100041037614",  # EX349DF -> EX311BG : 14 High Street, Ilfracombe, Devon
         ]:
