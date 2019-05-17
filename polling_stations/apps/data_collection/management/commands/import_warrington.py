@@ -1,13 +1,18 @@
-from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E06000007"
-    addresses_name = (
-        "parl.2017-06-08/Version 3/Warrington Democracy_Club__08June2017.tsv"
-    )
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy Club - Polling districts Warrington.csv"
     stations_name = (
-        "parl.2017-06-08/Version 3/Warrington Democracy_Club__08June2017.tsv"
+        "europarl.2019-05-23/Version 1/Democracy Club - Polling Stations Warrington.csv"
     )
-    elections = ["parl.2017-06-08"]
-    csv_delimiter = "\t"
+    elections = ["europarl.2019-05-23"]
+
+    def station_record_to_dict(self, record):
+
+        # Westbrook Old Hall Primary School
+        if record.stationcode in ["12X", "77"]:
+            record = record._replace(postcode="WA5 9QA")
+
+        return super().station_record_to_dict(record)
