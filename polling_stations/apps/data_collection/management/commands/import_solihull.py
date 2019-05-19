@@ -14,7 +14,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # 3x station changes for EU Parl elections
         if record.polling_place_id == "6775":
-            record = record._replace(polling_place_name="Arden Library")
+            record = record._replace(polling_place_name="Hampton in Arden Library")
             record = record._replace(polling_place_address_1="39 Fentham Road")
             record = record._replace(polling_place_address_2="Hampton in Arden")
             record = record._replace(polling_place_address_3="")
