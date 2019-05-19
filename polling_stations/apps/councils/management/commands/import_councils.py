@@ -168,11 +168,6 @@ class Command(BaseCommand):
 
         return councils
 
-    def _save_council(self, council):
-        # write council object to ALL databases
-        for db in settings.DATABASES.keys():
-            council.save(using=db)
-
     def clean_url(self, url):
         if not url.startswith(("http://", "https://")):
             # Assume http everywhere will redirect to https if it is there.
@@ -262,6 +257,6 @@ class Command(BaseCommand):
             council.address = info["address"]
             council.postcode = info["postcode"]
 
-            self._save_council(council)
+            council.save()
 
         self.stdout.write("..done")
