@@ -4,21 +4,18 @@ from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E09000003"
     addresses_name = (
-        "local.2018-05-03/Version 1/Democracy Club - Polling Districts (1) Barnet.csv"
+        "europarl.2019-05-23/Version 1/Decmoracy Club - Polling Districts.csv"
     )
     stations_name = (
-        "local.2018-05-03/Version 1/Democracy Club - Polling Stations Barnet.csv"
+        "europarl.2019-05-23/Version 1/Democracy Club - Polling Stations.csv"
     )
-    elections = ["local.2018-05-03"]
+    elections = ["europarl.2019-05-23"]
 
     def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.uprn.strip().lstrip("0")
 
-        if record.uprn == "-2709":
-            rec = super().address_record_to_dict(record)
-            rec["polling_station_id"] = ""
-            return rec
+        if uprn == "200196535":
+            rec["accept_suggestion"] = False
 
-        if record.postcode == "N20 0RB":
-            return None
-
-        return super().address_record_to_dict(record)
+        return rec
