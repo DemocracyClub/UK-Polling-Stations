@@ -3,15 +3,15 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000143"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Breckland.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Breckland.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Breck.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Breck.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id in ["7051", "7105", "7289"]:
+        if record.polling_place_id in ["7830", "7930", "8062"]:
             # The E/N points are the wrong way round for these 3
             # perform the old switcheroo
             easting = record.polling_place_northing
@@ -19,7 +19,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting=easting)
             record = record._replace(polling_place_northing=northing)
 
-        if record.polling_place_id == "7149":
+        if record.polling_place_id == "7980":
             # this one is just miles off
             # remove it and fall back to geocoding by postcode
             record = record._replace(polling_place_easting="0")
@@ -55,7 +55,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "100091305655",  # NR171DY -> NR171EA : Red Lodge, Watton Road, Shropham, Attleborough, Norfolk
             "100090787475",  # IP257AX -> IP257BL : Flint Cottage, Hale Road, Ashill, Thetford, Norfolk
-            "100091311394",  # IP256RS -> IP257JJ : Wood Farm Estate, Dereham Road, Ovington, Thetford, Norfolk
         ]:
             rec["accept_suggestion"] = False
 
