@@ -5,7 +5,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E07000123"
-    elections = ["local.2019-05-02"]
+    elections = ["local.2019-05-02", "europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Preston"
     geom_type = "geojson"
 
