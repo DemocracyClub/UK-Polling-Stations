@@ -1,12 +1,22 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000025"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019SGlos.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019SGlos.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
+
+    def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
+
+        # Trust Hall-Stoke Gifford
+        if record.polling_place_id == "10592":
+            rec["location"] = Point(-2.540965, 51.516655, srid=4326)
+
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -27,6 +37,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn == "648155":  # BS107RQ -> BS107RQ
             rec["postcode"] = "BS107RQ"
             rec["accept_suggestion"] = False
+
+        if uprn == "646315":
+            rec["postcode"] = "GL128EY"
 
         if uprn in [
             "624155",  # BS305NH -> BS305NL : 1 Cann Farm, Cann Lane, Warmley, Bristol
@@ -50,7 +63,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "581876",  # BS351LF -> BS351LB : Hill Crest, Lower Morton, Thornbury, Bristol
             "528682",  # BS154HN -> BS154HJ : 47 Honey Hill Road, Kingswood, Bristol
         ]:
-
             rec["accept_suggestion"] = True
 
         return rec

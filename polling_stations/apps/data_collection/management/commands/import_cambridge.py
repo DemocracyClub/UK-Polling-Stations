@@ -23,6 +23,14 @@ class Command(BaseHalaroseCsvImporter):
         if rec["internal_council_id"] == "31-trinity-old-field-pavilion":
             rec["location"] = Point(0.106029, 52.207284, srid=4326)
 
+        # user issue report #129
+        if rec["internal_council_id"] == "2-east-barnwell-community-centre":
+            rec["location"] = Point(0.165576, 52.212132, srid=4326)
+
+        # report from council
+        if rec["internal_council_id"] == "13-seminar-rooms-3-4-churchill-college":
+            rec["location"] = Point(0.099002518, 52.215464, srid=4326)
+
         return rec
 
     def address_record_to_dict(self, record):
