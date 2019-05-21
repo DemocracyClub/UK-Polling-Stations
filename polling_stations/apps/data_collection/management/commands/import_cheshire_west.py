@@ -3,16 +3,14 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000050"
-    addresses_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019.CSV"
-    stations_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019.CSV"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019CWC.CSV"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019CWC.CSV"
+    elections = ["europarl.2019-05-23"]
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "3203":
-            record = record._replace(polling_place_postcode="CW6 9NA")
-
-        if record.polling_place_id == "3089":
+        # "Ashton Hayes Parish Room" Correction brought forward from local.2019-05-02
+        if record.polling_place_id == "3673":
             record = record._replace(polling_place_postcode="CH3 8BJ")
 
         return super().station_record_to_dict(record)
@@ -20,20 +18,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn == "100012371869":
-            rec["postcode"] = "CW4 7LP"
-        if uprn in ["10013203208", "10013201585"]:
-            rec["postcode"] = "CW10 0QQ"
-        if uprn == "100012371896":
-            rec["postcode"] = "WA16 9SG"
-        if uprn == "10014519222":
-            rec["postcode"] = "WA4 4QG"
-        if uprn == "100012371909":
-            rec["postcode"] = "WA16 9NQ"
-
-        if record.addressline6.strip() in ["CW7 4AF", "CW8 2QS", "CW8 2JS"]:
-            return None
 
         if uprn in [
             "10013575202",  # CH661NZ -> CH661NT : Station House, Station Road, Little Sutton, Ellesmere Port, Cheshire
