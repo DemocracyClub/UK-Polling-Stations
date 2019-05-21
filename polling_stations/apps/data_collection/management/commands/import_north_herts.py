@@ -4,14 +4,14 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000099"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Nherts.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Nherts.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "6444":
+        if record.polling_place_id == "6876":  # Studlands Rise First School
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-0.013935, 52.045835, srid=4326)
             return rec
