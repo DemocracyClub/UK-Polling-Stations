@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressWebLookupCsvImporter
 
 
@@ -7,6 +8,18 @@ class Command(BaseXpressWebLookupCsvImporter):
     stations_name = "europarl.2019-05-23/Version 1/PropertyPostCodePollingStationWebLookup-2019-04-29.TSV"
     elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
+
+    def station_record_to_dict(self, record):
+
+        # Walter G Pomeroy Hall
+        # user issue report #130
+        if record.pollingplaceid == "7817":
+            rec = super().station_record_to_dict(record)
+            rec["postcode"] = ""
+            rec["location"] = Point(-0.465827, 51.523108, srid=4326)
+            return rec
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
