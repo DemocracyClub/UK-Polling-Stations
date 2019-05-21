@@ -5,13 +5,55 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000246"
     addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019somersetW.tsv"
     stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019somersetW.tsv"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "6954":
-            record = record._replace(polling_place_postcode="TA4 2JP")
+        """
+        These changes are from local.2019-05-02 to europarl.2019-05-23 from Somerset and West Taunton Council
+        Duplicate stations are being created to retain granularity of control wrt to polling districts.
+        """
+
+        # · Cheddon Fitzpaine Memorial Hall -> West Monkton Village Hall (already a polling station)
+        if record.polling_place_id == "6924":
+            record = record._replace(
+                polling_place_name="Cheddon Fitzpaine Memorial Hall"
+            )
+            record = record._replace(polling_place_address_1="Rowford")
+            record = record._replace(polling_place_address_2="Cheddon Fitzpaine")
+            record = record._replace(polling_place_address_4="Taunton")
+            record = record._replace(polling_place_postcode="TA2 8JY")
+
+        # · Crowcombe Church House -> Crowcombe Hall, Crowcombe TA4 4AQ
+        if record.polling_place_id == "6830":
+            record = record._replace(polling_place_name="Crowcombe Hall")
+            record = record._replace(polling_place_address_1="Crowcombe")
+            record = record._replace(polling_place_postcode="TA4 4AQ")
+
+        # · St James Church, St James Street, Taunton -> Victoria Park Pavilion (already a polling station)
+        if record.polling_place_id == "6866":
+            record = record._replace(polling_place_name="Victoria Park Pavilion")
+            record = record._replace(polling_place_address_1="Victoria Gate")
+            record = record._replace(polling_place_address_4="Taunton")
+            record = record._replace(polling_place_postcode="TA1 3ES")
+
+        # · The Function Room at The Beambridge Inn, Sampford Arundel -> Parish Room, Sampford Arundel (already a polling station)
+        if record.polling_place_id == "6715":
+            record = record._replace(polling_place_name="The Parish Room")
+            record = record._replace(polling_place_address_1="Sampford Arundel")
+            record = record._replace(polling_place_address_2="Wellington")
+            record = record._replace(polling_place_postcode="")
+
+        # · The 68 Club, Cheddon Road, Taunton -> The Meeting Room, Wellsprings Leisure Centre (already a polling station)
+        if record.polling_place_id == "6800":
+            record = record._replace(polling_place_name="Meeting Room")
+            record = record._replace(
+                polling_place_address_1="Wellsprings Leisure Centre"
+            )
+            record = record._replace(polling_place_address_2="Cheddon Road")
+            record = record._replace(polling_place_address_4="Taunton")
+            record = record._replace(polling_place_postcode="TA2 7QP")
 
         return super().station_record_to_dict(record)
 
