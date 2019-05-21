@@ -4,16 +4,20 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000228"
-    addresses_name = "local.2019-05-02/Version 1/Democracy Club Export - Mid Sussex.TSV"
-    stations_name = "local.2019-05-02/Version 1/Democracy Club Export - Mid Sussex.TSV"
-    elections = ["local.2019-05-02"]
+    addresses_name = (
+        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 Mid Sussex.tsv"
+    )
+    stations_name = (
+        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 Mid Sussex.tsv"
+    )
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        if record.polling_place_id == "1903":
+        if record.polling_place_id == "2427":
             rec["location"] = Point(-0.203007, 51.083493, srid=4326)
 
         return rec
@@ -23,8 +27,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100061866354",  # RH175AJ -> RH175AG : Grainloft, Cuckfield Road, Ansty, Haywards Heath, West Sussex
-            "10070622514",  # RH162QB -> RH162QE : 2 Diamond Cottages, Snowdrop Lane, Lindfield, Haywards Heath, West Sussex
+            "10070622514"  # RH162QB -> RH162QE : 2 Diamond Cottages, Snowdrop Lane, Lindfield, Haywards Heath, West Sussex
         ]:
             rec["accept_suggestion"] = True
 
