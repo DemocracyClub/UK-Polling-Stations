@@ -79,6 +79,20 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
             rec["location"] = Point(-2.466883, 50.606307, srid=4326)
             return rec
 
+        # Charlton Marshall - Church Room
+        # user issue report #131
+        if record.polling_place_id == "31525":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = None
+            return rec
+
+        # West Moors Memorial Hall
+        # user issue report #132
+        if record.polling_place_id in ["31839", "31842"]:
+            rec = super().station_record_to_dict(record)
+            rec["location"] = None
+            return rec
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
