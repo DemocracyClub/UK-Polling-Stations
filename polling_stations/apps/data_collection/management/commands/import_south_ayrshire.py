@@ -1,41 +1,64 @@
-from data_collection.management.commands import BaseScotlandSpatialHubImporter
+import tempfile
+import urllib.request
+from data_collection.github_importer import BaseGitHubImporter
 from data_collection.slugger import Slugger
 
+
 """
-Note:
-This importer provides coverage for 55/71 districts
-due to incomplete/poor quality data
+This one is a bit messy.
+
+The districts file has station addresses in it
+
+There is also a stations file with points, but it has no codes
+so we're going to parse the districts file twice
+(once for the shapes and once to fill in the station addresses)
+and then we'll fill in the points from the stations file
+using address slug where possible.
 """
 
 
-class Command(BaseScotlandSpatialHubImporter):
+class Command(BaseGitHubImporter):
+    srid = 4326
+    districts_srid = 4326
     council_id = "S12000028"
-    council_name = "South Ayrshire"
     elections = ["europarl.2019-05-23"]
-    station_map = {}
+    scraper_name = "wdiv-scrapers/DC-PollingStations-SouthAyrshire"
+    geom_type = "geojson"
+    stations_query = "districts"
+    station_points = {}
+
+    def pre_import(self):
+        filename = self.base_url % (self.council_id, "stations", "json")
+        with tempfile.NamedTemporaryFile() as tmp:
+            urllib.request.urlretrieve(filename, tmp.name)
+            stations = self.get_data("json", tmp.name)
+            for station in stations:
+                self.station_points[Slugger.slugify(station["place"])] = station
 
     def district_record_to_dict(self, record):
-        if record[2] == self.council_name:
-            name_postcode = f"{record[3].split(',')[0]} {record[3].split(',')[-1]}"
-            station_slug = Slugger.slugify(name_postcode)
-            self.station_map.setdefault(station_slug, []).append(record[0])
-            return super().district_record_to_dict(record)
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+        return {
+            "internal_council_id": record["polling"],
+            "name": record["polling"],
+            "area": poly,
+            "polling_station_id": record["polling"],
+        }
 
     def station_record_to_dict(self, record):
-        if record[2] == self.council_name:
-            try:
-                name_postcode = f"{record[3].split(',')[0]} {record[3].split(',')[-1]}"
-                station_slug = Slugger.slugify(name_postcode)
-                codes = self.station_map[station_slug]
-            except KeyError:
-                return None
+        if not record["place"]:
+            return None
 
-            stations = []
-            for code in codes:
-                rec = {
-                    "internal_council_id": code,
-                    "postcode": "",
-                    "address": record[3],
-                }
-                stations.append(rec)
-            return stations
+        slug = Slugger.slugify(record["place"])
+        if slug in self.station_points:
+            location = self.extract_geometry(
+                self.station_points[slug], self.geom_type, self.get_srid()
+            )
+        else:
+            location = None
+
+        return {
+            "internal_council_id": record["polling"],
+            "address": record["place"],
+            "postcode": record["postcode"],
+            "location": location,
+        }
