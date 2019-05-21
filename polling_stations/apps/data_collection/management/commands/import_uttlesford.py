@@ -9,7 +9,7 @@ class Command(BaseGitHubImporter, CsvMixin):
     srid = 27700
     districts_srid = 27700
     council_id = "E07000077"
-    elections = ["local.2019-05-02"]
+    elections = ["europarl.2019-05-23"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Uttlesford"
     geom_type = "geojson"
     # districts file has station address and UPRN for district
@@ -23,7 +23,8 @@ class Command(BaseGitHubImporter, CsvMixin):
 
     def pre_import(self):
         postcodes_file = os.path.join(
-            self.base_folder_path, "local.2019-05-02/Version 1/Uttlesford Postcodes.csv"
+            self.base_folder_path,
+            "europarl.2019-05-23/Version 1/Uttlesford Postcodes.csv",
         )
         postcodes = self.get_data("csv", postcodes_file)
         self.postcodes = {pc.district_code: pc.postcode for pc in postcodes}
