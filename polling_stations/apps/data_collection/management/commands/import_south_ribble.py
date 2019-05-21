@@ -4,10 +4,10 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000126"
     addresses_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-04-30sr.csv"
+        "europarl.2019-05-23/Version 2/polling_station_export-2019-05-20.csv"
     )
     stations_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-04-30sr.csv"
+        "europarl.2019-05-23/Version 2/polling_station_export-2019-05-20.csv"
     )
     elections = ["europarl.2019-05-23"]
 
