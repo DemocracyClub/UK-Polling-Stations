@@ -3,9 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000043"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019BH.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019BH.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019BandH.tsv"
+    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019BandH.tsv"
+    elections = ["europarl.2019-05-23"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -23,10 +23,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "22259748",  # BN21AU -> BN21PD : Flat 2 (First Rear), 21 Burlington Street, Brighton
-            "22258121",  # BN31AE -> BN11HH : Flat 6, 3-4 Western Road, Hove
-            "22262337",  # BN12AU -> BN11HJ : Flat 53 Russell House, Russell Mews, Brighton
-            "22258120",  # BN31AE -> BN11HH : Flat 5, 3-4 Western Road, Hove
             "22253791",  # BN21TN -> BN14QE : Flat At, 16 Madeira Place, Brighton
+            "22131280",  # BN31AE -> BN12PG : Lower Flat, 15 Western Road, Hove
         ]:
             rec["accept_suggestion"] = False
 
