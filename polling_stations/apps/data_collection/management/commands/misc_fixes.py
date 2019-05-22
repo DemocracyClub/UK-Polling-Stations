@@ -54,6 +54,12 @@ class Command(BaseCommand):
         wyre_forest.save()
         print("..updated")
 
+        print("updating Chelmsford phone number")
+        chelmsford = Council.objects.get(pk="E07000070")
+        chelmsford.phone = "01245 606449"
+        chelmsford.save()
+        print("..updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             "10023906550",
