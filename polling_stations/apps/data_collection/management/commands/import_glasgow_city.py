@@ -10,7 +10,7 @@ due to incomplete/poor quality data
 class Command(BaseScotlandSpatialHubImporter):
     council_id = "S12000046"
     council_name = "Glasgow City"
-    elections = ["europarl.2019-05-23"]
+    elections = []
 
     def district_record_to_dict(self, record):
         """

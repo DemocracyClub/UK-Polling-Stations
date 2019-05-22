@@ -13,7 +13,7 @@ No Polling Station for district SL114
 class Command(BaseScotlandSpatialHubImporter):
     council_id = "S12000029"
     council_name = "South Lanarkshire"
-    elections = ["europarl.2019-05-23"]
+    elections = []
     station_map = {}
 
     def district_record_to_dict(self, record):
