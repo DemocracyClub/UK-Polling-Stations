@@ -4,7 +4,7 @@ from data_collection.management.commands import BaseScotlandSpatialHubImporter
 class Command(BaseScotlandSpatialHubImporter):
     council_id = "S12000019"
     council_name = "Midlothian"
-    elections = ["europarl.2019-05-23"]
+    elections = []
 
     def district_record_to_dict(self, record):
         code = str(record[0]).strip()

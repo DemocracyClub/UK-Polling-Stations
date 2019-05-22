@@ -14,7 +14,7 @@ Districts LFL6B, LFL6L, LVL7X, LVL8Z and LVV3D missing polling place
 class Command(BaseScotlandSpatialHubImporter):
     council_id = "S12000040"
     council_name = "West Lothian"
-    elections = ["europarl.2019-05-23"]
+    elections = []
     station_map = {}
     seen_codes = set()
 
