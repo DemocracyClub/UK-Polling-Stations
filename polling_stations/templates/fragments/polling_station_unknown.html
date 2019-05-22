@@ -3,7 +3,6 @@
 <h2>{% blocktrans with council.name as council_name %}Contact {{ council_name }}{% endblocktrans %}</h2>
 
 {% blocktrans %}
-  <p>We don't have data for your area.</p>
   <p>
     Your polling station address should be printed on your polling card, which is delivered by post before an election.
   </p>
@@ -12,7 +11,7 @@
   <p>
     {% if council.phone %}
       {% blocktrans with council.phone as council_phone and council.name as council_name %}
-        Or, you need to contact your local council.
+        Or if you don't have a poll card, you need to contact your local council.
         You can call {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
       {% endblocktrans %}
     {% else %}

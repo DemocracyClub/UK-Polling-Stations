@@ -24,7 +24,6 @@ Feature: Check Postcodes
     Then I submit the only form
     Then The browser's URL should contain "/address/5/"
     And I should see "Contact Foo Council"
-    And I should see "We don't have data for your area."
     And No errors were thrown
 
     Scenario: Check postcode without address picker
@@ -46,7 +45,6 @@ Feature: Check Postcodes
     Then I select "My address is not in the list" from "address"
     Then I submit the only form
     Then I should see "Contact Foo Council"
-    And I should see "We don't have data for your area."
     And No errors were thrown
 
     Scenario: Check multiple councils
