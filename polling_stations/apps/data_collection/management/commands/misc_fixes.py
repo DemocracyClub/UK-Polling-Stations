@@ -355,3 +355,200 @@ class Command(BaseCommand):
         update_station_point(
             "E08000019", "198-walkley-library", Point(-1.502873, 53.394934, srid=4326)
         )
+
+        # Fife
+        print("updating: Fife...")
+        print("Updating: 027BAH")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="027BAH"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Carnegie Primary School\nPittsburgh Road\nDunfermline"
+            station.postcode = "KY11 8SS"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 043CAD")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="043CAD"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = (
+                "Education Resource & Training Centre\nMaitland Street\nDunfermline "
+            )
+            station.postcode = "KY12 8AF"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 045CAF")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="045CAF"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = (
+                "Touch Community Leisure Centre\n30 Mercer Place\nDunfermline "
+            )
+            station.postcode = "KY11 4UG"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 046CAG")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="046CAG"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Carnegie Primary School\nPittsburgh Road\nDunfermline"
+            station.postcode = "KY11 8SS"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 106GAB")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="106GAB"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = (
+                "Hill of Beath Ex-Servicemen’s Club\nMain Street\nHill of Beath"
+            )
+            station.postcode = "KY4 8DP"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 112GAF")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="112GAF"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = (
+                "Maxwell Community Centre\n70 Stenhouse Street\nCowdenbeath"
+            )
+            station.postcode = "KY4 9DD"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 112GAH")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="112GAH"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = (
+                "Maxwell Community Centre\n70 Stenhouse Street\nCowdenbeath"
+            )
+            station.postcode = "KY4 9DD"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 201IAA")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="201IAA"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Solid Rock Café\n245 High Street\nBurntisland "
+            station.postcode = "KY3 9AQ"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 211JAB")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="211JAB"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Torbain Parish Church Hall\nCarron Place\nKirkcaldy"
+            station.postcode = "KY2 6PS"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 259NAE")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="259NAE"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = (
+                "The Nairn Suite\nBalgeddie House Hotel,Balgeddie Way\nGlenrothes"
+            )
+            station.postcode = "KY6 3ET"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 307PAG")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="307PAG"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Ladybank (Howe of Fife Parish) Church Hall\noff Church Street\nLadybank "
+            station.postcode = "KY15 7ND"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 325QAF")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="325QAF"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Leuchars Primary School\n18 Pitlethie Road\nLeuchars"
+            station.postcode = "KY16 0EZ"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("Updating: 373UAF")
+        stations = PollingStation.objects.filter(
+            council_id="S12000047", internal_council_id="373UAF"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Sports Pavilion\nCotlands Park\nKennoway "
+            station.postcode = "KY8 5HX"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+        print("...updated Fife")
