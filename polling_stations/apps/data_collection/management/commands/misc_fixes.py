@@ -678,3 +678,14 @@ class Command(BaseCommand):
         # User issue #184
         print("updating: Felmore Court AP Scheme...")
         update_station_point("E07000066", "4065", None)
+
+        # say "we don't know" for this one postcode
+        ResidentialAddress.objects.create(
+            address="PR40EW",
+            postcode="PR40EW",
+            polling_station_id="",
+            council_id="E07000123",
+            slug="PR40EW",
+            location=Point(-2.729529, 53.796233, srid=4326),
+            uprn="",
+        )
