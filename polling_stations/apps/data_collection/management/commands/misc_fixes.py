@@ -605,3 +605,31 @@ class Command(BaseCommand):
                 print("..updated")
         else:
             print("..NOT updated")
+
+        #  Dorset via email https://trello.com/c/ZutXcLv1
+        print("updating: East Chaldon Village Hall...")
+        update_station_point(
+            "E06000059", "31943", Point(-2.298479, 50.647704, srid=4326)
+        )
+
+        #  Denbigshire https://trello.com/c/GVoeeqnF
+        print("updating: Canolfan Cymuned Ffordd Las Community Centre...")
+        update_station_point(
+            "W06000004", "8156", Point(-3.488767, 53.315241, srid=4326)
+        )
+
+        # User issue #171
+        print("updating: Brooklands Pavilion...")
+        update_station_point("E06000042", "7297", Point(-0.67579, 52.04455, srid=4326))
+
+        # User issue #170
+        print("updating: The Oval Primary School...")
+        update_station_point(
+            "E08000025",
+            "139-the-oval-primary-school",
+            Point(-1.79646, 52.47996, srid=4326),
+        )
+
+        # User issue #172
+        print("updating: St Andrew`s Church of Scotland...")
+        update_station_point("E07000150", "7044", Point(-0.69143, 52.49772, srid=4326))
