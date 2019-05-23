@@ -312,3 +312,18 @@ class Command(BaseCommand):
         # User issue 158
         print("updating:  Caythorpe and Frieston Village Hall...")
         update_station_point("E07000141", "4056", Point(-0.60214, 53.02241, srid=4326))
+
+        # Lambeth Council update / User issue 156
+        print("updating: Raleigh Park Centre...")
+        stations = PollingStation.objects.filter(
+            council_id="E09000022", internal_council_id="SOB"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-0.1134, 51.452, srid=4326)
+            station.address = "Jubilee Primary School & Children`s Centre\nTulse Hill"
+            station.postcode = "SW2 2JE"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
