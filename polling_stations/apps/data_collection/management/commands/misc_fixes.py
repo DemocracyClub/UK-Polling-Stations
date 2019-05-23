@@ -674,3 +674,7 @@ class Command(BaseCommand):
             "112-maypole-youth-and-community-centre",
             Point(-1.889264, 52.407175, srid=4326),
         )
+
+        # User issue #185
+        print("updating: Felmore Court AP Scheme...")
+        update_station_point("E07000066", "4065", None)
