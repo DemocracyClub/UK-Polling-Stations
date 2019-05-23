@@ -633,3 +633,17 @@ class Command(BaseCommand):
         # User issue #172
         print("updating: St Andrew`s Church of Scotland...")
         update_station_point("E07000150", "7044", Point(-0.69143, 52.49772, srid=4326))
+
+        # User issue #176
+        print("updating: Westonzoyland Village Hall...")
+        update_station_point(
+            "E07000188",
+            "55-westonzoyland-village-hall",
+            Point(-2.92303, 51.11035, srid=4326),
+        )
+
+        # Cambridge https://trello.com/c/iaBlKjwZ
+        print("updating: LICHFIELD HALL...")
+        update_station_point(
+            "E07000008", "20-lichfield-hall", Point(0.152069, 52.189367, srid=4326)
+        )
