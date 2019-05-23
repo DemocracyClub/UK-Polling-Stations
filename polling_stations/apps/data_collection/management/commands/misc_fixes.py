@@ -647,3 +647,9 @@ class Command(BaseCommand):
         update_station_point(
             "E07000008", "20-lichfield-hall", Point(0.152069, 52.189367, srid=4326)
         )
+
+        # User issue #178
+        print("updating: Brinkworth Village Hall...")
+        update_station_point(
+            "E06000054", "53062", Point(-1.980240, 51.558765, srid=4326)
+        )
