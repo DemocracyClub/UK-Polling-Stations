@@ -572,3 +572,36 @@ class Command(BaseCommand):
         # User issue 168
         print("updating: Kingswood Community Centre...")
         update_station_point("E06000007", "55", Point(-2.641653, 53.413628, srid=4326))
+
+        # 2x Last-minute changes from Kingston council
+        print("updating: Kingston-upon-Thames EA...")
+        stations = PollingStation.objects.filter(
+            council_id="E09000021", internal_council_id__in=["EA_25", "EA_26"]
+        )
+        if len(stations) == 2:
+            for station in stations:
+                station.address = "St. Mark's Church\nSt. Mark's Hill\nSurbiton"
+                station.postcode = "KT6 4LS"
+                station.location = Point(
+                    -0.300536430202766, 51.3952050795307, srid=4326
+                )
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
+
+        print("updating: Kingston-upon-Thames EB...")
+        stations = PollingStation.objects.filter(
+            council_id="E09000021", internal_council_id__in=["EB_27", "EB_28"]
+        )
+        if len(stations) == 2:
+            for station in stations:
+                station.address = "Glenmore House\n6 The Crescent\nSurbiton"
+                station.postcode = "KT6 4BN"
+                station.location = Point(
+                    -0.305167559373057, 51.3951372632609, srid=4326
+                )
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
