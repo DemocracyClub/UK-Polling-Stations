@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-# from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from councils.models import Council
 from addressbase.models import Address, Blacklist
@@ -237,3 +237,9 @@ class Command(BaseCommand):
             print("..deleted")
 
         print("..done")
+
+        # User issue 140
+        print("updating: Kilsby Village Hall (Kilsby Room)...")
+        update_station_point(
+            "E07000151", "6718", Point(-1.174253, 52.336931, srid=4326)
+        )
