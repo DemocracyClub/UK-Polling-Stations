@@ -296,3 +296,9 @@ class Command(BaseCommand):
         update_station_point(
             "E06000057", "B41NET", Point(-1.845624, 55.206558, srid=4326)
         )
+
+        # User issue 154/5
+        print("updating:  Bolton Road United Reformed Church...")
+        update_station_point(
+            "E06000008", "3077", Point(-2.4615102, 53.6832739, srid=4326)
+        )
