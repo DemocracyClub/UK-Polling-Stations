@@ -312,3 +312,46 @@ class Command(BaseCommand):
         # User issue 158
         print("updating:  Caythorpe and Frieston Village Hall...")
         update_station_point("E07000141", "4056", Point(-0.60214, 53.02241, srid=4326))
+
+        # Lambeth Council update / User issue 156
+        print("updating: Raleigh Park Centre...")
+        stations = PollingStation.objects.filter(
+            council_id="E09000022", internal_council_id="SOB"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-0.1134, 51.452, srid=4326)
+            station.address = "Jubilee Primary School & Children`s Centre\nTulse Hill"
+            station.postcode = "SW2 2JE"
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 162
+        print("updating:  Newport Pagnell Town Footbal Club...")
+        update_station_point(
+            "E06000042", "7370", Point(-0.721871, 52.077798, srid=4326)
+        )
+
+        # User issue 163
+        print("updating: Walkley Parish Community Hall...")
+        stations = PollingStation.objects.filter(
+            council_id="E08000019",
+            internal_council_id="194-walkley-parish-community-hall",
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-1.49913, 53.39145, srid=4326)
+            station.address = " St. Mary’s Walkley Community Hall\nWalkley"
+            station.postcode = ""
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 167
+        print("updating: Walkley Library...")
+        update_station_point(
+            "E08000019", "198-walkley-library", Point(-1.502873, 53.394934, srid=4326)
+        )
