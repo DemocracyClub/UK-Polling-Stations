@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-# from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from councils.models import Council
 from addressbase.models import Address, Blacklist
@@ -237,3 +237,78 @@ class Command(BaseCommand):
             print("..deleted")
 
         print("..done")
+
+        # User issue 140
+        print("updating: Kilsby Village Hall (Kilsby Room)...")
+        update_station_point(
+            "E07000151", "6718", Point(-1.174253, 52.336931, srid=4326)
+        )
+
+        # User issue 141
+        print("updating:  The Albert Underwood Room, St Peters Church...")
+        stations = PollingStation.objects.filter(
+            council_id="E07000152", internal_council_id="8545"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = "NN9 5WB"
+            station.location = Point(-0.61056, 52.32575, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 149
+        print("updating: The Mount View Hotel...")
+        update_station_point(
+            "E06000052", "3241", Point(-5.499815, 50.129318, srid=4326)
+        )
+
+        # User issue 139
+        print("updating:  LARGS ACADEMY,...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000021", internal_council_id="N804"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Largs Campus Gymnasium\nAlexander Avenue\nLargs"
+            station.postcode = "KA30 9EU"
+            station.location = Point(-4.855903, 55.8003773, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 151
+        print("updating: Holy Trinity Church Hall...")
+        update_station_point(
+            "E07000081", "2657", Point(-2.2127903, 51.8753716, srid=4326)
+        )
+
+        # User issue 153
+        print("updating: NETHERWITTON VILLAGE HALL...")
+        update_station_point(
+            "E06000057", "B37HAR", Point(-1.845624, 55.206558, srid=4326)
+        )
+        update_station_point(
+            "E06000057", "B39MEL", Point(-1.845624, 55.206558, srid=4326)
+        )
+        update_station_point(
+            "E06000057", "B41NET", Point(-1.845624, 55.206558, srid=4326)
+        )
+
+        # User issue 154/5
+        print("updating:  Bolton Road United Reformed Church...")
+        update_station_point(
+            "E06000008", "3077", Point(-2.4615102, 53.6832739, srid=4326)
+        )
+
+        # User issue 157
+        print("updating:  County Children`s Centre...")
+        update_station_point(
+            "E08000012", "5909", Point(-2.968792, 53.442462, srid=4326)
+        )
+
+        # User issue 158
+        print("updating:  Caythorpe and Frieston Village Hall...")
+        update_station_point("E07000141", "4056", Point(-0.60214, 53.02241, srid=4326))
