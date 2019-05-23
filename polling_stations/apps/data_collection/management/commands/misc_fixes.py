@@ -552,3 +552,19 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
         print("...updated Fife")
+
+        print("Updating: Perth & Kinross: SLI, SLL, SLM, SLN")
+        stations = PollingStation.objects.filter(
+            council_id="S12000048", internal_council_id__in=["SLI", "SLL", "SLM", "SLN"]
+        )
+        if len(stations) == 4:
+            for station in stations:
+                station.address = (
+                    "Aytoun Hall, 91-93 High Street, Auchterarder, Perthshire"
+                )
+                station.postcode = ""
+                station.location = None
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
