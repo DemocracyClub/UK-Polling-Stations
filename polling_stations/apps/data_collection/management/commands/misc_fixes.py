@@ -666,3 +666,11 @@ class Command(BaseCommand):
             print("..updated")
         else:
             print("..NOT updated")
+
+        # User issue #183
+        print("updating: Maypole Youth and Community Centre...")
+        update_station_point(
+            "E08000025",
+            "112-maypole-youth-and-community-centre",
+            Point(-1.889264, 52.407175, srid=4326),
+        )
