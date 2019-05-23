@@ -333,3 +333,25 @@ class Command(BaseCommand):
         update_station_point(
             "E06000042", "7370", Point(-0.721871, 52.077798, srid=4326)
         )
+
+        # User issue 163
+        print("updating: Walkley Parish Community Hall...")
+        stations = PollingStation.objects.filter(
+            council_id="E08000019",
+            internal_council_id="194-walkley-parish-community-hall",
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.location = Point(-1.49913, 53.39145, srid=4326)
+            station.address = " St. Mary’s Walkley Community Hall\nWalkley"
+            station.postcode = ""
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 167
+        print("updating: Walkley Library...")
+        update_station_point(
+            "E08000019", "198-walkley-library", Point(-1.502873, 53.394934, srid=4326)
+        )
