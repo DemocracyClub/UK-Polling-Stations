@@ -605,3 +605,9 @@ class Command(BaseCommand):
                 print("..updated")
         else:
             print("..NOT updated")
+
+        #  Dorset via email https://trello.com/c/ZutXcLv1
+        print("updating: East Chaldon Village Hall...")
+        update_station_point(
+            "E06000059", "31943", Point(-2.298479, 50.647704, srid=4326)
+        )
