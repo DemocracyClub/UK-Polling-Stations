@@ -263,3 +263,18 @@ class Command(BaseCommand):
         update_station_point(
             "E06000052", "3241", Point(-5.499815, 50.129318, srid=4326)
         )
+
+        # User issue 139
+        print("updating:  LARGS ACADEMY,...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000021", internal_council_id="N804"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Largs Campus Gymnasium\nAlexander Avenue\nLargs"
+            station.postcode = "KA30 9EU"
+            station.location = Point(-4.855903, 55.8003773, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
