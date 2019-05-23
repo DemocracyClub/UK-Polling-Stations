@@ -629,3 +629,7 @@ class Command(BaseCommand):
             "139-the-oval-primary-school",
             Point(-1.79646, 52.47996, srid=4326),
         )
+
+        # User issue #172
+        print("updating: St Andrew`s Church of Scotland...")
+        update_station_point("E07000150", "7044", Point(-0.69143, 52.49772, srid=4326))
