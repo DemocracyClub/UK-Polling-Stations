@@ -617,3 +617,7 @@ class Command(BaseCommand):
         update_station_point(
             "W06000004", "8156", Point(-3.488767, 53.315241, srid=4326)
         )
+
+        # User issue #171
+        print("updating: Brooklands Pavilion...")
+        update_station_point("E06000042", "7297", Point(-0.67579, 52.04455, srid=4326))
