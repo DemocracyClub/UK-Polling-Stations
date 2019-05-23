@@ -257,3 +257,9 @@ class Command(BaseCommand):
             print("..updated")
         else:
             print("..NOT updated")
+
+        # User issue 149
+        print("updating: The Mount View Hotel...")
+        update_station_point(
+            "E06000052", "3241", Point(-5.499815, 50.129318, srid=4326)
+        )
