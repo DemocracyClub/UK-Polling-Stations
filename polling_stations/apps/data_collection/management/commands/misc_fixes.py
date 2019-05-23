@@ -278,3 +278,21 @@ class Command(BaseCommand):
             print("..updated")
         else:
             print("..NOT updated")
+
+        # User issue 151
+        print("updating: Holy Trinity Church Hall...")
+        update_station_point(
+            "E07000081", "2657", Point(-2.2127903, 51.8753716, srid=4326)
+        )
+
+        # User issue 153
+        print("updating: NETHERWITTON VILLAGE HALL...")
+        update_station_point(
+            "E06000057", "B37HAR", Point(-1.845624, 55.206558, srid=4326)
+        )
+        update_station_point(
+            "E06000057", "B39MEL", Point(-1.845624, 55.206558, srid=4326)
+        )
+        update_station_point(
+            "E06000057", "B41NET", Point(-1.845624, 55.206558, srid=4326)
+        )
