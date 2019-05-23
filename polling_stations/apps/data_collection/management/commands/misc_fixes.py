@@ -568,3 +568,7 @@ class Command(BaseCommand):
                 print("..updated")
         else:
             print("..NOT updated")
+
+        # User issue 168
+        print("updating: Kingswood Community Centre...")
+        update_station_point("E06000007", "55", Point(-2.641653, 53.413628, srid=4326))
