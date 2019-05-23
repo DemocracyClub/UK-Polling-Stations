@@ -611,3 +611,9 @@ class Command(BaseCommand):
         update_station_point(
             "E06000059", "31943", Point(-2.298479, 50.647704, srid=4326)
         )
+
+        #  Denbigshire https://trello.com/c/GVoeeqnF
+        print("updating: Canolfan Cymuned Ffordd Las Community Centre...")
+        update_station_point(
+            "W06000004", "8156", Point(-3.488767, 53.315241, srid=4326)
+        )
