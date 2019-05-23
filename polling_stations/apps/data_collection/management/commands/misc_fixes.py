@@ -308,3 +308,7 @@ class Command(BaseCommand):
         update_station_point(
             "E08000012", "5909", Point(-2.968792, 53.442462, srid=4326)
         )
+
+        # User issue 158
+        print("updating:  Caythorpe and Frieston Village Hall...")
+        update_station_point("E07000141", "4056", Point(-0.60214, 53.02241, srid=4326))
