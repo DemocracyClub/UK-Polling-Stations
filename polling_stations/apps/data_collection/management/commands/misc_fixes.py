@@ -243,3 +243,17 @@ class Command(BaseCommand):
         update_station_point(
             "E07000151", "6718", Point(-1.174253, 52.336931, srid=4326)
         )
+
+        # User issue 141
+        print("updating:  The Albert Underwood Room, St Peters Church...")
+        stations = PollingStation.objects.filter(
+            council_id="E07000152", internal_council_id="8545"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.postcode = "NN9 5WB"
+            station.location = Point(-0.61056, 52.32575, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
