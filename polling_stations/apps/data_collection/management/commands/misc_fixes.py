@@ -641,3 +641,9 @@ class Command(BaseCommand):
             "55-westonzoyland-village-hall",
             Point(-2.92303, 51.11035, srid=4326),
         )
+
+        # Cambridge https://trello.com/c/iaBlKjwZ
+        print("updating: LICHFIELD HALL...")
+        update_station_point(
+            "E07000008", "20-lichfield-hall", Point(0.152069, 52.189367, srid=4326)
+        )
