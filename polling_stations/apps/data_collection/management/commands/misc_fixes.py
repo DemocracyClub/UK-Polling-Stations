@@ -653,3 +653,16 @@ class Command(BaseCommand):
         update_station_point(
             "E06000054", "53062", Point(-1.980240, 51.558765, srid=4326)
         )
+
+        # User issue #165
+        print("updating: district EWJ...")
+        districts = PollingDistrict.objects.filter(
+            council_id="S12000042", internal_council_id="EWJ"
+        )
+        if len(districts) == 1:
+            district = districts[0]
+            district.polling_station_id = "EWE"
+            district.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
