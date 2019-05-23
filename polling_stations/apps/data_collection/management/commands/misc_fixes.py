@@ -327,3 +327,9 @@ class Command(BaseCommand):
             print("..updated")
         else:
             print("..NOT updated")
+
+        # User issue 162
+        print("updating:  Newport Pagnell Town Footbal Club...")
+        update_station_point(
+            "E06000042", "7370", Point(-0.721871, 52.077798, srid=4326)
+        )
