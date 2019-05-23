@@ -302,3 +302,9 @@ class Command(BaseCommand):
         update_station_point(
             "E06000008", "3077", Point(-2.4615102, 53.6832739, srid=4326)
         )
+
+        # User issue 157
+        print("updating:  County Children`s Centre...")
+        update_station_point(
+            "E08000012", "5909", Point(-2.968792, 53.442462, srid=4326)
+        )
