@@ -1,5 +1,4 @@
 import abc
-from datetime import datetime
 
 from django.conf import settings
 from django.contrib.gis.geos import Point
@@ -7,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, TemplateView
-from django.utils import translation, timezone
+from django.utils import translation
 
 from councils.models import Council
 from data_finder.models import LoggedPostcode
@@ -80,14 +79,12 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        eu_polls_open = timezone.make_aware(
-            datetime.strptime("2019-05-23 7", "%Y-%m-%d %H")
-        )
-        eu_polls_close = timezone.make_aware(
-            datetime.strptime("2019-05-23 22", "%Y-%m-%d %H")
-        )
-        now = timezone.now()
-        context["show_polls_open"] = eu_polls_open < now and eu_polls_close > now
+        """
+        TODO: revisit idea of polling day-specific content
+        https://github.com/DemocracyClub/UK-Polling-Stations/pull/2037/files#diff-78a9fc588889ef751c68b530b1af1e80
+        https://github.com/DemocracyClub/UK-Polling-Stations/issues/2051
+        """
+        context["show_polls_open"] = False
         return context
 
     def form_valid(self, form):
