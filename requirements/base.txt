@@ -10,7 +10,7 @@ djangorestframework-gis==0.14
 django-cors-headers==3.0.2
 fastkml==0.11
 fuzzywuzzy==0.17.0
-lxml==4.3.3
+lxml==4.3.4
 psycopg2-binary==2.8.2
 pyshp==2.1.0
 python-levenshtein==0.12.0
