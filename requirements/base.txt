@@ -18,7 +18,7 @@ raven==6.10.0
 requests==2.22.0
 retry==0.9.2
 boto==2.49.0
-uk-geo-utils==0.7.0
+uk-geo-utils==0.8.0
 
 git+git://github.com/DemocracyClub/dc_base_theme.git@0.3.7
 git+https://github.com/DemocracyClub/dc_signup_form.git@2.0.1
