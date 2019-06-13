@@ -1,16 +1,16 @@
 dj-database-url==0.5.0
-django-apiblueprint-view==2.0.1
+django-apiblueprint-view==2.1.0
 django-basicauth==0.5.2
-django-extensions==2.1.6
+django-extensions==2.1.9
 django-localflavor==2.2
 django-markdown-deux==1.0.5
-django==1.11.20  # pyup: >=1.11,<2.0
+django==1.11.21  # pyup: >=1.11,<2.0
 djangorestframework==3.9.4
 djangorestframework-gis==0.14
-django-cors-headers==3.0.1
+django-cors-headers==3.0.2
 fastkml==0.11
 fuzzywuzzy==0.17.0
-lxml==4.3.3
+lxml==4.3.4
 psycopg2-binary==2.8.2
 pyshp==2.1.0
 python-levenshtein==0.12.0
@@ -18,7 +18,7 @@ raven==6.10.0
 requests==2.22.0
 retry==0.9.2
 boto==2.49.0
-uk-geo-utils==0.7.0
+uk-geo-utils==0.8.0
 
 git+git://github.com/DemocracyClub/dc_base_theme.git@0.3.7
 git+https://github.com/DemocracyClub/dc_signup_form.git@2.0.1
