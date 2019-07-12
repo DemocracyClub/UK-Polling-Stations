@@ -40,6 +40,7 @@ def setup(scenario, outline, steps):
     options = ChromeOptions()
     options.add_argument("--headless")
     options.add_argument("--disable-gpu")
+    options.add_experimental_option("w3c", False)
     world.browser = Chrome(options=options)
     world.browser.set_page_load_timeout(10)
     world.browser.set_script_timeout(10)
