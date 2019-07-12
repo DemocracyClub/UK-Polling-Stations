@@ -192,6 +192,12 @@ class Command(BaseCommand):
             elif council_id == "S12000048":
                 # Perth & Kinross
                 data = self.get_from_yvm("S12000024")
+            elif council_id == "S12000049":
+                # Glasgow
+                data = self.get_from_yvm("S12000046")
+            elif council_id == "S12000050":
+                # North Lanarkshire
+                data = self.get_from_yvm("S12000044")
             elif council_id in TEMP_CONTACT_DETAILS:
                 self.stdout.write("No contact details available from YVM")
                 return TEMP_CONTACT_DETAILS[council_id]
@@ -238,7 +244,7 @@ class Command(BaseCommand):
         councils = []
         self.stdout.write("Downloading ONS boundaries from %s..." % (boundaries_url))
         councils = councils + self.get_councils(
-            boundaries_url, id_field="lad18cd", name_field="lad18nm"
+            boundaries_url, id_field="lad19cd", name_field="lad19nm"
         )
 
         councils = self.pre_process_councils(councils)
