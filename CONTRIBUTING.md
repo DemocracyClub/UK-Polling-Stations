@@ -17,7 +17,7 @@ At [DemocracyClub](https://democracyclub.org.uk/) we value contributions to our 
     * `python manage.py harvest` (acceptance tests)
     or enable [travis-ci](https://travis-ci.org/) for your fork, so the tests will be executed after a `push`.
 * Check your work against our coding standards. We use [pyflakes](https://github.com/PyCQA/pyflakes) for linting and [black](https://github.com/ambv/black) for code formatting:
-     * `pytest --flake` (lint with pyflakes)
+     * `pytest --flakes` (lint with pyflakes)
      * `black .` (auto-format with black)
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository.
