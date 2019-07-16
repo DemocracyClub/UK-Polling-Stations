@@ -1,7 +1,6 @@
 import mock
 from django.contrib.gis.geos import Point
 from django.test import TestCase
-from unittest import skip
 from data_finder.helpers.directions import Directions, DirectionsException
 from data_finder.helpers import DirectionsHelper
 
@@ -21,10 +20,6 @@ def mock_route_google(self, start, end):
     return Directions("1", "1", "walk", "foo", 5, "Google")
 
 
-def mock_route_mapzen(self, start, end):
-    return Directions("1", "1", "walk", "foo", 6, "Mapzen")
-
-
 class DirectionsTest(TestCase):
     def setUp(self):
         self.a = Point(-0.14158760012261312, 51.50100893647978, srid=4326)
@@ -38,10 +33,6 @@ class DirectionsTest(TestCase):
         self.assertIsNone(result)
 
     @mock.patch(
-        "data_finder.helpers.directions.MapzenDirectionsClient.get_route",
-        mock_route_exception,
-    )
-    @mock.patch(
         "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
         mock_route_exception,
     )
@@ -53,10 +44,6 @@ class DirectionsTest(TestCase):
         self.assertIsNone(result)
 
     @mock.patch(
-        "data_finder.helpers.directions.MapzenDirectionsClient.get_route",
-        mock_route_exception,
-    )
-    @mock.patch(
         "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
         mock_route_google,
     )
@@ -66,18 +53,3 @@ class DirectionsTest(TestCase):
         d = DirectionsHelper()
         result = d.get_directions(start_location=self.a, end_location=self.b)
         self.assertEqual("Google", result.source)
-
-    @skip("skip this test pending review of directions providers")
-    @mock.patch(
-        "data_finder.helpers.directions.MapzenDirectionsClient.get_route",
-        mock_route_mapzen,
-    )
-    @mock.patch(
-        "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
-        mock_route_google,
-    )
-    def test_mapzen(self):
-        # Mapzen returns a valid result
-        d = DirectionsHelper()
-        result = d.get_directions(start_location=self.a, end_location=self.b)
-        self.assertEqual("Mapzen", result.source)
