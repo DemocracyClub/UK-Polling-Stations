@@ -4,13 +4,9 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000008"
-    addresses_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-04-28cambs.csv"
-    )
-    stations_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-04-28cambs.csv"
-    )
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "local.cambridge.newnham.by.2019-08-08/Version 1/polling_station_export-2019-07-19.csv"
+    stations_name = "local.cambridge.newnham.by.2019-08-08/Version 1/polling_station_export-2019-07-19.csv"
+    elections = ["local.cambridge.newnham.by.2019-08-08"]
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
