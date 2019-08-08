@@ -4,7 +4,7 @@ from councils.models import Council
 
 
 class DataQuality(models.Model):
-    council = models.OneToOneField(Council, primary_key=True)
+    council = models.OneToOneField(Council, primary_key=True, on_delete=models.CASCADE)
     url = models.URLField(
         blank=True, verbose_name="URL to the data", help_text="(PDF, website, etc)"
     )
