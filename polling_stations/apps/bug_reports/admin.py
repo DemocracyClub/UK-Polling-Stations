@@ -31,7 +31,9 @@ class BugReportAdmin(admin.ModelAdmin):
         return qs
 
     def preview_url(self, obj):
-        if obj.source == "wheredoivote" and is_safe_url(obj.source_url):
+        if obj.source == "wheredoivote" and is_safe_url(
+            obj.source_url, allowed_hosts=None
+        ):
             link = self.request.build_absolute_uri(obj.source_url)
             return mark_safe('<a href="%s">%s</a>' % (link, link))
         return "-"

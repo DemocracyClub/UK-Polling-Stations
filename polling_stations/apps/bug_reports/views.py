@@ -14,7 +14,7 @@ class BugReportFormView(CreateView):
 
         if (
             self.source_redirect
-            and is_safe_url(self.object.source_url)
+            and is_safe_url(self.object.source_url, allowed_hosts=None)
             and "report_problem" not in self.object.source_url
         ):
 
