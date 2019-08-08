@@ -91,7 +91,6 @@ MIDDLEWARE = (
     "django.middleware.locale.LocaleMiddleware",
     # 'django.middleware.csrf.CsrfViewMiddleware',
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "data_finder.middleware.UTMTrackerMiddleware",
     "whitelabel.middleware.WhiteLabelMiddleware",
