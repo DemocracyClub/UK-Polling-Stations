@@ -37,7 +37,12 @@ class Migration(migrations.Migration):
                 ),
                 ("postcode", models.CharField(max_length=100)),
                 ("had_data", models.BooleanField(db_index=True, default=False)),
-                ("council", models.ForeignKey(null=True, to="councils.Council")),
+                (
+                    "council",
+                    models.ForeignKey(
+                        null=True, to="councils.Council", on_delete=models.CASCADE
+                    ),
+                ),
                 (
                     "location",
                     django.contrib.gis.db.models.fields.PointField(

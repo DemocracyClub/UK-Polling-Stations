@@ -27,7 +27,12 @@ class Migration(migrations.Migration):
                 ("address", models.TextField(null=True, blank=True)),
                 ("postcode", models.CharField(null=True, blank=True, max_length=100)),
                 ("polling_station_id", models.CharField(blank=True, max_length=100)),
-                ("council", models.ForeignKey(to="councils.Council", null=True)),
+                (
+                    "council",
+                    models.ForeignKey(
+                        to="councils.Council", null=True, on_delete=models.CASCADE
+                    ),
+                ),
             ],
         )
     ]

@@ -18,7 +18,10 @@ class Migration(migrations.Migration):
                 (
                     "council",
                     models.OneToOneField(
-                        to="councils.Council", primary_key=True, serialize=False
+                        to="councils.Council",
+                        primary_key=True,
+                        serialize=False,
+                        on_delete=models.CASCADE,
                     ),
                 ),
                 ("report", models.TextField()),

@@ -52,7 +52,12 @@ class Migration(migrations.Migration):
                         verbose_name=b"In contact with DC?",
                     ),
                 ),
-                ("council", models.OneToOneField(to="councils.Council")),
+                (
+                    "council",
+                    models.OneToOneField(
+                        to="councils.Council", on_delete=models.CASCADE
+                    ),
+                ),
             ],
             options={"verbose_name_plural": "Data Quality"},
             bases=(models.Model,),
