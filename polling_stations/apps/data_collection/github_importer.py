@@ -49,18 +49,6 @@ class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
         return poly
 
     def extract_gml_geometry(self, record, srid):
-        """
-        This is a bit of a hack
-
-        In this version of Django, there is no way to directly create an
-        OGRGeometry or GEOSGeometry object directly from a GML string but we
-        can do it by writing it out to a file and then reading it back in with
-        DataSource().
-
-        This functionality will be added in Django 1.11
-        https://docs.djangoproject.com/en/dev/releases/1.11/#django-contrib-gis
-        """
-
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(force_bytes(record["geometry"]))
             tmp.seek(0)
