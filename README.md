@@ -34,7 +34,7 @@ sudo apt-get install postgresql-10 postgresql-server-dev-all python-psycopg2 pyt
 sudo npm install -g npm
 ```
 
-For other linux distributions, see [here](https://docs.djangoproject.com/en/1.11/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
+For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
 The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing API Blueprint. On OSX this can be installed using
 ```
