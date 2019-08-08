@@ -15,7 +15,7 @@ addons:
       - g++-5
 
 before_cache:
-    - rm -f .tox/py36-django111/log/*.log
+    - rm -f .tox/py36-django22/log/*.log
     - rm -f .cache/pip/log/*.log
 cache:
   pip: true
