@@ -4,8 +4,11 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
+from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
+
+from dc_theme.urls import dc_server_error
 
 from api.router import router
 from api.docs import ApiDocsView
@@ -20,7 +23,6 @@ from data_finder.views import (
 )
 from pollingstations.views import status_check
 
-from django.contrib import admin
 
 admin.autodiscover()
 
@@ -89,4 +91,4 @@ urlpatterns = (
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )
 
-handler500 = "dc_theme.urls.dc_server_error"
+handler500 = dc_server_error
