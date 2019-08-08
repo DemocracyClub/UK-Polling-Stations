@@ -17,7 +17,7 @@ class Command(BaseGitHubImporter):
         for feature in geo_collection:
             if isinstance(feature, Polygon):
                 return self.clean_poly(
-                    GEOSGeometry(feature.geojson, srid=self.get_srid("districts"))
+                    GEOSGeometry(feature.wkt, srid=self.get_srid("districts"))
                 )
 
     def district_record_to_dict(self, record):

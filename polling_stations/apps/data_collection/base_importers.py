@@ -379,9 +379,8 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                             "Implicitly converting station geometry to point",
                         )
                         geojson = json.dumps(station.shape.__geo_interface__)
-                        poly = self.clean_poly(
-                            GEOSGeometry(geojson, srid=self.get_srid())
-                        )
+                        poly = self.clean_poly(GEOSGeometry(geojson))
+                        poly.srid = self.get_srid()
                         station_record["location"] = poly.centroid
 
                 if self.validation_checks:
@@ -504,9 +503,8 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             if "area" not in district_info and (
                 self.districts_filetype in ["shp", "shp.zip", "geojson"]
             ):
-                poly = self.clean_poly(
-                    GEOSGeometry(geojson, srid=self.get_srid("districts"))
-                )
+                poly = self.clean_poly(GEOSGeometry(geojson))
+                poly.srid = self.get_srid("districts")
                 district_info["area"] = poly
 
             if self.validation_checks:
