@@ -26,14 +26,14 @@ class PollingDistrict(models.Model):
     class Meta:
         unique_together = ("council", "internal_council_id")
 
-    objects = models.GeoManager()
+    objects = models.Manager()
 
     def __unicode__(self):
         name = self.name or "Unnamed"
         return "%s (%s)" % (name, self.council)
 
 
-class PollingStationManager(models.GeoManager):
+class PollingStationManager(models.Manager):
     def get_polling_station(self, council_id, location=None, polling_district=None):
         assert any((polling_district, location))
 

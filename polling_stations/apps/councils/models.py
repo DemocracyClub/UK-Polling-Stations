@@ -11,7 +11,7 @@ class Council(models.Model):
     address = models.TextField(blank=True, null=True)
     area = models.MultiPolygonField(null=True, blank=True, geography=True, srid=4326)
 
-    objects = models.GeoManager()
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
