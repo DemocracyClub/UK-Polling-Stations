@@ -1,5 +1,6 @@
 import logging
 from collections import namedtuple
+from django.contrib.gis.geos import GEOSGeometry
 from django.db import connection
 from councils.models import Council
 from pollingstations.models import PollingDistrict, ResidentialAddress
@@ -64,7 +65,9 @@ class EdgeCaseFixer:
 
     def get_station_id(self, address):
         if not address.council_id:
-            c = Council.objects.defer("area").get(area__covers=address.location)
+            c = Council.objects.defer("area").get(
+                area__covers=GEOSGeometry(address.location)
+            )
             council_id = c.council_id
         else:
             council_id = address.council_id
