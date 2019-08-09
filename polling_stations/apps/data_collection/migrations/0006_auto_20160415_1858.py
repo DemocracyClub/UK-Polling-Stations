@@ -14,7 +14,10 @@ class Migration(migrations.Migration):
             model_name="dataquality",
             name="council",
             field=models.OneToOneField(
-                primary_key=True, to="councils.Council", serialize=False
+                primary_key=True,
+                to="councils.Council",
+                serialize=False,
+                on_delete=models.CASCADE,
             ),
         ),
     ]

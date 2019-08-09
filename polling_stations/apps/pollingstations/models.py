@@ -15,7 +15,7 @@ from uk_geo_utils.helpers import Postcode
 
 class PollingDistrict(models.Model):
     name = models.CharField(blank=True, null=True, max_length=255)
-    council = models.ForeignKey(Council, null=True)
+    council = models.ForeignKey(Council, null=True, on_delete=models.CASCADE)
     internal_council_id = models.CharField(blank=True, max_length=100)
     extra_id = models.CharField(blank=True, null=True, max_length=100)
     area = models.MultiPolygonField(null=True, blank=True)
@@ -26,14 +26,14 @@ class PollingDistrict(models.Model):
     class Meta:
         unique_together = ("council", "internal_council_id")
 
-    objects = models.GeoManager()
+    objects = models.Manager()
 
     def __unicode__(self):
         name = self.name or "Unnamed"
         return "%s (%s)" % (name, self.council)
 
 
-class PollingStationManager(models.GeoManager):
+class PollingStationManager(models.Manager):
     def get_polling_station(self, council_id, location=None, polling_district=None):
         assert any((polling_district, location))
 
@@ -84,7 +84,9 @@ class PollingStationManager(models.GeoManager):
 
 
 class PollingStation(models.Model):
-    council = models.ForeignKey(Council, null=True, db_index=True)
+    council = models.ForeignKey(
+        Council, null=True, db_index=True, on_delete=models.CASCADE
+    )
     internal_council_id = models.CharField(blank=True, max_length=100, db_index=True)
     postcode = models.CharField(blank=True, null=True, max_length=100)
     address = models.TextField(blank=True, null=True)
@@ -115,7 +117,7 @@ class PollingStation(models.Model):
 class ResidentialAddress(models.Model):
     address = models.TextField(blank=True, null=True)
     postcode = models.CharField(blank=True, null=True, max_length=100, db_index=True)
-    council = models.ForeignKey(Council, null=True)
+    council = models.ForeignKey(Council, null=True, on_delete=models.CASCADE)
     polling_station_id = models.CharField(blank=True, max_length=100)
     slug = models.SlugField(
         blank=False, null=False, db_index=True, unique=True, max_length=255

@@ -23,7 +23,7 @@ class FeedbackFormView(UpdateView):
         messages.success(self.request, "Thank you for your feedback!")
 
         if (
-            is_safe_url(self.object.source_url)
+            is_safe_url(self.object.source_url, allowed_hosts=None)
             and self.object.source_url != "/feedback/"
         ):
             return self.object.source_url

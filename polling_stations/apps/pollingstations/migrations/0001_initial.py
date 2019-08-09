@@ -31,7 +31,12 @@ class Migration(migrations.Migration):
                         srid=4326, null=True, blank=True
                     ),
                 ),
-                ("council", models.ForeignKey(to="councils.Council", null=True)),
+                (
+                    "council",
+                    models.ForeignKey(
+                        to="councils.Council", null=True, on_delete=models.CASCADE
+                    ),
+                ),
             ],
             options={},
             bases=(models.Model,),
@@ -57,7 +62,12 @@ class Migration(migrations.Migration):
                         srid=4326, null=True, blank=True
                     ),
                 ),
-                ("council", models.ForeignKey(to="councils.Council", null=True)),
+                (
+                    "council",
+                    models.ForeignKey(
+                        to="councils.Council", null=True, on_delete=models.CASCADE
+                    ),
+                ),
             ],
             options={},
             bases=(models.Model,),

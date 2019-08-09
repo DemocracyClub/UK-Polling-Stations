@@ -44,27 +44,17 @@ class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
     def extract_json_geometry(self, record, srid):
         geom = json.loads(record["geometry"])
         geojson = json.dumps(geom["geometry"])
-        return self.clean_poly(GEOSGeometry(geojson, srid=srid))
+        poly = self.clean_poly(GEOSGeometry(geojson))
+        poly.srid = srid
+        return poly
 
     def extract_gml_geometry(self, record, srid):
-        """
-        This is a bit of a hack
-
-        In this version of Django, there is no way to directly create an
-        OGRGeometry or GEOSGeometry object directly from a GML string but we
-        can do it by writing it out to a file and then reading it back in with
-        DataSource().
-
-        This functionality will be added in Django 1.11
-        https://docs.djangoproject.com/en/dev/releases/1.11/#django-contrib-gis
-        """
-
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(force_bytes(record["geometry"]))
             tmp.seek(0)
             ds = DataSource(tmp.name)
             if len(ds[0]) == 1:
-                geojson = next(iter(ds[0])).geom.geojson
-                return self.clean_poly(GEOSGeometry(geojson, srid=srid))
+                wkt = next(iter(ds[0])).geom.wkt
+                return self.clean_poly(GEOSGeometry(wkt, srid=srid))
             else:
                 raise ValueError("Expected 1 feature, found %i" % len(ds[0]))
