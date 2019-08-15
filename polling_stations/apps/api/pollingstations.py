@@ -6,7 +6,11 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 from rest_framework.viewsets import GenericViewSet
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.serializers import (
+    GeoFeatureModelSerializer,
+    GeometrySerializerMethodField,
+)
+from django.conf import settings
 from django.utils.http import urlencode
 from pollingstations.models import PollingStation
 from .mixins import PollingEntityMixin
@@ -49,6 +53,7 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
     id = SerializerMethodField("generate_id")
     urls = SerializerMethodField("generate_urls")
     council = SerializerMethodField("generate_council")
+    location = GeometrySerializerMethodField("generate_location")
 
     def generate_council(self, record):
         return reverse(
@@ -59,6 +64,12 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
 
     def generate_id(self, record):
         return "%s.%s" % (record.council_id, record.internal_council_id)
+
+    def generate_location(self, record):
+        SHOW_MAPS = getattr(settings, "SHOW_MAPS", True)
+        if not SHOW_MAPS:
+            return None
+        return record.location
 
     class Meta:
         model = PollingStation

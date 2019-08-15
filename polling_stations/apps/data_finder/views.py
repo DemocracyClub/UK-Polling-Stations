@@ -152,6 +152,9 @@ class BasePollingStationView(
 
         self.council = self.get_council(loc)
         self.station = self.get_station()
+        SHOW_MAPS = getattr(settings, "SHOW_MAPS", True)
+        if not SHOW_MAPS and self.station:
+            self.station.location = None
         self.directions = self.get_directions()
 
         ee = self.get_ee_wrapper()

@@ -3,6 +3,7 @@ from .base import *  # noqa
 EVERY_ELECTION["CHECK"] = True  # noqa
 NEXT_CHARISMATIC_ELECTION_DATE = None
 DISABLE_GA = True  # don't log to Google Analytics when we are running tests
+SHOW_MAPS = True
 
 INSTALLED_APPS = list(INSTALLED_APPS)  # noqa
 INSTALLED_APPS.append("aloe_django")

@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
@@ -109,6 +110,9 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         except PostcodeError:
             location = None
         ret["postcode_location"] = location
+        SHOW_MAPS = getattr(settings, "SHOW_MAPS", True)
+        if not SHOW_MAPS:
+            ret["postcode_location"] = None
 
         ret["polling_station_known"] = False
         ret["polling_station"] = None
