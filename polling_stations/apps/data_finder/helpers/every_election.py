@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 from django.conf import settings
 from uk_geo_utils.helpers import Postcode
@@ -161,7 +161,14 @@ class EveryElectionWrapper:
             return True
 
         if len(self.ballots) > 0 and not self.all_ballots_cancelled:
-            return True
+            if not settings.EVERY_ELECTION["THRESHOLD_DAYS"]:
+                return True
+            if (
+                datetime.strptime(self._get_next_election_date(), "%Y-%m-%d")
+                - timedelta(days=settings.EVERY_ELECTION["THRESHOLD_DAYS"])
+                <= datetime.now()
+            ):
+                return True
         return False
 
     def get_explanations(self):

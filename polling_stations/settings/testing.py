@@ -1,6 +1,7 @@
 from .base import *  # noqa
 
 EVERY_ELECTION["CHECK"] = True  # noqa
+EVERY_ELECTION["THRESHOLD_DAYS"] = None  # noqa
 NEXT_CHARISMATIC_ELECTION_DATE = None
 DISABLE_GA = True  # don't log to Google Analytics when we are running tests
 

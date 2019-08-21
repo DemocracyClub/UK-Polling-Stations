@@ -10,9 +10,11 @@ Set CHECK to False to return the value of HAS_ELECTION instead
 
 This is mostly useful in development when we want
 to see results even if there is no election happening
-"""
-EVERY_ELECTION = {"CHECK": True, "HAS_ELECTION": True}
 
-ELECTION_BLACKLIST = [
-    "local.epping-forest.moreton-and-fyfield.by.2018-05-03"  # uncontested
-]
+THRESHOLD_DAYS allows us to ignore elections which are
+more than N days in the future when determining has_election.
+Set to None or zero to ignore
+"""
+EVERY_ELECTION = {"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90}
+
+ELECTION_BLACKLIST = []

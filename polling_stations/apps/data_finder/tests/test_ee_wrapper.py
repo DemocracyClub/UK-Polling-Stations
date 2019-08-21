@@ -87,7 +87,7 @@ def get_data_with_elections(self, query_url):
 
 class EveryElectionWrapperTests(TestCase):
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_exception)
@@ -102,7 +102,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -119,7 +119,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -141,7 +141,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual({"this election": "has an ID pilot"}, ee.get_id_pilot_info())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=(datetime.now() + timedelta(days=1)).strftime(
             "%Y-%m-%d"
         ),
@@ -162,7 +162,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -179,7 +179,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -196,7 +196,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(None, ee.get_id_pilot_info())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -207,12 +207,14 @@ class EveryElectionWrapperTests(TestCase):
         # election is really happening here
         self.assertTrue(ee.has_election())
         # manually override it to false
-        with override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": False}):
+        with override_settings(
+            EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": False, "THRESHOLD_DAYS": 90}
+        ):
             ee = EveryElectionWrapper(postcode="AA11AA")
             self.assertFalse(ee.has_election())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -223,12 +225,39 @@ class EveryElectionWrapperTests(TestCase):
         # election is not really happening here
         self.assertFalse(ee.has_election())
         # manually override it to true
-        with override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": True}):
+        with override_settings(
+            EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90}
+        ):
             ee = EveryElectionWrapper(postcode="AA11AA")
             self.assertTrue(ee.has_election())
 
+    @override_settings(NEXT_CHARISMATIC_ELECTION_DATE=None)
+    @mock.patch(
+        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot
+    )
+    def test_threshold_days(self):
+        ee = EveryElectionWrapper(postcode="AA11AA")
+        with override_settings(
+            EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 3}
+        ):
+            # election happening inside THRESHOLD_DAYS
+            self.assertTrue(ee.has_election())
+            self.assertEqual(len(ee.get_all_ballots()), 1)
+        with override_settings(
+            EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 1}
+        ):
+            # election happening later than THRESHOLD_DAYS
+            self.assertFalse(ee.has_election())
+            self.assertEqual(len(ee.get_all_ballots()), 1)
+        with override_settings(
+            EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 0}
+        ):
+            # THRESHOLD_DAYS off
+            self.assertTrue(ee.has_election())
+            self.assertEqual(len(ee.get_all_ballots()), 1)
+
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         ELECTION_BLACKLIST=["foo.bar.baz.date"],
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
@@ -241,7 +270,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertTrue(ee.has_election())
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         ELECTION_BLACKLIST=["foo.bar.baz.date", "foo.bar.qux.date"],
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
@@ -360,7 +389,7 @@ def get_data_one_cancelled_ballot_with_metadata(self, query_url):
 
 class CancelledElectionTests(TestCase):
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -378,7 +407,7 @@ class CancelledElectionTests(TestCase):
         self.assertEqual(cancelled_info["metadata"], None)
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -396,7 +425,7 @@ class CancelledElectionTests(TestCase):
         self.assertEqual(cancelled_info["metadata"], None)
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -414,7 +443,7 @@ class CancelledElectionTests(TestCase):
         self.assertEqual(cancelled_info["metadata"], None)
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
@@ -435,7 +464,7 @@ class CancelledElectionTests(TestCase):
         self.assertEqual(cancelled_info["metadata"], None)
 
     @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
+        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True, "THRESHOLD_DAYS": 90},
         NEXT_CHARISMATIC_ELECTION_DATE=None,
     )
     @mock.patch(
