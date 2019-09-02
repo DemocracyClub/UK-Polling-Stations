@@ -4,25 +4,23 @@ Imports Camden
 import tempfile
 import urllib.request
 from fastkml import kml
-from lxml import etree
 from django.contrib.gis.geos import GEOSGeometry, Point
-from data_collection.base_importers import BaseGenericApiImporter
+from data_collection.base_importers import BaseGenericApiImporter, CsvMixin
 from data_collection.geo_utils import convert_linestring_to_multiploygon
 
 
-class Command(BaseGenericApiImporter):
+class Command(BaseGenericApiImporter, CsvMixin):
     """
     Imports the Polling Station data from Camden Council
     """
 
-    stations_filetype = None
-    districts_filetype = None
+    stations_filetype = "csv"
+    districts_filetype = "kml"
     srid = 4326
     districts_srid = 4326
     council_id = "E09000007"
     districts_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E09000007/districts.kml"
-    # This is just a bespoke XML format
-    stations_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E09000007/stations.xml"
+    stations_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E09000007/stations.csv"
     elections = ["europarl.2019-05-23"]
 
     def parse_kml_features(self, data):
@@ -69,35 +67,25 @@ class Command(BaseGenericApiImporter):
             "polling_station_id": district_id,
         }
 
-    def get_stations(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            urllib.request.urlretrieve(self.stations_url, tmp.name)
-            xml = etree.parse(tmp.name)
-            return xml.getroot()[0]
-
     def station_record_to_dict(self, record):
-        info = {}
-        for tag in record:
-            info[tag.tag] = tag.text
-
-        address = "\n".join([info["organisation"], info["street"]])
+        address = "\n".join([record.organisation, record.street])
 
         if (
-            info["polling_district_name"] == "JA"
-            and info["organisation"] == "Rainbow Nursery"
+            record.polling_district_name == "JA"
+            and record.organisation == "Rainbow Nursery"
         ):
-            info["postcode"] = "NW5 2HY"
+            record = record._replace(postcode="NW5 2HY")
             address = "Rainbow Nursery, St. Benet's Church Hall, Lupton Street London"
-            info["longitude"] = "-0.1381025"
-            info["latitude"] = "51.554399"
+            record = record._replace(longitude="-0.1381025")
+            record = record._replace(latitude="51.554399")
 
         location = Point(
-            float(info["longitude"]), float(info["latitude"]), srid=self.get_srid()
+            float(record.longitude), float(record.latitude), srid=self.get_srid()
         )
 
         return {
-            "internal_council_id": info["polling_district_name"],
-            "postcode": info["postcode"],
+            "internal_council_id": record.polling_district_name,
+            "postcode": record.postcode,
             "address": address,
             "location": location,
         }
