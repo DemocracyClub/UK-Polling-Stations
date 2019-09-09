@@ -2,7 +2,7 @@
 
 YVM_LA_URL = "https://www.yourvotematters.co.uk/_design/nested-content/results-page2/search-voting-locations-by-districtcode?queries_distcode_query="  # noqa
 BOUNDARIES_URL = (
-    "https://opendata.arcgis.com/datasets/b2d5f4f8e9eb469bb22af910bdc1de22_1.geojson"
+    "https://opendata.arcgis.com/datasets/2b95585accc4437b97d766f31c5568cb_0.geojson"
 )
 
 
@@ -14,6 +14,10 @@ OLD_TO_NEW_MAP = {
     "S12000015": "S12000047",
     # Perth & Kinross
     "S12000024": "S12000048",
+    # Glasgow
+    "S12000046": "S12000049",
+    # North Lanarkshire
+    "S12000044": "S12000050",
     # Somerset West & Taunton
     "E07000190": "E07000246",
     "E07000191": "E07000246",

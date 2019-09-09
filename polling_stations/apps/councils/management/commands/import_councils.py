@@ -238,7 +238,7 @@ class Command(BaseCommand):
         councils = []
         self.stdout.write("Downloading ONS boundaries from %s..." % (boundaries_url))
         councils = councils + self.get_councils(
-            boundaries_url, id_field="lad18cd", name_field="lad18nm"
+            boundaries_url, id_field="lad19cd", name_field="lad19nm"
         )
 
         councils = self.pre_process_councils(councils)
