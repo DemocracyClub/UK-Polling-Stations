@@ -22,44 +22,6 @@ def update_station_point(council_id, station_id, point):
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
-        print("updating Watford address...")
-        watford = Council.objects.get(pk="E07000103")
-        watford.address = "Electoral Services Office\nRoom 22\nTown Hall\nWatford"
-        watford.postcode = "WD17 3EX"
-        watford.save()
-        print("..updated")
-
-        print("updating Harrogate address...")
-        harrogate = Council.objects.get(pk="E07000165")
-        harrogate.address = "Civic Centre\nSt Lukes Avenue\nHarrogate"
-        harrogate.postcode = "HG1 2AE"
-        harrogate.save()
-        print("..updated")
-
-        print("updating Oadby & Wigston name...")
-        oadby = Council.objects.get(pk="E07000135")
-        oadby.name = "Oadby & Wigston Borough Council"
-        oadby.save()
-        print("..updated")
-
-        print("updating Swansea name...")
-        swansea = Council.objects.get(pk="W06000011")
-        swansea.name = "City & County of Swansea"
-        swansea.save()
-        print("..updated")
-
-        print("updating Wyre Forest phone number")
-        wyre_forest = Council.objects.get(pk="E07000239")
-        wyre_forest.phone = "01562 732928 / 01562 732733"
-        wyre_forest.save()
-        print("..updated")
-
-        print("updating Chelmsford phone number")
-        chelmsford = Council.objects.get(pk="E07000070")
-        chelmsford.phone = "01245 606449"
-        chelmsford.save()
-        print("..updated")
-
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
