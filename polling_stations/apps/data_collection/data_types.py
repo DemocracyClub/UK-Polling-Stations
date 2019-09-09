@@ -440,7 +440,8 @@ class AddressList:
             [
                 Postcode(record.pcds).without_space
                 for record in db_postcodes
-                if record.oslaua not in self.council_ids
+                if record.oslaua != self.council_id
+                and record.oslaua not in self.council_ids
             ]
         )
 
