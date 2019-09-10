@@ -1,27 +1,32 @@
-from data_collection.management.commands import BaseHalaroseCsvImporter
+from data_collection.github_importer import BaseGitHubImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseGitHubImporter):
+    srid = 4326
+    districts_srid = 4326
     council_id = "E09000013"
-    addresses_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-03HF.csv"
-    )
-    stations_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-03HF.csv"
-    )
-    elections = ["europarl.2019-05-23"]
+    elections = []
+    scraper_name = "wdiv-scrapers/DC-PollingStations-HammersmithAndFulham"
+    geom_type = "geojson"
 
-    def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.uprn.strip().lstrip("0")
+    def district_record_to_dict(self, record):
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
 
-        if uprn == "34157887":
-            rec["postcode"] = "W6 0BY"
+        return {
+            "internal_council_id": record["POLLING_ZO"],
+            "name": record["POLLING_ZO"],
+            "area": poly,
+            "polling_station_id": record["POLLING_ZO"],
+        }
 
-        if uprn == "34148072":
-            rec["accept_suggestion"] = False
+    def station_record_to_dict(self, record):
+        location = self.extract_geometry(
+            record, self.geom_type, self.get_srid("stations")
+        )
 
-        if record.houseid == "9005968":
-            return None
-
-        return rec
+        return {
+            "internal_council_id": record["POLLING_DI"],
+            "address": record["POLLING__1"],
+            "postcode": record["POSTCODE"],
+            "location": location,
+        }
