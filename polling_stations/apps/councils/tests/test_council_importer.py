@@ -1,9 +1,5 @@
 from io import StringIO
-
 from django.test import TestCase, override_settings
-
-import vcr
-
 from councils.models import Council
 from councils.management.commands.import_councils import Command
 
@@ -25,9 +21,9 @@ class MockCouncilsImporter(Command):
                     "type": "Feature",
                     "properties": {
                         "objectid": 1,
-                        "lad18cd": auth["code"],
-                        "lad18nm": auth["name"],
-                        "lad14nmw": " ",
+                        "lad19cd": auth["code"],
+                        "lad19nm": auth["name"],
+                        "lad19nmw": " ",
                         "st_areashape": 123,
                         "st_lengthshape": 4564,
                     },
@@ -48,28 +44,14 @@ class MockCouncilsImporter(Command):
 
 
 class TestCouncilImporter(TestCase):
-    @vcr.use_cassette("fixtures/vcr_cassettes/test_get_contact_info_from_yvm.yaml")
-    def test_get_contact_info_from_yvm(self):
-        council_info = Command().get_contact_info_from_yvm("E07000044")
-        assert council_info["name"] == "South Hams District Council"
-        assert council_info["website"].startswith("http://")
-
     @override_settings(NEW_COUNCILS=[])
     def test_import_councils(self):
         assert Council.objects.count() == 0
         cmd = MockCouncilsImporter()
-        cmd.get_contact_info_from_yvm = lambda x: {
-            "name": "",
-            "website": "",
-            "email": "",
-            "phone": "",
-            "address": "",
-            "postcode": "",
-        }
 
         # suppress output
         out = StringIO()
         cmd.stdout = out
-        cmd.handle(**{"teardown": False, "alt_url": None})
+        cmd.handle(**{"teardown": False, "alt_url": None, "contact_type": "vjbs"})
 
         assert Council.objects.count() == 6

@@ -1,6 +1,6 @@
-import html
+import csv
+from collections import namedtuple
 import json
-from json.decoder import JSONDecodeError
 import requests
 from django.apps import apps
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
@@ -17,50 +17,6 @@ def union_areas(a1, a2):
     return MultiPolygon(a1.union(a2))
 
 
-TEMP_CONTACT_DETAILS = {
-    "E07000246": {
-        "name": "Somerset West & Taunton Council",
-        "website": "https://www.somersetwestandtaunton.gov.uk/",
-        "email": "elections@somersetwestandtaunton.gov.uk",
-        "phone": "01823 358692",
-        "address": "Electoral Services\nWest Somerset House\nKillick Way\nWilliton",
-        "postcode": "TA4 4QA",
-    },
-    "E06000058": {
-        "name": "Bournemouth, Christchurch & Poole Council",
-        "website": "https://www.bcpcouncil.gov.uk",
-        "email": "elections@bcpcouncil.gov.uk",
-        "phone": "01202 633097",
-        "address": "Town Hall\nBourne Avenue\nBournemouth",
-        "postcode": "BH2 6DY",
-    },
-    "E06000059": {
-        "name": "Dorset Council",
-        "website": "https://www.dorset.gov.uk/",
-        "email": "elections@dorset.gov.uk",
-        "phone": "01305 838299",
-        "address": "South Walks House\nSouth Walks Road\nDorchester",
-        "postcode": "DT1 1UZ",
-    },
-    "E07000244": {
-        "name": "East Suffolk Council",
-        "website": "https://www.eastsuffolk.gov.uk/",
-        "email": "elections@eastsuffolk.gov.uk",
-        "phone": "01394 444422",
-        "address": "East Suffolk House\nStation Road\nMelton\nWoodbridge",
-        "postcode": "IP12 1RT",
-    },
-    "E07000245": {
-        "name": "West Suffolk Council",
-        "website": "https://www.westsuffolk.gov.uk/",
-        "email": "elections@westsuffolk.gov.uk",
-        "phone": "01284 757131",
-        "address": "Suffolk House\nWestern Way\nBury St Edmunds\nSuffolk",
-        "postcode": "IP33 3YU",
-    },
-}
-
-
 class Command(BaseCommand):
     """
     Turn off auto system check for all apps
@@ -69,6 +25,7 @@ class Command(BaseCommand):
     """
 
     requires_system_checks = False
+    contact_details = {}
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -83,6 +40,15 @@ class Command(BaseCommand):
             "-u",
             "--alt-url",
             required=False,
+            help="<Optional> Alternative url to override settings.BOUNDARIES_URL",
+        )
+        parser.add_argument(
+            "--contact-type",
+            dest="contact_type",
+            action="store",
+            required=False,
+            choices=("vjbs", "councils"),
+            default="vjbs",
             help="<Optional> Alternative url to override settings.BOUNDARIES_URL",
         )
 
@@ -168,53 +134,23 @@ class Command(BaseCommand):
 
         return councils
 
-    def clean_url(self, url):
-        if not url.startswith(("http://", "https://")):
-            # Assume http everywhere will redirect to https if it is there.
-            url = "http://{}".format(url)
-        return url
-
-    def get_from_yvm(self, council_id):
-        url = "{}{}".format(settings.YVM_LA_URL, council_id)
-        req = requests.get(url)
-        return req.json()
-
-    def get_contact_info_from_yvm(self, council_id):
-        try:
-            data = self.get_from_yvm(council_id)
-        except JSONDecodeError as e:
-            # YNM returns a 200 OK with HTML body if code not found
-            # If YVM isn't using the new codes yet, use the old codes
-            # to fetch the electoral services contact info
-            if council_id == "S12000047":
-                # Fife
-                data = self.get_from_yvm("S12000015")
-            elif council_id == "S12000048":
-                # Perth & Kinross
-                data = self.get_from_yvm("S12000024")
-            elif council_id in TEMP_CONTACT_DETAILS:
-                self.stdout.write("No contact details available from YVM")
-                return TEMP_CONTACT_DETAILS[council_id]
-            else:
-                raise e
-
-        council_data = data["registrationOffice"]
-        info = {}
-        info["name"] = html.unescape(council_data.get("office"))
-        info["website"] = self.clean_url(council_data.get("website"))
-        info["email"] = council_data.get("email").strip()
-        info["phone"] = (
-            council_data.get("telephone", "").replace("</a>", "").split(">")[-1]
-        )
-
-        address_fields = [
-            council_data.get(f, "")
-            for f in ["address1", "address2", "address3", "city", "address4"]
+    def load_contact_details(self, contact_type):
+        files = [
+            "./polling_stations/apps/councils/data/england-wales.csv",
+            "./polling_stations/apps/councils/data/ni.csv",
         ]
-        info["address"] = "\n".join([f for f in address_fields if f])
-        info["postcode"] = " ".join(council_data.get("postalcode", "").split(" ")[-2:])
 
-        return info
+        if contact_type == "vjbs":
+            files.append("./polling_stations/apps/councils/data/scotland-vjbs.csv")
+        if contact_type == "councils":
+            files.append("./polling_stations/apps/councils/data/scotland-councils.csv")
+
+        for filename in files:
+            with open(filename) as infile:
+                reader = csv.reader(infile)
+                Row = namedtuple("Row", next(reader))
+                for row in map(Row._make, reader):
+                    self.contact_details[row.gss] = row
 
     def handle(self, **options):
         """
@@ -238,24 +174,21 @@ class Command(BaseCommand):
         councils = []
         self.stdout.write("Downloading ONS boundaries from %s..." % (boundaries_url))
         councils = councils + self.get_councils(
-            boundaries_url, id_field="lad18cd", name_field="lad18nm"
+            boundaries_url, id_field="lad19cd", name_field="lad19nm"
         )
 
         councils = self.pre_process_councils(councils)
 
+        self.stdout.write("Attaching contact details...")
+        self.load_contact_details(options["contact_type"])
         for council in councils:
-            self.stdout.write(
-                "Getting contact info for %s from YourVoteMatters"
-                % (council.council_id)
-            )
-
-            info = self.get_contact_info_from_yvm(council.council_id)
-            council.name = info["name"]
-            council.website = info["website"]
-            council.email = info["email"]
-            council.phone = info["phone"]
-            council.address = info["address"]
-            council.postcode = info["postcode"]
+            contact_details = self.contact_details[council.council_id]
+            council.name = contact_details.name
+            council.website = contact_details.website
+            council.email = contact_details.email
+            council.phone = contact_details.phone
+            council.address = contact_details.address
+            council.postcode = contact_details.postcode
 
             council.save()
 
