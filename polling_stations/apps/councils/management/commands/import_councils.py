@@ -1,6 +1,7 @@
 import csv
 from collections import namedtuple
 import json
+import os
 import requests
 from django.apps import apps
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
@@ -146,7 +147,7 @@ class Command(BaseCommand):
             files.append("./polling_stations/apps/councils/data/scotland-councils.csv")
 
         for filename in files:
-            with open(filename) as infile:
+            with open(os.path.abspath(filename)) as infile:
                 reader = csv.reader(infile)
                 Row = namedtuple("Row", next(reader))
                 for row in map(Row._make, reader):
