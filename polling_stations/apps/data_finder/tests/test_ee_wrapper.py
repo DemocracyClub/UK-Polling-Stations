@@ -333,7 +333,7 @@ def get_data_one_cancelled_ballot_with_replacement(self, query_url):
         "replaced_by": None,
         "metadata": None,
     }
-    if query_url.endswith("/api/elections.json?postcode=AA1 1AA&future=1"):
+    if query_url.endswith("/api/elections.json?postcode=AA1 1AA&future=1&current=1"):
         return [this_election, that_election]
     if query_url.endswith("/api/elections/local.foo.thatdate.json"):
         return that_election
