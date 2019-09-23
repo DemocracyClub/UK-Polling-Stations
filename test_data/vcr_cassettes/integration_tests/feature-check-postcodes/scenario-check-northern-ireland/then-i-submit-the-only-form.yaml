@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=BT15%203JX&future=1
+    uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=BT15%203JX&future=1&current=1
   response:
     body: {string: '{"count":1,"next":null,"previous":null,"results":[
       {"election_id":"blablabla.bla", "group_type":null, "cancelled":false, "poll_open_date":"2099-12-31"}

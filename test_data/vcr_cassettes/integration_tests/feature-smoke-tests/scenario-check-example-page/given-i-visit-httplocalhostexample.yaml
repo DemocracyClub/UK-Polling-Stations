@@ -53,7 +53,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=EXAM%20PLE&future=1
+    uri: https://elections.democracyclub.org.uk/api/elections.json?postcode=EXAM%20PLE&future=1&current=1
   response:
     body: {string: '{"detail":"Invalid postcode"}'}
     headers:
