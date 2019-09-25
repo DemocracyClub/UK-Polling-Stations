@@ -3,10 +3,21 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000225"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.maybe/Version 1/chichester-Democracy_Club__15October2019.tsv"
+    stations_name = "parl.maybe/Version 1/chichester-Democracy_Club__15October2019.tsv"
+    elections = ["parl.maybe"]
     csv_delimiter = "\t"
+
+    def get_station_point(self, record):
+        return None
+
+    def station_record_to_dict(self, record):
+
+        # Rake Village Hall
+        if record.polling_place_id == "2978":
+            record = record._replace(polling_place_postcode="")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -33,6 +44,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10002467582",  # GU289LJ -> GU289NE : Freehold Farmhouse, Northchapel, Petworth
             "10002466676",  # GU290BU -> GU290BX : 123 Ambersham Moor, Selham Road, Ambersham, Midhurst
             "10002482519",  # GU315BU -> GU315EB : The Log Cabin Fyning Hill, Rogate, Petersfield
+            "10093117146",  # PO108FW -> PO108HG : 10 Brewery Close, Southbourne, Emsworth
+            "10093117147",  # PO108FW -> PO108HG : 11 Brewery Close, Southbourne, Emsworth
         ]:
             rec["accept_suggestion"] = True
 
