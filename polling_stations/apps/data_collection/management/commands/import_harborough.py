@@ -3,13 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000131"
-    addresses_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 Harborough DC.tsv"
-    )
-    stations_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 Harborough DC.tsv"
-    )
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    addresses_name = "parl.maybe/Version 1/harborough-Democracy_Club__15October2019.tsv"
+    stations_name = "parl.maybe/Version 1/harborough-Democracy_Club__15October2019.tsv"
+    elections = ["parl.maybe"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -18,6 +14,25 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn == "200003741884":
             rec["postcode"] = "LE14 2QY"
+
+        if uprn == "10093549892":
+            rec["postcode"] = "LE17 5FJ"
+            rec["uprn"] = ""
+            rec["accept_suggestion"] = False
+
+        if uprn == "10093551037":
+            rec["uprn"] = ""
+            rec["accept_suggestion"] = False
+        if (
+            record.addressline1.strip() == "23 Moorbarns Lane"
+            and record.addressline2.strip() == "Lutterworth"
+            and record.addressline3.strip() == "Leics"
+        ):
+            rec["postcode"] = "LE17 4QJ"
+            rec["accept_suggestion"] = False
+
+        if uprn == "10093550074":
+            return None
 
         if (
             record.addressline1.strip() == "69 Main Street"
@@ -33,6 +48,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200003741317",  # LE79DE -> LE79DP : Robin A Tiptoe Farm, Loddington Road, Tilton on the Hill, Leicester
             "200003742237",  # LE79XE -> LE79XB : Ash Tree Cottage, Launde Road, Loddington, Leicester
             "100030477785",  # LE96PU -> LE96PW : 102 Station Road, Broughton Astley, Leics
+            "10093549578",  # LE169FR -> LE176PU : 19 Marsh Drive, Husbands Bosworth, Leics
+            "10093551803",  # LE79EX -> LE79LX : 1 Stacey Avenue, Houghton on the Hill, Leicester
         ]:
             rec["accept_suggestion"] = True
 
@@ -55,3 +72,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["accept_suggestion"] = False
 
         return rec
+
+    def get_station_point(self, record):
+        return None
