@@ -3,9 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000226"
-    addresses_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019.tsv"
-    stations_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019.tsv"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    addresses_name = "parl.maybe/Version 1/crawley-Democracy_Club__15October2019.tsv"
+    stations_name = "parl.maybe/Version 1/crawley-Democracy_Club__15October2019.tsv"
+    elections = ["parl.maybe"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -22,11 +22,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         return rec
 
-    def station_record_to_dict(self, record):
-        if record.polling_place_id == "675":
-            record = record._replace(polling_place_easting="526564")
-            record = record._replace(polling_place_northing="135576")
-        if record.polling_place_id == "692":
-            record = record._replace(polling_place_easting="528408")
-            record = record._replace(polling_place_northing="135808")
-        return super().station_record_to_dict(record)
+    def get_station_point(self, record):
+
+        # Furnace Green Community Centre
+        if record.polling_place_id == "774":
+            return None
+
+        # Wakehams Green Community Centre
+        if record.polling_place_id == "789":
+            return None
+
+        # Southgate West Community Centre
+        if record.polling_place_id == "795":
+            return None
+
+        return super().get_station_point(record)
