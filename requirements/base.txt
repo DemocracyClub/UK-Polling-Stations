@@ -7,7 +7,7 @@ django-markdown-deux==1.0.5
 django==2.2.5  # pyup: >=2.2,<3.0
 djangorestframework==3.10.3
 djangorestframework-gis==0.14
-django-cors-headers==3.1.0
+django-cors-headers==3.1.1
 fastkml==0.11
 fuzzywuzzy==0.17.0
 lxml==4.4.1
