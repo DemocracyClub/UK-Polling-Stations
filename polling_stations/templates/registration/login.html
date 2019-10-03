@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load dc_forms %}
+
+{% block content %}
+<section class="card centered-card">
+    <form method="post" class="form form-inline">
+      <h2>Login</h2>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="button" type="submit">Login</button>
+    </form>
+    <a href="{% url "password_reset"%}">Forgot password?</a>
+</section>
+{% endblock content %}

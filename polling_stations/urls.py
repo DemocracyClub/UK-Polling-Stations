@@ -62,12 +62,14 @@ core_patterns = [
 ]
 
 extra_patterns = [
+    url(r"^accounts/", include("django.contrib.auth.urls")),
     url(r"^i18n/", include("django.conf.urls.i18n")),
     url(r"^api/beta/", include(router.urls)),
     url(r"^api/$", ApiDocsView.as_view(), name="api_docs"),
     url(r"^admin/", admin.site.urls),
     url(r"^feedback/", include("feedback.urls")),
     url(r"^report_problem/", include("bug_reports.urls")),
+    url(r"^upload_files/", include("file_uploads.urls")),
     url(r"^league_table/", include("data_collection.urls")),
     url(r"^example/$", ExamplePostcodeView.as_view(), name="example"),
     url(r"^email/", include("dc_signup_form.urls", namespace="dc_signup_form")),

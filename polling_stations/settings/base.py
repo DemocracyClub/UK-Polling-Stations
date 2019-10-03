@@ -161,6 +161,7 @@ PROJECT_APPS = (
     "data_finder",
     "dc_theme",
     "feedback",
+    "file_uploads",
     "pollingstations",
     "bug_reports",
     "uk_geo_utils",
@@ -206,6 +207,10 @@ LANGUAGES = [("en", "English"), ("cy-gb", "Welsh")]
 USE_I18N = (True,)
 USE_L10N = (True,)
 LOCALE_PATHS = (repo_root("locale"),)
+
+
+LOGIN_REDIRECT_URL = "file_upload_index"
+LOGOUT_REDIRECT_URL = "home"
 
 
 # API Settings
@@ -264,6 +269,7 @@ from .constants.directions import *  # noqa
 from .constants.elections import *  # noqa
 from .constants.importers import *  # noqa
 from .constants.tiles import *  # noqa
+from .constants.uploads import *  # noqa
 
 # Import .local.py last - settings in local.py override everything else
 try:
