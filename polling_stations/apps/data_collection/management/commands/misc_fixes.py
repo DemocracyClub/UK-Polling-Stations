@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 # from django.contrib.gis.geos import Point
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 from councils.models import Council
-from addressbase.models import Address, Blacklist
+from addressbase.models import Address
 
 
 def update_station_point(council_id, station_id, point):
@@ -31,26 +31,6 @@ class Command(BaseCommand):
             print(address.uprn)
             address.delete()
         print("..deleted")
-
-        print("removing dodgy blacklist entries (result of bad point in AddressBase)..")
-        blacklist = Blacklist.objects.filter(postcode="RH122LP")
-        if len(blacklist) == 2:
-            for b in blacklist:
-                b.delete()
-                print("..deleted")
-        else:
-            print("..NOT deleted")
-
-        print(
-            "removing dodgy blacklist entries (result of bad points in AddressBase).."
-        )
-        blacklist = Blacklist.objects.filter(postcode="S24AX")
-        if len(blacklist) == 2:
-            for b in blacklist:
-                b.delete()
-                print("..deleted")
-        else:
-            print("..NOT deleted")
 
         deleteme = [
             # nothing yet
