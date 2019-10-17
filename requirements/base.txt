@@ -1,5 +1,5 @@
 dj-database-url==0.5.0
-django-apiblueprint-view==2.1.0
+django-apiblueprint-view==2.1.1
 django-basicauth==0.5.2
 django-extensions==2.2.3
 django-localflavor==2.2
