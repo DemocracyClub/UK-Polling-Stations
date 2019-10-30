@@ -1,7 +1,7 @@
-from collections import namedtuple
 from urllib.parse import urlencode
 
 from django.urls import reverse
+from django.utils.functional import cached_property
 from uk_geo_utils.helpers import Postcode
 
 from addressbase.models import Blacklist
@@ -19,7 +19,6 @@ class RoutingHelper:
 
     def __init__(self, postcode):
         self.postcode = Postcode(postcode).without_space
-        self.Endpoint = namedtuple("Endpoint", ["view", "kwargs"])
         self.get_addresses()
         self.get_councils_from_blacklist()
 
@@ -65,13 +64,32 @@ class RoutingHelper:
             # postcode is not in ResidentialAddress table
             return "postcode"
 
-    @property
+    @cached_property
     def view(self):
-        return self.get_endpoint().view
+        if self.route_type == "multiple_councils":
+            # this postcode contains UPRNS situated in >1 local auth
+            # maybe one day we will handle this better, but for now
+            # we just throw a special "we don't know" page
+            # ..even if we might possibly know
+            return "multiple_councils_view"
+        if self.route_type == "single_address":
+            # all the addresses in this postcode
+            # map to one polling station
+            return "address_view"
+        if self.route_type == "multiple_addresses":
+            # addresses in this postcode map to
+            # multiple polling stations
+            return "address_select_view"
+        if self.route_type == "postcode":
+            # postcode is not in ResidentialAddress table
+            return "postcode_view"
 
-    @property
+    @cached_property
     def kwargs(self):
-        return self.get_endpoint().kwargs
+        if self.route_type in ("multiple_councils", "multiple_addresses", "postcode"):
+            return {"postcode": self.postcode}
+        if self.route_type in {"single_address"}:
+            return {"address_slug": self.addresses[0].slug}
 
     def get_canonical_url(self, request, preserve_query=True):
         """Returns a canonical URL to route to, preserving any important query parameters"""
@@ -87,24 +105,3 @@ class RoutingHelper:
         if query and preserve_query:
             url += "?" + query
         return url
-
-    def get_endpoint(self):
-        if self.route_type == "multiple_councils":
-            # this postcode contains UPRNS situated in >1 local auth
-            # maybe one day we will handle this better, but for now
-            # we just throw a special "we don't know" page
-            # ..even if we might possibly know
-            return self.Endpoint("multiple_councils_view", {"postcode": self.postcode})
-        if self.route_type == "single_address":
-            # all the addresses in this postcode
-            # map to one polling station
-            return self.Endpoint(
-                "address_view", {"address_slug": self.addresses[0].slug}
-            )
-        if self.route_type == "multiple_addresses":
-            # addresses in this postcode map to
-            # multiple polling stations
-            return self.Endpoint("address_select_view", {"postcode": self.postcode})
-        if self.route_type == "postcode":
-            # postcode is not in ResidentialAddress table
-            return self.Endpoint("postcode_view", {"postcode": self.postcode})

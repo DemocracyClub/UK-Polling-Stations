@@ -126,8 +126,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
         # Before the fix, we wrongly assume that we know the polling station
         postcode = "KW15 88TF"
         rh = RoutingHelper(postcode)
-        endpoint = rh.get_endpoint()
-        self.assertEqual("postcode_view", endpoint.view)
+        self.assertEqual("postcode_view", rh.view)
 
         # Fix the addresses outside of the districts
         fixer = EdgeCaseFixer("X01000001", MockLogger())
@@ -136,8 +135,7 @@ class PostcodeBoundaryFixerTestCase(TestCase):
 
         # Now we should get offered an address lookup
         rh = RoutingHelper(postcode)
-        endpoint = rh.get_endpoint()
-        self.assertEqual("address_select_view", endpoint.view)
+        self.assertEqual("address_select_view", rh.view)
 
     def test_make_addresses_cross_borders(self):
         """
