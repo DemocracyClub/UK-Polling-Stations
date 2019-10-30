@@ -1,3 +1,6 @@
+from unittest import mock
+
+from django.http import QueryDict
 from django.test import TestCase
 from addressbase.models import Blacklist
 from data_finder.helpers import RoutingHelper
@@ -57,3 +60,21 @@ class RoutingHelperTest(TestCase):
         rh = RoutingHelper("dd11dd")
         endpoint = rh.get_endpoint()
         self.assertEqual("multiple_councils_view", endpoint.view)
+
+    def test_canonical_url(self):
+        rh = RoutingHelper("AA11AA")
+        request = mock.Mock()
+        request.GET = QueryDict("utm_source=foo&something=other")
+        # Could be either slug
+        self.assertRegexpMatches(
+            rh.get_canonical_url(request), "/address/[12]/\?utm_source=foo"
+        )
+
+    def test_canonical_url_without_preserve(self):
+        rh = RoutingHelper("AA11AA")
+        request = mock.Mock()
+        request.GET = QueryDict("utm_source=foo&something=other")
+        # Could be either slug
+        self.assertRegexpMatches(
+            rh.get_canonical_url(request, preserve_query=False), "/address/[12]/"
+        )

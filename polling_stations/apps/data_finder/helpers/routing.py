@@ -1,5 +1,7 @@
 from collections import namedtuple
+from urllib.parse import urlencode
 
+from django.urls import reverse
 from uk_geo_utils.helpers import Postcode
 
 from addressbase.models import Blacklist
@@ -8,6 +10,13 @@ from pollingstations.models import ResidentialAddress
 
 # use a postcode to decide which endpoint the user should be directed to
 class RoutingHelper:
+    _query_params_to_preserve = {
+        "utm_content",
+        "utm_medium",
+        "utm_source",
+        "utm_campaign",
+    }
+
     def __init__(self, postcode):
         self.postcode = Postcode(postcode).without_space
         self.Endpoint = namedtuple("Endpoint", ["view", "kwargs"])
@@ -55,6 +64,29 @@ class RoutingHelper:
         else:
             # postcode is not in ResidentialAddress table
             return "postcode"
+
+    @property
+    def view(self):
+        return self.get_endpoint().view
+
+    @property
+    def kwargs(self):
+        return self.get_endpoint().kwargs
+
+    def get_canonical_url(self, request, preserve_query=True):
+        """Returns a canonical URL to route to, preserving any important query parameters"""
+        url = reverse(self.view, kwargs=self.kwargs)
+        query = urlencode(
+            [
+                (k, request.GET.getlist(k))
+                for k in request.GET
+                if k in self._query_params_to_preserve
+            ],
+            doseq=True,
+        )
+        if query and preserve_query:
+            url += "?" + query
+        return url
 
     def get_endpoint(self):
         if self.route_type == "multiple_councils":
