@@ -92,8 +92,8 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         postcode = Postcode(form.cleaned_data["postcode"])
 
         rh = RoutingHelper(postcode)
-        endpoint = rh.get_endpoint()
-        self.success_url = reverse(endpoint.view, kwargs=endpoint.kwargs)
+        # Don't preserve query, as the user has already been to an HTML page
+        self.success_url = rh.get_canonical_url(self.request, preserve_query=False)
 
         return super(HomeView, self).form_valid(form)
 
@@ -190,9 +190,8 @@ class PostcodeView(BasePollingStationView):
             return HttpResponseRedirect(reverse("home"))
 
         rh = RoutingHelper(self.kwargs["postcode"])
-        endpoint = rh.get_endpoint()
-        if endpoint.view != "postcode_view":
-            return HttpResponseRedirect(reverse(endpoint.view, kwargs=endpoint.kwargs))
+        if rh.view != "postcode_view":
+            return HttpResponseRedirect(rh.get_canonical_url(request))
         else:
             # we are already in postcode_view
             self.postcode = Postcode(kwargs["postcode"])
@@ -326,9 +325,8 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
     def get(self, request, *args, **kwargs):
         self.postcode = Postcode(self.kwargs["postcode"])
         rh = RoutingHelper(self.postcode)
-        endpoint = rh.get_endpoint()
-        if endpoint.view != "multiple_councils_view":
-            return HttpResponseRedirect(reverse(endpoint.view, kwargs=endpoint.kwargs))
+        if rh.view != "multiple_councils_view":
+            return HttpResponseRedirect(rh.get_canonical_url(request))
 
         self.council_ids = rh.councils
         context = self.get_context_data(**kwargs)
