@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load pipeline %}
+
+
+{% block extra_page_css %}
+    {% stylesheet 'map' %}
+{% endblock extra_page_css %}
+
+{% block extra_javascript %}
+    {% javascript 'map' %}
+{% endblock extra_javascript %}
+
+
+{% block in_page_javascript %}
+    <script type="text/javascript">
+        (function() {
+
+            var typeIcons = {
+            'pollingstation': 'fa-check-square',
+            'residentialaddress': 'fa-home'};
+
+
+            tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data ⓒ <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+                subdomains: 'abc'
+            });
+
+            map = L.map('area_map', {
+                layers: [tiles]
+            });
+            fetch('{% url "dashboard:postcode-geojson" postcode %}').then((response) => {
+                response.json().then((json) => {
+                    layer = L.geoJSON(json, {
+                          pointToLayer: (feature, latlng) => {
+                              return L.marker(latlng, {icon: L.ExtraMarkers.icon({
+          icon: typeIcons[feature.properties.type] || 'fa-question',
+          markerColor: feature.properties.color,
+          iconColor: 'white',
+          shape: 'circle',
+          prefix: 'fa'
+        })});
+                          },
+                    });
+                    layer.addTo(map);
+                    map.fitBounds(layer.getBounds());
+                })});
+        })();
+  </script>
+{% endblock in_page_javascript %}
+
+
+{% block content %}
+<h1>{{ postcode }}</h1>
+
+
+    <div id="area_map">
+
+    </div>
+
+    <table>
+    <thead>
+    <tr>
+        <th>Address</th>
+        <th>UPRN</th>
+    </tr>
+    </thead>
+    <tbody>{% for address in addresses %}
+    <tr>
+        <td>{{ address.address }}</td>
+        <td>{{ address.uprn }}</td>
+    </tr>{% endfor %}
+    </tbody>
+    </table>
+
+{% endblock content %}

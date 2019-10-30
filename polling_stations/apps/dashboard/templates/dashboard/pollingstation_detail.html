@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<h1>{{ pollingstation.address }}</h1>
+
+    <p><a href="{% url "dashboard:council_detail" pollingstation.council_id %}">{{ pollingstation.council }}</a></p>
+
+
+{% endblock content %}

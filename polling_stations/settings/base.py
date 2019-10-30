@@ -134,6 +134,7 @@ WSGI_APPLICATION = "polling_stations.wsgi.application"
 INSTALLED_APPS = (
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.humanize",
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.messages",
@@ -156,6 +157,7 @@ PROJECT_APPS = (
     "addressbase",
     "api",
     "councils",
+    "dashboard",
     "data_collection",
     "data_finder",
     "dc_theme",

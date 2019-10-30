@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<h1>{{ council }}</h1>
+
+    <section>
+    <h2>Report</h2>
+    <pre>{{ council.dataquality.report }}</pre>
+    </section>
+
+
+    <section>
+        <h2>Postcodes by diameter</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Postcode</th>
+                <th>Diameter (metres)</th>
+            </tr>
+            </thead>
+            <tbody>{% for postcode, diameter in postcodes_by_diameter %}
+            <tr>
+                <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a></td>
+                <td>{{ diameter|intcomma }}</td>
+            </tr>{% endfor %}
+
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+    <h2>Largest distances to polling places</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Address</th>
+            <th>Post code</th>
+            <th>Polling station</th>
+            <th>Distance (metres)</th>
+        </tr>
+        </thead>
+        <tbody>{% for pollingstation_id, address, slug, postcode, distance in distances_to_stations %}
+        <tr>
+            <td>
+<a href="{% url "address_view" slug %}">{{ address }}</a>
+            </td>
+                <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a></td>
+    <td>{{ pollingstation_id }}</td>
+        <td>{{ distance|intcomma }}</td>
+        </tr>{%  endfor %}
+        </tbody>
+    </table>
+    </section>
+
+    <section>
+        <h2>Polling places</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Address</th>
+                <th>Postcode</th>
+                <th>Location?</th>
+            </tr>
+            </thead>
+            <tbody>{% for pollingstation in pollingstation_list %}
+            <tr>
+                <td><a href="{% url "dashboard:pollingstation_detail" pollingstation.council_id pollingstation.internal_council_id %}">{{ pollingstation.internal_council_id }}</a></td>
+                <td>{{ pollingstation.address }}</td>
+                <td>{{ pollingstation.postcode }}</td>
+                <td>{{ pollingstation.location|yesno }}</td>
+            </tr>{% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+
+{% endblock content %}
