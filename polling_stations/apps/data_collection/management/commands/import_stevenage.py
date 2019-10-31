@@ -8,11 +8,11 @@ from uk_geo_utils.geocoders import AddressBaseGeocoder, AddressBaseException
 class Command(BaseCsvStationsCsvAddressesImporter):
     council_id = "E07000243"
     addresses_name = (
-        "local.2018-05-03/Version 1/DemocracyClub Stevenage PD removed.csv"
-    )  # from idox
+        "local.2018-05-03/Version 1/DemocracyClub Stevenage PD removed.csv"  # from idox
+    )
     stations_name = (
-        "local.2018-05-03/Version 1/stations.csv"
-    )  # extracted from PDF by hand
+        "local.2018-05-03/Version 1/stations.csv"  # extracted from PDF by hand
+    )
     elections = []
 
     def format_address(self, instr):
