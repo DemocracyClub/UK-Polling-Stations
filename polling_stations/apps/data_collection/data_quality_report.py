@@ -1,32 +1,35 @@
+import re
+
 from django.db import connection
 from django.db.models import Q
 from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
 
 
-# define some methods we can use to print coloured console output
-class OutputFormatter:
+class ANSI:
     OKGREEN = "\033[92m"
     WARNING = "\033[93m"
     ENDC = "\033[0m"
     BOLD = "\033[1m"
 
-    @staticmethod
-    def print_ok(text):
-        print(OutputFormatter.OKGREEN + text + OutputFormatter.ENDC)
+    @classmethod
+    def ok(cls, text):
+        return cls.OKGREEN + text + cls.ENDC
+
+    @classmethod
+    def warning(cls, text):
+        return cls.WARNING + text + cls.ENDC
+
+    @classmethod
+    def bold(cls, text):
+        return cls.BOLD + text + cls.ENDC
+
+    @classmethod
+    def ok_bold(cls, text):
+        return cls.OKGREEN + cls.BOLD + text + cls.ENDC
 
     @staticmethod
-    def print_warning(text):
-        print(OutputFormatter.WARNING + text + OutputFormatter.ENDC)
-
-    @staticmethod
-    def print_bold(text):
-        print(OutputFormatter.BOLD + text + OutputFormatter.ENDC)
-
-    @staticmethod
-    def print_ok_bold(text):
-        print(
-            OutputFormatter.OKGREEN + OutputFormatter.BOLD + text + OutputFormatter.ENDC
-        )
+    def remove_escapes(text):
+        return re.sub("\033\\[[0-9;]+m", "", text)
 
 
 # data quality stats for polling stations
@@ -311,13 +314,9 @@ class DataQualityReportBuilder:
         self.report = []
 
     def build_header(self):
-        self.report.append(
-            {"style": None, "text": "=================================="}
-        )
-        self.report.append({"style": "bold", "text": "        DATA QUALITY REPORT"})
-        self.report.append(
-            {"style": None, "text": "==================================\n"}
-        )
+        self.report.append("==================================")
+        self.report.append(ANSI.bold("        DATA QUALITY REPORT"))
+        self.report.append("==================================\n")
 
     def build_station_report(self):
         stations_report = StationReport(self.council_id)
@@ -325,109 +324,85 @@ class DataQualityReportBuilder:
         stations_imported = stations_report.get_stations_imported()
         if stations_imported > 0:
             self.report.append(
-                {
-                    "style": "bold",
-                    "text": "STATIONS IMPORTED                : %i"
-                    % (stations_imported),
-                }
+                ANSI.bold("STATIONS IMPORTED                : %i" % (stations_imported))
             )
-            self.report.append(
-                {"style": None, "text": "----------------------------------"}
-            )
+            self.report.append("----------------------------------")
 
             district_ids = stations_report.get_stations_with_district_id()
             if district_ids > 0:
                 self.report.append(
-                    {
-                        "style": "ok_bold",
-                        "text": " - with district id              : %i"
-                        % (district_ids),
-                    }
+                    ANSI.ok_bold(
+                        " - with district id              : %i" % (district_ids)
+                    )
                 )
                 self.report.append(
-                    {
-                        "style": "ok",
-                        "text": "   - valid district id refs      : %i"
+                    ANSI.ok(
+                        "   - valid district id refs      : %i"
                         % (stations_report.get_stations_with_valid_district_id_ref()),
-                    }
+                    )
                 )
                 self.report.append(
-                    {
-                        "style": "warning",
-                        "text": "   - invalid district id refs    : %i"
-                        % (stations_report.get_stations_with_invalid_district_id_ref()),
-                    }
+                    ANSI.warning(
+                        "   - invalid district id refs    : %i"
+                        % (stations_report.get_stations_with_invalid_district_id_ref())
+                    )
                 )
             else:
                 self.report.append(
-                    {
-                        "style": "ok",
-                        "text": " - with district id              : %i"
-                        % (district_ids),
-                    }
+                    ANSI.ok(" - with district id              : %i" % (district_ids))
                 )
 
             self.report.append(
-                {
-                    "style": "warning",
-                    "text": " - without district id           : %i"
-                    % (stations_report.get_stations_without_district_id()),
-                }
+                ANSI.warning(
+                    " - without district id           : %i"
+                    % (stations_report.get_stations_without_district_id())
+                )
             )
             self.report.append(
-                {
-                    "style": "ok",
-                    "text": " - with point                    : %i"
-                    % (stations_report.get_stations_with_point()),
-                }
+                ANSI.ok(
+                    " - with point                    : %i"
+                    % (stations_report.get_stations_with_point())
+                )
             )
             self.report.append(
-                {
-                    "style": "warning",
-                    "text": " - without point                 : %i"
+                ANSI.warning(
+                    " - without point                 : %i"
                     % (stations_report.get_stations_without_point()),
-                }
+                )
             )
             self.report.append(
-                {
-                    "style": "ok",
-                    "text": " - with address                  : %i"
+                ANSI.ok(
+                    " - with address                  : %i"
                     % (stations_report.get_stations_with_address()),
-                }
+                )
             )
             self.report.append(
-                {
-                    "style": "warning",
-                    "text": " - without address               : %i"
-                    % (stations_report.get_stations_without_address()),
-                }
+                ANSI.warning(
+                    " - without address               : %i"
+                    % (stations_report.get_stations_without_address())
+                )
+            )
+            self.report.append("----------------------------------")
+            self.report.append(ANSI.bold("POLYGON LOOKUPS"))
+            self.report.append(
+                ANSI.warning(
+                    "Stations in 0 districts          : %i"
+                    % (stations_report.get_stations_in_zero_districts())
+                )
             )
             self.report.append(
-                {"style": None, "text": "----------------------------------"}
-            )
-            self.report.append({"style": "bold", "text": "POLYGON LOOKUPS"})
-            self.report.append(
-                {
-                    "style": "warning",
-                    "text": "Stations in 0 districts          : %i"
-                    % (stations_report.get_stations_in_zero_districts()),
-                }
+                ANSI.ok(
+                    "Stations in 1 districts          : %i"
+                    % (stations_report.get_stations_in_one_districts())
+                )
             )
             self.report.append(
-                {
-                    "style": "ok",
-                    "text": "Stations in 1 districts          : %i"
-                    % (stations_report.get_stations_in_one_districts()),
-                }
-            )
-            self.report.append(
-                {
-                    "style": "warning",
-                    "text": "Stations in >1 districts         : %i"
+                ANSI.warning(
+                    "Stations in >1 districts         : %i"
                     % (stations_report.get_stations_in_more_districts()),
-                }
+                )
             )
-            self.report.append({"style": None, "text": "\n"})
+            self.report.append("\n")
 
     def build_district_report(self):
         districts_report = DistrictReport(self.council_id)
@@ -435,81 +410,63 @@ class DataQualityReportBuilder:
         districts_imported = districts_report.get_districts_imported()
         if districts_imported > 0:
             self.report.append(
-                {
-                    "style": "bold",
-                    "text": "DISTRICTS IMPORTED               : %i"
-                    % (districts_imported),
-                }
+                ANSI.bold(
+                    "DISTRICTS IMPORTED               : %i" % (districts_imported)
+                )
             )
-            self.report.append(
-                {"style": None, "text": "----------------------------------"}
-            )
+            self.report.append("----------------------------------")
 
             station_ids = districts_report.get_districts_with_station_id()
             if station_ids > 0:
                 self.report.append(
-                    {
-                        "style": "ok_bold",
-                        "text": " - with station id               : %i" % (station_ids),
-                    }
+                    ANSI.ok_bold(
+                        " - with station id               : %i" % (station_ids),
+                    )
                 )
                 self.report.append(
-                    {
-                        "style": "ok",
-                        "text": "   - valid station id refs       : %i"
+                    ANSI.ok(
+                        "   - valid station id refs       : %i"
                         % (districts_report.get_districts_with_valid_station_id_ref()),
-                    }
+                    )
                 )
                 self.report.append(
-                    {
-                        "style": "warning",
-                        "text": "   - invalid station id refs     : %i"
-                        % (
-                            districts_report.get_districts_with_invalid_station_id_ref()
-                        ),
-                    }
+                    ANSI.warning(
+                        "   - invalid station id refs     : %i"
+                        % (districts_report.get_districts_with_invalid_station_id_ref())
+                    )
                 )
             else:
                 self.report.append(
-                    {
-                        "style": "ok",
-                        "text": " - with station id               : %i" % (station_ids),
-                    }
+                    ANSI.ok(" - with station id               : %i" % (station_ids),)
                 )
 
             self.report.append(
-                {
-                    "style": "warning",
-                    "text": " - without station id            : %i"
+                ANSI.warning(
+                    " - without station id            : %i"
                     % (districts_report.get_districts_without_station_id()),
-                }
+                )
+            )
+            self.report.append("----------------------------------")
+            self.report.append(ANSI.bold("POLYGON LOOKUPS"))
+            self.report.append(
+                ANSI.warning(
+                    "Districts containing 0 stations  : %i"
+                    % (districts_report.get_districts_containing_zero_stations())
+                )
             )
             self.report.append(
-                {"style": None, "text": "----------------------------------"}
-            )
-            self.report.append({"style": "bold", "text": "POLYGON LOOKUPS"})
-            self.report.append(
-                {
-                    "style": "warning",
-                    "text": "Districts containing 0 stations  : %i"
-                    % (districts_report.get_districts_containing_zero_stations()),
-                }
+                ANSI.ok(
+                    "Districts containing 1 stations  : %i"
+                    % (districts_report.get_districts_containing_one_stations())
+                )
             )
             self.report.append(
-                {
-                    "style": "ok",
-                    "text": "Districts containing 1 stations  : %i"
-                    % (districts_report.get_districts_containing_one_stations()),
-                }
-            )
-            self.report.append(
-                {
-                    "style": "warning",
-                    "text": "Districts containing >1 stations : %i"
+                ANSI.warning(
+                    "Districts containing >1 stations : %i"
                     % (districts_report.get_districts_containing_more_stations()),
-                }
+                )
             )
-            self.report.append({"style": None, "text": "\n"})
+            self.report.append("\n")
 
     def build_residential_address_report(self):
         address_report = ResidentialAddressReport(self.council_id)
@@ -517,64 +474,50 @@ class DataQualityReportBuilder:
         addresses_imported = address_report.get_addresses_imported()
         if addresses_imported > 0:
             self.report.append(
-                {
-                    "style": "bold",
-                    "text": "ADDRESSES IMPORTED               : %i"
-                    % (addresses_imported),
-                }
+                ANSI.bold(
+                    "ADDRESSES IMPORTED               : %i" % (addresses_imported)
+                )
             )
-            self.report.append(
-                {"style": None, "text": "----------------------------------"}
-            )
+            self.report.append("----------------------------------")
 
             station_ids = address_report.get_addresses_with_station_id()
             if station_ids > 0:
                 self.report.append(
-                    {
-                        "style": "ok_bold",
-                        "text": " - with station id               : %i" % (station_ids),
-                    }
+                    ANSI.ok_bold(
+                        " - with station id               : %i" % (station_ids),
+                    )
                 )
                 self.report.append(
-                    {
-                        "style": "ok",
-                        "text": "   - valid station id refs       : %i"
+                    ANSI.ok(
+                        "   - valid station id refs       : %i"
                         % (address_report.get_addresses_with_valid_station_id_ref()),
-                    }
+                    )
                 )
                 self.report.append(
-                    {
-                        "style": "warning",
-                        "text": "   - invalid station id refs     : %i"
+                    ANSI.warning(
+                        "   - invalid station id refs     : %i"
                         % (address_report.get_addresses_with_invalid_station_id_ref()),
-                    }
+                    )
                 )
             else:
                 self.report.append(
-                    {
-                        "style": "ok",
-                        "text": " - with station id               : %i" % (station_ids),
-                    }
+                    ANSI.ok(" - with station id               : %i" % (station_ids),)
                 )
 
             self.report.append(
-                {
-                    "style": "warning",
-                    "text": " - without station id            : %i"
+                ANSI.warning(
+                    " - without station id            : %i"
                     % (address_report.get_addresses_without_station_id()),
-                }
+                )
             )
+            self.report.append("----------------------------------")
             self.report.append(
-                {"style": None, "text": "----------------------------------"}
-            )
-            self.report.append(
-                {
-                    "style": "warning",
-                    "text": " - with UPRN                     : %i"
+                ANSI.warning(
+                    " - with UPRN                     : %i"
                     % (address_report.get_uprns_imported()),
-                }
+                )
             )
-            self.report.append({"style": None, "text": "\n"})
+            self.report.append("\n")
 
     def build_report(self):
         self.build_header()
@@ -583,20 +526,7 @@ class DataQualityReportBuilder:
         self.build_residential_address_report()
 
     def output_console_report(self):
-        for line in self.report:
-            if line["style"] == "ok":
-                OutputFormatter.print_ok(line["text"])
-            elif line["style"] == "warning":
-                OutputFormatter.print_warning(line["text"])
-            elif line["style"] == "ok_bold":
-                OutputFormatter.print_ok_bold(line["text"])
-            elif line["style"] == "bold":
-                OutputFormatter.print_bold(line["text"])
-            elif line["style"] is None:
-                print(line["text"])
+        print("\n".join(self.report))
 
     def generate_string_report(self):
-        out = ""
-        for line in self.report:
-            out = out + line["text"] + "\n"
-        return out.strip()
+        return ANSI.remove_escapes("\n".join(self.report))
