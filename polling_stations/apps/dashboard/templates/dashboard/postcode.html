@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load pipeline %}
 
+{% block page_title %}{% trans "Postcode:" %} {{ postcode }}{% endblock page_title %}
 
 {% block extra_page_css %}
     {% stylesheet 'map' %}
