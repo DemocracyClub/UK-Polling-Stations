@@ -309,9 +309,12 @@ class ResidentialAddressReport:
 
 # generate all the stats
 class DataQualityReportBuilder:
-    def __init__(self, council_id):
+    def __init__(self, council_id, expecting_districts):
         self.council_id = council_id
         self.report = []
+        # Whether the importer is expected to have imported districts;
+        # controls whether relevant summaries appear in the report.
+        self.expecting_districts = expecting_districts
 
     def build_header(self):
         self.report.append("==================================")
@@ -328,36 +331,43 @@ class DataQualityReportBuilder:
             )
             self.report.append("----------------------------------")
 
-            district_ids = stations_report.get_stations_with_district_id()
-            if district_ids > 0:
-                self.report.append(
-                    ANSI.ok_bold(
-                        " - with district id              : %i" % (district_ids)
+            if self.expecting_districts:
+                district_ids = stations_report.get_stations_with_district_id()
+                if district_ids > 0:
+                    self.report.append(
+                        ANSI.ok_bold(
+                            " - with district id              : %i" % (district_ids)
+                        )
                     )
-                )
-                self.report.append(
-                    ANSI.ok(
-                        "   - valid district id refs      : %i"
-                        % (stations_report.get_stations_with_valid_district_id_ref()),
+                    self.report.append(
+                        ANSI.ok(
+                            "   - valid district id refs      : %i"
+                            % (
+                                stations_report.get_stations_with_valid_district_id_ref()
+                            ),
+                        )
                     )
-                )
+                    self.report.append(
+                        ANSI.warning(
+                            "   - invalid district id refs    : %i"
+                            % (
+                                stations_report.get_stations_with_invalid_district_id_ref()
+                            )
+                        )
+                    )
+                else:
+                    self.report.append(
+                        ANSI.ok(
+                            " - with district id              : %i" % (district_ids)
+                        )
+                    )
+
                 self.report.append(
                     ANSI.warning(
-                        "   - invalid district id refs    : %i"
-                        % (stations_report.get_stations_with_invalid_district_id_ref())
+                        " - without district id           : %i"
+                        % (stations_report.get_stations_without_district_id())
                     )
                 )
-            else:
-                self.report.append(
-                    ANSI.ok(" - with district id              : %i" % (district_ids))
-                )
-
-            self.report.append(
-                ANSI.warning(
-                    " - without district id           : %i"
-                    % (stations_report.get_stations_without_district_id())
-                )
-            )
             self.report.append(
                 ANSI.ok(
                     " - with point                    : %i"
@@ -382,26 +392,27 @@ class DataQualityReportBuilder:
                     % (stations_report.get_stations_without_address())
                 )
             )
-            self.report.append("----------------------------------")
-            self.report.append(ANSI.bold("POLYGON LOOKUPS"))
-            self.report.append(
-                ANSI.warning(
-                    "Stations in 0 districts          : %i"
-                    % (stations_report.get_stations_in_zero_districts())
+            if self.expecting_districts:
+                self.report.append("----------------------------------")
+                self.report.append(ANSI.bold("POLYGON LOOKUPS"))
+                self.report.append(
+                    ANSI.warning(
+                        "Stations in 0 districts          : %i"
+                        % (stations_report.get_stations_in_zero_districts())
+                    )
                 )
-            )
-            self.report.append(
-                ANSI.ok(
-                    "Stations in 1 districts          : %i"
-                    % (stations_report.get_stations_in_one_districts())
+                self.report.append(
+                    ANSI.ok(
+                        "Stations in 1 districts          : %i"
+                        % (stations_report.get_stations_in_one_districts())
+                    )
                 )
-            )
-            self.report.append(
-                ANSI.warning(
-                    "Stations in >1 districts         : %i"
-                    % (stations_report.get_stations_in_more_districts()),
+                self.report.append(
+                    ANSI.warning(
+                        "Stations in >1 districts         : %i"
+                        % (stations_report.get_stations_in_more_districts()),
+                    )
                 )
-            )
             self.report.append("\n")
 
     def build_district_report(self):

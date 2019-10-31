@@ -72,6 +72,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     base_folder_path = None
     logger = None
     batch_size = None
+    imports_districts = False
 
     def write_info(self, message):
         if self.verbosity > 0:
@@ -147,7 +148,9 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
 
     def report(self):
         # build report
-        report = DataQualityReportBuilder(self.council_id)
+        report = DataQualityReportBuilder(
+            self.council_id, expecting_districts=self.imports_districts
+        )
         station_report = StationReport(self.council_id)
         district_report = DistrictReport(self.council_id)
         address_report = ResidentialAddressReport(self.council_id)
@@ -392,6 +395,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
 
 class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
+    imports_districts = True
 
     districts = None
     districts_srid = None
