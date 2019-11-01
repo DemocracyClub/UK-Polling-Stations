@@ -86,10 +86,9 @@ class RoutingHelper:
 
     @cached_property
     def kwargs(self):
-        if self.route_type in ("multiple_councils", "multiple_addresses", "postcode"):
-            return {"postcode": self.postcode}
-        if self.route_type in {"single_address"}:
+        if self.route_type == "single_address":
             return {"address_slug": self.addresses[0].slug}
+        return {"postcode": self.postcode}
 
     def get_canonical_url(self, request, preserve_query=True):
         """Returns a canonical URL to route to, preserving any important query parameters"""
