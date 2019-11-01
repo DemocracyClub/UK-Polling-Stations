@@ -1,5 +1,7 @@
-from collections import namedtuple
+from urllib.parse import urlencode
 
+from django.urls import reverse
+from django.utils.functional import cached_property
 from uk_geo_utils.helpers import Postcode
 
 from addressbase.models import Blacklist
@@ -8,9 +10,15 @@ from pollingstations.models import ResidentialAddress
 
 # use a postcode to decide which endpoint the user should be directed to
 class RoutingHelper:
+    _query_params_to_preserve = {
+        "utm_content",
+        "utm_medium",
+        "utm_source",
+        "utm_campaign",
+    }
+
     def __init__(self, postcode):
         self.postcode = Postcode(postcode).without_space
-        self.Endpoint = namedtuple("Endpoint", ["view", "kwargs"])
         self.get_addresses()
         self.get_councils_from_blacklist()
 
@@ -56,23 +64,43 @@ class RoutingHelper:
             # postcode is not in ResidentialAddress table
             return "postcode"
 
-    def get_endpoint(self):
+    @cached_property
+    def view(self):
         if self.route_type == "multiple_councils":
             # this postcode contains UPRNS situated in >1 local auth
             # maybe one day we will handle this better, but for now
             # we just throw a special "we don't know" page
             # ..even if we might possibly know
-            return self.Endpoint("multiple_councils_view", {"postcode": self.postcode})
+            return "multiple_councils_view"
         if self.route_type == "single_address":
             # all the addresses in this postcode
             # map to one polling station
-            return self.Endpoint(
-                "address_view", {"address_slug": self.addresses[0].slug}
-            )
+            return "address_view"
         if self.route_type == "multiple_addresses":
             # addresses in this postcode map to
             # multiple polling stations
-            return self.Endpoint("address_select_view", {"postcode": self.postcode})
+            return "address_select_view"
         if self.route_type == "postcode":
             # postcode is not in ResidentialAddress table
-            return self.Endpoint("postcode_view", {"postcode": self.postcode})
+            return "postcode_view"
+
+    @cached_property
+    def kwargs(self):
+        if self.route_type == "single_address":
+            return {"address_slug": self.addresses[0].slug}
+        return {"postcode": self.postcode}
+
+    def get_canonical_url(self, request, preserve_query=True):
+        """Returns a canonical URL to route to, preserving any important query parameters"""
+        url = reverse(self.view, kwargs=self.kwargs)
+        query = urlencode(
+            [
+                (k, request.GET.getlist(k))
+                for k in request.GET
+                if k in self._query_params_to_preserve
+            ],
+            doseq=True,
+        )
+        if query and preserve_query:
+            url += "?" + query
+        return url
