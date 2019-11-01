@@ -58,7 +58,7 @@ class RoutingHelperTest(TestCase):
         request = mock.Mock()
         request.GET = QueryDict("utm_source=foo&something=other")
         # Could be either slug
-        self.assertRegexpMatches(
+        self.assertRegex(
             rh.get_canonical_url(request), "/address/[12]/\?utm_source=foo"
         )
 
@@ -67,6 +67,6 @@ class RoutingHelperTest(TestCase):
         request = mock.Mock()
         request.GET = QueryDict("utm_source=foo&something=other")
         # Could be either slug
-        self.assertRegexpMatches(
+        self.assertRegex(
             rh.get_canonical_url(request, preserve_query=False), "/address/[12]/"
         )

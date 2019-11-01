@@ -15,7 +15,7 @@ class HomeViewTestCase(TestCase):
         self.assertEqual(302, response.status_code)
         # The query string isn't preserved, because they've come from the home page, and it could be either slug
         # for the postcode given (hence the [12])
-        self.assertRegexpMatches(response["Location"], "/address/[12]/")
+        self.assertRegex(response["Location"], "/address/[12]/")
 
 
 class PostCodeViewTestCase(TestCase):
@@ -39,6 +39,4 @@ class MultipleCouncilsViewTestCase(TestCase):
             "/multiple_councils/AA11AA/?utm_source=foo&something=other", follow=False
         )
         self.assertEqual(302, response.status_code)
-        self.assertRegexpMatches(
-            response["Location"], r"/address/[12]/\?utm_source=foo"
-        )
+        self.assertRegex(response["Location"], r"/address/[12]/\?utm_source=foo")
