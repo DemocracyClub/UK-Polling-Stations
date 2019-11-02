@@ -5,7 +5,7 @@ from django_extensions.management.commands.show_urls import Command
 
 class UrlTests(TestCase):
     def is_exception(self, url):
-        exceptions = [".txt", ".ics"]
+        exceptions = [".txt", ".ics", ".geojson"]
         for exception in exceptions:
             if exception in url:
                 return True
