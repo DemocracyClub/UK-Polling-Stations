@@ -94,15 +94,18 @@ class PostCodeGeoJSONView(View):
         station_ids = sorted(
             set(residential_addresses.values_list("council_id", "polling_station_id"))
         )
-        stations = PollingStation.objects.filter(
-            reduce(
-                operator.or_,
-                (
-                    Q(council_id=council_id, internal_council_id=internal_council_id)
-                    for council_id, internal_council_id in station_ids
-                ),
+        if station_ids:
+            stations = PollingStation.objects.filter(
+                reduce(
+                    operator.or_,
+                    (
+                        Q(council_id=council_id, internal_council_id=internal_council_id)
+                        for council_id, internal_council_id in station_ids
+                    ),
+                )
             )
-        )
+        else:
+            stations = PollingStation.objects.none()
         station_colors = dict(zip(station_ids, self.station_colors))
 
         return JsonResponse(
