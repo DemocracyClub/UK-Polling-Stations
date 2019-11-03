@@ -17,55 +17,78 @@ UserModel = get_user_model()
 
 class DashboardTestCase(TestCase):
     def setUp(self):
-        self.user = UserModel.objects.create(username='staff', is_staff=True)
+        self.user = UserModel.objects.create(username="staff", is_staff=True)
         self.client.force_login(self.user)
 
 
 class CouncilDetailViewTestCase(DashboardTestCase):
-    fixtures = ['test_routing']
+    fixtures = ["test_routing"]
 
     def test_get(self):
-        council = Council.objects.get(pk='X01000001')
-        response = self.client.get('/dashboard/council/{}/'.format(council.pk))
+        council = Council.objects.get(pk="X01000001")
+        response = self.client.get("/dashboard/council/{}/".format(council.pk))
         self.assertEqual(200, response.status_code)
-        self.assertEqual(council, response.context['council'])
+        self.assertEqual(council, response.context["council"])
 
 
 class PostCodeViewTestCase(DashboardTestCase):
-    fixtures = ['test_routing']
+    fixtures = ["test_routing"]
 
     def test_known_postcode(self):
-        response = self.client.get('/dashboard/postcode/AA11AA/')
+        response = self.client.get("/dashboard/postcode/AA11AA/")
         self.assertEqual(200, response.status_code)
-        self.assertEqual(2, len(response.context['addresses']))
+        self.assertEqual(2, len(response.context["addresses"]))
 
 
 class PostCodeGeoJSONTestCase(DashboardTestCase):
-    fixtures = ['test_routing']
+    fixtures = ["test_routing"]
 
     def test_unknown_postcode(self):
-        response = self.client.get('/dashboard/postcode/ZZ11ZZ.geojson')
+        response = self.client.get("/dashboard/postcode/ZZ11ZZ.geojson")
         self.assertEqual(200, response.status_code)
-        self.assertEqual('application/geo+json', response['Content-Type'])
-        self.assertEqual('application/geo+json', response['Content-Type'])
-        self.assertEqual({'type':'FeatureCollection', 'features': []}, json.loads(response.content))
+        self.assertEqual("application/geo+json", response["Content-Type"])
+        self.assertEqual("application/geo+json", response["Content-Type"])
+        self.assertEqual(
+            {"type": "FeatureCollection", "features": []}, json.loads(response.content)
+        )
 
     def test_known_postcode(self):
-        response = self.client.get('/dashboard/postcode/BB11BB.geojson')
+        response = self.client.get("/dashboard/postcode/BB11BB.geojson")
         self.assertEqual(200, response.status_code)
-        self.assertEqual('application/geo+json', response['Content-Type'])
+        self.assertEqual("application/geo+json", response["Content-Type"])
         data = json.loads(response.content)
-        self.assertEqual('FeatureCollection', data['type'])
-        self.assertEqual(1, len([feature for feature in data['features'] if feature['properties']['type'] == 'pollingstation']))
-        self.assertEqual(3, len([feature for feature in data['features'] if feature['properties']['type'] == 'residentialaddress']))
+        self.assertEqual("FeatureCollection", data["type"])
+        self.assertEqual(
+            1,
+            len(
+                [
+                    feature
+                    for feature in data["features"]
+                    if feature["properties"]["type"] == "pollingstation"
+                ]
+            ),
+        )
+        self.assertEqual(
+            3,
+            len(
+                [
+                    feature
+                    for feature in data["features"]
+                    if feature["properties"]["type"] == "residentialaddress"
+                ]
+            ),
+        )
 
 
 class PollingStationDetailView(DashboardTestCase):
-    fixtures = ['test_routing']
+    fixtures = ["test_routing"]
 
     def test_get(self):
         polling_station = PollingStation.objects.get(pk=1)
-        response = self.client.get('/dashboard/council/{}/polling-station/{}/'.format(polling_station.council_id,
-                                                                                     polling_station.internal_council_id))
+        response = self.client.get(
+            "/dashboard/council/{}/polling-station/{}/".format(
+                polling_station.council_id, polling_station.internal_council_id
+            )
+        )
         self.assertEqual(200, response.status_code)
-        self.assertEqual(polling_station, response.context['pollingstation'])
+        self.assertEqual(polling_station, response.context["pollingstation"])

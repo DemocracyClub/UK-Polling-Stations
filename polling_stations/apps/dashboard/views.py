@@ -99,7 +99,10 @@ class PostCodeGeoJSONView(View):
                 reduce(
                     operator.or_,
                     (
-                        Q(council_id=council_id, internal_council_id=internal_council_id)
+                        Q(
+                            council_id=council_id,
+                            internal_council_id=internal_council_id,
+                        )
                         for council_id, internal_council_id in station_ids
                     ),
                 )
