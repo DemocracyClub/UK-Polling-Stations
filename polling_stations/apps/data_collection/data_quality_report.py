@@ -419,7 +419,7 @@ class DataQualityReportBuilder:
         districts_report = DistrictReport(self.council_id)
 
         districts_imported = districts_report.get_districts_imported()
-        if districts_imported > 0:
+        if self.expecting_districts:
             self.report.append(
                 ANSI.bold(
                     "DISTRICTS IMPORTED               : %i" % (districts_imported)
