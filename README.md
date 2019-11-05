@@ -46,9 +46,10 @@ On Ubuntu, this needs to be installed/compiled manually:
 wget https://github.com/apiaryio/drafter/releases/download/v3.2.7/drafter-v3.2.7.tar.gz
 tar xvzf drafter-v3.2.7.tar.gz
 cd drafter-v3.2.7
-./configure --shared
+/usr/bin/python2 configure --shared
 make libdrafter
 sudo cp build/out/Release/lib.target/libdrafter.so /usr/lib/libdrafter.so
+sudo mkdir -p /usr/include/drafter
 sudo cp src/drafter.h /usr/include/drafter/drafter.h
 ```
 
@@ -120,7 +121,7 @@ python manage.py migrate
 
 #### Import ONSPD
 
-For development purposes, you can use the ONSPD for geocoding. Grab the latest release from http://geoportal.statistics.gov.uk/datasets?q=ONS%20Postcode%20Directory%20(ONSPD)&sort=-updatedAt unzip the data and import it using:
+For development purposes, you can use the ONSPD for geocoding. Grab the latest release from https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=-modified&tags=PRD_ONSPD unzip the data and import it using:
 
 ```
 python manage.py import_onspd /path/to/data
