@@ -1,5 +1,4 @@
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode_point_only, PostcodeError
 from data_collection.addresshelpers import (
     format_residential_address,
     format_polling_station_address,
@@ -10,8 +9,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     council_id = "E07000241"
     addresses_name = "local.2019-05-02/Version 1/addresses.csv"
     stations_name = "local.2019-05-02/Version 1/stations.csv"
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
     csv_delimiter = ","
+    allow_station_point_from_postcode = False
 
     def get_station_hash(self, record):
         return "-".join([record.code.strip()])
@@ -28,16 +28,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         )
 
     def get_station_point(self, record):
-        postcode = record.postcode.strip()
-        if postcode == "":
-            return None
-
-        try:
-            location_data = geocode_point_only(postcode)
-            location = location_data.centroid
-        except PostcodeError:
-            location = None
-        return location
+        return None
 
     def station_record_to_dict(self, record):
         location = self.get_station_point(record)
