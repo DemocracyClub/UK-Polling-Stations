@@ -59,7 +59,7 @@ class RoutingHelperTest(TestCase):
         request.GET = QueryDict("utm_source=foo&something=other")
         # Could be either slug
         self.assertRegex(
-            rh.get_canonical_url(request), "/address/[12]/\?utm_source=foo"
+            rh.get_canonical_url(request), r"/address/[12]/\?utm_source=foo"
         )
 
     def test_canonical_url_without_preserve(self):
@@ -68,5 +68,5 @@ class RoutingHelperTest(TestCase):
         request.GET = QueryDict("utm_source=foo&something=other")
         # Could be either slug
         self.assertRegex(
-            rh.get_canonical_url(request, preserve_query=False), "/address/[12]/"
+            rh.get_canonical_url(request, preserve_query=False), r"/address/[12]/"
         )
