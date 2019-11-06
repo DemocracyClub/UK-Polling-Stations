@@ -344,7 +344,7 @@ class DataQualityReportBuilder:
                             "   - valid district id refs      : %i"
                             % (
                                 stations_report.get_stations_with_valid_district_id_ref()
-                            ),
+                            )
                         )
                     )
                     self.report.append(
@@ -377,13 +377,13 @@ class DataQualityReportBuilder:
             self.report.append(
                 ANSI.warning(
                     " - without point                 : %i"
-                    % (stations_report.get_stations_without_point()),
+                    % (stations_report.get_stations_without_point())
                 )
             )
             self.report.append(
                 ANSI.ok(
                     " - with address                  : %i"
-                    % (stations_report.get_stations_with_address()),
+                    % (stations_report.get_stations_with_address())
                 )
             )
             self.report.append(
@@ -410,7 +410,7 @@ class DataQualityReportBuilder:
                 self.report.append(
                     ANSI.warning(
                         "Stations in >1 districts         : %i"
-                        % (stations_report.get_stations_in_more_districts()),
+                        % (stations_report.get_stations_in_more_districts())
                     )
                 )
             self.report.append("\n")
@@ -431,13 +431,13 @@ class DataQualityReportBuilder:
             if station_ids > 0:
                 self.report.append(
                     ANSI.ok_bold(
-                        " - with station id               : %i" % (station_ids),
+                        " - with station id               : %i" % (station_ids)
                     )
                 )
                 self.report.append(
                     ANSI.ok(
                         "   - valid station id refs       : %i"
-                        % (districts_report.get_districts_with_valid_station_id_ref()),
+                        % (districts_report.get_districts_with_valid_station_id_ref())
                     )
                 )
                 self.report.append(
@@ -448,13 +448,13 @@ class DataQualityReportBuilder:
                 )
             else:
                 self.report.append(
-                    ANSI.ok(" - with station id               : %i" % (station_ids),)
+                    ANSI.ok(" - with station id               : %i" % (station_ids))
                 )
 
             self.report.append(
                 ANSI.warning(
                     " - without station id            : %i"
-                    % (districts_report.get_districts_without_station_id()),
+                    % (districts_report.get_districts_without_station_id())
                 )
             )
             self.report.append("----------------------------------")
@@ -474,7 +474,7 @@ class DataQualityReportBuilder:
             self.report.append(
                 ANSI.warning(
                     "Districts containing >1 stations : %i"
-                    % (districts_report.get_districts_containing_more_stations()),
+                    % (districts_report.get_districts_containing_more_stations())
                 )
             )
             self.report.append("\n")
@@ -495,37 +495,37 @@ class DataQualityReportBuilder:
             if station_ids > 0:
                 self.report.append(
                     ANSI.ok_bold(
-                        " - with station id               : %i" % (station_ids),
+                        " - with station id               : %i" % (station_ids)
                     )
                 )
                 self.report.append(
                     ANSI.ok(
                         "   - valid station id refs       : %i"
-                        % (address_report.get_addresses_with_valid_station_id_ref()),
+                        % (address_report.get_addresses_with_valid_station_id_ref())
                     )
                 )
                 self.report.append(
                     ANSI.warning(
                         "   - invalid station id refs     : %i"
-                        % (address_report.get_addresses_with_invalid_station_id_ref()),
+                        % (address_report.get_addresses_with_invalid_station_id_ref())
                     )
                 )
             else:
                 self.report.append(
-                    ANSI.ok(" - with station id               : %i" % (station_ids),)
+                    ANSI.ok(" - with station id               : %i" % (station_ids))
                 )
 
             self.report.append(
                 ANSI.warning(
                     " - without station id            : %i"
-                    % (address_report.get_addresses_without_station_id()),
+                    % (address_report.get_addresses_without_station_id())
                 )
             )
             self.report.append("----------------------------------")
             self.report.append(
                 ANSI.warning(
                     " - with UPRN                     : %i"
-                    % (address_report.get_uprns_imported()),
+                    % (address_report.get_uprns_imported())
                 )
             )
             self.report.append("\n")
