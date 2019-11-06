@@ -1,17 +1,18 @@
+from uk_geo_utils.helpers import Postcode
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000143"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Breck.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Breck.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019breck.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019breck.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id in ["7830", "7930", "8062"]:
+        if record.polling_place_id in ["8277", "8377", "8521"]:
             # The E/N points are the wrong way round for these 3
             # perform the old switcheroo
             easting = record.polling_place_northing
@@ -19,7 +20,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting=easting)
             record = record._replace(polling_place_northing=northing)
 
-        if record.polling_place_id == "7980":
+        if record.polling_place_id == "8440":
             # this one is just miles off
             # remove it and fall back to geocoding by postcode
             record = record._replace(polling_place_easting="0")
@@ -33,10 +34,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn == "10011992099":
             rec["postcode"] = "PE32 2DQ"
-        if uprn == "10011984924":
-            rec["postcode"] = "NR20 4FW"
 
-        if uprn == "10011991979":
+        if Postcode(record.addressline6).with_space == "IP24 1QS":
             return None
 
         if (

@@ -3,14 +3,20 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000002"
-    addresses_name = "local.2019-05-02/Version 1/middlesbrough-.tsv"
-    stations_name = "local.2019-05-02/Version 1/middlesbrough-.tsv"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/middlesbrough.gov.uk-1572526539000-.tsv"
+    stations_name = "parl.2019-12-12/Version 1/middlesbrough.gov.uk-1572526539000-.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id in ["7950", "7849"]:
+        # Marton Manor Primary School
+        if record.polling_place_id == "8595":
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+        # Linthorpe Community School
+        if record.polling_place_id == "8484":
             record = record._replace(polling_place_easting="0")
             record = record._replace(polling_place_northing="0")
 
@@ -19,6 +25,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if record.addressline6 == "TS3 0JW":
+            return None
 
         if uprn in [
             "10023173215",  # TS12HJ -> TS12ET : Apartment 1 Central Hall, 108a Borough Road, Middlesbrough
