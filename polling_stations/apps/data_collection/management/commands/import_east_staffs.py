@@ -24,3 +24,12 @@ class Command(BaseDemocracyCountsCsvImporter):
             rec["accept_suggestion"] = True
 
         return rec
+
+    def station_record_to_dict(self, record):
+
+        if record.stationcode == "BP_45":
+            # record = record._replace(polling_place_postcode="")
+            record = record._replace(xordinate="422735")
+            record = record._replace(yordinate="323640")
+
+        return super().station_record_to_dict(record)
