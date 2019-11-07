@@ -3,28 +3,24 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000066"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019 basildon.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019 basildon.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019basil.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019basil.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-
-        # station changes for EU election
-        if record.polling_place_id == "3968":
-            record = record._replace(
-                polling_place_name="Portacabin at Brightside County Primary School"
-            )
-        if record.polling_place_id == "4095":
-            record = record._replace(
-                polling_place_name="Portacabin at Ryedene Primary & Nursery School"
-            )
-
-        return super().station_record_to_dict(record)
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
+
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        ### Incorrect geocoding
+        if uprn in ["100091212751", "10013352273"]:
+            rec["uprn"] = ""
+
+        ### Wront Postcode
+        if record.addressline1 == "6 Dale Farm":
+            rec["postcode"] = "CM11 2YH"
 
         ### Invalid postcodes
 
@@ -53,9 +49,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10024197481",  # SS156GH -> SS156GJ : 46 School Avenue, Laindon, Basildon, Essex
             "10093026829",  # SS156GJ -> SS156LX : 144 School Avenue, Laindon, Basildon, Essex
             "100090277964",  # CM120ND -> CM120NH : 111 Perry Street, Billericay, Essex
-            "10093029314",  # SS165LE -> SS155LE : 7 Bebington Link, Basildon, Essex
-            "10093029315",  # SS165LE -> SS155LE : 8 Bebington Link, Basildon, Essex
-            "10093029317",  # SS165LE -> SS155LE : 10 Bebington Link, Basildon, Essex
             "10024197241",  # SS156PF -> SS156PE : 29 Somerset Road, Laindon, Basildon, Essex
             "100090233401",  # SS133EA -> SS132EA : 17 Appleford Court, Halstow Way, Pitsea, Basildon, Essex
             "100090233418",  # SS132EB -> SS132EA : 34 Appleford Court, Halstow Way, Pitsea, Basildon, Essex
@@ -77,8 +70,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "10093029374",  # CM112AD -> CM120AD : 2 Woodward House, 9 Stock Road, Billericay, Essex
             "10024196317",  # CM129LH -> SS156GH : 45 School Road, Billericay, Essex
-            "10090681494",  # CM129JD -> CM111EX : 179A Western Road, Billericay, Essex
             "100090284447",  # SS129EJ -> SS120EG : Mobile Home Adj. Cranfield, Lower Park Road, Wickford, Essex
+            "10093029314",  # SS165LE -> SS155LE : 7 Bebington Link, Basildon, Essex
+            "10093029317",  # SS165LE -> SS155LE : 10 Bebington Link, Basildon, Essex
         ]:
             rec["accept_suggestion"] = False
 
