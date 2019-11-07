@@ -3,9 +3,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000212"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019runny.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019runny.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Runny.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Runny.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -15,7 +15,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "100061498464",  # TW200BJ -> TW200BQ : Chestnuts, Royal Holloway University - Halls of Residence, Englefield Green, Egham, Surrey
             "200001732773",  # TW208HJ -> TW200HJ : Brook Lodge, Wick Road, Englefield Green, Egham, Surrey
-            "10002019662",  # KT153NT -> KT153QE : Accomodation at The Black Prince, Woodham Lane
+            # "10002019662",  # KT153NT -> KT153QE : Accomodation at The Black Prince, Woodham Lane
         ]:
             rec["accept_suggestion"] = True
 
