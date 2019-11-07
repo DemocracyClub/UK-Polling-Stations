@@ -12,7 +12,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # Carried over from local.2019-05-02 & europarl.2019-05-23
-        if record.polling_place_id == "3742":  # Catholic Church Hall
+        if record.polling_place_id == "4260":  # Catholic Church Hall
             record = record._replace(polling_place_postcode="KT22 7EZ")
         return super().station_record_to_dict(record)
 
