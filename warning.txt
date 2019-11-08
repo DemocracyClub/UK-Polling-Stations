@@ -1,0 +1,143 @@
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10010541038",  # ST145JF -> ST145JD : Truckle House , Keelings Lane, Croxden, Staffordshire
+Input Record:
+{'address': 'Truckle House , Keelings Lane, Croxden, Staffordshire', 'postcode': 'ST145JF', 'polling_station_id': 'AA_1', 'uprn': '10010541038', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-aa_1-truckle-house-keelings-lane-croxden-staffordshire-st145jf'}
+Addressbase record:
+{'address': 'TRUCKLE HOUSE, CROXDEN, UTTOXETER', 'postcode': 'ST145JD', 'location': '0101000020E61000003E12E5C1CC6DFEBF97BBE01D2A7A4A40'}
+Match quality: 61
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10008037137",  # ST145AR -> ST145BL : Lowfields, Crakemarsh, Stramshall, Uttoxeter, Staffordshire
+Input Record:
+{'address': 'Lowfields, Crakemarsh, Stramshall, Uttoxeter, Staffordshire', 'postcode': 'ST145AR', 'polling_station_id': 'AF_2', 'uprn': '10008037137', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-af_2-lowfields-crakemarsh-stramshall-uttoxeter-staffordshire-st145ar'}
+Addressbase record:
+{'address': 'LOWFIELDS, COMBRIDGE, UTTOXETER', 'postcode': 'ST145BL', 'location': '0101000020E6100000FEE8407B9AD8FDBF7DD2E4BDC5774A40'}
+Match quality: 55
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "100032003884",  # DE143JY -> DE143LS : Argyle Arms, 180 All Saints Road, Burton upon Trent, Staffordshire
+Input Record:
+{'address': 'Argyle Arms, 180 All Saints Road, Burton upon Trent, Staffordshire', 'postcode': 'DE143JY', 'polling_station_id': 'AH_5', 'uprn': '100032003884', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-ah_5-argyle-arms-180-all-saints-road-burton-upon-trent-staffordshire-de143jy'}
+Addressbase record:
+{'address': 'ARGYLE ARMS, 180 ALL SAINTS ROAD, BURTON-ON-TRENT', 'postcode': 'DE143LS', 'location': '0101000020E610000043D6091E9551FABF17E41D96BC654A40'}
+Match quality: 91
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "100031653184",  # DE143DL -> DE139PL : 5 Burton Road, Branston, Staffordshire
+Input Record:
+{'address': '5 Burton Road, Branston, Staffordshire', 'postcode': 'DE143DL', 'polling_station_id': 'AM_9', 'uprn': '100031653184', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-am_9-5-burton-road-branston-staffordshire-de143dl'}
+Addressbase record:
+{'address': '5 TUDOR GARDENS, BURTON ROAD, TUTBURY, BURTON-ON-TRENT', 'postcode': 'DE139PL', 'location': '0101000020E61000000FD253E41051FABFCEAC003A27654A40'}
+Match quality: 58
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "200001860302",  # DE139HS -> DE139HR : Fauld Manor, Fauld Lane, Fauld, Staffordshire
+Input Record:
+{'address': 'Fauld Manor, Fauld Lane, Fauld, Staffordshire', 'postcode': 'DE139HS', 'polling_station_id': 'AW_23', 'uprn': '200001860302', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-aw_23-fauld-manor-fauld-lane-fauld-staffordshire-de139hs'}
+Addressbase record:
+{'address': 'FAULD MANOR, FAULD, TUTBURY, BURTON-ON-TRENT', 'postcode': 'DE139HR', 'location': '0101000020E6100000685BCD3AE3BBFBBF1234C1CB676D4A40'}
+Match quality: 56
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "100031678587",  # ST147PD -> ST147PB : 49 Hawthornden Avenue, Uttoxeter, Staffordshire
+Input Record:
+{'address': '49 Hawthornden Avenue, Uttoxeter, Staffordshire', 'postcode': 'ST147PD', 'polling_station_id': 'BC_31', 'uprn': '100031678587', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-bc_31-49-hawthornden-avenue-uttoxeter-staffordshire-st147pd'}
+Addressbase record:
+{'address': '49 HAWTHORNDEN GARDENS, UTTOXETER', 'postcode': 'ST147PB', 'location': '0101000020E61000007954A1269F23FEBF5371885D80734A40'}
+Match quality: 88
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "100031678484",  # ST147PB -> ST147PA : 49 Hawthornden Gardens, Uttoxeter, Staffordshire
+Input Record:
+{'address': '49 Hawthornden Gardens, Uttoxeter, Staffordshire', 'postcode': 'ST147PB', 'polling_station_id': 'BC_32', 'uprn': '100031678484', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-bc_32-49-hawthornden-gardens-uttoxeter-staffordshire-st147pb'}
+Addressbase record:
+{'address': '49 HAWTHORNDEN AVENUE, UTTOXETER', 'postcode': 'ST147PA', 'location': '0101000020E61000004D5A023ADD23FEBF52932A9B83734A40'}
+Match quality: 87
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10008039684",  # DE139BT -> DE139BS : Moseley Mews Cottage, Mosley Mews, Rolleston on Dove, Staffordshire
+Input Record:
+{'address': 'Moseley Mews Cottage, Mosley Mews, Rolleston on Dove, Staffordshire', 'postcode': 'DE139BT', 'polling_station_id': 'BM_40', 'uprn': '10008039684', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-bm_40-moseley-mews-cottage-mosley-mews-rolleston-on-dove-staffordshire-de139bt'}
+Addressbase record:
+{'address': 'MOSELEY MEWS COTTAGE, HALL GROUNDS, ROLLESTON-ON-DOVE, BURTON-ON-TRENT', 'postcode': 'DE139BS', 'location': '0101000020E610000094F59B89E982FABF01ADAF647D6C4A40'}
+Match quality: 69
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10009260103",  # DE139AZ -> DE139AB : 118 Station Road, Rolleston on Dove, Staffordshire
+Input Record:
+{'address': '118 Station Road, Rolleston on Dove, Staffordshire', 'postcode': 'DE139AZ', 'polling_station_id': 'BM_40', 'uprn': '10009260103', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-bm_40-118-station-road-rolleston-on-dove-staffordshire-de139az'}
+Addressbase record:
+{'address': '118 STATION ROAD, ROLLESTON-ON-DOVE, BURTON-ON-TRENT', 'postcode': 'DE139AB', 'location': '0101000020E6100000334A3C45B337FABF4DA25EF0696C4A40'}
+Match quality: 77
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10009259958",  # DE139AZ -> DE139AB : 120 Station Road, Rolleston on Dove, Staffordshire
+Input Record:
+{'address': '120 Station Road, Rolleston on Dove, Staffordshire', 'postcode': 'DE139AZ', 'polling_station_id': 'BM_40', 'uprn': '10009259958', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-bm_40-120-station-road-rolleston-on-dove-staffordshire-de139az'}
+Addressbase record:
+{'address': '120 STATION ROAD, ROLLESTON-ON-DOVE, BURTON-ON-TRENT', 'postcode': 'DE139AB', 'location': '0101000020E61000000C129150E936FABFDD065A26686C4A40'}
+Match quality: 77
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10009257486",  # DE139HR -> DE139GX : Fauld Lodge, Fauld, Staffordshire
+Input Record:
+{'address': 'Fauld Lodge, Fauld, Staffordshire', 'postcode': 'DE139HR', 'polling_station_id': 'BY_62', 'uprn': '10009257486', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-by_62-fauld-lodge-fauld-staffordshire-de139hr'}
+Addressbase record:
+{'address': 'FAULD LODGE, FAULD LANE, FAULD, TUTBURY, BURTON-ON-TRENT', 'postcode': 'DE139GX', 'location': '0101000020E6100000254A31F6146FFBBF0FFC5EF9E26D4A40'}
+Match quality: 68
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "200002869111",  # DE139NR -> DE139NP : High Croft, The Balk, Tutbury, Staffordshire
+Input Record:
+{'address': 'High Croft, The Balk, Tutbury, Staffordshire', 'postcode': 'DE139NR', 'polling_station_id': 'BY_63', 'uprn': '200002869111', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-by_63-high-croft-the-balk-tutbury-staffordshire-de139nr'}
+Addressbase record:
+{'address': 'HIGH CROFT, THE BALK, TUTBURY, BURTON-ON-TRENT', 'postcode': 'DE139NP', 'location': '0101000020E61000002654707841E4FABF210EC814626D4A40'}
+Match quality: 78
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10009257196",  # DE62GW -> DE62HA : Parkgate Lodge, Wootton Estate, Wootton Road, Ellastone, Derbyshire
+Input Record:
+{'address': 'Parkgate Lodge, Wootton Estate, Wootton Road, Ellastone, Derbyshire', 'postcode': 'DE62GW', 'polling_station_id': 'CC_66', 'uprn': '10009257196', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-cc_66-parkgate-lodge-wootton-estate-wootton-road-ellastone-derbyshire-de62gw'}
+Addressbase record:
+{'address': 'PARKGATE LODGE, WOOTTON ROAD, ELLASTONE, ASHBOURNE', 'postcode': 'DE62HA', 'location': '0101000020E6100000F8B5E4A72782FDBFB543B2367C7F4A40'}
+Match quality: 68
+
+WARNING: Removing UPRN due to postcode mismatch.
+SUGGESTION: "10008036394",  # DE62GW -> DE62HA : Park Gate Cottage, Wootton, Ashbourne, Derbyshire
+Input Record:
+{'address': 'Park Gate Cottage, Wootton, Ashbourne, Derbyshire', 'postcode': 'DE62GW', 'polling_station_id': 'CE_66', 'uprn': '10008036394', 'council': <Council: East Staffordshire Borough Council>, 'slug': 'e07000193-ce_66-park-gate-cottage-wootton-ashbourne-derbyshire-de62gw'}
+Addressbase record:
+{'address': 'PARKGATE COTTAGE, WOOTTON ROAD, ELLASTONE, ASHBOURNE', 'postcode': 'DE62HA', 'location': '0101000020E6100000FD16F8E52770FDBF4EDF217B737F4A40'}
+Match quality: 72
+
+Importing data for East Staffordshire Borough Council...
+----------------------------------
+Contextual Data:
+Total UPRNs in ONSUD: 69,977
+Total UPRNs in AddressBase: 58,704
+Total Dwellings from 2011 Census: 49,103
+----------------------------------
+Addresses: Found 43,272 rows in input file
+----------------------------------
+==================================
+[1m        DATA QUALITY REPORT[0m
+==================================
+
+[1mSTATIONS IMPORTED                : 82[0m
+----------------------------------
+[92m - with point                    : 82[0m
+[93m - without point                 : 0[0m
+[92m - with address                  : 82[0m
+[93m - without address               : 0[0m
+
+
+[1mADDRESSES IMPORTED               : 42728[0m
+----------------------------------
+[92m[1m - with station id               : 42728[0m
+[92m   - valid station id refs       : 42728[0m
+[93m   - invalid station id refs     : 0[0m
+[93m - without station id            : 0[0m
+----------------------------------
+[93m - with UPRN                     : 42488[0m
+
+

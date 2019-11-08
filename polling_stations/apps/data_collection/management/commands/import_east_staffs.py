@@ -27,9 +27,14 @@ class Command(BaseDemocracyCountsCsvImporter):
 
     def station_record_to_dict(self, record):
 
+        # Shobnall Primary School
         if record.stationcode == "BP_45":
-            # record = record._replace(polling_place_postcode="")
             record = record._replace(xordinate="422735")
             record = record._replace(yordinate="323640")
+
+        # St Giles Church, Croxden Lane
+        if record.stationcode == "AA_1":
+            record = record._replace(xordinate="406486")
+            record = record._replace(yordinate="339871")
 
         return super().station_record_to_dict(record)
