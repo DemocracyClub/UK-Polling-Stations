@@ -15,7 +15,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "100061498464",  # TW200BJ -> TW200BQ : Chestnuts, Royal Holloway University - Halls of Residence, Englefield Green, Egham, Surrey
             "200001732773",  # TW208HJ -> TW200HJ : Brook Lodge, Wick Road, Englefield Green, Egham, Surrey
-            # "10002019662",  # KT153NT -> KT153QE : Accomodation at The Black Prince, Woodham Lane
         ]:
             rec["accept_suggestion"] = True
 
