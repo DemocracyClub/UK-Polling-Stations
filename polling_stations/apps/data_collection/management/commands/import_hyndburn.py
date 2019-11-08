@@ -37,7 +37,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "BB5 4BQ",  # Confusion between Queens Road West in Accrington and Church
             "BB5 3BB",  # Confusion between High Streets in Accrington and Oswaldtwistle
         ]:
-            # Confusion between Stanhill [Road] and Stanhill Lane
             rec["accept_suggestion"] = False
 
         if uprn == "10070894060":
