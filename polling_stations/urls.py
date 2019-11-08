@@ -68,8 +68,6 @@ extra_patterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^feedback/", include("feedback.urls")),
     url(r"^report_problem/", include("bug_reports.urls")),
-    url(r"^league_table/", include("data_collection.urls")),
-    url(r"^dashboard/", include("dashboard.urls", namespace="dashboard")),
     url(r"^example/$", ExamplePostcodeView.as_view(), name="example"),
     url(r"^email/", include("dc_signup_form.urls", namespace="dc_signup_form")),
     url(
@@ -81,6 +79,11 @@ extra_patterns = [
         name="about",
     ),
 ]
+
+if settings.DEBUG:
+    extra_patterns.append(
+        url(r"^dashboard/", include("dashboard.urls", namespace="dashboard"))
+    )
 
 PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:

@@ -2,7 +2,6 @@ import json
 import operator
 from functools import reduce
 
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import connection
 from django.db.models import Q
 from django.http import JsonResponse
@@ -11,20 +10,16 @@ from django.views import View
 from django.views.generic import TemplateView, DetailView, ListView
 
 from councils.models import Council
+from data_finder.helpers import RoutingHelper
 from pollingstations.models import ResidentialAddress, PollingStation
 
 
-class DashboardMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_staff
-
-
-class IndexView(DashboardMixin, ListView):
+class IndexView(ListView):
     queryset = Council.objects.select_related("dataquality")
     template_name = "dashboard/council_list.html"
 
 
-class CouncilDetailView(DashboardMixin, DetailView):
+class CouncilDetailView(DetailView):
     queryset = Council.objects.all()
     template_name = "dashboard/council_detail.html"
 
@@ -43,7 +38,7 @@ class CouncilDetailView(DashboardMixin, DetailView):
                 ) AS subquery
                 WHERE multipoint IS NOT NULL
                 ORDER BY maxdistance DESC
-                LIMIT 10;
+                LIMIT 100;
             """,
                 (object.pk,),
             )
@@ -56,16 +51,17 @@ class CouncilDetailView(DashboardMixin, DetailView):
                    ra.address,
                    ra.slug,
                    ra.postcode,
-                   st_distance(st_transform(ps.location, 27700), st_transform(ra.location, 27700))::int AS distance
+                   st_distance(st_transform(ps.location, 27700),
+                               st_transform(COALESCE(ra.location, onspd.location), 27700))::int AS distance
                 FROM pollingstations_pollingstation ps,
                      pollingstations_residentialaddress ra
+                LEFT OUTER JOIN uk_geo_utils_onspd onspd ON onspd.pcd = ra.postcode
                 WHERE ps.council_id=ra.council_id
                   AND ra.polling_station_id=ps.internal_council_id
                   AND ra.council_id=%s
-                  AND ra.location IS NOT NULL
                   AND ps.location IS NOT NULL
                 ORDER BY distance DESC
-                LIMIT 10;
+                LIMIT 100;
             """,
                 (object.pk,),
             )
@@ -83,6 +79,7 @@ class PostCodeView(TemplateView):
         return {
             "postcode": postcode,
             "addresses": ResidentialAddress.objects.filter(postcode=postcode),
+            "routing_helper": RoutingHelper(postcode),
         }
 
 
@@ -151,6 +148,7 @@ class PostCodeGeoJSONView(View):
                                     residential_address.polling_station_id,
                                 )
                             ],
+                            "uprn": residential_address.uprn,
                             "url": reverse(
                                 "address_view", args=(residential_address.slug,)
                             ),
@@ -163,7 +161,7 @@ class PostCodeGeoJSONView(View):
         )
 
 
-class PollingStationDetailView(DashboardMixin, DetailView):
+class PollingStationDetailView(DetailView):
     template_name = "dashboard/pollingstation_detail.html"
     queryset = PollingStation.objects.all()
 

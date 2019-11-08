@@ -5,7 +5,7 @@
 {% block page_title %}{{ pollingstation.address }}{% endblock page_title %}
 
 {% block content %}
-<h1>{{ pollingstation.address }}</h1>
+    <h1>{{ pollingstation.address }}</h1>
 
     <p><a href="{% url "dashboard:council_detail" pollingstation.council_id %}">{{ pollingstation.council }}</a></p>
 

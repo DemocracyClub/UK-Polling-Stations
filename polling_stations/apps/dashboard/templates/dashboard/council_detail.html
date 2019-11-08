@@ -5,15 +5,15 @@
 {% block page_title %}{{ council }} - {% trans "Dashboard" %}{% endblock page_title %}
 
 {% block content %}
-<h1>{{ council }}</h1>
+    <h1>{{ council }}</h1>
 
-    <section>
-    <h2>Report</h2>
-    <pre>{{ council.dataquality.report }}</pre>
+    <section class="card">
+        <h2>Report</h2>
+        <pre>{{ council.dataquality.report }}</pre>
     </section>
 
 
-    <section>
+    <section class="card">
         <h2>Postcodes by diameter</h2>
         <table>
             <thead>
@@ -23,40 +23,40 @@
             </tr>
             </thead>
             <tbody>{% for postcode, diameter in postcodes_by_diameter %}
-            <tr>
-                <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a></td>
-                <td>{{ diameter|intcomma }}</td>
-            </tr>{% endfor %}
+                <tr>
+                    <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a> (<a href="{% url "postcode_view" postcode %}">site</a>)</td>
+                    <td>{{ diameter|intcomma }}</td>
+                </tr>{% endfor %}
 
             </tbody>
         </table>
     </section>
 
-    <section>
-    <h2>Largest distances to polling places</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Address</th>
-            <th>Post code</th>
-            <th>Polling station</th>
-            <th>Distance (metres)</th>
-        </tr>
-        </thead>
-        <tbody>{% for pollingstation_id, address, slug, postcode, distance in distances_to_stations %}
-        <tr>
-            <td>
-<a href="{% url "address_view" slug %}">{{ address }}</a>
-            </td>
-                <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a></td>
-    <td>{{ pollingstation_id }}</td>
-        <td>{{ distance|intcomma }}</td>
-        </tr>{%  endfor %}
-        </tbody>
-    </table>
+    <section class="card">
+        <h2>Largest distances to polling places</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Address</th>
+                <th>Post code</th>
+                <th>Polling station</th>
+                <th>Distance (metres)</th>
+            </tr>
+            </thead>
+            <tbody>{% for pollingstation_id, address, slug, postcode, distance in distances_to_stations %}
+                <tr>
+                    <td>
+                        <a href="{% url "address_view" slug %}">{{ address }}</a>
+                    </td>
+                    <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a> (<a href="{% url "postcode_view" postcode %}">site</a>)</td>
+                    <td>{{ pollingstation_id }}</td>
+                    <td>{{ distance|intcomma }}</td>
+                </tr>{%  endfor %}
+            </tbody>
+        </table>
     </section>
 
-    <section>
+    <section class="card">
         <h2>Polling places</h2>
         <table>
             <thead>
@@ -68,15 +68,13 @@
             </tr>
             </thead>
             <tbody>{% for pollingstation in pollingstation_list %}
-            <tr>
-                <td><a href="{% url "dashboard:pollingstation_detail" pollingstation.council_id pollingstation.internal_council_id %}">{{ pollingstation.internal_council_id }}</a></td>
-                <td>{{ pollingstation.address }}</td>
-                <td>{{ pollingstation.postcode }}</td>
-                <td>{{ pollingstation.location|yesno }}</td>
-            </tr>{% endfor %}
+                <tr>
+                    <td><a href="{% url "dashboard:pollingstation_detail" pollingstation.council_id pollingstation.internal_council_id %}">{{ pollingstation.internal_council_id }}</a></td>
+                    <td>{{ pollingstation.address }}</td>
+                    <td>{{ pollingstation.postcode }}</td>
+                    <td>{{ pollingstation.location|yesno }}</td>
+                </tr>{% endfor %}
             </tbody>
         </table>
     </section>
-
-
 {% endblock content %}

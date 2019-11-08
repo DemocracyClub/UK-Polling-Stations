@@ -157,7 +157,6 @@ PROJECT_APPS = (
     "addressbase",
     "api",
     "councils",
-    "dashboard",
     "data_collection",
     "data_finder",
     "dc_theme",
@@ -278,6 +277,9 @@ try:
 
 except ImportError:
     pass
+
+if DEBUG:
+    INSTALLED_APPS += ("dashboard",)
 
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
