@@ -1,47 +1,32 @@
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    srid = 27700
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000146"
-    districts_name = "parl.2017-06-08/Version 3/Polling_districts.shp"
-    stations_name = "parl.2017-06-08/Version 3/Polling_Stations_June17.shp"
-    elections = ["parl.2017-06-08"]
+    stations_name = "parl.2019-12-12/Version 1/west-norfolk.gov.uk-1572885849000-.tsv"
+    addresses_name = "parl.2019-12-12/Version 1/west-norfolk.gov.uk-1572885849000-.tsv"
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
-    def district_record_to_dict(self, record):
-        code = str(record[2]).strip()
-        return {"internal_council_id": code, "name": str(record[1]).strip()}
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
 
-    def parse_string(self, text):
-        try:
-            return text.strip().decode("utf-8")
-        except AttributeError:
-            return text.strip()
+        if uprn == "10024107639":
+            rec["postcode"] = ""
+            rec["accept_suggestion"] = False
 
-    def get_address(self, record):
-        address_parts = [self.parse_string(x) for x in record[2:7] if x != "NULL"]
-        address = "\n".join(address_parts)
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n").strip()
-        return address
+        if record.addressline1 == "8 Lions Close":
+            rec["postcode"] = "PE38 0AT"
+
+        return rec
 
     def station_record_to_dict(self, record):
-        stations = []
 
-        codes = str(record[11]).strip()
+        if record.polling_place_id == "18049":
+            record = record._replace(polling_place_postcode="PE14 9QH")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
 
-        if codes == "NOT USED":
-            return None
-        codes = codes.split(" ")
-
-        for code in codes:
-            stations.append(
-                {
-                    "internal_council_id": code,
-                    "postcode": str(record[8]).strip(),
-                    "address": self.get_address(record),
-                    "polling_district_id": code,
-                }
-            )
-
-        return stations
+        return super().station_record_to_dict(record)
