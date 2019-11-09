@@ -80,7 +80,7 @@ extra_patterns = [
     ),
 ]
 
-if settings.DEBUG:
+if "dashboard" in settings.INSTALLED_APPS:
     extra_patterns.append(
         url(r"^dashboard/", include("dashboard.urls", namespace="dashboard"))
     )
