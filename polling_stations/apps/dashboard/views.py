@@ -55,7 +55,8 @@ class CouncilDetailView(DetailView):
                                st_transform(COALESCE(ra.location, onspd.location), 27700))::int AS distance
                 FROM pollingstations_pollingstation ps,
                      pollingstations_residentialaddress ra
-                LEFT OUTER JOIN uk_geo_utils_onspd onspd ON onspd.pcd = ra.postcode
+                LEFT OUTER JOIN uk_geo_utils_onspd onspd ON
+                    onspd.pcds=LEFT(ra.postcode, LENGTH(ra.postcode)-3) || ' ' || RIGHT(ra.postcode, 3)
                 WHERE ps.council_id=ra.council_id
                   AND ra.polling_station_id=ps.internal_council_id
                   AND ra.council_id=%s
