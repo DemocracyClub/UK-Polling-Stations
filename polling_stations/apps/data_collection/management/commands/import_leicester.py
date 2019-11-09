@@ -5,9 +5,14 @@ from data_collection.management.commands import (
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "E06000016"
-    addresses_name = "local.2019-05-02/Version 1/Democracy Club LCC Polling Places List 2 May 2019.csv"
-    stations_name = "local.2019-05-02/Version 1/Democracy Club LCC Polling Places List 2 May 2019.csv"
-    elections = ["local.2019-05-02"]
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019leices.tsv"
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019leices.tsv"
+    )
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    csv_encoding = "windows-1252"
+    allow_station_point_from_postcode = False
 
     station_postcode_search_fields = [
         "polling_place_postcode",
@@ -52,6 +57,9 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
             "2465184335",  # LE21DF -> LE21DB : First Floor Flat 2, 38 St Peters Road, Leicester
             "2465184334",  # LE21DF -> LE21DB : Ground Floor Flat 1, 38 St Peters Road, Leicester
             "2465179600",  # LE21DF -> LE21DB : 40 St Peters Road, Leicester
+            "2465159692",  # LE31BH -> LE31BL : Flat 1, 10 Fullhurst Avenue, Leicester
+            "2465156924",  # LE31BH -> LE31BL : Flat Over Shop, 6 Fullhurst Avenue, Leicester
+            "2465192335",  # LE20PF -> LE17GZ : Flat 1, 79A London Road, Leicester
         ]:
             rec["accept_suggestion"] = True
 
@@ -59,10 +67,10 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
             "2465161850",  # LE54HH -> LE54HG : 337 St Saviours Road, Leicester
             "2465100401",  # LE20GU -> LE20GH : 63 Melbourne Road, Leicester
             "2465167645",  # LE46PN -> LE46QJ : The Flat, 43 Melton Road, Leicester
+            "2465199613",  # LE35HU -> LE45BD : Cluster Room Second Floor 327 Tudor Studios, 164 Tudor Road, Leicester
+            "2465199614",  # LE35HU -> LE45BD : Cluster Room Second Floor 328 Tudor Studios, 164 Tudor Road, Leicester
+            "2465199616",  # LE35HU -> LE51WU : Cluster Room Second Floor 330 Tudor Studios, 164 Tudor Road, Leicester
         ]:
-            rec["accept_suggestion"] = False
-
-        if uprn in ["2465164584", "2465164583", "2465164582"]:
             rec["accept_suggestion"] = False
 
         if (
