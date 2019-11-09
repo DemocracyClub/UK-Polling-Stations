@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Dashboard" %}{% endblock page_title %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+
+    <section class="card">
+        <table>
+            <thead>
+            <tr>
+                <th>Council</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Stations</th>
+                <th>Districts</th>
+                <th>Addresses</th>
+            </tr>
+            </thead>
+            <tbody>{% for council in council_list %}
+                <tr>
+                    <td>
+                        <a href="{% url "dashboard:council_detail" pk=council.pk %}">{{ council }}</a>
+                    </td>
+                    <td>{% if council.email %}<a href="mailto:{{ council.email }}">{{ council.email }}</a>{% endif %}</td>
+                    <td>{{ council.phone }}</td>
+                    <td>{{ council.dataquality.num_stations|default:"" }}</td>
+                    <td>{{ council.dataquality.num_districts|default:"" }}</td>
+                    <td>{{ council.dataquality.num_addresses|default:"" }}</td>
+                </tr>{% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock content %}

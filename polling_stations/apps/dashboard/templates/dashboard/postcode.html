@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load pipeline %}
+
+{% block page_title %}{% trans "Postcode:" %} {{ postcode }}{% endblock page_title %}
+
+{% block extra_page_css %}
+    {% stylesheet 'map' %}
+{% endblock extra_page_css %}
+
+{% block extra_javascript %}
+    {% javascript 'map' %}
+{% endblock extra_javascript %}
+
+
+{% block in_page_javascript %}
+    <script type="text/javascript">
+        (function() {
+
+            var typeIcons = {
+                'pollingstation': 'fa-check-square',
+                'residentialaddress': 'fa-home'
+            };
+
+            tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data ⓒ <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+                subdomains: 'abc'
+            });
+
+            map = L.map('area_map', {
+                layers: [tiles]
+            });
+            fetch('{% url "dashboard:postcode-geojson" postcode %}').then((response) => {
+                response.json().then((json) => {
+                    layer = L.geoJSON(json, {
+                        pointToLayer: (feature, latlng) => {
+                            var popup = document.createElement("div");
+                            popup.appendChild(document.createElement("p")).textContent = feature.properties.address;
+                            if (feature.properties.uprn) {
+                                popup.appendChild(document.createElement("p")).textContent = feature.properties.uprn;
+                            }
+                            var viewLink = popup.appendChild(document.createElement("a"));
+                            viewLink.textContent = "View";
+                            viewLink.setAttribute("href", feature.properties.url);
+                            return L.marker(latlng, {icon: L.ExtraMarkers.icon({
+                                    icon: typeIcons[feature.properties.type] || 'fa-question',
+                                    markerColor: feature.properties.color,
+                                    iconColor: 'white',
+                                    shape: 'circle',
+                                    prefix: 'fa'
+                                })}).bindPopup(popup);
+                        },
+                    });
+                    layer.addTo(map);
+                    map.fitBounds(layer.getBounds());
+                })
+            });
+        })();
+    </script>
+{% endblock in_page_javascript %}
+
+
+{% block content %}
+    <h1>{{ postcode }}</h1>
+
+
+    <div id="area_map" class="card">
+
+    </div>
+
+    <section class="card">
+        <h2>User view</h2>
+
+        <p><a href="{% url "postcode_view" postcode %}">View ({{ routing_helper.route_type }})</a></p>
+    </section>
+
+    <section class="card">
+        <h2>Addresses</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Address</th>
+                <th>UPRN</th>
+                <th>Polling place</th>
+            </tr>
+            </thead>
+            <tbody>{% for address in addresses %}
+                <tr>
+                    <td>{{ address.address }}</td>
+                    <td>{{ address.uprn }}</td>
+                    <td><a href="{% url "dashboard:pollingstation_detail" address.council_id address.polling_station_id %}">{{ address.polling_station_id }}</a></td>
+                </tr>{% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+{% endblock content %}

@@ -81,6 +81,11 @@ extra_patterns = [
     ),
 ]
 
+if "dashboard" in settings.INSTALLED_APPS:
+    extra_patterns.append(
+        url(r"^dashboard/", include("dashboard.urls", namespace="dashboard"))
+    )
+
 PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:
     extra_patterns += [url(r"^%s/" % EMBED, include("whitelabel.urls"))]

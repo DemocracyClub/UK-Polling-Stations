@@ -134,6 +134,7 @@ WSGI_APPLICATION = "polling_stations.wsgi.application"
 INSTALLED_APPS = (
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.humanize",
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.messages",
@@ -276,6 +277,9 @@ try:
 
 except ImportError:
     pass
+
+if DEBUG:
+    INSTALLED_APPS += ("dashboard",)
 
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:

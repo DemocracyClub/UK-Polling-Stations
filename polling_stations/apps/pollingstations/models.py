@@ -7,6 +7,7 @@ import urllib.parse
 
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
@@ -132,6 +133,9 @@ class ResidentialAddress(models.Model):
         """
         self.postcode = Postcode(self.postcode).without_space
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("address_view", args=(self.slug,))
 
 
 class CustomFinderManager(models.Manager):
