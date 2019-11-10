@@ -333,6 +333,7 @@ class BaseHalaroseCsvImporter(
         "pollingstationaddress_5",
     ]
     residential_uprn_field = "uprn"
+    allow_station_point_from_postcode = True
 
     def get_station_hash(self, record):
         return "-".join(
@@ -353,6 +354,9 @@ class BaseHalaroseCsvImporter(
         return address
 
     def get_station_point(self, record):
+        if not self.allow_station_point_from_postcode:
+            return None
+
         location = None
 
         # geocode using postcode
@@ -464,6 +468,7 @@ class BaseDemocracyCountsCsvImporter(
     postcode_field = "postcode"
     station_id_field = "stationcode"
     residential_uprn_field = "uprn"
+    allow_station_point_from_postcode = True
 
     def address_record_to_dict(self, record):
 
@@ -491,6 +496,9 @@ class BaseDemocracyCountsCsvImporter(
         }
 
     def get_station_point(self, record):
+        if not self.allow_station_point_from_postcode:
+            return None
+
         location = None
 
         badvalues = ["", "0", "0.00"]
