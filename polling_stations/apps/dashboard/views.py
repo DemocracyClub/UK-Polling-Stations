@@ -61,6 +61,7 @@ class CouncilDetailView(DetailView):
                   AND ra.polling_station_id=ps.internal_council_id
                   AND ra.council_id=%s
                   AND ps.location IS NOT NULL
+                  AND COALESCE(ra.location, onspd.location) IS NOT NULL
                 ORDER BY distance DESC
                 LIMIT 100;
             """,
