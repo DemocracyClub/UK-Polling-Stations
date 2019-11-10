@@ -3,17 +3,14 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000043"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 European ElectionND.CSV"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 European ElectionND.CSV"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy Club - Polling Station Data - North Devon Council.CSV"
+    stations_name = "parl.2019-12-12/Version 1/Democracy Club - Polling Station Data - North Devon Council.CSV"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = True
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
-        postcode = record.addressline6
-
-        if postcode in ["EX32 8QJ"]:
-            return None
 
         if uprn in [
             "10012095333",  # EX379AB -> EX379AR : Umberleigh Mill, Umberleigh, Devon
@@ -32,7 +29,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100040259243",  # EX331AA -> EX332ES : Flat 18, Cross Tree Centre, Braunton, North Devon
             "100040259242",  # EX331AA -> EX332ES : Flat 17, Cross Tree Centre, Braunton, North Devon
             "100040259242",  # EX331AF -> EX332ES : 17 Sunny Nook, Cross Tree, Braunton, North Devon
-            "10000489519",  # EX331LG -> EX331LS : Hillsview Cottage, Saunton, Braunton, Devon.
             "100040261566",  # EX332AA -> EX332AF : 44 South Street, Braunton, Devon.
             "10012098448",  # EX379EF -> EX379ES : Millmoor Cottage, Burrington, Umberleigh, Devon
             "100040245337",  # EX327DL -> EX311EW : 11 Queen Anne`s Court Flats Castle Street, Barnstaple, Devon.
@@ -42,7 +38,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10012097418",  # EX379ES -> EX379ET : Colleton Mill Cottage, Colleton Mills, Umberleigh, Devon
             "10000486684",  # EX340AN -> EX340AP : Seaspray, 2 Borough Road, Combe Martin, Ilfracombe, Devon
             "10012091238",  # EX340NF -> EX340NE : Glendale, Wood Lane, Combe Martin, Devon
-            "10012091253",  # EX340NF -> EX340NE : The Barn, Glendale, Wood Lane, Combe Martin, Devon
             "10012102485",  # EX340AT -> EX340BB : Whitegates House, Woodlands, Combe Martin, Devon
             "10012090155",  # EX169JW -> EX363PE : Oak Cottage, East Anstey, Tiverton, Devon
             "100040249218",  # EX313XW -> EX313HW : 21 Littlemoor Close, West Yelland, Barnstaple
@@ -50,7 +45,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10012090612",  # EX313PL -> EX313PB : Meadow View, Newton Tracey, Barnstaple, Devon
             "10012101587",  # EX349QF -> EX349QE : Flat B, 61/62 High Street, Ilfracombe, Devon
             "100040265196",  # EX349QF -> EX349QE : Flat A, 61/62 High Street, Ilfracombe, Devon
-            "100040265421",  # EX349HX -> EX349NW : Pimpernell Lodge, Castle Hill Road, Ilfracombe, Devon
             "100040265157",  # EX349EZ -> EX349HE : Flat 5/6, 141 High Street, Ilfracombe, Devon
             "100040265549",  # EX349DA -> EX349NL : Flat 3 Portland Villas, Hostle Park Road, Hostle Park Road, Ilfracombe, Devon
             "100040265547",  # EX349DA -> EX349NL : Flat 1 Portland Villas, Hostle Park Road, Hostle Park Road, Ilfracombe, Devon
@@ -65,7 +59,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100040265928",  # EX348PD -> EX348JL : Cedars, Marlborough Road, Ilfracombe, Devon
             "100041138737",  # EX348HA -> EX348LA : 2 Winsham Terrace, Ilfracombe, Devon
             "100041138738",  # EX348HA -> EX348LA : 3 Winsham Terrace, Ilfracombe, Devon
-            "10094236734",  # EX348FS -> EX348ER : Beau Lodge, Footpath 58, Ilfracombe, Devon
             "10012097008",  # EX348LL -> EX348LN : 2 Whitestone Cottage, Lincombe, Lee, Ilfracombe
             "10012098726",  # EX348LL -> EX348LN : 1 Whitestone Cottage, Lincombe, Lee, Ilfracombe
             "10012091795",  # EX314NB -> EX314ND : The Old Chapel House, Kentisbury Ford, Barnstaple
@@ -73,12 +66,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10090338354",  # EX314ND -> EX314NB : Bales Croft, Kentisbury Ford, Barnstaple
             "10090338355",  # EX314ND -> EX314NB : Rose Croft, Kentisbury Ford, Barnstaple
             "10000489210",  # EX314RF -> EX314RA : Highview Woolhanger Farm, Woolhanger, Parracombe, Barnstaple
-            "10012095654",  # EX356EW -> EX356EN : Manor Cottage, Countisbury Hill, Lynmouth, Devon
-            "10012095653",  # EX356EW -> EX356EN : The Manor House, Countisbury Hill, Lynmouth, Devon
             "10000487967",  # EX314DT -> EX314DU : Springfield Farm, Middle Marwood, Barnstaple, Devon
             "10090333861",  # EX363PT -> EX364RR : Little Moor Farm, Botreaux Mill, South Molton, Devon
             "10090337950",  # EX363NX -> EX364RR : Wild Boar Woodland, West Anstey, South Molton
-            "10012096021",  # EX331JA -> EX331HX : Withycot, Spreacombe, Braunton
             "100040243728",  # EX320PE -> EX327PE : 2 Caravan Birch Wood, Birch Road, Barnstaple, Devon
             "100040250867",  # EX329FQ -> EX329BQ : 47 A, Newport Road, Barnstaple, Devon.
             "10012099559",  # EX363QF -> EX364EH : Mill-Haven, Bish Mill, South Molton
@@ -106,7 +96,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10000487730",  # EX313PH -> EX313PP : Hopesay Barn, East Woodlands, Newton Tracey, Barnstaple, Devon
             "10090337291",  # EX347HH -> EX347AT : Mobile Home 1 Smallacre Cottages, Mortehoe Station Road, Mortehoe, Woolacombe, Devon
             "10090337978",  # EX363EF -> EX314QN : Woodland Hideaway, Drewstone Farm, Bishops Nympton, South Molton, Devon
-            "100041037614",  # EX349DF -> EX311BG : 14 High Street, Ilfracombe, Devon
         ]:
             rec["accept_suggestion"] = False
 
