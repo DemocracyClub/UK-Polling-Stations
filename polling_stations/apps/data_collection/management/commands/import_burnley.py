@@ -6,9 +6,10 @@ from data_collection.management.commands import (
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "E07000117"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019burn.CSV"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019burn.CSV"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019burn.CSV"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019burn.CSV"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -31,7 +32,6 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         if uprn in [
             "100012536092",  # BB102JF -> BB101XH : 5 Burnley Road, Briercliffe, Burnley
             "100012536996",  # BB112QR -> BB112RQ : Whinn Scarr, Moseley Road, Habergham Eaves, Burnley
-            "100012537257",  # BB115NZ -> BB113ES : Springfield House, Clowbridge, Burnley
             "10003759507",  # BB127LA -> BB128HF : 11 Church Street, Hapton, Burnley
             "200001589427",  # BB115SA -> BB128TX : 1 Mere Court, Burnley
         ]:
@@ -40,13 +40,10 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         return rec
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id == "3683":
-            record = record._replace(polling_place_postcode="BB11 3HL")
+        if record.polling_place_id == "4502":
+            record = record._replace(polling_place_postcode="BB10 4SN")
 
-        if record.polling_place_id == "3656":
-            record = record._replace(polling_place_postcode="BB11 5LZ")
-
-        if record.polling_place_id == "3664":
+        if record.polling_place_id == "4447":
             record = record._replace(polling_place_postcode="")
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.292241, 53.790222, srid=4326)
