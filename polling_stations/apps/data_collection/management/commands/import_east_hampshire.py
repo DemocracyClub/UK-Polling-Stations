@@ -8,7 +8,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019EHDC.tsv"
     elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = True
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
         # Jubilee Hall, Crouch Lane
