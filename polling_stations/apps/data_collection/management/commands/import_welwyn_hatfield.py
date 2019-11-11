@@ -11,7 +11,6 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     stations_name = "local.2019-05-02/Version 1/stations.csv"
     elections = ["parl.2019-12-12"]
     csv_delimiter = ","
-    allow_station_point_from_postcode = False
 
     def get_station_hash(self, record):
         return "-".join([record.code.strip()])
@@ -34,6 +33,14 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         location = self.get_station_point(record)
         code = record.code.strip()
         postcode = record.postcode.strip()
+
+        if code == "BFB":
+            return {
+                "internal_council_id": code,
+                "postcode": "AL7 2BQ",
+                "address": "Panshanger Hall\nHardings\nWelwyn Garden City\nHertfordshire",
+                "location": location,
+            }
 
         return {
             "internal_council_id": code,
