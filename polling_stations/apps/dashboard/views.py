@@ -38,7 +38,7 @@ class CouncilDetailView(DetailView):
                 ) AS subquery
                 WHERE multipoint IS NOT NULL
                 ORDER BY maxdistance DESC
-                LIMIT 100;
+                LIMIT 20;
             """,
                 (object.pk,),
             )
@@ -47,22 +47,26 @@ class CouncilDetailView(DetailView):
         with connection.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT ps.internal_council_id,
-                   ra.address,
-                   ra.slug,
-                   ra.postcode,
-                   st_distance(st_transform(ps.location, 27700),
-                               st_transform(COALESCE(ra.location, onspd.location), 27700))::int AS distance
+                SELECT
+                    ps.internal_council_id,
+                    ra.uprn,
+                    ra.address,
+                    ra.slug,
+                    ra.postcode,
+                    st_distance(
+                        st_transform(ps.location, 27700),
+                        st_transform(COALESCE(ra.location, onspd.location), 27700)
+                    )::int AS distance
                 FROM pollingstations_pollingstation ps,
-                     pollingstations_residentialaddress ra
+                    pollingstations_residentialaddress ra
                 LEFT OUTER JOIN uk_geo_utils_onspd onspd ON
                     onspd.pcds=LEFT(ra.postcode, LENGTH(ra.postcode)-3) || ' ' || RIGHT(ra.postcode, 3)
                 WHERE ps.council_id=ra.council_id
-                  AND ra.polling_station_id=ps.internal_council_id
-                  AND ra.council_id=%s
-                  AND ps.location IS NOT NULL
-                  AND COALESCE(ra.location, onspd.location) IS NOT NULL
-                ORDER BY distance DESC
+                    AND ra.polling_station_id=ps.internal_council_id
+                    AND ra.council_id=%s
+                    AND ps.location IS NOT NULL
+                    AND COALESCE(ra.location, onspd.location) IS NOT NULL
+                ORDER BY distance DESC, ra.uprn, ra.slug
                 LIMIT 100;
             """,
                 (object.pk,),

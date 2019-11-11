@@ -37,14 +37,16 @@
         <table>
             <thead>
             <tr>
+                <th>UPRN</th>
                 <th>Address</th>
                 <th>Post code</th>
                 <th>Polling station</th>
                 <th>Distance (metres)</th>
             </tr>
             </thead>
-            <tbody>{% for pollingstation_id, address, slug, postcode, distance in distances_to_stations %}
+            <tbody>{% for pollingstation_id, uprn, address, slug, postcode, distance in distances_to_stations %}
                 <tr>
+                    <td>{{ uprn }}</td>
                     <td>
                         <a href="{% url "address_view" slug %}">{{ address }}</a>
                     </td>
