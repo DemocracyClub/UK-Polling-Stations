@@ -1,21 +1,23 @@
-from data_collection.management.commands import (
-    BaseXpressDCCsvInconsistentPostcodesImporter,
-)
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
+
     council_id = "E06000056"
     addresses_name = (
-        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019centbed.CSV"
+        "parl.2019-12-12/Version 2/Democracy_Club__12December2019 polling stations.csv"
     )
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019centbed.CSV"
-    elections = ["europarl.2019-05-23"]
+    stations_name = (
+        "parl.2019-12-12/Version 2/Democracy_Club__12December2019 polling stations.csv"
+    )
+    elections = ["parl.2019-12-12"]
     csv_delimiter = ","
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
         # Haynes Village Hall
-        if record.polling_place_id == "11179":
+        if record.polling_place_id == "13358":
             record = record._replace(polling_place_easting="510086")
             record = record._replace(polling_place_northing="242021")
 
@@ -29,8 +31,16 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         if uprn.endswith("0000000"):
             rec["uprn"] = ""
 
+        if record.addressline1 == "Meadow Lake":
+            rec["postcode"] = "SG191NU"
         if record.addressline1 in ["4 Bunch O`nuts", "3 Bunch O`nuts"]:
             rec["postcode"] = "LU5 5DX"
+
+        if uprn in [
+            "10093351429",
+            "10014618845",
+        ]:
+            return None
 
         if uprn in [
             "10000861447",  # MK430LN -> MK430LP : 110B Lower Shelton Road, Marston Moretaine, Beds
@@ -39,8 +49,5 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
             "10001023325",  # LU55AD -> LU55ES : 48A Houghton Road, Dunstable, Beds.
         ]:
             rec["accept_suggestion"] = False
-
-        if record.addressline6 == "SG18 OJS":
-            rec["postcode"] = "SG180JS"
 
         return rec
