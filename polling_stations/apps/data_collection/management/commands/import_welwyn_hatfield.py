@@ -30,17 +30,15 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         return None
 
     def station_record_to_dict(self, record):
+        if record.code == "BFB":
+            record = record._replace(address_line1="Panshanger Hall")
+            record = record._replace(address_line2="Hardings")
+            record = record._replace(postcode="AL7 2BQ")
+        if record.code in ["BGA", "BGB"]:
+            record = record._replace(address_line1="Panshanger Football Club")
         location = self.get_station_point(record)
         code = record.code.strip()
         postcode = record.postcode.strip()
-
-        if code == "BFB":
-            return {
-                "internal_council_id": code,
-                "postcode": "AL7 2BQ",
-                "address": "Panshanger Hall\nHardings\nWelwyn Garden City\nHertfordshire",
-                "location": location,
-            }
 
         return {
             "internal_council_id": code,
