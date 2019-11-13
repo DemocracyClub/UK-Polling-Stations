@@ -1,25 +1,12 @@
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    srid = 27700
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000224"
-    districts_name = "shp/AR_RE_PollingDistricts2017"
-    stations_name = "shp/AR_RE_PollingStations2017.shp"
-    elections = ["local.west-sussex.2017-05-04", "parl.2017-06-08"]
-
-    def district_record_to_dict(self, record):
-        code = str(record[0]).strip()
-        return {
-            "internal_council_id": code,
-            "name": str(record[1]).strip(),
-            "polling_station_id": code,
-        }
-
-    def station_record_to_dict(self, record):
-
-        return {
-            "internal_council_id": str(record[1]).strip(),
-            "postcode": "",
-            "address": str(record[7]).strip(),
-        }
+    addresses_name = (
+        "parl.2019-12-12/Version 1/elections@arun.gov.uk-1572944623000-.tsv"
+    )
+    stations_name = "parl.2019-12-12/Version 1/elections@arun.gov.uk-1572944623000-.tsv"
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
