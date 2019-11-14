@@ -3,10 +3,11 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000047"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019WD.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019WD.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -17,23 +18,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             rec["accept_suggestion"] = False
 
-        if uprn == "10013755070":
-            rec["postcode"] = "EX201FQ"
-
         return rec
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "6451":
+        # Charter Hall (Polling Station No.1-4)
+        if record.polling_place_id in ["6965", "6975", "6971", "6973"]:
             record = record._replace(polling_place_uprn="10013752301")
 
-        if record.polling_place_id == "6477":
-            record = record._replace(polling_place_uprn="10013752301")
-
-        if record.polling_place_id == "6524":
-            record = record._replace(polling_place_uprn="10013752301")
-
-        if record.polling_place_id == "6502":
+        # Milton Abbot Village Halls
+        if record.polling_place_id == "7237":
             record = record._replace(polling_place_uprn="10001329795")
             record = record._replace(polling_place_postcode="")
 
