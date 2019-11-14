@@ -1,26 +1,18 @@
-from data_collection.management.commands import BaseXpressWebLookupCsvImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseXpressWebLookupCsvImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000010"
-    addresses_name = "local.2019-05-02/Version 1/PropertyPostCodePollingStationWebLookup-2019-03-26.TSV"
-    stations_name = "local.2019-05-02/Version 1/PropertyPostCodePollingStationWebLookup-2019-03-26.TSV"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019Wig.tsv"
+    stations_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019Wig.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-
-        # these co-ordinates were a missing a digit
-        if record.pollingplaceid == "4905":
-            record = record._replace(pollingplaceeasting="371720")
-        if record.pollingplaceid == "4957":
-            record = record._replace(pollingplaceeasting="356840")
-
-        return super().station_record_to_dict(record)
+    csv_encoding = "windows-1252"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
-        uprn = record.uprn.strip().lstrip("0")
+        uprn = record.property_urn.strip().lstrip("0")
 
         if uprn == "200004805060":
             rec["postcode"] = "WN7 1BT"
@@ -28,9 +20,11 @@ class Command(BaseXpressWebLookupCsvImporter):
         if uprn == "10091702455":
             rec["postcode"] = "WN6 0GU"
 
+        if uprn == "10091700365":
+            rec["postcode"] = "WN7 1LS"
+
         if uprn in [
             "10014065653",  # WN60TE -> WN60UL : 57 Granny Flat School Lane
-            "200004801589",  # WN67NZ -> WN67LZ : Flat Over  132 Woodhouse Lane
         ]:
             rec["accept_suggestion"] = True
 
@@ -42,12 +36,14 @@ class Command(BaseXpressWebLookupCsvImporter):
             "10014060612",  # WN25TA -> WN25NY : 14 Caravan Site
             "10014060613",  # WN25TA -> WN25NY : 15 Caravan Site
             "10014060614",  # WN25TA -> WN25NY : 16 Caravan Site
-            "100012497983",  # WN73SE -> WN73SD : Bowland Field Farm Grave Oak Lane
             "200001924721",  # WN40JH -> WN40JA : High Brooks Stables High Brooks
             "100012500742",  # WN24XR -> WN24XS : The Old Barn Smiths Lane
-            "100012499758",  # WN50LL -> WN58QE : 375 Green Gables Gathurst Road
             "100011798794",  # WN59DL -> WN59DN : Flat Above  301-305 Ormskirk Road
         ]:
             rec["accept_suggestion"] = False
+
+        # 17 Chester Street, Leigh WN7 2LS. NB addressbase UPRN is "10091700365"
+        if uprn == "100011763908":
+            rec["postcode"] = "WN71LS"
 
         return rec
