@@ -1,3 +1,4 @@
+import json
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos.collections import MultiPolygon, Polygon
 from data_collection.geo_utils import fix_bad_polygons
@@ -9,7 +10,7 @@ class Command(BaseGitHubImporter):
     srid = 27700
     districts_srid = 27700
     council_id = "E07000240"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-StAlbans"
     geom_type = "geojson"
 
@@ -19,6 +20,21 @@ class Command(BaseGitHubImporter):
                 return self.clean_poly(
                     GEOSGeometry(feature.wkt, srid=self.get_srid("districts"))
                 )
+
+    def extract_json_geometry(self, record, srid):
+        geom = json.loads(record["geometry"])
+
+        # delete any junk which will cause us to throw
+        # Invalid number of points in LinearRing found 3 - must be 0 or >= 4
+        if geom["geometry"]["type"] == "MultiPolygon":
+            for i, poly in enumerate(geom["geometry"]["coordinates"]):
+                if len(poly[0]) < 4:
+                    del geom["geometry"]["coordinates"][i]
+
+        geojson = json.dumps(geom["geometry"])
+        poly = self.clean_poly(GEOSGeometry(geojson))
+        poly.srid = srid
+        return poly
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
