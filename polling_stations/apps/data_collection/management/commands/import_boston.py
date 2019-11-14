@@ -1,61 +1,38 @@
-"""
-Import Boston
-"""
-from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseCsvStationsShpDistrictsImporter):
-    """
-    Imports the Polling Station data from Boston Council
-    """
-
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000136"
-    districts_name = "Polling Districts May 2015_region"
-    stations_name = "pollingstations.csv"
-    elections = ["parl.2015-05-07"]
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019boston.tsv"
+    )
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019boston.tsv"
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
-    def district_record_to_dict(self, record):
-        return {
-            "internal_council_id": record[0],
-            "name": "%s - %s" % (record[1], record[0]),
-            "polling_station_id": record[0],
-        }
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
 
-    def station_record_to_dict(self, record):
-        try:
-            location = Point(int(record.easting), int(record.northing), srid=self.srid)
-        except ValueError:
-            location = Point(
-                float(record.easting), float(record.northing), srid=self.srid
-            )
+        if uprn == "100030738257":
+            rec["postcode"] = "PE20 2NZ"
+            rec["accept_suggestion"] = False
 
-        address_parts = [x.strip() for x in record.address.split(",")]
-        address = "\n".join(address_parts[:-1])
-        postcode = address_parts[-1]
+        if uprn in [
+            "100032168500",  # PE229JN -> PE229JP : The Cottage, Hurn`s End, Old Leake, Boston
+            "10008181290",  # PE202PT -> PE202PJ : C`van Sparrow Hall, Asperton Road, Wigtoft, Boston
+            "10008186479",  # PE202PT -> PE202PS : Taumberland, Asperton Road, Swineshead, Boston, Lincs
+            "10008186513",  # PE220QA -> PE220PX : Field Views, Freiston Ings Farm Lane, Freiston Ings, Boston, Lincs
+            "10008187814",  # PE218QN -> PE218QR : 63 West Street, Boston, Lincs
+            "200004465433",  # PE217LH -> PE217JU : White House Farm, Wyberton West Road, Wyberton, Boston, Lincs
+            "200004467072",  # PE201EG -> PE218SH : 10 High Street, Kirton, Boston, Lincs
+            "200004471567",  # PE220PG -> PE219RZ : Orchard Lea, Wainfleet Road, Freiston, Boston
+            "200004473861",  # PE203QX -> PE203SZ : Fairways, Top Farm, Kirton Drove, Brothertoft, Boston, Lincs
+            "200004475159",  # LN44QJ -> LN44QN : The Wheelwright Bungalow, Kirton Drove, Kirton Fen, Lincoln, Lincs
+            "200004475193",  # PE201SN -> PE201SP : Smith`s Lodge, Holmes Road, Kirton Holme, Boston, Lincs
+            "200004476439",  # PE219QR -> PE219QP : 160 Spilsby Road, Fishtoft, Boston, Lincs
+        ]:
+            rec["accept_suggestion"] = True
 
-        """
-        In this data, sometimes a single polling station serves several
-        districts. For simplicity, if record.internal_id is something like "AB,AC" 
-        return the same polling station address/point multiple times with different IDs
-        """
-        internal_ids = record.internal_id.split(",")
-        if len(internal_ids) == 1:
-            return {
-                "internal_council_id": record.internal_id,
-                "postcode": postcode,
-                "address": address,
-                "location": location,
-            }
-        else:
-            stations = []
-            for id in internal_ids:
-                stations.append(
-                    {
-                        "internal_council_id": id,
-                        "postcode": postcode,
-                        "address": address,
-                        "location": location,
-                    }
-                )
-            return stations
+        return rec
