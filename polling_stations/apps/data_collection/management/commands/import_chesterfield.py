@@ -34,3 +34,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["accept_suggestion"] = False
 
         return rec
+
+    def station_record_to_dict(self, record):
+
+        if (
+            record.polling_place_id == "5468"
+        ):  # St Barnabas Church  Albert Road Old Whittington Chesterfield
+            record = record._replace(polling_place_postcode="S43 2BH")
+            record = record._replace(polling_place_address_2="New Whittington")
+        return super().station_record_to_dict(record)
