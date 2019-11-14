@@ -1,60 +1,44 @@
-from data_collection.management.commands import BaseScotlandSpatialHubImporter
-from data_collection.slugger import Slugger
-
-"""
-Note:
-This importer provides coverage for 103/107 districts
-due to incomplete/poor quality data
-
-Station RAILWAY STAFF CLUB, PERTH has no districts assigned to it.
-Districts Wellshill and Fairfield are assinged to
-Fairfield Neighbourhood Centre, Perth. But this station is  not in the polling
-stations source file. The RAILWAY STAFF CLUB could be correct for these.
-District Hoole has polling place 'Inchture Village Hall, Kinrossie' aassigned
-which is ambiguous becasue Kinrossie and Inchture are not the same place and
-District Inchture has 'Inchture Village Hall, Inchture' which looks correct.
-District East Ruthenfield has no polling station due to an abscence of electors.
+from addressbase.models import Address
+from data_collection.github_importer import BaseGitHubImporter
 
 
-Data at
-http://gis-pkc.opendata.arcgis.com/datasets?q=polling&sort_by=-updatedAt
-https://github.com/wdiv-scrapers/data/tree/master/S12000024
+class Command(BaseGitHubImporter):
 
-is also be worth a look, but at last check there were
-some issues with overlapping polygons etc so could also be problematic
-"""
-
-
-class Command(BaseScotlandSpatialHubImporter):
+    srid = 4326
     council_id = "S12000048"
-    council_name = "Perth and Kinross"
-    elections = ["europarl.2019-05-23"]
-    station_map = {}
+    elections = ["parl.2019-12-12"]
+    scraper_name = "wdiv-scrapers/DC-PollingStations-PerthAndKinross"
+    geom_type = "geojson"
+    # districts file has station address and UPRN for district
+    # parse the districts file twice
+    stations_query = "districts"
+
+    def geocode_from_uprn(self, uprn):
+        uprn = str(uprn).lstrip("0").strip()
+        ab_rec = Address.objects.get(uprn=uprn)
+        return ab_rec.location
 
     def district_record_to_dict(self, record):
-        if record[2] == self.council_name:
-            station_slug = Slugger.slugify(record[3])
-            self.station_map.setdefault(station_slug, []).append(record[0])
-            return super().district_record_to_dict(record)
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+        return {
+            "internal_council_id": record["CODE"],
+            "name": record["CODE"],
+            "area": poly,
+            "polling_station_id": record["CODE"],
+        }
 
     def station_record_to_dict(self, record):
-        if record[2] == self.council_name:
-            try:
-                station_slug = Slugger.slugify(record[3])
-                if station_slug == "pitcairngreen-village-hall-pitcairngreen":
-                    station_slug = "pitcairngreen-village-hall-almondbank"
+        try:
+            location = self.geocode_from_uprn(record["UPRN"])
+        except Address.DoesNotExist:
+            location = None
 
-                codes = self.station_map[station_slug]
+        if record["CODE"] == "tba":
+            return None
 
-            except KeyError:
-                return None
-
-            stations = []
-            for code in codes:
-                rec = {
-                    "internal_council_id": code,
-                    "postcode": "",
-                    "address": record[3],
-                }
-                stations.append(rec)
-            return stations
+        return {
+            "internal_council_id": record["CODE"],
+            "address": record["ADDRESS"],
+            "postcode": "",
+            "location": location,
+        }
