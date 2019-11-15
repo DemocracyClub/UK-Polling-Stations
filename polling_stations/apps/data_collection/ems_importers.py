@@ -496,9 +496,6 @@ class BaseDemocracyCountsCsvImporter(
         }
 
     def get_station_point(self, record):
-        if not self.allow_station_point_from_postcode:
-            return None
-
         location = None
 
         badvalues = ["", "0", "0.00"]
@@ -508,6 +505,9 @@ class BaseDemocracyCountsCsvImporter(
                 float(record.xordinate), float(record.yordinate), srid=27700
             )
         else:
+            if not self.allow_station_point_from_postcode:
+                return None
+
             # otherwise, geocode using postcode
             postcode = record.postcode.strip()
             if postcode == "":
