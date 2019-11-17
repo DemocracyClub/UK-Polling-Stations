@@ -3,21 +3,16 @@ from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E07000027"
-    addresses_name = "local.2019-05-02/Version 1/DemocracyClubPollingDistrictsbdc.csv"
-    stations_name = "local.2019-05-02/Version 1/DemocracyClubPollingStationsbdc.csv"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy Club - Polling Districts.csv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy Club - Polling Stations.csv"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
-            "36025885"  # LA130PJ -> LA130PG : West Gate Cottage, Manor Road, Barrow-in-Furness
-        ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "36015231",  # LA141BS -> LA141DU : 289 Rawlinson Street, Barrow-in-Furness
             "36016015",  # LA141DU -> LA145AY : 26 Crellin Street, Barrow-in-Furness
             "36025851",  # LA139HY -> LA139LT : 81 Newbarns Village, Hollow Lane, Barrow-in-Furness
             "36047048",  # LA130UF -> LA142UJ : 7 Rosewood Grove, Barrow-in-Furness
@@ -30,3 +25,15 @@ class Command(BaseDemocracyCountsCsvImporter):
             rec["accept_suggestion"] = False
 
         return rec
+
+    def station_record_to_dict(self, record):
+
+        if record.stationcode in ["LC/1", "LC/2"]:
+            record = record._replace(xordinate="321436")
+            record = record._replace(yordinate="477564")
+
+        if record.stationcode == "AA/1":
+            record = record._replace(xordinate="318608")
+            record = record._replace(yordinate="468975")
+
+        return super().station_record_to_dict(record)

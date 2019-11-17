@@ -5,15 +5,18 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000005"
     addresses_name = (
-        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019darling.tsv"
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019darling.tsv"
     )
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019darling.tsv"
-    elections = ["europarl.2019-05-23"]
+    stations_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019darling.tsv"
+    )
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "5030":
+        if record.polling_place_id == "5634":  #  The Reading Room
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-1.49308179, 54.48766450, srid=4326)
             return rec
@@ -23,6 +26,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn == "10013318194":  # Suspicious postcode
+            return None
 
         if uprn in [
             "10013315063",  # DL14EP -> DL14ER : Willow Green Care Home, Eastbourne Road, Darlington
