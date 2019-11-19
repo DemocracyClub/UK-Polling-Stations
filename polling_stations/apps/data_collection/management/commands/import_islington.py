@@ -4,9 +4,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E09000019"
-    addresses_name = "europarl.2019-05-23/Version 1/islington.gov.uk-1557480923000-.TSV"
-    stations_name = "europarl.2019-05-23/Version 1/islington.gov.uk-1557480923000-.TSV"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/islington.gov.uk-1573121124000-.TSV"
+    stations_name = "parl.2019-12-12/Version 1/islington.gov.uk-1573121124000-.TSV"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -25,9 +25,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().station_record_to_dict(record)
 
         # Location corrections carried forward
-        if rec["internal_council_id"] == "1531":  #    St. Thomas` Church Hall
+        if rec["internal_council_id"] == "1698":  #    St. Thomas` Church Hall
             rec["location"] = Point(-0.104049, 51.560139, srid=4326)
-        if rec["internal_council_id"] == "1519":  # St Joan of Arc Community Centre
+        if rec["internal_council_id"] == "1686":  # St Joan of Arc Community Centre
             rec["location"] = Point(-0.0966823, 51.5559102, srid=4326)
 
         return rec
