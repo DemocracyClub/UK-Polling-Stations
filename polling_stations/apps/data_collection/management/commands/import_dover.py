@@ -8,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E07000108"
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Dover"
     geom_type = "geojson"
 
