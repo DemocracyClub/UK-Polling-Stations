@@ -20,6 +20,15 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     ]
     station_address_fields = ["polling_place_name", "polling_place_address_1"]
 
+    def station_record_to_dict(self, record):
+
+        if record.polling_place_id == "7560":
+            record = record._replace(
+                polling_place_address_1="Entrance from Kedleston Road"
+            )
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
         rec = super().address_record_to_dict(record)
