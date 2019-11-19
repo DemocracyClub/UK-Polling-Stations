@@ -4,22 +4,24 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000015"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wirr.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wirr.tsv"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
-    csv_delimiter = "\t"
-    csv_encoding = "windows-1252"
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019Wirral.csv"
+    )
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Wirral.csv"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "4836":
+        # Marlowe Road URC Hall
+        if record.polling_place_id in ["5873"]:
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-3.050648, 53.417306, srid=4326)
             return rec
 
         # user issue report #87
         # The Grange Public House
-        if record.polling_place_id == "4862":
+        if record.polling_place_id == "5895":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-3.122875, 53.396797, srid=4326)
             return rec
@@ -30,8 +32,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "42194705":
-            rec["postcode"] = "CH45 0LF"
+        if uprn == "42194145":
+            return None
+
+        if uprn == "42191192":
+            rec["postcode"] = "CH62 1AB"
+            rec["accept_suggestion"] = False
 
         if (
             record.addressline1.strip() == "136 Wallasey Road"
@@ -40,24 +46,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ):
             rec["postcode"] = "CH44 2AF"
 
-        if (
-            record.addressline1.strip() == "Top Floor Hilbre Lodge"
-            and record.addressline2.strip() == "53 Bebington Road"
-            and record.addressline3.strip() == "New Ferry"
-            and record.addressline4.strip() == "Wirral"
-        ):
-            return None
-
         if uprn in [
             "42072401",  # CH434TS -> CH431TS : 29 Mather Road, Oxton, Wirral
             "42072402",  # CH434TS -> CH431TS : 29A Mather Road, Oxton, Wirral
             "42072403",  # CH434TS -> CH431TS : 29B Mather Road, Oxton, Wirral
             "42081451",  # CH439TT -> CH439UE : Wexford Ridge, Noctorum Lane, Oxton, Wirral
+            "42181578",  # CH474AU -> CH472DH : 10 Market Street, Hoylake, Wirral
         ]:
             rec["accept_suggestion"] = True
 
         if uprn in [
-            "42026495",  # CH412SQ -> CH416AZ : 30 Clifton Road, Tranmere, Wirral
             "42092437",  # CH427LQ -> CH427LG : 5 Prenton Road East, Higher Tranmere, Wirral
             "42168891",  # CH414DB -> CH414DP : Flat 1, 70 Grange Road West, Claughton, Wirral
             "42168892",  # CH414DB -> CH414DP : Flat 2, 70 Grange Road West, Claughton, Wirral
