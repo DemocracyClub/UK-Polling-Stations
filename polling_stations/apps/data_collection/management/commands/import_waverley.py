@@ -3,10 +3,11 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000216"
-    addresses_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019Wav.tsv"
-    stations_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019Wav.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.2019-12-12/Version 3/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 3/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -19,13 +20,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200003086280",  # GU84BH -> GU84BX : Gorebridge House, Loxhill, Godalming, Surrey
             "100061616798",  # GU85UJ -> GU85LA : Brook Grange, Haslemere Road, Brook, Godalming, Surrey
             "10013894366",  # GU99JT -> GU97JT : 5 Stoke House, 17 St James Terrace, Farnham, Surrey
-            "100061604558",  # GU102PH -> GU102PJ : Oak Ridge, Kitts Lane, Churt, Farnham, Surrey
-            "100062162414",  # GU104EX -> GU104EQ : South Hill Bungalow, Batts Corner, Dockenfield, Farnham, Surrey
             "100062163296",  # GU71SX -> GU71XS : 10 Lawnwood Court, Catteshall Lane, Godalming, Surrey
             "100061625643",  # GU50TJ -> GU50TP : Thanescroft, Lords Hill Common, Shamley Green, Guildford, Surrey
             "200001294523",  # GU50LG -> GU50LH : Rushett Farm Cottage, Rushett Common, Bramley, Guildford, Surrey
             "200001537439",  # GU50SU -> GU68QY : Willinghurst Lodge, Willinghurst Estate, Shamley Green, Guildford, Surrey
-            "100062350393",  # GU67NJ -> GU67NH : Three Hatches, Horseblock Hollow, Ewhurst, Cranleigh, Surrey
         ]:
             rec["accept_suggestion"] = True
 
