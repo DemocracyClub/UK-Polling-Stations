@@ -9,14 +9,9 @@ from data_collection.addresshelpers import (
 
 class Command(BaseCsvStationsCsvAddressesImporter):
     council_id = "E08000022"
-    addresses_name = (
-        "local.2019-05-02/Version 1/North Tyneside Council - Polling Station Data.tsv"
-    )
-    stations_name = (
-        "local.2019-05-02/Version 1/North Tyneside Council - Polling Station Data.tsv"
-    )
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
-    csv_delimiter = "\t"
+    addresses_name = "parl.2019-12-12/Version 1/Find My Polling Station.csv"
+    stations_name = "parl.2019-12-12/Version 1/Find My Polling Station.csv"
+    elections = ["parl.2019-12-12"]
 
     def get_station_hash(self, record):
         return "-".join([record.col12.strip()])
@@ -65,8 +60,12 @@ class Command(BaseCsvStationsCsvAddressesImporter):
 
     def address_record_to_dict(self, record):
         uprn = record.col36.strip()
+        postcode = record.col35.strip()
 
         if uprn == "47237285":
+            return None
+
+        if postcode in ["NE25 9BE", "NE27 0PJ"]:
             return None
 
         address = format_residential_address(
@@ -81,7 +80,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         )
         rec = {
             "address": address.strip(),
-            "postcode": record.col35.strip(),
+            "postcode": postcode,
             "polling_station_id": record.col12.strip(),
             "uprn": uprn,
         }
@@ -92,9 +91,10 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         if uprn in [
             "47029975",  # NE237JT -> NE237JU : EAST BARNS, GREENS HOUSES FARM, DUDLEY LANE, SEATON BURN
             "47035320",  # NE237AG -> NE237AF : RESIDENTIAL HOUSE AT, 83 FERN DRIVE, DUDLEY
-            "47024602",  # NE289ED -> NE289HP : BATTLE HILL VICARAGE, BERWICK DRIVE, WALLSEND
             "47093421",  # NE299JU -> NE296SL : THE OLD VICARAGE, PRESTON ROAD, NORTH SHIELDS
             "47102033",  # NE304HQ -> NE304NU : FLAT 3, 45 PERCY GARDENS, TYNEMOUTH
+            "47102032",  # NE304HQ -> NE304NU : FLAT 2, 45 PERCY GARDENS, TYNEMOUTH
+            "47072823",  # NE258RU -> NE270XL : 19 PRIORY AVENUE, WHITLEY BAY
             "47072822",  # NE258RU -> NE270XL : 18 PRIORY AVENUE, WHITLEY BAY
             "47072818",  # NE258RU -> NE270XL : 14 PRIORY AVENUE, WHITLEY BAY
         ]:

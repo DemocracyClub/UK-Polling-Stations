@@ -3,27 +3,18 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000045"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019teign.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019teign.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tein.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tein.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        # Dawlish Leisure Centre
-        if record.polling_place_id == "6620":
-            record = record._replace(polling_place_easting="296596")
-            record = record._replace(polling_place_northing="77519")
-
-        # St Pancras Church
-        if record.polling_place_id == "6606":
-            record = record._replace(polling_place_easting="271881")
-            record = record._replace(polling_place_northing="76793")
-
-        # The Church House Inn
-        if record.polling_place_id == "6636":
-            record = record._replace(polling_place_easting="291609")
-            record = record._replace(polling_place_northing="70499")
+        # Alice Cross Day Centre
+        if record.polling_place_id == "7231":
+            record = record._replace(polling_place_easting="293930")
+            record = record._replace(polling_place_northing="73047")
 
         return super().station_record_to_dict(record)
 
@@ -49,6 +40,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             and record.addressline6.strip() == "TQ13 9HD"
         ):
             rec["postcode"] = "TQ13 7QH"
+
+        if record.addressline6.strip() == "TQ12 1FB":
+            return None
 
         if uprn in [
             "10032970638",  # TQ121BX -> TQ121BU : Ground Floor, 48 Keyberry Road, Newton Abbot
