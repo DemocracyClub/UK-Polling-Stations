@@ -36,4 +36,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="614333.04")
             record = record._replace(polling_place_northing="242066.66")
 
+        # recieved from council
+        if record.polling_place_id == "18250":  # Chilton - The White Horse Inn
+            record = record._replace(
+                polling_place_name="Great Waldingfield Village Hall",
+                polling_place_address_1="The Heath",
+                polling_place_address_2="Great Waldingfield",
+                polling_place_postcode="CO10 0SE",
+            )
+        if record.polling_place_id == "18318":  # Harkstead Village Hall
+            record = record._replace(
+                polling_place_name="Holbrook Village Hall",
+                polling_place_address_1="The Street",
+                polling_place_address_2="Holbrook",
+                polling_place_postcode="IP9 2PZ",
+            )
+
         return super().station_record_to_dict(record)
