@@ -4,17 +4,29 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000076"
     addresses_name = (
-        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019tendring.tsv"
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019tendring.tsv"
     )
     stations_name = (
-        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019tendring.tsv"
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019tendring.tsv"
     )
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10007931054",
+            "10007941736",
+            "100091273215",
+            "100091463517",
+        ]:
+            return None
+
+        if uprn == "10007936637":
+            rec["postcode"] = "CO15 1TT"
 
         if uprn in [
             "10007940599",  # CO168TA -> CO148TA : 106 Kirby Road, Walton-on-the-Naze, Essex
@@ -49,11 +61,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10094246358",  # CO168SG -> CO168TA : 422 Seawick Holiday Park, Beach Road, St Osyth, Clacton-on-Sea, Essex
             "10094246534",  # CO156LY -> CO154BE : 406 Valley Farm Holiday Park, Valley Road, Clacton-on-Sea, Essex
             "200001487728",  # CO77DW -> CO77DJ : Brendon, Colchester Road, Frating, Colchester, Essex
+            "10090659423",  # CO78RF -> CO78RE : 4 Lakelands, Bentley Country Park, Flag Hill, Great Bentley, Colchester, Essex
+            "10090658018",  # CO78RF -> CO78RE : 9 Whitebeam, Bentley Country Park, Flag Hill, Great Bentley, Colchester, Essex
+            "10090656284",  # CO78RF -> CO78RE : 11 Lake View, Bentley County Park, Flag Hill, Great Bentley, Colchester, Essex
+            "100091271615",  # CO77NB -> CO78NB : Shangrila, Weeley Road, Aingers Green, Great Bentley, Colchester, Essex
+            "10007931091",  # CO154BS -> CO154BT : 72A St Johns Road, Clacton-on-Sea, Essex
+            "100090599546",  # CO156QE -> CO156QF : The Carnarvon Nursing Home, 22-24 Carnarvon Road, Clacton-on-Sea, Essex
+            "100090613536",  # CO168JL -> CO168NW : 262 Point Clear Road, St Osyth, Clacton-on-Sea, Essex
+            "10007941693",  # CO168JL -> CO168NW : The Annexe, 262 Point Clear Road, St Osyth, Clacton-on-Sea, Essex
         ]:
             rec["accept_suggestion"] = True
 
         if uprn in [
-            "200001737111",  # CO168TA -> CO168SG : 101A Priory Close, Bel Air Chalet Estate, St Osyth, Clacton-on-Sea, Essex
             "100091463343",  # CO123LD -> CO151PP : 18 Orwell Road, Harwich, Essex
             "100090623245",  # CO70AG -> CO111AH : 25A High Street, Brightlingsea, Colchester, Essex
         ]:
