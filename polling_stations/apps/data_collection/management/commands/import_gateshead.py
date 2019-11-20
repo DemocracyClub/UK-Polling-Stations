@@ -3,35 +3,15 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000037"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019gate.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019gate.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019gates.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019gates.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-
-        # Station change for EU election
-        if record.polling_place_id == "6055":
-            record = record._replace(polling_place_name="Croftside Communal Lounge")
-            record = record._replace(polling_place_address_1="Croftside")
-            record = record._replace(polling_place_address_2="Birtley")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="DH3 1LZ")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="")
-
-        return super().station_record_to_dict(record)
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn in [
-            "100000014034"  # NE109SJ -> NE109BD : Musgrove House, Albion Street, Windy Nook, Gateshead
-        ]:
-            rec["accept_suggestion"] = True
 
         if uprn in [
             "100000084114",  # NE404NG -> NE404NB : Allendale House, Garden Terrace, Crawcrook, Ryton
