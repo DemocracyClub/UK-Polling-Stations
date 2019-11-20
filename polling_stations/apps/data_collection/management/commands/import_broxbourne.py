@@ -3,35 +3,44 @@ from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E07000095"
-    addresses_name = "local.2019-05-02/Version 1/Democracy club- polling districts for Borough of Broxbourne.csv"
-    stations_name = "local.2019-05-02/Version 1/Democracy club- polling stations for Borough of Broxbourne.csv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy club - polling districts 12-12-2019.csv"
+    )
+    stations_name = (
+        "parl.2019-12-12/Version 1/Democracy club - polling stations 12-12-2019.csv"
+    )
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        # user issue report #46
-        if record.stationcode == "AHC_1":
-            record = record._replace(xordinate="0")
-            record = record._replace(yordinate="0")
+        # Fairfields primary school
+        if record.stationcode in ["AHC_1", "AHE_1"]:
+            record = record._replace(xordinate="534213")
+            record = record._replace(yordinate="203580")
 
-        # station change for EU Parl elections
-        if record.stationcode == "ACA_1":
-            record = record._replace(add1="The Spinning Wheel")
-            record = record._replace(add2="30 High Street")
-            record = record._replace(add3="Hoddesdon")
-            record = record._replace(add4="")
-            record = record._replace(add5="")
-            record = record._replace(add6="")
-            record = record._replace(postcode="EN11 8BP")
-            record = record._replace(xordinate="0")
-            record = record._replace(yordinate="0")
-            record = record._replace(placename="")
+        # Flamstead End Hall
+        if record.stationcode in ["AHD_1", "AHB_1", "AHA_1"]:
+            record = record._replace(xordinate="535062")
+            record = record._replace(yordinate="203335")
+
+        # Fairley Cross Hall, Rosedale Community Church
+        if record.stationcode in ["AJA_1", "AJC_1", "AJD_1"]:
+            record = record._replace(xordinate="534455")
+            record = record._replace(yordinate="203051")
+
+        # These stations are outside the council area and don't appear in the addresses file
+        if record.stationcode in ["DCB_1", "DCB_2", "DCC_1"]:
+            return None
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
+
+        if uprn in ["148023093", "148022559"]:
+            return None
 
         if uprn in [
             "148036797",  # EN89DG -> EN89DQ : 3 LEIGHTON COURT, TURNERS HILL, CHESHUNT, HERTFORDSHIRE
