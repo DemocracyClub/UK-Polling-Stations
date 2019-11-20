@@ -36,4 +36,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="627286.25")
             record = record._replace(polling_place_northing="281055.48")
 
+        # recieved from council
+        if record.polling_place_id == "17440":  # Kenton - Caravan near former Station
+            record = record._replace(
+                polling_place_name="Bedingfield Village Hall",
+                polling_place_address_1="Church Corner",
+                polling_place_address_2="Bedingfield",
+                polling_place_postcode="IP23 7QG",
+            )
+        if record.polling_place_id == "17355":  # Elmswell (ELS) - The Wesley
+            record = record._replace(
+                polling_place_name="Elmswell (ELN) - Blackbourne Centre",
+                polling_place_address_1="Blackbourne Road",
+                polling_place_address_2="Elmswell",
+                polling_place_postcode="IP30 9UH",
+            )
         return super().station_record_to_dict(record)
