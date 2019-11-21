@@ -37,4 +37,20 @@ class Command(BaseDemocracyCountsCsvImporter):
             record = record._replace(xordinate="406486")
             record = record._replace(yordinate="339871")
 
+        # correction from council
+        # https://trello.com/c/GfMTsEaX
+        if record.stationcode in ["BT_56", "BT_57", "BT_58", "BT_59"]:
+            record = record._replace(
+                placename="Bradley House Club",
+                add1="Bradley Street",
+                add2="Uttoxeter",
+                add3="Staffs",
+                add4="",
+                add5="",
+                add6="",
+                postcode="ST14 7QA",
+                xordinate="0",
+                yordinate="0",
+            )
+
         return super().station_record_to_dict(record)

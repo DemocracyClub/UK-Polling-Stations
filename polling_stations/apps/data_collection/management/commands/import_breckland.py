@@ -26,6 +26,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="0")
             record = record._replace(polling_place_northing="0")
 
+        if record.polling_place_id == "8147":
+            record = record._replace(polling_place_easting="601038")
+            record = record._replace(polling_place_northing="313511")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
