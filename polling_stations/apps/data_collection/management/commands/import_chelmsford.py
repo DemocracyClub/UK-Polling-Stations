@@ -3,11 +3,12 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000070"
-    addresses_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019chelm.tsv"
-    stations_name = "local.2019-05-02/Version 2/Democracy_Club__02May2019chelm.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.2019-12-12/Version 2/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 2/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -22,6 +23,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn == "100091237355":
             rec["postcode"] = "SS11 7DS"
+
+        if record.addressline6.strip() == "CM1 1PJ":
+            return None
 
         if uprn in [
             "10091492809"  # CM11LA -> CM111LA : 2 The Paddocks, Layland Farm, Sudbury Road, Downham, Billericay, Essex

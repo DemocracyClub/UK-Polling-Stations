@@ -3,25 +3,39 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000026"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019cov.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019cov.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019.tsv"
+    stations_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
         # Community Centre, Warwickshire Shopping Park
-        if record.polling_place_id == "10023":
+        if record.polling_place_id == "11876":
             record = record._replace(polling_place_postcode="CV3 2SB")
 
         # Parkgate Primary School
-        if record.polling_place_id == "9740":
+        if record.polling_place_id == "11954":
             record = record._replace(polling_place_postcode="CV6 4GF")
+
+        if record.polling_place_id == "12190":
+            record = record._replace(polling_place_easting="429643")
+            record = record._replace(polling_place_northing="278413")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if record.addressline6.strip() in [
+            "CV3 1QH",
+            "CV4 9AJ",
+            "CV4 9YJ",
+            "CV6 2GE",
+            "CV6 2EQ",
+        ]:
+            return None
 
         if uprn == "100071317687":
             rec["postcode"] = "CV12LL"
@@ -44,10 +58,26 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100070624242",  # CV32DS -> CV32HZ : 13 Brinklow Road, Coventry
             "100070715099",  # CV57BP -> CV57LJ : Tiber Cottage, Tiber Close, Coventry
             "10024028272",  # CV66BL -> CV62BL : FLAT ABOVE, 267 - 269 Bedworth Road, Coventry
-            "100071316735",  # CV62NT -> CV62AL : 31 Halford Lodge, Cottage Farm Road, Coventry
             "200001562367",  # CV63BP -> CV63HL : Caretakers Flat Westfield House, Radford Road, Coventry
             "10024620573",  # CV21UR -> CV61PR : 12 Curlew Close, Coventry
             "10024621864",  # CV64GR -> CV78RH : 58 Gospel Oak Road, Coventry
+        ]:
+            rec["accept_suggestion"] = False
+
+        if uprn in [
+            # Addressbase issues - TODO: report to OS
+            "10023038958",
+            "100070637150",
+            "10024027630",
+            "100071317687",
+            "10024027756",
+            "10023038958",
+            "10023034814",
+            "10023034813",
+            "10023034811",
+            "10023034810",
+            "10023034809",
+            "10023034808",
         ]:
             rec["accept_suggestion"] = False
 
