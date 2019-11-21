@@ -4,33 +4,42 @@ from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E06000055"
     addresses_name = (
-        "europarl.2019-05-23/Version 1/Democracy Club - Polling Districts.csv"
+        "parl.2019-12-12/Version 1/Democracy Club - Polling Districts UKPGE.csv"
     )
     stations_name = (
-        "europarl.2019-05-23/Version 1/Democracy Club - Polling Stations.csv"
+        "parl.2019-12-12/Version 1/Democracy Club - Polling Stations UKPGE.csv"
     )
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     # KEMPSTON WEST METHODIST CHURCH Carried forward from local.2019-05-02
     def station_record_to_dict(self, record):
-        if record.stationcode == "50":
-            record = record._replace(xordinate="0")
-            record = record._replace(yordinate="0")
+        if record.stationcode == "BAS_1":
+            record = record._replace(xordinate="502614")
+            record = record._replace(yordinate="247440")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn in [
-            "10093204769",  # MK401PE -> MK402SY : FLAT 10, HARPUR APARTMENTS, HARPUR STREET
-            "100080999032",  # PE280ND -> PE280NE : NELSON COTTAGE, HIGH STREET, UPPER DEAN, Huntingdon
-            "100080999044",  # PE280ND -> PE280NE : THE SPINNEY, HIGH STREET, UPPER DEAN, Huntingdon
-            "10033178065",  # PE280NF -> PE280NE : DEAN LODGE, BROOK LANE, UPPER DEAN, Huntingdon
-            "10024229957",  # MK442EY -> MK442EL : SKYLARKS, KIMBOLTON ROAD, BOLNHURST, BEDFORD
-            "100081212998",  # MK442BZ -> MK442LD : BERRY WOOD FARM, LITTLE STAUGHTON ROAD, COLMWORTH, BEDFORD
+        # Lot's of junk UPRNs
+        record = record._replace(uprn="")
+
+        rec = super().address_record_to_dict(record)
+
+        if (
+            uprn == "10024229957"
+        ):  # MK442EY -> MK442EL : SKYLARKS, KIMBOLTON ROAD, BOLNHURST, BEDFORD
+            rec["postcode"] = "MK442EL"
+
+        if record.postcode in ["MK45 3PG", "MK45 3PW", "MK43 0BD"]:
+            return None
+
+        if record.add1 in [
+            "CRIEGNESH",
+            "THE SHIELING",
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
         return rec
