@@ -3,10 +3,19 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000225"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.TSV"
+    stations_name = "parl.2019-12-12/Version 1/merged.TSV"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
+
+    def station_record_to_dict(self, record):
+
+        # Rake Village Hall
+        if record.polling_place_id == "3566":
+            record = record._replace(polling_place_postcode="GU33 7JA")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -33,6 +42,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10002467582",  # GU289LJ -> GU289NE : Freehold Farmhouse, Northchapel, Petworth
             "10002466676",  # GU290BU -> GU290BX : 123 Ambersham Moor, Selham Road, Ambersham, Midhurst
             "10002482519",  # GU315BU -> GU315EB : The Log Cabin Fyning Hill, Rogate, Petersfield
+            "10093117146",  # PO108FW -> PO108HG : 10 Brewery Close, Southbourne, Emsworth
+            "10093117147",  # PO108FW -> PO108HG : 11 Brewery Close, Southbourne, Emsworth
         ]:
             rec["accept_suggestion"] = True
 
