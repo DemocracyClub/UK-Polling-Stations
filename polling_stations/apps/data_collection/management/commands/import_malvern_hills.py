@@ -3,26 +3,21 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000235"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019malv.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019malv.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019mal.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019mal.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn in ["10014094039", "10014094040"]:
-            return None
 
         if uprn == "10014091874":
             rec["postcode"] = "DY13 0SQ"
 
         if uprn == "10024319007":
             rec["postcode"] = "WR2 4SF"
-
-        if uprn == "10014091918":
-            rec["postcode"] = "DY13 0SQ"
 
         if uprn in [
             "10014093545",  # WR158QY -> WR158QW : Garwood Cottage, Hanley Childe, Tenbury Wells, Worcestershire
@@ -50,7 +45,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200002874926",  # WR135AJ -> WR135AQ : Madresfield Grange, Madresfield, Malvern, Worcestershire
             "200003224371",  # WR26RH -> WR26RL : Jenya, Crown East Lane, Lower Broadheath, Worcester
             "10024317453",  # WR65NE -> WR65NR : Blackfields Cottage, Broadwas, Worcester
-            "100120595755",  # WR66QL -> WR66QJ : Spring Meadow, Quarry Lane, Martley, Worcester
             "100120594930",  # WR25TU -> WR25TR : Parkfield, Crown East, Worcester
             "100120595357",  # WR53PA -> WR53PB : Mereside, Main Road, Kempsey, Worcester
             "10014088389",  # WR66LX -> WR66LF : The Stables, Dingle Court, Little Witley, Worcester
@@ -67,15 +61,5 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10024317597",  # WR158JE -> WR158JF : Garden Cottage, Newnham Court, Newnham Bridge, Tenbury Wells, Worcestershire
         ]:
             rec["accept_suggestion"] = True
-
-        if uprn in [
-            "10024318867",  # DY130RY -> WR24RY : Hampstall Inn, Hampstall Lane, Astley Burf, Stourport on Severn, Worcestershire
-            "10024321881",  # WR66BF -> WR142BT : 6 Ryecroft Way, Martley, Worcester
-            "10024321732",  # WR158TQ -> WR66YE : Hawk Cabin, Cadmore Lodge, Berrington Green, Tenbury Wells, Worcestershire
-            "10093062462",  # WR136JW -> WR135FB : 65 Three Counties Park, Upper Pendock, Malvern, Worcestershire
-            "10093062122",  # WR53JN -> WR143HL : Little Orchard, 25A Lyf's Lane, Kempsey, Worcester
-            "10000832472",  # DY130RR -> WR66PN : The Old Court, Astley, Stourport on Severn, Worcestershire
-        ]:
-            rec["accept_suggestion"] = False
 
         return rec

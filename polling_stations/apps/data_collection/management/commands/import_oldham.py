@@ -4,26 +4,17 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000004"
-    addresses_name = "local.2019-05-02/Version 1/oldham.gov.uk-1555340067000-.tsv"
-    stations_name = "local.2019-05-02/Version 1/oldham.gov.uk-1555340067000-.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019oldham.tsv"
+    )
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019oldham.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        # one changed station from local.2019-05-02 --> europarl.2019-05-23
-        if record.polling_place_district_reference == "HO4":
-            record = record._replace(polling_place_name="St Chads Centre")
-            record = record._replace(polling_place_address_1="Lime Green Parade")
-            record = record._replace(polling_place_address_2="Limehurst Village")
-            record = record._replace(polling_place_address_3="Oldham")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="OL8 3HH")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="")
-
-        if record.polling_place_id == "5063":
+        if record.polling_place_id == "6196":
             record = record._replace(polling_place_postcode="")
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-2.148726, 53.514296, srid=4326)
@@ -38,8 +29,33 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6.strip() == "M35 09D":
             rec["postcode"] = "M35 0PD"
 
+        if record.addressline2 == "185B Huddersfield Road":
+            return None
+        if "The Bungalow Deeside Gardens" in record.addressline1:
+            return None
+        if "Hill Brow Close" in record.addressline1:
+            return None
+
         if uprn in [
-            "422000076707",  # OL83LB -> OL45LN : Hawthorne Inn, 365 Roundthorn Road, Oldham
+            "422000129521",
+            "422000120408",
+            "422000118702",
+            "422000120682",
+            "422000120353",
+            "422000129006",
+            "422000112898",
+            "422000118887",
+            "422000069004",
+            "422000126990",
+            "422000119217",
+            "422000061537",
+            "100011199092",
+            "100011199050",
+            "422000118382",
+        ]:
+            return None
+
+        if uprn in [
             "100012737571",  # OL35QL -> OL35AG : Ladbrook, Sandy Lane, Dobcross
         ]:
             rec["accept_suggestion"] = True
