@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
@@ -23,6 +24,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return rec
 
     def station_record_to_dict(self, record):
+
+        # Dersingham Village Centre
+        if record.polling_place_id == "17923":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(0.512389, 52.843528, srid=4326)
+            return rec
+
+        # Windsor Park, KING`S LYNN
+        if record.polling_place_id == "17867":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(0.404833, 52.748556, srid=4326)
+            return rec
 
         if record.polling_place_id == "18049":
             record = record._replace(polling_place_postcode="PE14 9QH")
