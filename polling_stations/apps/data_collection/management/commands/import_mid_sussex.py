@@ -4,27 +4,30 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000228"
-    addresses_name = (
-        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 Mid Sussex.tsv"
-    )
-    stations_name = (
-        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019 Mid Sussex.tsv"
-    )
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        if record.polling_place_id == "2427":
-            rec["location"] = Point(-0.203007, 51.083493, srid=4326)
+        if record.polling_place_id == "2941":
+            rec["location"] = Point(-0.14863, 50.96048, srid=4326)
 
         return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in ["10070631101", "10070629962"]:
+            return None
+
+        if record.addressline6 == "RH19 1ET":
+            return None
 
         if uprn in [
             "10070622514"  # RH162QB -> RH162QE : 2 Diamond Cottages, Snowdrop Lane, Lindfield, Haywards Heath, West Sussex
