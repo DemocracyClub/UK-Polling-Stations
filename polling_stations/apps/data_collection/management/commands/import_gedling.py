@@ -49,7 +49,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10002896029",  # NG36HE -> NG36HG : Flat above The Punchbowl, 214 Porchester Road, Mapperley, Nottingham
         ]:
             rec["accept_suggestion"] = True
-
+        
         if uprn in [
             "200001152310",  # NG44FL -> NG44FG : 267A Westdale Lane East, Carlton, Nottinghamshire
             "200001152316",  # NG44FN -> NG44FG : 273A Westdale Lane East, Carlton, Nottinghamshire
