@@ -3,10 +3,15 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000009"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Trafford.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Trafford.tsv"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
-    csv_delimiter = "\t"
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019trafford.CSV"
+    )
+    stations_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019trafford.CSV"
+    )
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = ","
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -15,8 +20,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn == "200000333851":
             rec["postcode"] = "M41 6AS"
 
-        if uprn == "10070456948":
-            rec["accept_suggestion"] = False
+        if record.addressline1 == "78B High Elm Road":
+            rec["postcode"] = "WA15 0HX"
+
+        if uprn in [
+            "10070405338",
+            "10070405338",
+            "100011646326",
+            "100011693362",
+            "100011622567",
+            "100011679026",
+        ]:
+            return None
 
         if uprn in [
             "100012491068",  # WA144RJ -> WA145RJ : 1 Red House Cottages, Red House Lane, Dunham Massey
@@ -26,16 +41,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100012495530",  # M314WJ -> M314NL : Carlton, 29 Warburton Lane, Partington
             "200000333945",  # M416JU -> M416DU : 83 Irlam Road, Flixton
             "100011674930",  # M416JS -> M416GT : 12 The Avenue, Flixton
-            "100012496466",  # M337WH -> M337QH : Bridge Inn, Dane Road, Sale
+            "100012496466",  # M337WH -> M337QH : Bridge Inn, Dane Road, Sale]
         ]:
             rec["accept_suggestion"] = True
 
         if uprn in [
             "10070460306",  # WA158UH -> WA158SZ : 3 Great Oak Drive, Altrincham
             "200000340318",  # M337RE -> M337TY : Apartment 18, 100 Washway Road, Sale
-            "100012491343",  # WA143HD -> WA143HF : Woodhatch, South Downs Road, Bowdon
-            "100011654153",  # M417DQ -> M417DN : 50 Davyhulme Road, Davyhulme
             "100011700864",  # M332UW -> M334RZ : 264 Norris Road, Sale
+            "10070456948",  # 31A Ludford Grove, Sale
         ]:
             rec["accept_suggestion"] = False
 
