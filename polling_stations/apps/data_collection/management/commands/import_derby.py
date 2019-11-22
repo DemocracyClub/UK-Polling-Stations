@@ -3,32 +3,11 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000015"
-    addresses_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019derby.tsv"
-    stations_name = "local.2019-05-02/Version 3/Democracy_Club__02May2019derby.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019derby.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019derby.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # user issue report #48
-        if record.polling_place_id == "7944":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-
-        # station change for EU Parl elections
-        if record.polling_place_id == "7793":
-            record = record._replace(
-                polling_place_name="The Serbian Orthodox Church Hall"
-            )
-            record = record._replace(polling_place_address_1="Normanton Road")
-            record = record._replace(polling_place_address_2="Derby")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="DE1 2GJ")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="")
-
-        return super().station_record_to_dict(record)
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -48,24 +27,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ):
             rec["postcode"] = "DE24 0LR"
 
-        if (
-            record.addressline1.strip() == "Flat 2"
-            and record.addressline2.strip() == "70 Wilkins Drive"
-            and record.addressline3.strip() == "Allenton"
-            and record.addressline4.strip() == "Derby"
-        ):
-            rec["postcode"] = "DE24 8LU"
-
         if uprn == "10010687582":
             rec["postcode"] = "DE22 4LT"
 
-        if record.addressline6.strip() == "DE23 6GH":
-            return None
-
         if uprn in [
-            "100032007602",  # DE223FZ -> DE223SZ : Basement Flat, Flat 1, Rear of 302 Abbey Street, Derby
-            "100032008969",  # DE234AA -> DE236AD : International Hotel, 288-290 Burton Road, Derby
             "10010687003",  # DE236SX -> DE238SX : Flat c, 202 St Thomas` Road, Derby
+            "200001878041",  # DE240LU -> DE248LU : Flat 2, 70 Wilkins Drive, Allenton, Derby
+            "100030341735",  # DE248BH -> DE248BG : 40A Nightingale Road, Derby
+            "10010683517",  # DE39GW -> DE39GB : Flat 1, 30 Poppyfields Drive, Mickleover, Derby
         ]:
             rec["accept_suggestion"] = True
 
@@ -75,8 +44,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10010685239",  # DE240UQ -> DE248UQ : The Needles, Bembridge Drive, Alvaston, Derby
             "100030323067",  # DE221GZ -> DE231DG : 20 Highfield Road, Derby
             "100030301767",  # DE39FT -> DE236WG : 20 Chestnut Avenue, Mickleover, Derby
-            "100030342785",  # DE217GZ -> DE216AN : 211 Nottingham Road, Spondon, Derby
             "10071154563",  # DE13GB -> DE13DZ : Flat Above The Flowerpot, 23 King Street, Derby
+            "10010673524",  # DE222DL -> DE221BG : Flat Above, 508 Duffield Road, Allestree, Derby
+            "100030342785",  # DE217GZ -> DE216AN : 211 Nottingham Road, Spondon, Derby
+            "10010678922",  # DE221JH -> DE11EP : 10 St George`s Close, Allestree, Derby
+            "100030297262",  # DE248DT -> DE238RT : Ground Floor Flat, 90 Marlborough Road, Derby
+            "100030360196",  # DE248QG -> DE238QX : First Floor, 1162 London Road, Alvaston, Derby
+            "10071156845",  # DE13AZ -> DE236BJ : 3B North Street, Derby
         ]:
             rec["accept_suggestion"] = False
 
