@@ -32,4 +32,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="388393")
             record = record._replace(polling_place_northing="203373")
 
+        if record.polling_place_id == "17096":  # Church of God of Prophecy
+            record = record._replace(polling_place_easting="385658")
+            record = record._replace(polling_place_northing="205119")
+
         return super().station_record_to_dict(record)
