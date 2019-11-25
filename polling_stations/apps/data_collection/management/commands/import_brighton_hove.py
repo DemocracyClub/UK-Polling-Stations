@@ -3,10 +3,13 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000043"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019BandH.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019BandH.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019bright.TSV"
+    )
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019bright.TSV"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -25,6 +28,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "22259748",  # BN21AU -> BN21PD : Flat 2 (First Rear), 21 Burlington Street, Brighton
             "22253791",  # BN21TN -> BN14QE : Flat At, 16 Madeira Place, Brighton
             "22131280",  # BN31AE -> BN12PG : Lower Flat, 15 Western Road, Hove
+            # addressbase errors - TODO: report to OS
+            "22125165",
+            "22177543",
         ]:
             rec["accept_suggestion"] = False
 
