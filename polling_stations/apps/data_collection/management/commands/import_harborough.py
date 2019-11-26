@@ -3,14 +3,11 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000131"
-    addresses_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 Harborough DC.tsv"
-    )
-    stations_name = (
-        "local.2019-05-02/Version 1/Democracy_Club__02May2019 Harborough DC.tsv"
-    )
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019harb.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019harb.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -19,6 +16,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn == "200003741884":
             rec["postcode"] = "LE14 2QY"
 
+        if uprn == "10093551037":
+            rec["uprn"] = ""
+            rec["accept_suggestion"] = False
+
         if (
             record.addressline1.strip() == "69 Main Street"
             and record.addressline2.strip() == "Great Bowden"
@@ -26,6 +27,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ):
             rec["postcode"] = "LE16 7HD"
             rec["accept_suggestion"] = False
+
+        if record.addressline6.strip() == "LE17 5LD":
+            return None
+
+        if uprn in ["10093551160", "10093550174"]:
+            return None
 
         if uprn in [
             "100030474314",  # LE79DE -> LE79DP : Grange Barn, Loddington Road, Tilton on the Hill, Leicester
@@ -46,7 +53,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100030480043",  # LE174RU -> LE174RX : Toll Gate Cottage, Bitteswell Road, Lutterworth, Leics
             "10034458557",  # LE175LE -> LE174LE : The Milking Parlour Boston Lodge, Lutterworth Road, Gilmorton, Lutterworth, Leics
             "200003744797",  # LE175PL -> LE175RZ : Ewe Cottage Gilmorton Lodge, Kimcote Road, Gilmorton, Lutterworth, Leics
-            "100030493741",  # LE167TT -> LE167TX : Birchtree Farm, Welham Road, Thorpe Langton, Leics
             "200003742100",  # LE174LH -> LE174LR : The Mere, Mere Road, Bitteswell, Lutterworth, Leics
             "200003741377",  # LE79XL -> LE79XJ : 3 Fiddlers Green, Uppingham Road, East Norton, Leicester
             "200003741379",  # LE79XL -> LE79XJ : 2 Fiddlers Green, Uppingham Road, East Norton, Leicester

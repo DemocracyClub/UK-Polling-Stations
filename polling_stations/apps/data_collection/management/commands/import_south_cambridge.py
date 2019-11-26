@@ -3,13 +3,14 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000012"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019scambs.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019scambs.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id == "6803":
+        if record.polling_place_id == "7342":
             record = record._replace(polling_place_postcode="CB8 0XF")
 
         return super().station_record_to_dict(record)
@@ -21,6 +22,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in ["200001850767", "10091623496", "10091623497", "10091624790"]:
             rec["postcode"] = "CB234NL"
             rec["accept_suggestion"] = False
+
+        if uprn in ["100091203868"]:
+            return None
 
         if uprn in [
             "10003188510",  # CB259NW -> CB259PG : 1 Goose Hall Farm, Ely Road, Waterbeach, Cambridge
