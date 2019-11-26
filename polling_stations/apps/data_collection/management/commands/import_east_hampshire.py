@@ -10,14 +10,56 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
     allow_station_point_from_postcode = False
 
+    def get_station_hash(self, record):
+        return "-".join(
+            [record.polling_place_id, record.polling_place_district_reference]
+        )
+
     def station_record_to_dict(self, record):
+        # corrections: https://trello.com/c/OGsqpfn4
+        # we can't use the station ref here
+        # because it also serves another district
+        if record.polling_place_district_reference == "AL":
+            record = record._replace(
+                # replace the ID here so we don't end up with 2 different
+                # station addresses for station ID 11829
+                polling_place_id="AL",
+                polling_place_name="The Wickham Institute",
+                polling_place_address_1="Church Street",
+                polling_place_address_2="Binsted",
+                polling_place_address_3="Hampshire",
+                polling_place_address_4="",
+                polling_place_postcode="GU34 4NX",
+                polling_place_easting="",
+                polling_place_northing="",
+            )
+
+        if record.polling_place_id == "11806":
+            record = record._replace(
+                polling_place_name="Alton Community Centre",
+                polling_place_address_1="Amery Street",
+                polling_place_address_2="Alton",
+                polling_place_address_3="Hampshire",
+                polling_place_address_4="",
+                polling_place_postcode="GU34 1HN",
+                polling_place_easting="",
+                polling_place_northing="",
+            )
+
         # Jubilee Hall, Crouch Lane
         rec = super().station_record_to_dict(record)
         if record.polling_place_id == "11962":
             rec["location"] = Point(-1.013446, 50.916221, srid=4326)
+
         return rec
 
     def address_record_to_dict(self, record):
+
+        # ...and make the corresponding change when importing the addresses
+        # so that the station ids match up
+        if record.polling_place_district_reference == "AL":
+            record = record._replace(polling_place_id="AL")
+
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 

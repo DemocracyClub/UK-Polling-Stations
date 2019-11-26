@@ -10,6 +10,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
     allow_station_point_from_postcode = False
 
+    def station_record_to_dict(self, record):
+
+        # correction: https://trello.com/c/R5XolnQC
+        if record.polling_place_id == "7903":  # New Milton Cricket Club
+            record = record._replace(polling_place_postcode="BH25 5SU")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
