@@ -1,6 +1,6 @@
 -r base.txt
 
 ec2_tag_conditional==0.1.2
-gunicorn==20.0.2
+gunicorn==20.0.3
 django-redis
 hiredis
