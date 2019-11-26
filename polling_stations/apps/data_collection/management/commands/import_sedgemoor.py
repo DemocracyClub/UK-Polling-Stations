@@ -4,12 +4,13 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000188"
     addresses_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-14.csv"
+        "parl.2019-12-12/Version 1/polling_station_export-2019-11-11sedge.csv"
     )
     stations_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-14.csv"
+        "parl.2019-12-12/Version 1/polling_station_export-2019-11-11sedge.csv"
     )
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip()
@@ -20,5 +21,12 @@ class Command(BaseHalaroseCsvImporter):
 
         if uprn == "200000450011":
             rec["postcode"] = "BS26 2HU"
+
+        if record.housepostcode in [
+            "TA5 1NQ",
+            "TA5 1NG",
+            "TA5 1JW",
+        ]:
+            return None
 
         return rec
