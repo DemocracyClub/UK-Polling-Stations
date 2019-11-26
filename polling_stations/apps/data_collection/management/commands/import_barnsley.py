@@ -1,21 +1,22 @@
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "E08000016"
-    addresses_name = "local.2019-05-02/Version 1/DC Polling Districts.csv"
-    stations_name = "local.2019-05-02/Version 1/DC Polling Stations.csv"
-    elections = ["local.2019-05-02", "europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy Club PD.csv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy Club PS.csv"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        # user issue report #65
-        # Penistone Cricket Club
-        if record.stationcode == "110":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-1.618343, 53.525626, srid=4326)
-            return rec
+        # DARFIELD COMMUNITY CENTRE, DARHAVEN, DARFIELD, BARNSLEY
+        if record.stationcode == "59":
+            record = record._replace(xordinate="441313", yordinate="404680")
+
+        # TEMPORARY BUILDING AT GRASMERE CRESCENT
+        if record.stationcode == "10":
+            record = record._replace(xordinate="", yordinate="")
 
         return super().station_record_to_dict(record)
 
@@ -26,7 +27,11 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.uprn == "100050685041":
             rec["postcode"] = "S35 7AL"
 
-        if record.postcode in ["S70 5UD", "S70 6FH", "S70 6FG"]:
+        if record.postcode in [
+            "S70 5UD",
+            "S36 9DB",
+            "S75 6JX",
+        ]:
             return None
 
         if uprn in [
