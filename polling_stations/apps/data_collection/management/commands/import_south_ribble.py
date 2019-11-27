@@ -3,17 +3,17 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000126"
-    addresses_name = (
-        "europarl.2019-05-23/Version 2/polling_station_export-2019-05-20.csv"
-    )
-    stations_name = (
-        "europarl.2019-05-23/Version 2/polling_station_export-2019-05-20.csv"
-    )
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-13sr.csv"
+    stations_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-13sr.csv"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
+
+        if record.housepostcode in ["PR25 2YH", "PR5 4EN"]:
+            return None
 
         if uprn in [
             "100012756794",  # PR53PH -> PR251XB : 85 Leyland Lane, Leyland, Lancashire
@@ -35,7 +35,6 @@ class Command(BaseHalaroseCsvImporter):
 
         if uprn in [
             "100012412616",  # PR19YT -> PR19YE : The Oaks Hill Road South, Penwortham, Lancashire
-            "10013243792",  # PR19TZ -> PR10TA : 30 - 32 Smalley Croft, Penwortham, Lancashire
             "200001130049",  # PR45JX -> PR45JB : Rydal Mount Liverpool Road, Much Hoole, Lancashire
             "100012412471",  # PR45XB -> PR45ZD : Beech Lodge 9 Hall Lane, Longton, Lancashire
             "10013245106",  # PR50JT -> PR50JS : Campton House Daub Hall Lane, Hoghton, Lancashire
