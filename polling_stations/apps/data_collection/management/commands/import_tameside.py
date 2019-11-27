@@ -3,20 +3,19 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000008"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.CSV"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019.CSV"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tame.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tame.tsv"
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
         rec = super().address_record_to_dict(record)
         postcode = record.addressline6
 
-        if uprn == "200002851978":
-            rec["postcode"] = "M43 7RZ"
-            return rec
-
-        # Clearly wrong but too many to sort out
+        # These fixes mostly come from locals May 2019, checking a few of them suggests
+        # they're still relevant for GE Dec 2019 so just going to leave them here for now.
         if uprn in [
             "100012486537",
             "100012486572",
@@ -34,13 +33,33 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200004410656",
             "200004422675",
             "200004423681",
-        ] or postcode in ["SK14 1EY", "SK14 4XE", "SK14 4EG", "M34 2WS", "OL6 7FU"]:
+            "200004409546",
+            "200004419687",
+            "200004419357",
+            "200004419358",
+            "200004401602",
+            "10090078250",
+            "100012488602",
+            "200004406539",
+            "200004406539",
+            "100011576995",
+        ] or postcode in [
+            "SK15 3QR",
+            "SK14 6SG",
+            "SK14 5RF",
+            "SK14 1EY",
+            "SK14 4XE",
+            "SK14 4EG",
+            "M34 2WS",
+            "OL6 7FU",
+            "M43 6LX",
+            "SK14 3EB",
+            "SK14 3HD",
+        ]:
             return None
 
         if uprn in [
             "10014259345",  # SK153AE -> SK153AD : 2 Portland Chambers, 1 Mottram Road, Stalybridge, Cheshire
-            "100012486293",  # SK146SE -> SK146SJ : Mains Grass Farm, Edge Lane, Mottram, Hyde, Cheshire
-            "10003436096",  # SK146SQ -> SK146SG : The Cottage,Landslow Green, Hobson Moor Road, Mottram, Hyde, Cheshire
             "100011618417",  # SK151AD -> SK153AD : 6A Portland Place, Mottram Road, Stalybridge, Cheshire
             "10003434537",  # OL59PH -> OL50BA : The Penthouse, Stamford Road, Mossley, Ashton-under-Lyne, Lancashire
             "100012776537",  # SK145QG -> SK145QN : Cemetery Lodge, Stockport Road, Hyde, Cheshire
@@ -57,6 +76,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100011536597",  # OL66NR -> OL69NR : 22 Albemarle Street, Ashton-under-Lyne, Lancashire
             "100011536598",  # OL66NR -> OL69NR : 24 Albemarle Street, Ashton-under-Lyne, Lancashire
             "100011536599",  # OL66NR -> OL69NR : 26 Albemarle Street, Ashton-under-Lyne, Lancashire
+            "10090075402",  # M437PU -> M437ZA : 1 Bridgewater House, Somerset Road, Droylsden, Manchester
+            "10090075327",  # M437PU -> M437ZA : 2 Bridgewater House, Somerset Road, Droylsden, Manchester
+            "10090075403",  # M437PU -> M437ZA : 3 Bridgewater House, Somerset Road, Droylsden, Manchester
+            "10090075328",  # M437PU -> M437ZA : 4 Bridgewater House, Somerset Road, Droylsden, Manchester
+            "10090075404",  # M437PU -> M437ZA : 5 Bridgewater House, Somerset Road, Droylsden, Manchester
+            "10090075329",  # M437PU -> M437ZA : 6 Bridgewater House, Somerset Road, Droylsden, Manchester
+            "200004409564",  # OL79DR -> OL79AA : Flat 1 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004409565",  # OL79DR -> OL79AA : Flat 2 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004424803",  # OL79DR -> OL79AA : Flat 3 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004409566",  # OL79DR -> OL79AA : Flat 4 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004424804",  # OL79DR -> OL79AA : Flat 5 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004409568",  # OL79DR -> OL79AA : Flat 6 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004409569",  # OL79DR -> OL79AA : Flat 7 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004424805",  # OL79DR -> OL79AA : Flat 8 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004409570",  # OL79DR -> OL79AA : Flat 9 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004409571",  # OL79DR -> OL79AA : Flat 10 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
+            "200004424812",  # OL79DR -> OL79AA : Flat 11 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
         ]:
             rec["accept_suggestion"] = True
 
@@ -67,23 +103,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["accept_suggestion"] = False
 
         return rec
-
-
-# Ambiguous, do nothing so they are disguarded.
-# "10090075402",  # M437PU -> M437ZA : 1 Bridgewater House, Somerset Road, Droylsden, Manchester
-# "10090075327",  # M437PU -> M437ZA : 2 Bridgewater House, Somerset Road, Droylsden, Manchester
-# "10090075403",  # M437PU -> M437ZA : 3 Bridgewater House, Somerset Road, Droylsden, Manchester
-# "10090075328",  # M437PU -> M437ZA : 4 Bridgewater House, Somerset Road, Droylsden, Manchester
-# "10090075404",  # M437PU -> M437ZA : 5 Bridgewater House, Somerset Road, Droylsden, Manchester
-# "10090075329",  # M437PU -> M437ZA : 6 Bridgewater House, Somerset Road, Droylsden, Manchester
-# "200004409564",  # OL79DR -> OL79AA : Flat 1 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004409565",  # OL79DR -> OL79AA : Flat 2 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004424803",  # OL79DR -> OL79AA : Flat 3 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004409566",  # OL79DR -> OL79AA : Flat 4 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004424804",  # OL79DR -> OL79AA : Flat 5 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004409568",  # OL79DR -> OL79AA : Flat 6 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004409569",  # OL79DR -> OL79AA : Flat 7 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004424805",  # OL79DR -> OL79AA : Flat 8 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004409570",  # OL79DR -> OL79AA : Flat 9 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004409571",  # OL79DR -> OL79AA : Flat 10 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
-# "200004424812",  # OL79DR -> OL79AA : Flat 11 The Raynors, Taunton Road, Ashton-under-Lyne, Lancashire
