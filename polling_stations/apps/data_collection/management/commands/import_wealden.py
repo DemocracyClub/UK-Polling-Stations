@@ -3,16 +3,27 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000065"
-    addresses_name = (
-        "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Wealdon.tsv"
-    )
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019Wealdon.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if record.addressline6 in [
+            "BN27 1DQ",
+            "TN21 0BA",
+        ]:
+            return None
+
+        if uprn in [
+            "10033413595",
+            "10033417739",
+        ]:
+            return None
 
         if uprn in [
             "10033399978",  # TN224DB -> TN224BY : Stable Cottage, Uckfield Road, Herons Ghyll, Uckfield, East Sussex
@@ -25,7 +36,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["accept_suggestion"] = True
 
         if uprn in [
-            "100062557927",  # BN86HE -> TN225NR : Old Post House, The Street, Chiddingly, Lewes, East Sussex
             "100060123569",  # RH177LS -> RH177JQ : Anderida, Stone Quarry Road, Chelwood Gate, Haywards Heath, West Sussex
             "10033406575",  # TN39HG -> TN39HA : Singlegate Lodge, Frant Road, Frant, Tunbridge Wells, East Sussex
             "10033408533",  # TN56PQ -> TN56PG : The Oasthouse, Mousehall, Tidebrook Road, Wadhurst, East Sussex
