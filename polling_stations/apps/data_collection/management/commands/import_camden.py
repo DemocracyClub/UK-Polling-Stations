@@ -21,7 +21,7 @@ class Command(BaseGenericApiImporter, CsvMixin):
     council_id = "E09000007"
     districts_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E09000007/districts.kml"
     stations_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E09000007/stations.csv"
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
 
     def parse_kml_features(self, data):
         k = kml.KML()
@@ -69,15 +69,6 @@ class Command(BaseGenericApiImporter, CsvMixin):
 
     def station_record_to_dict(self, record):
         address = "\n".join([record.organisation, record.street])
-
-        if (
-            record.polling_district_name == "JA"
-            and record.organisation == "Rainbow Nursery"
-        ):
-            record = record._replace(postcode="NW5 2HY")
-            address = "Rainbow Nursery, St. Benet's Church Hall, Lupton Street London"
-            record = record._replace(longitude="-0.1381025")
-            record = record._replace(latitude="51.554399")
 
         location = Point(
             float(record.longitude), float(record.latitude), srid=self.get_srid()

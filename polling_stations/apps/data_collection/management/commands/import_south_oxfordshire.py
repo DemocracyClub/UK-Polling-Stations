@@ -3,58 +3,47 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000179"
+    # single file merged for South Oxfordshire and Value of White Horse
+    # we'll split out the bits we need
     addresses_name = (
-        "local.2019-05-02/Version 1/Democracy Club Data South Oxfordshire.tsv"
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019vale and ox.CSV"
     )
     stations_name = (
-        "local.2019-05-02/Version 1/Democracy Club Data South Oxfordshire.tsv"
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019vale and ox.CSV"
     )
-    elections = ["europarl.2019-05-23"]
-    csv_delimiter = "\t"
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = ","
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
+        # discard records in Vale of White Horse
+        if record.polling_place_district_reference.startswith(
+            "S"
+        ) or record.polling_place_district_reference.startswith("X"):
+            return None
 
-        # 3x station changes for EU Parl elections
-        if record.polling_place_id == "6458":
-            record = record._replace(polling_place_name="Benson Youth Hall")
-            record = record._replace(polling_place_address_1="Oxford Road")
-            record = record._replace(polling_place_address_2="Benson")
-            record = record._replace(polling_place_address_3="Wallingford")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="OX10 6LX")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="")
-
-        if record.polling_place_id == "6775":
-            record = record._replace(polling_place_name="Stoke Row Village Hall")
-            record = record._replace(polling_place_address_1="Main Street")
-            record = record._replace(polling_place_address_2="Stoke Row")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="RG9 5QL")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="")
-
-        if record.polling_place_id == "6491":
-            record = record._replace(polling_place_name="St Catherine’s Church")
-            record = record._replace(polling_place_address_1="Church Lane")
-            record = record._replace(polling_place_address_2="Towersey")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="OX9 3QL")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
+        if record.polling_place_id == "8737":
             record = record._replace(polling_place_uprn="")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        # 10090812631 assigned to polling station 6782. Rest of postcode assigned to 6607.
-        # 10033011944 assigned to polling station 6765. Rest of postcode assigned to 6739.
-        if record.post_code in ["RG8 9EY", "OX49 5BZ"]:
+        # discard records in Vale of White Horse
+        if record.polling_place_district_reference.startswith(
+            "S"
+        ) or record.polling_place_district_reference.startswith("X"):
             return None
+
+        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if record.post_code == "OX49 5BZ" or uprn == "100120897264":
+            return None
+
+        if uprn == "100120888662":
+            rec["postcode"] = "OX14 3DX"
+
+        if uprn == "100120860708":
+            rec["postcode"] = "OX11 9UX"
 
         return rec

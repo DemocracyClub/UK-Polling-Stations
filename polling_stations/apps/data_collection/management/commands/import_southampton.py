@@ -16,7 +16,7 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
     council_id = "E06000045"
     districts_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E06000045/districts.kml"
     stations_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E06000045/stations.kml"
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
 
     def extract_info_from_district_description(self, description):
         # lxml needs everything to be enclosed in one root element
