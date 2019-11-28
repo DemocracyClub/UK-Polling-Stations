@@ -4,33 +4,16 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000037"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wberks.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Wberks.tsv"
-    elections = ["europarl.2019-05-23"]
-    csv_delimiter = "\t"
+    addresses_name = "parl.2019-12-12/Version 3/Democracy_Club__12December2019v3.csv"
+    stations_name = "parl.2019-12-12/Version 3/Democracy_Club__12December2019v3.csv"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-
-        # Station change for EU election
-        if record.polling_place_id == "3832":
-            record = record._replace(polling_place_name="Bradfield Village Hall")
-            record = record._replace(polling_place_address_1="Southend Road")
-            record = record._replace(polling_place_address_2="Bradfield Southend")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="RG7 6EY")
-            record = record._replace(polling_place_easting="459649")
-            record = record._replace(polling_place_northing="170731")
-            record = record._replace(polling_place_uprn="")
-
-        # Leckhampstead Village Hall
-        if record.polling_place_id == "3915":
-            record = record._replace(polling_place_postcode="RG20 8QZ")
-
         rec = super().station_record_to_dict(record)
 
         # Holybrook Centre
-        if record.polling_place_id == "4135":
+        if record.polling_place_id == "5139":
             rec["location"] = Point(-1.025829, 51.441617, srid=4326)
 
         return rec
@@ -39,6 +22,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
+        if record.addressline6 in [
+            "RG7 6TP",
+            "RG8 8HA",
+            "RG8 8PT",
+        ]:
+            return None
+
+        if uprn in ["10009196849"]:
+            return None
         if uprn in [
             "200004724874",  # RG317RS -> RG317RJ : Latymer House, The Spinney, Mill Lane, Calcot, Reading, Berks
             "200004722978",  # RG88JN -> RG88SN : Clayhanger Farm, Whitemoor Lane, Upper Basildon, Reading, Berks
@@ -56,7 +48,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10009201431",  # RG143BG -> RG143BH : West Lodge, Snelsmore Common, Newbury, Berks
             "10009199275",  # OX129NL -> OX129NN : Littleworth Farmhouse, South Fawley, Wantage, Oxon
             "10009200802",  # RG208SU -> RG208TU : Mobile Home, Old Street, Beedon, Newbury, Berks
-            "100081023961",  # RG73JS -> RG73ZF : Bay Tree Cottage, Hollybush Lane, Burghfield Common, Reading, Berks
             "10023920503",  # RG189SB -> RG170YU : Caravan, Stable View, Manor Lane, Oare, Newbury, Berks
             "10023920214",  # RG88PU -> RG88JG : Bowdenside Farm Nurseries, Yattendon Road, Pangbourne, Reading, Berks
             "200004735176",  # RG88JJ -> RG88PT : Bowden Corner, Yattendon Road, Pangbourne, Reading, Berks
