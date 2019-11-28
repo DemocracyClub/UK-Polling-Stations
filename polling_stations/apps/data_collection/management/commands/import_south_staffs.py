@@ -1,51 +1,47 @@
-import os
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000196"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019SST.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019SST.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019sstaffs.tsv"
+    )
+    stations_name = (
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019sstaffs.tsv"
+    )
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-
-    def pre_import(self):
-        gridrefs_file = os.path.join(
-            self.base_folder_path, "local.2019-05-02/Version 1/grid_refs.tsv"
-        )
-        gridrefs = self.get_data("csv", gridrefs_file)
-        self.gridrefs = {
-            row.polling_station_id: {
-                "easting": row.easting,
-                "northing": row.northing,
-                "uprn": row.uprn,
-            }
-            for row in gridrefs
-        }
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-        polling_place_id = record.polling_place_id
-        if polling_place_id == "2864":
+
+        if record.polling_place_id == "3464":
             record = record._replace(
-                polling_place_uprn=self.gridrefs[polling_place_id]["uprn"]
+                polling_place_easting="391056", polling_place_northing="319891"
             )
-        else:
+
+        if record.polling_place_id == "3427":
             record = record._replace(
-                polling_place_easting=self.gridrefs[polling_place_id]["easting"]
+                polling_place_easting="389364", polling_place_northing="295314"
             )
-            record = record._replace(
-                polling_place_northing=self.gridrefs[polling_place_id]["northing"]
-            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if len(record.addressline6) < 5:
+        if uprn in [
+            "200004532518",
+            "100031812029",
+            "10003692636",
+        ]:
             return None
 
-        if uprn in ["200004533338", "200004533338"]:
+        if record.addressline6 in ["DY7 5HL", "ST19 5RH"]:
+            return None
+
+        if uprn == "200004533338":
             rec["postcode"] = "DY6 0BD"
         if uprn == "100031830402":
             rec["postcode"] = "WV4 4UF"
@@ -56,7 +52,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "100031809999",  # WS67AD -> WS67AF : 2 Pinfold House, High Street, Cheslyn Hay, South Staffordshire
-            "100031810006",  # WS67AD -> WS67AF : 9 Pinfold House, High Street, Cheslyn Hay, South Staffordshire
             "100031810022",  # WS67AD -> WS67AF : 25 Pinfold House, High Street, Cheslyn Hay, South Staffordshire
             "200002877369",  # WS67NY -> WS67HP : 30 Pinfold Lane, Cheslyn Hay, South Staffordshire
             "200002877370",  # WS67NY -> WS67HP : 32 Pinfold Lane, Cheslyn Hay, South Staffordshire
@@ -75,7 +70,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100031811678",  # WS67BL -> WS67BH : 25 New Horse Road, Cheslyn Hay, South Staffordshire
             "100031811680",  # WS67BL -> WS67BH : 27 New Horse Road, Cheslyn Hay, South Staffordshire
             "100031811682",  # WS67BL -> WS67BH : 29 New Horse Road, Cheslyn Hay, South Staffordshire
-            "100031811683",  # WS67BL -> WS67BH : 31 New Horse Road, Cheslyn Hay, South Staffordshire
             "100031811685",  # WS67BL -> WS67BH : 35 New Horse Road, Cheslyn Hay, South Staffordshire
             "100031811686",  # WS67BL -> WS67BH : 37 New Horse Road, Cheslyn Hay, South Staffordshire
             "100031811687",  # WS67BL -> WS67BH : 39 New Horse Road, Cheslyn Hay, South Staffordshire
@@ -88,10 +82,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100032229602",  # WV107DW -> WV107DL : Mile End Cottage, Straight Mile, Calf Heath, Wolverhampton
             "200004532613",  # WV107DW -> WV107DL : Newhaven, Straight Mile, Calf Heath, Wolverhampton
             "200004529818",  # WV107BN -> WV95AW : The Harrows, Stafford Road, Standeford, Wolverhampton
-            "100031799286",  # WV81PP -> WS111SU : 16 Wolverhampton Road, Codsall, South Staffordshire
-            "100031802737",  # ST195DH -> ST195DJ : Machine Cottage, Market Street, Penkridge, Stafford
-            "10090090441",  # WV57HD -> WV59HG : 5 The Seven Stars, Fox Road, Seisdon, South Staffordshire
-            "200004534066",  # WV50JJ -> WV50JN : Red Lion, Battlefield Hill, Wombourne, South Staffordshire
         ]:
             rec["accept_suggestion"] = False
 

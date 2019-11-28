@@ -1,67 +1,42 @@
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000246"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019somersetW.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019somersetW.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = (
+        "parl.2019-12-12/Version 2/Democracy_Club__12December2019somersetw.tsv"
+    )
+    stations_name = (
+        "parl.2019-12-12/Version 2/Democracy_Club__12December2019somersetw.tsv"
+    )
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
 
-        """
-        These changes are from local.2019-05-02 to europarl.2019-05-23 from Somerset and West Taunton Council
-        Duplicate stations are being created to retain granularity of control wrt to polling districts.
-        """
+        # Williams Hall
+        if rec["internal_council_id"] == "8079":
+            rec["location"] = Point(-2.930949, 51.041262, srid=4326)
 
-        # · Cheddon Fitzpaine Memorial Hall -> West Monkton Village Hall (already a polling station)
-        if record.polling_place_id == "6924":
-            record = record._replace(
-                polling_place_name="Cheddon Fitzpaine Memorial Hall"
-            )
-            record = record._replace(polling_place_address_1="Rowford")
-            record = record._replace(polling_place_address_2="Cheddon Fitzpaine")
-            record = record._replace(polling_place_address_4="Taunton")
-            record = record._replace(polling_place_postcode="TA2 8JY")
+        # Victoria Park Pavilion
+        if rec["internal_council_id"] == "8219":
+            rec["location"] = Point(-3.091719, 51.017816, srid=4326)
 
-        # · Crowcombe Church House -> Crowcombe Hall, Crowcombe TA4 4AQ
-        if record.polling_place_id == "6830":
-            record = record._replace(polling_place_name="Crowcombe Hall")
-            record = record._replace(polling_place_address_1="Crowcombe")
-            record = record._replace(polling_place_postcode="TA4 4AQ")
-
-        # · St James Church, St James Street, Taunton -> Victoria Park Pavilion (already a polling station)
-        if record.polling_place_id == "6866":
-            record = record._replace(polling_place_name="Victoria Park Pavilion")
-            record = record._replace(polling_place_address_1="Victoria Gate")
-            record = record._replace(polling_place_address_4="Taunton")
-            record = record._replace(polling_place_postcode="TA1 3ES")
-
-        # · The Function Room at The Beambridge Inn, Sampford Arundel -> Parish Room, Sampford Arundel (already a polling station)
-        if record.polling_place_id == "6715":
-            record = record._replace(polling_place_name="The Parish Room")
-            record = record._replace(polling_place_address_1="Sampford Arundel")
-            record = record._replace(polling_place_address_2="Wellington")
-            record = record._replace(polling_place_postcode="")
-
-        # · The 68 Club, Cheddon Road, Taunton -> The Meeting Room, Wellsprings Leisure Centre (already a polling station)
-        if record.polling_place_id == "6800":
-            record = record._replace(polling_place_name="Meeting Room")
-            record = record._replace(
-                polling_place_address_1="Wellsprings Leisure Centre"
-            )
-            record = record._replace(polling_place_address_2="Cheddon Road")
-            record = record._replace(polling_place_address_4="Taunton")
-            record = record._replace(polling_place_postcode="TA2 7QP")
-
-        return super().station_record_to_dict(record)
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 in ["TA4 1GQ", "TA4 1CQ"]:
+        if record.addressline6 in [
+            "TA4 1CQ",
+            "TA22 9JH",
+            "TA24 8NS",
+            "TA23 0HL",
+        ]:
             return None
 
         if uprn == "10003766208":
@@ -74,12 +49,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200003159967",  # TA247UF -> TA247TQ : 1 Slades Cottage, Great House Street
             "10023837182",  # TA43PX -> TA43PU : Sadies Lodge, Elworthy Lydeard St Lawrence
             "10003560944",  # TA245BG -> TA246BG : Flat 2 5 The Terrace, Bircham Road, Alcombe, Minehead, Somerset
-            "100040944958",  # TA14YH -> TA14PZ : 1A Bruford Close, Taunton, Somerset
-            "100040944959",  # TA14YH -> TA14PZ : 1B Bruford Close, Taunton, Somerset
-            "100040944961",  # TA14YH -> TA14PZ : 2B Bruford Close, Taunton, Somerset
-            "100040944964",  # TA14YH -> TA14PZ : 4A Bruford Close, Taunton, Somerset
-            "100040944966",  # TA14YH -> TA14PZ : 5A Bruford Close, Taunton, Somerset
-            "100040944972",  # TA14YH -> TA14PZ : 8A Bruford Close, Taunton, Somerset
         ]:
             rec["accept_suggestion"] = True
 
