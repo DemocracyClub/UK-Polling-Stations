@@ -24,6 +24,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["location"] = Point(-0.200082, 51.491363, srid=4326)
             return rec
 
+        # Updates From Council
+        # Chelsea Old Town Hall, 165-181 King's Road, LONDON
+        if record.polling_place_id == "910":
+            record = record._replace(polling_place_easting="527281")
+            record = record._replace(polling_place_northing="178093")
+
+        # Kensington Central Library, 12 Phillimore Walk, LONDON
+        if record.polling_place_id == "853":
+            record = record._replace(polling_place_easting="525421")
+            record = record._replace(polling_place_northing="179598")
+
+        # Christ Church, Victoria Road, LONDON, W8 5RQ
+        if record.polling_place_id == "899":
+            record = record._replace(polling_place_easting="525968")
+            record = record._replace(polling_place_northing="179187")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):

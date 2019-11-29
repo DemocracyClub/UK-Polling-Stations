@@ -4,24 +4,34 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "E07000031"
-    addresses_name = "local.2018-05-03/Version 1/polling_station_export-2018-04-03 South Lakeland.csv"
-    stations_name = "local.2018-05-03/Version 1/polling_station_export-2018-04-03 South Lakeland.csv"
-    elections = ["local.2018-05-03"]
+    addresses_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-14.csv"
+    stations_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-14.csv"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.uprn.strip().lstrip("0")
 
-        # All of the UPRN data from South Lakeland is a bit dubious.
-        # For safety I'm just going to ignore them all
-        record = record._replace(uprn="")
+        if uprn in [
+            "10003949214",
+            "100110697617",
+            "10034113464",
+        ]:
+            return None
 
-        return super().address_record_to_dict(record)
+        if record.housepostcode in [
+            "LA6 2NA",
+            "LA23 3LX",
+        ]:
+            return None
+
+        return rec
 
     def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
 
-        if record.pollingstationnumber == "109":
-            record = record._replace(pollingstationpostcode="LA8 9LE")
-            rec = super().station_record_to_dict(record)
+        if rec["internal_council_id"] == "109-selside-memorial-hall":
             rec["location"] = Point(-2.709031, 54.398317, srid=4326)
-            return rec
 
-        return super().station_record_to_dict(record)
+        return rec

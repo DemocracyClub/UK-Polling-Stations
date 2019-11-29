@@ -3,11 +3,12 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000093"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019test.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019test.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019 test.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019 test.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -22,8 +23,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in ["200000704765", "200000712354"]:
             rec["postcode"] = "SO51 0QW"
 
+        if record.addressline6 in ["SP11 8PW"]:
+            return None
+
         if uprn in [
-            "200010018966",  # SO206AZ -> SO206AX : The Mayfly, Testcombe, Wherwell, Andover, Hampshire
             "200000723154",  # SO208DP -> SO208DR : The Lodge, Garlogs, Nine Mile Water, Nether Wallop, Stockbridge, Hampshire
             "200000714047",  # SO208DT -> SO208EG : Lark Rise, Romsey Road, Nether Wallop, Stockbridge, Hampshire
             "200010012330",  # SO208EG -> SO208HN : The Old George, Salisbury Road, Middle Wallop, Stockbridge, Hampshire
@@ -38,7 +41,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200000706708",  # SO510HE -> SO510HS : 2 New Cottages, Awbridge Hill, Awbridge, Romsey, Hampshire
             "200000713285",  # SP118PX -> SP118PH : Kimpton Cottage, The Green, Kimpton, Andover, Hampshire
             "200000715087",  # SP40EE -> SP40DR : 55 Spinney Cottage, Cholderton, Salisbury, Wiltshire
-            "200010018694",  # SO516EQ -> SO516DX : Strawberry Cottage, Shorts Farm, Scallows Lane, Wellow, Romsey, Hampshire
             "200000717175",  # SO516FS -> SO516ZR : Workshop Flat, St Edwards Sch, Melchet Court, Plaitford, Romsey, Hampshire
             "100062537012",  # SO516EB -> SO516EA : 5 Bridge Cottages, Foxes Lane, Wellow, Romsey, Hampshire
             "100062537013",  # SO516EB -> SO516EA : 6 Bridge Cottages, Foxes Lane, Wellow, Romsey, Hampshire
@@ -57,7 +59,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "200000712580",  # SO206AB -> SO206AZ : Down End, Drove Road, Chilbolton, Stockbridge, Hampshire
             "100062539681",  # SO519AL -> SP102EG : 2 Winchester Road, Crampmoor, Romsey, Hampshire
-            "200010015207",  # SP116JH -> SP118PW : 4 Woodhouse Smannell, Andover   Hampshire
         ]:
             rec["accept_suggestion"] = False
 
