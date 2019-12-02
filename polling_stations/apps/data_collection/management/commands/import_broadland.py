@@ -1,7 +1,5 @@
-from django.contrib.gis.geos import Point
 from uk_geo_utils.helpers import Postcode
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode_point_only, PostcodeError
 from data_collection.addresshelpers import (
     format_residential_address,
     format_polling_station_address,
@@ -10,9 +8,9 @@ from data_collection.addresshelpers import (
 
 class Command(BaseCsvStationsCsvAddressesImporter):
     council_id = "E07000144"
-    addresses_name = "local.2019-05-02/Version 1/Broadland_poll_card_file_amended.csv"
-    stations_name = "local.2019-05-02/Version 1/Broadland_poll_card_file_amended.csv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Poll card informationbroad.csv"
+    stations_name = "parl.2019-12-12/Version 1/Poll card informationbroad.csv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = ","
 
     def get_station_hash(self, record):
@@ -31,58 +29,11 @@ class Command(BaseCsvStationsCsvAddressesImporter):
         )
 
     def get_station_point(self, record):
-        postcode = record.placepcode.strip()
-        if postcode == "":
-            return None
-
-        try:
-            location_data = geocode_point_only(postcode)
-            location = location_data.centroid
-        except PostcodeError:
-            location = None
-        return location
+        return None
 
     def station_record_to_dict(self, record):
         district = record.district.strip()
-
-        # Station changes for EU election
-        if district == "BC1":
-            record = record._replace(placename="St Andrew and St Peter Church")
-            record = record._replace(placeadd1="Church Road")
-            record = record._replace(placeadd2="Blofield")
-            record = record._replace(placeadd3="Norwich")
-            record = record._replace(placeadd4="")
-            record = record._replace(placeadd5="")
-            record = record._replace(placepcode="NR13 4NA")
-        if district in ["BL4", "BL5", "BL6", "BL7", "BL8", "BL9"]:
-            record = record._replace(placename="The Old Rectory")
-            record = record._replace(placeadd1="The Street")
-            record = record._replace(placeadd2="Swannington")
-            record = record._replace(placeadd3="Norwich")
-            record = record._replace(placeadd4="")
-            record = record._replace(placeadd5="")
-            record = record._replace(placepcode="NR9 5NW")
-        if district == "BY2":
-            record = record._replace(placename="Rackheath Village Hall")
-            record = record._replace(placeadd1="Green Lane West")
-            record = record._replace(placeadd2="Rackheath")
-            record = record._replace(placeadd3="Norwich")
-            record = record._replace(placeadd4="")
-            record = record._replace(placeadd5="")
-            record = record._replace(placepcode="NR13 6LT")
-        if district == "HC1":
-            record = record._replace(placename="Parish Council Chamber")
-            record = record._replace(placeadd1="Diamond Jubilee Lodge")
-            record = record._replace(placeadd2="Wood View Road")
-            record = record._replace(placeadd3="Hellesdon")
-            record = record._replace(placeadd4="")
-            record = record._replace(placeadd5="")
-            record = record._replace(placepcode="NR6 5QB")
-
         location = self.get_station_point(record)
-
-        if district == "BW1":
-            location = Point(1.193280, 52.689556, srid=4326)
 
         return {
             "internal_council_id": district,
@@ -133,6 +84,7 @@ class Command(BaseCsvStationsCsvAddressesImporter):
             "100090814819",  # NR65NG -> NR65NS : AMBERLEA, 67 MIDDLETONS LANE, HELLESDON, NORWICH
             "10009923828",  # NR205PT -> NR205PS : 4 KERDISTON ROAD, THEMELTHORPE, DEREHAM
             "200004287047",  # NR205PT -> NR205PS : 5 KERDISTON ROAD, THEMELTHORPE, DEREHAM
+            "10014358940",  # AddressBase error
         ]:
             rec["accept_suggestion"] = False
 
