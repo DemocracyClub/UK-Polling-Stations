@@ -3,10 +3,35 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000194"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Lich.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Lich.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    csv_encoding = "windows-1252"
+    allow_station_point_from_postcode = False
+
+    def station_record_to_dict(self, record):
+        if record.polling_place_id == "4925":
+            # Guildroom, Guildhall, Bore Street, Lichfield
+            record = record._replace(polling_place_postcode="WS13 6LU")
+        if record.polling_place_id == "4912":
+            # Mobile Polling Station, Staffs University West Car Park, Monks Close, Lichfield
+            record = record._replace(
+                polling_place_easting=411530, polling_place_northing=309223
+            )
+        # Locations for these because I investigated why they had the same postcode and it turns out they're adjacent
+        # properties
+        if record.polling_place_id == "4924":
+            # Holy Cross, Community Meeting Room, Holy Cross Church
+            record = record._replace(
+                polling_place_easting=411921, polling_place_northing=308789
+            )
+        if record.polling_place_id == "4920":
+            # Holy Cross Parish Hall
+            record = record._replace(
+                polling_place_easting=411908, polling_place_northing=308797
+            )
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
