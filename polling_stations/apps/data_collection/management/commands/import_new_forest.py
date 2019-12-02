@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
@@ -15,6 +16,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # correction: https://trello.com/c/R5XolnQC
         if record.polling_place_id == "7903":  # New Milton Cricket Club
             record = record._replace(polling_place_postcode="BH25 5SU")
+
+        # user issue report #195
+        if record.polling_place_id == "7942":  # Sandleheath Village Hall
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-1.817931, 50.931645, srid=4326)
+            return rec
 
         return super().station_record_to_dict(record)
 
