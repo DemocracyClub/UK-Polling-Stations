@@ -10,76 +10,44 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
+        # These polling places have a UPRN, and the addressbase postcode doesn't match
+        # the postcode from the council. In these cases the addressbase postcode matches
+        # the postcode used on the venue's website.
+        # Online references toStation ID 7680 (Whar Hall Road Community Centre) don't
+        # align with addressbase, but the postcodes are adjacent. So leaving postcode
+        # as is in the CSV.
+        if record.polling_place_id == "7518":  # Barston Memorial Institute
+            record = record._replace(polling_place_postcode="B92 0JU")
+        if record.polling_place_id == "7550":  # St Clements Church
+            record = record._replace(polling_place_postcode="B36 0BA")
+        if record.polling_place_id == "7561":  # Kingshurst Evangelical Church
+            record = record._replace(polling_place_postcode="B37 6NP")
+        if (
+            record.polling_place_id == "7626"
+        ):  # The Royal British Legion (Knowle) Club Limited
+            record = record._replace(polling_place_postcode="B93 9LU")
+        if record.polling_place_id == "7660":  # Woodlands Campus
+            record = record._replace(polling_place_postcode="B36 0NF")
 
-        # 3x station changes for EU Parl elections
-        if record.polling_place_id == "6775":
-            record = record._replace(polling_place_name="Hampton in Arden Library")
-            record = record._replace(polling_place_address_1="39 Fentham Road")
-            record = record._replace(polling_place_address_2="Hampton in Arden")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="B92 0AY")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="200003829766")
-
-        if record.polling_place_id == "7075":
-            record = record._replace(
-                polling_place_name="Monkspath Junior and Infant School"
-            )
-            record = record._replace(polling_place_address_1="Farmhouse Way")
-            record = record._replace(polling_place_address_2="")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="B90 4EH")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="100071489020")
-
-        if record.polling_place_id == "7049":
-            record = record._replace(polling_place_name="Sharmans Cross Junior School")
-            record = record._replace(polling_place_address_1="Sharmans Cross Road")
-            record = record._replace(polling_place_address_2="")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="B91 1PH")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            record = record._replace(polling_place_uprn="100071401403")
-
-        # The Loft Above Asda
-        if record.polling_place_id == "6826":
-            record = record._replace(polling_place_uprn="010023647341")
-
-        # Tudor Grange Leisure Centre
-        if record.polling_place_id == "7027":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-1.7881577, 52.4124167, srid=4326)
-            return rec
-
+        # Fixes carried forward
         # Three Trees Community Centre
-        if record.polling_place_id == "6824":
+        if record.polling_place_id == "7571":
             record = record._replace(polling_place_uprn="100071461342")
-
-        # Elmwood Place
-        if record.polling_place_id in ["7041", "7011"]:
-            record = record._replace(polling_place_uprn="10090946409")
-
-        # Auckland Hall
-        if record.polling_place_id == "7004":
-            record = record._replace(polling_place_uprn="200003829755")
-
         # Dorridge Methodist Church
-        if record.polling_place_id == "7081":
+        if record.polling_place_id == "7586":
             record = record._replace(polling_place_uprn="100071001475")
 
-        # Catherine de Barnes Village Hall
-        if record.polling_place_id == "6777":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-1.7382134, 52.4203089, srid=4326)
-            return rec
+        rec = super().station_record_to_dict(record)
 
-        return super().station_record_to_dict(record)
+        # Tudor Grange Leisure Centre
+        if record.polling_place_id == "7726":
+            rec["location"] = Point(-1.7881577, 52.4124167, srid=4326)
+
+        # Catherine de Barnes Village Hall
+        if record.polling_place_id == "7515":
+            rec["location"] = Point(-1.7382134, 52.4203089, srid=4326)
+
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
