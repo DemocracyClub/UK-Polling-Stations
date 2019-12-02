@@ -4,10 +4,9 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000029"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019soli.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019soli.tsv"
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.CSV"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.CSV"
     elections = ["europarl.2019-05-23"]
-    csv_delimiter = "\t"
     allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
@@ -89,30 +88,37 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn == "10090949380":
             rec["postcode"] = "B93 0FH"
 
+        if (record.addressline1, record.addressline2) == (
+            "101 Noble Way",
+            "Cheswick Green",
+        ):
+            rec["uprn"] = "10090950327"
+            rec["accept_suggestion"] = True
+
         if uprn in [
             "10090945527",  # B377RN -> B376RL : 3C Woodlands Way, Chelmsley Wood
             "10090945525",  # B377RN -> B376RL : 3A Woodlands Way, Chelmsley Wood
         ]:
             rec["accept_suggestion"] = True
 
+        if record.addressline6 in [
+            "B90 4AY",  # stray odd-looking property
+            "CV7 7HL",  # single property with spurious-looking station
+        ]:
+            return None
+
         if uprn in [
             "100071001341",  # B911DA -> B911JW : 90 Grange Road, Solihull
             "10090946742",  # B901FT -> B930EJ : Apartment 16, Leasowes House, 3 Main Street, Dickens Heath, Solihull
             "10090948318",  # B901GL -> B913AB : Apartment 5, Market Court, 61 Old Dickens Heath Road, Shirley, Solihull
-            "200003823593",  # B904EA -> B946QT : The Flat Cheswick Green Inn, Tanworth Lane, Shirley, Solihull
-            "10090947460",  # B904LG -> B377NZ : 18 Archer Drive, Solihull
             "10090947804",  # CV49BN -> B901FT : 12 Eagle Drive, Solihull
             "200003834455",  # B927AW -> B927AH : St Michaels Residential Home, 251 Warwick Road, Solihull
             "10090946771",  # B920JP -> B930FD : Caravan Firs Farm, Barston Lane, Solihull
-            "10090946731",  # B377WA -> B930EJ : Apartment 23, Fillingham Court, 66 Fillingham Close, Chelmsley Wood
-            "10090946121",  # B913EP -> B920LD : Apartment 10, Scarlet Oak, 911-913 Warwick Road, Solihull
             "10090948319",  # B912AW -> B913AB : Flat 2, 58 Lode Lane, Solihull
             "100070965323",  # B376ES -> B376EU : 77 Overgreen Drive, Kingshurst
             "100070965320",  # B376ES -> B376EU : 77A Overgreen Drive, Kingshurst
             "100070965321",  # B376ES -> B376EU : 77B Overgreen Drive, Kingshurst
             "100070965322",  # B376ES -> B376EU : 77C Overgreen Drive, Kingshurst
-            "10023648240",  # B946DQ -> B946DE : 66B Salter Street, Hockley Heath
-            "200003831389",  # B360UD -> B360UF : 275 Windward Way, Smith`s Wood
         ]:
             rec["accept_suggestion"] = False
 
