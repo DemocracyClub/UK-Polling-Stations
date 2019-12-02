@@ -1,18 +1,23 @@
+from addressbase.models import Address
+from uk_geo_utils.helpers import Postcode
 from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode_point_only, PostcodeError
+from data_collection.addresshelpers import (
+    format_residential_address,
+    format_polling_station_address,
+)
 
 
 class Command(BaseCsvStationsCsvAddressesImporter):
     council_id = "W06000020"
-    addresses_name = "parl.2017-06-08/Version 1/ElectorateAddressWthPollingStationsTorfaenFINAL-anonymised.csv"
-    stations_name = "parl.2017-06-08/Version 1/ElectorateAddressWthPollingStationsTorfaenFINAL-anonymised.csv"
-    elections = ["parl.2017-06-08"]
+    addresses_name = "parl.2019-12-12/Version 1/DEMOCRACY CLUB Finaltor.csv"
+    stations_name = "parl.2019-12-12/Version 1/DEMOCRACY CLUB Finaltor.csv"
+    elections = ["parl.2019-12-12"]
 
     def get_station_hash(self, record):
-        return "-".join([record.station_uprn.strip()])
+        return "-".join([record.polling_district.strip()])
 
     def get_station_address(self, record):
-        address = "\n".join(
+        return format_polling_station_address(
             [
                 record.polling_station_name.strip(),
                 record.polling_station_address1.strip(),
@@ -20,51 +25,45 @@ class Command(BaseCsvStationsCsvAddressesImporter):
                 record.polling_station_address3.strip(),
                 record.polling_station_address4.strip(),
                 record.polling_station_address5.strip(),
+                record.polling_station_address6.strip(),
+                record.polling_station_address7.strip(),
+                record.polling_station_address8.strip(),
             ]
         )
-        while "\n\n" in address:
-            address = address.replace("\n\n", "\n")
-        return address.strip()
 
     def get_station_point(self, record):
-        postcode = record.polling_station_postcode.strip()
-        if postcode == "":
-            return None
-
+        uprn = record.polling_station_uprn.lstrip("0").strip()
         try:
-            location_data = geocode_point_only(postcode)
-            location = location_data.centroid
-        except PostcodeError:
-            location = None
-        return location
+            ab_rec = Address.objects.get(uprn=uprn)
+            return ab_rec.location
+        except Address.DoesNotExist:
+            return None
 
     def station_record_to_dict(self, record):
         location = self.get_station_point(record)
         return {
-            "internal_council_id": record.station_uprn.strip(),
-            "postcode": record.polling_station_postcode.strip(),
+            "internal_council_id": record.polling_district.strip(),
+            "postcode": record.polling_station_address9.strip(),
             "address": self.get_station_address(record),
             "location": location,
         }
 
     def address_record_to_dict(self, record):
-        address = ", ".join(
+        address = format_residential_address(
             [
-                record.electorate_address1.strip(),
-                record.electorate_address2.strip(),
-                record.electorate_address3.strip(),
-                record.electorate_address4.strip(),
-                record.electorate_address5.strip(),
-                record.electorate_address6.strip(),
+                record.elector_address1.strip(),
+                record.elector_address2.strip(),
+                record.elector_address3.strip(),
+                record.elector_address4.strip(),
+                record.elector_address5.strip(),
+                record.elector_address6.strip(),
+                record.elector_address7.strip(),
+                record.elector_address8.strip(),
             ]
         )
-        while ", , " in address:
-            address = address.replace(", , ", ", ")
-        if address[-2:] == ", ":
-            address = address[:-2]
 
         return {
             "address": address.strip(),
-            "postcode": record.electorate_postcode.strip(),
-            "polling_station_id": record.station_uprn.strip(),
+            "postcode": Postcode(record.elector_address9.strip()).without_space,
+            "polling_station_id": record.polling_district.strip(),
         }

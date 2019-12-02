@@ -22,10 +22,14 @@ class Command(BaseGitHubImporter):
         code = record["ID"].strip()
         address = record["POLLING_PL"].strip()
 
-        # Ad-hoc fix for parl.2019-12-12
-        # The point got updated in API, but the address didn't
+        # Ad-hoc fixs for parl.2019-12-12
+        # The points got updated in API, but the addresses didn't
         if code == "CWI2":
             address = "Thanington Neighbourhood Resource Centre\nThanington Road\nCanterbury\nCT1 3XE"
+        if code == "RCS2":
+            address = (
+                "Chartham Sports Club\nBeech Avenue\nChartham\nCanterbury\nCT4 7TA"
+            )
 
         if code in self.station_addresses and self.station_addresses[code] != address:
             raise ValueError(
