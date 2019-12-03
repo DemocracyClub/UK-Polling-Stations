@@ -32,8 +32,8 @@
 
 {% if show_polls_open %}
 <div class="card centered-card">
-  {# <h2>Put a Title in Here</h2> #}
-  <p>Polling stations are open from 7am to 10pm today.</p>
+  <h2>UK General Election</h2>
+  <p>Polling stations are open from 7am to 10pm <strong>{{ poll_date }}</strong>.</p>
 
   <p>You don't need your poll card to vote.</p>
 
@@ -44,7 +44,7 @@
     can go to the polling station and give them your name and address.
   </p>
 
-  <p>You don't need any other form of ID, except in Northern Ireland, where you must bring photo ID.</p>
+  <p>In England, Wales and Scotland, you don't need any form of ID. In Northern Ireland, you must bring photo ID.</p>
 
 </div>
 {% endif %}
