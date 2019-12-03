@@ -17,6 +17,14 @@ class Command(BaseHalaroseCsvImporter):
         if rec["internal_council_id"] == "38-methodist-hall":
             rec["location"] = Point(1.72571, 52.57462, srid=4326)
 
+        # Corrections from Council
+        if rec["internal_council_id"] == "11-the-priory-centre":
+            rec["postcode"] = "NR30 1NA"
+            rec["address"] = "The Catalyst\nThe Conge\nGreat Yarmouth"
+        if rec["internal_council_id"] == "28-community-building":
+            rec["postcode"] = "NR31 7ND"
+            rec["address"] = "St Marys Church Hall\nFastolff Avenue\nGorleston"
+
         return rec
 
     def address_record_to_dict(self, record):
