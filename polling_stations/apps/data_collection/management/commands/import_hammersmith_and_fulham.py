@@ -1,32 +1,38 @@
-from data_collection.github_importer import BaseGitHubImporter
+from data_collection.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseHalaroseCsvImporter):
     council_id = "E09000013"
-    elections = []
-    scraper_name = "wdiv-scrapers/DC-PollingStations-HammersmithAndFulham"
-    geom_type = "geojson"
+    addresses_name = (
+        "parl.2019-12-12/Version 1/polling_station_export-2019-11-16H&F.csv"
+    )
+    stations_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-16H&F.csv"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+    def address_record_to_dict(self, record):
+        rec = super().address_record_to_dict(record)
+        uprn = record.uprn.strip().lstrip("0")
 
-        return {
-            "internal_council_id": record["POLLING_ZO"],
-            "name": record["POLLING_ZO"],
-            "area": poly,
-            "polling_station_id": record["POLLING_ZO"],
-        }
+        if uprn == "34157887":
+            rec["postcode"] = "W60BY"
 
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
+        if uprn in [
+            "34148072",
+            "34136009",
+            "34135797",
+            "34129561",
+            "34155328",
+        ]:
+            return None
 
-        return {
-            "internal_council_id": record["POLLING_DI"],
-            "address": record["POLLING__1"],
-            "postcode": record["POSTCODE"],
-            "location": location,
-        }
+        if (record.housenumber, record.streetname) == ("17A", "Hannell Road"):
+            return None
+
+        if record.housepostcode in [
+            "NW10 6FG",
+            "W12 8HH",
+        ]:
+            return None
+
+        return rec

@@ -4,9 +4,11 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000156"
     addresses_name = (
-        "europarl.2019-05-23/Version 1/DC Polling Station Data Wellingborough.CSV"
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019welling.csv"
     )
     stations_name = (
-        "europarl.2019-05-23/Version 1/DC Polling Station Data Wellingborough.CSV"
+        "parl.2019-12-12/Version 1/Democracy_Club__12December2019welling.csv"
     )
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
