@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView, DetailView, ListView
 
+from addressbase.models import Address
 from councils.models import Council
 from data_finder.helpers import RoutingHelper
 from pollingstations.models import ResidentialAddress, PollingStation
@@ -82,9 +83,19 @@ class PostCodeView(TemplateView):
     template_name = "dashboard/postcode.html"
 
     def get_context_data(self, postcode, **kwargs):
+        residential_addresses = ResidentialAddress.objects.filter(postcode=postcode)
+        addresses = dict(
+            Address.objects.filter(
+                uprn__in=residential_addresses.values_list("uprn", flat=True)
+            ).values_list("uprn", "address")
+        )
+        for residential_address in residential_addresses:
+            residential_address.addressbase_address = addresses.get(
+                residential_address.uprn
+            )
         return {
             "postcode": postcode,
-            "addresses": ResidentialAddress.objects.filter(postcode=postcode),
+            "addresses": residential_addresses,
             "routing_helper": RoutingHelper(postcode),
         }
 
