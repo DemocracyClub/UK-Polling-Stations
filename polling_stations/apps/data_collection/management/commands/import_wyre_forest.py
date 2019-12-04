@@ -10,7 +10,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        if record.addressline6 == "DY103JM":
+        if record.addressline6 == "DY10 3JM":
             record = record._replace(addressline6="DY10 3JH")
 
         rec = super().address_record_to_dict(record)
