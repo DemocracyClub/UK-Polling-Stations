@@ -1,31 +1,13 @@
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000083"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Tewk.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Tewk.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tewk.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tewk.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-
-        # one station change for EU election
-        if record.polling_place_id == "7309":
-            record = record._replace(polling_place_name="The Gambier Parry Hall")
-            record = record._replace(polling_place_address_1="Highnam Community Centre")
-            record = record._replace(polling_place_address_2="Newent Road")
-            record = record._replace(polling_place_address_3="Glos")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="GL2 8DG")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-2.295441, 51.874659, srid=4326)
-            return rec
-
-        return super().station_record_to_dict(record)
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -35,7 +17,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["postcode"] = "GL52 9QG"
             rec["accept_suggestion"] = False
 
-        if uprn in ["200004320994", "200004330341"]:
+        if uprn in ["10090024267"]:
             return None
 
         if uprn in [
@@ -45,12 +27,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200004330125",  # WR127NQ -> WR127ND : New House Farm, Stanton Road, Stanton, Broadway, Glos
             "10067629295",  # GL545PP -> GL545NY : 2 Millhampost Barn, Stanway, Cheltenham, Glos
             "10090023401",  # GL206JL -> GL208GN : 8 Styles Close, Northway, Tewkesbury, Glos
-            "10093223390",  # GL208HQ -> GL208RY : The Coach House, Northway Court Farmhouse, Hardwick Bank Road, Northway, Tewkesbury, Glos
             "200004329486",  # GL510TL -> GL510TW : Brooklaines Farm, Barrow, Boddington, Cheltenham, Glos
             "200004331100",  # GL206JL -> GL206JD : The Granary, 1 Greenacres, Twyning, Tewkesbury, Glos
             "100121258576",  # GL205PR -> GL205PP : 2 Kings Head Cottages, Barton Street, Tewkesbury, Glos
-            "100120547768",  # GL205PR -> GL205PP : 3 Kings Head Cottages, Barton Street, Tewkesbury, Glos
-            "100120553601",  # GL545QP -> GL545AB : Langley Lodge, Langley Road, Winchcombe, Cheltenham, Glos
             "100120553581",  # GL545QP -> GL545AB : Cotmore, Langley Road, Winchcombe, Cheltenham, Glos
         ]:
             rec["accept_suggestion"] = True

@@ -3,31 +3,29 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000052"
-    addresses_name = "europarl.2019-05-23/Version 2/Democracy_Club__23May2019 -Cornwall- new file.CSV"
-    stations_name = "europarl.2019-05-23/Version 2/Democracy_Club__23May2019 -Cornwall- new file.CSV"
-    elections = ["europarl.2019-05-23"]
-    csv_delimiter = ","
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019corn.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019corn.tsv"
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        # most of these UPRNs are junk
-        if uprn.endswith("00000"):
-            rec["uprn"] = ""
+        if "Roundhouse Way" in record.addressline1:
+            rec["postcode"] = "TR13 8WL"
 
         if uprn == "10003303540":
             rec["postcode"] = "PL15 9PB"
 
         if record.addressline6.strip() in [
-            "PL15 9NR",
-            "EX23 9PX",
-            "TR4 8JA",
-            "PL15 7SN",
             "EX23 9PJ",
-            "PL15 7SL",
-            "TR19 6LJ",
+            "TR20 9JG",
         ]:
+            return None
+
+        if uprn in ["10014484586"]:
             return None
 
         return rec
@@ -35,20 +33,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
 
         # Methodist Sunday School Room
-        if record.polling_place_id == "3453":
+        if record.polling_place_id == "4637":
             record = record._replace(polling_place_uprn="10003300470")
-
         # The Cove Hall, Wilcove
-        if record.polling_place_id == "2992":
+        if record.polling_place_id == "4768":
             record = record._replace(polling_place_uprn="10003065058")
             record = record._replace(polling_place_postcode="PL11 2PQ")
 
         # St Austell Rugby Club
-        if record.polling_place_id == "2669":
-            record = record._replace(polling_place_uprn="10002694687")
+        if record.polling_place_id == "5003":
+            record = record._replace(
+                polling_place_uprn="10002694687", polling_place_postcode="PL26 7FH"
+            )
 
         # Millbrook Village Hall
-        if record.polling_place_id == "3112":
-            record = record._replace(polling_place_uprn="10023432417")
+        if record.polling_place_id == "4891":
+            record = record._replace(
+                polling_place_uprn="10023432417", polling_place_postcode="PL10 1AX"
+            )
 
         return super().station_record_to_dict(record)
