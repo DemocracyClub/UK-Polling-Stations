@@ -23,6 +23,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["location"] = Point(-1.817931, 50.931645, srid=4326)
             return rec
 
+        # corrections from council
+        if record.polling_place_id == "7953":  # Woodgreen Village Hall
+            record = record._replace(polling_place_easting="417079.23")
+            record = record._replace(polling_place_northing="117684.73")
+        if record.polling_place_id == "7836":  # Fordingbridge Town Hall
+            record = record._replace(polling_place_easting="414713.35")
+            record = record._replace(polling_place_northing="114134.91")
+        if record.polling_place_id == "7784":  # Totton & Eling Cricket Club
+            record = record._replace(polling_place_easting="435321.7")
+            record = record._replace(polling_place_northing="113089.68")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
