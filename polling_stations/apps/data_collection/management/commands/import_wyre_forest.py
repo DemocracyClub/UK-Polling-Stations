@@ -3,13 +3,21 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000239"
-    addresses_name = "local.2019-05-02/Version 2/Democracy Club (1).csv"
-    stations_name = "local.2019-05-02/Version 2/Democracy Club (1).csv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019WF.tsv"
+    stations_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019WF.tsv"
+    elections = ["parl.2019-12-12"]
+    csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
+        if record.addressline6 == "DY10 3JM":
+            record = record._replace(addressline6="DY10 3JH")
+
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn == "100120753042":
+            rec["accept_suggestion"] = False  # incorrect 100% match "correction"
 
         if uprn in [
             "100120751152",  # DY122BL -> DY122LQ : Grove Farm, Dry Mill Lane, Bewdley, Worcestershire
@@ -31,9 +39,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "100120738036",  # DY101PX -> DY101PS : Flat 4 Compton Valley House, 90 George Street, Kidderminster, Worcestershire
-            "10003382039",  # DY122RE -> DY104ND : B14 Riverside Caravan Park, Greenacres Lane, Dowles Road, Bewdley, Worcestershire
-            "10003379973",  # DY122QG -> DY149EB : Caravan T04, Hillcroft Caravan Park, Cleobury Road, Bewdley, Worcestershire
-            "10003374954",  # DY103RT -> DY103PX : 56 Westley Court, Austcliffe Lane, Cookley, Kidderminster, Worcestershire        ]:
         ]:
             rec["accept_suggestion"] = False
 
