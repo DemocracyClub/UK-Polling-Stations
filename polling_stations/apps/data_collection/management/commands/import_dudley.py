@@ -3,16 +3,17 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000027"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Dudley.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019Dudley.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
         # St Andrews District Church
-        if record.polling_place_id == "20072":
+        if record.polling_place_id == "22550":
             record = record._replace(polling_place_postcode="DY3 3AB")
 
         return super().station_record_to_dict(record)
@@ -20,9 +21,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
-
-        if record.addressline6.strip() == "DY5 2HN":
-            return None
 
         if uprn in [
             "90146449",  # DY69LJ -> DY69NW : Swan Hotel, Stream Road, Kingswinford, West Midlands
@@ -38,5 +36,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "90156425",  # B629EJ -> B629LB : 161 Long Lane, Halesowen, West Midlands
         ]:
             rec["accept_suggestion"] = False
+
+        if uprn == "90161895":
+            return None
 
         return rec
