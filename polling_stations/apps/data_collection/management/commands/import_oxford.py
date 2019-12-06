@@ -60,4 +60,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if rec["internal_council_id"] == "5174":
             rec["location"] = Point(-1.232920, 51.740993, srid=4326)
 
+        # Oxford Centre for Mission Studies
+        if rec["internal_council_id"] == "5344":
+            rec["location"] = Point(-1.264263, 51.764185, srid=4326)
+
         return rec
