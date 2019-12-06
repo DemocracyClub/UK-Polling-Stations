@@ -40,6 +40,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="525968")
             record = record._replace(polling_place_northing="179187")
 
+        # user error report #204
+        # St Philip`s Church
+        if record.polling_place_id == "844":
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(-0.196350, 51.495703, srid=4326)
+            return rec
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
