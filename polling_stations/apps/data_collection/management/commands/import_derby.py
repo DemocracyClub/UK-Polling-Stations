@@ -9,6 +9,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
     allow_station_point_from_postcode = False
 
+    def station_record_to_dict(self, record):
+
+        # user error report #202
+        # Rebecca House, Uttoxeter Old Road
+        if record.polling_place_id == "9315":
+            record = record._replace(polling_place_easting="434237")
+            record = record._replace(polling_place_northing="336464")
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
