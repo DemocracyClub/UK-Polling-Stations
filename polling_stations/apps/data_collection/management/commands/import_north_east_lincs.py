@@ -4,28 +4,13 @@ from data_collection.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "E06000012"
     addresses_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-03-15NELC.csv"
+        "parl.2019-12-12/Version 1/polling_station_export-2019-11-27NELC.csv"
     )
     stations_name = (
-        "local.2019-05-02/Version 1/polling_station_export-2019-03-15NELC.csv"
+        "parl.2019-12-12/Version 1/polling_station_export-2019-11-27NELC.csv"
     )
-    elections = ["europarl.2019-05-23"]
-    csv_encoding = "windows-1252"
-
-    def get_station_hash(self, record):
-        return "-".join([record.pollingstationnumber.strip()])
-
-    def station_record_to_dict(self, record):
-        # one station change for EU election
-        if record.pollingstationnumber == "21":
-            record = record._replace(pollingstationname="ST JAMES' SCHOOL")
-            record = record._replace(pollingstationaddress_1="COLLEGE STREET")
-            record = record._replace(pollingstationaddress_2="GRIMSBY")
-            record = record._replace(pollingstationaddress_3="")
-            record = record._replace(pollingstationaddress_4="")
-            record = record._replace(pollingstationaddress_5="")
-            record = record._replace(pollingstationpostcode="DN34 4SY")
-        return super().station_record_to_dict(record)
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -33,6 +18,12 @@ class Command(BaseHalaroseCsvImporter):
 
         if record.housepostcode.strip() == "DN333 3E":
             rec["postcode"] = "DN33 3EN"
+
+        if record.housepostcode.strip() in ["DN35 8AB", "DN33 2AD"]:
+            return None
+
+        if uprn == "10090082509":
+            return None
 
         if uprn in [
             "11073783"  # DN364QR -> DN364QQ : 298 STATION ROAD, NEW WALTHAM, NORTH EAST LINCOLNSHIRE
