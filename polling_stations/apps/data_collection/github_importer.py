@@ -43,6 +43,8 @@ class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
 
     def extract_json_geometry(self, record, srid):
         geom = json.loads(record["geometry"])
+        if geom["geometry"] is None:
+            return None
         geojson = json.dumps(geom["geometry"])
         poly = self.clean_poly(GEOSGeometry(geojson))
         poly.srid = srid
