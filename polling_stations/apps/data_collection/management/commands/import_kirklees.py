@@ -4,34 +4,20 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000034"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019kirklees.CSV"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019kirklees.CSV"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = (
+        "parl.2019-12-12/Version 1/061219_Democracy_Club__12December2019.tsv"
+    )
+    stations_name = (
+        "parl.2019-12-12/Version 1/061219_Democracy_Club__12December2019.tsv"
+    )
+    elections = ["parl.2019-12-12"]
     allow_station_point_from_postcode = False
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # station changes for EU election
-        if record.polling_place_id == "7685":
-            record = record._replace(
-                polling_place_name="Temporary Polling Station, BBG Academy"
-            )
-
-        if record.polling_place_id == "8151":
-            record = record._replace(polling_place_name="Battyeford J & I School")
-            record = record._replace(polling_place_address_1="Nab Lane")
-            record = record._replace(polling_place_address_2="Battyeford")
-            record = record._replace(polling_place_address_3="Mirfield")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="")
-            record = record._replace(polling_place_uprn="")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-1.706736, 53.681520, srid=4326)
-            return rec
-
         # user issue report #80
-        if record.polling_place_id == "7820":
+        # Darby and Joan Club
+        if record.polling_place_id == "11271":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-1.6100925, 53.5945822, srid=4326)
             return rec
@@ -47,11 +33,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["accept_suggestion"] = False
 
         if uprn in [
-            "83099017",  # HD13UN -> BD195EY : Flat Above, 50 Westgate, Cleckheaton
             "200003798939",  # HD76DU -> HD75TU : Throstle Green Farm, Holt Head Road, Slaithwaite, Huddersfield
             "83151141",  # WF134JD -> WF134JA : 1 the Bungalows, Halifax Road, Dewsbury
             "83199907",  # WF134JD -> WF134JA : 2 the Bungalows, Halifax Road, Dewsbury
-            "83121884",  # BD194JP -> BD194AU : The Coach House, 291C Oxford Road, Gomersal, Cleckheaton
             "83002159",  # HD75UZ -> HD75UU : Outbarn, Laund Road, Slaithwaite, Huddersfield
             "83003456",  # HD74NN -> HD75UU : Nab Farm, Highfield Road, Slaithwaite, Huddersfield
             "83007989",  # HD75PW -> HD75TR : Pioneer Farm Cottage, 2 Blackmoorfoot Road, Linthwaite, Huddersfield
@@ -66,12 +50,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             rec["accept_suggestion"] = False
 
-        if uprn == "83099017":
-            return None
         if record.addressline6.strip() == "BD19 5EY":
             return None
 
-        if record.addressline6.strip() in ["HD8 8SB", "HD5 0RN"]:
+        if record.addressline6.strip() == "HD5 0RN":
             return None
 
         return rec
