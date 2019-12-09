@@ -11,14 +11,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
 
         # Portable building on land opposite 49 Aire Road
         if record.polling_place_id == "7234":
-            rec = super().station_record_to_dict(record)
             rec["location"] = Point(-1.39239, 53.94110, srid=4326)
-            return rec
 
-        return super().station_record_to_dict(record)
+        # user error report #215
+        # Guiseley AFC
+        if record.polling_place_id == "7894":
+            rec["location"] = None
+
+        # user error report #219
+        # All Souls Church
+        if record.polling_place_id == "7329":
+            rec["location"] = None
+
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)

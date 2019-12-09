@@ -39,7 +39,7 @@ class Command(BaseDemocracyCountsCsvImporter):
 
         # correction from council
         # https://trello.com/c/GfMTsEaX
-        if record.stationcode in ["BT_56", "BT_57", "BT_58", "BT_59"]:
+        if record.stationcode in ["BT_56", "BT_57", "BT_58", "BU_59"]:
             record = record._replace(
                 placename="Bradley House Club",
                 add1="Bradley Street",

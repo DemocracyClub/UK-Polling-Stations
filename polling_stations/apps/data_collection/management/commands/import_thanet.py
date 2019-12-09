@@ -40,12 +40,23 @@ class Command(BaseGitHubImporter):
             ):
                 location = Point(1.338154, 51.38301, srid=4326)
 
-            stations.append(
-                {
-                    "internal_council_id": code.strip(),
-                    "postcode": postcode,
-                    "address": address,
-                    "location": location,
-                }
-            )
+            if code == "MJ1":
+                # https://trello.com/c/sdz5zQvY
+                stations.append(
+                    {
+                        "internal_council_id": code.strip(),
+                        "postcode": "CT9 1RP",
+                        "address": "Quarterdeck Youth Centre\n15 Zion Place\nMargate\nKent",
+                        "location": None,
+                    }
+                )
+            else:
+                stations.append(
+                    {
+                        "internal_council_id": code.strip(),
+                        "postcode": postcode,
+                        "address": address,
+                        "location": location,
+                    }
+                )
         return stations
