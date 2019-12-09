@@ -26,4 +26,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting=386085,
             )
 
+        # https://trello.com/c/nwGJpZV0
+        if record.polling_place_id == "3535":
+            record = record._replace(polling_place_name="Barnoldswick Civic Hall")
+            record = record._replace(polling_place_address_1="Station Road")
+            record = record._replace(polling_place_address_2="Barnoldswick")
+            record = record._replace(polling_place_address_3="")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="BB18 6NA")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+
         return super().station_record_to_dict(record)

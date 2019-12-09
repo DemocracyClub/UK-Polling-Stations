@@ -15,6 +15,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
+        # user error report #206
+        if record.addressline6.strip() == "BN3 1DN":
+            return None
+
         if uprn in [
             "22249017",  # BN13RH -> BN13PJ : Flat 1, 22 Buckingham Road, Brighton
             "22200182",  # BN33PY -> BN33JN : Maisonette (1ST/2ND/F), 64 Wilbury Road, Hove

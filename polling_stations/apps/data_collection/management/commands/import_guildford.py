@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from data_collection.geo_utils import fix_bad_polygons
 from data_collection.github_importer import BaseGitHubImporter
 
@@ -44,6 +45,10 @@ class Command(BaseGitHubImporter):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
+
+        if record["register"] == "T2" and record["pollingplace"] == "The Ash Centre":
+            location = Point(-0.719643, 51.256381, srid=4326)
+
         return {
             "internal_council_id": record["register"],
             "postcode": "",

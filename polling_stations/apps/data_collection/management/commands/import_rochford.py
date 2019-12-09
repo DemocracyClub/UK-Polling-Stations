@@ -15,6 +15,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "4814":
             record = record._replace(polling_place_postcode="SS6 7JP")
 
+        # user error report #208
+        # Grange Free Church
+        if record.polling_place_id == "4770":
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
