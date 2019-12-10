@@ -74,6 +74,13 @@ class Command(BaseGenericApiImporter, CsvMixin):
             float(record.longitude), float(record.latitude), srid=self.get_srid()
         )
 
+        # user error report #227
+        if (
+            record.polling_district_name == "PB"
+            and record.organisation == "Kings Cross Neighbourhood Community Centre"
+        ):
+            location = None
+
         return {
             "internal_council_id": record.polling_district_name,
             "postcode": record.postcode,
