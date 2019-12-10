@@ -17,58 +17,65 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # user issue report #39
         if record.polling_place_id == "34414":
             record = record._replace(polling_place_uprn="100041099964")
+
+        # last-minute change for parl.2019-12-12
+        # https://trello.com/c/Ij4tgMP1
+        if record.polling_place_id == "35139":
+            record = record._replace(polling_place_name="The Parish Pavilion")
+            record = record._replace(polling_place_address_1="Buckland Newton")
+            record = record._replace(polling_place_address_2="Dorchester")
+            record = record._replace(polling_place_address_3="Dorset")
+            record = record._replace(polling_place_address_4="")
+            record = record._replace(polling_place_postcode="DT2 7DP")
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
+            rec = super().station_record_to_dict(record)
+            rec["location"] = None
+            return rec
+
         rec = super().station_record_to_dict(record)
 
         # Corfe Mullen Village Hall
         if record.polling_place_id in ["34405", "34401"]:
-            record = record._replace(polling_place_postcode="BH21 3UA")
-
             rec["location"] = Point(-2.017478, 50.774375, srid=4326)
+            rec["postcode"] = "BH21 3UA"
 
         # Portesham Village Hall
         # user issue report #38
         if record.polling_place_id == "35170":
-
             rec["location"] = Point(-2.567644, 50.668385, srid=4326)
 
         # Bishops Caundle Village Hall
         # user issue report #40
         if record.polling_place_id == "35252":
-
             rec["location"] = Point(-2.437757, 50.915554, srid=4326)
 
         # All Saints Church Hall
         # user issue report #41
         if record.polling_place_id in ["34319", "34315"]:
-
             rec["location"] = Point(-1.834570, 50.831005, srid=4326)
 
         # Ferndown Village Hall
         # user issue report #42
         if record.polling_place_id in ["34287", "34277"]:
-
             rec["location"] = Point(-1.896419, 50.801961, srid=4326)
 
         # St Marys Church Hall
         if record.polling_place_id == "35117":
-
             rec["location"] = Point(-2.443608, 50.709373, srid=4326)
 
         # Southill Community Centre
         # user issue report #47
         if record.polling_place_id == "34801":
-
             rec["location"] = Point(-2.477398, 50.623534, srid=4326)
 
         # Moose Lodge
         # user issue report #43
         if record.polling_place_id == "34771":
-
             rec["location"] = Point(-2.466883, 50.606307, srid=4326)
 
         # Charlton Marshall Parish Centre
         if record.polling_place_id == "34446":
-
             rec["location"] = Point(-2.14121, 50.83429, srid=4326)
 
         # West Moors Memorial Hall
@@ -78,12 +85,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # Dorset Fire & Rescue, Peverell Avenue West...
         if record.polling_place_id == "35112":
-
             rec["location"] = Point(-2.471750, 50.713013, srid=4326)
 
         # Furzebrook Village Hall
         if record.polling_place_id == "34895":
-
             rec["location"] = Point(-2.10060, 50.65811, srid=4326)
 
         return rec
