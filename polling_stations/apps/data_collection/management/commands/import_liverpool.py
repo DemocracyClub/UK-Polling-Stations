@@ -1,22 +1,13 @@
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000012"
-    addresses_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019liver.tsv"
-    stations_name = "europarl.2019-05-23/Version 1/Democracy_Club__23May2019liver.tsv"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.tsv"
+    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
-
-        # From: 1977a6:polling_stations/apps/data_collection/management/commands/misc_fixes.py-345-
-        if rec["internal_council_id"] == "6025":  # Kensington Primary School
-            rec["location"] = Point(-2.9532108, 53.4082081, srid=4326)
-
-        return rec
+    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -61,7 +52,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38206702",  # L83SL -> L80TH : Flat 3 Grove House, Sefton Park Road, Liverpool
             "38206704",  # L83SL -> L80TH : Flat 5 Grove House, Sefton Park Road, Liverpool
             "38206705",  # L83SL -> L80TH : Flat 6 Grove House, Sefton Park Road, Liverpool
-            "38214492",  # L155AH -> L155AJ : Flat 1, 276 Smithdown Road, Liverpool
             "38237715",  # L45RQ -> L45RJ : Flat 1, 269 Walton Lane, Liverpool
             "38027340",  # L43RB -> L43QZ : Flat 2, 134 Carisbrooke Road, Liverpool
             "38268660",  # L46UF -> L46UD : 28A Walton Hall Avenue, Liverpool
@@ -70,7 +60,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38006109",  # L114TD -> L110BS : Croxteth Park Care Home, Altcross Road, Liverpool
             "38039508",  # L120HA -> L120HR : Clk of Works House, Croxteth Hall Lane, Liverpool
             "38049794",  # L122AH -> L122AJ : 387A Eaton Road, Liverpool
-            "38093960",  # L96AD -> L97AA : Labyrinth Lodge, Long Lane, Liverpool
             "38243176",  # L137BA -> L137BB : Flat 1, 87 Green Lane, Liverpool
             "38243177",  # L137BA -> L137BB : Flat 2, 87 Green Lane, Liverpool
             "38180077",  # L125HW -> L120HA : West Derby Lodge, West Derby Village, Liverpool
@@ -106,7 +95,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38287667",  # L77EZ -> L77BL : Flat TC2.02 Tudor Close, Mulberry Street, Liverpool
             "38287662",  # L77EZ -> L77BL : Flat TC1.02 Tudor Close, Mulberry Street, Liverpool
             "38287673",  # L77EZ -> L77EE : Flat TC3.05 Tudor Close, Mulberry Street, Liverpool
-            "38238640",  # L63AJ -> L63AD : Flat 2, 36 Huntley Road, Liverpool
             "38287661",  # L77EZ -> L77BL : Flat 1.01 Tudor Close, Mulberry Street, Liverpool
             "38287667",  # L77EZ -> L77BL : Flat 2.02 Tudor Close, Mulberry Street, Liverpool
             "38287665",  # L77EZ -> L77BL : Flat 1.07 Tudor Close, Mulberry Street, Liverpool
@@ -143,7 +131,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38299316",  # L77AJ -> L77AL : Flat D4061 Vine Court, 35 Myrtle Street, Liverpool
             "38299319",  # L77AJ -> L77AL : Flat D4072 Vine Court, 35 Myrtle Street, Liverpool
             "38243179",  # L137BA -> L137BB : Flat 4, 87 Green Lane, Liverpool
-            "38238641",  # L63AJ -> L63AD : Flat 3, 36 Huntley Road, Liverpool
             "38287687",  # L77EZ -> L77BL : Flat 5.23 Tudor Close, Mulberry Street, Liverpool
             "38287704",  # L77EZ -> L77EE : Flat 8.12 Tudor Close, Mulberry Street, Liverpool
             "38287727",  # L77EZ -> L77BL : Flat 11.21 Tudor Close, Mulberry Street, Liverpool
@@ -168,7 +155,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38299155",  # L77AJ -> L77AL : Flat C4015 Vine Court, 35 Myrtle Street, Liverpool
             "38299300",  # L77AJ -> L77AL : Flat D4021 Vine Court, 35 Myrtle Street, Liverpool
             "38206701",  # L83SL -> L80TH : Flat 2 Grove House, Sefton Park Road, Liverpool
-            "38005247",  # L88DQ -> L183JT : Apartment 19, 5 High Park Street, Liverpool
             "38243206",  # L133BN -> L132BN : Flat 1, 23 Greenfield Road, Liverpool
             "38147052",  # L45QY -> L209ET : 2D Stuart Road, Liverpool
             "38287689",  # L77EZ -> L77BL : Flat 6.11 Tudor Close, Mulberry Street, Liverpool
@@ -207,7 +193,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38299167",  # L77AJ -> L77AL : Flat C4027 Vine Court, 35 Myrtle Street, Liverpool
             "38299295",  # L77AJ -> L77AL : Flat D4011 Vine Court, 35 Myrtle Street, Liverpool
             "38245857",  # L78UE -> L70LA : Flat 3, 15A Prescot Street, Liverpool
-            "38214493",  # L155AH -> L155AJ : Flat 2, 276 Smithdown Road, Liverpool
             "38152834",  # L40RG -> L40RQ : Park Hotel, 194 Walton Breck Road, Liverpool
             "38287684",  # L77EZ -> L77BL : Flat 5.13 Tudor Close, Mulberry Street, Liverpool
             "38287724",  # L77EZ -> L77BL : Flat 11.11 Tudor Close, Mulberry Street, Liverpool
@@ -240,7 +225,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38299178",  # L77AJ -> L77AL : Flat C5006 Vine Court, 35 Myrtle Street, Liverpool
             "38299304",  # L77AJ -> L77AL : Flat D4033 Vine Court, 35 Myrtle Street, Liverpool
             "38243178",  # L137BA -> L137BB : Flat 3, 87 Green Lane, Liverpool
-            "38210926",  # L80WN -> L83SL : Greenheys Lodge N Home, Sefton Park Road, Liverpool
             "38147049",  # L45QY -> L209ET : 2A Stuart Road, Liverpool
             "38287692",  # L77EZ -> L77BL : Flat 6.21 Tudor Close, Mulberry Street, Liverpool
             "38287709",  # L77EZ -> L77BL : Flat 9.01 Tudor Close, Mulberry Street, Liverpool
@@ -262,13 +246,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["accept_suggestion"] = True
 
         if uprn in [
-            "38044753",  # L64AE -> L64DX : 8 Lowndes Road, Liverpool
-            "38307437",  # L139BA -> L85RN : Flat Ground Floor, 28 Pennsylvania Road, Liverpool
-            "38323204",  # L126RL -> L73QR : 112 Mab Lane, Liverpool
-            "38313291",  # L22BT -> L39AH : Apartment 401, 2 Moorfields, Liverpool
-            "38291803",  # L149NN -> L150EE : 28 Fincham Road, Liverpool
-            "38152762",  # L115AF -> L139DN : 188A Townsend Avenue, Liverpool
-            "38320750",  # L18ND -> L80TL : Apartment 804, 37 Strand Street, Liverpool
             "38291517",  # L133BS -> L142DD : Rooms At, 325 Prescot Road, Liverpool
             "38248655",
             "38326441",
@@ -282,7 +259,47 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38252914",
             "38252913",
             "38252916",
+            "38312954",
+            "38307125",
+            "38307126",
+            "38307127",
+            "38307128",
+            "38307129",
+            "38245855",
+            "38245856",
+            "38245857",
+            "38321863",
+            "38321864",
+            "38321865",
+            "38321866",
+            "38282429",
+            "38282430",
+            "38325987",
+            "38325988",
+            "38268559",
+            "38268560",
+            "38268561",
+            "38268562",
+            "38300977",
+            "38300978",
+            "38300979",
+            "38300980",
+            "38300981",
+            "38300982",
+            "38243654",
+            "38238875",
+            "38238876",
+            "38238877",
+            "38314085",
+            "38237230",
+            "38241124",
+            "38237648",
+            "38237649",
+            "38245835",
         ]:
             rec["accept_suggestion"] = False
+
+        if record.addressline6.strip() in ["L25 7RA"]:
+            return None
 
         return rec

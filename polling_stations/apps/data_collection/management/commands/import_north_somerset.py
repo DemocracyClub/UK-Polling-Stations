@@ -3,23 +3,15 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000024"
-    addresses_name = "local.2019-05-02/Version 1/n-somerset.gov.uk-1552316467000.tsv"
-    stations_name = "local.2019-05-02/Version 1/n-somerset.gov.uk-1552316467000.tsv"
-    elections = ["local.2019-05-02"]
-    csv_delimiter = "\t"
+    addresses_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019.CSV"
+    stations_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019.CSV"
+    elections = ["parl.2019-12-12"]
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id == "6470":
-            record = record._replace(
-                polling_place_name="Wick St. Lawrence Village Hall"
-            )
-            record = record._replace(polling_place_address_1="Wick St. Lawrence")
-            record = record._replace(polling_place_address_2="")
-            record = record._replace(polling_place_address_3="")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="BS22 7YP")
-            record = record._replace(polling_place_easting="336512")
-            record = record._replace(polling_place_northing="165164")
+        if record.polling_place_id == "9109":
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -57,7 +49,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "24123490",  # BS234DB -> BS206YF : Ground Floor Flat, 12 Exeter Road, Weston-super-Mare
             "24000034",  # BS229YD -> BS232EP : Wayside, 3 Kewstoke Road, Kewstoke, Weston-super-Mare
             "24024127",  # BS229LF -> BS229YH : 88 Lower Kewstoke Road, Weston-super-Mare
-            "24122755",  # BS494LH -> BS494LW : Streamcross Community Church, 181 Claverham Road, Claverham, Bristol
             "24042019",  # BS216XD -> BS216NB : Woodview, Kingston Seymour, Clevedon
             "24127398",  # BS138AH -> BS405RB : The Town & Country Lodge, Bridgwater Road, Long Ashton, Bristol
             "24009435",  # BS231NA -> BS231NR : 20 Boulevard, Weston-super-Mare
@@ -65,8 +56,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "24083287",  # BS217AZ -> BS217AX : Woodbine Cottage, Walton Bay, Walton-in-Gordano, Clevedon
             "24083315",  # BS217AS -> BS217AZ : Harvest Home, Walton Bay, Walton-in-Gordano, Clevedon
             "24141641",  # BS233UE -> BS227FP : Flat 1, 8 Chaucer Road, Weston-super-Mare
-            "24124873",  # BS246SQ -> BS246SG : Heathgate Paddock, Bristol Road, Hewish, Weston-super-Mare
+            "24086832",
+            "24086841",
+            "24086843",
+            "24086844",
+            "24099451",
+            "24149140",
+            "24091652",
         ]:
             rec["accept_suggestion"] = False
+
+        if uprn == "24138946":
+            return None
 
         return rec
