@@ -1,30 +1,63 @@
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E06000027"
-    addresses_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019tor.tsv"
-    stations_name = "local.2019-05-02/Version 1/Democracy_Club__02May2019tor.tsv"
-    elections = ["local.2019-05-02"]
+    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
+    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
+    elections = ["parl.2019-12-12"]
     csv_delimiter = "\t"
+    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-
-        if record.polling_place_id == "6337":
+        if record.polling_place_id == "7553":
             record = record._replace(polling_place_postcode="TQ5 0BX")
 
-        if record.polling_place_id == "6331":
+        if record.polling_place_id == "7530":
             record = record._replace(polling_place_postcode="TQ5 9HW")
 
-        return super().station_record_to_dict(record)
+        rec = super().station_record_to_dict(record)
+
+        if record.polling_place_id == "7418":
+            rec["location"] = Point(-3.556830, 50.488924, srid=4326)
+
+        return rec
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "679205":
-            rec["postcode"] = "BS161PF"
-            rec["accept_suggestion"] = False
+        # This was a last minute import,
+        # so I've taken a fairly coarse approach to throwing things away...
+        if record.addressline6 in [
+            "TQ2 6XA",
+            "TQ4 6JX",
+            "TQ5 0BX",
+            "TQ4 6LH",
+            "TQ5 0AE",
+            "TQ1 3QF",
+            "TQ4",
+        ]:
+            return None
+
+        if uprn in [
+            "100040519265",
+            "200002083269",
+            "10024003870",
+            "10002991569",
+            "100040529632",
+            "100040562013",
+            "100040520900",
+            "10093141050",
+            "10093141805",
+            "10093142379",
+            "100040537640",
+            "100041189794",
+            "10002991567",
+            "10002991571",
+        ]:
+            return None
 
         if uprn in [
             "100041196260",  # TQ26AS -> TQ26AP : Millbrook House Hotel, Old Mill Road, Torquay
@@ -51,7 +84,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10000012760",  # TQ32HT -> TQ50EH : 2 Manor Court, Manor Road, Paignton
             "10000012746",  # TQ32HT -> TQ50EH : 3 Manor Court, Manor Road, Paignton
             "10000012765",  # TQ32HT -> TQ50EH : 6 Manor Court, Manor Road, Paignton
-            "10000013683",  # TQ58AG -> TQ59DJ : Flat 2, 67a Fore Street, Brixham
         ]:
             rec["accept_suggestion"] = False
 
