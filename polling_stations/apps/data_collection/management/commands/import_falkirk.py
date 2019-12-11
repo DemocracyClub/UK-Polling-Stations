@@ -4,14 +4,92 @@ from data_collection.management.commands import BaseScotlandSpatialHubImporter
 class Command(BaseScotlandSpatialHubImporter):
     council_id = "S12000014"
     council_name = "Falkirk"
-    elections = ["europarl.2019-05-23"]
+    elections = ["parl.2019-12-12"]
+
+    def district_record_to_dict(self, record):
+        # 6 Districts codes not in station file.
+        if record[0] in [
+            "FW765",
+            "FW721",
+            "FW746",
+            "FW740",
+            "LE127",
+            "FW731",
+        ]:
+            return None
+        return super().district_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # There is a code mismatch between stations and districts.
-        # This matches them up.
-        if record[0] == "FW507":
-            record[0] = "FW506"
+        # 3 Stationi codes not in Record file.
+        if record[0] in [
+            "FW747",
+            "FW732",
+            "FW722",
+        ]:
+            return None
 
         rec = super().station_record_to_dict(record)
+
+        # Much wombling added postcodes, and generally got addresses matching up
+        # with the SoPP
+        addresses = {
+            "FE400": "AIRTH COMMUNITY HALL, HIGH STREET, AIRTH, FALKIRK, FK2 8JL",
+            "FE407": "CARRONSHORE SPORTS AND SOCIAL HALL, MAIN STREET, CARRONSHORE, FK2 8EY",
+            "FE412": "CARRON PRIMARY SCHOOL, ALLOA ROAD, CARRON, FL2 8EJ",
+            "FE416": "STENHOUSE AND CARRON PARISH CHURCH HALL, CHURCH STREET, STENHOUSEMUIR, FALKIRK, FK5 4BU",
+            "FE421": "TRYST COMMUNITY CENTRE, PARK DRIVE, STENHOUSEMUIR, FK5 3BA",
+            "FE440": "MOBILE UNIT - BOTHKENNAR PRIMARY SCHOOL SITE, MAIN STREET, SKINFLATS, FALKIRK, FK2 8NU",
+            "FE750": "HALLGLEN PRIMARY SCHOOL, NEW HALLGLEN ROAD, HALLGLEN, FALKIRK, FK1 2RA",
+            "FE801": "LAURIESTON COMMUNITY HALL, THRUMS, LAURIESTON, FALKIRK, FK2 9LR",
+            "FE806": "LAURISTON PRIMARY SCHOOL, SCHOOL ROAD, LAURIESTON, FK2 9JA",
+            "FE811": "WESTQUARTER COMMUNITY SCHOOL PROJECT, WESTQUARTER AVENUE, WESTQUARTER, FK2 9RN",
+            "FE816": "POLMONT SPORTS CENTRE, SALMON INN ROAD, POLMONT, FALKIRK, FK2 0XF",
+            "FE820": "GREENPARK COMMUNITY CENTRE, GREENPARK DRIVE, POLMONT, FK2 0PZ",
+            "FE826": "GRANGE COMMUNITY CENTRE, REDDING ROAD, REDDING",
+            "FE950": "BRIGHTONS COMMUNITY CENTRE, MAIN STREET, BRIGHTONS",
+            "FE955": "BRIGHTONS COMMUNITY CENTRE, MAIN STREET, BRIGHTONS",
+            "FE960": "SHIELDHILL WELFARE HALL, MAIN STREET, SHIELDHILL, FALKIRK, FK1 2HA",
+            "FW300": "DUNIPACE CHURCH HALL, STIRLING STREET, DUNIPACE, FK6 5BY",
+            "FW305": "DENNY WESTPARK CHURCH HALL, DUKE STREET, DENNY, FK6 6NP",
+            "FW310": "FANKERTON VILLAGE HALL, FANKERTON, DENNY, FK6 5HU",
+            "FW317": "NETHERMAINS PRIMARY SCHOOL, BULLOCH CRESCENT, DENNY, FK6 5AR",
+            "FW322": "ARCHIBALD RUSSELL CENTRE, HAYPARK ROAD, DENNYLOANHEAD, FALKIRK, FK6 5JZ",
+            "FW325": "BANKNOCK COMMUNITY CENTRE, KILSYTH ROAD, BANKNOCK, FALKIRK, FK4 1HY",
+            "FW330": "ALLANDALE BOWLING CLUB, THORNDALE GARDENS, ALLANDALE, FALKIRK, FK4 2HG",
+            "FW426": "ST BERNADETTE'S PRIMARY SCHOOL, EDWARD AVENUE, STENHOUSEMUIR, FALKIRK, FK5 4XR",
+            "FW431": "KINNAIRD PRIMARY SCHOOL, MCINTYRE AVENUE, LARBERT, FALKIRK, FK5 4TQ",
+            "FW500": "KINNAIRD PRIMARY SCHOOL, MCINTYRE AVENUE, LARBERT, FALKIRK, FK5 4TQ",
+            "FW506": "DOBBIE HALL, MAIN STREET, LARBERT, FALKIRK, FK5 4BL",
+            "FW511": "LARBERT OLD PARISH CHURCH HALL, DENNY ROAD, LARBERT, FALKIRK, FK5 4BL",
+            "FW515": "TORWOOD SCOUT HALL, TORWOODHEAD, TORWOOD, FALKIRK, FK5 4SR",
+            "FW520": "BONNYBRIDGE PRIMARY SCHOOL, WELLPARK TERRACE, BONNYBRIDGE, FALKIRK, FK4 1LR",
+            "FW525": "BONNYBRIDGE COMMUNITY CENTRE, BRIDGE STREET, BONNYBRIDGE, FALKIRK, FK4 1AA",
+            "FW530": "ANTONINE PRIMARY SCHOOL, BROOMHILL ROAD, BONNYBRIDGE, FALKIRK, FK4 2AT",
+            "FW611": "MOBILE UNIT - NEW CARRON CO-OP, RONADES ROAD, FALKIRK, FK2 7TA",
+            "FW612": "BAINSFORD COMMUNITY CENTRE, DAVIDS LOAN, BAINSFORD, FALKIRK, FK2 7NS",
+            "FW615": "DAWSON CENTRE, DAVIDS LOAN, BAINSHEAD, FALKIRK, FK2 7RJ",
+            "FW620": "THORNHILL COMMUNITY CENTRE, THORNHILL ROAD, FALKIRK, FK2 7AE",
+            "FW625": "WESTFIELD COMMUNITY CENTRE, WESTFIELD STREET, FALKIRK, FK2 9DX",
+            "FW645": "EASTER CARMUIRS PRIMARY SCHOOL, CARMUIRS DRIVE, CAMELON, FALKIRK, FK1 4JG",
+            "FW650": "CARMUIRS PRIMARY SCHOOL, CARMUIRS STREET, FALKIRK, FK1 4PZ",
+            "FW655": "CAMELON EDUCATION CENTRE, ABERCROMBIE STREET, CAMELON, FALKIRK, FK1 4HA",
+            "FW660": "ST FRANCIS XAVIER CHURCH HALL, HOPE STREET, FALKIRK, FK1 5AU",
+            "FW710": "TAMFOURHILL COMMUNITY CENTRE, CUMBRAE DRIVE, TAMFOURHILL, FALKIRK, FK1 4AH",
+            "FW715": "GREENBANK COURT MEETING ROOM, GREENBANK COURT, FALKIRK, FK1 5HD",
+            "FW722": "BANTASKIN PRIMARY SCHOOL, BANTASKINE ROAD, FALKIRK, FK1 5HD",
+            "FW732": "WOODLANDS GAMES HALL, COCHRANE AVENUE, FALKIRK, FK1 1QE",
+            "FW747": "HALLGLEN PRIMARY SCHOOL, NEW HALLGLEN ROAD, HALLGLEN, FALKIRK, FK1 2RA",
+            "FW760": "LEISHMAN TOWER CLUB ROOM, SEATON PLACE, FALKIRK, FK1 1TH",
+            "FW770": "ST FRANCIS XAVIER CHURCH HALL, HOPE STREET, FALKIRK, FK1 5AU",
+        }
+
+        if rec:
+            try:
+                rec["address"] = addresses[rec["internal_council_id"]]
+                if rec["internal_council_id"] in ["FW710", "FE750"]:
+                    rec["location"] = None
+
+            except KeyError:
+                return rec
 
         return rec
