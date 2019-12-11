@@ -28,6 +28,10 @@ class Command(BaseCommand):
             "E07000178", "5354", Point(-1.274921, 51.752621, srid=4326)
         )
 
+        # User issue 237
+        print("updating: ATHERSLEY COMMUNITY SHOP (Barnsley)...")
+        update_station_point("E08000016", "45", Point(-1.479578, 53.583410, srid=4326))
+
         # User issue 238
         print("updating: YMCA - Lawnswood Branch (Leeds)...")
         update_station_point(
