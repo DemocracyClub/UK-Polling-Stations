@@ -52,6 +52,21 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # Correction from Tunbridge Wells
+        print("updating: District JJ (Tunbridge Wells)...")
+        stations = PollingStation.objects.filter(
+            council_id="E07000116", internal_council_id="JJ"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Pantiles Baptist Church, 73 Frant Road, Tunbridge Wells"
+            station.postcode = "TN2 5LH"
+            station.location = Point(558296, 137921, srid=27700)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
