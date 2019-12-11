@@ -29,6 +29,11 @@ class Command(BaseDemocracyCountsCsvImporter):
             record = record._replace(xordinate="534455")
             record = record._replace(yordinate="203051")
 
+        # HALSEY HALL
+        if record.stationcode in ["AFA_1", "AFB_1", "AFF_1"]:
+            record = record._replace(xordinate="535906")
+            record = record._replace(yordinate="201922")
+
         # These stations are outside the council area and don't appear in the addresses file
         if record.stationcode in ["DCB_1", "DCB_2", "DCC_1"]:
             return None
