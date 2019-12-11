@@ -23,7 +23,6 @@ class Command(BaseHalaroseCsvImporter):
 
         if uprn == "10093715348":
             rec["postcode"] = "BS140FR"
-            print("updating record")
 
         if uprn in ["10091550422"]:
             return None
@@ -48,5 +47,9 @@ class Command(BaseHalaroseCsvImporter):
 
         if record.houseid.strip() == "9014616":
             rec["accept_suggestion"] = True
+
+        # https://trello.com/c/uyppyCLq
+        if record.housepostcode == "BA2 6DR":
+            rec["polling_station_id"] = "5-claverton-down-community-hall"
 
         return rec
