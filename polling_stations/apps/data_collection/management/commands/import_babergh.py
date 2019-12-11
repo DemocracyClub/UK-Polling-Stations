@@ -51,5 +51,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_address_2="Holbrook",
                 polling_place_postcode="IP9 2PZ",
             )
+        # https://trello.com/c/kKKWpgrl
+        if record.polling_place_id == "18262":  # Pot Kiln School
+            record = record._replace(
+                polling_place_name="The Stevenson Centre",
+                polling_place_address_1="Stevenson Approach",
+                polling_place_address_2="Great Cornard",
+                polling_place_address_3="Sudbury",
+                polling_place_postcode="CO10 0WD",
+            )
 
         return super().station_record_to_dict(record)
