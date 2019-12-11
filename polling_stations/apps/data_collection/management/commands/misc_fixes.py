@@ -67,6 +67,20 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # User issue 253
+        print("updating: SOUTHFIELDS COMMUNITY CENTRE (Bedford)...")
+        stations = PollingStation.objects.filter(
+            council_id="E06000055",
+            internal_council_id__in=["BAR_1", "BAR_2", "BAR_3", "BAR_4", "BAR_5"],
+        )
+        if len(stations) == 5:
+            for station in stations:
+                station.location = Point(-0.482075, 52.113823, srid=4326)
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
