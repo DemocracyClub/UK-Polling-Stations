@@ -308,6 +308,12 @@ class Command(BaseCommand):
         print("updating: New Marston Pastoral Centre...")
         update_station_point("E07000178", "5280", None)
 
+        # User issue 431
+        print("updating: Standish Community Centre...")
+        update_station_point(
+            "E08000010", "6075", Point(-2.660449, 53.585105, srid=4326)
+        )
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
