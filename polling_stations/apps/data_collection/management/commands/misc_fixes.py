@@ -143,6 +143,12 @@ class Command(BaseCommand):
         print("updating: Aubert Court Community Centre...")
         update_station_point("E09000019", "1704", None)
 
+        # User issue 323
+        print("updating: Trust Hall-Stoke Gifford...")
+        update_station_point(
+            "E06000025", "11076", Point(-2.540850, 51.516671, srid=4326)
+        )
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
