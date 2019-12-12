@@ -155,6 +155,52 @@ class Command(BaseCommand):
             "E06000002", "8607", Point(-1.259325, 54.520594, srid=4326)
         )
 
+        # User issue 288
+        print("updating: Thame Snooker Club...")
+        update_station_point(
+            "E07000179", "8327", Point(-0.9743458, 51.7464972, srid=4326)
+        )
+
+        # User issue 290
+        print("updating: Temporary at Wingfield Rd...")
+        update_station_point("E08000016", "48", None)
+
+        # User issue 314
+        print("updating: Harrold Chapel...")
+        update_station_point(
+            "E06000055", "NW_1", Point(-0.613711, 52.202050, srid=4326)
+        )
+
+        # User issue 317
+        print("updating: Aubert Court Community Centre...")
+        update_station_point("E09000019", "1704", None)
+
+        # User issue 323
+        print("updating: Trust Hall-Stoke Gifford...")
+        update_station_point(
+            "E06000025", "11076", Point(-2.540850, 51.516671, srid=4326)
+        )
+
+        # User issue 333
+        print("updating: Ince Independent Methodist Church...")
+        update_station_point("E08000010", "6192", None)
+
+        # User issue 339
+        print("updating: ROYAL QUAYS COMMUNITY CENTRE...")
+        update_station_point("E08000022", "FF", None)
+
+        # User issue 346
+        print("updating: BROUGHTON VILLAGE HALL...")
+        update_station_point("S12000026", "01G", None)
+
+        # User issue 347
+        print("updating:  Newton Childrens Centre...")
+        update_station_point("E08000013", "3741", None)
+
+        # User issue 349
+        print("updating:  Kingswood Play Area Hall...")
+        update_station_point("E07000066", "4613", None)
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
