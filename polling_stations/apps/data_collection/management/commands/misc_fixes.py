@@ -149,6 +149,10 @@ class Command(BaseCommand):
             "E06000025", "11076", Point(-2.540850, 51.516671, srid=4326)
         )
 
+        # User issue 333
+        print("updating: Ince Independent Methodist Church...")
+        update_station_point("E08000010", "6192", None)
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
