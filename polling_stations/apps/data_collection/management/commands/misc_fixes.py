@@ -285,6 +285,19 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # User issue 364
+        print("Updating District 'WAP' (Dundee)...")
+        districts = PollingDistrict.objects.filter(
+            council_id="S12000042", internal_council_id="WAP"
+        )
+        if len(districts) == 1:
+            district = districts[0]
+            district.polling_station_id = "WAP"
+            district.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         # User issue 362
         print("updating: Long Ashton Church House...")
         update_station_point("E06000024", "8952", None)
