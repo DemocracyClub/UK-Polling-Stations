@@ -22,6 +22,23 @@ def update_station_point(council_id, station_id, point):
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
+        # https://trello.com/c/29TzIzEB
+        print("updating: District PF (Calderdale)...")
+        stations = PollingStation.objects.filter(
+            council_id="E08000033", internal_council_id="PF"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = (
+                "The Community Room\nHalifax Fire Station\nSkircoat Moor Road\nHalifax"
+            )
+            station.postcode = "HX1 3JF"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         # User issue 230
         print("updating: West Oxford Community Centre (Oxford)...")
         update_station_point(
