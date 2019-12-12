@@ -123,6 +123,12 @@ class Command(BaseCommand):
             "E06000002", "8607", Point(-1.259325, 54.520594, srid=4326)
         )
 
+        # User issue 288
+        print("updating: Thame Snooker Club...")
+        update_station_point(
+            "E07000179", "8327", Point(-0.9743458, 51.7464972, srid=4326)
+        )
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
