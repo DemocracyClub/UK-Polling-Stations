@@ -201,6 +201,10 @@ class Command(BaseCommand):
         print("updating:  Kingswood Play Area Hall...")
         update_station_point("E07000066", "4613", None)
 
+        # User issue 351
+        print("updating: BARNSLEY MBC SPRINGVALE DEPOT...")
+        update_station_point("E08000016", "146", None)
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
