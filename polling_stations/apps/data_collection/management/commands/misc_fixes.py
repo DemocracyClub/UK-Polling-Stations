@@ -205,6 +205,21 @@ class Command(BaseCommand):
         print("updating: BARNSLEY MBC SPRINGVALE DEPOT...")
         update_station_point("E08000016", "146", None)
 
+        # User issue 360
+        print("updating: DALMUIR BARCLAY PARISH CHURCH...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000039", internal_council_id="CW13C"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "OUR LADY OF LORETTO PRIMARY SCHOOL, CASTLE SQUARE, CASTLE STREET, DALMUIR, CLYDEBANK"
+            station.postcode = "G81 4HN"
+            station.location = Point(-4.43306, 55.91240, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
