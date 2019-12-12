@@ -16,6 +16,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
+        # correction from the EC
+        if record.polling_place_district_reference.strip() == "ST1":
+            record = record._replace(polling_place_id="5876")
+
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.lstrip("0")
 
