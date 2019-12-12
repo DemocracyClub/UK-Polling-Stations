@@ -224,6 +224,52 @@ class Command(BaseCommand):
         print("updating:  Kingswood Play Area Hall...")
         update_station_point("E07000066", "4613", None)
 
+        # User issue 351
+        print("updating: BARNSLEY MBC SPRINGVALE DEPOT...")
+        update_station_point("E08000016", "146", None)
+
+        # User issue 360
+        print("updating: DALMUIR BARCLAY PARISH CHURCH...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000039", internal_council_id="CW13C"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "OUR LADY OF LORETTO PRIMARY SCHOOL, CASTLE SQUARE, CASTLE STREET, DALMUIR, CLYDEBANK"
+            station.postcode = "G81 4HN"
+            station.location = Point(-4.43306, 55.91240, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 365
+        print("updating: Newton Park Primary...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000017",
+            internal_council_id__in=["C03I", "C03J", "C03D", "C03C"],
+        )
+        if len(stations) == 4:
+            for station in stations:
+                station.location = None
+                station.save()
+                print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 364
+        print("Updating District 'WED' (Dundee)...")
+        districts = PollingDistrict.objects.filter(
+            council_id="S12000042", internal_council_id="WED"
+        )
+        if len(districts) == 1:
+            district = districts[0]
+            district.polling_station_id = "WED"
+            district.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
