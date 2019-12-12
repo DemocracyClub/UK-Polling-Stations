@@ -153,6 +153,10 @@ class Command(BaseCommand):
         print("updating: Ince Independent Methodist Church...")
         update_station_point("E08000010", "6192", None)
 
+        # User issue 339
+        print("updating: ROYAL QUAYS COMMUNITY CENTRE...")
+        update_station_point("E08000022", "FF", None)
+
         # User issue 346
         print("updating: BROUGHTON VILLAGE HALL...")
         update_station_point("S12000026", "01G", None)
