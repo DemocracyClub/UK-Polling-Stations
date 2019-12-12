@@ -139,6 +139,10 @@ class Command(BaseCommand):
             "E06000055", "NW_1", Point(-0.613711, 52.202050, srid=4326)
         )
 
+        # User issue 317
+        print("updating: Aubert Court Community Centre...")
+        update_station_point("E09000019", "1704", None)
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
