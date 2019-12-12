@@ -270,6 +270,10 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # User issue 362
+        print("updating: Long Ashton Church House...")
+        update_station_point("E06000024", "8952", None)
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
