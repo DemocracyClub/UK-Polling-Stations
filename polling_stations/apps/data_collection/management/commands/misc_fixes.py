@@ -153,6 +153,18 @@ class Command(BaseCommand):
         print("updating: Ince Independent Methodist Church...")
         update_station_point("E08000010", "6192", None)
 
+        # User issue 346
+        print("updating: BROUGHTON VILLAGE HALL...")
+        update_station_point("S12000026", "01G", None)
+
+        # User issue 347
+        print("updating:  Newton Childrens Centre...")
+        update_station_point("E08000013", "3741", None)
+
+        # User issue 349
+        print("updating:  Kingswood Play Area Hall...")
+        update_station_point("E07000066", "4613", None)
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
