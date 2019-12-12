@@ -234,6 +234,19 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # User issue 364
+        print("Updating District 'WED' (Dundee)...")
+        districts = PollingDistrict.objects.filter(
+            council_id="S12000042", internal_council_id="WED"
+        )
+        if len(districts) == 1:
+            district = districts[0]
+            district.polling_station_id = "WED"
+            district.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
