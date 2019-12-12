@@ -77,6 +77,21 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # User issue 319
+        print("updating: District EAB (Dundee)...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000042", internal_council_id="EAB"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Finmill Centre\nFindcastle Street\nDundee"
+            station.postcode = "DD4 9EW"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         # User issue 230
         print("updating: West Oxford Community Centre (Oxford)...")
         update_station_point(
