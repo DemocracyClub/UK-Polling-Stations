@@ -39,6 +39,21 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # from the EC
+        print("updating: District NL148 (North Lanarkshire)...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000050", internal_council_id="NL148"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Knowetop Primary School\nKnowetop Avenue\nMotherwell"
+            station.postcode = "ML1 2AG"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         # User issue 230
         print("updating: West Oxford Community Centre (Oxford)...")
         update_station_point(
