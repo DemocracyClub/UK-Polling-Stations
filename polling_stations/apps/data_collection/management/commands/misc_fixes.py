@@ -81,6 +81,48 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # User issue 261
+        print("updating: West Ardsley Methodist Church (Leeds)...")
+        update_station_point(
+            "E08000035", "7800", Point(-1.5725806, 53.71417, srid=4326)
+        )
+
+        # User issue 272
+        print("updating: Meadowbank Church of Scotland (Edinburgh)...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000036", internal_council_id="EN12K"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Norton Park Conference Centre, 53 Albion Road"
+            station.postcode = "EH7 5QY"
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 273
+        print("updating: Maitland Park Gym (Camden)...")
+        stations = PollingStation.objects.filter(
+            council_id="E09000007", internal_council_id="LA"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "Rhyl Primary School, 7-31 Rhyl Street, London"
+            station.postcode = "NW5 3HB"
+            station.location = Point(-0.150516, 51.547817, srid=4326)
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
+        # User issue 285
+        print("updating: Memorial Hall (Middlesbrough)...")
+        update_station_point(
+            "E06000002", "8607", Point(-1.259325, 54.520594, srid=4326)
+        )
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
