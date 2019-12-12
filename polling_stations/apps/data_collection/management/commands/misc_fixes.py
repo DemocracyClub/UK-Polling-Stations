@@ -22,6 +22,29 @@ def update_station_point(council_id, station_id, point):
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
+        # workaround https://trello.com/c/xIjxFrES
+        ResidentialAddress.objects.update_or_create(
+            address="GU101FJ",
+            postcode="GU101FJ",
+            polling_station_id="",
+            council_id="E07000209",
+            slug="GU101FJ",
+            location=Point(489140, 149760, srid=27700),
+            uprn="",
+        )
+
+        # https://trello.com/c/vhaPaGDO
+        districts = PollingDistrict.objects.filter(
+            council_id="S12000021", internal_council_id="N205"
+        )
+        if len(districts) == 1:
+            district = districts[0]
+            district.polling_station_id = ""
+            district.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         # https://trello.com/c/29TzIzEB
         print("updating: District PF (Calderdale)...")
         stations = PollingStation.objects.filter(
