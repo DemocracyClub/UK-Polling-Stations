@@ -122,6 +122,18 @@ class Command(BaseCommand):
         else:
             print("..NOT updated")
 
+        # User issue 438
+        print("updating: Primrose Hall  (Slough)...")
+        update_station_point("E06000039", "1043", None)
+
+        # User issue 436
+        print("updating: The Church of Jesus Christ (King's Lynn)...")
+        update_station_point("E07000146", "17834", None)
+
+        # User issue 444
+        print("updating: St Josephs Church (Preston)...")
+        update_station_point("E07000123", "SM3", None)
+
         # Correction from Tunbridge Wells
         print("updating: District JJ (Tunbridge Wells)...")
         stations = PollingStation.objects.filter(
