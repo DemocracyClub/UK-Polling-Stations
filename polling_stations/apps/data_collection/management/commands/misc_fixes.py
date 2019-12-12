@@ -274,6 +274,21 @@ class Command(BaseCommand):
         print("updating: Long Ashton Church House...")
         update_station_point("E06000024", "8952", None)
 
+        # User issue 377
+        print("updating: Lothian Chambers...")
+        stations = PollingStation.objects.filter(
+            council_id="S12000036", internal_council_id="EC11H"
+        )
+        if len(stations) == 1:
+            station = stations[0]
+            station.address = "City of Edinburgh Council Chambers, 253 High Street"
+            station.postcode = ""
+            station.location = None
+            station.save()
+            print("..updated")
+        else:
+            print("..NOT updated")
+
         print("removing bad points from AddressBase")
         bad_uprns = [
             # nothing yet
