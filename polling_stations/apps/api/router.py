@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from rest_framework import routers
 from .address import ResidentialAddressViewSet
 from .councils import CouncilViewSet
@@ -5,6 +6,7 @@ from .pollingdistricts import PollingDistrictViewSet
 from .pollingstations import PollingStationViewSet
 from .postcode import PostcodeViewSet
 from .sandbox import SandboxView
+from file_uploads.api import UploadViewSet
 
 
 router = routers.DefaultRouter()
@@ -14,9 +16,7 @@ router.register(r"pollingdistricts", PollingDistrictViewSet)
 router.register(r"postcode", PostcodeViewSet, basename="postcode")
 router.register(r"address", ResidentialAddressViewSet, basename="address")
 
-
-from django.conf.urls import url
-
+router.urls.append(url(r"^uploads/", UploadViewSet.as_view({"post": "create"})))
 router.urls.append(
     url(r"^sandbox/postcode/(?P<postcode>[A-Za-z0-9 +]+)/$", SandboxView.as_view())
 )

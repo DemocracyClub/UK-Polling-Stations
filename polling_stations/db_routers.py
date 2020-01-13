@@ -8,6 +8,7 @@ class LoggerRouter(object):
         "contenttypes",
         "data_finder",
         "feedback",
+        "file_uploads",
     ]
 
     def db_for_read(self, model, **hints):
