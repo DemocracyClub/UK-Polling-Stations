@@ -130,3 +130,101 @@ class AddressTest(APITestCase):
         self.assertEqual(201, resp.status_code)
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(2, len(File.objects.all()))
+
+    def test_multiple_files_out_of_order_delivery(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+
+        # The first payload we receive for this upload contains 2 files
+        payload1 = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:26:05Z",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": True,
+                    "csv_rows": 86109,
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
+                },
+                {
+                    "csv_valid": True,
+                    "csv_rows": 69,
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
+                },
+            ],
+        }
+        resp = self.client.post("/api/beta/uploads/", payload1, format="json")
+        self.assertEqual(201, resp.status_code)
+        # assert we've inserted it correctly
+        self.assertEqual(1, len(Upload.objects.all()))
+        self.assertEqual(2, len(File.objects.all()))
+        stations_file = File.objects.get(
+            key="E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv"
+        )
+        self.assertEqual("", stations_file.errors)
+
+        # The second payload we receive only contains one of the files
+        # that was in the first payload.
+        # This upload was actually processed first, but we're receiving it
+        # later because an out-of-order delivery has happened.
+        payload2 = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:26:05Z",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": True,
+                    "csv_rows": 69,
+                    "ems": "Democracy Counts",
+                    "errors": "Expected 2 files, found 1",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
+                },
+            ],
+        }
+        resp = self.client.post("/api/beta/uploads/", payload2, format="json")
+        self.assertEqual(201, resp.status_code)
+        self.assertEqual(1, len(Upload.objects.all()))
+        # we should still have 2 file objects attached to this upload, not 1
+        self.assertEqual(2, len(File.objects.all()))
+        # stations_file.errors should still be "", not "Expected 2 files, found 1"
+        stations_file = File.objects.get(
+            key="E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv"
+        )
+        self.assertEqual("", stations_file.errors)
+
+        payload3 = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:26:05Z",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": True,
+                    "csv_rows": 86109,
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
+                },
+                {
+                    "csv_valid": True,
+                    "csv_rows": 69,
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
+                },
+                {
+                    "csv_valid": True,
+                    "csv_rows": 100,
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/some other file.csv",
+                },
+            ],
+        }
+        resp = self.client.post("/api/beta/uploads/", payload3, format="json")
+        self.assertEqual(201, resp.status_code)
+        self.assertEqual(1, len(Upload.objects.all()))
+        # now we should have 3 file objects
+        self.assertEqual(3, len(File.objects.all()))
