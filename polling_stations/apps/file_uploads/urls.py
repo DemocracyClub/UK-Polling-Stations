@@ -10,4 +10,9 @@ urlpatterns = [
     ),
     url(r"^files/(?P<pk>.+)/$", FileDetailView.as_view(), name="files_detail",),
     url(r"^upload_files/$", FileUploadView.as_view(), name="file_upload_index"),
+    url(
+        r"^upload_files/(?P<gss>.+)/$",
+        FileUploadView.as_view(),
+        name="file_upload_detail",
+    ),
 ]

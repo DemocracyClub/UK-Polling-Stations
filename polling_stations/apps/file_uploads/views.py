@@ -73,6 +73,12 @@ class FileUploadView(RequireStaffMixin, TemplateView):
             .defer("area")
             .order_by("name")
         )
+
+        if "gss" in self.kwargs:
+            context["councils"] = context["councils"].filter(
+                council_id=self.kwargs["gss"]
+            )
+
         return context
 
     def validate_body(self, body):
