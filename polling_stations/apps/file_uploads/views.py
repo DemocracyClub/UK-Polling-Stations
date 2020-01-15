@@ -2,8 +2,7 @@ import json
 from datetime import datetime
 
 from django.conf import settings
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db.models import Prefetch
 from django.http import JsonResponse
@@ -55,10 +54,14 @@ def get_s3_client():
     )
 
 
-class FileUploadView(LoginRequiredMixin, TemplateView):
+class RequireStaffMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_active and self.request.user.is_staff
+
+
+class FileUploadView(RequireStaffMixin, TemplateView):
     template_name = "file_uploads/index.html"
 
-    @method_decorator(staff_member_required)
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         return super().get(self, request, *args, **kwargs)
@@ -93,7 +96,6 @@ class FileUploadView(LoginRequiredMixin, TemplateView):
         if len(files) == 2 and files[0]["name"] == files[1]["name"]:
             raise DjangoValidationError("Files must have different names")
 
-    @method_decorator(staff_member_required)
     @method_decorator(csrf_protect)
     def post(self, request, *args, **kwargs):
         body = json.loads(request.body)
@@ -133,7 +135,7 @@ class FileUploadView(LoginRequiredMixin, TemplateView):
         return JsonResponse(resp, status=200)
 
 
-class CouncilListView(LoginRequiredMixin, ListView):
+class CouncilListView(RequireStaffMixin, ListView):
     template_name = "file_uploads/council_list.html"
 
     def get_queryset(self):
@@ -146,7 +148,7 @@ class CouncilListView(LoginRequiredMixin, ListView):
         return qs
 
 
-class CouncilDetailView(LoginRequiredMixin, DetailView):
+class CouncilDetailView(RequireStaffMixin, DetailView):
     template_name = "file_uploads/council_detail.html"
 
     def get_queryset(self):
@@ -161,6 +163,6 @@ class CouncilDetailView(LoginRequiredMixin, DetailView):
         return qs
 
 
-class FileDetailView(LoginRequiredMixin, DetailView):
+class FileDetailView(RequireStaffMixin, DetailView):
     template_name = "file_uploads/file_detail.html"
     model = File
