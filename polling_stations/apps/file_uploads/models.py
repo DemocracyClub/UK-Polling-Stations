@@ -24,3 +24,11 @@ class File(models.Model):
 
     def __str__(self):
         return self.key
+
+    @property
+    def filename(self):
+        return self.key.split("/")[-1]
+
+    @property
+    def path(self):
+        return "/".join(self.key.split("/")[:-1]) + "/"

@@ -209,7 +209,7 @@ USE_L10N = (True,)
 LOCALE_PATHS = (repo_root("locale"),)
 
 
-LOGIN_REDIRECT_URL = "file_upload_index"
+LOGIN_REDIRECT_URL = "file_uploads:councils_list"
 LOGOUT_REDIRECT_URL = "home"
 
 

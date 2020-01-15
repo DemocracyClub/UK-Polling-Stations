@@ -5,11 +5,11 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.db.models import Q
+from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, ListView, TemplateView
 
 import boto3
 from boto.pyami.config import Config
@@ -18,6 +18,7 @@ from marshmallow import Schema, fields, validate
 from marshmallow import ValidationError as MarshmallowValidationError
 
 from councils.models import Council
+from .models import File, Upload
 
 
 class FileSchema(Schema):
@@ -130,3 +131,36 @@ class FileUploadView(LoginRequiredMixin, TemplateView):
                     {"error": "Could not authorize request"}, status=400
                 )
         return JsonResponse(resp, status=200)
+
+
+class CouncilListView(LoginRequiredMixin, ListView):
+    template_name = "file_uploads/council_list.html"
+
+    def get_queryset(self):
+        qs = (
+            Council.objects.all()
+            .exclude(council_id__startswith="N09")
+            .defer("area")
+            .order_by("name")
+        )
+        return qs
+
+
+class CouncilDetailView(LoginRequiredMixin, DetailView):
+    template_name = "file_uploads/council_detail.html"
+
+    def get_queryset(self):
+        uploads = Upload.objects.all().order_by("-timestamp")
+        qs = (
+            Council.objects.all()
+            .exclude(council_id__startswith="N09")
+            .defer("area")
+            .prefetch_related(Prefetch("upload_set", uploads))
+            .prefetch_related("upload_set__file_set")
+        )
+        return qs
+
+
+class FileDetailView(LoginRequiredMixin, DetailView):
+    template_name = "file_uploads/file_detail.html"
+    model = File

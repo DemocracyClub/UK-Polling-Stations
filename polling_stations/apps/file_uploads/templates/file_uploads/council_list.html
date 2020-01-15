@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Uploads" %}{% endblock page_title %}
+
+{% block content %}
+  {% include "file_uploads/uploads_header.html" %}
+
+  <section class="card">
+    <h1>Uploads</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Council ID</th>
+          <th>Council Name</th>
+          <th>Email</th>
+          <th>Upload</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for council in object_list %}
+          <tr>
+            <td>{{ council.council_id }}</td>
+            <td>
+              <a href="{% url 'file_uploads:councils_detail' pk=council.council_id %}">
+                {{ council.name }}
+              </a>
+            </td>
+            <td><a href="mailto:{{ council.email }}">{{ council.email }}</a></td>
+            <td><a href="#TODO">upload</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4">No councils found!</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+{% endblock content %}

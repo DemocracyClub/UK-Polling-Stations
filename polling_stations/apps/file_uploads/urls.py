@@ -1,5 +1,13 @@
 from django.conf.urls import url
 
-from .views import FileUploadView
+from .views import CouncilListView, CouncilDetailView, FileDetailView, FileUploadView
 
-urlpatterns = [url(r"^$", FileUploadView.as_view(), name="file_upload_index")]
+app_name = "file_uploads"
+urlpatterns = [
+    url(r"^councils/$", CouncilListView.as_view(), name="councils_list"),
+    url(
+        r"^councils/(?P<pk>.+)/$", CouncilDetailView.as_view(), name="councils_detail",
+    ),
+    url(r"^files/(?P<pk>.+)/$", FileDetailView.as_view(), name="files_detail",),
+    url(r"^upload_files/$", FileUploadView.as_view(), name="file_upload_index"),
+]

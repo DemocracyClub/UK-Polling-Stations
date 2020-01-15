@@ -13,6 +13,9 @@
 {% endblock extra_page_css %}
 
 {% block content %}
+
+{% include "file_uploads/uploads_header.html" %}
+
 <div class="card">
 
     <noscript>
@@ -97,7 +100,7 @@ var serializeFile = function(file) {
 var getPresignedPostData = function() {
   return new Promise(function(resolve, reject) {
     var xhr = new XMLHttpRequest();
-    var url = '{% url "file_upload_index" %}';
+    var url = '{% url "file_uploads:file_upload_index" %}';
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));

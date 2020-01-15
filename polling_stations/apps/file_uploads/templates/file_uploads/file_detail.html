@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block page_title %}{{ object.filename }}{% endblock page_title %}
+
+{% block extra_page_css %}
+<style>
+  dt {
+      float: left;
+  }
+  dt::after{
+      content: ":";
+  }
+  dd {
+      margin-left: 25%;
+  }
+  dd::after {
+      content: " ";
+      display: block;
+      clear: left;
+  }
+</style>
+{% endblock extra_page_css %}
+
+{% block content %}
+  {% include "file_uploads/uploads_header.html" %}
+
+  <section class="card">
+    <h1>{{ object.filename }}</h1>
+
+    <dl>
+      <dt><strong>Location</strong></dt>
+      <dd><code>{{ object.key }}</code></dd>
+
+      <dt><strong>EMS</strong></dt>
+      <dd>{{ object.ems }}</dd>
+
+      <dt><strong>Errors</strong></dt>
+      <dd>
+        {% if object.csv_valid %}✔️ OK{% else %}❌{% endif %}
+        {{ object.errors | linebreaksbr }}
+      </dd>
+    </dl>
+
+  </section>
+{% endblock content %}
