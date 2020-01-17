@@ -188,11 +188,20 @@ LOGGING = {
             "class": "django.utils.log.AdminEmailHandler",
         },
         "null": {"class": "logging.NullHandler"},
+        "sentry": {
+            "level": "ERROR",
+            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
+        },
     },
     "loggers": {
         # Silence DisallowedHost exception by setting null error handler - see
         # https://docs.djangoproject.com/en/1.8/topics/logging/#django-security
         "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
+        "file_uploads.views": {
+            "handlers": ["sentry"],
+            "level": "ERROR",
+            "propagate": True,
+        },
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",

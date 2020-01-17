@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 
 from django.conf import settings
@@ -59,6 +60,9 @@ class RequireStaffMixin(UserPassesTestMixin):
         return self.request.user.is_active and self.request.user.is_staff
 
 
+logger = logging.getLogger(__name__)
+
+
 class FileUploadView(RequireStaffMixin, TemplateView):
     template_name = "file_uploads/index.html"
 
@@ -90,7 +94,11 @@ class FileUploadView(RequireStaffMixin, TemplateView):
         """
         try:
             UploadRequestSchema().load(body)
-        except MarshmallowValidationError:
+        except MarshmallowValidationError as e:
+            # for now, log the error and body to sentry
+            # so we've got visibility on errors
+            logger.error(f"{e}\n{body}")
+
             raise DjangoValidationError("Request body did not match schema")
 
         try:
