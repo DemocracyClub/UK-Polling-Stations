@@ -64,7 +64,7 @@ logger = logging.getLogger(__name__)
 
 
 class FileUploadView(RequireStaffMixin, TemplateView):
-    template_name = "file_uploads/index.html"
+    template_name = "file_uploads/upload.html"
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
