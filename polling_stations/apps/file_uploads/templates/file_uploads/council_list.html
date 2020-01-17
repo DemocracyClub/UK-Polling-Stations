@@ -29,7 +29,7 @@
             </td>
             <td><a href="mailto:{{ council.email }}">{{ council.email }}</a></td>
             <td>
-              <a href="{% url 'file_uploads:file_upload_detail' gss=council.council_id %}">
+              <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
                 upload
               </a>
             </td>

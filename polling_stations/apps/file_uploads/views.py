@@ -38,7 +38,6 @@ class FileSchema(Schema):
 
 
 class UploadRequestSchema(Schema):
-    council_id = fields.String(required=True)
     files = fields.List(
         fields.Nested(FileSchema()),
         required=True,
@@ -71,18 +70,12 @@ class FileUploadView(RequireStaffMixin, TemplateView):
         return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, **context):
-        context["councils"] = (
+        context["council"] = (
             Council.objects.all()
             .exclude(council_id__startswith="N09")
             .defer("area")
-            .order_by("name")
+            .get(council_id=self.kwargs["gss"])
         )
-
-        if "gss" in self.kwargs:
-            context["councils"] = context["councils"].filter(
-                council_id=self.kwargs["gss"]
-            )
-
         return context
 
     def validate_body(self, body):
@@ -101,11 +94,6 @@ class FileUploadView(RequireStaffMixin, TemplateView):
 
             raise DjangoValidationError("Request body did not match schema")
 
-        try:
-            Council.objects.get(pk=body["council_id"])
-        except Council.DoesNotExist as e:
-            raise DjangoValidationError(str(e))
-
         files = body["files"]
         if len(files) == 2 and files[0]["name"] == files[1]["name"]:
             raise DjangoValidationError("Files must have different names")
@@ -116,6 +104,10 @@ class FileUploadView(RequireStaffMixin, TemplateView):
 
         try:
             self.validate_body(body)
+            try:
+                Council.objects.get(pk=self.kwargs["gss"])
+            except Council.DoesNotExist as e:
+                raise DjangoValidationError(str(e))
         except DjangoValidationError as e:
             return JsonResponse({"error": e.message}, status=400)
 
@@ -125,7 +117,7 @@ class FileUploadView(RequireStaffMixin, TemplateView):
         resp = {"files": []}
         for f in body["files"]:
             bucket_name = settings.S3_UPLOADS_BUCKET
-            object_name = f"{body['council_id']}/{now}/{f['name']}"
+            object_name = f"{self.kwargs['gss']}/{now}/{f['name']}"
             fields = {"Content-Type": f["type"]}
             conditions = [
                 {"Content-Type": f["type"]},

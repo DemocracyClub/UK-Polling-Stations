@@ -21,6 +21,12 @@
   <section class="card">
     <h1>{{ object.name }} - Uploads</h1>
 
+    <p>
+      <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="link-button">
+        Upload
+      </a>
+    </p>
+
     {% for upload in object.upload_set.all %}
         <h3>{{ upload.timestamp | naturaltime }}
         {% if upload.github_issue %} -
