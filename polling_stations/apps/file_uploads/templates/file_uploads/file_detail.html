@@ -37,8 +37,8 @@
 
       <dt><strong>Errors</strong></dt>
       <dd>
-        {% if object.csv_valid %}✔️ OK{% else %}❌{% endif %}
-        {{ object.errors | linebreaksbr }}
+        {{ object.status_emoji }}
+        {% if object.csv_valid %}OK{% else %}{{ object.errors | linebreaksbr }}{% endif %}
       </dd>
     </dl>
 

@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
           function(data) {
             console.log('done!');
             console.log(data);
-            window.location.href = '{% url "file_uploads:councils_list" %}';
+            window.location.href = '{% url "file_uploads:councils_detail" pk=gss %}';
             document.getElementById("submit").disabled = false;
           },
           handleError

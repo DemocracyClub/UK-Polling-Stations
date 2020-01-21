@@ -105,7 +105,7 @@ class FileUploadView(RequireStaffMixin, TemplateView):
         try:
             self.validate_body(body)
             try:
-                Council.objects.get(pk=self.kwargs["gss"])
+                council = Council.objects.get(pk=self.kwargs["gss"])
             except Council.DoesNotExist as e:
                 raise DjangoValidationError(str(e))
         except DjangoValidationError as e:
@@ -134,6 +134,7 @@ class FileUploadView(RequireStaffMixin, TemplateView):
                         ExpiresIn=expiration,
                     )
                 )
+                Upload.objects.get_or_create(gss=council, timestamp=now)
             except ClientError:
                 return JsonResponse(
                     {"error": "Could not authorize request"}, status=400
@@ -141,32 +142,26 @@ class FileUploadView(RequireStaffMixin, TemplateView):
         return JsonResponse(resp, status=200)
 
 
-class CouncilListView(RequireStaffMixin, ListView):
-    template_name = "file_uploads/council_list.html"
-
-    def get_queryset(self):
-        qs = (
-            Council.objects.all()
-            .exclude(council_id__startswith="N09")
-            .defer("area")
-            .order_by("name")
-        )
-        return qs
-
-
-class CouncilDetailView(RequireStaffMixin, DetailView):
-    template_name = "file_uploads/council_detail.html"
-
+class CouncilView:
     def get_queryset(self):
         uploads = Upload.objects.all().order_by("-timestamp")
         qs = (
             Council.objects.all()
             .exclude(council_id__startswith="N09")
             .defer("area")
+            .order_by("name")
             .prefetch_related(Prefetch("upload_set", uploads))
             .prefetch_related("upload_set__file_set")
         )
         return qs
+
+
+class CouncilListView(RequireStaffMixin, CouncilView, ListView):
+    template_name = "file_uploads/council_list.html"
+
+
+class CouncilDetailView(RequireStaffMixin, CouncilView, DetailView):
+    template_name = "file_uploads/council_detail.html"
 
 
 class FileDetailView(RequireStaffMixin, DetailView):

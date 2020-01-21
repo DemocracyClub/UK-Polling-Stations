@@ -4,17 +4,6 @@
 
 {% block page_title %}{{ object.name }} - {% trans "Uploads" %}{% endblock page_title %}
 
-{% block extra_page_css %}
-<style>
-  .file-valid::before {
-    content: "✔️ "
-  }
-  .file-not-valid::before {
-    content: "❌ "
-  }
-</style>
-{% endblock extra_page_css %}
-
 {% block content %}
   {% include "file_uploads/uploads_header.html" %}
 
@@ -37,7 +26,8 @@
         {% if upload.file_set.all %}
           <ul style="list-style-type:none">
             {% for file in upload.file_set.all %}
-            <li class="{% if file.csv_valid %}file-valid{% else %}file-not-valid{% endif %}">
+            <li>
+              {{ file.status_emoji }}
               {{ file.path }}
               <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
                 {{ file.filename }}
@@ -45,6 +35,8 @@
             </li>
           {% endfor %}
           </ul>
+        {% else %}
+          Waiting...
         {% endif %}
 
     {% empty %}

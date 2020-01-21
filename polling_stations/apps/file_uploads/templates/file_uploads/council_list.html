@@ -16,6 +16,7 @@
           <th>Council Name</th>
           <th>Email</th>
           <th>Upload</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -32,6 +33,9 @@
               <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
                 upload
               </a>
+            </td>
+            <td>
+              {{ council.upload_set.latest.status_emoji }}
             </td>
           </tr>
         {% empty %}
