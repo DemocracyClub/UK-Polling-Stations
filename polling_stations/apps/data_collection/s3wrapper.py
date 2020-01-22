@@ -61,5 +61,5 @@ class S3Wrapper:
             raise ValueError("Couldn't find any data to import")
 
     def fetch_data_by_council(self, council_id):
-        prefix = "%s-" % (council_id)
+        prefix = "%s" % (council_id)
         self.fetch_data(prefix)

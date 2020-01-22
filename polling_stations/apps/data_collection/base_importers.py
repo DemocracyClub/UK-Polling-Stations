@@ -180,7 +180,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     def get_base_folder_path(self):
         if getattr(self, "local_files", True):
             if self.base_folder_path is None:
-                path = os.path.join(self.data_path, "{0}-*".format(self.council_id))
+                path = os.path.join(self.data_path, self.council_id)
                 return glob.glob(path)[0]
         return self.base_folder_path
 
