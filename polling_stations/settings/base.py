@@ -161,6 +161,7 @@ PROJECT_APPS = (
     "data_finder",
     "dc_theme",
     "feedback",
+    "file_uploads",
     "pollingstations",
     "bug_reports",
     "uk_geo_utils",
@@ -187,11 +188,20 @@ LOGGING = {
             "class": "django.utils.log.AdminEmailHandler",
         },
         "null": {"class": "logging.NullHandler"},
+        "sentry": {
+            "level": "ERROR",
+            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
+        },
     },
     "loggers": {
         # Silence DisallowedHost exception by setting null error handler - see
         # https://docs.djangoproject.com/en/1.8/topics/logging/#django-security
         "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
+        "file_uploads.views": {
+            "handlers": ["sentry"],
+            "level": "ERROR",
+            "propagate": True,
+        },
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",
@@ -206,6 +216,10 @@ LANGUAGES = [("en", "English"), ("cy-gb", "Welsh")]
 USE_I18N = (True,)
 USE_L10N = (True,)
 LOCALE_PATHS = (repo_root("locale"),)
+
+
+LOGIN_REDIRECT_URL = "file_uploads:councils_list"
+LOGOUT_REDIRECT_URL = "home"
 
 
 # API Settings
@@ -264,6 +278,7 @@ from .constants.directions import *  # noqa
 from .constants.elections import *  # noqa
 from .constants.importers import *  # noqa
 from .constants.tiles import *  # noqa
+from .constants.uploads import *  # noqa
 
 # Import .local.py last - settings in local.py override everything else
 try:

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block extra_page_css %}
+<style>
+  button:disabled {
+    background-color: lightgrey;
+    border-color: darkgrey;
+  }
+</style>
+{% endblock extra_page_css %}
+
+{% block content %}
+
+{% include "file_uploads/uploads_header.html" %}
+
+<div class="card">
+
+    <noscript>
+      <div class="card error-summary">
+          <h2>Javascript disabled</h2>
+          <p>To upload files, please enable javascript.</p>
+      </div>
+    </noscript>
+
+    <h2>Upload Files: {{ council.name }}</h2>
+
+    <form id="file_upload_form" method="POST">
+        <div class="card error-summary" id="error" hidden></div>
+
+        <p>
+          <label for="file0">File 1 (required)</label>
+          <input type="file" id="file0" name="file0" accept=".csv,.tsv" required />
+          <progress id="progressBar0" value="0" max="100"></progress>
+        </p>
+        <p>
+          <label for="file1">File 2 (optional)</label>
+          <input type="file" id="file1" name="file1" accept=".csv,.tsv" />
+          <progress id="progressBar1" value="0" max="100"></progress>
+        </p>
+
+        <div>
+        <button type="submit" class="button" id="submit">Upload</button>
+        </div>
+      </form>
+
+</div>
+{% endblock content %}
+
+{% block in_page_javascript %}
+<script>
+var getCookie = function(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+};
+
+var handleError = function(err) {
+  var error = '<h2>Sorry, something has gone wrong</h2> '
+  error += '<p>Ensure the file you are uploading is of type .csv or .tsv. ';
+  error += 'If the problem continues, ';
+  error += '<a href="mailto:pollingstations@democracyclub.org.uk">contact us</a>.</p>';
+  document.getElementById("error").innerHTML = error;
+  document.getElementById("error").hidden = false;
+  document.getElementById("submit").disabled = false;
+};
+
+var serializeFile = function(file) {
+  if (file == null) return null;
+  return {
+    name: file.name,
+    size: file.size,
+    type: file.type,
+  };
+};
+
+var getPresignedPostData = function() {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    var url = '{% url "file_uploads:file_upload" gss=gss %}';
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    var payload = {
+      files: [
+        serializeFile(document.getElementById('file0').files[0]),
+        serializeFile(document.getElementById('file1').files[0])
+      ].filter(Boolean),
+    };
+    xhr.send(JSON.stringify(payload));
+    xhr.onload = function() {
+      if (this.status === 200) {
+        resolve(JSON.parse(this.responseText));
+       } else {
+        reject(this.responseText);
+       }
+    };
+  });
+};
+
+var uploadFileToS3 = function(presignedPostData, file, progressBar) {
+  return new Promise(function(resolve, reject) {
+    var formData = new FormData();
+    Object.keys(presignedPostData.fields).forEach(function(key) {
+      formData.append(key, presignedPostData.fields[key]);
+    });
+
+    formData.append("file", document.getElementById(file).files[0]);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", presignedPostData.url, true);
+    xhr.upload.addEventListener("progress", function(event) {
+      document.getElementById(progressBar).value = (event.loaded / event.total) * 100;
+    }, false);
+    xhr.send(formData);
+    xhr.onload = function() {
+      if (this.status === 204) {
+        resolve(this.responseText);
+      } else {
+        reject(this.responseText);
+      }
+    };
+  });
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.getElementById('file_upload_form').addEventListener("submit", function (e) {
+    e.preventDefault();
+    document.getElementById("error").innerHTML = "";
+    document.getElementById("error").hidden = true;
+    document.getElementById("submit").disabled = true;
+
+    getPresignedPostData().then(
+      function(data) {
+        var uploads = [];
+        for (var i=0; i<data.files.length; i++) {
+          uploads.push(
+            uploadFileToS3(data.files[i], 'file'.concat(i), 'progressBar'.concat(i))
+          );
+        }
+        Promise.all(uploads).then(
+          function(data) {
+            console.log('done!');
+            console.log(data);
+            window.location.href = '{% url "file_uploads:councils_detail" pk=gss %}';
+            document.getElementById("submit").disabled = false;
+          },
+          handleError
+        );
+
+      },
+      handleError
+    );
+
+  });
+
+});
+</script>
+{% endblock in_page_javascript %}

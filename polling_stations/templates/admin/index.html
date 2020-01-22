@@ -1,0 +1,15 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<div class="module">
+  <table>
+    <caption>Uploads</caption>
+    <tr>
+      <th scope="row">Upload Files</th>
+      <td>&nbsp;</td>
+      <td><a href="{% url 'file_uploads:councils_list' %}" class="addlink">Upload</a></td>
+    </tr>
+  </table>
+</div>
+{{ block.super }}
+{% endblock %}

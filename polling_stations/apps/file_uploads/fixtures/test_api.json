@@ -1,0 +1,67 @@
+[
+  {
+    "fields": {
+      "name": "Piddleton Parish Council",
+      "email": "",
+      "phone": "",
+      "website": "",
+      "postcode": "",
+      "address": "",
+      "area": null
+    },
+    "model": "councils.council",
+    "pk": "X01000001"
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$xxxxx$yyyyy",
+      "last_login": "2020-01-09T13:06:17.491Z",
+      "is_superuser": true,
+      "username": "superuser",
+      "first_name": "",
+      "last_name": "",
+      "email": "example@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2018-10-22T16:03:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$xxxxx$yyyyy",
+      "last_login": "2020-01-09T13:06:17.491Z",
+      "is_superuser": false,
+      "username": "normaluser",
+      "first_name": "",
+      "last_name": "",
+      "email": "example@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-10-22T16:03:09Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "superuser-key",
+    "fields": {
+      "user": 1,
+      "created": "2020-01-10T13:51:34.495Z"
+    }
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "normaluser-key",
+    "fields": {
+      "user": 2,
+      "created": "2020-01-10T13:51:34.495Z"
+    }
+  }
+]
