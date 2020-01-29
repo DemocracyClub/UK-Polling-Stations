@@ -19,7 +19,6 @@ class Command(BaseGitHubImporter):
             "internal_council_id": record["POLLING_DISTRICT"],
             "name": record["POLLING_DISTRICT"],
             "area": poly,
-            "polling_station_id": record["POLLING_STATION_ID"],
         }
 
     def get_address(self, uprn):
@@ -43,4 +42,5 @@ class Command(BaseGitHubImporter):
             "address": address,
             "postcode": postcode,
             "location": location,
+            "polling_district_id": record["POLLING_DISTRICT"],
         }
