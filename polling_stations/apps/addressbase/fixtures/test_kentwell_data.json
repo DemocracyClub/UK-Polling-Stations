@@ -125,7 +125,8 @@
     "fields": {
         "postcode": "KW15 88TF",
         "address": "In the middle of the field",
-        "location": "SRID=4326;POINT (0.7208994610313337 52.0965737442737833)"
+        "location": "SRID=4326;POINT (0.7208994610313337 52.0965737442737833)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 },
@@ -134,7 +135,8 @@
     "fields": {
         "postcode": "KW15 88TF",
         "address": "The Cott",
-        "location": "SRID=4326;POINT (0.7225083308451804 52.0975051994085803)"
+        "location": "SRID=4326;POINT (0.7225083308451804 52.0975051994085803)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 },
@@ -143,7 +145,8 @@
     "fields": {
         "postcode": "KW15 88LM",
         "address": "Sym's Caravan",
-        "location": "SRID=4326;POINT (0.7152352684829660 52.0954911675566947)"
+        "location": "SRID=4326;POINT (0.7152352684829660 52.0954911675566947)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 },
@@ -152,7 +155,8 @@
     "fields": {
         "postcode": "KW15 88LX",
         "address": "74 Kendell Street",
-        "location": "SRID=4326;POINT (-4.482032954692841 51.905678058246835)"
+        "location": "SRID=4326;POINT (-4.482032954692841 51.905678058246835)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 },
@@ -161,7 +165,8 @@
     "fields": {
         "postcode": "KW15 88LX",
         "address": "75 Kendell Street",
-        "location": "SRID=4326;POINT (-4.481622576713562 51.905638342789175)"
+        "location": "SRID=4326;POINT (-4.481622576713562 51.905638342789175)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 },
@@ -170,7 +175,8 @@
     "fields": {
         "postcode": "KW15 88LZ",
         "address": "80 Kendell Street",
-        "location": "SRID=4326;POINT (-4.482572078704834 51.90549602877751)"
+        "location": "SRID=4326;POINT (-4.482572078704834 51.90549602877751)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 },
@@ -179,7 +185,8 @@
     "fields": {
         "postcode": "KW15 88LZ",
         "address": "81 Kendell Street",
-        "location": "SRID=4326;POINT (-4.482660591602325 51.905499338410806)"
+        "location": "SRID=4326;POINT (-4.482660591602325 51.905499338410806)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 },
@@ -188,7 +195,8 @@
     "fields": {
         "postcode": "KW15 88LZ",
         "address": "82 Kendell Street",
-        "location": "SRID=4326;POINT (-4.482770562171936 51.905499338410806)"
+        "location": "SRID=4326;POINT (-4.482770562171936 51.905499338410806)",
+        "addressbase_postal": "D"
     },
     "model": "addressbase.address"
 }
