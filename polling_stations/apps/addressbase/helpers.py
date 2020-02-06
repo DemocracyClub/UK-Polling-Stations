@@ -140,7 +140,7 @@ class EdgeCaseFixer:
             ) ct
             ON ab.uprn=ct.uprn
 
-            WHERE ab.postcode=%s
+            WHERE ab.postcode=%s AND ab.addressbase_postal='D'
             """,
             [postcode, postcode],
         )

@@ -10,7 +10,7 @@ class AddressManager(AbstractAddressManager):
         return list(qs)
 
     def points_for_postcode(self, postcode):
-        qs = self.filter(postcode=postcode)
+        qs = self.filter(postcode=postcode, addressbase_postal="D")
         qs = qs.values_list("location", flat=True)
         return list(qs)
 
