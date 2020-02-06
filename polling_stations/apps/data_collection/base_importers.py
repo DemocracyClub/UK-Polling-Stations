@@ -73,6 +73,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     logger = None
     batch_size = None
     imports_districts = False
+    use_postcode_centroids = False
 
     def write_info(self, message):
         if self.verbosity > 0:
@@ -106,6 +107,15 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         parser.add_argument(
             "--nochecks",
             help="<Optional> Do not perform validation checks or display context information",
+            action="store_true",
+            required=False,
+            default=False,
+        )
+
+        parser.add_argument(
+            "-p",
+            "--use-postcode-centroids",
+            help="<optional> Use postcode centroids to derive a location for polling stations",
             action="store_true",
             required=False,
             default=False,
@@ -202,6 +212,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         self.logger = LogHelper(self.verbosity)
         self.batch_size = kwargs.get("batch_size")
         self.validation_checks = not (kwargs.get("nochecks"))
+        self.allow_station_point_from_postcode = kwargs.get("use_postcode_centroids")
 
         if self.council_id is None:
             self.council_id = args[0]

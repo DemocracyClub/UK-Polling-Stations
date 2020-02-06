@@ -142,9 +142,19 @@ class Command(BaseCommand):
 
         commands_series = []
         commands_parallel = []
-        opts = {"noclean": False, "nochecks": True, "verbosity": 1}
+        opts = {
+            "noclean": False,
+            "nochecks": True,
+            "verbosity": 1,
+            "use_postcode_centroids": False,
+        }
         if kwargs["multiprocessing"]:
-            opts = {"noclean": False, "nochecks": True, "verbosity": 0}
+            opts = {
+                "noclean": False,
+                "nochecks": True,
+                "verbosity": 0,
+                "use_postcode_centroids": False,
+            }
 
         # loop over all the import scripts
         # and build up a list of management commands to run

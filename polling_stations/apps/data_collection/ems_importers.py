@@ -34,7 +34,6 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
 
     # Set this to false in an import script if we want to only set a station
     # point based on UPRN or co-ordinates (even if we've got a valid postcode)
-    allow_station_point_from_postcode = True
 
     @property
     @abc.abstractmethod
@@ -333,7 +332,6 @@ class BaseHalaroseCsvImporter(
         "pollingstationaddress_5",
     ]
     residential_uprn_field = "uprn"
-    allow_station_point_from_postcode = True
 
     def get_station_hash(self, record):
         return "-".join(
@@ -468,7 +466,6 @@ class BaseDemocracyCountsCsvImporter(
     postcode_field = "postcode"
     station_id_field = "stationcode"
     residential_uprn_field = "uprn"
-    allow_station_point_from_postcode = True
 
     def address_record_to_dict(self, record):
 
