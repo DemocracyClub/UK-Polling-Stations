@@ -44,9 +44,6 @@ District = namedtuple(
 )
 
 
-postcode_validator = GBPostcodeField()
-
-
 class CustomSet(metaclass=abc.ABCMeta):
     def __init__(self):
         self.elements = set()
@@ -145,17 +142,8 @@ class AddressList:
             return
 
         if address["slug"] not in self.seen:
-            try:
-                postcode_validator.clean(address["postcode"])
-                self.elements.append(address)
-                self.seen.add(address["slug"])
-            except ValidationError:
-                self.logger.log_message(
-                    logging.WARNING,
-                    "Discarding record with invalid postcode:\n%s\n",
-                    variable=address,
-                    pretty=True,
-                )
+            self.elements.append(address)
+            self.seen.add(address["slug"])
         else:
             self.logger.log_message(
                 logging.DEBUG,
@@ -163,6 +151,80 @@ class AddressList:
                 variable=address,
                 pretty=True,
             )
+
+    def validate_postcodes(self, addressbase_data):
+        """
+        This method checks if a record has a valid postcode.
+        If it doesn't then it looks for uprn, and if it can match the uprn in
+        addressbase, and the addresses look similar it will correct the postcode
+        for us.
+        Even if it doesn't match the uprn it saves us some legwork by having tried
+        various options.
+        """
+
+        postcode_validator = GBPostcodeField()
+
+        def correct_postcode_from_uprn(record, addressbase_data):
+            addressbase_record = addressbase_data[record["uprn"]]
+            match_quality = fuzz.partial_ratio(
+                record["address"].lower().replace(",", ""),
+                addressbase_record["address"].lower().replace(",", ""),
+            )
+            if match_quality >= 100:
+                record["postcode"] = addressbase_record["postcode"]
+                self.logger.log_message(
+                    logging.INFO,
+                    "Replacing %s with %s for record:\n%s\n",
+                    variable=(
+                        record["postcode"],
+                        addressbase_record["postcode"],
+                        record,
+                    ),
+                )
+                return True
+
+            else:
+                self.logger.log_message(
+                    logging.WARNING,
+                    'Invalid postcode: %s\nAddressbase correction: %s\nSUGGESTION:\nif uprn == "%s:\n\trec["postcode"] = "%s"\n',
+                    variable=(
+                        record["postcode"],
+                        addressbase_record["postcode"],
+                        record["uprn"],
+                        addressbase_record["postcode"],
+                    ),
+                )
+                return False
+
+        def keep_record(record, addressbase_data):
+            try:
+                postcode_validator.clean(record["postcode"])
+                return True
+            except ValidationError:
+                # Check there's a UPRN
+                if not record["uprn"]:
+                    self.logger.log_message(
+                        logging.WARNING,
+                        "Discarding record with invalid postcode and missing UPRN.\nRecord:\n%s\n",
+                        variable=(record),
+                        pretty=True,
+                    )
+                    return False
+
+                # Check it's in our addressbase_data
+                if record["uprn"] not in addressbase_data:
+                    self.logger.log_message(
+                        logging.WARNING,
+                        "Discarding record with invalid postcode and record UPRN not in addressbase.\nRecord:\n%s\n",
+                        variable=(record),
+                        pretty=True,
+                    )
+                    return False
+
+                # attempt correction
+                return correct_postcode_from_uprn(record, addressbase_data)
+
+        self.elements = [e for e in self.elements if keep_record(e, addressbase_data)]
 
     def get_address_lookup(self):
         # for each address, build a lookup of address -> set of station ids
@@ -507,6 +569,7 @@ class AddressList:
 
         self.remove_ambiguous_addresses_by_address()
         addressbase_data = get_uprn_hash_table(self.council_id)
+        self.validate_postcodes(addressbase_data)
         self.handle_invalid_uprns(addressbase_data, fuzzy_match, match_threshold)
         self.attach_doorstep_gridrefs(addressbase_data)
         self.remove_addresses_outside_target_auth()
