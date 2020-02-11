@@ -1,10 +1,13 @@
 {% load dc_forms %}
 
-<form id="report_form" action="{% url 'bug_report_form_view' %}" method="post">
-  {% csrf_token %}
-  <div class="form-group">
-    <p>{{ bug_report_form|dc_form }}</p>
-    {% include "bug_reports/disclaimer.html" %}
-    <button type="submit" class="button">Send Report</button>
-  </div>
-</form>
+<div class="card">
+  <h3>Report a Problem with this page</h3>
+  <form id="report_form" action="{% url 'bug_report_form_view' %}" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <p>{{ bug_report_form|dc_form }}</p>
+      {% include "bug_reports/disclaimer.html" %}
+      <button type="submit" class="button">Send Report</button>
+    </div>
+  </form>
+</div>
