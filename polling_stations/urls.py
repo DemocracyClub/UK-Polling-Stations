@@ -67,7 +67,6 @@ extra_patterns = [
     url(r"^api/beta/", include(router.urls)),
     url(r"^api/$", ApiDocsView.as_view(), name="api_docs"),
     url(r"^admin/", admin.site.urls),
-    url(r"^feedback/", include("feedback.urls")),
     url(r"^report_problem/", include("bug_reports.urls")),
     url(r"^uploads/", include("file_uploads.urls", namespace="file_uploads")),
     url(r"^league_table/", include("data_collection.urls")),

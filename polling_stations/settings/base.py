@@ -116,7 +116,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "dc_theme.context_processors.dc_theme_context",
                 "dc_signup_form.context_processors.signup_form",
-                "feedback.context_processors.feedback_form",
                 "bug_reports.context_processors.bug_report_form",
                 "pollingstations.context_processors.google_analytics",
                 "pollingstations.context_processors.global_settings",

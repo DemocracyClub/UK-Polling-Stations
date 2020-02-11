@@ -72,12 +72,7 @@
 
     {% if we_know_where_you_should_vote or custom %}
       {% if request.brand == 'democracyclub' and has_election and not error %}
-        <div class="card">
-          {% include "feedback/feedback_form.html" %}
-          <div id="report_form_container" style="display: none;">
-          {% include "bug_reports/report_form_inline.html" %}
-          </div>
-        </div>
+        {% include "bug_reports/report_form_inline.html" %}
       {% endif %}
     {% endif %}
 
@@ -143,7 +138,5 @@
   {% if we_know_where_you_should_vote and station.location and has_election and not error %}
     {% javascript 'map' %}
   {% endif %}
-
-  {% include "fragments/feedback_js.html" %}
 
 {% endblock extra_javascript %}
