@@ -178,7 +178,9 @@ class Command(BaseCommand):
                         council_id=cmd.council_id
                     ).exists()
                     if not existing_data or kwargs.get("overwrite"):
-                        self.summary.append(("INFO", "Ran import script %s" % tail))
+                        self.summary.append(
+                            ("INFO", f"Ran import script for {cmd.council_id}: {tail}")
+                        )
                         if hasattr(cmd, "run_in_series"):
                             commands_series.append((f, opts))
                         else:
