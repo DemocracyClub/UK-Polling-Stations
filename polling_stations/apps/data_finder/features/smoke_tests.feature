@@ -15,11 +15,6 @@ Feature: Smoke tests
     Then I should see "Join our mailing list"
     And No errors were thrown
 
-    Scenario: Check feedback form
-    When I visit site page "/feedback"
-    Then I should see "Did you find this useful?"
-    And No errors were thrown
-
     Scenario: Check bug report form
     When I visit site page "/report_problem"
     Then I should see "Report a Problem"
