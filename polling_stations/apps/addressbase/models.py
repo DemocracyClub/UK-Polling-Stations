@@ -1,6 +1,11 @@
 from django.contrib.gis.db import models
 from django.db import connection
-from uk_geo_utils.models import AbstractAddress, AbstractAddressManager, AbstractOnsud
+from uk_geo_utils.models import (
+    AbstractAddress,
+    AbstractAddressManager,
+    AbstractOnsud,
+    AbstractOnsudManager,
+)
 
 
 class AddressManager(AbstractAddressManager):
@@ -22,6 +27,16 @@ class Address(AbstractAddress):
 class Onsud(AbstractOnsud):
     class Meta:
         index_together = ("lad",)
+
+
+class UprnToCouncil(models.Model):
+    class Meta:
+        indexes = [models.Index(fields=["lad",], name="lookup_lad_idx")]
+
+    objects = AbstractOnsudManager()
+
+    uprn = models.CharField(primary_key=True, max_length=12)
+    lad = models.CharField(blank=True, max_length=9)
 
 
 class Blacklist(models.Model):
