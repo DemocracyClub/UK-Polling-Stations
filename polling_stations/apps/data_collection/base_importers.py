@@ -569,9 +569,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.write_info("----------------------------------")
         self.write_info("Contextual Data:")
         self.write_info(
-            "Total UPRNs in ONSUD: {:,}".format(dwellings.from_onsud(self.council_id))
-        )
-        self.write_info(
             "Total UPRNs in AddressBase: {:,}".format(
                 dwellings.from_addressbase(self.council.area)
             )
