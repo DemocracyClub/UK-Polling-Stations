@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .sass-cache
 COMPILED/
+polling_stations/static
 
 # C extensions
 *.so
