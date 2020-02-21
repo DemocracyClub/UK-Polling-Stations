@@ -586,3 +586,78 @@ class AddressListTest(TestCase):
         # but leave L252XY intact
         self.assertEqual(1, len(address_list.elements))
         self.assertEqual(address_list.elements[0]["postcode"], "L252XY")
+
+    def test_validate_postcodes(self):
+        in_list = [
+            {  # Valid postcode
+                "address": "5-6 Mickleton Dr, Southport",
+                "postcode": "PR82QX",
+                "polling_station_id": "A01",
+                "council": "X01000001",
+                "slug": "a",
+                "uprn": "",
+            },
+            {  # Invalid postcode we can fix from addressbase
+                "address": "1 Abbeyvale Dr, Liverpool",
+                "postcode": "L25ZNW",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "b",
+                "uprn": "00001",
+            },
+            {  # Invalid postcode, but address doesn't match addressbase
+                "address": "2 Abbeyvale Dr, Liverpool",
+                "postcode": "L25ZNW",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "c",
+                "uprn": "00002",
+            },
+            {  # Invalid postcode, record missing uprn
+                "address": "3 Abbeyvale Dr, Liverpool",
+                "postcode": "L25ZNW",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "d",
+                "uprn": "",
+            },
+            {  # Invalid postcode, uprn not in addressbase
+                "address": "4 Abbeyvale Dr, Liverpool",
+                "postcode": "L25ZNW",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "e",
+                "uprn": "00005",
+            },
+        ]
+        expected = [
+            {  # A valid postcode
+                "address": "5-6 Mickleton Dr, Southport",
+                "postcode": "PR82QX",
+                "polling_station_id": "A01",
+                "council": "X01000001",
+                "slug": "a",
+                "uprn": "",
+            },
+            {  # A corrected postcode
+                "address": "1 Abbeyvale Dr, Liverpool",
+                "postcode": "L252NW",
+                "polling_station_id": "AA",
+                "council": "X01000001",
+                "slug": "b",
+                "uprn": "00001",
+            },
+        ]
+
+        address_list = AddressList(MockLogger())
+        for el in in_list:
+            address_list.append(el)
+
+        addressbase = {
+            "00001": {"postcode": "L252NW", "address": "1 Abbeyvale Dr, Liverpool"},
+            "00002": {"postcode": "L252NW", "address": "2 Abbeyvale Drive, Liverpool"},
+        }
+
+        address_list.validate_postcodes(addressbase)
+        # Assertions
+        self.assertEqual(expected, address_list.elements)
