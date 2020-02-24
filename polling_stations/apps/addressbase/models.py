@@ -1,6 +1,10 @@
 from django.contrib.gis.db import models
 from django.db import connection
-from uk_geo_utils.models import AbstractAddress, AbstractAddressManager, AbstractOnsud
+from uk_geo_utils.models import (
+    AbstractAddress,
+    AbstractAddressManager,
+    AbstractOnsudManager,
+)
 
 
 class AddressManager(AbstractAddressManager):
@@ -19,9 +23,14 @@ class Address(AbstractAddress):
     objects = AddressManager()
 
 
-class Onsud(AbstractOnsud):
+class UprnToCouncil(models.Model):
     class Meta:
-        index_together = ("lad",)
+        indexes = [models.Index(fields=["lad",], name="lookup_lad_idx")]
+
+    objects = AbstractOnsudManager()
+
+    uprn = models.CharField(primary_key=True, max_length=12)
+    lad = models.CharField(blank=True, max_length=9)
 
 
 class Blacklist(models.Model):
@@ -41,7 +50,7 @@ class Blacklist(models.Model):
 
 def get_uprn_hash_table(council_ids):
     # get all the UPRNs in target local auth
-    # which exist in both Addressbase and ONSUD
+    # NB we miss ~25 over the country because lighthouses etc.
     cursor = connection.cursor()
     cursor.execute(
         """
@@ -51,8 +60,8 @@ def get_uprn_hash_table(council_ids):
             REPLACE(a.postcode, ' ', ''),
             a.location
         FROM addressbase_address a
-        JOIN addressbase_onsud o ON a.uprn=o.uprn
-        WHERE o.lad IN %s;
+        JOIN addressbase_uprntocouncil u ON a.uprn=u.uprn
+        WHERE u.lad IN %s;
         """,
         [council_ids],
     )

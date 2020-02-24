@@ -108,7 +108,7 @@ class EdgeCaseFixer:
                 ab.postcode,
                 pd.internal_council_id,
                 ps.internal_council_id,
-                os.lad,
+                uc.lad,
                 ct.count,
                 ab.location
             FROM addressbase_address ab
@@ -116,8 +116,8 @@ class EdgeCaseFixer:
             LEFT JOIN pollingstations_pollingdistrict pd
             ON ST_CONTAINS(pd.area, ab.location)
 
-            LEFT JOIN addressbase_onsud os
-            ON os.uprn=ab.uprn
+            LEFT JOIN addressbase_uprntocouncil uc
+            ON uc.uprn=ab.uprn
 
             LEFT JOIN pollingstations_pollingstation ps
             ON (

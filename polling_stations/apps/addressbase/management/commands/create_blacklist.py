@@ -5,8 +5,9 @@ from addressbase.models import Blacklist
 
 
 """
-Use AddressBase and ONSUD to create a list of
-postcodes which contain UPRNs in >1 local authorities
+Use AddressBase and a lookup to ONS Local
+Authority ids to create a list of postcodes
+which contain UPRNs in >1 local authorities
 """
 
 
@@ -17,8 +18,8 @@ class Command(BaseCommand):
             """
             SELECT DISTINCT(postcode)
             FROM addressbase_address as AB
-            JOIN addressbase_onsud ONSUD
-            ON AB.uprn = ONSUD.uprn
+            JOIN addressbase_uprntocouncil UC
+            ON AB.uprn = UC.uprn
             GROUP BY postcode
             HAVING COUNT(DISTINCT(LAD))>1;
             """
@@ -32,15 +33,15 @@ class Command(BaseCommand):
             """
             SELECT DISTINCT(LAD)
             FROM addressbase_address as AB
-            JOIN addressbase_onsud ONSUD
-            ON AB.uprn = ONSUD.uprn
+            JOIN addressbase_uprntocouncil UC
+            ON AB.uprn = UC.uprn
             WHERE AB.postcode=%s;
             """,
             [postcode],
         )
         councils = self.cursor.fetchall()
 
-        # merge/de-dupe any new councils not in ONSUD
+        # merge/de-dupe any new councils not in uprn to council lookup
         gss_codes = [council[0] for council in councils]
         gss_codes = [
             settings.OLD_TO_NEW_MAP[code] if code in settings.OLD_TO_NEW_MAP else code

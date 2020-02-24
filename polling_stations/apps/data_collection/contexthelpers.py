@@ -1,5 +1,5 @@
 import requests
-from addressbase.models import Onsud, Address
+from addressbase.models import Address
 
 
 def get_stat_from_nomis(dataset, measure, gss_code):
@@ -18,9 +18,6 @@ def get_stat_from_nomis(dataset, measure, gss_code):
 class Dwellings:
     def from_census(self, gss_code):
         return get_stat_from_nomis("NM_618_1", "20100", gss_code)
-
-    def from_onsud(self, council_id):
-        return Onsud.objects.filter(lad=council_id).count()
 
     def from_addressbase(self, polygon):
         return Address.objects.filter(location__within=polygon).count()

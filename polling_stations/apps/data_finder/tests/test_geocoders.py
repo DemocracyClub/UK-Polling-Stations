@@ -46,7 +46,8 @@ class GeocodeTest(TestCase):
     def test_no_codes(self):
         """
         We find records for the given postcode in the AddressBase table
-        but there are no corresponding records in the ONSUD for the UPRNs we found
+        but there are no corresponding records in the uprn to council lookup
+        for the UPRNs we found
 
         We should fall back to centroid-based geocoding using ONSPD
         """
@@ -59,7 +60,8 @@ class GeocodeTest(TestCase):
     def test_multiple_councils(self):
         """
         We find records for the given postcode in the AddressBase table
-        There are corresponding records in the ONSUD for the UPRNs we found
+        There are corresponding records in the uprn to council lookup
+        for the UPRNs we found
         The UPRNs described by this postcode map to more than one local authority
 
         Exception of class MultipleCouncilsException should be thrown
@@ -73,7 +75,8 @@ class GeocodeTest(TestCase):
     def test_valid(self):
         """
         We find records for the given postcode in the AddressBase table
-        There are some corresponding records in the ONSUD for the UPRNs we found
+        There are some corresponding records in the uprn to council lookup
+        for the UPRNs we found
 
         Valid result should be returned based on geocoding using AddressBase
         """
@@ -113,7 +116,8 @@ class GeocodePointOnlyTest(TestCase):
     def test_valid(self):
         """
         We find records for the given postcode in the AddressBase table
-        There are some corresponding records in the ONSUD for the UPRNs we found
+        There are some corresponding records in the uprn to council lookup
+        for the UPRNs we found
 
         Valid result should be returned based on geocoding using AddressBase
         """

@@ -9,7 +9,7 @@ class Council(models.Model):
     website = models.URLField(blank=True)
     postcode = models.CharField(blank=True, null=True, max_length=100)
     address = models.TextField(blank=True, null=True)
-    area = models.MultiPolygonField(null=True, blank=True, geography=True, srid=4326)
+    area = models.MultiPolygonField(null=True, blank=True, srid=4326)
 
     objects = models.Manager()
 

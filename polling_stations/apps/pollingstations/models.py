@@ -141,22 +141,26 @@ class ResidentialAddress(models.Model):
 class CustomFinderManager(models.Manager):
     def get_custom_finder(self, geocoder, postcode):
         try:
-            finder = self.get(
-                pk__in=[geocoder.get_code("lad"), geocoder.get_code("eer")]
-            )
-            finder.message = _(finder.message)
-            """
-            EONI's poling station finder requires postcode to have a space :(
-            http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT5+7TQ
-            will produce a result, whereas
-            http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT57TQ
-            will not.
-
-            We might need to take a more sophisticated approach as we add more custom finders
-            that accept postcodes (e.g: a postcode format flag in the database).
-            At the moment I only have this one to work with.
-            """
-            finder.encoded_postcode = urllib.parse.quote(Postcode(postcode).with_space)
+            code = geocoder.get_code("lad")
+            if code.startswith("N"):
+                finder = self.get(pk="N07000001")
+                finder.message = _(finder.message)
+                """
+                EONI's poling station finder requires postcode to have a space :(
+                http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT5+7TQ
+                will produce a result, whereas
+                http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT57TQ
+                will not.
+    
+                We might need to take a more sophisticated approach as we add more custom finders
+                that accept postcodes (e.g: a postcode format flag in the database).
+                At the moment I only have this one to work with.
+                """
+                finder.encoded_postcode = urllib.parse.quote(
+                    Postcode(postcode).with_space
+                )
+            else:
+                finder = self.get(pk=code)
 
             return finder
         except ObjectDoesNotExist:

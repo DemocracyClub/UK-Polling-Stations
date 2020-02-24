@@ -28,7 +28,8 @@ class AddressBaseGeocoderAdapterTest(TestCase):
     def test_no_codes(self):
         """
         We find records for the given postcode in the AddressBase table
-        but there are no corresponding records in the ONSUD for the UPRNs we found
+        but there are no corresponding records in the uprn to council lookup
+        for the UPRNs we found
 
         Exception of class CodesNotFoundException should be thrown
         """
@@ -43,7 +44,8 @@ class AddressBaseGeocoderAdapterTest(TestCase):
     def test_multiple_councils(self):
         """
         We find records for the given postcode in the AddressBase table
-        There are corresponding records in the ONSUD for the UPRNs we found
+        There are corresponding records in the uprn Lookup table for the
+        UPRNs we found.
         The UPRNs described by this postcode map to more than one local authority
 
         Exception of class MultipleCouncilsException should be thrown
@@ -59,12 +61,14 @@ class AddressBaseGeocoderAdapterTest(TestCase):
     def test_valid(self):
         """
         We find records for the given postcode in the AddressBase table
-        There are some corresponding records in the ONSUD for the UPRNs we found
+        There are some corresponding records in the uprn to council lookup
+        for the UPRNs we found
 
         Valid result should be returned
 
-        Note that in this case, the ONSUD table does not contain corresponding
-        records for *all* of the UPRNs we found, but we accept the result anyway
+        Note that in this case, the uprn to council lookup table does not contain
+        corresponding records for *all* of the UPRNs we found, but we accept the
+        result anyway
         """
         addressbase = AddressBaseGeocoderAdapter(
             "bb 1   1B B"

@@ -158,7 +158,8 @@ def geocode(postcode):
             raise
         except AddressBaseException:
             # we did find this postcode in AddressBase, but there were no
-            # corresponding codes in ONSUD: fall back to the next source
+            # corresponding codes in the uprn/council lookup:
+            #   fall back to the next source
             continue
         except PostcodeError:
             # we were unable to geocode this postcode using ONSPD
