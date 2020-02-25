@@ -506,7 +506,7 @@ class AddressList:
     def save(self, batch_size, fuzzy_match, match_threshold):
 
         self.remove_ambiguous_addresses_by_address()
-        addressbase_data = get_uprn_hash_table(self.council_ids)
+        addressbase_data = get_uprn_hash_table(self.council_id)
         self.handle_invalid_uprns(addressbase_data, fuzzy_match, match_threshold)
         self.attach_doorstep_gridrefs(addressbase_data)
         self.remove_addresses_outside_target_auth()
