@@ -3,28 +3,30 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000087"
-    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
-    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
-    elections = ["parl.2019-12-12"]
+    addresses_name = "2020-02-03T10:02:24.726188/Democracy_Club__07May2020Fareham.tsv"
+    stations_name = "2020-02-03T10:02:24.726188/Democracy_Club__07May2020Fareham.tsv"
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id == "5854":
+        if record.polling_place_id == "5655":
             # Titchfield Parish Rooms
             record = record._replace(polling_place_postcode="PO14 4AQ")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        # correction from the EC
-        if record.polling_place_district_reference.strip() == "ST1":
-            record = record._replace(polling_place_id="5876")
-
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.lstrip("0")
 
-        if uprn == "100060367957":
-            return None  # conflation of "123 Locks Road, Lock Heath" and "123 Locks Heath Parks Road"
+        if record.addressline6 in [
+            "SO31 7BJ",
+        ]:
+            return None
+
+        if uprn in [
+            "100060367957",  # conflation of "123 Locks Road, Lock Heath" and "123 Locks Heath Parks Road"
+        ]:
+            return None
 
         if uprn in [
             "100060360780",  # PO144LJ -> PO144LL : 387 Warsash Road, Titchfield Common, Fareham
