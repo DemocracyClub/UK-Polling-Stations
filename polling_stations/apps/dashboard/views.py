@@ -13,6 +13,8 @@ from addressbase.models import Address
 from councils.models import Council
 from data_finder.helpers import RoutingHelper
 from pollingstations.models import ResidentialAddress, PollingStation
+from uk_geo_utils.models import Onspd
+from uk_geo_utils.helpers import Postcode
 
 
 class IndexView(ListView):
@@ -93,6 +95,7 @@ class PostCodeView(TemplateView):
             residential_address.addressbase_address = addresses.get(
                 residential_address.uprn
             )
+
         return {
             "postcode": postcode,
             "addresses": residential_addresses,
@@ -105,6 +108,7 @@ class PostCodeGeoJSONView(View):
 
     def get(self, request, postcode):
         residential_addresses = ResidentialAddress.objects.filter(postcode=postcode)
+        onspd = Onspd.objects.get(pcds=Postcode(postcode).with_space)
         station_ids = sorted(
             set(residential_addresses.values_list("council_id", "polling_station_id"))
         )
@@ -172,6 +176,20 @@ class PostCodeGeoJSONView(View):
                         },
                     }
                     for residential_address in residential_addresses
+                ]
+                + [
+                    {
+                        "type": "Feature",
+                        "geometry": json.loads(onspd.location.geojson)
+                        if onspd.location
+                        else None,
+                        "properties": {
+                            "type": "onspd",
+                            "address": onspd.pcd,
+                            "color": "cyan",
+                            "url": "",
+                        },
+                    }
                 ],
             },
             content_type="application/geo+json",

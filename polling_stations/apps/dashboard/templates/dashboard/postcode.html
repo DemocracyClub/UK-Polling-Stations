@@ -21,7 +21,8 @@
 
             var typeIcons = {
                 'pollingstation': 'fa-check-square',
-                'residentialaddress': 'fa-home'
+                'residentialaddress': 'fa-home',
+                'onspd': 'fa-flag'
             };
 
             tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -32,6 +33,7 @@
             map = L.map('area_map', {
                 layers: [tiles]
             });
+
             fetch('{% url "dashboard:postcode-geojson" postcode %}').then((response) => {
                 response.json().then((json) => {
                     layer = L.geoJSON(json, {
