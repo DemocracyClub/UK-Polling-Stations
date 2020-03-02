@@ -9,9 +9,10 @@
   },
   "homepage": "https://github.com/chris48s/UK-Polling-Stations#readme",
   "dependencies": {
+    "@mapbox/polyline": "^1.1.0",
+    "font-awesome": "^4.7.0",
     "leaflet": "^1.6.0",
     "leaflet-extra-markers": "^1.2.1",
-    "@mapbox/polyline": "^1.1.0",
-    "font-awesome": "^4.7.0"
+    "leaflet.markercluster": "^1.4.1"
   }
 }

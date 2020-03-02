@@ -6,10 +6,12 @@
 
 {% block extra_page_css %}
     {% stylesheet 'map' %}
+    {% stylesheet 'dashboard' %}
 {% endblock extra_page_css %}
 
 {% block extra_javascript %}
     {% javascript 'map' %}
+    {% javascript 'dashboard' %}
 {% endblock extra_javascript %}
 
 
@@ -51,7 +53,9 @@
                                 })}).bindPopup(popup);
                         },
                     });
-                    layer.addTo(map);
+                    var clusteredMarkers = L.markerClusterGroup({maxClusterRadius: 1});
+                    clusteredMarkers.addLayer(layer);
+                    map.addLayer(clusteredMarkers);
                     map.fitBounds(layer.getBounds(), {padding: [30, 30]});
                 })
             });
