@@ -1,6 +1,5 @@
 import logging
 from collections import namedtuple
-from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 from django.db import connection
 from councils.models import Council
@@ -72,8 +71,6 @@ class EdgeCaseFixer:
             council_id = c.council_id
         else:
             council_id = address.council_id
-            if council_id in settings.OLD_TO_NEW_MAP:
-                council_id = settings.OLD_TO_NEW_MAP[council_id]
 
         if council_id != self.target_council_id:
             # treat addresses in other council areas as district not found

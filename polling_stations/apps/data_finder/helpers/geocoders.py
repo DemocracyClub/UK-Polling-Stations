@@ -64,30 +64,9 @@ class OnspdGeocoderAdapter(BaseGeocoder):
         return geocoder
 
 
-class PatchedABGeocoder(AddressBaseGeocoder):
-    def get_code(self, code_type, *args, **kwargs):
-        try:
-            code = super().get_code(code_type, *args, **kwargs)
-        except MultipleCodesException:
-            if code_type != "lad":
-                raise
-            gss_codes = set([getattr(u, "lad") for u in self._uprns])
-            gss_codes = [
-                settings.OLD_TO_NEW_MAP[code]
-                if code in settings.OLD_TO_NEW_MAP
-                else code
-                for code in gss_codes
-            ]
-            gss_codes = list(set(gss_codes))
-            if len(gss_codes) > 1:
-                raise
-            return gss_codes[0]
-        return code
-
-
 class AddressBaseGeocoderAdapter(BaseGeocoder):
     def geocode(self):
-        geocoder = PatchedABGeocoder(self.postcode)
+        geocoder = AddressBaseGeocoder(self.postcode)
         geocoder.centroid
 
         try:
