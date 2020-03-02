@@ -1,29 +1,37 @@
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseHalaroseCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "E08000030"
     addresses_name = (
-        "parl.2019-12-12/Version 3/polling_station_export-2019-11-14walsall.csv"
+        "2020-02-03T14:09:25.972119/polling_station_export-2020-02-03Walsall.csv"
     )
     stations_name = (
-        "parl.2019-12-12/Version 3/polling_station_export-2019-11-14walsall.csv"
+        "2020-02-03T14:09:25.972119/polling_station_export-2020-02-03Walsall.csv"
     )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    elections = ["2020-05-07"]
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn == "100071059426":  # 193 HIGH STREET, BROWNHILLS, WALSALL
-            rec["postcode"] = "WS8 6HE"
-
-        if record.housepostcode in ["WV13 1RT", "WS9 9DE" "WS2 8AF"]:
+        if uprn in [
+            "100071345467",  # PEARTREE FARM, FISHLEY LANE, appears twice two different addresses.
+            "10090903310",  # Flat 1, 73 STAFFORD STREET, WALSALL
+        ]:
             return None
 
-        if record.houseid == "121600":
+        if record.houseid == "121600":  # '12 FORGE LANE, ALDRIDGE, WALSALL'
+            return None
+
+        if record.housepostcode in [
+            "WV12 5YH",
+            "WS10 7TG",
+            "WS2 8AF",
+            "WS9 9DE",
+            "WS2 8AF",
+        ]:
             return None
 
         if uprn in [
@@ -40,10 +48,6 @@ class Command(BaseHalaroseCsvImporter):
             "10013664416",  # WS31JR -> WS31LA : FLAT ABOVE 51 WELL LANE, BLOXWICH, WALSALL
             "100071107530",  # WV125QB -> WV125PZ : 135 COLTHAM ROAD, WILLENHALL, WALSALL
             "100071044166",  # WS99DF -> WS99DE : 370 CHESTER ROAD, STONNALL, WALSALL
-            "10090063332",  # WV132AT -> WV131AT : Flat 5 WATERGLADES, ROSE HILL, WILLENHALL, WALSALL
-            "10090063338",  # WV132AT -> WV131AT : Flat 11 WATERGLADES, ROSE HILL, WILLENHALL, WALSALL
-            "10090063340",  # WV132AT -> WV131AT : Flat 14 WATERGLADES, ROSE HILL, WILLENHALL, WALSALL
-            "10090063341",  # WV132AT -> WV131AT : Flat 15 WATERGLADES, ROSE HILL, WILLENHALL, WALSALL
             "100071371423",  # WV148ES -> WS14HE : 22 MOORCROFT, MOXLEY, WALSALL
         ]:
             rec["accept_suggestion"] = False
@@ -54,7 +58,8 @@ class Command(BaseHalaroseCsvImporter):
 
         rec = super().station_record_to_dict(record)
 
-        if record.pollingstationnumber == "67":
+        # 66-st-michaels-church
+        if record.pollingstationnumber == "66":
             rec["location"] = Point(-1.971183, 52.625281, srid=4326)
 
         return rec
