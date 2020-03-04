@@ -1,47 +1,35 @@
-from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseXpressWebLookupCsvImporter
+from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseXpressWebLookupCsvImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E09000017"
-    addresses_name = "europarl.2019-05-23/Version 1/PropertyPostCodePollingStationWebLookup-2019-04-29.TSV"
-    stations_name = "europarl.2019-05-23/Version 1/PropertyPostCodePollingStationWebLookup-2019-04-29.TSV"
-    elections = ["europarl.2019-05-23"]
+    addresses_name = "2020-02-19T10:04:28.162348/Democracy_Club__07May2020...TSV"
+    stations_name = "2020-02-19T10:04:28.162348/Democracy_Club__07May2020...TSV"
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
 
-        # Walter G Pomeroy Hall
-        # user issue report #130
-        if record.pollingplaceid == "7817":
-            rec = super().station_record_to_dict(record)
-            rec["postcode"] = ""
-            rec["location"] = Point(-0.465827, 51.523108, srid=4326)
-            return rec
+        if record.polling_place_id == "9241":
+            record = record._replace(polling_place_easting="506536")
+            record = record._replace(polling_place_northing="181610")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        uprn = record.uprn.strip().lstrip("0")
+        uprn = record.property_urn.strip().lstrip("0")
         rec = super().address_record_to_dict(record)
 
-        if uprn == "10092982613":
-            rec["postcode"] = "UB4 0SE"
-
-        if uprn == "100021447278":
-            rec["postcode"] = "HA6 3SJ"
-
-        if uprn == "10093736200":
-            rec["postcode"] = "UB10 0TX"
+        if uprn in [
+            "100022832219"  # 1 Elm View House, Shepiston Lane, Hayes, Middlesex
+        ]:
+            return None
 
         if uprn == "100023413509":
             rec["postcode"] = "UB10 8AQ"
 
         if uprn in [
-            "10090329328",  # UB79LW -> UB49LW : 11  Adelaide House Perth Avenue
             "10092980468",  # UB33PF -> UB83PF : 9A  10A Carlton Court Bosanquet Close
-            "10092982616",  # HA40SE -> UB40SE : Flat 5  366-370 Uxbridge Road
-            "10092982617",  # HA40SE -> UB40SE : Flat 6  366-370 Uxbridge Road
             "10022805692",  # UB100QB -> UB100BQ : Flat 3  134 Jefferson Court Vine Lane
         ]:
             rec["accept_suggestion"] = True
