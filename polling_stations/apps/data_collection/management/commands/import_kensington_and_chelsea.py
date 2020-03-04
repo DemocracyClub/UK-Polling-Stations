@@ -1,71 +1,26 @@
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+
+# from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E09000020"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019ken.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019ken.tsv"
-    elections = ["parl.2019-12-12"]
+    addresses_name = "2020-03-03T13:22:45.003848/Democracy_Club__07May2020.tsv"
+    stations_name = "2020-03-03T13:22:45.003848/Democracy_Club__07May2020.tsv"
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
-
-    def station_record_to_dict(self, record):
-
-        # St Columba's Church
-        if record.polling_place_id == "847":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-0.163128, 51.496844, srid=4326)
-            return rec
-
-        # St Cuthbert`s Centre
-        if record.polling_place_id == "871":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-0.200082, 51.491363, srid=4326)
-            return rec
-
-        # Updates From Council
-        # Chelsea Old Town Hall, 165-181 King's Road, LONDON
-        if record.polling_place_id == "910":
-            record = record._replace(polling_place_easting="527281")
-            record = record._replace(polling_place_northing="178093")
-
-        # Kensington Central Library, 12 Phillimore Walk, LONDON
-        if record.polling_place_id == "853":
-            record = record._replace(polling_place_easting="525421")
-            record = record._replace(polling_place_northing="179598")
-
-        # Christ Church, Victoria Road, LONDON, W8 5RQ
-        if record.polling_place_id == "899":
-            record = record._replace(polling_place_easting="525968")
-            record = record._replace(polling_place_northing="179187")
-
-        # user error report #204
-        # St Philip`s Church
-        if record.polling_place_id == "844":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-0.196350, 51.495703, srid=4326)
-            return rec
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "217130227":
+        if uprn in ["217125754", "217129279", "217130227", "217029293"]:
             return None
 
-        if record.addressline1 == "The Studio":
+        if record.addressline6 == "SW3 3AA":
             return None
-
-        if uprn == "217126141":
-            rec["postcode"] = "SW5 9EZ"
         if uprn == "217108045":
             rec["postcode"] = "W8 5DH"
-
-        if record.addressline6.strip() == "SW1X 8HN":
-            rec["postcode"] = "SW1X 8HJ"
 
         if (
             record.addressline6 == "W11 4LY"
