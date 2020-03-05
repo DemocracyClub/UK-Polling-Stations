@@ -3,23 +3,20 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000225"
-    addresses_name = "parl.2019-12-12/Version 1/merged.TSV"
-    stations_name = "parl.2019-12-12/Version 1/merged.TSV"
-    elections = ["parl.2019-12-12"]
+    addresses_name = "2020-02-12T10:50:30.802114/Democracy_Club__07May2020chi.tsv"
+    stations_name = "2020-02-12T10:50:30.802114/Democracy_Club__07May2020chi.tsv"
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
-
-    def station_record_to_dict(self, record):
-
-        # Rake Village Hall
-        if record.polling_place_id == "3566":
-            record = record._replace(polling_place_postcode="GU33 7JA")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn == "1710108727":  # Boundary Cottage, Foley Estate, Liphook
+            return None
+
+        if uprn == "10002480960":
+            rec["postcode"] = "PO189LG"
 
         if uprn in [
             "10002469481",  # GU273PT -> GU273PS : Fern Owls, Marley Common, Haslemere
@@ -41,9 +38,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10008886679",  # PO197BB -> PO197JR : Suite 848, 26 The Hornet, Chichester
             "10002467582",  # GU289LJ -> GU289NE : Freehold Farmhouse, Northchapel, Petworth
             "10002466676",  # GU290BU -> GU290BX : 123 Ambersham Moor, Selham Road, Ambersham, Midhurst
-            "10002482519",  # GU315BU -> GU315EB : The Log Cabin Fyning Hill, Rogate, Petersfield
             "10093117146",  # PO108FW -> PO108HG : 10 Brewery Close, Southbourne, Emsworth
             "10093117147",  # PO108FW -> PO108HG : 11 Brewery Close, Southbourne, Emsworth
+            "10093115410",  # PO196EL -> PO196EH : 8 Bloomfield Drive, Chichester
+            "10093115403",  # PO196EL -> PO196EG : 1 Bloomfield Drive, Chichester
+            "10093115404",  # PO196EL -> PO196EG : 2 Bloomfield Drive, Chichester
+            "10093115405",  # PO196EL -> PO196EH : 3 Bloomfield Drive, Chichester
+            "10093115406",  # PO196EL -> PO196EH : 4 Bloomfield Drive, Chichester
+            "10093115407",  # PO196EL -> PO196EH : 5 Bloomfield Drive, Chichester
+            "10093115408",  # PO196EL -> PO196EH : 6 Bloomfield Drive, Chichester
+            "10093115409",  # PO196EL -> PO196EH : 7 Bloomfield Drive, Chichester
         ]:
             rec["accept_suggestion"] = True
 
