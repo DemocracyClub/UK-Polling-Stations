@@ -3,19 +3,23 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000012"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.tsv"
-    elections = ["parl.2019-12-12"]
+    addresses_name = "2020-02-24T10:27:02.080443/Democracy_Club__07May2020Liver.tsv"
+    stations_name = "2020-02-24T10:27:02.080443/Democracy_Club__07May2020Liver.tsv"
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
+
+    def station_record_to_dict(self, record):
+
+        if record.polling_place_id == "7874":
+            record = record._replace(polling_place_easting="336731")
+            record = record._replace(polling_place_northing="390578")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
-        if uprn == "38303584":
-            rec["postcode"] = "L40UQ"
 
-        # The following UPRN corrections are from local.2019-05-02 but have been checked to still be relevant.
         if uprn in [
             "38002209",  # L199DG -> L199BN : Lone Oak, Aigburth Hall Road, Liverpool
             "38287679",  # L77EZ -> L77BL : Flat 4.06 Tudor Close, Mulberry Street, Liverpool
@@ -247,37 +251,43 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "38291517",  # L133BS -> L142DD : Rooms At, 325 Prescot Road, Liverpool
-            "38248655",
-            "38326441",
             "38289089",
-            "38312647",
-            "38252912",
-            "38252915",
-            "38252918",
-            "38252917",
-            "38252911",
-            "38252914",
-            "38252913",
-            "38252916",
-            "38312954",
-            "38307125",
-            "38307126",
-            "38307127",
-            "38307128",
-            "38307129",
             "38245855",
             "38245856",
             "38245857",
+            "38252913",
+            "38252916",
+            "38252915",
+            "38252918",
+            "38252917",
+            "38252912",
+            "38252911",
+            "38252914",
+            "38325987",
+            "38325987",
+            "38268561",
+            "38268562",
+            "38268559",
+        ]:
+            rec["accept_suggestion"] = False
+
+        if uprn == "38303584":
+            rec["postcode"] = "L40UQ"
+
+        if uprn in [
+            "38318034",
+            "38248655",
+            "38312954",
+            "38307129",
+            "38307128",
+            "38307127",
             "38321863",
-            "38321864",
-            "38321865",
             "38321866",
-            "38282429",
+            "38321865",
             "38282430",
+            "38282429",
             "38325987",
             "38325988",
-            "38268559",
-            "38268560",
             "38268561",
             "38268562",
             "38300977",
@@ -292,14 +302,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "38238877",
             "38314085",
             "38237230",
-            "38241124",
-            "38237648",
-            "38237649",
-            "38245835",
         ]:
-            rec["accept_suggestion"] = False
-
-        if record.addressline6.strip() in ["L25 7RA"]:
             return None
 
         return rec
