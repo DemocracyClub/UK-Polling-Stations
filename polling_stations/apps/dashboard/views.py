@@ -1,5 +1,6 @@
 import json
 import operator
+import requests
 from functools import reduce
 
 from django.db import connection
@@ -104,6 +105,18 @@ class PostCodeView(TemplateView):
 
 
 class PostCodeGeoJSONView(View):
+    def get_approximate_postcode_boundary(self, postcode, **kwargs):
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT ST_AsGeoJSON(pcds.*)
+                FROM voronoi_pcds_mview as pcds
+                WHERE pcds.pcd = %s;
+                """,
+                (postcode,),
+            )
+            return cursor.fetchall()
+
     station_colors = ["purple", "red", "blue", "yellow", "green", "pink", "orange"]
 
     def get(self, request, postcode):
@@ -128,7 +141,6 @@ class PostCodeGeoJSONView(View):
         else:
             stations = PollingStation.objects.none()
         station_colors = dict(zip(station_ids, self.station_colors))
-
         return JsonResponse(
             {
                 "type": "FeatureCollection",
@@ -190,7 +202,8 @@ class PostCodeGeoJSONView(View):
                             "url": "",
                         },
                     }
-                ],
+                ]
+                + [json.loads(self.get_approximate_postcode_boundary(postcode)[0][0]),],
             },
             content_type="application/geo+json",
         )
