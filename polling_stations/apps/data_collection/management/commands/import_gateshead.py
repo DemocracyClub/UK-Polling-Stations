@@ -3,15 +3,26 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E08000037"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019gates.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019gates.tsv"
-    elections = ["parl.2019-12-12"]
+    addresses_name = "2020-02-24T11:50:25.837722/Democracy_Club__07May2020Gate.tsv"
+    stations_name = "2020-02-24T11:50:25.837722/Democracy_Club__07May2020Gate.tsv"
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
+
+        if record.addressline6 in [
+            "DHS 2AQ",
+            "NE10 9RZ",
+        ]:
+            return None
+
+        if uprn in [
+            "100000044538",  # 1 Millford, Leam Lane Estate, Felling, Gateshead
+            "100000044540",  # 3 Millford, Leam Lane Estate, Felling, Gateshead
+        ]:
+            return None
 
         if uprn in [
             "100000084114",  # NE404NG -> NE404NB : Allendale House, Garden Terrace, Crawcrook, Ryton
