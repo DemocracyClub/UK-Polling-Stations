@@ -1,3 +1,4 @@
+from data_collection.geo_utils import fix_bad_polygons
 from data_collection.github_importer import BaseGitHubImporter
 
 
@@ -6,7 +7,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "E08000006"
-    elections = ["parl.2019-12-12"]
+    elections = ["2020-05-07"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Salford"
     geom_type = "geojson"
 
@@ -29,3 +30,6 @@ class Command(BaseGitHubImporter):
             "location": location,
             "polling_district_id": record["polling_district"],
         }
+
+    def post_import(self):
+        fix_bad_polygons()
