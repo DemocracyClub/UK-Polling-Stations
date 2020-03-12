@@ -5,7 +5,7 @@ from data_collection.github_importer import BaseGitHubImporter
 
 class Command(BaseGitHubImporter, ShpMixin):
     council_id = "E07000172"
-    elections = ["parl.2019-12-12"]
+    elections = ["2020-05-07"]
 
     # This one is a bit of a mish-mash
     # The stations are on GitHub
