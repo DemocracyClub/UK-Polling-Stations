@@ -3,11 +3,10 @@ from data_collection.management.commands import BaseXpressDemocracyClubCsvImport
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000131"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019harb.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019harb.tsv"
-    elections = ["parl.2019-12-12"]
+    addresses_name = "2020-02-24T12:06:18.759737/Democracy_Club__07May2020.tsv"
+    stations_name = "2020-02-24T12:06:18.759737/Democracy_Club__07May2020.tsv"
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -15,10 +14,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn == "200003741884":
             rec["postcode"] = "LE14 2QY"
-
-        if uprn == "10093551037":
-            rec["uprn"] = ""
-            rec["accept_suggestion"] = False
 
         if (
             record.addressline1.strip() == "69 Main Street"
@@ -31,7 +26,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6.strip() == "LE17 5LD":
             return None
 
-        if uprn in ["10093551160", "10093550174"]:
+        if uprn == "200003742018":
+            rec["postcode"] = "LE85UE"
+
+        if uprn == "200001042877":
+            rec["postcode"] = "LE24RY"
+
+        if uprn in [
+            "10093551160",
+            "10034464134",
+        ]:
             return None
 
         if uprn in [
@@ -39,7 +43,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100030474315",  # LE79DE -> LE79DP : Grange Yard, Loddington Road, Tilton on the Hill, Leicester
             "200003741317",  # LE79DE -> LE79DP : Robin A Tiptoe Farm, Loddington Road, Tilton on the Hill, Leicester
             "200003742237",  # LE79XE -> LE79XB : Ash Tree Cottage, Launde Road, Loddington, Leicester
-            "100030477785",  # LE96PU -> LE96PW : 102 Station Road, Broughton Astley, Leics
+            "10094809467",  # LE176HY -> LE176JB : Narrow Boat Grey Lady, North Kilworth Marina, Station Road, North Kilworth, Leics
+            "10094809491",  # LE176HY -> LE176JB : Narrowboat Gadfly, North Kilworth Marina, Station Road, North Kilworth, Leics
+            "10094809493",  # LE176HY -> LE176JB : Narrowboat Zenith, North Kilworth Marina, Station Road, North Kilworth, Leics
         ]:
             rec["accept_suggestion"] = True
 
