@@ -1,21 +1,30 @@
-from django.contrib.gis.geos import Point
 from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "E07000228"
-    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
-    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
-    elections = ["parl.2019-12-12"]
+    addresses_name = (
+        "2020-02-24T14:06:28.311616/Mid Sussex Polling Station Export - 07.05.2020.tsv"
+    )
+    stations_name = (
+        "2020-02-24T14:06:28.311616/Mid Sussex Polling Station Export - 07.05.2020.tsv"
+    )
+    elections = ["2020-05-07"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        if record.polling_place_id == "2941":
+        if (
+            record.polling_place_id == "3189"
+        ):  # Church Hall, St Edward the Confessor Church, Royal George Road, Burgess Hill
             rec["location"] = Point(-0.14863, 50.96048, srid=4326)
+        if (
+            record.polling_place_id == "3125"
+        ):  # Haywards Heath Baptist Church, Sussex Road, Haywards Heath
+            rec["location"] = Point(-0.10036, 50.99487, srid=4326)
 
         return rec
 
@@ -23,10 +32,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in ["10070631101", "10070629962"]:
-            return None
-
-        if record.addressline6 == "RH19 1ET":
+        if record.addressline6 == "RH16 4RN":
             return None
 
         if uprn in [
