@@ -124,16 +124,9 @@ class EveryElectionWrapper:
         if not rec["cancelled"]:
             return rec
 
-        if len(self.cancelled_ballots) > 1:
-            # If there were 2 or more elections scheduled to happen
-            # on this day and all of them got cancelled
-            # its diffuclt to know how to present this info in the abstract
-            # lets just say something generic
-            return rec
-
-        # there is exactly one cancelled election
         cancelled_ballot = self.cancelled_ballots[0]
-        rec["name"] = cancelled_ballot["election_title"]
+        if len(self.cancelled_ballots) == 1:
+            rec["name"] = cancelled_ballot["election_title"]
         rec["metadata"] = cancelled_ballot["metadata"]
 
         if cancelled_ballot["replaced_by"]:
