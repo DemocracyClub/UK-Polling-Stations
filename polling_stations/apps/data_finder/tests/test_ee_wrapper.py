@@ -288,6 +288,7 @@ def get_data_two_ballots_both_cancelled(self, query_url):
             "cancelled": True,
             "poll_open_date": datetime.now().strftime("%Y-%m-%d"),
             "replaced_by": None,
+            "metadata": None,
         },
         {
             "election_id": "qux.bar.date",
@@ -296,6 +297,7 @@ def get_data_two_ballots_both_cancelled(self, query_url):
             "cancelled": True,
             "poll_open_date": datetime.now().strftime("%Y-%m-%d"),
             "replaced_by": None,
+            "metadata": None,
         },
     ]
 
