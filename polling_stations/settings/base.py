@@ -180,11 +180,14 @@ SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "filters": {
+        "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"},
+        "ignore_status_checks": {"()": "pollingstations.filters.StatusCheckFilter"},
+    },
     "handlers": {
         "mail_admins": {
             "level": "ERROR",
-            "filters": ["require_debug_false"],
+            "filters": ["require_debug_false", "ignore_status_checks"],
             "class": "django.utils.log.AdminEmailHandler",
         },
         "null": {"class": "logging.NullHandler"},
