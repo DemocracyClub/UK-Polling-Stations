@@ -8,7 +8,7 @@ from collections import namedtuple
 
 from django.conf import settings
 from django.forms import ValidationError
-from fuzzywuzzy import fuzz
+from rapidfuzz import fuzz
 from localflavor.gb.forms import GBPostcodeField
 
 from addressbase.models import Blacklist, get_uprn_hash_table
@@ -383,7 +383,7 @@ class AddressList:
                     self.logger.log_message(
                         logging.INFO,
                         "Correcting postcode based on UPRN and fuzzy match.\nInput Record:\n%s\nAddressbase record:\n%s\nMatch quality: %s\n",
-                        variable=(record, addressbase_record, match_quality),
+                        variable=(record, addressbase_record, round(match_quality)),
                     )
                     record["postcode"] = addressbase_record["postcode"]
                 elif match_quality <= 50:
@@ -440,7 +440,7 @@ class AddressList:
                             record["address"],
                             record,
                             addressbase_record,
-                            match_quality,
+                            round(match_quality),
                         ),
                     )
                     record["uprn"] = ""
