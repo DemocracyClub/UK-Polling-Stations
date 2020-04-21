@@ -1,5 +1,5 @@
 import os
-from data_collection.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):

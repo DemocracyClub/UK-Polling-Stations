@@ -1,62 +1,85 @@
 from collections import namedtuple
 from django.test import TestCase
 
+from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
-from data_collection.tests.stubs import stub_halaroseimport
-from pollingstations.models import PollingStation, ResidentialAddress
+from data_importers.tests.stubs import stub_halaroseimport
+from pollingstations.models import PollingStation
 
 
 class HalaroseImportTests(TestCase):
 
-    opts = {"noclean": False, "nochecks": True, "verbosity": 0}
+    opts = {"nochecks": True, "verbosity": 0}
+    uprns = [
+        "1",
+        "2",
+        "3",
+        "4",
+    ]
+    addressbase = [
+        {
+            "address": "2, Dogkennel Farm Cottages",
+            "postcode": "BA15 2BB",
+            "uprn": "1",
+        },
+        {
+            "address": "47 Heol Dylan, Gorseinon, Swansea",
+            "postcode": "SA4 4LR",
+            "uprn": "2",
+        },
+        {
+            "address": "1 Heol Elfed, Gorseinon, Swansea",
+            "postcode": "SA4 4GH",
+            "uprn": "3",
+        },
+        {
+            "address": "2 Heol Elfed, Gorseinon, Swansea",
+            "postcode": "SA4 4GH",
+            "uprn": "4",
+        },
+    ]
 
     def setUp(self):
-        Council.objects.update_or_create(pk="X01000000", identifiers=["X01000000"])
+        for address in self.addressbase:
+            Address.objects.update_or_create(**address)
+
+        Council.objects.update_or_create(pk="AAA", identifiers=["X01000000"])
+        for uprn in self.uprns:
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
         cmd = stub_halaroseimport.Command()
         cmd.handle(**self.opts)
 
     def test_addresses(self):
-        addresses = (
-            ResidentialAddress.objects.filter(council_id="X01000000")
-            .order_by("address")
-            .values_list("address", flat=True)
+        imported_uprns = (
+            UprnToCouncil.objects.filter(lad="AAA")
+            .exclude(polling_station_id="")
+            .order_by("uprn")
+            .values_list("uprn", flat=True)
         )
 
-        # we should have inserted 3 addresses
-        # and discarded 3 due to error conditions
-        self.assertEqual(3, len(addresses))
-        expected = set(
-            [
-                "1 Heol Elfed, Gorseinon, Swansea",
-                "47 Heol Dylan, Gorseinon, Swansea",
-                "2, Dogkennel Farm Cottages",
-            ]
-        )
-        self.assertEqual(set(addresses), expected)
+        self.assertEqual(2, len(imported_uprns))
+        expected = set(["2", "3"])
+        self.assertEqual(set(imported_uprns), expected)
 
     def test_station_ids(self):
-        self.assertEqual(
-            "",
-            ResidentialAddress.objects.get(
-                slug="x01000000-2-dogkennel-farm-cottages-ba152bb"
-            ).polling_station_id,
+        imported_uprns_and_ids = (
+            UprnToCouncil.objects.filter(lad="AAA")
+            .exclude(polling_station_id="")
+            .order_by("uprn")
+            .values_list("uprn", "polling_station_id")
         )
-        self.assertEqual(
-            "10-penyrheol-boxing-club",
-            ResidentialAddress.objects.get(
-                slug="x01000000-10-penyrheol-boxing-club-1-heol-elfed-gorseinon-swansea-sa44gh"
-            ).polling_station_id,
+
+        expected = set(
+            [
+                ("2", "10-penyrheol-boxing-club"),
+                ("3", "10-penyrheol-boxing-club"),
+            ]
         )
-        self.assertEqual(
-            "10-penyrheol-boxing-club",
-            ResidentialAddress.objects.get(
-                slug="x01000000-10-penyrheol-boxing-club-47-heol-dylan-gorseinon-swansea-sa44lr"
-            ).polling_station_id,
-        )
+        self.assertEqual(set(imported_uprns_and_ids), expected)
 
     def test_stations(self):
         stations = (
-            PollingStation.objects.filter(council_id="X01000000")
+            PollingStation.objects.filter(council_id="AAA")
             .order_by("internal_council_id")
             .values_list("address", flat=True)
         )

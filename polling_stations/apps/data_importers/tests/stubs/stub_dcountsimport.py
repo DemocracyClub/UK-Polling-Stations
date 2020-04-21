@@ -1,5 +1,5 @@
 import os
-from data_collection.management.commands import BaseDemocracyCountsCsvImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
