@@ -1,5 +1,5 @@
 import os
-from data_collection.management.commands import BaseXpressWebLookupCsvImporter
+from data_importers.management.commands import BaseXpressWebLookupCsvImporter
 
 
 class Command(BaseXpressWebLookupCsvImporter):

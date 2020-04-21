@@ -1,5 +1,5 @@
 import os
-from data_collection.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
