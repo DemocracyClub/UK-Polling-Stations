@@ -1,5 +1,5 @@
 import os
-from data_collection.tests.stubs import BaseStubCsvStationsJsonDistrictsImporter
+from data_importers.tests.stubs import BaseStubCsvStationsJsonDistrictsImporter
 
 
 """
