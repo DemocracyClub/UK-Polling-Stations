@@ -52,6 +52,13 @@ class TestCouncilImporter(TestCase):
         # suppress output
         out = StringIO()
         cmd.stdout = out
-        cmd.handle(**{"teardown": False, "alt_url": None, "contact_type": "vjbs"})
+        cmd.handle(
+            **{
+                "teardown": False,
+                "alt_url": None,
+                "contact_type": "vjbs",
+                "update_contact_details": False,
+            }
+        )
 
         assert Council.objects.count() == 6

@@ -52,6 +52,11 @@ class Command(BaseCommand):
             default="vjbs",
             help="<Optional> Alternative url to override settings.BOUNDARIES_URL",
         )
+        parser.add_argument(
+            "--update-contact-details",
+            action="store_true",
+            help="Only update contact information for imported councils",
+        )
 
     def feature_to_multipolygon(self, feature):
         geometry = GEOSGeometry(json.dumps(feature["geometry"]), srid=4326)
@@ -153,6 +158,25 @@ class Command(BaseCommand):
                 for row in map(Row._make, reader):
                     self.contact_details[row.gss] = row
 
+    def attach_contact_details(self, councils, contact_type):
+        self.stdout.write("Attaching contact details...")
+        self.load_contact_details(contact_type)
+        for council in councils:
+            if council.council_id not in self.contact_details:
+                # Skip councils that exist in the database with no contact
+                # details. It's possible older objects exist that we aren't
+                # interested in
+                continue
+            contact_details = self.contact_details[council.council_id]
+            council.name = contact_details.name
+            council.website = contact_details.website
+            council.email = contact_details.email
+            council.phone = contact_details.phone
+            council.address = contact_details.address
+            council.postcode = contact_details.postcode
+
+            council.save()
+
     def handle(self, **options):
         """
         Manually run system checks for the
@@ -164,33 +188,27 @@ class Command(BaseCommand):
             [apps.get_app_config("councils"), apps.get_app_config("pollingstations")]
         )
 
-        if options["teardown"]:
-            self.stdout.write("Clearing councils table..")
-            Council.objects.all().delete()
+        if options["update_contact_details"]:
+            councils = Council.objects.all().defer("area")
+        else:
+            if options["teardown"]:
+                self.stdout.write("Clearing councils table..")
+                Council.objects.all().delete()
 
-        boundaries_url = settings.BOUNDARIES_URL
-        if options["alt_url"]:
-            boundaries_url = options["alt_url"]
+            boundaries_url = settings.BOUNDARIES_URL
+            if options["alt_url"]:
+                boundaries_url = options["alt_url"]
 
-        councils = []
-        self.stdout.write("Downloading ONS boundaries from %s..." % (boundaries_url))
-        councils = councils + self.get_councils(
-            boundaries_url, id_field="lad19cd", name_field="lad19nm"
-        )
+            councils = []
+            self.stdout.write(
+                "Downloading ONS boundaries from %s..." % (boundaries_url)
+            )
+            councils = councils + self.get_councils(
+                boundaries_url, id_field="lad19cd", name_field="lad19nm"
+            )
 
-        councils = self.pre_process_councils(councils)
+            councils = self.pre_process_councils(councils)
 
-        self.stdout.write("Attaching contact details...")
-        self.load_contact_details(options["contact_type"])
-        for council in councils:
-            contact_details = self.contact_details[council.council_id]
-            council.name = contact_details.name
-            council.website = contact_details.website
-            council.email = contact_details.email
-            council.phone = contact_details.phone
-            council.address = contact_details.address
-            council.postcode = contact_details.postcode
-
-            council.save()
+        self.attach_contact_details(councils, options["contact_type"])
 
         self.stdout.write("..done")
