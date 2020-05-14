@@ -23,7 +23,7 @@ class Address(AbstractAddress):
     objects = AddressManager()
 
 
-class UprnToCouncil(models.Model):
+class UprnDirectory(models.Model):
     class Meta:
         indexes = [models.Index(fields=["lad",], name="lookup_lad_idx")]
 
