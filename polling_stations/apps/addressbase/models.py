@@ -29,8 +29,8 @@ class UprnToCouncil(models.Model):
 
     objects = AbstractOnsudManager()
 
-    uprn = models.CharField(primary_key=True, max_length=12)
-    lad = models.CharField(blank=True, max_length=9)
+    uprn = models.OneToOneField(Address, on_delete=models.CASCADE, primary_key=True, max_length=12, db_column="uprn")
+    lad = models.ForeignKey("councils.Council", on_delete=models.CASCADE, blank=True, max_length=9, db_column="lad")
 
 
 class Blacklist(models.Model):

@@ -91,6 +91,28 @@
         "model": "addressbase.address",
         "pk": "00000009"
     },
+     {
+      "model": "councils.council",
+      "fields": {
+        "address": "Newport City Council\nCivic Centre\nNewport\nSouth Wales",
+        "email": "uvote@newport.gov.uk",
+        "name": "Newport Council",
+        "phone": "01633 656656",
+        "area": ""
+      },
+      "pk": "B01000001"
+  },
+  {
+      "model": "councils.council",
+      "fields": {
+        "address": "Newport City Council\nCivic Centre\nNewport\nSouth Wales",
+        "email": "uvote@newport.gov.uk",
+        "name": "Newport Council",
+        "phone": "01633 656656",
+        "area": ""
+      },
+      "pk": "B01000002"
+  },
 
     {
         "fields": {
