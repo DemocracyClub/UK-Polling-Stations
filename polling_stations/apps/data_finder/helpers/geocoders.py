@@ -145,6 +145,8 @@ def get_council(geocode_result, uprn=None):
                 council_id=geocode_result.get_code("lad", uprn=uprn)
             )
         else:
-            return Council.objects.defer("area").get(council_id=geocode_result.get_code("lad"))
+            return Council.objects.defer("area").get(
+                council_id=geocode_result.get_code("lad")
+            )
     except Council.DoesNotExist:
         return Council.objects.defer("area").get(area__covers=geocode_result.centroid)

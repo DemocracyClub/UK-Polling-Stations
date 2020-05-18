@@ -8,9 +8,10 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, TemplateView
 from django.utils import translation
 
+from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from data_finder.models import LoggedPostcode
-from pollingstations.models import PollingStation, ResidentialAddress, CustomFinder
+from pollingstations.models import PollingStation, CustomFinder
 from uk_geo_utils.helpers import AddressSorter, Postcode
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import PostcodeLookupForm, AddressSelectForm
@@ -19,7 +20,6 @@ from .helpers import (
     get_council,
     geocode,
     EveryElectionWrapper,
-    MultipleCouncilsException,
     PostcodeError,
     RoutingHelper,
 )
@@ -88,9 +88,7 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         return context
 
     def form_valid(self, form):
-
         postcode = Postcode(form.cleaned_data["postcode"])
-
         rh = RoutingHelper(postcode)
         # Don't preserve query, as the user has already been to an HTML page
         self.success_url = rh.get_canonical_url(self.request, preserve_query=False)
@@ -195,16 +193,7 @@ class PostcodeView(BasePollingStationView):
         else:
             # we are already in postcode_view
             self.postcode = Postcode(kwargs["postcode"])
-
-            try:
-                context = self.get_context_data(**kwargs)
-            except MultipleCouncilsException:
-                return HttpResponseRedirect(
-                    reverse(
-                        "multiple_councils_view",
-                        kwargs={"postcode": self.postcode.without_space},
-                    )
-                )
+            context = self.get_context_data(**kwargs)
 
             return self.render_to_response(context)
 
@@ -222,48 +211,28 @@ class PostcodeView(BasePollingStationView):
 
 class AddressView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
-        self.address = get_object_or_404(
-            ResidentialAddress, slug=self.kwargs["address_slug"]
-        )
+        self.address = get_object_or_404(Address, uprn=self.kwargs["uprn"])
         self.postcode = Postcode(self.address.postcode)
-
-        try:
-            context = self.get_context_data(**kwargs)
-        except MultipleCouncilsException:
-            return HttpResponseRedirect(
-                reverse(
-                    "multiple_councils_view",
-                    kwargs={"postcode": self.postcode.without_space},
-                )
-            )
+        context = self.get_context_data(**kwargs)
 
         return self.render_to_response(context)
 
     def get_location(self):
-        try:
-            location = geocode(self.postcode)
-            return location
-        except PostcodeError:
-            return None
+        return geocode(self.postcode, self.address.uprn)
 
     def get_council(self, geocode_result):
-        return Council.objects.defer("area").get(
-            identifiers__contains=[self.address.council_id]
-        )
+        return get_council(geocode_result, uprn=self.address.uprn)
 
     def get_station(self):
-        if not self.address.polling_station_id:
+        if not UprnToCouncil.objects.get(uprn=self.kwargs["uprn"]):
             return None
+        uprn_info = UprnToCouncil.objects.get(uprn=self.kwargs["uprn"])
         return PollingStation.objects.get_polling_station_by_id(
-            self.address.polling_station_id, self.address.council_id
+            uprn_info.polling_station_id, uprn_info.lad
         )
 
     def get_ee_wrapper(self):
-        rh = RoutingHelper(self.postcode)
-        if not rh.address_have_single_station:
-            if self.address.location:
-                return EveryElectionWrapper(point=self.address.location)
-        return EveryElectionWrapper(postcode=self.postcode)
+        return EveryElectionWrapper(point=self.address.location)
 
 
 class ExamplePostcodeView(BasePollingStationView):
@@ -286,7 +255,7 @@ class ExamplePostcodeView(BasePollingStationView):
         )
 
     def get_council(self, geocode_result):
-        return Council.objects.defer("area").get(identifiers__contains=["E06000023"])
+        return Council.objects.defer("area").get(pk="E06000023")
 
     def get_station(self):
         return PollingStation(
@@ -320,36 +289,6 @@ class WeDontKnowView(PostcodeView):
         return None
 
 
-class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
-    # because sometimes "we don't know" just isn't uncertain enough
-    template_name = "multiple_councils.html"
-
-    def get(self, request, *args, **kwargs):
-        self.postcode = Postcode(self.kwargs["postcode"])
-        rh = RoutingHelper(self.postcode)
-        if rh.view != "multiple_councils_view":
-            return HttpResponseRedirect(rh.get_canonical_url(request))
-
-        self.council_ids = rh.councils
-        context = self.get_context_data(**kwargs)
-        return self.render_to_response(context)
-
-    def get_context_data(self, **context):
-        context["councils"] = Council.objects.filter(
-            identifiers__contains=self.council_ids
-        )
-        context["territory"] = self.postcode.territory
-
-        log_data = {
-            "we_know_where_you_should_vote": False,
-            "location": None,
-            "council": None,
-        }
-        self.log_postcode(self.postcode, log_data, type(self).__name__)
-
-        return context
-
-
 class AddressFormView(FormView):
     form_class = AddressSelectForm
     template_name = "address_select.html"
@@ -362,27 +301,26 @@ class AddressFormView(FormView):
 
     def get_form(self, form_class=AddressSelectForm):
         self.postcode = Postcode(self.kwargs["postcode"])
-        addresses = ResidentialAddress.objects.filter(
-            postcode=self.postcode.without_space
-        )
+
+        addresses = Address.objects.filter(postcode=self.postcode.with_space)
 
         if not addresses:
             raise Http404
 
         sorter = AddressSorter(addresses)
         addresses = sorter.natural_sort()
-        select_addresses = [(element.slug, element.address) for element in addresses]
+        select_addresses = [(element.uprn, element.address) for element in addresses]
         select_addresses.append((self.NOTINLIST, "My address is not in the list"))
         return form_class(
             select_addresses, self.postcode.without_space, **self.get_form_kwargs()
         )
 
     def form_valid(self, form):
-        slug = form.cleaned_data["address"]
-        if slug == self.NOTINLIST:
+        uprn = form.cleaned_data["address"]
+        if uprn == self.NOTINLIST:
             self.success_url = reverse(
                 "we_dont_know", kwargs={"postcode": self.postcode.without_space}
             )
         else:
-            self.success_url = reverse("address_view", kwargs={"address_slug": slug})
+            self.success_url = reverse("address_view", kwargs={"uprn": uprn})
         return super(AddressFormView, self).form_valid(form)
