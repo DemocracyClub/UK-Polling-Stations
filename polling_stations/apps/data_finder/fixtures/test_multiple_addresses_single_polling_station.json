@@ -1,0 +1,55 @@
+[
+    {
+        "fields": {
+            "uprn": "102",
+            "lad": "X01",
+            "polling_station_id": "3C"
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "102"
+    },
+    {
+        "fields": {
+            "uprn": "103",
+            "lad": "X01",
+            "polling_station_id": "3C"
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "103"
+    },
+
+    {
+        "fields": {
+            "uprn": "102",
+            "address": "3 Foo St, Bar Town",
+            "postcode": "CC1 1AA",
+            "location": null,
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "102"
+    },
+    {
+        "fields": {
+            "uprn": "103",
+            "address": "4 Foo St, Bar Town",
+            "postcode": "CC1 1AA",
+            "location": null,
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "103"
+    },
+
+    {
+        "fields": {
+            "council": "X01",
+            "internal_council_id": "3C",
+            "postcode": "BB21CC",
+            "address": "",
+            "location": null
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 3
+    }
+]

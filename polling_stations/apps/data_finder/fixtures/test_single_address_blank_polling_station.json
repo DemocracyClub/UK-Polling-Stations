@@ -1,0 +1,35 @@
+[
+    {
+        "fields": {
+            "uprn": "101",
+            "lad": "X01",
+            "polling_station_id": ""
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "101"
+    },
+
+    {
+        "fields": {
+            "uprn": "101",
+            "address": "2 Foo St, Bar Town",
+            "postcode": "BB1 1BB",
+            "location": null,
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "101"
+    },
+
+    {
+        "fields": {
+            "council": "X01",
+            "internal_council_id": "2B",
+            "postcode": "BB11BD",
+            "address": "",
+            "location": null
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 2
+    }
+]

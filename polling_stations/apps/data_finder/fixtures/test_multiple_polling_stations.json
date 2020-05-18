@@ -1,0 +1,86 @@
+[
+    {
+        "fields": {
+            "uprn": "104",
+            "lad": "X01",
+            "polling_station_id": "4A"
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "104"
+    },
+    {
+        "fields": {
+            "uprn": "105",
+            "lad": "X01",
+            "polling_station_id": "4B"
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "105"
+    },
+    {
+        "fields": {
+            "uprn": "106",
+            "lad": "X01",
+            "polling_station_id": "4C"
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "106"
+    },
+
+    {
+        "fields": {
+            "uprn": "104",
+            "address": "5 Foo St, Bar Town",
+            "postcode": "DD1 1DD",
+            "location": null,
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "104"
+    },
+    {
+        "fields": {
+            "uprn": "105",
+            "address": "6 Foo St, Bar Town",
+            "postcode": "DD1 1DD",
+            "location": null,
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "105"
+    },
+    {
+        "fields": {
+            "uprn": "106",
+            "address": "7 Foo St, Bar Town",
+            "postcode": "DD1 1DD",
+            "location": null,
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "106"
+    },
+
+    {
+        "fields": {
+            "council": "X01",
+            "internal_council_id": "4A",
+            "postcode": "BB21CC",
+            "address": "",
+            "location": null
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "council": "X01",
+            "internal_council_id": "4B",
+            "postcode": "CC23BB",
+            "address": "",
+            "location": null
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 5
+    }
+]
