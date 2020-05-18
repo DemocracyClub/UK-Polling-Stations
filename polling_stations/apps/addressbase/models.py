@@ -1,9 +1,18 @@
+from collections import namedtuple
+
 from django.contrib.gis.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
+from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.models import (
     AbstractAddress,
     AbstractAddressManager,
     AbstractOnsudManager,
+)
+
+UprnInfo = namedtuple(
+    "UprnInfo",
+    ["address", "postcode", "council", "uprn", "polling_station_id", "location"],
 )
 
 
@@ -17,6 +26,59 @@ class AddressManager(AbstractAddressManager):
         qs = self.filter(postcode=postcode)
         qs = qs.values_list("location", flat=True)
         return list(qs)
+
+    def get_uprn(self, uprn):
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+                SELECT a.address, a.postcode, u.lad, u.uprn, u.polling_station_id, a.location
+                FROM addressbase_address a
+                    JOIN addressbase_uprntocouncil u
+                    ON a.uprn = u.uprn
+                WHERE a.uprn=%s
+            """,
+            [uprn],
+        )
+        row = cursor.fetchone()
+        if row:
+            return UprnInfo(
+                address=row[0],
+                postcode=row[1],
+                council=row[2],
+                uprn=row[3],
+                polling_station_id=row[4].replace(" ", ""),
+                location=row[5],
+            )
+        else:
+            raise ObjectDoesNotExist
+
+    def uprns_for_postcode(self, postcode):
+        postcode = Postcode(postcode)
+        uprns = []
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+                SELECT a.address, a.postcode, u.lad, u.uprn, u.polling_station_id, a.location
+                FROM addressbase_address a
+                    JOIN addressbase_uprntocouncil u
+                    ON a.uprn = u.uprn
+                WHERE a.postcode=%s
+            """,
+            [postcode.with_space],  # Can we assume addresssbase postcodes have a space.
+        )
+
+        for row in cursor.fetchall():
+            uprn_info = UprnInfo(
+                address=row[0],
+                postcode=row[1],
+                council=row[2],
+                uprn=row[3],
+                polling_station_id=row[4].replace(" ", ""),
+                location=row[5],
+            )
+            uprns.append(uprn_info)
+
+        return uprns
 
 
 class Address(AbstractAddress):
