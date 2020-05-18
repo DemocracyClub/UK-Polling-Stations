@@ -41,21 +41,6 @@ class UprnToCouncil(models.Model):
     polling_station_id = models.CharField(blank=True, max_length=255)
 
 
-class Blacklist(models.Model):
-    """
-    Model for storing postcodes containing UPRNs in >1 local authorities
-    This is intentionally de-normalised for performance reasons
-    Ideally ('postcode', 'lad') should be a composite PK,
-    but django's ORM doesn't support them.
-    """
-
-    postcode = models.CharField(blank=False, max_length=15, db_index=True)
-    lad = models.CharField(blank=False, max_length=9)
-
-    class Meta:
-        unique_together = ("postcode", "lad")
-
-
 def get_uprn_hash_table(council_id):
     # get all the UPRNs in target local auth
     # NB we miss ~25 over the country because lighthouses etc.
