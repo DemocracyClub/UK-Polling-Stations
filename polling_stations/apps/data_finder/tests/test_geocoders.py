@@ -3,9 +3,12 @@ from django.test import TestCase, override_settings
 from data_finder.helpers.geocoders import (
     geocode,
     geocode_point_only,
-    MultipleCouncilsException,
 )
-from uk_geo_utils.geocoders import AddressBaseGeocoder, OnspdGeocoder
+from uk_geo_utils.geocoders import (
+    AddressBaseGeocoder,
+    OnspdGeocoder,
+    MultipleCodesException,
+)
 
 
 class StubOnspdGeocoder(OnspdGeocoder):
@@ -20,7 +23,7 @@ just where it came from
 """
 
 
-def mock_geocode(self):
+def mock_geocode(self, uprn=None):
     return StubOnspdGeocoder("foo")
 
 
@@ -64,9 +67,9 @@ class GeocodeTest(TestCase):
         for the UPRNs we found
         The UPRNs described by this postcode map to more than one local authority
 
-        Exception of class MultipleCouncilsException should be thrown
+        Exception of class MultipleCodesException should be thrown
         """
-        with self.assertRaises(MultipleCouncilsException):
+        with self.assertRaises(MultipleCodesException):
             geocode("CC11CC")
 
     @mock.patch(

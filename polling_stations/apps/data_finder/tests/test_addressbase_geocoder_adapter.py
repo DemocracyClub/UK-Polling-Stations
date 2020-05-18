@@ -1,10 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
-from data_finder.helpers.geocoders import (
-    AddressBaseGeocoderAdapter,
-    MultipleCouncilsException,
+from data_finder.helpers.geocoders import AddressBaseGeocoderAdapter
+from uk_geo_utils.geocoders import (
+    AddressBaseGeocoder,
+    CodesNotFoundException,
+    MultipleCodesException,
 )
-from uk_geo_utils.geocoders import AddressBaseGeocoder, CodesNotFoundException
 
 
 class AddressBaseGeocoderAdapterTest(TestCase):
@@ -48,15 +49,23 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         UPRNs we found.
         The UPRNs described by this postcode map to more than one local authority
 
-        Exception of class MultipleCouncilsException should be thrown
+        Result should be different depending on uprn
         """
         addressbase = AddressBaseGeocoderAdapter("CC11CC")
-        with self.assertRaises(MultipleCouncilsException):
-            result = addressbase.geocode()
+
+        # geocode postcode intersecting with more than one council should raise
+        with self.assertRaises(MultipleCodesException):
+            addressbase.geocode()
+
+        # geocode method should work with a uprn
+        result_00000008 = addressbase.geocode(uprn="00000008")
+        result_00000009 = addressbase.geocode(uprn="00000009")
+        self.assertIsInstance(result_00000008, AddressBaseGeocoder)
+        self.assertIsInstance(result_00000009, AddressBaseGeocoder)
 
         # point only geocode should return a result anyway
-        result = addressbase.geocode_point_only()
-        self.assertIsInstance(result, AddressBaseGeocoder)
+        result_point_only = addressbase.geocode_point_only()
+        self.assertIsInstance(result_point_only, AddressBaseGeocoder)
 
     def test_valid(self):
         """

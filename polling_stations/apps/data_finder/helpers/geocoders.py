@@ -7,18 +7,13 @@ from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     OnspdGeocoder,
-    AddressBaseException,
-    MultipleCodesException,
+    CodesNotFoundException,
 )
 
 from pollingstations.models import Council
 
 
 class PostcodeError(Exception):
-    pass
-
-
-class MultipleCouncilsException(MultipleCodesException):
     pass
 
 
@@ -39,7 +34,7 @@ class BaseGeocoder(metaclass=abc.ABCMeta):
 
 
 class OnspdGeocoderAdapter(BaseGeocoder):
-    def geocode(self):
+    def geocode(self, uprn=None):
         geocoder = OnspdGeocoder(self.postcode)
         centre = geocoder.centroid
         if not centre:
@@ -65,16 +60,11 @@ class OnspdGeocoderAdapter(BaseGeocoder):
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
-    def geocode(self):
+    def geocode(self, uprn=None):
         geocoder = AddressBaseGeocoder(self.postcode)
         geocoder.centroid
-
-        try:
-            geocoder.get_code("lad")
-        except MultipleCodesException as e:
-            # re-raise as a more specific MultipleCouncilsException
-            # because that is what the calling code expects to handle
-            raise MultipleCouncilsException(str(e))
+        # We should always have a uprn so only attempt to get council code with this information.
+        geocoder.get_code("lad", uprn=uprn)
 
         return geocoder
 
@@ -105,12 +95,14 @@ def geocode_point_only(postcode):
     raise PostcodeError("Could not geocode from any source")
 
 
-def geocode(postcode):
+def geocode(postcode, uprn=None):
     geocoders = (AddressBaseGeocoderAdapter(postcode), OnspdGeocoderAdapter(postcode))
     for geocoder in geocoders:
         try:
-            gc = geocoder.geocode()
-
+            if isinstance(geocoder, AddressBaseGeocoderAdapter):
+                gc = geocoder.geocode(uprn=uprn)
+            else:
+                gc = geocoder.geocode()
             # Declare a new subclass of whatever type `gc` is on-the-fly
             # this allows us to monkey-patch `get_code()` with a function that
             # can translate old codes if our data source isn't up-to-date yet
@@ -131,14 +123,10 @@ def geocode(postcode):
             # - AddressBase hasn't been imported
             # fall back to the next source
             continue
-        except MultipleCouncilsException:
-            # this postcode contains uprns in multiple local authorities
-            # re-raise the exception.
-            raise
-        except AddressBaseException:
+        except CodesNotFoundException:
             # we did find this postcode in AddressBase, but there were no
             # corresponding codes in the uprn/council lookup:
-            #   fall back to the next source
+            # fall back to the next source
             continue
         except PostcodeError:
             # we were unable to geocode this postcode using ONSPD
@@ -150,10 +138,13 @@ def geocode(postcode):
     raise PostcodeError("Could not geocode from any source")
 
 
-def get_council(geocode_result):
+def get_council(geocode_result, uprn=None):
     try:
-        return Council.objects.defer("area").get(
-            council_id=geocode_result.get_code("lad")
-        )
+        if uprn:
+            return Council.objects.defer("area").get(
+                council_id=geocode_result.get_code("lad", uprn=uprn)
+            )
+        else:
+            return Council.objects.defer("area").get(council_id=geocode_result.get_code("lad"))
     except Council.DoesNotExist:
         return Council.objects.defer("area").get(area__covers=geocode_result.centroid)
