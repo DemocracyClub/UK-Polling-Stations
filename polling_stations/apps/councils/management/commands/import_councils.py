@@ -44,15 +44,6 @@ class Command(BaseCommand):
             help="<Optional> Alternative url to override settings.BOUNDARIES_URL",
         )
         parser.add_argument(
-            "--contact-type",
-            dest="contact_type",
-            action="store",
-            required=False,
-            choices=("vjbs", "councils"),
-            default="vjbs",
-            help="<Optional> Alternative url to override settings.BOUNDARIES_URL",
-        )
-        parser.add_argument(
             "--update-contact-details",
             action="store_true",
             help="Only update contact information for imported councils",
@@ -83,97 +74,62 @@ class Command(BaseCommand):
             raise HTTPError("202 Accepted", response=r)
         return r.json()
 
-    def get_councils(self, url, id_field, name_field):
-        # call url and return a list of Council objects
-        # with the code and boundary fields populated
-        # (ready to atttach contact details to)
-        councils = []
+    def attach_boundaries(self, url=None, id_field="lad19cd"):
+        """
+        Fetch each council's boundary from ONS and attach it to an existing
+        council object
+
+        :param url: The URL of the geoJSON file containing council boundaries
+        :param id_field: The name of the feature properties field containing
+                         the council ID
+        :return:
+        """
+        if not url:
+            url = settings.BOUNDARIES_URL
+        self.stdout.write("Downloading ONS boundaries from %s..." % (url))
         feature_collection = self.get_json(url)
         for feature in feature_collection["features"]:
             council_id = feature["properties"][id_field]
-            self.stdout.write(
-                "Found boundary for %s: %s"
-                % (council_id, feature["properties"][name_field])
-            )
-            poly = self.feature_to_multipolygon(feature)
-            councils.append(Council(council_id=council_id, area=poly))
-        return councils
-
-    def pre_process_councils(self, councils):
-        """
-        if the new councils for 2019 don't already
-        exist in the input file we need to:
-        - build the boundaries as a union of
-          the old authorities that they replace
-        - delete the old ones out of the councils array so
-          we don't have >1 polygons covering the same area
-        """
-
-        new_council_objects = {}
-        for code in settings.NEW_COUNCILS:
-            # only attempt to build the new areas if they don't already exist
-            if code not in [c.council_id for c in councils]:
-                new_council_objects[code] = Council(council_id=code, area=None)
-
-        self.stdout.write(
-            "building new areas: {}".format(str(list(new_council_objects.keys())))
-        )
-
-        # ids of any councils we're going to delete
-        deleteme = []
-
-        for council in councils:
-            if not council.council_id in settings.OLD_TO_NEW_MAP:
-                continue
-            code = settings.OLD_TO_NEW_MAP[council.council_id]
-            if code in new_council_objects:
-                new_council_objects[code].area = union_areas(
-                    new_council_objects[code].area, council.area
+            try:
+                council = Council.objects.get(identifiers__contains=[council_id])
+                self.stdout.write(
+                    "Found boundary for %s: %s" % (council_id, council.name)
                 )
-                self.stdout.write("{} --> {}".format(council.council_id, code))
-                deleteme.append(council.council_id)
-
-        councils = [c for c in councils if c.council_id not in deleteme]
-
-        for code, council in new_council_objects.items():
-            councils.append(council)
-
-        return councils
-
-    def load_contact_details(self, contact_type):
-        files = [
-            "./polling_stations/apps/councils/data/england-wales.csv",
-            "./polling_stations/apps/councils/data/ni.csv",
-        ]
-
-        if contact_type == "vjbs":
-            files.append("./polling_stations/apps/councils/data/scotland-vjbs.csv")
-        if contact_type == "councils":
-            files.append("./polling_stations/apps/councils/data/scotland-councils.csv")
-
-        for filename in files:
-            with open(os.path.abspath(filename)) as infile:
-                reader = csv.reader(infile)
-                Row = namedtuple("Row", next(reader))
-                for row in map(Row._make, reader):
-                    self.contact_details[row.gss] = row
-
-    def attach_contact_details(self, councils, contact_type):
-        self.stdout.write("Attaching contact details...")
-        self.load_contact_details(contact_type)
-        for council in councils:
-            if council.council_id not in self.contact_details:
-                # Skip councils that exist in the database with no contact
-                # details. It's possible older objects exist that we aren't
-                # interested in
+            except Council.DoesNotExist:
+                self.stderr.write(
+                    "No council object with ID {} found".format(council_id)
+                )
                 continue
-            contact_details = self.contact_details[council.council_id]
-            council.name = contact_details.name
-            council.website = contact_details.website
-            council.email = contact_details.email
-            council.phone = contact_details.phone
-            council.address = contact_details.address
-            council.postcode = contact_details.postcode
+
+            council.area = self.feature_to_multipolygon(feature)
+            council.save()
+
+    def load_contact_details(self):
+        return requests.get(settings.EC_COUNCIL_CONTACT_DETAILS_API_URL).json()
+
+    def import_councils_from_ec(self):
+        self.stdout.write("Importing councils...")
+
+        for council_data in self.load_contact_details():
+            council, _ = Council.objects.get_or_create(council_id=council_data["code"])
+            council.name = council_data["official_name"]
+            council.identifiers = council_data["identifiers"]
+            if council_data["electoral_services"]:
+                electoral_services = council_data["electoral_services"][0]
+                council.electoral_services_email = electoral_services["email"]
+                council.electoral_services_address = electoral_services["address"]
+                council.electoral_services_postcode = electoral_services["postcode"]
+                council.electoral_services_phone_numbers = electoral_services["tel"]
+                council.electoral_services_website = electoral_services[
+                    "website"
+                ].replace("\\", "")
+            if council_data["registration"]:
+                registration = council_data["registration"][0]
+                council.registration_email = registration["email"]
+                council.registration_address = registration["address"]
+                council.registration_postcode = registration["postcode"]
+                council.registration_phone_numbers = registration["tel"]
+                council.registration_website = registration["website"].replace("\\", "")
 
             council.save()
 
@@ -188,27 +144,13 @@ class Command(BaseCommand):
             [apps.get_app_config("councils"), apps.get_app_config("pollingstations")]
         )
 
-        if options["update_contact_details"]:
-            councils = Council.objects.all().defer("area")
-        else:
-            if options["teardown"]:
-                self.stdout.write("Clearing councils table..")
-                Council.objects.all().delete()
+        if options["teardown"]:
+            self.stdout.write("Clearing councils table..")
+            Council.objects.all().delete()
 
-            boundaries_url = settings.BOUNDARIES_URL
-            if options["alt_url"]:
-                boundaries_url = options["alt_url"]
+        self.import_councils_from_ec()
 
-            councils = []
-            self.stdout.write(
-                "Downloading ONS boundaries from %s..." % (boundaries_url)
-            )
-            councils = councils + self.get_councils(
-                boundaries_url, id_field="lad19cd", name_field="lad19nm"
-            )
-
-            councils = self.pre_process_councils(councils)
-
-        self.attach_contact_details(councils, options["contact_type"])
+        if not options["update_contact_details"]:
+            self.attach_boundaries(options.get("alt_url"))
 
         self.stdout.write("..done")
