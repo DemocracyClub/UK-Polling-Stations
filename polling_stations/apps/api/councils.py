@@ -1,13 +1,13 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework import serializers
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 
 
-class CouncilDataSerializer(HyperlinkedModelSerializer):
+class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Council
         lookup_field = "council_id"
@@ -21,6 +21,15 @@ class CouncilDataSerializer(HyperlinkedModelSerializer):
             "postcode",
             "address",
         )
+
+    email = serializers.EmailField(source="electoral_services_email")
+    phone = serializers.SerializerMethodField()
+    website = serializers.URLField(source="electoral_services_website")
+    postcode = serializers.CharField(source="electoral_services_postcode")
+    address = serializers.CharField(source="electoral_services_address")
+
+    def get_phone(self, obj):
+        return obj.electoral_services_phone_numbers[0]
 
 
 class CouncilGeoSerializer(GeoFeatureModelSerializer):
@@ -39,6 +48,15 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
             "postcode",
             "address",
         )
+
+    email = serializers.EmailField(source="electoral_services_email")
+    phone = serializers.SerializerMethodField()
+    website = serializers.URLField(source="electoral_services_website")
+    postcode = serializers.CharField(source="electoral_services_postcode")
+    address = serializers.CharField(source="electoral_services_address")
+
+    def get_phone(self, obj):
+        return obj.electoral_services_phone_numbers[0]
 
 
 class CouncilViewSet(ReadOnlyModelViewSet):
