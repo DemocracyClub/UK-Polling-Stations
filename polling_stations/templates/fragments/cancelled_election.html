@@ -20,7 +20,12 @@
   {% endfilter %}
 {% else %}
   <p>For more information contact {{ council.name }}
-  {% if council.phone %}
-  on <strong><a href="tel:{{ council.phone }}">{{ council.phone }}</a></strong>
+  {% if council.electoral_services_phone_numbers %}
+  on
+  <strong>
+    <a href="tel:{{ council.electoral_services_phone_numbers.0 }}">{{ council.electoral_services_phone_numbers.0 }}</a>
+  </strong>
+
+
   {% endif %}</p>
 {% endif %}

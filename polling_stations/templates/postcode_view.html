@@ -81,7 +81,7 @@
       {% endif %}
     {% endif %}
 
-    {% if council.address or council.postcode or council.phone or council.email %}
+    {% if council.electoral_services_address or council.electoral_services_postcode or council.electoral_services_phone_numbers or council.electoral_services_email %}
       {% include "fragments/contact_details.html" %}
     {% endif %}
 

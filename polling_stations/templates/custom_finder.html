@@ -9,13 +9,13 @@
 {% endif %}
 
 {% if custom.base_url %}
-  {% if council.phone %}
+  {% if council.electoral_services_phone_numbers %}
     {% if territory == 'NI' %}
-      {% blocktrans with council_phone=council.phone council_name=council.name %}
+      {% blocktrans with council_phone=council.electoral_services_phone_numbers.0 council_name=council.name %}
         <p>Alternatively, contact The Electoral Office for Northern Ireland on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
       {% endblocktrans %}
     {% else %}
-      {% blocktrans with council_phone=council.phone council_name=council.name %}
+      {% blocktrans with council_phone=council.council.electoral_services_phone_numbers.0 council_name=council.name %}
         <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
       {% endblocktrans %}
     {% endif %}
