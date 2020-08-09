@@ -1,7 +1,4 @@
-import csv
-from collections import namedtuple
 import json
-import os
 import requests
 from django.apps import apps
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
@@ -16,6 +13,21 @@ def union_areas(a1, a2):
     if not a1:
         return a2
     return MultiPolygon(a1.union(a2))
+
+
+NIR_IDS = [
+    "ABC",
+    "AND",
+    "ANN",
+    "BFS",
+    "CCG",
+    "DRS",
+    "FMO",
+    "LBC",
+    "MEA",
+    "MUL",
+    "NMD",
+]
 
 
 class Command(BaseCommand):
@@ -44,9 +56,10 @@ class Command(BaseCommand):
             help="<Optional> Alternative url to override settings.BOUNDARIES_URL",
         )
         parser.add_argument(
-            "--update-contact-details",
+            "--only-contact-details",
             action="store_true",
-            help="Only update contact information for imported councils",
+            help="Only update contact information for imported councils, "
+            "don't update boundaries",
         )
 
     def feature_to_multipolygon(self, feature):
@@ -56,7 +69,7 @@ class Command(BaseCommand):
         return geometry
 
     @retry(HTTPError, tries=2, delay=30)
-    def get_json(self, url):
+    def get_ons_boundary_json(self, url):
         r = requests.get(url)
         r.raise_for_status()
         """
@@ -87,7 +100,7 @@ class Command(BaseCommand):
         if not url:
             url = settings.BOUNDARIES_URL
         self.stdout.write("Downloading ONS boundaries from %s..." % (url))
-        feature_collection = self.get_json(url)
+        feature_collection = self.get_ons_boundary_json(url)
         for feature in feature_collection["features"]:
             council_id = feature["properties"][id_field]
             try:
@@ -107,12 +120,32 @@ class Command(BaseCommand):
     def load_contact_details(self):
         return requests.get(settings.EC_COUNCIL_CONTACT_DETAILS_API_URL).json()
 
+    def get_council_name(self, council_data):
+        """
+        At the time of writing, the council name can be NULL in the API
+        meaning we can't rely on the key being populated in all cases.
+
+        This is normally only an issue with councils covered by EONI, so if
+        we see one of them without a name, we assign a hardcoded name.
+
+        """
+        name = None
+        if council_data["official_name"]:
+            name = council_data["official_name"]
+        else:
+            if council_data["code"] in NIR_IDS:
+                name = "Electoral Office for Northern Ireland"
+        if not name:
+            raise ValueError("No official name for {}".format(council_data["code"]))
+        return name
+
     def import_councils_from_ec(self):
         self.stdout.write("Importing councils...")
 
         for council_data in self.load_contact_details():
             council, _ = Council.objects.get_or_create(council_id=council_data["code"])
-            council.name = council_data["official_name"]
+
+            council.name = self.get_council_name(council_data)
             council.identifiers = council_data["identifiers"]
             if council_data["electoral_services"]:
                 electoral_services = council_data["electoral_services"][0]
@@ -150,7 +183,7 @@ class Command(BaseCommand):
 
         self.import_councils_from_ec()
 
-        if not options["update_contact_details"]:
+        if not options["only_contact_details"]:
             self.attach_boundaries(options.get("alt_url"))
 
         self.stdout.write("..done")
