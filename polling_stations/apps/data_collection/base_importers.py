@@ -127,7 +127,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         ResidentialAddress.objects.filter(council=council).delete()
 
     def get_council(self, council_id):
-        return Council.objects.get(pk=council_id)
+        return Council.objects.get(identifiers__contains=[council_id])
 
     def get_data(self, filetype, filename):
         options = {}

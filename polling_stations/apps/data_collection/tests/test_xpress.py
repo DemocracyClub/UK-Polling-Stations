@@ -10,7 +10,7 @@ class XpressDemocracyClubImportTests(TestCase):
     opts = {"noclean": False, "nochecks": True, "verbosity": 0}
 
     def setUp(self):
-        Council.objects.update_or_create(pk="X01000000")
+        Council.objects.update_or_create(pk="X01000000", identifiers=["X01000000"])
         cmd = stub_xpress_democlub.Command()
         cmd.handle(**self.opts)
 
@@ -82,7 +82,7 @@ class XpressWebLookupImportTests(TestCase):
     opts = {"noclean": False, "nochecks": True, "verbosity": 0}
 
     def setUp(self):
-        Council.objects.update_or_create(pk="X01000000")
+        Council.objects.update_or_create(pk="X01000000", identifiers=["X01000000"])
         cmd = stub_xpress_weblookup.Command()
         cmd.handle(**self.opts)
 
@@ -156,7 +156,7 @@ class XpressWebLookupAmbiguousAddressTests(TestCase):
     opts = {"noclean": False, "nochecks": True, "verbosity": 0}
 
     def test_ambiguous(self):
-        Council.objects.update_or_create(pk="X01000000")
+        Council.objects.update_or_create(pk="X01000000", identifiers=["X01000000"])
         cmd = stub_xpress_weblookup.Command()
         cmd.addresses_name = "test_ambiguous.csv"
         cmd.stations_name = "test_ambiguous.csv"
