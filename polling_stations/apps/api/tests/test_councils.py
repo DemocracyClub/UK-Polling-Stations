@@ -57,3 +57,22 @@ class CouncilsTest(TestCase):
         response = CouncilViewSet.as_view({"get": "retrieve"})(self.request, pk="ABC")
         self.assertEqual(response.status_code, 301)
         self.assertEqual(response.url, "http://testserver/api/beta/councils/X01000001/")
+
+    def test_identifiers_in_api_response(self):
+        response = CouncilViewSet.as_view({"get": "retrieve"})(
+            self.request, pk="X01000001"
+        )
+        self.assertDictEqual(
+            response.data,
+            {
+                "address": "",
+                "council_id": "X01000001",
+                "email": "",
+                "identifiers": ["ABC"],
+                "name": "X01000001",
+                "phone": "",
+                "postcode": "",
+                "url": "http://testserver/api/beta/councils/X01000001/",
+                "website": "",
+            },
+        )

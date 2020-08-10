@@ -22,6 +22,7 @@ class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
             "website",
             "postcode",
             "address",
+            "identifiers",
         )
 
     email = serializers.EmailField(source="electoral_services_email")
@@ -49,6 +50,7 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
             "website",
             "postcode",
             "address",
+            "identifiers",
         )
 
     email = serializers.EmailField(source="electoral_services_email")
