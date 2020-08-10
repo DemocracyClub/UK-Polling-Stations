@@ -74,5 +74,13 @@ class CouncilsTest(TestCase):
                 "postcode": "",
                 "url": "http://testserver/api/beta/councils/X01000001/",
                 "website": "",
+                "registration_contacts": None,
+                "electoral_services_contacts": {
+                    "email": "",
+                    "phone_numbers": [""],
+                    "address": "",
+                    "postcode": "",
+                    "website": "",
+                },
             },
         )

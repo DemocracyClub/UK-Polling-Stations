@@ -9,6 +9,20 @@ from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
 
 
+def contact_type_to_dict(obj, contact_type):
+    """
+    Build the contact details for a contact type in to a dict
+    """
+
+    assert contact_type in ["electoral_services", "registration"]
+    data = {}
+    for key in ["phone_numbers", "email", "address", "postcode", "website"]:
+        data[key] = getattr(obj, "{}_{}".format(contact_type, key))
+    if not any(data.values()):
+        data = None
+    return data
+
+
 class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Council
@@ -23,6 +37,8 @@ class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
             "postcode",
             "address",
             "identifiers",
+            "electoral_services_contacts",
+            "registration_contacts",
         )
 
     email = serializers.EmailField(source="electoral_services_email")
@@ -31,8 +47,17 @@ class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
     postcode = serializers.CharField(source="electoral_services_postcode")
     address = serializers.CharField(source="electoral_services_address")
 
+    electoral_services_contacts = serializers.SerializerMethodField()
+    registration_contacts = serializers.SerializerMethodField()
+
     def get_phone(self, obj):
         return obj.electoral_services_phone_numbers[0]
+
+    def get_electoral_services_contacts(self, obj):
+        return contact_type_to_dict(obj, "electoral_services")
+
+    def get_registration_contacts(self, obj):
+        return contact_type_to_dict(obj, "registration")
 
 
 class CouncilGeoSerializer(GeoFeatureModelSerializer):
@@ -50,6 +75,8 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
             "website",
             "postcode",
             "address",
+            "electoral_services_contacts",
+            "registration_contacts",
             "identifiers",
         )
 
@@ -59,8 +86,17 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
     postcode = serializers.CharField(source="electoral_services_postcode")
     address = serializers.CharField(source="electoral_services_address")
 
+    electoral_services_contacts = serializers.SerializerMethodField()
+    registration_contacts = serializers.SerializerMethodField()
+
     def get_phone(self, obj):
         return obj.electoral_services_phone_numbers[0]
+
+    def get_electoral_services_contacts(self, obj):
+        return contact_type_to_dict(obj, "electoral_services")
+
+    def get_registration_contacts(self, obj):
+        return contact_type_to_dict(obj, "registration")
 
 
 class CouncilViewSet(ReadOnlyModelViewSet):
