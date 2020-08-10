@@ -47,3 +47,13 @@ class CouncilsTest(TestCase):
     def test_null_area(self):
         response = CouncilViewSet.as_view({"get": "geo"})(self.request, pk="X01000002")
         self.assertEqual(None, response.data["geometry"])
+
+    def test_redirect_from_identifier(self):
+        """
+        Check that a non-PK ID that is a valid identifier is redurected to
+        the canonical URL for that instance.
+        :return:
+        """
+        response = CouncilViewSet.as_view({"get": "retrieve"})(self.request, pk="ABC")
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.url, "http://testserver/api/beta/councils/X01000001/")
