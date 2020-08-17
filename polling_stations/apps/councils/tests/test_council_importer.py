@@ -5,7 +5,7 @@ from councils.management.commands.import_councils import Command
 
 
 class MockCouncilsImporter(Command):
-    def get_json(self, url):
+    def get_ons_boundary_json(self, url):
         auths = [
             {"code": "E09000001", "name": "City of London Corporation"},
             {"code": "E09000002", "name": "London Borough of Barking and Dagenham"},
@@ -42,6 +42,36 @@ class MockCouncilsImporter(Command):
             )
         return {"features": out}
 
+    def load_contact_details(self):
+        codes = [
+            "E09000001",
+            "E09000002",
+            "E09000003",
+            "E09000004",
+            "E09000005",
+            "E09000006",
+        ]
+        councils = []
+        for i, code in enumerate(codes):
+            councils.append(
+                {
+                    "code": code,
+                    "official_name": "Foo {} council".format(i),
+                    "electoral_services": [
+                        {
+                            "address": "The Electoral Office Headquarters",
+                            "postcode": "BT1 1ER",
+                            "tel": ["0800 4320 712"],
+                            "email": "info@foo.gov.uk",
+                            "website": "http://www.example.gov.uk/",
+                        }
+                    ],
+                    "registration": None,
+                    "identifiers": [code],
+                },
+            )
+        return councils
+
 
 class TestCouncilImporter(TestCase):
     @override_settings(NEW_COUNCILS=[])
@@ -53,12 +83,7 @@ class TestCouncilImporter(TestCase):
         out = StringIO()
         cmd.stdout = out
         cmd.handle(
-            **{
-                "teardown": False,
-                "alt_url": None,
-                "contact_type": "vjbs",
-                "update_contact_details": False,
-            }
+            **{"teardown": False, "alt_url": None, "only_contact_details": False,}
         )
 
         assert Council.objects.count() == 6

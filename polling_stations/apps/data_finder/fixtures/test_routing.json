@@ -2,12 +2,13 @@
     {
         "fields": {
             "name": "Foo Council",
-            "email": "",
-            "phone": "",
-            "website": "",
-            "postcode": "",
-            "address": "",
-            "area": null
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": null,
+            "identifiers": ["X01000001"]
         },
         "model": "councils.council",
         "pk": "X01000001"
@@ -15,12 +16,13 @@
     {
         "fields": {
             "name": "Newport Council",
-            "email": "",
-            "phone": "",
-            "website": "",
-            "postcode": "",
-            "address": "",
-            "area": "SRID=4326;MULTIPOLYGON (((-2.9787111278202683 51.6086311168530472, -3.0140733714677026 51.6099103806234538, -3.0272912974912098 51.5917841149768108, -3.0108118053059938 51.5810115542275724, -2.9718446727430576 51.5805848655760144, -2.9630899425196695 51.5962630418120298, -2.9787111278202683 51.6086311168530472)))"
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": "SRID=4326;MULTIPOLYGON (((-2.9787111278202683 51.6086311168530472, -3.0140733714677026 51.6099103806234538, -3.0272912974912098 51.5917841149768108, -3.0108118053059938 51.5810115542275724, -2.9718446727430576 51.5805848655760144, -2.9630899425196695 51.5962630418120298, -2.9787111278202683 51.6086311168530472)))",
+            "identifiers": ["W06000022"]
         },
         "model": "councils.council",
         "pk": "W06000022"
@@ -28,12 +30,13 @@
     {
         "fields": {
             "name": "Bristol Council",
-            "email": "",
-            "phone": "",
-            "website": "",
-            "postcode": "",
-            "address": "",
-            "area": "MULTIPOLYGON(((-2.6181793212890625 51.4739416782317,-2.5275421142578125 51.4739416782317,-2.5275421142578125 51.43115250328755,-2.6181793212890625 51.43115250328755,-2.6181793212890625 51.4739416782317)))"
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": "MULTIPOLYGON(((-2.6181793212890625 51.4739416782317,-2.5275421142578125 51.4739416782317,-2.5275421142578125 51.43115250328755,-2.6181793212890625 51.43115250328755,-2.6181793212890625 51.4739416782317)))",
+            "identifiers": ["E06000023"]
         },
         "model": "councils.council",
         "pk": "E06000023"
@@ -41,12 +44,13 @@
     {
         "fields": {
             "name": "Belfast",
-            "email": "",
-            "phone": "0800 4320 712",
-            "website": "http://www.eoni.org.uk/",
-            "postcode": "BT1 1ER",
-            "address": "The Electoral Office Headquarters\nSt Anne's House\n15 Church Street\nBelfast",
-            "area": null
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": ["0800 4320 712"],
+            "electoral_services_website": "http://www.eoni.org.uk/",
+            "electoral_services_postcode": "BT1 1ER",
+            "electoral_services_address": "The Electoral Office Headquarters\nSt Anne's House\n15 Church Street\nBelfast",
+            "area": null,
+            "identifiers": ["N09000003"]
         },
         "model": "councils.council",
         "pk": "N09000003"

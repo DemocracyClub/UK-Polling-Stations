@@ -2,11 +2,11 @@
   {
     "fields": {
       "name": "Piddleton Parish Council",
-      "email": "",
-      "phone": "",
-      "website": "",
-      "postcode": "",
-      "address": "",
+      "electoral_services_email": "",
+      "electoral_services_phone_numbers": [""],
+      "electoral_services_website": "",
+      "electoral_services_postcode": "",
+      "electoral_services_address": "",
       "area": null
     },
     "model": "councils.council",

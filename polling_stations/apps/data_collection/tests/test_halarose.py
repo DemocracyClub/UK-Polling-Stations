@@ -11,7 +11,7 @@ class HalaroseImportTests(TestCase):
     opts = {"noclean": False, "nochecks": True, "verbosity": 0}
 
     def setUp(self):
-        Council.objects.update_or_create(pk="X01000000")
+        Council.objects.update_or_create(pk="X01000000", identifiers=["X01000000"])
         cmd = stub_halaroseimport.Command()
         cmd.handle(**self.opts)
 

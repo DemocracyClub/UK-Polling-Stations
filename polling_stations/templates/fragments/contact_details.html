@@ -7,15 +7,17 @@
     <h3>{% trans "Council Contact info" %}</h3>
   {% endif %}
   <address>
-    {% if council.address %}
-      {{ council.address|linebreaksbr }}<br>
-      {% if council.postcode %}{{ council.postcode }}<br>{% endif %}
+    {% if council.electoral_services_address %}
+      {{ council.electoral_services_address|linebreaksbr }}<br>
+      {% if council.electoral_services_postcode %}{{ council.electoral_services_postcode }}<br>{% endif %}
     {% else %}
       {{ council.name }}<br>
     {% endif %}
     <br>
-    <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ council.phone }}">{{ council.phone }}</a><br>
+    {% for phone_number in council.electoral_services_phone_numbers %}
+      <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ phone_number }}">{{ phone_number }}</a><br>
+    {% endfor %}
     <abbr title="Email">{% trans "E:" context "Short for Email:" %}</abbr>
-    <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+    <a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a>
   </address>
 </div>

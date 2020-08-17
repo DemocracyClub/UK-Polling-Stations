@@ -4,12 +4,12 @@
     "model": "councils.council",
     "fields": {
         "area": "SRID=4326;MULTIPOLYGON (((-5.515136718749999 51.28940590271679, 2.3291015625 51.28940590271679, 2.3291015625 53.657661020298, -5.515136718749999 53.657661020298, -5.515136718749999 51.28940590271679)))",
-        "website": "",
-        "address": "",
-        "postcode": "",
+        "electoral_services_website": "",
+        "electoral_services_address": "",
+        "electoral_services_postcode": "",
         "name": "Kentwell Hall",
-        "email": "",
-        "phone": ""
+        "electoral_services_email": "",
+        "electoral_services_phone_numbers": [""]
     }
 },
 {
