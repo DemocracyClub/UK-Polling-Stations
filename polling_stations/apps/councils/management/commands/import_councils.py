@@ -143,6 +143,7 @@ class Command(BaseCommand):
         self.stdout.write("Importing councils...")
 
         for council_data in self.load_contact_details():
+            self.seen_ids.add(council_data["code"])
             council, _ = Council.objects.get_or_create(council_id=council_data["code"])
 
             council.name = self.get_council_name(council_data)
@@ -181,9 +182,13 @@ class Command(BaseCommand):
             self.stdout.write("Clearing councils table..")
             Council.objects.all().delete()
 
+        self.seen_ids = set()
         self.import_councils_from_ec()
 
         if not options["only_contact_details"]:
             self.attach_boundaries(options.get("alt_url"))
+
+        # Clean up old councils that we've not seen in the EC data
+        Council.objects.exclude(council_id__in=self.seen_ids).delete()
 
         self.stdout.write("..done")
