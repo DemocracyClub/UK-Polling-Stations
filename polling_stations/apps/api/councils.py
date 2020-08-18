@@ -51,7 +51,10 @@ class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
     registration_contacts = serializers.SerializerMethodField()
 
     def get_phone(self, obj):
-        return obj.electoral_services_phone_numbers[0]
+        try:
+            return obj.electoral_services_phone_numbers[0]
+        except IndexError:
+            return ""
 
     def get_electoral_services_contacts(self, obj):
         return contact_type_to_dict(obj, "electoral_services")
@@ -90,7 +93,10 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
     registration_contacts = serializers.SerializerMethodField()
 
     def get_phone(self, obj):
-        return obj.electoral_services_phone_numbers[0]
+        try:
+            return obj.electoral_services_phone_numbers[0]
+        except IndexError:
+            return ""
 
     def get_electoral_services_contacts(self, obj):
         return contact_type_to_dict(obj, "electoral_services")
