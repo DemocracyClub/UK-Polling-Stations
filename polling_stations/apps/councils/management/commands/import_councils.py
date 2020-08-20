@@ -1,4 +1,6 @@
 import json
+from html import unescape
+
 import requests
 from django.apps import apps
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
@@ -137,7 +139,7 @@ class Command(BaseCommand):
                 name = "Electoral Office for Northern Ireland"
         if not name:
             raise ValueError("No official name for {}".format(council_data["code"]))
-        return name
+        return unescape(name)
 
     def import_councils_from_ec(self):
         self.stdout.write("Importing councils...")
@@ -148,10 +150,13 @@ class Command(BaseCommand):
 
             council.name = self.get_council_name(council_data)
             council.identifiers = council_data["identifiers"]
+
             if council_data["electoral_services"]:
                 electoral_services = council_data["electoral_services"][0]
                 council.electoral_services_email = electoral_services["email"]
-                council.electoral_services_address = electoral_services["address"]
+                council.electoral_services_address = unescape(
+                    electoral_services["address"]
+                )
                 council.electoral_services_postcode = electoral_services["postcode"]
                 council.electoral_services_phone_numbers = electoral_services["tel"]
                 council.electoral_services_website = electoral_services[
@@ -160,7 +165,7 @@ class Command(BaseCommand):
             if council_data["registration"]:
                 registration = council_data["registration"][0]
                 council.registration_email = registration["email"]
-                council.registration_address = registration["address"]
+                council.registration_address = unescape(registration["address"])
                 council.registration_postcode = registration["postcode"]
                 council.registration_phone_numbers = registration["tel"]
                 council.registration_website = registration["website"].replace("\\", "")
