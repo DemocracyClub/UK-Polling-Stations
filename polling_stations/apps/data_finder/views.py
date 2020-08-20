@@ -335,10 +335,9 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
         return self.render_to_response(context)
 
     def get_context_data(self, **context):
-        context["councils"] = []
-        for council_id in self.council_ids:
-            context["councils"].append(Council.objects.get(pk=council_id))
-
+        context["councils"] = Council.objects.filter(
+            identifiers__contains=self.council_ids
+        )
         context["territory"] = self.postcode.territory
 
         log_data = {
