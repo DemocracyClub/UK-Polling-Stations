@@ -12,7 +12,7 @@ fastkml==0.11
 rapidfuzz==0.5.0
 lxml==4.5.1
 marshmallow==3.6.0
-psycopg2-binary==2.8.5
+psycopg2-binary==2.8.6
 pyshp==2.1.0
 raven==6.10.0
 requests==2.23.0
