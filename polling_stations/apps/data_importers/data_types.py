@@ -4,9 +4,27 @@ Data type classes used by base importers
 
 import abc
 import logging
+from collections import namedtuple
+
+from django.db import connection
 
 from addressbase.models import get_uprn_hash_table, UprnToCouncil
 from uk_geo_utils.helpers import Postcode
+
+from pollingstations.models import PollingStation
+
+
+Station = namedtuple(
+    "Station",
+    [
+        "council",
+        "internal_council_id",
+        "postcode",
+        "address",
+        "location",
+        "polling_district_id",
+    ],
+)
 
 
 class CustomSet(metaclass=abc.ABCMeta):
@@ -46,12 +64,44 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
             )
 
 
-class StationSet(CustomSet, AssignPollingStationsMixin):
-    NotImplemented
-
-
 class DistrictSet(CustomSet, AssignPollingStationsMixin):
     NotImplemented
+
+
+class StationSet(CustomSet, AssignPollingStationsMixin):
+    def build_namedtuple(self, element):
+
+        # Point is mutable, so we must serialize it to store in a tuple
+        if "location" in element and element["location"]:
+            location = element["location"].ewkb  # use ewkb so it encodes srid
+        else:
+            location = None
+
+        return Station(
+            element["council"],
+            element["internal_council_id"],
+            element.get("postcode", ""),
+            element.get("address", ""),
+            location,
+            element.get("polling_district_id", ""),
+        )
+
+    def get_polling_station_lookup(self):
+        NotImplemented
+
+    def save(self):
+        stations_db = []
+        for station in self.elements:
+            record = PollingStation(
+                council=station.council,
+                internal_council_id=station.internal_council_id,
+                postcode=station.postcode,
+                address=station.address,
+                location=station.location,
+                polling_district_id=station.polling_district_id,
+            )
+            stations_db.append(record)
+        PollingStation.objects.bulk_create(stations_db)
 
 
 class AddressList(AssignPollingStationsMixin):
