@@ -87,7 +87,38 @@ class StationSet(CustomSet, AssignPollingStationsMixin):
         )
 
     def get_polling_station_lookup(self):
-        NotImplemented
+        """
+        for each address, build a lookup of polling_station_id -> set of uprns
+        This does the lookup in the db so you need to have called save() before
+        using this.
+        """
+        polling_station_lookup = {}
+        cursor = connection.cursor()
+        cursor.execute(
+            """
+                SELECT a.uprn, s.internal_council_id
+                FROM addressbase_address a
+                    JOIN addressbase_uprntocouncil u
+                    ON a.uprn = u.uprn
+                    JOIN pollingstations_pollingdistrict d
+                    ON ST_Contains(d.area, a.location)
+                    JOIN pollingstations_pollingstation s
+                    ON s.polling_district_id = d.internal_council_id
+                WHERE d.council_id=%s
+                AND u.lad=%s
+                AND s.council_id=%s
+            """,
+            [self.council_id, self.council_id, self.council_id],
+        )
+        for row in cursor.fetchall():
+            uprn = row[0]
+            polling_station_id = row[1]
+            if polling_station_id not in polling_station_lookup:
+                polling_station_lookup[polling_station_id] = {uprn}
+            else:
+                polling_station_lookup[polling_station_id].add(uprn)
+
+        return polling_station_lookup
 
     def save(self):
         stations_db = []
