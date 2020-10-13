@@ -1,6 +1,6 @@
 import os
 from django.contrib.gis.geos import Point
-from data_collection.management.commands import BaseCsvStationsCsvAddressesImporter
+from data_importers.management.commands import BaseCsvStationsCsvAddressesImporter
 
 """
 Define a stub implementation of address importer we can run tests against
@@ -14,12 +14,13 @@ class Command(BaseCsvStationsCsvAddressesImporter):
     addresses_name = "addresses.csv"
     stations_name = "stations.csv"
     base_folder_path = os.path.join(
-        os.path.dirname(__file__), "../fixtures/address_importer"
+        os.path.dirname(__file__), "../fixtures/csv_importer"
     )
 
     def address_record_to_dict(self, record):
         return {
             "council": self.council,
+            "uprn": record.uprn,
             "address": record.address,
             "postcode": record.postcode,
             "polling_station_id": record.polling_station,
