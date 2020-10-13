@@ -1,4 +1,4 @@
-from data_collection.base_importers import (
+from data_importers.base_importers import (
     BaseCsvStationsShpDistrictsImporter,
     BaseShpStationsShpDistrictsImporter,
     BaseCsvStationsJsonDistrictsImporter,
@@ -10,7 +10,7 @@ from data_collection.base_importers import (
     BaseApiCsvStationsShpZipDistrictsImporter,
     BaseScotlandSpatialHubImporter,
 )
-from data_collection.ems_importers import (
+from data_importers.ems_importers import (
     BaseXpressWebLookupCsvImporter,
     BaseXpressDemocracyClubCsvImporter,
     BaseXpressDCCsvInconsistentPostcodesImporter,
