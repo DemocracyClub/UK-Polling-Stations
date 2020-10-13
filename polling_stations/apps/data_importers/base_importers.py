@@ -9,37 +9,27 @@ import os
 import tempfile
 import urllib.request
 
-from argparse import ArgumentTypeError
 from django.apps import apps
+from django.contrib.gis import geos
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from django.contrib.gis import geos
 from django.contrib.gis.geos import Point, GEOSGeometry, GEOSException
 
+from addressbase.models import UprnToCouncil
 from councils.models import Council
-from data_collection.data_types import AddressList, DistrictSet, StationSet
-from data_collection.data_quality_report import (
+from data_importers.data_types import AddressList, DistrictSet, StationSet
+from data_importers.data_quality_report import (
     DataQualityReportBuilder,
     StationReport,
     DistrictReport,
-    ResidentialAddressReport,
+    AddressReport,
 )
-from data_collection.contexthelpers import Dwellings
-from data_collection.filehelpers import FileHelperFactory
-from data_collection.loghelper import LogHelper
-from data_collection.slugger import Slugger
-from data_collection.s3wrapper import S3Wrapper
-from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
-from data_collection.models import DataQuality
-from uk_geo_utils.helpers import Postcode
-from addressbase.helpers import create_address_records_for_council
-
-
-class PostProcessingMixin:
-    def clean_postcodes_overlapping_districts(self, batch_size, logger):
-        data = create_address_records_for_council(self.council, batch_size, logger)
-        self.postcodes_contained_by_district = data["no_attention_needed"]
-        self.postcodes_with_addresses_generated = data["addresses_created"]
+from data_importers.contexthelpers import Dwellings
+from data_importers.filehelpers import FileHelperFactory
+from data_importers.loghelper import LogHelper
+from data_importers.s3wrapper import S3Wrapper
+from pollingstations.models import PollingDistrict, PollingStation
+from data_importers.models import DataQuality
 
 
 class CsvMixin:
@@ -57,12 +47,12 @@ class ShpMixin:
         return {"shp_encoding": self.shp_encoding}
 
 
-class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
+class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
 
     """
     Turn off auto system check for all apps
-    We will maunally run system checks only for the
-    'data_collection' and 'pollingstations' apps
+    We will manually run system checks only for the
+    'data_importers' and 'pollingstations' apps
     """
 
     requires_system_checks = False
@@ -80,29 +70,6 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             self.stdout.write(message)
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "-n",
-            "--noclean",
-            help="<Optional> Do not run clean_postcodes_overlapping_districts()",
-            action="store_true",
-            required=False,
-            default=False,
-        )
-
-        def check_positive(value):
-            ivalue = int(value)
-            if ivalue < 1:
-                raise ArgumentTypeError("%s is an invalid positive int value" % value)
-            return ivalue
-
-        parser.add_argument(
-            "-b",
-            "--batch_size",
-            help="<Optional> Number of records to insert in each batch when importing addresses",
-            type=check_positive,
-            required=False,
-            default=3000,
-        )
 
         parser.add_argument(
             "--nochecks",
@@ -124,7 +91,7 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     def teardown(self, council):
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
-        ResidentialAddress.objects.filter(council=council).delete()
+        UprnToCouncil.objects.filter(lad=council.pk).update(polling_station_id="")
 
     def get_council(self, council_id):
         return Council.objects.get(identifiers__contains=[council_id])
@@ -157,21 +124,23 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     def report(self):
+        pass
         # build report
         report = DataQualityReportBuilder(
-            self.council_id, expecting_districts=self.imports_districts
+            self.council.pk, expecting_districts=self.imports_districts
         )
-        station_report = StationReport(self.council_id)
-        district_report = DistrictReport(self.council_id)
-        address_report = ResidentialAddressReport(self.council_id)
+        station_report = StationReport(self.council.pk)
+        district_report = DistrictReport(self.council.pk)
+        address_report = AddressReport(self.council.pk)
         report.build_report()
 
         # save a static copy in the DB that we can serve up on the website
-        record = DataQuality.objects.get_or_create(council_id=self.council_id)
+        record = DataQuality.objects.get_or_create(council_id=self.council.pk)
         record[0].report = report.generate_string_report()
         record[0].num_stations = station_report.get_stations_imported()
         record[0].num_districts = district_report.get_districts_imported()
-        record[0].num_addresses = address_report.get_addresses_imported()
+        record[0].num_addresses = address_report.get_addresses_with_station_id()
+
         record[0].save()
 
         # output to console
@@ -197,20 +166,19 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
     def handle(self, *args, **kwargs):
         """
         Manually run system checks for the
-        'data_collection' and 'pollingstations' apps
+        'data_importers' and 'pollingstations' apps
         Management commands can ignore checks that only apply to
         the apps supporting the website part of the project
         """
         self.check(
             [
-                apps.get_app_config("data_collection"),
+                apps.get_app_config("data_importers"),
                 apps.get_app_config("pollingstations"),
             ]
         )
 
         self.verbosity = kwargs.get("verbosity")
         self.logger = LogHelper(self.verbosity)
-        self.batch_size = kwargs.get("batch_size")
         self.validation_checks = not (kwargs.get("nochecks"))
         self.allow_station_point_from_postcode = kwargs.get("use_postcode_centroids")
 
@@ -232,11 +200,6 @@ class BaseImporter(BaseCommand, PostProcessingMixin, metaclass=abc.ABCMeta):
             self.post_import()
         except NotImplementedError:
             pass
-
-        # For areas with shape data, use AddressBase
-        # to clean up overlapping postcode
-        if not kwargs.get("noclean") and hasattr(self, "district_record_to_dict"):
-            self.clean_postcodes_overlapping_districts(self.batch_size, self.logger)
 
         # save and output data quality report
         if self.verbosity > 0:
@@ -272,7 +235,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
         if station_record["location"]:
             try:
                 council = Council.objects.get(area__covers=station_record["location"])
-                if council.council_id != self.council_id:
+                if self.council_id not in council.identifiers:
                     self.logger.log_message(
                         logging.WARNING,
                         "Polling station %s is in %s (%s) but target council is %s (%s) - manual check recommended\n",
@@ -548,18 +511,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         addresses_file = os.path.join(self.base_folder_path, self.addresses_name)
         return self.get_data(self.addresses_filetype, addresses_file)
 
-    def get_slug(self, address_info):
-        self.logger.log_message(logging.DEBUG, "Generating custom slug")
-        return Slugger.slugify(
-            "%s-%s-%s-%s"
-            % (
-                self.council.pk,
-                address_info["polling_station_id"],
-                address_info["address"],
-                address_info["postcode"],
-            )
-        )
-
     @abc.abstractmethod
     def address_record_to_dict(self, record):
         pass
@@ -610,13 +561,10 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         if "uprn" not in address_info:
             address_info["uprn"] = ""
         else:
+            # UPRNs less than 12 characters long may be left padded with zeros
+            # Making sure uprns in our addresslist are not left padded will help with matching them
+            # and catching duplicates.
             address_info["uprn"] = str(address_info["uprn"]).lstrip("0")
-
-        address_info["postcode"] = Postcode(address_info["postcode"]).without_space
-
-        # generate a unique slug so we can provide a consistent url
-        slug = self.get_slug(address_info)
-        address_info["slug"] = slug
 
         self.addresses.append(address_info)
 
@@ -638,14 +586,11 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
         self.import_polling_districts()
         self.import_polling_stations()
         self.districts.save()
+        self.districts.update_uprn_to_council_model()
         self.stations.save()
 
 
 class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter):
-
-    fuzzy_match = True
-    match_threshold = 100
-
     def pre_import(self):
         raise NotImplementedError
 
@@ -661,7 +606,8 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
         self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
         self.import_polling_stations()
-        self.addresses.save(self.batch_size, self.fuzzy_match, self.match_threshold)
+        self.addresses.check_records()
+        self.addresses.update_uprn_to_council_model()
         self.stations.save()
 
 
