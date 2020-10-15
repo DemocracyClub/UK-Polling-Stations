@@ -9,10 +9,8 @@ from collections import namedtuple
 from django.db import connection
 
 from addressbase.models import get_uprn_hash_table, UprnToCouncil
+from pollingstations.models import PollingDistrict, PollingStation
 from uk_geo_utils.helpers import Postcode
-
-from pollingstations.models import PollingStation
-
 
 Station = namedtuple(
     "Station",
@@ -23,6 +21,19 @@ Station = namedtuple(
         "address",
         "location",
         "polling_district_id",
+    ],
+)
+
+
+District = namedtuple(
+    "District",
+    [
+        "name",
+        "council",
+        "internal_council_id",
+        "extra_id",
+        "area",
+        "polling_station_id",
     ],
 )
 
@@ -57,15 +68,80 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
             polling_station_lookup = self.get_polling_station_lookup()
 
         uprns_in_council = UprnToCouncil.objects.filter(lad=self.council_id)
-
+        seen = set()
         for polling_station_id, uprns in polling_station_lookup.items():
             uprns_in_council.filter(uprn__in=uprns).update(
                 polling_station_id=polling_station_id
             )
+            if self.__class__.__name__ == "DistrictSet":
+                # We have to do this in case there are two districts which overlap
+                # and an address falls within that overlapping area.
+                duplicates = [u for u in uprns if u in seen]
+                uprns_in_council.filter(uprn__in=duplicates).update(
+                    polling_station_id=""
+                )
+                seen.update(uprns)
 
 
 class DistrictSet(CustomSet, AssignPollingStationsMixin):
-    NotImplemented
+    def build_namedtuple(self, element):
+
+        # MultiPolygon is mutable, so we must serialize it to store in a tuple
+        area = element["area"].ewkb  # use ewkb so it encodes srid
+
+        return District(
+            element.get("name", ""),
+            element["council"],
+            element["internal_council_id"],
+            element.get("extra_id", ""),
+            area,
+            element.get("polling_station_id", ""),
+        )
+
+    def save(self):
+        districts_db = []
+        for district in self.elements:
+            record = PollingDistrict(
+                name=district.name,
+                council=district.council,
+                internal_council_id=district.internal_council_id,
+                extra_id=district.extra_id,
+                area=district.area,
+                polling_station_id=district.polling_station_id,
+            )
+            districts_db.append(record)
+        PollingDistrict.objects.bulk_create(districts_db)
+
+    def get_polling_station_lookup(self):
+        """
+        for each address, build a lookup of polling_station_id -> set of uprns
+        This does the lookup in the db so you need to have called save() before
+        using this.
+        """
+        polling_station_lookup = {}
+        cursor = connection.cursor()
+        cursor.execute(
+            """ 
+                SELECT a.uprn, d.polling_station_id
+                FROM addressbase_address a
+                    JOIN addressbase_uprntocouncil u
+                    ON a.uprn = u.uprn
+                    JOIN pollingstations_pollingdistrict d
+                    ON ST_Contains(d.area, a.location)
+                WHERE d.council_id=%s
+                AND u.lad=%s
+            """,
+            [self.council_id, self.council_id],
+        )
+        for row in cursor.fetchall():
+            uprn = row[0]
+            polling_station_id = row[1]
+            if polling_station_id not in polling_station_lookup:
+                polling_station_lookup[polling_station_id] = {uprn}
+            else:
+                polling_station_lookup[polling_station_id].add(uprn)
+
+        return polling_station_lookup
 
 
 class StationSet(CustomSet, AssignPollingStationsMixin):
@@ -95,7 +171,7 @@ class StationSet(CustomSet, AssignPollingStationsMixin):
         polling_station_lookup = {}
         cursor = connection.cursor()
         cursor.execute(
-            """
+            """ 
                 SELECT a.uprn, s.internal_council_id
                 FROM addressbase_address a
                     JOIN addressbase_uprntocouncil u
