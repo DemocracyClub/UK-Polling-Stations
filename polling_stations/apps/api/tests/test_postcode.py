@@ -13,7 +13,7 @@ class StubGeocoder:
         self.centroid = centroid
         self.code = code
 
-    def get_code(self, codetype):
+    def get_code(self, codetype, uprn=None):
         if not self.code:
             raise ObjectDoesNotExist
         return self.code
@@ -158,22 +158,6 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(400, response.status_code)
-
-    def test_blacklist(self):
-        response = self.endpoint.retrieve(
-            self.request, "EE11EE", "json", geocoder=mock_geocode, log=False
-        )
-        self.assertEqual(200, response.status_code)
-        self.assertIsNone(response.data["council"])
-        self.assertFalse(response.data["polling_station_known"])
-
-    def test_blacklist_lowercase_postcode(self):
-        response = self.endpoint.retrieve(
-            self.request, "ee11ee", "json", geocoder=mock_geocode, log=False
-        )
-        self.assertEqual(200, response.status_code)
-        self.assertIsNone(response.data["council"])
-        self.assertFalse(response.data["polling_station_known"])
 
     def test_cors_header(self):
         resp = self.client.get(

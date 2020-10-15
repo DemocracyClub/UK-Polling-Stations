@@ -25,7 +25,6 @@
         "model": "councils.council",
         "pk": "X01000002"
     },
-
     {
         "fields": {
             "location": "",
@@ -62,7 +61,6 @@
         "model": "pollingstations.pollingstation",
         "pk": 3
     },
-
     {
         "fields": {
             "internal_council_id": "AA",
@@ -87,65 +85,68 @@
         "model": "pollingstations.pollingdistrict",
         "pk": 2
     },
-
+    {
+        "fields": {"uprn": "200", "lad": "X01000001", "polling_station_id": "2"},
+        "model": "addressbase.uprntocouncil",
+        "pk": "200"
+    },
+    {
+        "fields": {"uprn": "201", "lad": "X01000001", "polling_station_id": "2"},
+        "model": "addressbase.uprntocouncil",
+        "pk": "201"
+    },
+    {
+        "fields": {"uprn": "202", "lad": "X01000001", "polling_station_id": ""},
+        "model": "addressbase.uprntocouncil",
+        "pk": "202"
+    },
+    {
+        "fields": {"uprn": "203", "lad": "X01000001", "polling_station_id": "1"},
+        "model": "addressbase.uprntocouncil",
+        "pk": "203"
+    },
     {
         "fields": {
+            "uprn": "200",
             "address": "1 Foo Street, Bar Town",
-            "postcode": "AA11AA",
-            "polling_station_id": "2",
-            "council": "X01000001",
-            "slug": "1-foo-street-bar-town"
+            "postcode": "AA1 1AA",
+            "location": null,
+            "addressbase_postal": "D"
         },
-        "model": "pollingstations.residentialaddress",
-        "pk": 1
+        "model": "addressbase.address",
+        "pk": "200"
     },
     {
         "fields": {
+            "uprn": "201",
             "address": "2 Foo Street, Bar Town",
-            "postcode": "AA11AA",
-            "polling_station_id": "2",
-            "council": "X01000001",
-            "slug": "2-foo-street-bar-town"
+            "postcode": "AA1 1AA",
+            "location": null,
+            "addressbase_postal": "D"
         },
-        "model": "pollingstations.residentialaddress",
-        "pk": 2
+        "model": "addressbase.address",
+        "pk": "201"
     },
     {
         "fields": {
+            "uprn": "202",
             "address": "3 Foo Street, Bar Town",
-            "postcode": "AA11AA",
-            "polling_station_id": "",
-            "council": "X01000001",
-            "slug": "3-foo-street-bar-town"
+            "postcode": "AA1 1AA",
+            "location": null,
+            "addressbase_postal": "D"
         },
-        "model": "pollingstations.residentialaddress",
-        "pk": 3
+        "model": "addressbase.address",
+        "pk": "202"
     },
     {
         "fields": {
-            "postcode": "EE11EE",
-            "lad": "X01000001"
-        },
-        "pk": 1,
-        "model": "addressbase.blacklist"
-    },
-    {
-        "fields": {
-            "postcode": "EE11EE",
-            "lad": "W06000022"
-        },
-        "pk": 2,
-        "model": "addressbase.blacklist"
-    },
-    {
-        "fields": {
+            "uprn": "203",
             "address": "1 Bar Street, Bar Town",
-            "postcode": "FF11FF",
-            "polling_station_id": "1",
-            "council": "X01000001",
-            "slug": "1-bar-street-bar-town"
+            "postcode": "FF1 1FF",
+            "location": null,
+            "addressbase_postal": "D"
         },
-        "model": "pollingstations.residentialaddress",
-        "pk": 4
+        "model": "addressbase.address",
+        "pk": "203"
     }
 ]
