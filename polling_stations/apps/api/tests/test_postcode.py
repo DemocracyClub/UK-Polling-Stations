@@ -4,7 +4,7 @@ from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.views import APIView
 from api.postcode import PostcodeViewSet
-from data_finder.helpers import MultipleCouncilsException, PostcodeError
+from data_finder.helpers import PostcodeError
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
 
@@ -49,10 +49,6 @@ def mock_geocode(postcode):
     # no council
     if postcode == "DD11DD":
         return StubGeocoder(Point(-4.6142578125, 57.45913526799062, srid=4326), None)
-
-    # multiple councils
-    if postcode == "EE11EE":
-        raise MultipleCouncilsException()
 
     # geocoding errors
     if postcode == "FF11FF":

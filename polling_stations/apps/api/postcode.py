@@ -8,7 +8,6 @@ from data_finder.helpers import (
     get_council,
     geocode,
     PostcodeError,
-    MultipleCouncilsException,
     RoutingHelper,
 )
 from pollingstations.models import PollingStation, CustomFinder
@@ -76,9 +75,6 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
                 location = None
             else:
                 return Response({"detail": e.args[0]}, status=400)
-        except MultipleCouncilsException:
-            loc = None
-            location = None
 
         ret["postcode_location"] = location
 
