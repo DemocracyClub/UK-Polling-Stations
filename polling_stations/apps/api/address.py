@@ -4,14 +4,16 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.core.exceptions import ObjectDoesNotExist
+
+from addressbase.models import Address
+from councils.models import Council
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     EveryElectionWrapper,
     geocode_point_only,
-    PostcodeError,
     RoutingHelper,
 )
-from pollingstations.models import PollingStation, ResidentialAddress
+from pollingstations.models import PollingStation
 from uk_geo_utils.helpers import Postcode
 from .councils import CouncilDataSerializer
 from .fields import PointField
@@ -27,12 +29,15 @@ def get_bug_report_url(request, station_known):
     )
 
 
-class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ResidentialAddress
-        extra_kwargs = {"url": {"view_name": "address-detail", "lookup_field": "slug"}}
+class AddressSerializer(serializers.HyperlinkedModelSerializer):
+    council = serializers.CharField()
+    polling_station_id = serializers.CharField()
 
-        fields = ("url", "address", "postcode", "council", "polling_station_id", "slug")
+    class Meta:
+        model = Address
+        extra_kwargs = {"url": {"view_name": "address-detail", "lookup_field": "uprn"}}
+
+        fields = ("url", "address", "postcode", "council", "polling_station_id", "uprn")
 
 
 class BallotSerializer(serializers.Serializer):
@@ -58,40 +63,40 @@ class PostcodeResponseSerializer(serializers.Serializer):
     custom_finder = serializers.CharField(read_only=True)
     council = CouncilDataSerializer(read_only=True)
     polling_station = PollingStationGeoSerializer(read_only=True)
-    addresses = ResidentialAddressSerializer(read_only=True, many=True)
+    addresses = AddressSerializer(read_only=True, many=True)
     report_problem_url = serializers.CharField(read_only=True)
     metadata = serializers.DictField(read_only=True)
     ballots = BallotSerializer(read_only=True, many=True)
 
 
-class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
+class AddressViewSet(ViewSet, LogLookUpMixin):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ["get", "post", "head", "options"]
-    lookup_field = "slug"
+    lookup_field = "uprn"
     serializer_class = PostcodeResponseSerializer
 
     def get_object(self, **kwargs):
-        assert "slug" in kwargs
-        return ResidentialAddress.objects.get(slug=kwargs["slug"])
+        assert "uprn" in kwargs
+        return Address.objects.get_uprn(uprn=kwargs["uprn"])
 
     def get_ee_wrapper(self, address):
         rh = RoutingHelper(address.postcode)
-        if not rh.address_have_single_station:
+        if not rh.addresses_have_single_station:
             if address.location:
                 return EveryElectionWrapper(point=address.location)
         return EveryElectionWrapper(postcode=address.postcode)
 
     def retrieve(
-        self, request, slug=None, format=None, geocoder=geocode_point_only, log=True
+        self, request, uprn=None, format=None, geocoder=geocode_point_only, log=True
     ):
         ret = {}
         ret["custom_finder"] = None
 
-        # attempt to get address based on slug
+        # attempt to get address based on uprn
         # if we fail, return an error response
         try:
-            address = self.get_object(slug=slug)
+            address = self.get_object(uprn=uprn)
         except ObjectDoesNotExist:
             return Response({"detail": "Address not found"}, status=404)
 
@@ -99,26 +104,21 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         ret["addresses"] = [address]
 
         # council object
-        ret["council"] = address.council
+        ret["council"] = Council.objects.get(pk=address.council)
 
-        # attempt to attach point
-        # in this situation, failure to geocode is non-fatal
-        try:
-            l = geocoder(address.postcode)
-            location = l.centroid
-        except PostcodeError:
-            location = None
-        ret["postcode_location"] = location
+        # Addresbase object should have a location
+        ret["postcode_location"] = address.location
 
         ret["polling_station_known"] = False
         ret["polling_station"] = None
 
         ee = self.get_ee_wrapper(address)
         has_election = ee.has_election()
-        if has_election:
+        # An address might have an election but we might not know the polling station.
+        if has_election and address.polling_station_id:
             # get polling station if there is an election in this area
             polling_station = PollingStation.objects.get_polling_station_by_id(
-                address.polling_station_id, address.council_id
+                address.polling_station_id, address.council
             )
             if polling_station:
                 ret["polling_station"] = polling_station
@@ -134,7 +134,7 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         # create log entry
         log_data = {}
         log_data["we_know_where_you_should_vote"] = ret["polling_station_known"]
-        log_data["location"] = location
+        log_data["location"] = address.location
         log_data["council"] = address.council
         log_data["brand"] = "api"
         log_data["language"] = ""

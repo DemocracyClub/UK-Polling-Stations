@@ -39,7 +39,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         if routing_helper.route_type == "single_address":
             return PollingStation.objects.get_polling_station_by_id(
                 routing_helper.addresses[0].polling_station_id,
-                council_id=routing_helper.addresses[0].council_id,
+                council_id=routing_helper.addresses[0].council,
             )
         elif routing_helper.route_type == "postcode":
             return self.get_object(location=location, council=council)
@@ -62,7 +62,6 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
         postcode = Postcode(postcode)
         ret = {}
-
         rh = RoutingHelper(postcode)
 
         # attempt to attach point and gss_codes

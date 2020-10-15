@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework import routers
-from .address import ResidentialAddressViewSet
+from .address import AddressViewSet
 from .councils import CouncilViewSet
 from .pollingdistricts import PollingDistrictViewSet
 from .pollingstations import PollingStationViewSet
@@ -14,7 +14,7 @@ router.register(r"councils", CouncilViewSet)
 router.register(r"pollingstations", PollingStationViewSet)
 router.register(r"pollingdistricts", PollingDistrictViewSet)
 router.register(r"postcode", PostcodeViewSet, basename="postcode")
-router.register(r"address", ResidentialAddressViewSet, basename="address")
+router.register(r"address", AddressViewSet, basename="address")
 
 router.urls.append(url(r"^uploads/", UploadViewSet.as_view({"post": "create"})))
 router.urls.append(
