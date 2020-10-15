@@ -11,4 +11,5 @@ omit =
     */lib/python3.5/site-packages/*
     polling_stations/apps/data_collection/management/commands/import_*
     polling_stations/apps/data_collection/management/commands/misc_fixes.py
+    polling_stations/apps/data_importers/management/commands/import_*
     polling_stations/apps/data_finder/features/index.py
