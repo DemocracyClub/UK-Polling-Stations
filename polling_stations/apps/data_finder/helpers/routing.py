@@ -4,8 +4,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from uk_geo_utils.helpers import Postcode
 
-from addressbase.models import Blacklist
-from pollingstations.models import ResidentialAddress
+from addressbase.models import Address
 
 
 # use a postcode to decide which endpoint the user should be directed to
@@ -18,60 +17,53 @@ class RoutingHelper:
     }
 
     def __init__(self, postcode):
-        self.postcode = Postcode(postcode).without_space
-        self.get_addresses()
-        self.get_councils_from_blacklist()
+        self.postcode = Postcode(postcode)
+        self.addresses = self.get_addresses()
 
     def get_addresses(self):
-        self.addresses = ResidentialAddress.objects.filter(postcode=self.postcode)
-        return self.addresses
+        return Address.objects.uprns_for_postcode(self.postcode.with_space)
 
-    def get_councils_from_blacklist(self):
-        # if this postcode appears in the blacklist table
-        # return a list of any council ids attached to it
-        # if it is not in the table, we will return []
-        blacklist = Blacklist.objects.filter(postcode=self.postcode)
-        self.councils = [row.lad for row in blacklist]
-        return self.councils
+    @property
+    def polling_stations(self):
+        return {address.polling_station_id for address in self.addresses}
 
     @property
     def has_addresses(self):
         return bool(self.addresses)
 
     @property
-    def has_single_address(self):
-        return self.addresses.count == 1
+    def no_stations(self):
+        """Return true if there are addresses, but no polling station information"""
+        return self.polling_stations == {""}
 
     @property
-    def address_have_single_station(self):
-        stations = self.addresses.values("polling_station_id").distinct()
-        return len(stations) == 1
+    def addresses_have_single_station(self):
+        """Check if all addresses have the same polling station id and
+        that it is not an empty string"""
+        if len(self.polling_stations) == 1:
+            return bool(self.polling_stations.pop())
+        else:
+            return False
 
     @property
     def route_type(self):
-        if len(self.councils) > 1:
-            return "multiple_councils"
-        if self.has_addresses:
-            if self.address_have_single_station:
-                # all the addresses in this postcode
-                # map to one polling station
-                return "single_address"
-            else:
-                # addresses in this postcode map to
-                # multiple polling stations
-                return "multiple_addresses"
-        else:
-            # postcode is not in ResidentialAddress table
+        if not self.has_addresses:
+            # Postcode is not in addressbase
             return "postcode"
+        if self.no_stations:
+            # We don't have any station information for this address
+            return "postcode"
+        if self.addresses_have_single_station:
+            # all the addresses in this postcode
+            # map to one polling station
+            return "single_address"
+        else:
+            # addresses in this postcode map to
+            # multiple polling stations
+            return "multiple_addresses"
 
     @cached_property
     def view(self):
-        if self.route_type == "multiple_councils":
-            # this postcode contains UPRNS situated in >1 local auth
-            # maybe one day we will handle this better, but for now
-            # we just throw a special "we don't know" page
-            # ..even if we might possibly know
-            return "multiple_councils_view"
         if self.route_type == "single_address":
             # all the addresses in this postcode
             # map to one polling station
@@ -81,14 +73,15 @@ class RoutingHelper:
             # multiple polling stations
             return "address_select_view"
         if self.route_type == "postcode":
-            # postcode is not in ResidentialAddress table
+            # postcode is not in addressbase table or we
+            # don't have any polling station information for it.
             return "postcode_view"
 
     @cached_property
     def kwargs(self):
         if self.route_type == "single_address":
-            return {"address_slug": self.addresses[0].slug}
-        return {"postcode": self.postcode}
+            return {"uprn": self.addresses[0].uprn}
+        return {"postcode": self.postcode.without_space}
 
     def get_canonical_url(self, request, preserve_query=True):
         """Returns a canonical URL to route to, preserving any important query parameters"""
