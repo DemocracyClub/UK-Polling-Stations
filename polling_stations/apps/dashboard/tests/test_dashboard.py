@@ -22,26 +22,26 @@ class DashboardTestCase(TestCase):
 
 
 class CouncilDetailViewTestCase(DashboardTestCase):
-    fixtures = ["test_routing"]
+    fixtures = ["test_dashboard"]
 
     def test_get(self):
-        council = Council.objects.get(pk="X01000001")
+        council = Council.objects.get(pk="X01")
         response = self.client.get("/dashboard/council/{}/".format(council.pk))
         self.assertEqual(200, response.status_code)
         self.assertEqual(council, response.context["council"])
 
 
 class PostCodeViewTestCase(DashboardTestCase):
-    fixtures = ["test_routing"]
+    fixtures = ["test_dashboard"]
 
     def test_known_postcode(self):
         response = self.client.get("/dashboard/postcode/AA11AA/")
         self.assertEqual(200, response.status_code)
-        self.assertEqual(2, len(response.context["addresses"]))
+        self.assertEqual(1, len(response.context["addresses"]))
 
 
 class PostCodeGeoJSONTestCase(DashboardTestCase):
-    fixtures = ["test_routing"]
+    fixtures = ["test_dashboard"]
 
     def test_unknown_postcode(self):
         response = self.client.get("/dashboard/postcode/ZZ11ZZ.geojson")
@@ -53,13 +53,13 @@ class PostCodeGeoJSONTestCase(DashboardTestCase):
         )
 
     def test_known_postcode(self):
-        response = self.client.get("/dashboard/postcode/BB11BB.geojson")
+        response = self.client.get("/dashboard/postcode/DD11DD.geojson")
         self.assertEqual(200, response.status_code)
         self.assertEqual("application/geo+json", response["Content-Type"])
         data = json.loads(response.content)
         self.assertEqual("FeatureCollection", data["type"])
         self.assertEqual(
-            1,
+            2,
             len(
                 [
                     feature
@@ -81,7 +81,7 @@ class PostCodeGeoJSONTestCase(DashboardTestCase):
 
 
 class PollingStationDetailView(DashboardTestCase):
-    fixtures = ["test_routing"]
+    fixtures = ["test_dashboard"]
 
     def test_get(self):
         polling_station = PollingStation.objects.get(pk=1)

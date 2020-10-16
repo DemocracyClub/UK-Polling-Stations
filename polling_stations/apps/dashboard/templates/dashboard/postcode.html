@@ -84,19 +84,27 @@
         <table>
             <thead>
             <tr>
-                <th>Council address</th>
-                <th>AddressBase address</th>
+                <th>Address</th>
                 <th>UPRN</th>
                 <th>Polling place</th>
             </tr>
             </thead>
-            <tbody>{% for address in addresses %}
+            <tbody>
+                {% for address in addresses %}
                 <tr>
                     <td>{{ address.address }}</td>
-                    <td>{{ address.addressbase_address|default:"" }}</td>
                     <td>{{ address.uprn }}</td>
-                    <td><a href="{% url "dashboard:pollingstation_detail" address.council_id address.polling_station_id %}">{{ address.polling_station_id }}</a></td>
-                </tr>{% endfor %}
+                    <td><a href="{% url "dashboard:pollingstation_detail" address.council address.polling_station_id %}">{{ address.polling_station_id }}</a></td>
+                </tr>
+                {% endfor %}
+                {% for address in unassigned_addresses %}
+                <tr>
+                    <td>{{ address.address }}</td>
+                    <td>{{ address.uprn }}</td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+
             </tbody>
         </table>
     </section>
