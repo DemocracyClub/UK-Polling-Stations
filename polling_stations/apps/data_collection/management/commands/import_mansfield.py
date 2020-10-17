@@ -12,7 +12,11 @@ class Command(BaseHalaroseCsvImporter):
     allow_station_point_from_postcode = False
 
     def get_station_hash(self, record):
-        return "-".join([record.pollingstationnumber.strip(),])
+        return "-".join(
+            [
+                record.pollingstationnumber.strip(),
+            ]
+        )
 
     def address_record_to_dict(self, record):
         rec = super().address_record_to_dict(record)
@@ -41,7 +45,10 @@ class Command(BaseHalaroseCsvImporter):
                     float(record.origin_x), float(record.origin_y), srid=27700
                 )
                 self.check_station_point(
-                    {"location": station.location, "council_id": station.council_id,}
+                    {
+                        "location": station.location,
+                        "council_id": station.council_id,
+                    }
                 )
                 station.save()
             else:

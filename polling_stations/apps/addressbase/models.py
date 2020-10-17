@@ -25,7 +25,14 @@ class Address(AbstractAddress):
 
 class UprnToCouncil(models.Model):
     class Meta:
-        indexes = [models.Index(fields=["lad",], name="lookup_lad_idx")]
+        indexes = [
+            models.Index(
+                fields=[
+                    "lad",
+                ],
+                name="lookup_lad_idx",
+            )
+        ]
 
     objects = AbstractOnsudManager()
 

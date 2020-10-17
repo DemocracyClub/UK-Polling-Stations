@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name="upload", options={"get_latest_by": "timestamp"},
+            name="upload",
+            options={"get_latest_by": "timestamp"},
         ),
     ]
