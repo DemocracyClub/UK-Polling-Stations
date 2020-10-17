@@ -18,7 +18,10 @@ def status_to_emoji(status):
 
 class Upload(models.Model):
     gss = models.ForeignKey(
-        Council, null=True, db_constraint=False, on_delete=models.DO_NOTHING,
+        Council,
+        null=True,
+        db_constraint=False,
+        on_delete=models.DO_NOTHING,
     )
     timestamp = models.DateTimeField()
     github_issue = models.CharField(blank=True, max_length=100)

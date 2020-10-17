@@ -62,9 +62,10 @@ class BugReportAdmin(admin.ModelAdmin):
 
     def export(self, qs):
         response = HttpResponse(content_type="text/csv")
-        response["Content-Disposition"] = (
-            'attachment; filename="bug-reports-%s.csv"'
-            % (datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S"))
+        response[
+            "Content-Disposition"
+        ] = 'attachment; filename="bug-reports-%s.csv"' % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
         )
         fields = [f.name for f in BugReport._meta.get_fields()]
         writer = csv.writer(response)
