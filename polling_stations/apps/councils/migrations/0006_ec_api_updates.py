@@ -17,7 +17,9 @@ class Migration(migrations.Migration):
             new_name="electoral_services_address",
         ),
         migrations.RenameField(
-            model_name="council", old_name="email", new_name="electoral_services_email",
+            model_name="council",
+            old_name="email",
+            new_name="electoral_services_email",
         ),
         migrations.RenameField(
             model_name="council",
@@ -29,7 +31,10 @@ class Migration(migrations.Migration):
             old_name="website",
             new_name="electoral_services_website",
         ),
-        migrations.RemoveField(model_name="council", name="phone",),
+        migrations.RemoveField(
+            model_name="council",
+            name="phone",
+        ),
         migrations.AddField(
             model_name="council",
             name="electoral_services_phone_numbers",

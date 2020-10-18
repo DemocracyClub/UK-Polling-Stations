@@ -448,7 +448,9 @@ class DataQualityReportBuilder:
                 )
             else:
                 self.report.append(
-                    ANSI.ok(" - with station id               : %i" % (station_ids),)
+                    ANSI.ok(
+                        " - with station id               : %i" % (station_ids),
+                    )
                 )
 
             self.report.append(
@@ -512,7 +514,9 @@ class DataQualityReportBuilder:
                 )
             else:
                 self.report.append(
-                    ANSI.ok(" - with station id               : %i" % (station_ids),)
+                    ANSI.ok(
+                        " - with station id               : %i" % (station_ids),
+                    )
                 )
 
             self.report.append(

@@ -41,7 +41,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if (
             record.polling_place_id == "4186"
         ):  #  Hookwood Memorial Hall, Withey Meadows, Hookwood, RH6 0AZ
-            record = record._replace(polling_place_name="Hookwood Memorial Hall",)
+            record = record._replace(
+                polling_place_name="Hookwood Memorial Hall",
+            )
 
         return super().station_record_to_dict(record)
 

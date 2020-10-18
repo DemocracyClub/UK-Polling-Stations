@@ -18,7 +18,10 @@ class Command(BaseCsvStationsCsvAddressesImporter):
 
     def get_station_address(self, record):
         return format_polling_station_address(
-            [record.polling_station.strip(), record.polling_station_address.strip(),]
+            [
+                record.polling_station.strip(),
+                record.polling_station_address.strip(),
+            ]
         )
 
     def get_station_point(self, record):
@@ -49,7 +52,9 @@ class Command(BaseCsvStationsCsvAddressesImporter):
                 record.add9.strip(),
             ]
         ).strip()
-        postcode = Postcode(record.postcode.strip(),).without_space
+        postcode = Postcode(
+            record.postcode.strip(),
+        ).without_space
         uprn = record.uprn.lstrip("0").strip()
 
         if uprn == "10012752190":
