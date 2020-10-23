@@ -8,11 +8,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
 from addressbase.models import Address
-from data_collection.addresshelpers import (
+from data_importers.addresshelpers import (
     format_residential_address,
     format_polling_station_address,
 )
-from data_collection.base_importers import BaseCsvStationsCsvAddressesImporter
+from data_importers.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_finder.helpers import geocode_point_only, PostcodeError
 from uk_geo_utils.helpers import Postcode
 
