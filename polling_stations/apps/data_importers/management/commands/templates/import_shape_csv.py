@@ -5,7 +5,7 @@ import sys
 
 from django.contrib.gis.geos import Point
 
-from data_collection.management.commands import BaseCsvStationsShpDistrictsImporter
+from data_importers.management.commands import BaseCsvStationsShpDistrictsImporter
 
 
 class Command(BaseCsvStationsShpDistrictsImporter):

@@ -3,7 +3,7 @@ Import COUNCIL
 """
 import sys
 
-from data_collection.management.commands import BaseShpStationsShpDistrictsImporter
+from data_importers.management.commands import BaseShpStationsShpDistrictsImporter
 
 
 class Command(BaseShpStationsShpDistrictsImporter):
