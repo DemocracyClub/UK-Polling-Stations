@@ -4,7 +4,7 @@ import tempfile
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.gdal import DataSource
 from django.utils.encoding import force_bytes
-from data_collection.base_importers import BaseGenericApiImporter
+from data_importers.base_importers import BaseGenericApiImporter
 
 
 class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
