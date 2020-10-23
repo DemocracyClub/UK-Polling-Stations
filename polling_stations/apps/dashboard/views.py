@@ -165,7 +165,10 @@ class PostCodeGeoJSONView(View):
                             "type": "residentialaddress",
                             "address": address.address,
                             "color": station_colors[
-                                (address.council, address.polling_station_id,)
+                                (
+                                    address.council,
+                                    address.polling_station_id,
+                                )
                             ],
                             "uprn": address.uprn,
                             "url": reverse("address_view", args=(address.uprn,)),

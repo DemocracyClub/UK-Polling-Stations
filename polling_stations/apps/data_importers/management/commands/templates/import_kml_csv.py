@@ -5,7 +5,7 @@ import sys
 
 from django.contrib.gis.geos import Point, GEOSGeometry
 
-from data_collection.management.commands import BaseCsvStationsKmlDistrictsImporter
+from data_importers.management.commands import BaseCsvStationsKmlDistrictsImporter
 
 
 class Command(BaseCsvStationsKmlDistrictsImporter):
