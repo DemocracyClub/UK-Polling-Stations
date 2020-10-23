@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
 
 # from django.contrib.gis.geos import Point
-from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
+from pollingstations.models import PollingStation, PollingDistrict
 from councils.models import Council
-from addressbase.models import Address
+from addressbase.models import Address, UprnToCouncil
 
 
 def update_station_point(council_id, station_id, point):
@@ -31,6 +31,12 @@ class Command(BaseCommand):
             print(address.uprn)
             address.delete()
         print("..deleted")
+        print("removing bad uprns from uprn lookup")
+        uprns = UprnToCouncil.objects.filter(pk__in=bad_uprns)
+        for uprn in uprns:
+            print(uprn.pk)
+            uprn.delete()
+        print(".. deleted")
 
         deleteme = [
             # nothing yet
@@ -43,7 +49,7 @@ class Command(BaseCommand):
 
             PollingStation.objects.filter(council=council_id).delete()
             PollingDistrict.objects.filter(council=council_id).delete()
-            ResidentialAddress.objects.filter(council=council_id).delete()
+            UprnToCouncil.objects.filter(lad=council_id).update(polling_station_id="")
             print("..deleted")
 
         print("..done")
