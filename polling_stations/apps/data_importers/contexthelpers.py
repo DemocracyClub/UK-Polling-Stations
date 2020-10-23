@@ -3,6 +3,12 @@ from addressbase.models import Address
 
 
 def get_stat_from_nomis(dataset, measure, gss_code):
+    """
+    Obtains the number of 'dwellings' in a local authority from the:
+    'KS401EW - Dwellings, household spaces and accommodation type' dataset.
+    This is based on 2011 data, so is getting pretty out of date, but is
+    a good sanity check.
+    """
     url = "http://www.nomisweb.co.uk/api/v01/dataset/{dataset}.data.json?date=latest&geography={gss_code}&rural_urban=0&cell=0&measures={measures}".format(
         dataset=dataset, gss_code=gss_code, measures=measure
     )

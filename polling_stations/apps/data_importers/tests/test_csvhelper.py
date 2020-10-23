@@ -1,6 +1,6 @@
 import os
 from django.test import TestCase
-from data_collection.filehelpers import CsvHelper
+from data_importers.filehelpers import CsvHelper
 
 
 class CsvHelperTest(TestCase):

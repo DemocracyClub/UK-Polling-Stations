@@ -19,12 +19,11 @@ def recursive_find(path, pattern):
     return matches
 
 
-"""
-Helper class for reading data from CSV files
-"""
-
-
 class CsvHelper:
+    """
+    Helper class for reading data from CSV files
+    """
+
     def __init__(self, filepath, encoding="utf-8", delimiter=","):
         self.filepath = filepath
         self.encoding = encoding
@@ -68,12 +67,11 @@ class CsvHelper:
         return data
 
 
-"""
-Helper class for reading geographic data from ESRI SHP files
-"""
-
-
 class ShpHelper:
+    """
+    Helper class for reading geographic data from ESRI SHP files
+    """
+
     def __init__(self, filepath, zip=False, encoding="utf-8"):
         self.filepath = filepath
         self.zip = zip
@@ -99,12 +97,11 @@ class ShpHelper:
             return sf.shapeRecords()
 
 
-"""
-Helper class for reading geographic data from GeoJSON files
-"""
-
-
 class GeoJsonHelper:
+    """
+    Helper class for reading geographic data from GeoJSON files
+    """
+
     def __init__(self, filepath):
         self.filepath = filepath
 
@@ -113,12 +110,11 @@ class GeoJsonHelper:
         return geometries["features"]
 
 
-"""
-Helper class for reading data from JSON files
-"""
-
-
 class JsonHelper:
+    """
+    Helper class for reading data from JSON files
+    """
+
     def __init__(self, filepath):
         self.filepath = filepath
 
@@ -126,12 +122,11 @@ class JsonHelper:
         return json.load(open(self.filepath))
 
 
-"""
-Helper class for reading geographic data from KML/KMZ files
-"""
-
-
 class KmlHelper:
+    """
+    Helper class for reading geographic data from KML/KMZ files
+    """
+
     def __init__(self, filepath):
         self.filepath = filepath
 
@@ -156,15 +151,14 @@ class KmlHelper:
             return data
 
 
-"""
-Factory class for creating file helper objects.
-
-If we add helper classes for more file types,
-add an extra case to create()
-"""
-
-
 class FileHelperFactory:
+    """
+    Factory class for creating file helper objects.
+
+    If we add helper classes for more file types,
+    add an extra case to create()
+    """
+
     @staticmethod
     def create(filetype, filepath, options):
         if filetype == "shp":
