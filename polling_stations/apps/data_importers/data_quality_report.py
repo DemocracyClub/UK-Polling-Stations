@@ -2,7 +2,8 @@ import re
 
 from django.db import connection
 from django.db.models import Q
-from pollingstations.models import PollingStation, PollingDistrict, ResidentialAddress
+from pollingstations.models import PollingStation, PollingDistrict
+from addressbase.models import UprnToCouncil
 
 
 class ANSI:
@@ -242,45 +243,38 @@ class DistrictReport:
         return self.counts[">1"]
 
 
-# data quality stats for residential addresses
-class ResidentialAddressReport:
+# data quality stats for UPRNs assigned polling station ids
+class AddressReport:
     def __init__(self, council_id):
         self.council_id = council_id
 
-    def get_addresses_imported(self):
-        return ResidentialAddress.objects.filter(council_id=self.council_id).count()
+    def get_uprns_in_addressbase(self):
+        return UprnToCouncil.objects.filter(lad=self.council_id).count()
 
     def get_addresses_with_station_id(self):
         return (
-            ResidentialAddress.objects.filter(
-                council_id=self.council_id, polling_station_id__isnull=False
+            UprnToCouncil.objects.filter(
+                lad=self.council_id, polling_station_id__isnull=False
             )
             .exclude(polling_station_id="")
             .count()
         )
 
     def get_addresses_without_station_id(self):
-        return ResidentialAddress.objects.filter(
+        return UprnToCouncil.objects.filter(
             Q(polling_station_id__isnull=True) | Q(polling_station_id=""),
             council_id=self.council_id,
         ).count()
-
-    def get_uprns_imported(self):
-        return (
-            ResidentialAddress.objects.filter(council_id=self.council_id)
-            .exclude(uprn="")
-            .count()
-        )
 
     def get_addresses_with_valid_station_id_ref(self):
         cursor = connection.cursor()
         cursor.execute(
             """
-            SELECT COUNT(*) FROM pollingstations_residentialaddress
+            SELECT COUNT(*) FROM addressbase_uprntocouncil
             WHERE polling_station_id IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
                 WHERE council_id=%s)
-            AND council_id=%s
+            AND lad=%s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
@@ -293,11 +287,11 @@ class ResidentialAddressReport:
         cursor = connection.cursor()
         cursor.execute(
             """
-            SELECT COUNT(*) FROM pollingstations_residentialaddress
+            SELECT COUNT(*) FROM addressbase_uprntocouncil
             WHERE polling_station_id NOT IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
                 WHERE council_id=%s)
-            AND council_id=%s
+            AND lad=%s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
@@ -481,64 +475,46 @@ class DataQualityReportBuilder:
             )
             self.report.append("\n")
 
-    def build_residential_address_report(self):
-        address_report = ResidentialAddressReport(self.council_id)
-
-        addresses_imported = address_report.get_addresses_imported()
+    def build_address_report(self):
+        address_report = AddressReport(self.council_id)
+        uprns_in_council_area = address_report.get_uprns_in_addressbase()
+        addresses_imported = address_report.get_addresses_with_station_id()
+        station_ids = address_report.get_addresses_with_station_id()
         if addresses_imported > 0:
             self.report.append(
-                ANSI.bold(
-                    "ADDRESSES IMPORTED               : %i" % (addresses_imported)
-                )
+                ANSI.bold(f"UPRNS ASSIGNED STATION ID        : {station_ids}")
             )
-            self.report.append("----------------------------------")
-
-            station_ids = address_report.get_addresses_with_station_id()
-            if station_ids > 0:
-                self.report.append(
-                    ANSI.ok_bold(
-                        " - with station id               : %i" % (station_ids),
-                    )
-                )
-                self.report.append(
-                    ANSI.ok(
-                        "   - valid station id refs       : %i"
-                        % (address_report.get_addresses_with_valid_station_id_ref()),
-                    )
-                )
-                self.report.append(
-                    ANSI.warning(
-                        "   - invalid station id refs     : %i"
-                        % (address_report.get_addresses_with_invalid_station_id_ref()),
-                    )
-                )
-            else:
-                self.report.append(
-                    ANSI.ok(
-                        " - with station id               : %i" % (station_ids),
-                    )
-                )
 
             self.report.append(
-                ANSI.warning(
-                    " - without station id            : %i"
-                    % (address_report.get_addresses_without_station_id()),
+                ANSI.ok_bold(
+                    f" - As % of uprns in addressbase  : {round(100 * station_ids / uprns_in_council_area, 1)}%"
                 )
             )
+
             self.report.append("----------------------------------")
             self.report.append(
-                ANSI.warning(
-                    " - with UPRN                     : %i"
-                    % (address_report.get_uprns_imported()),
+                ANSI.ok(
+                    "   - valid station id refs       : %i"
+                    % (address_report.get_addresses_with_valid_station_id_ref()),
                 )
             )
-            self.report.append("\n")
+            self.report.append(
+                ANSI.warning(
+                    "   - invalid station id refs     : %i"
+                    % (address_report.get_addresses_with_invalid_station_id_ref()),
+                )
+            )
+        else:
+
+            self.report.append(ANSI.warning("NO POLLING STATIONS ASSIGNED...      "))
+        self.report.append("----------------------------------")
+        self.report.append("\n")
 
     def build_report(self):
         self.build_header()
         self.build_district_report()
         self.build_station_report()
-        self.build_residential_address_report()
+        self.build_address_report()
 
     def output_console_report(self):
         print("\n".join(self.report))
