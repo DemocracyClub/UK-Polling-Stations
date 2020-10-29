@@ -12,3 +12,5 @@ class BugReportForm(forms.ModelForm):
     )
     source_url = forms.CharField(widget=forms.HiddenInput(), required=False)
     source = forms.CharField(widget=forms.HiddenInput(), required=False)
+    required_css_class = "required"
+    error_css_class = "error"
