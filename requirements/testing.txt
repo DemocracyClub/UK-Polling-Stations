@@ -7,7 +7,7 @@ aloe_webdriver
 
 black
 
-vcrpy==1.11.0
+vcrpy==4.1.1
 
 pytest
 pytest-django
