@@ -5,6 +5,9 @@ from localflavor.gb.forms import GBPostcodeField
 
 class PostcodeLookupForm(forms.Form):
     postcode = GBPostcodeField(label="Enter your postcode")
+    required_css_class = "required"
+    error_css_class = "error"
+
 
 
 class AddressSelectForm(forms.Form):
