@@ -9,7 +9,6 @@ class PostcodeLookupForm(forms.Form):
     error_css_class = "error"
 
 
-
 class AddressSelectForm(forms.Form):
     address = forms.ChoiceField(
         choices=(),
