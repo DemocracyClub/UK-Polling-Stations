@@ -13,3 +13,5 @@ MIGRATION_MODULES = {app: None for app in INSTALLED_APPS if "django" not in app}
 
 MAPZEN_API_KEY = ""
 GOOGLE_API_KEYS = []
+
+SILENCED_SYSTEM_CHECKS = ["templates.E002"]
