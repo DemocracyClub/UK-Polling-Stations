@@ -7,7 +7,6 @@ import urllib.parse
 
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from councils.models import Council
@@ -113,29 +112,6 @@ class PollingStation(models.Model):
         if not self.address:
             return None
         return "\n".join([x[0].strip() for x in groupby(self.address.split(","))])
-
-
-class ResidentialAddress(models.Model):
-    address = models.TextField(blank=True, null=True)
-    postcode = models.CharField(blank=True, null=True, max_length=100, db_index=True)
-    council = models.ForeignKey(Council, null=True, on_delete=models.CASCADE)
-    polling_station_id = models.CharField(blank=True, max_length=100)
-    slug = models.SlugField(
-        blank=False, null=False, db_index=True, unique=True, max_length=255
-    )
-    uprn = models.CharField(max_length=100, blank=True)
-    location = models.PointField(null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        """
-        strip all whitespace from postcode and convert to uppercase
-        this will make it easier to query based on user-supplied postcode
-        """
-        self.postcode = Postcode(self.postcode).without_space
-        super().save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse("address_view", args=(self.slug,))
 
 
 class CustomFinderManager(models.Manager):
