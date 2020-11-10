@@ -4,7 +4,7 @@ from django.test import TestCase
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from data_importers.data_types import StationSet
-from pollingstations.models import PollingDistrict, PollingStation
+from pollingstations.models import PollingDistrict
 
 
 def get_uprns():
@@ -84,12 +84,11 @@ class StationSetTest(TestCase):
         for uprn in uprns:
             UprnToCouncil.objects.update_or_create(**uprn)
 
-        for station in polling_stations:
-            PollingStation.objects.update_or_create(**station)
-
         self.station_set = StationSet()
         for element in polling_stations:
             self.station_set.add(element)
+
+        self.station_set.save()
 
     def test_council_id(self):
         self.assertEqual(self.station_set.council_id, "AAA")

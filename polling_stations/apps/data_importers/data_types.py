@@ -38,12 +38,20 @@ District = namedtuple(
 )
 
 
+class RecordsNotSavedException(Exception):
+    """Records weren't saved to the db"""
+
+    pass
+
+
 class CustomSet(metaclass=abc.ABCMeta):
     def __init__(self):
         self.elements = set()
+        self.saved = False
 
     def add(self, element):
         self.elements.add(self.build_namedtuple(element))
+        self.saved = False
 
     @abc.abstractmethod
     def build_namedtuple(self, element):
@@ -111,13 +119,17 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
             )
             districts_db.append(record)
         PollingDistrict.objects.bulk_create(districts_db)
+        self.saved = True
 
     def get_polling_station_lookup(self):
         """
         for each address, build a lookup of polling_station_id -> set of uprns
-        This does the lookup in the db so you need to have called save() before
-        using this.
         """
+        if not self.saved:
+            raise RecordsNotSavedException(
+                "You must have called self.save() before self.get_polling_station_lookup()"
+            )
+
         polling_station_lookup = {}
         cursor = connection.cursor()
         cursor.execute(
@@ -165,9 +177,12 @@ class StationSet(CustomSet, AssignPollingStationsMixin):
     def get_polling_station_lookup(self):
         """
         for each address, build a lookup of polling_station_id -> set of uprns
-        This does the lookup in the db so you need to have called save() before
-        using this.
         """
+        if not self.saved:
+            raise RecordsNotSavedException(
+                "You must have called self.save() before self.get_polling_station_lookup()"
+            )
+
         polling_station_lookup = {}
         cursor = connection.cursor()
         cursor.execute(
@@ -209,6 +224,7 @@ class StationSet(CustomSet, AssignPollingStationsMixin):
             )
             stations_db.append(record)
         PollingStation.objects.bulk_create(stations_db)
+        self.saved = True
 
 
 class AddressList(AssignPollingStationsMixin):
