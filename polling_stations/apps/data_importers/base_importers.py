@@ -572,6 +572,70 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
     def pre_import(self):
         raise NotImplementedError
 
+    @property
+    def districts_have_station_ids(self):
+        """
+        Check that we've called self.import_polling_{districts,stations}
+        Don't raise an exception though, because we might still want to
+        import just stations or districts for debugging - i.e. to see them
+        in qgis/the db. However if we don't also have the other half we
+        won't be able to update the UprnToCouncil table.
+        """
+        if len(self.districts.elements) < 1:
+            self.logger.log_message(
+                logging.WARNING, "No district records added to self.districts"
+            )
+        if len(self.stations.elements) < 1:
+            self.logger.log_message(
+                logging.WARNING, "No station records added to self.stations"
+            )
+
+        district_ids = {
+            e.internal_council_id
+            for e in self.districts.elements
+            if e.internal_council_id != ""
+        }
+        station_ids_from_districts = {
+            e.polling_station_id
+            for e in self.districts.elements
+            if e.polling_station_id != ""
+        }
+        station_ids = {
+            e.internal_council_id
+            for e in self.stations.elements
+            if e.internal_council_id != ""
+        }
+        district_ids_from_stations = {
+            e.polling_district_id
+            for e in self.stations.elements
+            if e.polling_district_id != ""
+        }
+
+        def get_missing(set_a, set_b):
+            return set_a - set_b
+
+        if station_ids_from_districts:
+            self.write_info("Districts have station ids attached")
+            missing_ids = get_missing(station_ids_from_districts, station_ids)
+            for station_id in missing_ids:
+                self.logger.log_message(
+                    logging.WARNING,
+                    "Station id: %s found in districts but not in stations",
+                    variable=station_id,
+                )
+            return True
+
+        elif district_ids_from_stations:
+            self.write_info("Stations have district ids attached")
+            missing_ids = get_missing(district_ids_from_stations, district_ids)
+            for district_id in missing_ids:
+                self.logger.log_message(
+                    logging.WARNING,
+                    "Station id: %s found in districts but not in stations",
+                    variable=district_id,
+                )
+            return False
+
     def import_data(self):
 
         # Optional step for pre import tasks
@@ -585,8 +649,8 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
         self.import_polling_districts()
         self.import_polling_stations()
         self.districts.save()
-        self.districts.update_uprn_to_council_model()
         self.stations.save()
+        self.districts.update_uprn_to_council_model(self.districts_have_station_ids)
 
 
 class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter):
@@ -787,6 +851,7 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
 
         self.districts.save()
         self.stations.save()
+        self.districts.update_uprn_to_council_model(self.districts_have_station_ids)
 
     def get_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:

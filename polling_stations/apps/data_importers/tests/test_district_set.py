@@ -8,6 +8,12 @@ from pollingstations.models import PollingDistrict
 
 
 class DistrictSetTest(TestCase):
+    def setUp(self):
+        Council.objects.update_or_create(pk="AAA")
+
+    def tearDown(self):
+        PollingDistrict.objects.all().delete()
+
     def test_get_polling_station_lookup(self):
         """
         Not to scale...
@@ -20,8 +26,6 @@ class DistrictSetTest(TestCase):
          └ ┴ ─ ┴ ─ ┴ ─ ┴
            0   1   2   3
         """
-
-        Council.objects.update_or_create(pk="AAA")
 
         polling_districts = [
             {
@@ -52,9 +56,6 @@ class DistrictSetTest(TestCase):
             {"uprn": "2", "lad": "AAA"},
         ]
 
-        for district in polling_districts:
-            PollingDistrict.objects.update_or_create(**district)
-
         for address in addressbase:
             Address.objects.update_or_create(**address)
 
@@ -64,6 +65,7 @@ class DistrictSetTest(TestCase):
         district_set = DistrictSet()
         for element in polling_districts:
             district_set.add(element)
+        district_set.save()
 
         expected = {"01": {"1"}}
         self.assertEqual(district_set.get_polling_station_lookup(), expected)
@@ -85,8 +87,6 @@ class DistrictSetTest(TestCase):
         affect many addresses. We should assign the UPRN to both polling stations, which should then
         be caught by the update_uprn_to_council_model.
         """
-
-        Council.objects.update_or_create(pk="AAA")
 
         polling_districts = [
             {
@@ -126,9 +126,6 @@ class DistrictSetTest(TestCase):
             {"uprn": "3", "lad": "AAA"},
         ]
 
-        for district in polling_districts:
-            PollingDistrict.objects.update_or_create(**district)
-
         for address in addressbase:
             Address.objects.update_or_create(**address)
 
@@ -138,6 +135,7 @@ class DistrictSetTest(TestCase):
         district_set = DistrictSet()
         for element in polling_districts:
             district_set.add(element)
+        district_set.save()
 
         expected = {"01": {"1", "2"}, "02": {"2", "3"}}
 
@@ -169,8 +167,6 @@ class DistrictSetTest(TestCase):
         In the case of a point in polygon lookup this means the point has to fall inside
         the polygon, NOT on it's boundary.
         """
-
-        Council.objects.update_or_create(pk="AAA")
 
         polling_districts = [
             {
@@ -211,9 +207,6 @@ class DistrictSetTest(TestCase):
             {"uprn": "4", "lad": "AAA"},
         ]
 
-        for district in polling_districts:
-            PollingDistrict.objects.update_or_create(**district)
-
         for address in addressbase:
             Address.objects.update_or_create(**address)
 
@@ -223,13 +216,13 @@ class DistrictSetTest(TestCase):
         district_set = DistrictSet()
         for element in polling_districts:
             district_set.add(element)
+        district_set.save()
 
         expected = {"01": {"1", "2"}, "02": {"4"}}
 
         self.assertEqual(district_set.get_polling_station_lookup(), expected)
 
     def test_update_uprn_to_council_model(self):
-        Council.objects.update_or_create(pk="AAA")
         polling_districts = [
             {
                 "polling_station_id": "01",
@@ -258,15 +251,14 @@ class DistrictSetTest(TestCase):
         for uprn in uprns:
             UprnToCouncil.objects.update_or_create(**uprn)
 
-        for district in polling_districts:
-            PollingDistrict.objects.update_or_create(**district)
-
         # '2' fell in an overlapping section of the two districts.
         # '4' fell in no districts.
         polling_station_lookup = {"01": {"1", "2"}, "02": {"2", "3"}}
         district_set = DistrictSet()
         for element in polling_districts:
             district_set.add(element)
+        district_set.save()
+
         district_set.update_uprn_to_council_model(
             polling_station_lookup=polling_station_lookup
         )
