@@ -76,19 +76,10 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
             polling_station_lookup = self.get_polling_station_lookup()
 
         uprns_in_council = UprnToCouncil.objects.filter(lad=self.council_id)
-        seen = set()
         for polling_station_id, uprns in polling_station_lookup.items():
             uprns_in_council.filter(uprn__in=uprns).update(
                 polling_station_id=polling_station_id
             )
-            if self.__class__.__name__ == "DistrictSet":
-                # We have to do this in case there are two districts which overlap
-                # and an address falls within that overlapping area.
-                duplicates = [u for u in uprns if u in seen]
-                uprns_in_council.filter(uprn__in=duplicates).update(
-                    polling_station_id=""
-                )
-                seen.update(uprns)
 
 
 class DistrictSet(CustomSet, AssignPollingStationsMixin):
@@ -121,19 +112,9 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
         PollingDistrict.objects.bulk_create(districts_db)
         self.saved = True
 
-    def get_polling_station_lookup(self):
-        """
-        for each address, build a lookup of polling_station_id -> set of uprns
-        """
-        if not self.saved:
-            raise RecordsNotSavedException(
-                "You must have called self.save() before self.get_polling_station_lookup()"
-            )
-
-        polling_station_lookup = {}
-        cursor = connection.cursor()
+    def get_uprns_by_district(self, cursor):
         cursor.execute(
-            """ 
+            """
                 SELECT a.uprn, d.polling_station_id
                 FROM addressbase_address a
                     JOIN addressbase_uprntocouncil u
@@ -145,6 +126,44 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
             """,
             [self.council_id, self.council_id],
         )
+        return cursor
+
+    def get_uprns_by_district_join_stations(self, cursor):
+        cursor.execute(
+            """
+                SELECT a.uprn, s.internal_council_id
+                FROM addressbase_address a
+                    JOIN addressbase_uprntocouncil u
+                    ON a.uprn = u.uprn
+                    JOIN pollingstations_pollingdistrict d
+                    ON ST_Contains(d.area, a.location)
+                    JOIN pollingstations_pollingstation s
+                    ON s.polling_district_id = d.internal_council_id
+                WHERE d.council_id=%s
+                AND u.lad=%s
+                AND s.council_id=%s
+            """,
+            [self.council_id, self.council_id, self.council_id],
+        )
+        return cursor
+
+    def get_polling_station_lookup(self, districts_have_station_ids=True):
+        """
+        for each address, build a lookup of polling_station_id -> set of uprns
+        """
+        if not self.saved:
+            raise RecordsNotSavedException(
+                "You must have called self.save() before self.get_polling_station_lookup()"
+            )
+
+        polling_station_lookup = {}
+        cursor = connection.cursor()
+
+        if districts_have_station_ids:
+            cursor = self.get_uprns_by_district(cursor)
+        else:
+            cursor = self.get_uprns_by_district_join_stations(cursor)
+
         for row in cursor.fetchall():
             uprn = row[0]
             polling_station_id = row[1]
@@ -155,8 +174,29 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
 
         return polling_station_lookup
 
+    def update_uprn_to_council_model(
+        self, districts_have_station_ids=True, polling_station_lookup=None
+    ):
+        if not polling_station_lookup:
+            polling_station_lookup = self.get_polling_station_lookup(
+                districts_have_station_ids
+            )
 
-class StationSet(CustomSet, AssignPollingStationsMixin):
+        uprns_in_council = UprnToCouncil.objects.filter(lad=self.council_id)
+        seen = set()
+        for polling_station_id, uprns in polling_station_lookup.items():
+            uprns_in_council.filter(uprn__in=uprns).update(
+                polling_station_id=polling_station_id
+            )
+
+            # We have to do this in case there are two districts which overlap
+            # and an address falls within that overlapping area.
+            duplicates = [u for u in uprns if u in seen]
+            uprns_in_council.filter(uprn__in=duplicates).update(polling_station_id="")
+            seen.update(uprns)
+
+
+class StationSet(CustomSet):
     def build_namedtuple(self, element):
 
         # Point is mutable, so we must serialize it to store in a tuple
@@ -174,42 +214,13 @@ class StationSet(CustomSet, AssignPollingStationsMixin):
             element.get("polling_district_id", ""),
         )
 
-    def get_polling_station_lookup(self):
-        """
-        for each address, build a lookup of polling_station_id -> set of uprns
-        """
-        if not self.saved:
-            raise RecordsNotSavedException(
-                "You must have called self.save() before self.get_polling_station_lookup()"
-            )
-
-        polling_station_lookup = {}
-        cursor = connection.cursor()
-        cursor.execute(
-            """ 
-                SELECT a.uprn, s.internal_council_id
-                FROM addressbase_address a
-                    JOIN addressbase_uprntocouncil u
-                    ON a.uprn = u.uprn
-                    JOIN pollingstations_pollingdistrict d
-                    ON ST_Contains(d.area, a.location)
-                    JOIN pollingstations_pollingstation s
-                    ON s.polling_district_id = d.internal_council_id
-                WHERE d.council_id=%s
-                AND u.lad=%s
-                AND s.council_id=%s
-            """,
-            [self.council_id, self.council_id, self.council_id],
-        )
-        for row in cursor.fetchall():
-            uprn = row[0]
-            polling_station_id = row[1]
-            if polling_station_id not in polling_station_lookup:
-                polling_station_lookup[polling_station_id] = {uprn}
+    @property
+    def council_id(self):  # TODO Deal with old_to_new council_ids map
+        for e in self.elements:
+            if isinstance(e, dict):
+                return e["council"].council_id
             else:
-                polling_station_lookup[polling_station_id].add(uprn)
-
-        return polling_station_lookup
+                return e.council.council_id
 
     def save(self):
         stations_db = []

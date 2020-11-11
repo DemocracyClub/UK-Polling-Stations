@@ -573,6 +573,48 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
     def pre_import(self):
         raise NotImplementedError
 
+    @property
+    def districts_have_station_ids(self):
+
+        """
+        Check that we've called self.import_polling_{districts,stations}
+        Don't raise an exception though, because we might still want to
+        import just stations or districts for debugging - i.e. to see them
+        in qgis/the db. However if we don't also have the other half we
+        won't be able to update the UprnToCouncil table.
+        """
+        if len(self.districts.elements) < 1:
+            self.logger.log_message(
+                logging.WARNING, "No district records added to self.districts"
+            )
+        if len(self.stations.elements) < 1:
+            self.logger.log_message(
+                logging.WARNING, "No station records added to self.stations"
+            )
+
+        district_ids = {e.internal_council_id for e in self.districts.elements}
+        district_stations_ids = {e.polling_station_id for e in self.districts.elements}
+        station_ids = {e.internal_council_id for e in self.stations.elements}
+        station_districts_ids = {e.polling_district_id for e in self.stations.elements}
+
+        def check_for_mismatches(set_a, set_b):
+            if set_a - set_b:
+                self.logger.log_message(
+                    logging.WARNING,
+                    "No elements in %s have ids for following elements in %s: \n%s",
+                    variable=(set_b, set_a, set_a - set_b),
+                )
+
+        if district_stations_ids:
+            self.logger.log_message(logging.INFO, "Districts have station ids")
+            check_for_mismatches(district_stations_ids, station_ids)
+            return True
+
+        elif station_districts_ids:
+            self.logger.log_message(logging.INFO, "Stations have district ids")
+            check_for_mismatches(station_districts_ids, district_ids)
+            return False
+
     def import_data(self):
 
         # Optional step for pre import tasks
@@ -586,8 +628,8 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
         self.import_polling_districts()
         self.import_polling_stations()
         self.districts.save()
-        self.districts.update_uprn_to_council_model()
         self.stations.save()
+        self.districts.update_uprn_to_council_model(self.districts_have_station_ids)
 
 
 class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter):

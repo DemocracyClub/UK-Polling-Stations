@@ -1,10 +1,10 @@
-from django.contrib.gis.geos import Polygon, Point, MultiPolygon
+from django.contrib.gis.geos import Point
 from django.test import TestCase
 
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from data_importers.data_types import StationSet
-from pollingstations.models import PollingDistrict
+from pollingstations.models import PollingStation
 
 
 def get_uprns():
@@ -37,21 +37,6 @@ def get_addressbase():
     ]
 
 
-def get_districts():
-    return [
-        {
-            "area": MultiPolygon(Polygon(((0, 0), (0, 3), (1, 3), (1, 0), (0, 0)))),
-            "council": Council.objects.get(pk="AAA"),
-            "internal_council_id": "A",
-        },
-        {
-            "area": MultiPolygon(Polygon(((1, 1), (1, 4), (2, 4), (2, 1), (1, 1)))),
-            "council": Council.objects.get(pk="AAA"),
-            "internal_council_id": "B",
-        },
-    ]
-
-
 def get_stations():
     return [
         {
@@ -72,11 +57,8 @@ class StationSetTest(TestCase):
         Council.objects.update_or_create(pk="AAA")
 
         uprns = get_uprns()
-        polling_districts = get_districts()
         addressbase = get_addressbase()
         polling_stations = get_stations()
-        for district in polling_districts:
-            PollingDistrict.objects.update_or_create(**district)
 
         for address in addressbase:
             Address.objects.update_or_create(**address)
@@ -88,12 +70,16 @@ class StationSetTest(TestCase):
         for element in polling_stations:
             self.station_set.add(element)
 
-        self.station_set.save()
-
     def test_council_id(self):
         self.assertEqual(self.station_set.council_id, "AAA")
 
-    def test_get_polling_station_lookup(self):
-        expected = {"PS-1": {"1", "2"}, "PS-2": {"4"}}
-
-        self.assertEqual(self.station_set.get_polling_station_lookup(), expected)
+    def test_save(self):
+        self.station_set.save()
+        self.assertEqual(
+            set(
+                PollingStation.objects.all().values_list(
+                    "internal_council_id", "council", "polling_district_id"
+                )
+            ),
+            {("PS-2", "AAA", "B"), ("PS-1", "AAA", "A")},
+        )
