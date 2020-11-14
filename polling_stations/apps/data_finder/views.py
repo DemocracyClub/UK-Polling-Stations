@@ -204,9 +204,13 @@ class PostcodeView(BasePollingStationView):
         return get_council(geocode_result)
 
     def get_station(self):
-        return PollingStation.objects.get_polling_station(
-            self.council.council_id, location=self.location
-        )
+        """
+        We're in PostcodeView so either postcode isn't in addressbase,
+        or if postcode is in addressbase we don't have station info for
+        any of the uprns.
+        Either way let's be explicit that station is None
+        """
+        return None
 
 
 class AddressView(BasePollingStationView):
