@@ -31,3 +31,26 @@ class PostCodeViewTestCase(TestCase):
         )
         self.assertEqual(302, response.status_code)
         self.assertEqual(response["Location"], "/address_select/DD11DD/?utm_source=foo")
+
+
+class PostCodeViewNoStationTestCase(TestCase):
+    fixtures = [
+        "test_single_address_blank_polling_station.json",
+        "test_postcode_not_in_addressbase.json",
+    ]
+
+    def test_polling_station_is_blank(self):
+        response = self.client.get(
+            "/postcode/BB11BB/?utm_source=foo&something=other", follow=False
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, "Contact Foo Council")
+        self.assertContains(response, "tel:01314 159265")
+
+    def test_post_code_not_in_addressbase(self):
+        response = self.client.get(
+            "/postcode/HJ67KL/?utm_source=foo&something=other", follow=False
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, "Contact Foo Council")
+        self.assertContains(response, "tel:01314 159265")
