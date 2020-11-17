@@ -1,6 +1,5 @@
 from django.apps import apps
 from django.core.management.base import BaseCommand
-from django.db import connection
 
 from addressbase.models import UprnToCouncil
 from councils.models import Council
@@ -81,12 +80,10 @@ class Command(BaseCommand):
             PollingDistrict.objects.all().delete()
             PollingStation.objects.all().delete()
 
-            # use raw SQL so we don't have to loop over every single record one-by-one
-            cursor = connection.cursor()
-            cursor.execute(
-                "UPDATE addressbase_uprntocouncil SET polling_station_id='' WHERE polling_station_id != ''"
+            UprnToCouncil.objects.exclude(polling_station_id="").update(
+                polling_station_id=""
             )
-            cursor.execute(
-                "UPDATE data_importers_dataquality SET report='', num_addresses=0, num_districts=0, num_stations=0"
+            DataQuality.objects.all().update(
+                report="", num_addresses=0, num_districts=0, num_stations=0
             )
             print("..done")
