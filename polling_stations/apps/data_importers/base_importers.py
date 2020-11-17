@@ -124,7 +124,6 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     def report(self):
-        pass
         # build report
         report = DataQualityReportBuilder(
             self.council.pk, expecting_districts=self.imports_districts
