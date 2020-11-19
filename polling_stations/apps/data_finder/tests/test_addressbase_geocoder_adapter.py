@@ -3,7 +3,6 @@ from django.test import TestCase
 from data_finder.helpers.geocoders import AddressBaseGeocoderAdapter
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
-    CodesNotFoundException,
     MultipleCodesException,
 )
 
@@ -26,22 +25,6 @@ class AddressBaseGeocoderAdapterTest(TestCase):
         with self.assertRaises(ObjectDoesNotExist):
             addressbase.geocode_point_only()
 
-    def test_no_codes(self):
-        """
-        We find records for the given postcode in the AddressBase table
-        but there are no corresponding records in the uprn to council lookup
-        for the UPRNs we found
-
-        Exception of class CodesNotFoundException should be thrown
-        """
-        addressbase = AddressBaseGeocoderAdapter("AA11AA")
-        with self.assertRaises(CodesNotFoundException):
-            result = addressbase.geocode()
-
-        # point only geocode should return a result anyway
-        result = addressbase.geocode_point_only()
-        self.assertIsInstance(result, AddressBaseGeocoder)
-
     def test_multiple_councils(self):
         """
         We find records for the given postcode in the AddressBase table
@@ -55,17 +38,15 @@ class AddressBaseGeocoderAdapterTest(TestCase):
 
         # geocode postcode intersecting with more than one council should raise
         with self.assertRaises(MultipleCodesException):
-            addressbase.geocode()
+            addressbase.geocode().get_code("lad")
 
         # geocode method should work with a uprn
-        result_00000008 = addressbase.geocode(uprn="00000008")
-        result_00000009 = addressbase.geocode(uprn="00000009")
-        self.assertIsInstance(result_00000008, AddressBaseGeocoder)
-        self.assertIsInstance(result_00000009, AddressBaseGeocoder)
-
-        # point only geocode should return a result anyway
-        result_point_only = addressbase.geocode_point_only()
-        self.assertIsInstance(result_point_only, AddressBaseGeocoder)
+        self.assertEqual(
+            "B01000001", addressbase.geocode().get_code("lad", uprn="00000008")
+        )
+        self.assertEqual(
+            "B01000002", addressbase.geocode().get_code("lad", uprn="00000009")
+        )
 
     def test_valid(self):
         """

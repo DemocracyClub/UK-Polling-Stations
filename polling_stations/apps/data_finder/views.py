@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, TemplateView
 from django.utils import translation
+from uk_geo_utils.geocoders import MultipleCodesException
 
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
@@ -170,9 +171,13 @@ class BasePollingStationView(
             if loc is None:
                 context["custom"] = None
             else:
-                context["custom"] = CustomFinder.objects.get_custom_finder(
-                    loc, self.postcode.without_space
-                )
+                try:
+                    context["custom"] = CustomFinder.objects.get_custom_finder(
+                        loc, self.postcode.without_space
+                    )
+
+                except MultipleCodesException:
+                    context["custom"] = None
 
         self.log_postcode(self.postcode, context, type(self).__name__)
 

@@ -60,13 +60,8 @@ class OnspdGeocoderAdapter(BaseGeocoder):
 
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
-    def geocode(self, uprn=None):
-        geocoder = AddressBaseGeocoder(self.postcode)
-        geocoder.centroid
-        # We should always have a uprn so only attempt to get council code with this information.
-        geocoder.get_code("lad", uprn=uprn)
-
-        return geocoder
+    def geocode(self):
+        return AddressBaseGeocoder(self.postcode)
 
     def geocode_point_only(self):
         return AddressBaseGeocoder(self.postcode)
@@ -100,7 +95,7 @@ def geocode(postcode, uprn=None):
     for geocoder in geocoders:
         try:
             if isinstance(geocoder, AddressBaseGeocoderAdapter):
-                gc = geocoder.geocode(uprn=uprn)
+                gc = geocoder.geocode()
             else:
                 gc = geocoder.geocode()
             # Declare a new subclass of whatever type `gc` is on-the-fly
