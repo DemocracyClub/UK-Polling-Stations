@@ -19,6 +19,7 @@ from data_finder.views import (
     AddressView,
     AddressFormView,
     WeDontKnowView,
+    MultipleCouncilsView,
 )
 from pollingstations.views import status_check
 
@@ -35,6 +36,11 @@ core_patterns = [
         r"^we_dont_know/(?P<postcode>.+)/$",
         WeDontKnowView.as_view(),
         name="we_dont_know",
+    ),
+    url(
+        r"^multiple_councils/(?P<postcode>.+)/$",
+        MultipleCouncilsView.as_view(),
+        name="multiple_councils_view",
     ),
     url(
         r"^address_select/(?P<postcode>.+)/$",

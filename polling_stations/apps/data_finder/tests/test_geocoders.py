@@ -7,7 +7,6 @@ from data_finder.helpers.geocoders import (
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     OnspdGeocoder,
-    MultipleCodesException,
 )
 
 
@@ -46,20 +45,6 @@ class GeocodeTest(TestCase):
     @mock.patch(
         "data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode
     )
-    def test_no_codes(self):
-        """
-        We find records for the given postcode in the AddressBase table
-        but there are no corresponding records in the uprn to council lookup
-        for the UPRNs we found
-
-        We should fall back to centroid-based geocoding using ONSPD
-        """
-        result = geocode("AA11AA")
-        self.assertIsInstance(result, OnspdGeocoder)
-
-    @mock.patch(
-        "data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode
-    )
     def test_multiple_councils(self):
         """
         We find records for the given postcode in the AddressBase table
@@ -69,8 +54,7 @@ class GeocodeTest(TestCase):
 
         Exception of class MultipleCodesException should be thrown
         """
-        with self.assertRaises(MultipleCodesException):
-            geocode("CC11CC")
+        self.assertIsInstance(geocode("CC11CC"), AddressBaseGeocoder)
 
     @mock.patch(
         "data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode

@@ -24,6 +24,14 @@ class RoutingHelper:
         return Address.objects.uprns_for_postcode(self.postcode.with_space)
 
     @property
+    def councils(self):
+        council_ids = {a.council for a in self.addresses}
+        if len(council_ids) == 1:
+            return None
+        else:
+            return list(council_ids)
+
+    @property
     def polling_stations(self):
         return {address.polling_station_id for address in self.addresses}
 
@@ -50,6 +58,9 @@ class RoutingHelper:
         if not self.has_addresses:
             # Postcode is not in addressbase
             return "postcode"
+        if self.councils and self.no_stations:
+            # multiple councils and no stations for any address in postcode
+            return "multiple_addresses"
         if self.no_stations:
             # We don't have any station information for this address
             return "postcode"

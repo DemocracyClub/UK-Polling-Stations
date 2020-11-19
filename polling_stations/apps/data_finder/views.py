@@ -186,13 +186,13 @@ class BasePollingStationView(
 
 class PostcodeView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
-
         if "postcode" in request.GET:
             self.kwargs["postcode"] = kwargs["postcode"] = request.GET["postcode"]
         if "postcode" not in kwargs or kwargs["postcode"] == "":
             return HttpResponseRedirect(reverse("home"))
 
         rh = RoutingHelper(self.kwargs["postcode"])
+
         if rh.view != "postcode_view":
             return HttpResponseRedirect(rh.get_canonical_url(request))
         else:
@@ -291,11 +291,49 @@ class ExamplePostcodeView(BasePollingStationView):
 class WeDontKnowView(PostcodeView):
     def get(self, request, *args, **kwargs):
         self.postcode = Postcode(kwargs["postcode"])
+        rh = RoutingHelper(self.postcode)
+        if rh.councils:
+            return HttpResponseRedirect(
+                reverse(
+                    "multiple_councils_view",
+                    kwargs={"postcode": self.postcode.without_space},
+                )
+            )
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
 
     def get_station(self):
         return None
+
+
+class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
+    """
+    Because sometimes "we don't know" just isn't uncertain enough
+    User should end up here when directed to WeDontKnow but when we
+    there are uprns in multiple councils for their postcode.
+    """
+
+    template_name = "multiple_councils.html"
+
+    def get(self, request, *args, **kwargs):
+        self.postcode = Postcode(self.kwargs["postcode"])
+        rh = RoutingHelper(self.postcode)
+        self.council_ids = rh.councils
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **context):
+        context["councils"] = Council.objects.filter(council_id__in=self.council_ids)
+        context["territory"] = self.postcode.territory
+
+        log_data = {
+            "we_know_where_you_should_vote": False,
+            "location": None,
+            "council": None,
+        }
+        self.log_postcode(self.postcode, log_data, type(self).__name__)
+
+        return context
 
 
 class AddressFormView(FormView):
