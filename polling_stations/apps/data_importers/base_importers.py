@@ -829,6 +829,7 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
 
         self.districts.save()
         self.stations.save()
+        self.districts.update_uprn_to_council_model(self.districts_have_station_ids)
 
     def get_districts(self):
         with tempfile.NamedTemporaryFile() as tmp:
