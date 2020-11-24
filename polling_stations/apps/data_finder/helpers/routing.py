@@ -49,7 +49,7 @@ class RoutingHelper:
         """Check if all addresses have the same polling station id and
         that it is not an empty string"""
         if len(self.polling_stations) == 1:
-            return bool(self.polling_stations.pop())
+            return bool(min(self.polling_stations))
         else:
             return False
 
