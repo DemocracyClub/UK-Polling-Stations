@@ -37,7 +37,7 @@ class AddressTest(TestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertTrue(response.data["polling_station_known"])
         self.assertEqual(
             "Foo Street Primary School, Bar Town",
@@ -57,7 +57,7 @@ class AddressTest(TestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual(1, len(response.data["addresses"]))
@@ -73,7 +73,7 @@ class AddressTest(TestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual(1, len(response.data["addresses"]))

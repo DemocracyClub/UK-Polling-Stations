@@ -19,21 +19,21 @@ class PollingStationsTest(TestCase):
     def test_unknown_council(self):
         # council that matches no stations should return empty array []
         factory = APIRequestFactory()
-        request = factory.get("/foo?council_id=X01000003", format="json")
+        request = factory.get("/foo?council_id=GHI", format="json")
         response = PollingStationViewSet.as_view({"get": "list"})(request)
         self.assertEqual(200, response.status_code)
         self.assertEqual(0, len(response.data))
 
     def test_valid_council(self):
         factory = APIRequestFactory()
-        request = factory.get("/foo?council_id=X01000001", format="json")
+        request = factory.get("/foo?council_id=ABC", format="json")
         response = PollingStationViewSet.as_view({"get": "list"})(request)
         self.assertEqual(200, response.status_code)
         self.assertEqual(2, len(response.data))
 
     def test_valid_council_geo(self):
         factory = APIRequestFactory()
-        request = factory.get("/foo?council_id=X01000001", format="json")
+        request = factory.get("/foo?council_id=ABC", format="json")
         response = PollingStationViewSet.as_view({"get": "geo"})(request)
         self.assertEqual(200, response.status_code)
         # geo response should be a FeatureCollection, not an array
@@ -43,14 +43,14 @@ class PollingStationsTest(TestCase):
     def test_station_geo(self):
         factory = APIRequestFactory()
 
-        # set up geojson request for station X01000001.1
+        # set up geojson request for station ABC.1
         geo_request = factory.get(
-            "/foo?council_id=X01000001&station_id=1", format="json"
+            "/foo?council_id=ABC&station_id=1", format="json"
         )
         geo_response = PollingStationViewSet.as_view({"get": "geo"})(geo_request)
 
-        # set up json request for station X01000001.1
-        request = factory.get("/foo?council_id=X01000001&station_id=1", format="json")
+        # set up json request for station ABC.1
+        request = factory.get("/foo?council_id=ABC&station_id=1", format="json")
         response = PollingStationViewSet.as_view({"get": "list"})(request)
 
         # geo_response should contain geometry
@@ -67,7 +67,7 @@ class PollingStationsTest(TestCase):
 
     def test_null_point(self):
         factory = APIRequestFactory()
-        request = factory.get("/foo?council_id=X01000001&station_id=2", format="json")
+        request = factory.get("/foo?council_id=ABC&station_id=2", format="json")
         response = PollingStationViewSet.as_view({"get": "geo"})(request)
 
         self.assertEqual(None, response.data["geometry"])

@@ -13,7 +13,7 @@ class StubGeocoder:
         self.centroid = centroid
         self.code = code
 
-    def get_code(self, codetype, uprn=None):
+    def get_code(self, codetype):
         if not self.code:
             raise ObjectDoesNotExist
         return self.code
@@ -75,7 +75,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual(3, len(response.data["addresses"]))
@@ -89,7 +89,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000002", response.data["council"]["council_id"])
+        self.assertEqual("DEF", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
@@ -103,7 +103,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertTrue(response.data["polling_station_known"])
         self.assertEqual(
             "St Foo's Church Hall, Bar Town",
@@ -121,7 +121,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
@@ -135,7 +135,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertEqual(
             "St Foo's Church Hall, Bar Town",
             response.data["polling_station"]["properties"]["address"],
