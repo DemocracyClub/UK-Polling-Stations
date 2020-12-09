@@ -48,7 +48,7 @@ class Command(BaseCommand):
             COPY (SELECT
                     a.uprn as uprn,
                     c.council_id as lad,
-                    NULL as polling_station_id
+                    '' as polling_station_id
                 FROM
                     addressbase_address a 
                     JOIN 
@@ -58,7 +58,7 @@ class Command(BaseCommand):
                     ) 
                 TO STDOUT
                 
-            with CSV HEADER DELIMITER ',';
+            with DELIMITER ',';
             """,
             self.dst,
         )
