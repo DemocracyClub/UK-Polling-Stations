@@ -1,0 +1,49 @@
+[
+    {
+        "fields": {
+            "uprn": "101",
+            "lad": "X01",
+            "polling_station_id": ""
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "101"
+    },
+
+    {
+        "fields": {
+            "uprn": "101",
+            "address": "2 Foo St, Bar Town",
+            "postcode": "BB1 1BB",
+            "location": null,
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "101"
+    },
+
+    {
+        "fields": {
+            "council": "X01",
+            "internal_council_id": "2B",
+            "postcode": "BB11BD",
+            "address": "",
+            "location": null
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "name": "Foo Council",
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": ["01314 159265"],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": null,
+            "identifiers": ["X01"]
+        },
+        "model": "councils.council",
+        "pk": "X01"
+    }
+]
