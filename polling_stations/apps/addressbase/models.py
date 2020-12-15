@@ -47,24 +47,13 @@ class UprnToCouncil(models.Model):
 
 
 def get_uprn_hash_table(council_id):
-    # get all the UPRNs in target local auth
-    # NB we miss ~25 over the country because lighthouses etc.
-    cursor = connection.cursor()
-    cursor.execute(
-        """
-        SELECT
-            a.uprn,
-            a.address,
-            REPLACE(a.postcode, ' ', ''),
-            a.location
-        FROM addressbase_address a
-        JOIN addressbase_uprntocouncil u ON a.uprn=u.uprn
-        WHERE u.lad=%s;
-        """,
-        [council_id],
-    )
+    addresses = Address.objects.filter(uprntocouncil__lad=council_id)
     # return result a hash table keyed by UPRN
     return {
-        row[0]: {"address": row[1], "postcode": row[2], "location": row[3]}
-        for row in cursor.fetchall()
+        a.uprn: {
+            "address": a.address,
+            "postcode": a.postcode.replace(" ", ""),
+            "location": a.location,
+        }
+        for a in addresses
     }
