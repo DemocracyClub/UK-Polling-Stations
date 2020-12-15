@@ -7,15 +7,6 @@ from data_importers.data_types import StationSet
 from pollingstations.models import PollingStation
 
 
-def get_uprns():
-    return [
-        {"uprn": "1", "lad": "AAA"},
-        {"uprn": "2", "lad": "AAA"},
-        {"uprn": "3", "lad": "AAA"},
-        {"uprn": "4", "lad": "AAA"},
-    ]
-
-
 def get_addressbase():
     return [
         {
@@ -56,7 +47,7 @@ class StationSetTest(TestCase):
     def setUp(self):
         Council.objects.update_or_create(pk="AAA")
 
-        uprns = get_uprns()
+        uprns = ["1", "2", "3", "4"]
         addressbase = get_addressbase()
         polling_stations = get_stations()
 
@@ -64,7 +55,7 @@ class StationSetTest(TestCase):
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(**uprn)
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
 
         self.station_set = StationSet()
         for element in polling_stations:

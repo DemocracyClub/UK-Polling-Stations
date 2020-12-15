@@ -98,13 +98,14 @@ class XpressDemocracyClubImportTests(TestCase):
 class XpressWebLookupImportTests(TestCase):
 
     opts = {"nochecks": True, "verbosity": 0}
-    uprns = ["1", "2", "3", "4", "5", "6"]
+    uprns = ["1", "3", "4", "6"]
     addressbase = [
         {
             "address": "Balham High Road",
             "postcode": "SW17 7BE",
             "uprn": "1",
         },
+        # uprn "2" in csv but not in addressbase
         {
             "address": "200 Balham High Road",
             "postcode": "SW17 7BE",
@@ -115,6 +116,7 @@ class XpressWebLookupImportTests(TestCase):
             "postcode": "SW12 9BE",
             "uprn": "4",
         },
+        # uprn "5" in csv but not in addressbase
         {
             "address": "189A Balham High Road",
             "postcode": "SW12 9BE",

@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from addressbase.models import UprnToCouncil
+from addressbase.models import UprnToCouncil, Address
 from councils.models import Council
 from data_importers.data_types import AssignPollingStationsMixin
 
@@ -24,6 +24,8 @@ class AssignPollingStationsMixinTest(TestCase):
 
     def test_update_uprn_to_council_model(self):
         Council.objects.update_or_create(pk="Foo")
+        Address.objects.update_or_create(pk="001")
+        Address.objects.update_or_create(pk="002")
         UprnToCouncil.objects.update_or_create(pk="001", lad="Foo")
         UprnToCouncil.objects.update_or_create(pk="002", lad="Foo")
         mock_collection = MockCollection()

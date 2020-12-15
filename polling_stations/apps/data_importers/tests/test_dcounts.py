@@ -9,7 +9,7 @@ from pollingstations.models import PollingStation
 class DemocracyCountsImportTests(TestCase):
 
     opts = {"nochecks": True, "verbosity": 0}
-    uprns = ["1", "2", "3", "4", "5", "6"]
+    uprns = ["1", "2", "3", "5", "6"]
     addressbase = [
         {
             "address": "158 Wood Street,Barnet",
@@ -26,6 +26,7 @@ class DemocracyCountsImportTests(TestCase):
             "postcode": "EN5 4DB",
             "uprn": "3",
         },
+        # uprn '4' in districts.csv but wasn't in addressbase
         {
             "address": "Flat 1,196 Ballards Lane,Finchley,London",
             "postcode": "N3 2NA",

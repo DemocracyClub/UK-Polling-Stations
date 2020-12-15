@@ -52,15 +52,15 @@ class DistrictSetTest(TestCase):
             },
         ]
         uprns = [
-            {"uprn": "1", "lad": "AAA"},
-            {"uprn": "2", "lad": "AAA"},
+            "1",
+            "2",
         ]
 
         for address in addressbase:
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(**uprn)
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
 
         district_set = DistrictSet()
         for element in polling_districts:
@@ -120,18 +120,13 @@ class DistrictSetTest(TestCase):
                 "location": Point(1.75, 3),
             },
         ]
-        uprns = [
-            {"uprn": "1", "lad": "AAA"},
-            {"uprn": "2", "lad": "AAA"},
-            {"uprn": "3", "lad": "AAA"},
-        ]
+        uprns = ["1", "2", "3"]
 
         for address in addressbase:
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(**uprn)
-
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
         district_set = DistrictSet()
         for element in polling_districts:
             district_set.add(element)
@@ -200,18 +195,13 @@ class DistrictSetTest(TestCase):
                 "location": Point(1.75, 3),
             },
         ]
-        uprns = [
-            {"uprn": "1", "lad": "AAA"},
-            {"uprn": "2", "lad": "AAA"},
-            {"uprn": "3", "lad": "AAA"},
-            {"uprn": "4", "lad": "AAA"},
-        ]
+        uprns = ["1", "2", "3", "4"]
 
         for address in addressbase:
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(**uprn)
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
 
         district_set = DistrictSet()
         for element in polling_districts:
@@ -242,14 +232,11 @@ class DistrictSetTest(TestCase):
             },
         ]
 
-        uprns = [
-            {"uprn": "1", "lad": "AAA"},
-            {"uprn": "2", "lad": "AAA"},
-            {"uprn": "3", "lad": "AAA"},
-            {"uprn": "4", "lad": "AAA"},
-        ]
+        uprns = ["1", "2", "3", "4"]
+
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(**uprn)
+            Address.objects.update_or_create(pk=uprn)
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
 
         # '2' fell in an overlapping section of the two districts.
         # '4' fell in no districts.

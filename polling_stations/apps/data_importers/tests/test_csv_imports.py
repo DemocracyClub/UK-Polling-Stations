@@ -139,9 +139,10 @@ class ImporterTest(TestCase):
 
     def test_address_import(self):
         test_params = {
-            "uprns": ["1", "2", "3", "4", "5", "6", "7"],
+            "uprns": ["1", "3", "4", "5", "6", "7"],
             "addressbase": [
                 {"address": "Haringey Park, London", "uprn": "1", "postcode": "N8 9JG"},
+                # uprn '2' in addresses.csv but wasn't in addressbase so not in uprntocouncil either
                 {
                     "address": "36 Abbots Park, London",
                     "uprn": "3",

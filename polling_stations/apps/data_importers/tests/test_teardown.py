@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from addressbase.models import UprnToCouncil
+from addressbase.models import UprnToCouncil, Address
 from councils.models import Council
 from pollingstations.models import PollingStation, PollingDistrict
 from data_importers.models import DataQuality
@@ -58,7 +58,12 @@ class TestTeardown(TestCase):
             PollingDistrict.objects.update_or_create(**pd)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(**uprn)
+            Address.objects.update_or_create(pk=uprn["uprn"])
+            UprnToCouncil.objects.update_or_create(
+                pk=uprn["uprn"],
+                lad=uprn["lad"],
+                polling_station_id=uprn["polling_station_id"],
+            )
 
     def test_teardown_one_council(self):
         self.assertEqual(Council.objects.count(), 2)
