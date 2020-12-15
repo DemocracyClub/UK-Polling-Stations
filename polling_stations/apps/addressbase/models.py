@@ -1,26 +1,35 @@
 from django.contrib.gis.db import models
-from django.db import connection
 from uk_geo_utils.models import (
     AbstractAddress,
-    AbstractAddressManager,
     AbstractOnsudManager,
 )
 
-
-class AddressManager(AbstractAddressManager):
-    def postcodes_for_district(self, district):
-        qs = self.filter(location__within=district.area)
-        qs = qs.values_list("postcode", flat=True).distinct()
-        return list(qs)
-
-    def points_for_postcode(self, postcode):
-        qs = self.filter(postcode=postcode)
-        qs = qs.values_list("location", flat=True)
-        return list(qs)
+from councils.models import Council
+from pollingstations.models import PollingStation
 
 
 class Address(AbstractAddress):
-    objects = AddressManager()
+    @property
+    def council_id(self):
+        return self.uprntocouncil.lad
+
+    @property
+    def council(self):
+        return Council.objects.defer("area").get(council_id=self.council_id)
+
+    @property
+    def polling_station_id(self):
+        return self.uprntocouncil.polling_station_id
+
+    @property
+    def polling_station(self):
+        station = PollingStation.objects.filter(
+            internal_council_id=self.polling_station_id, council_id=self.council_id
+        )
+        if len(station) == 1:
+            return station[0]
+        else:
+            return None
 
 
 class UprnToCouncil(models.Model):
