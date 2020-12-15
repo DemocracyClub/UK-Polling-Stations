@@ -3,9 +3,11 @@ from django.test import TestCase, override_settings
 from data_finder.helpers.geocoders import (
     geocode,
     geocode_point_only,
-    MultipleCouncilsException,
 )
-from uk_geo_utils.geocoders import AddressBaseGeocoder, OnspdGeocoder
+from uk_geo_utils.geocoders import (
+    AddressBaseGeocoder,
+    OnspdGeocoder,
+)
 
 
 class StubOnspdGeocoder(OnspdGeocoder):
@@ -20,7 +22,7 @@ just where it came from
 """
 
 
-def mock_geocode(self):
+def mock_geocode(self, uprn=None):
     return StubOnspdGeocoder("foo")
 
 
@@ -43,20 +45,6 @@ class GeocodeTest(TestCase):
     @mock.patch(
         "data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode
     )
-    def test_no_codes(self):
-        """
-        We find records for the given postcode in the AddressBase table
-        but there are no corresponding records in the uprn to council lookup
-        for the UPRNs we found
-
-        We should fall back to centroid-based geocoding using ONSPD
-        """
-        result = geocode("AA11AA")
-        self.assertIsInstance(result, OnspdGeocoder)
-
-    @mock.patch(
-        "data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode
-    )
     def test_multiple_councils(self):
         """
         We find records for the given postcode in the AddressBase table
@@ -64,10 +52,9 @@ class GeocodeTest(TestCase):
         for the UPRNs we found
         The UPRNs described by this postcode map to more than one local authority
 
-        Exception of class MultipleCouncilsException should be thrown
+        Exception of class MultipleCodesException should be thrown
         """
-        with self.assertRaises(MultipleCouncilsException):
-            geocode("CC11CC")
+        self.assertIsInstance(geocode("CC11CC"), AddressBaseGeocoder)
 
     @mock.patch(
         "data_finder.helpers.geocoders.OnspdGeocoderAdapter.geocode", mock_geocode
