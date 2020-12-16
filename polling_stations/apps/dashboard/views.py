@@ -8,11 +8,12 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView, DetailView, ListView
+from uk_geo_utils.helpers import Postcode
 
 from addressbase.models import Address
 from councils.models import Council
 from data_finder.helpers import RoutingHelper
-from pollingstations.models import ResidentialAddress, PollingStation
+from pollingstations.models import PollingStation
 
 
 class IndexView(ListView):
@@ -32,10 +33,11 @@ class CouncilDetailView(DetailView):
                 """
                 SELECT postcode, st_maxdistance(multipoint, multipoint)::int AS maxdistance
                 FROM (
-                    SELECT postcode, st_transform(st_collect(location), 27700) AS multipoint
-                    FROM pollingstations_residentialaddress
-                    WHERE council_id = %s
-                    GROUP BY postcode
+                    SELECT aa.postcode, st_transform(st_collect(aa.location), 27700) AS multipoint
+                    FROM addressbase_address aa  JOIN addressbase_uprntocouncil uc
+                    ON aa.uprn = uc.uprn
+                    WHERE uc.lad = %s
+                    GROUP BY aa.postcode
                 ) AS subquery
                 WHERE multipoint IS NOT NULL
                 ORDER BY maxdistance DESC
@@ -50,24 +52,26 @@ class CouncilDetailView(DetailView):
                 """
                 SELECT
                     ps.internal_council_id,
-                    ra.uprn,
-                    ra.address,
-                    ra.slug,
-                    ra.postcode,
+                    aa.uprn,
+                    aa.address,
+                    aa.postcode,
                     st_distance(
                         st_transform(ps.location, 27700),
-                        st_transform(COALESCE(ra.location, onspd.location), 27700)
+                        st_transform(COALESCE(aa.location, onspd.location), 27700)
                     )::int AS distance
-                FROM pollingstations_pollingstation ps,
-                    pollingstations_residentialaddress ra
-                LEFT OUTER JOIN uk_geo_utils_onspd onspd ON
-                    onspd.pcds=LEFT(ra.postcode, LENGTH(ra.postcode)-3) || ' ' || RIGHT(ra.postcode, 3)
-                WHERE ps.council_id=ra.council_id
-                    AND ra.polling_station_id=ps.internal_council_id
-                    AND ra.council_id=%s
+                FROM 
+                    pollingstations_pollingstation ps,
+                    addressbase_address aa JOIN
+                    addressbase_uprntocouncil uc ON
+                        aa.uprn = uc.uprn
+                    LEFT OUTER JOIN uk_geo_utils_onspd onspd ON
+                        onspd.pcds=LEFT(aa.postcode, LENGTH(aa.postcode)-3) || ' ' || RIGHT(aa.postcode, 3)
+                WHERE ps.council_id=uc.lad
+                    AND uc.polling_station_id=ps.internal_council_id
+                    AND uc.lad=%s
                     AND ps.location IS NOT NULL
-                    AND COALESCE(ra.location, onspd.location) IS NOT NULL
-                ORDER BY distance DESC, ra.uprn, ra.slug
+                    AND COALESCE(aa.location, onspd.location) IS NOT NULL
+                ORDER BY distance DESC, aa.uprn
                 LIMIT 100;
             """,
                 (object.pk,),
@@ -83,19 +87,14 @@ class PostCodeView(TemplateView):
     template_name = "dashboard/postcode.html"
 
     def get_context_data(self, postcode, **kwargs):
-        residential_addresses = ResidentialAddress.objects.filter(postcode=postcode)
-        addresses = dict(
-            Address.objects.filter(
-                uprn__in=residential_addresses.values_list("uprn", flat=True)
-            ).values_list("uprn", "address")
-        )
-        for residential_address in residential_addresses:
-            residential_address.addressbase_address = addresses.get(
-                residential_address.uprn
-            )
+        postcode = Postcode(postcode)
+        addresses = Address.objects.filter(postcode=postcode.with_space)
+        unassigned_addresses = [a for a in addresses if not a.polling_station_id]
+        addresses = [a for a in addresses if a.polling_station_id]
         return {
             "postcode": postcode,
-            "addresses": residential_addresses,
+            "addresses": addresses,
+            "unassigned_addresses": unassigned_addresses,
             "routing_helper": RoutingHelper(postcode),
         }
 
@@ -104,9 +103,10 @@ class PostCodeGeoJSONView(View):
     station_colors = ["purple", "red", "blue", "yellow", "green", "pink", "orange"]
 
     def get(self, request, postcode):
-        residential_addresses = ResidentialAddress.objects.filter(postcode=postcode)
+        postcode = Postcode(postcode)
+        addresses = Address.objects.filter(postcode=postcode.with_space)
         station_ids = sorted(
-            set(residential_addresses.values_list("council_id", "polling_station_id"))
+            set((a.council_id, a.polling_station_id) for a in addresses)
         )
         if station_ids:
             stations = PollingStation.objects.filter(
@@ -153,25 +153,23 @@ class PostCodeGeoJSONView(View):
                 + [
                     {
                         "type": "Feature",
-                        "geometry": json.loads(residential_address.location.geojson)
-                        if residential_address.location
+                        "geometry": json.loads(address.location.geojson)
+                        if address.location
                         else None,
                         "properties": {
                             "type": "residentialaddress",
-                            "address": residential_address.address,
+                            "address": address.address,
                             "color": station_colors[
                                 (
-                                    residential_address.council_id,
-                                    residential_address.polling_station_id,
+                                    address.council_id,
+                                    address.polling_station_id,
                                 )
                             ],
-                            "uprn": residential_address.uprn,
-                            "url": reverse(
-                                "address_view", args=(residential_address.slug,)
-                            ),
+                            "uprn": address.uprn,
+                            "url": reverse("address_view", args=(address.uprn,)),
                         },
                     }
-                    for residential_address in residential_addresses
+                    for address in addresses
                 ],
             },
             content_type="application/geo+json",
