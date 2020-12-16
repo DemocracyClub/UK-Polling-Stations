@@ -4,6 +4,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.core.exceptions import ObjectDoesNotExist
+
+from addressbase.models import Address
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     EveryElectionWrapper,
@@ -11,7 +13,7 @@ from data_finder.helpers import (
     PostcodeError,
     RoutingHelper,
 )
-from pollingstations.models import PollingStation, ResidentialAddress
+from pollingstations.models import PollingStation
 from uk_geo_utils.helpers import Postcode
 from .councils import CouncilDataSerializer
 from .fields import PointField
@@ -27,12 +29,15 @@ def get_bug_report_url(request, station_known):
     )
 
 
-class ResidentialAddressSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ResidentialAddress
-        extra_kwargs = {"url": {"view_name": "address-detail", "lookup_field": "slug"}}
+class AddressSerializer(serializers.HyperlinkedModelSerializer):
+    council = serializers.CharField()
+    polling_station_id = serializers.CharField()
 
-        fields = ("url", "address", "postcode", "council", "polling_station_id", "slug")
+    class Meta:
+        model = Address
+        extra_kwargs = {"url": {"view_name": "address-detail", "lookup_field": "uprn"}}
+
+        fields = ("url", "address", "postcode", "council", "polling_station_id", "uprn")
 
 
 class BallotSerializer(serializers.Serializer):
@@ -58,22 +63,22 @@ class PostcodeResponseSerializer(serializers.Serializer):
     custom_finder = serializers.CharField(read_only=True)
     council = CouncilDataSerializer(read_only=True)
     polling_station = PollingStationGeoSerializer(read_only=True)
-    addresses = ResidentialAddressSerializer(read_only=True, many=True)
+    addresses = AddressSerializer(read_only=True, many=True)
     report_problem_url = serializers.CharField(read_only=True)
     metadata = serializers.DictField(read_only=True)
     ballots = BallotSerializer(read_only=True, many=True)
 
 
-class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
+class AddressViewSet(ViewSet, LogLookUpMixin):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ["get", "post", "head", "options"]
-    lookup_field = "slug"
+    lookup_field = "uprn"
     serializer_class = PostcodeResponseSerializer
 
     def get_object(self, **kwargs):
-        assert "slug" in kwargs
-        return ResidentialAddress.objects.get(slug=kwargs["slug"])
+        assert "uprn" in kwargs
+        return Address.objects.get(uprn=kwargs["uprn"])
 
     def get_ee_wrapper(self, address):
         rh = RoutingHelper(address.postcode)
@@ -83,15 +88,15 @@ class ResidentialAddressViewSet(ViewSet, LogLookUpMixin):
         return EveryElectionWrapper(postcode=address.postcode)
 
     def retrieve(
-        self, request, slug=None, format=None, geocoder=geocode_point_only, log=True
+        self, request, uprn=None, format=None, geocoder=geocode_point_only, log=True
     ):
         ret = {}
         ret["custom_finder"] = None
 
-        # attempt to get address based on slug
+        # attempt to get address based on uprn
         # if we fail, return an error response
         try:
-            address = self.get_object(slug=slug)
+            address = self.get_object(uprn=uprn)
         except ObjectDoesNotExist:
             return Response({"detail": "Address not found"}, status=404)
 

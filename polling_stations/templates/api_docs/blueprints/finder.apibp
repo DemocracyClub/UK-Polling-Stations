@@ -97,18 +97,18 @@ the following conditions can be observed in the response body:
         + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
             + (object)
-                + url: `https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/` (string) - Call this URL to get data for this registered address
+                + url: `https://wheredoivote.co.uk/api/beta/address/60017557/` (string) - Call this URL to get data for this registered address
                 + `polling_station_id`: `527` (string)
                 + postcode: `BN436HW` (string)
-                + address: `5 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
-                + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
+                + address: `4 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
+                + uprn: `60017559` (string)
                 + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
             + (object)
-                + url: `https://wheredoivote.co.uk/api/beta/address/e07000223-524-2-truleigh-way-shoreham-by-sea-west-sussex-bn436hw?` (string) - Call this URL to get data for this registered address
+                + url: `https://wheredoivote.co.uk/api/beta/address/60017557?` (string) - Call this URL to get data for this registered address
                 + `polling_station_id`: `524` (string)
                 + postcode: `BN436HW` (string)
                 + address: `2 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
-                + slug: `e07000223-524-2-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
+                + uprn: `60017557` (string)
                 + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
         + `polling_station` (object, nullable) - A GeoJSON polling station feature
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
@@ -159,7 +159,7 @@ the following conditions can be observed in the response body:
         { "detail": "Could not geocode from any source" }
 
 
-## Address search [/address/{slug}.json]
+## Address search [/address/{uprn}.json]
 
 In the event that the addresses described by a postcode are not all assigned to the same polling station,
 an array of address objects will be returned, each of which corresponds to a call to the `/address` endpoint.
@@ -171,7 +171,7 @@ the following conditions can be observed in the response body:
 * `addresses` is an array of length one containing a single address object describing the requested address
 
 + Parameters
-    + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (required, string) - A unique slug describing a residential address
+    + uprn: `60017559` (required, string) - A unique uprn describing a residential address
 
 ### Address search [GET]
 
@@ -190,11 +190,11 @@ the following conditions can be observed in the response body:
         + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
             + (object)
-                + url: `https://wheredoivote.co.uk/api/beta/address/e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw/` (string) - Call this URL to get data for this registered address
+                + url: `https://wheredoivote.co.uk/api/beta/address/60017559/` (string) - Call this URL to get data for this registered address
                 + `polling_station_id`: `527` (string)
                 + postcode: `BN436HW` (string)
-                + address: `5 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
-                + slug: `e07000223-527-5-truleigh-way-shoreham-by-sea-west-sussex-bn436hw` (string)
+                + address: `4 Truleigh Way, Shoreham-by-Sea, West Sussex` (string)
+                + uprn: `60017559` (string)
                 + council: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string)
         + `polling_station` (GeoPollingStation, nullable) - A GeoJSON polling station feature
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
