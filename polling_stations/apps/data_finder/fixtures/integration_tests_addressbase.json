@@ -1,4 +1,57 @@
-[
+[    {
+        "fields": {
+            "name": "Foo Council",
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": null,
+            "identifiers": ["X01"]
+        },
+        "model": "councils.council",
+        "pk": "FOO"
+    },
+    {
+        "fields": {
+            "name": "Example Council",
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": null,
+            "identifiers": ["E06000023"]
+        },
+        "model": "councils.council",
+        "pk": "EXM"
+    },
+    {
+        "fields": {
+            "name": "",
+            "electoral_services_email": "info@eoni.org.uk",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "http://www.eoni.org.uk/",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": null,
+            "identifiers": ["N09000003"]
+        },
+        "model": "councils.council",
+        "pk": "N09000003"
+    },
+    {
+        "fields": {
+            "council": "FOO",
+            "internal_council_id": "1A",
+            "postcode": "BB11BD",
+            "address": "Some street, Bar Town",
+            "location": "SRID=4326;POINT (-2.995147704661227 51.595814835763214)"
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 1
+    },
+
     {
         "fields": {
             "address": "1 Baz Street, Bar Town",
@@ -7,7 +60,7 @@
             "addressbase_postal": "D"
         },
         "model": "addressbase.address",
-        "pk": "00000004"
+        "pk": "04"
     },
     {
         "fields": {
@@ -17,55 +70,72 @@
             "addressbase_postal": "D"
         },
         "model": "addressbase.address",
-        "pk": "00000005"
+        "pk": "05"
     },
     {
         "fields": {
-            "address": "2 Baz Street, Bar Town",
+            "address": "3 Baz Street, Bar Town",
             "postcode": "BB1 1BB",
             "location": "SRID=4326;POINT (-3.8 51.2)",
             "addressbase_postal": "D"
         },
         "model": "addressbase.address",
-        "pk": "00000006"
+        "pk": "06"
     },
     {
         "fields": {
-            "lad": "X01000001"
+            "lad": "FOO"
         },
         "model": "addressbase.uprntocouncil",
-        "pk": "00000004"
+        "pk": "04"
     },
     {
         "fields": {
-            "lad": "X01000001"
+            "lad": "FOO",
+            "polling_station_id": "1A"
         },
         "model": "addressbase.uprntocouncil",
-        "pk": "00000005"
+        "pk": "05"
     },
     {
         "fields": {
-            "lad": "X01000001"
+            "lad": "FOO"
         },
         "model": "addressbase.uprntocouncil",
-        "pk": "00000006"
+        "pk": "06"
     },
 
     {
         "fields": {
-            "address": "some address",
+            "address": "1, some address",
             "postcode": "NP20 5GN",
             "location": "SRID=4326;POINT(-2.998065948486328 51.596012118680264)"
         },
         "model": "addressbase.address",
-        "pk": "00000010"
+        "pk": "10"
     },
     {
         "fields": {
-            "lad": "W06000022"
+            "lad": "W06000022",
+            "polling_station_id": "3B"
         },
         "model": "addressbase.uprntocouncil",
-        "pk": "00000010"
+        "pk": "10"
+    },
+    {
+        "fields": {
+            "council": "W06000022",
+            "internal_council_id": "3B",
+            "postcode": "NP20 6GN",
+            "address": "Some other address",
+            "location": "SRID=4326;POINT (-2.995147704661227 51.595814835763214)"
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 2
+    },
+    {
+        "fields":
+            {"pcd": "BT153JX", "pcd2": "BT15 3JX", "pcds": "BT15 3JX", "dointr": "198412", "doterm": "", "oscty": "N99999999", "ced": "N99999999", "oslaua": "N09000003", "osward": "N08000322", "parish": "N99999999", "usertype": "0", "oseast1m": "334150", "osnrth1m": "0376920", "osgrdind": "1", "oshlthau": "ZB001", "nhser": "N99999999", "ctry": "N92000002", "rgn": "N99999999", "streg": "0", "pcon": "N06000002", "eer": "N07000001", "teclec": "N99999999", "ttwa": "N12000002", "pct": "ZC010", "nuts": "N08000322", "statsward": "99ZZ00", "oa01": "95GG200007", "casward": "95GG20", "park": "N99999999", "lsoa01": "95GG20S1", "msoa01": "N99999999", "ur01ind": "A", "oac01": "5B3", "oa11": "N00001134", "lsoa11": "95GG20S1", "msoa11": "N99999999", "wz11": "N19000650", "ccg": "ZC010", "bua11": "N99999999", "buasd11": "N99999999", "ru11ind": "", "oac11": "8B1", "lat": "54.622642", "long": "-5.923832", "lep1": "N99999999", "lep2": "N99999999", "pfa": "N99999999", "imd": "49", "calncv": "N99999999", "stp": "N99999999", "location": "SRID=4326;POINT (-5.923832 54.622642)"},
+        "model": "uk_geo_utils.onspd"
     }
-
 ]
