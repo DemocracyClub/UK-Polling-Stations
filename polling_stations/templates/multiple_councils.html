@@ -21,7 +21,7 @@
       <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ phone_number }}">{{ phone_number }}</a><br>
     {% endfor %}
     <abbr title="Email">{% trans "E:" context "Short for Email:" %}</abbr>
-    <a href="mailto:{{ council.email }}">{{ council.email }}</a>
+    <a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a>
   </p>
   {% endfor %}
 </div>
