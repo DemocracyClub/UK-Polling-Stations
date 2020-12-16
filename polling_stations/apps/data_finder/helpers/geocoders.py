@@ -7,18 +7,13 @@ from uk_geo_utils.helpers import Postcode
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     OnspdGeocoder,
-    AddressBaseException,
-    MultipleCodesException,
+    CodesNotFoundException,
 )
 
 from pollingstations.models import Council
 
 
 class PostcodeError(Exception):
-    pass
-
-
-class MultipleCouncilsException(MultipleCodesException):
     pass
 
 
@@ -66,17 +61,7 @@ class OnspdGeocoderAdapter(BaseGeocoder):
 
 class AddressBaseGeocoderAdapter(BaseGeocoder):
     def geocode(self):
-        geocoder = AddressBaseGeocoder(self.postcode)
-        geocoder.centroid
-
-        try:
-            geocoder.get_code("lad")
-        except MultipleCodesException as e:
-            # re-raise as a more specific MultipleCouncilsException
-            # because that is what the calling code expects to handle
-            raise MultipleCouncilsException(str(e))
-
-        return geocoder
+        return AddressBaseGeocoder(self.postcode)
 
     def geocode_point_only(self):
         return AddressBaseGeocoder(self.postcode)
@@ -131,14 +116,10 @@ def geocode(postcode):
             # - AddressBase hasn't been imported
             # fall back to the next source
             continue
-        except MultipleCouncilsException:
-            # this postcode contains uprns in multiple local authorities
-            # re-raise the exception.
-            raise
-        except AddressBaseException:
+        except CodesNotFoundException:
             # we did find this postcode in AddressBase, but there were no
             # corresponding codes in the uprn/council lookup:
-            #   fall back to the next source
+            # fall back to the next source
             continue
         except PostcodeError:
             # we were unable to geocode this postcode using ONSPD
