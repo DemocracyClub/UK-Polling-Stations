@@ -119,11 +119,10 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
 
         ee = self.get_ee_wrapper(address)
         has_election = ee.has_election()
-        if has_election:
+        # An address might have an election but we might not know the polling station.
+        if has_election and address.polling_station_id:
             # get polling station if there is an election in this area
-            polling_station = PollingStation.objects.get_polling_station_by_id(
-                address.polling_station_id, address.council_id
-            )
+            polling_station = address.polling_station
             if polling_station:
                 ret["polling_station"] = polling_station
                 ret["polling_station_known"] = True
@@ -138,8 +137,8 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         # create log entry
         log_data = {}
         log_data["we_know_where_you_should_vote"] = ret["polling_station_known"]
-        log_data["location"] = location
-        log_data["council"] = address.council
+        log_data["location"] = address.location
+        log_data["council"] = ret["council"]
         log_data["brand"] = "api"
         log_data["language"] = ""
         log_data["api_user"] = request.user
