@@ -116,7 +116,7 @@
     },
     {
         "fields": {
-            "lad": "W06000022",
+            "lad": "NWP",
             "polling_station_id": "3B"
         },
         "model": "addressbase.uprntocouncil",
@@ -124,7 +124,7 @@
     },
     {
         "fields": {
-            "council": "W06000022",
+            "council": "NWP",
             "internal_council_id": "3B",
             "postcode": "NP20 6GN",
             "address": "Some other address",
