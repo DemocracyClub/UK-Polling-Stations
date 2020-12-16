@@ -2,13 +2,14 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django.core.exceptions import ObjectDoesNotExist
+from uk_geo_utils.geocoders import MultipleCodesException
+
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     EveryElectionWrapper,
     get_council,
     geocode,
     PostcodeError,
-    MultipleCouncilsException,
     RoutingHelper,
 )
 from pollingstations.models import PollingStation, CustomFinder
@@ -71,19 +72,12 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             loc = geocoder(postcode)
             location = loc.centroid
         except PostcodeError as e:
-            if rh.route_type == "single_address":
-                loc = None
-                location = None
-            else:
-                return Response({"detail": e.args[0]}, status=400)
-        except MultipleCouncilsException:
-            loc = None
-            location = None
+            return Response({"detail": e.args[0]}, status=400)
 
         ret["postcode_location"] = location
 
         # council object
-        if rh.route_type == "multiple_councils" or not loc:
+        if rh.councils or not loc:
             # We can't assign this postcode to exactly one council
             council = None
         else:

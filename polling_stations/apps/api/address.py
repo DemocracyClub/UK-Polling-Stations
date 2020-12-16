@@ -13,7 +13,6 @@ from data_finder.helpers import (
     PostcodeError,
     RoutingHelper,
 )
-from pollingstations.models import PollingStation
 from uk_geo_utils.helpers import Postcode
 from .councils import CouncilDataSerializer
 from .fields import PointField
@@ -82,7 +81,7 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
 
     def get_ee_wrapper(self, address):
         rh = RoutingHelper(address.postcode)
-        if not rh.address_have_single_station:
+        if not rh.addresses_have_single_station:
             if address.location:
                 return EveryElectionWrapper(point=address.location)
         return EveryElectionWrapper(postcode=address.postcode)
