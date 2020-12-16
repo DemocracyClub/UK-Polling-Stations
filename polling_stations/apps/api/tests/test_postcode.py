@@ -4,7 +4,7 @@ from django.contrib.gis.geos import Point
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.views import APIView
 from api.postcode import PostcodeViewSet
-from data_finder.helpers import MultipleCouncilsException, PostcodeError
+from data_finder.helpers import PostcodeError
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
 
@@ -50,14 +50,6 @@ def mock_geocode(postcode):
     if postcode == "DD11DD":
         return StubGeocoder(Point(-4.6142578125, 57.45913526799062, srid=4326), None)
 
-    # multiple councils
-    if postcode == "EE11EE":
-        raise MultipleCouncilsException()
-
-    # geocoding errors
-    if postcode == "FF11FF":
-        raise PostcodeError("oh noes!!")
-
     if postcode == "FOOBAR":
         raise PostcodeError("oh noes!!")
 
@@ -79,7 +71,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual(3, len(response.data["addresses"]))
@@ -93,7 +85,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000002", response.data["council"]["council_id"])
+        self.assertEqual("DEF", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
@@ -107,7 +99,7 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertTrue(response.data["polling_station_known"])
         self.assertEqual(
             "St Foo's Church Hall, Bar Town",
@@ -125,29 +117,13 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
+        self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
         self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(0, len(response.data["ballots"]))
-
-    def test_station_found_no_source_point(self):
-        response = self.endpoint.retrieve(
-            self.request, "FF11FF", "json", geocoder=mock_geocode, log=False
-        )
-
-        self.assertEqual(200, response.status_code)
-        self.assertEqual("X01000001", response.data["council"]["council_id"])
-        self.assertEqual(
-            "St Foo's Church Hall, Bar Town",
-            response.data["polling_station"]["properties"]["address"],
-        )
-        self.assertEqual([], response.data["addresses"])
-        self.assertIsNone(response.data["custom_finder"])
-        self.assertIsNone(response.data["postcode_location"])
-        self.assertEqual(1, len(response.data["ballots"]))
 
     def test_no_council(self):
         response = self.endpoint.retrieve(
@@ -162,22 +138,6 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(400, response.status_code)
-
-    def test_blacklist(self):
-        response = self.endpoint.retrieve(
-            self.request, "EE11EE", "json", geocoder=mock_geocode, log=False
-        )
-        self.assertEqual(200, response.status_code)
-        self.assertIsNone(response.data["council"])
-        self.assertFalse(response.data["polling_station_known"])
-
-    def test_blacklist_lowercase_postcode(self):
-        response = self.endpoint.retrieve(
-            self.request, "ee11ee", "json", geocoder=mock_geocode, log=False
-        )
-        self.assertEqual(200, response.status_code)
-        self.assertIsNone(response.data["council"])
-        self.assertFalse(response.data["polling_station_known"])
 
     def test_cors_header(self):
         resp = self.client.get(
