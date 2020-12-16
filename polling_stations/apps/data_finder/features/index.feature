@@ -8,7 +8,7 @@ Feature: Check Postcodes
     And I should see option "2 Baz Street, Bar Town" in selector "address"
     Then I select "2 Baz Street, Bar Town" from "address"
     Then I submit the only form
-    Then The browser's URL should contain "/address/4/"
+    Then The browser's URL should contain "address/05"
     And I should see "Your polling station"
     And I should see "Walking/driving directions"
     And No errors were thrown
@@ -22,7 +22,7 @@ Feature: Check Postcodes
     And I should see option "3 Baz Street, Bar Town" in selector "address"
     Then I select "3 Baz Street, Bar Town" from "address"
     Then I submit the only form
-    Then The browser's URL should contain "/address/5/"
+    Then The browser's URL should contain "/address/06/"
     And I should see "Contact Foo Council"
     And No errors were thrown
 
@@ -31,7 +31,7 @@ Feature: Check Postcodes
     Then I should see "Find your polling station"
     Then I fill in "postcode" with "NP205GN"
     Then I submit the only form
-    Then The browser's URL should contain "/postcode/NP205GN/"
+    Then The browser's URL should contain "/address/10/"
     And I should see "Your polling station"
     And I should see "Walking/driving directions"
     And No errors were thrown
@@ -45,15 +45,6 @@ Feature: Check Postcodes
     Then I select "My address is not in the list" from "address"
     Then I submit the only form
     Then I should see "Contact Foo Council"
-    And No errors were thrown
-
-    Scenario: Check multiple councils
-    When I visit site page "/"
-    Then I should see "Find your polling station"
-    Then I fill in "postcode" with "DD11DD"
-    Then I submit the only form
-    Then I should see "Contact Your Council"
-    And I should see "Residents in DD11DD may be in one of the following council areas:"
     And No errors were thrown
 
     Scenario: Check invalid postcode

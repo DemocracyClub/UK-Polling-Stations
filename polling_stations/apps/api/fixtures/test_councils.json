@@ -11,11 +11,11 @@
       "electoral_services_address": "",
       "area": "MULTIPOLYGON (((-2.83447265625 53.64203274279828,1.549072265625 53.64203274279828,1.549072265625 52.52691653862567,-2.83447265625 52.52691653862567,-2.83447265625 53.64203274279828)))",
       "identifiers": [
-        "ABC"
+        "X01000001"
       ]
     },
     "model": "councils.council",
-    "pk": "X01000001"
+    "pk": "ABC"
   },
   {
     "fields": {
@@ -29,10 +29,10 @@
       "electoral_services_address": "",
       "area": null,
       "identifiers": [
-        "DEF"
+        "X01000002"
       ]
     },
     "model": "councils.council",
-    "pk": "X01000002"
+    "pk": "DEF"
   }
 ]

@@ -1,0 +1,173 @@
+[
+    {
+        "fields": {
+            "uprn": "200",
+            "lad": "FOO",
+            "polling_station_id": "1A"
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "200"
+    },
+    {
+        "fields": {
+            "uprn": "201",
+            "lad": "BAR",
+            "polling_station_id": "foo-station"
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "201"
+    },
+    {
+        "fields": {
+            "uprn": "202",
+            "lad": "FOO",
+            "polling_station_id": ""
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "202"
+    },    {
+        "fields": {
+            "uprn": "203",
+            "lad": "BAR",
+            "polling_station_id": ""
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "203"
+    },
+    {
+        "fields": {
+            "uprn": "204",
+            "lad": "FOO",
+            "polling_station_id": ""
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "204"
+    },
+    {
+        "fields": {
+            "uprn": "205",
+            "lad": "FOO",
+            "polling_station_id": ""
+        },
+        "model": "addressbase.uprntocouncil",
+        "pk": "205"
+    },
+
+    {
+        "fields": {
+            "uprn": "200",
+            "address": "some residential address 1",
+            "postcode": "FF2 2FF",
+            "location": "POINT (0 1)",
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "200"
+    },
+    {
+        "fields": {
+            "uprn": "201",
+            "address": "some residential address 2",
+            "postcode": "FF2 2FF",
+            "location": "POINT (1 0)",
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "201"
+    },
+    {
+        "fields": {
+            "uprn": "202",
+            "address": "some residential address 3",
+            "postcode": "FF2 2FF",
+            "location": "POINT (0 0)",
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "202"
+    },
+    {
+        "fields": {
+            "uprn": "203",
+            "address": "some residential address 4",
+            "postcode": "GG2 2GG",
+            "location": "POINT (2 2)",
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "203"
+    },
+    {
+        "fields": {
+            "uprn": "204",
+            "address": "some residential address 5",
+            "postcode": "GG2 2GG",
+            "location": "POINT (3 3)",
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "204"
+    },
+    {
+        "fields": {
+            "uprn": "205",
+            "address": "some residential address 6",
+            "postcode": "HH2 2HH",
+            "location": "POINT (4 4)",
+            "addressbase_postal": "D"
+        },
+        "model": "addressbase.address",
+        "pk": "205"
+    },
+    {
+        "fields": {
+            "council": "FOO",
+            "internal_council_id": "1A",
+            "postcode": "FF22FF",
+            "address": "another station address 1",
+            "location": null
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "council": "BAR",
+            "internal_council_id": "foo-station",
+            "postcode": "FF22FF",
+            "address": "another station address 2",
+            "location": null
+        },
+        "model": "pollingstations.pollingstation",
+        "pk": 2
+    },
+
+    {
+        "fields": {
+            "name": "Foo Council",
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": null,
+            "identifiers": ["X01"]
+        },
+        "model": "councils.council",
+        "pk": "FOO"
+    },
+    {
+        "fields": {
+            "name": "Bar Borough",
+            "electoral_services_email": "",
+            "electoral_services_phone_numbers": [""],
+            "electoral_services_website": "",
+            "electoral_services_postcode": "",
+            "electoral_services_address": "",
+            "area": null,
+            "identifiers": ["X02"]
+        },
+        "model": "councils.council",
+        "pk": "BAR"
+    }
+]

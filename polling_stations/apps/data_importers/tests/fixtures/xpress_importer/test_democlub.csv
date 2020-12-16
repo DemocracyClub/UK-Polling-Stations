@@ -1,0 +1,6 @@
+ElectionDate,ElectionType,ElectoralArea,Contested,Property_URN,AddressLine1,AddressLine2,AddressLine3,AddressLine4,AddressLine5,Addressline6,Post_Code,Polling_Place_District_Reference,Polling_Place_Id,Polling_Place_Name,Polling_Place_Address_1,Polling_Place_Address_2,Polling_Place_Address_3,Polling_Place_Address_4,Polling_Place_Postcode,Polling_Place_Easting,Polling_Place_Northing,Polling_Place_UPRN,AreaNameAlternative
+04/05/2017,County,Lancing,Unknown,1,1 Abbots Way,Lancing,West Sussex,,,BN15 9DH,BN15 9DH,AO1,518,Monks Farm Hall,North Road,Lancing,,,BN15 9BB,0,0,,
+04/05/2017,County,Lancing,Unknown,2,2 Abbots Way,Lancing,West Sussex,,,BN15 9DH,BN15 9DH,AO1,518,Monks Farm Hall,North Road,Lancing,,,BN15 9BB,0,0,,
+04/05/2017,County,Lancing,Unknown,3,3 Freshbrook Mews,Freshbrook Road,Lancing,West Sussex,,,,AZ,512,Lancing Parish Hall,South Street,Lancing,,,BN15 8AJ,0,0,,
+04/05/2017,County,Lancing,Unknown,4,2 Freshbrook Mews,Freshbrook Road,Lancing,West Sussex,,BN15 8DA,BN15 8DA,AZ,512,Lancing Parish Hall,South Street,Lancing,,,BN15 8AJ,0,0,,
+04/05/2017,County,Lancing,Unknown,5,1 Freshbrook Mews,Freshbrook Road,Lancing,West Sussex,,BN15 8DA,BN15 8DA,AZ,512,Lancing Parish Hall,South Street,Lancing,,,BN15 8AJ,0,0,,

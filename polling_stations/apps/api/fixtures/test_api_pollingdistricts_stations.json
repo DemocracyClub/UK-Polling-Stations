@@ -7,10 +7,12 @@
             "electoral_services_website": "",
             "electoral_services_postcode": "",
             "electoral_services_address": "",
-            "area": null
+            "area": null,
+            "identifiers": ["X01000001"]
+
         },
         "model": "councils.council",
-        "pk": "X01000001"
+        "pk": "ABC"
     },
     {
         "fields": {
@@ -20,10 +22,12 @@
             "electoral_services_website": "",
             "electoral_services_postcode": "",
             "electoral_services_address": "",
-            "area": null
+            "area": null,
+            "identifiers": ["X01000002"]
+
         },
         "model": "councils.council",
-        "pk": "X01000002"
+        "pk": "DEF"
     },
     {
         "fields": {
@@ -33,10 +37,12 @@
             "electoral_services_website": "",
             "electoral_services_postcode": "",
             "electoral_services_address": "",
-            "area": null
+            "area": null,
+            "identifiers": ["X01000003"]
+
         },
         "model": "councils.council",
-        "pk": "X01000003"
+        "pk": "GHI"
     },
 
     {
@@ -44,7 +50,7 @@
             "location": "POINT (-2.39501953125 52.67638208083924)",
             "address": "St Foo's Church Hall, Bar Town",
             "internal_council_id": "1",
-            "council": "X01000001",
+            "council": "ABC",
             "postcode": "",
             "polling_district_id": ""
         },
@@ -56,7 +62,7 @@
             "location": "",
             "address": "Foo Street Primary School, Bar Town",
             "internal_council_id": "2",
-            "council": "X01000001",
+            "council": "ABC",
             "postcode": "",
             "polling_district_id": ""
         },
@@ -68,7 +74,7 @@
             "location": "",
             "address": "St Norf's Church Hall, Qux Town",
             "internal_council_id": "3",
-            "council": "X01000002",
+            "council": "DEF",
             "postcode": "",
             "polling_district_id": ""
         },
@@ -82,7 +88,7 @@
             "name": "",
             "area": "MULTIPOLYGON (((-2.39501953125 52.67638208083924, -2.39501953125 52.96187505907603, -1.8896484375 52.96187505907603, -1.8896484375 52.67638208083924, -2.39501953125 52.67638208083924)))",
             "extra_id": null,
-            "council": "X01000001",
+            "council": "ABC",
             "polling_station_id": "1"
         },
         "model": "pollingstations.pollingdistrict",
@@ -94,7 +100,7 @@
             "name": "",
             "area": "MULTIPOLYGON (((0.72509765625 53.1072166918934, 0.72509765625 53.38332836757156, 1.23046875 53.38332836757156, 1.23046875 53.1072166918934, 0.72509765625 53.1072166918934)))",
             "extra_id": null,
-            "council": "X01000001",
+            "council": "ABC",
             "polling_station_id": "2"
         },
         "model": "pollingstations.pollingdistrict",
@@ -106,7 +112,7 @@
             "name": "",
             "area": "MULTIPOLYGON (((-4.39178466796875 55.8290586885836, -4.39178466796875 55.896876336360755, -4.1802978515625 55.896876336360755, -4.1802978515625 55.8290586885836, -4.39178466796875 55.8290586885836)))",
             "extra_id": null,
-            "council": "X01000001",
+            "council": "ABC",
             "polling_station_id": "3"
         },
         "model": "pollingstations.pollingdistrict",

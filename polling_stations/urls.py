@@ -31,7 +31,7 @@ core_patterns = [
     url(r"^status_check/$", status_check, name="status_check"),
     url(r"^postcode/(?P<postcode>.+)/$", PostcodeView.as_view(), name="postcode_view"),
     url(r"^postcode/$", PostcodeView.as_view(), name="postcode_view_alias"),
-    url(r"^address/(?P<address_slug>.+)/$", AddressView.as_view(), name="address_view"),
+    url(r"^address/(?P<uprn>.+)/$", AddressView.as_view(), name="address_view"),
     url(
         r"^we_dont_know/(?P<postcode>.+)/$",
         WeDontKnowView.as_view(),
@@ -70,7 +70,6 @@ extra_patterns = [
     url(r"^feedback/", include("feedback.urls")),
     url(r"^report_problem/", include("bug_reports.urls")),
     url(r"^uploads/", include("file_uploads.urls", namespace="file_uploads")),
-    url(r"^league_table/", include("data_collection.urls")),
     url(r"^example/$", ExamplePostcodeView.as_view(), name="example"),
     url(r"^email/", include("dc_signup_form.urls", namespace="dc_signup_form")),
     url(

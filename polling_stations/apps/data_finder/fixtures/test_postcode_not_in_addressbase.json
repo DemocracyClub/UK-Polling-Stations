@@ -1,0 +1,10 @@
+[
+    {
+        "fields": {
+            "pcds": "HJ6 7KL",
+            "oslaua": "X01",
+            "location": "POINT (0 0)"
+        },
+        "model": "uk_geo_utils.onspd"
+    }
+]

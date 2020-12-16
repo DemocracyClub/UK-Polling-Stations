@@ -144,5 +144,5 @@ all reference data which is publicly available.
 
 Each council that has unimported data has a Github Issue with the [Data Import](https://github.com/DemocracyClub/UK-Polling-Stations/issues?q=is%3Aissue+is%3Aopen+label%3A%22Data+Import%22) label.
 
-We make a Django `manage.py` command in the data_collection app for each council which imports the raw data.
+We make a Django `manage.py` command in the data_importers app for each council which imports the raw data.
 If you are interested in helping the project by writing an import script, see the issues tagged [recommended for beginners](https://github.com/DemocracyClub/UK-Polling-Stations/issues?q=is%3Aissue+is%3Aopen+label%3A%22recommended+for+beginners%22) for more info.

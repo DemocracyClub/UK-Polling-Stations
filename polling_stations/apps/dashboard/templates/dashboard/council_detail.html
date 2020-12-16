@@ -44,11 +44,11 @@
                 <th>Distance (metres)</th>
             </tr>
             </thead>
-            <tbody>{% for pollingstation_id, uprn, address, slug, postcode, distance in distances_to_stations %}
+            <tbody>{% for pollingstation_id, uprn, address, postcode, distance in distances_to_stations %}
                 <tr>
                     <td>{{ uprn }}</td>
                     <td>
-                        <a href="{% url "address_view" slug %}">{{ address }}</a>
+                        <a href="{% url "address_view" uprn %}">{{ address }}</a>
                     </td>
                     <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a> (<a href="{% url "postcode_view" postcode %}">site</a>)</td>
                     <td>{{ pollingstation_id }}</td>
