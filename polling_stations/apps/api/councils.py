@@ -39,6 +39,7 @@ class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
             "identifiers",
             "electoral_services_contacts",
             "registration_contacts",
+            "nation",
         )
 
     email = serializers.EmailField(source="electoral_services_email")
@@ -49,6 +50,7 @@ class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
 
     electoral_services_contacts = serializers.SerializerMethodField()
     registration_contacts = serializers.SerializerMethodField()
+    nation = serializers.CharField()
 
     def get_phone(self, obj):
         try:
