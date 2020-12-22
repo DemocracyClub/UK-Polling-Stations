@@ -19,6 +19,7 @@ class CouncilsTest(TestCase):
         response = CouncilViewSet.as_view({"get": "retrieve"})(self.request, pk="ABC")
         self.assertEqual(200, response.status_code)
         self.assertEqual("ABC", response.data["council_id"])
+        self.assertEqual("England", response.data["nation"])
 
     def test_bad_council(self):
         response = CouncilViewSet.as_view({"get": "retrieve"})(self.request, pk="FOO")
@@ -61,8 +62,9 @@ class CouncilsTest(TestCase):
                 "address": "",
                 "council_id": "ABC",
                 "email": "",
-                "identifiers": ["X01000001"],
+                "identifiers": ["X01000001", "E06000001"],
                 "name": "X01000001",
+                "nation": "England",
                 "phone": "",
                 "postcode": "",
                 "url": "http://testserver/api/beta/councils/ABC/",

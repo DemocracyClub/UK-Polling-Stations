@@ -9,6 +9,7 @@
 - url: `https://wheredoivote.co.uk/api/beta/councils/E07000223/` (string) - URL for this resource
 - `council_id`: `E07000223` (string) - GSS code for this council
 - name: `Adur District Council` (string) - Name of this council
+- nation: `England` (string) - Name of nation
 - email: `elections@adur-worthing.gov.uk` (string) - Contact email address for this council's Electoral Services team
 - phone: `01903 221014/5/6` (string) - Telephone number for this council's Electoral Services team
 - website: `http://adur-worthing.gov.uk/elections-and-voting/register-to-vote/` (string) - URL for this council's website
