@@ -120,6 +120,7 @@ TEMPLATES = [
                 "bug_reports.context_processors.bug_report_form",
                 "pollingstations.context_processors.google_analytics",
                 "pollingstations.context_processors.global_settings",
+                "pollingstations.context_processors.canonical_url",
                 "whitelabel.context_processors.base_template",
             ],
         },
@@ -301,3 +302,5 @@ if DEBUG:
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
     from .testing import *  # noqa
+
+CANONICAL_URL= ''
