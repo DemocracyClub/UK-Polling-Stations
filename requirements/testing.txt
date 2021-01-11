@@ -4,6 +4,7 @@ mock
 aloe
 aloe_django
 aloe_webdriver
+factory_boy
 
 black
 
