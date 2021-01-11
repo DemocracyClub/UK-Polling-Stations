@@ -13,6 +13,8 @@ class DistrictSetTest(TestCase):
 
     def tearDown(self):
         PollingDistrict.objects.all().delete()
+        UprnToCouncil.objects.all().delete()
+        Address.objects.all().delete()
 
     def test_get_polling_station_lookup(self):
         """
@@ -216,17 +218,13 @@ class DistrictSetTest(TestCase):
         polling_districts = [
             {
                 "polling_station_id": "01",
-                "area": MultiPolygon(
-                    Polygon(((0, 0), (0, 3), (1.25, 3), (1.25, 0), (0, 0)))
-                ),
+                "area": MultiPolygon(),
                 "council": Council.objects.get(pk="AAA"),
                 "internal_council_id": "A",
             },
             {
                 "polling_station_id": "02",
-                "area": MultiPolygon(
-                    Polygon(((0.75, 1), (0.75, 4), (2, 4), (2, 1), (0.75, 1)))
-                ),
+                "area": MultiPolygon(),
                 "council": Council.objects.get(pk="AAA"),
                 "internal_council_id": "B",
             },
