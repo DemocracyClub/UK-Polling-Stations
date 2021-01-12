@@ -1,0 +1,69 @@
+
+version: 2.1
+
+orbs:
+  browser-tools: circleci/browser-tools@1.1.1
+  node: circleci/node@4.1.0
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:2021.01-18.04
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+      - image: circleci/postgres:10.5-postgis-ram
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: polling_stations
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
+      - run:
+          name: Check chromedriver install
+          command: |
+            google-chrome --version
+            chromedriver --version
+
+      - node/install
+      - node/install-packages:
+          cache-path: ~/repo/node_modules
+          override-ci-command: npm install
+
+      - run:
+          name: install dependencies
+          command: |
+            sudo apt update && sudo apt install -y python3-venv gdal-bin python3-gdal
+            python3 -m venv .venv
+            . .venv/bin/activate
+            pip install --upgrade pip
+            pip install coveralls
+            pip install -r requirements/testing.txt
+
+      - save_cache:
+          paths:
+            - ./.venv
+            - ./node_modules
+          key: polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+
+      - run:
+          name: Tests!
+          command: |
+            . .venv/bin/activate
+            pip check
+            python --version
+            python manage.py --version
+            python manage.py check
+            pytest --flakes
+            black --check .
+            pytest --cov-report= --cov=polling_stations
+            coverage run --append manage.py harvest
