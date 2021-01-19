@@ -1,24 +1,55 @@
 from django.test import TestCase
+from django.urls import reverse
+
+from data_finder.tests.utils import PostcodeBuilder
 
 
 class HomeViewTestCase(TestCase):
-    fixtures = [
-        "test_routing.json",
-        "test_multiple_addresses_single_polling_station.json",
-    ]
+    def setUp(self):
+        self.postcode_unassigned_addresses = (
+            PostcodeBuilder().with_unassigned_addresses()
+        )
+        self.postcode_assigned_addresses = PostcodeBuilder().with_assigned_addresses()
+        self.postcode_mixed_addresses = (
+            PostcodeBuilder().with_assigned_addresses().with_unassigned_addresses()
+        )
 
     def test_get(self):
         response = self.client.get("/")
         self.assertEqual(200, response.status_code)
 
-    def test_redirect(self):
+    def test_redirect_with_unassigned_addresses(self):
         response = self.client.post(
-            r"/?utm_source=foo&something=other", {"postcode": "CC1 1AA"}, follow=False
+            reverse("home") + "?utm_source=foo&something=other",
+            {"postcode": self.postcode_unassigned_addresses.postcode},
+            follow=False,
         )
         self.assertEqual(302, response.status_code)
-        # The query string isn't preserved, because they've come from the home page, and it could be either uprn
-        # for the postcode given (hence the [23])
-        self.assertRegex(response["Location"], r"/address/10[23]/")
+        self.assertRegex(
+            response["location"],
+            f"/postcode/{self.postcode_unassigned_addresses.postcode.replace(' ','')}/",
+        )
+
+    def test_redirect_with_assigned_addresses(self):
+        response = self.client.post(
+            reverse("home") + "?utm_source=foo&something=other",
+            {"postcode": self.postcode_assigned_addresses.postcode},
+            follow=False,
+        )
+        self.assertEqual(302, response.status_code)
+        self.assertRegex(response["location"], "/address/[0-9]{9}/")
+
+    def test_redirect_with_mixed_addresses(self):
+        response = self.client.post(
+            reverse("home") + "?utm_source=foo&something=other",
+            {"postcode": self.postcode_mixed_addresses.postcode},
+            follow=False,
+        )
+        self.assertEqual(302, response.status_code)
+        self.assertEqual(
+            response["location"],
+            f"/address_select/{self.postcode_mixed_addresses.postcode.replace(' ','')}/",
+        )
 
 
 class PostCodeViewTestCase(TestCase):
