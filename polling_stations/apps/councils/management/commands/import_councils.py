@@ -89,7 +89,7 @@ class Command(BaseCommand):
             raise HTTPError("202 Accepted", response=r)
         return r.json()
 
-    def attach_boundaries(self, url=None, id_field="lad20cd"):
+    def attach_boundaries(self, url=None, id_field="lad19cd"):
         """
         Fetch each council's boundary from ONS and attach it to an existing
         council object

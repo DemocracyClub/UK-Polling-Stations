@@ -21,9 +21,9 @@ class MockCouncilsImporter(Command):
                     "type": "Feature",
                     "properties": {
                         "objectid": 1,
-                        "lad20cd": auth["code"],
-                        "lad20nm": auth["name"],
-                        "lad20nmw": " ",
+                        "lad19cd": auth["code"],
+                        "lad19nm": auth["name"],
+                        "lad19nmw": " ",
                         "st_areashape": 123,
                         "st_lengthshape": 4564,
                     },
