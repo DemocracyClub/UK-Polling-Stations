@@ -124,21 +124,31 @@ python manage.py import_councils
 #### Import some Polling District/Station data
 
 For development purposes, you will need to seed your database with some data.
-Most of our import scripts reference data is hosted privately, but there are
-a number of councils who publish their data at a public location.
+We depend on Ordnance Survey Addressbase Plus, which is not publicly available. 
+To allow open source contributions we have prepared the sample data Ordnance Survey
+provide (https://www.ordnancesurvey.co.uk/business-government/products/addressbase-plus#sample-data)
+ready for import, and some sample import scripts for testing.
 
-For example:
+To prepare your database run the following commands:
 
-* `python manage.py import_camden`
-* `python manage.py import_doncaster`
-* `python manage.py import_lambeth`
-* `python manage.py import_salford`
-* `python manage.py import_southampton`
-* `python manage.py import_st_albans`
-* `python manage.py import_tunbridge_wells`
-* `python manage.py import_wolverhampton`
+```
+./manage.py import_cleaned_addresses test_data/addressbase/
+./manage.py create_uprn_council_lookup
+./manage.py import_uprn_council_lookup uprn-to-councils.csv
+```
 
-all reference data which is publicly available.
+You can clean up the look up with:
+
+```
+rm uprn-to-councils.csv
+```
+
+And finally you can import some dummy data with:
+
+```
+./manage.py import_fake_teignbridge
+./manage.py import_fake_exeter
+```
 
 ## Importing the data we have from councils
 
