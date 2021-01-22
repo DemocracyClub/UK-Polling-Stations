@@ -65,6 +65,8 @@ jobs:
             python manage.py check
             pytest --flakes
             black --check .
+            python manage.py makemigrations --check
+
       - run:
           name: Coverage
           command: |
