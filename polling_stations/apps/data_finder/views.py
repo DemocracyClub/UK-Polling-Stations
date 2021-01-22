@@ -259,7 +259,7 @@ class ExamplePostcodeView(BasePollingStationView):
         )
 
     def get_council(self, geocode_result):
-        return Council.objects.defer("area").get(pk="EXM")
+        return Council.objects.defer("area").get(pk="BST")
 
     def get_station(self):
         return PollingStation(
@@ -267,7 +267,7 @@ class ExamplePostcodeView(BasePollingStationView):
             postcode="BS4 4NZ",
             address="St Peters Methodist Church\nAllison Road\nBrislington",
             location=Point(-2.5417780465622686, 51.440043287399604),
-            council_id="EXM",
+            council_id="BST",
         )
 
     def get_context_data(self, **kwargs):
