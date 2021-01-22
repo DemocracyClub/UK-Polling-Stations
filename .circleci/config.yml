@@ -56,7 +56,7 @@ jobs:
           key: polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - run:
-          name: Tests!
+          name: Tests
           command: |
             . .venv/bin/activate
             pip check
@@ -65,5 +65,10 @@ jobs:
             python manage.py check
             pytest --flakes
             black --check .
+      - run:
+          name: Coverage
+          command: |
+            . .venv/bin/activate
             pytest --cov-report= --cov=polling_stations
             coverage run --append manage.py harvest
+            coveralls
