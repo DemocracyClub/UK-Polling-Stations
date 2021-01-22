@@ -14,7 +14,7 @@
     },
     {
         "fields": {
-            "name": "Example Council",
+            "name": "Bristol City Council",
             "electoral_services_email": "",
             "electoral_services_phone_numbers": [""],
             "electoral_services_website": "",
@@ -24,7 +24,7 @@
             "identifiers": ["E06000023"]
         },
         "model": "councils.council",
-        "pk": "EXM"
+        "pk": "BST"
     },
     {
         "fields": {
