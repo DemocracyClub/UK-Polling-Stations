@@ -1,5 +1,15 @@
 from .base import *  # noqa
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": "polling_stations",
+        "USER": "postgres",
+        "PASSWORD": "",
+        "HOST": "",
+        "PORT": "",
+    }
+}
 EVERY_ELECTION["CHECK"] = True  # noqa
 NEXT_CHARISMATIC_ELECTION_DATE = None
 DISABLE_GA = True  # don't log to Google Analytics when we are running tests
