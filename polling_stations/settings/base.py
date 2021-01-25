@@ -1,12 +1,11 @@
-import sys
-from os.path import join, abspath, dirname
+import os, sys
 
 # PATH vars
 
-here = lambda *x: join(abspath(dirname(__file__)), *x)
+here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 PROJECT_ROOT = here("..")
-root = lambda *x: join(abspath(PROJECT_ROOT), *x)
-repo_root = lambda *x: join(abspath(here("../..")), *x)
+root = lambda *x: os.path.join(os.path.abspath(PROJECT_ROOT), *x)
+repo_root = lambda *x: os.path.join(os.path.abspath(here("../..")), *x)
 
 sys.path.insert(0, root("apps"))
 
@@ -301,3 +300,7 @@ if DEBUG:
 # importing test settings file if necessary (TODO chould be done better)
 if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
     from .testing import *  # noqa
+
+
+if os.environ.get("CIRCLECI"):
+    from .ci import *  # noqa
