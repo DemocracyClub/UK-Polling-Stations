@@ -1,12 +1,11 @@
 import os, sys
-from os.path import join, abspath, dirname
 
 # PATH vars
 
-here = lambda *x: join(abspath(dirname(__file__)), *x)
+here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 PROJECT_ROOT = here("..")
-root = lambda *x: join(abspath(PROJECT_ROOT), *x)
-repo_root = lambda *x: join(abspath(here("../..")), *x)
+root = lambda *x: os.path.join(os.path.abspath(PROJECT_ROOT), *x)
+repo_root = lambda *x: os.path.join(os.path.abspath(here("../..")), *x)
 
 sys.path.insert(0, root("apps"))
 
@@ -303,9 +302,5 @@ if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
     from .testing import *  # noqa
 
 
-def is_ci():
-    return os.environ.get("CIRCLECI")
-
-
-if is_ci:
+if os.environ.get("CIRCLECI"):
     from .ci import *  # noqa
