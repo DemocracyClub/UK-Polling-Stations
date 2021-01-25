@@ -6,7 +6,7 @@ django-localflavor==3.0.1
 django-markdown-deux==1.0.5
 django==2.2.17  # pyup: >=2.2,<3.0
 djangorestframework==3.12.2
-djangorestframework-gis==0.16
+djangorestframework-gis==0.17
 django-cors-headers==3.6.0
 fastkml==0.11
 rapidfuzz==0.14.2
