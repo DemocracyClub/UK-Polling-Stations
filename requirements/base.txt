@@ -9,7 +9,7 @@ djangorestframework==3.12.2
 djangorestframework-gis==0.16
 django-cors-headers==3.6.0
 fastkml==0.11
-rapidfuzz==0.14.1
+rapidfuzz==0.14.2
 lxml==4.6.2
 marshmallow==3.10.0
 psycopg2-binary==2.8.6
