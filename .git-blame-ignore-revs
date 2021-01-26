@@ -1,0 +1,9 @@
+# Usage: git blame foo.py --ignore-revs-file .git-blame-ignore-revs
+# Add complete commit hashes below.
+
+# Pre-commit hooks framework migration
+fdb5c6ad70d07b7e21d7763cb856f46c1ad77d4e
+# run black on everything
+eff34d20915beb190c051809e8dba146d6993b4a
+# Run new version of black on everything
+a1c7bd44bfb73bb444caf55cd3e6a524517fecd0
