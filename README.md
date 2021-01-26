@@ -124,7 +124,7 @@ python manage.py import_councils
 #### Import some Polling District/Station data
 
 For development purposes, you will need to seed your database with some data.
-We depend on Ordnance Survey Addressbase Plus, which is not publicly available. 
+We depend on Ordnance Survey Addressbase Plus, which is not publicly available.
 To allow open source contributions we have prepared the sample data Ordnance Survey
 provide (https://www.ordnancesurvey.co.uk/business-government/products/addressbase-plus#sample-data)
 ready for import, and some sample import scripts for testing.
