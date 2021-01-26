@@ -50,14 +50,14 @@ class Command(BaseCommand):
                     c.council_id as lad,
                     '' as polling_station_id
                 FROM
-                    addressbase_address a 
-                    JOIN 
+                    addressbase_address a
+                    JOIN
                     councils_council_subdivided c
                     ON
                     ST_Covers(c.geom, a.location)
-                    ) 
+                    )
                 TO STDOUT
-                
+
             with DELIMITER ',';
             """,
             self.dst,

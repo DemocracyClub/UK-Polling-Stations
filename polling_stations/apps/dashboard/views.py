@@ -59,7 +59,7 @@ class CouncilDetailView(DetailView):
                         st_transform(ps.location, 27700),
                         st_transform(COALESCE(aa.location, onspd.location), 27700)
                     )::int AS distance
-                FROM 
+                FROM
                     pollingstations_pollingstation ps,
                     addressbase_address aa JOIN
                     addressbase_uprntocouncil uc ON

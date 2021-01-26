@@ -75,7 +75,7 @@ class CustomFinderManager(models.Manager):
                 will produce a result, whereas
                 http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT57TQ
                 will not.
-    
+
                 We might need to take a more sophisticated approach as we add more custom finders
                 that accept postcodes (e.g: a postcode format flag in the database).
                 At the moment I only have this one to work with.

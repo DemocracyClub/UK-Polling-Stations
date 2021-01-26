@@ -1,4 +1,4 @@
-This data is derived from data downloaded from 
+This data is derived from data downloaded from
 https://www.ordnancesurvey.co.uk/business-government/products/addressbase-plus#sample-data
 To recreate, download sample data and header file (https://www.ordnancesurvey.co.uk/documents/product-support/support/addressbase-plus-header.csv)
 Combine them and run ./manage.py clean_addressbase_plus
