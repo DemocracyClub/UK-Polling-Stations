@@ -156,3 +156,7 @@ Each council that has unimported data has a Github Issue with the [Data Import](
 
 We make a Django `manage.py` command in the data_importers app for each council which imports the raw data.
 If you are interested in helping the project by writing an import script, see the issues tagged [recommended for beginners](https://github.com/DemocracyClub/UK-Polling-Stations/issues?q=is%3Aissue+is%3Aopen+label%3A%22recommended+for+beginners%22) for more info.
+
+## Install git hooks
+
+If you like you can use the commit hooks defined in `.pre-commit-config.yaml`. Run `pre-commit install && pre-commit install -t pre-push`.

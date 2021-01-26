@@ -1,0 +1,26 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+    -   id: black
+-   repo: local
+    hooks:
+    -   id: pytest
+        name: pytest --flakes
+        language: system
+        entry: pytest --flakes
+        pass_filenames: false
+        stages: [push]
+    -   id: makemigrations
+        name: makemigrations --check
+        language: system
+        entry: ./manage.py makemigrations --check
+        pass_filenames: false
+        stages: [push]
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: check-json
