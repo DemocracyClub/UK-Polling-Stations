@@ -27,8 +27,6 @@ class Council(models.Model):
     registration_postcode = models.CharField(blank=True, null=True, max_length=100)
     registration_address = models.TextField(blank=True, null=True)
 
-    area = models.MultiPolygonField(null=True, blank=True, srid=4326)
-
     objects = models.Manager()
 
     def __str__(self):
@@ -83,3 +81,11 @@ class Council(models.Model):
             return identifier_nations.pop()
         else:
             return ""
+
+
+class CouncilGeography(models.Model):
+    council = models.OneToOneField(
+        "Council", related_name="geography", on_delete=models.CASCADE
+    )
+    gss = models.CharField(blank=True, max_length=20)
+    geography = models.MultiPolygonField(null=True)
