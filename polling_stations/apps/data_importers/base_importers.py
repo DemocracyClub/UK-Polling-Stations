@@ -91,10 +91,12 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
     def teardown(self, council):
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
-        UprnToCouncil.objects.filter(lad=council.pk).update(polling_station_id="")
+        UprnToCouncil.objects.filter(lad__in=council.identifiers).update(
+            polling_station_id=""
+        )
 
     def get_council(self, council_id):
-        return Council.objects.get(identifiers__contains=[council_id])
+        return Council.objects.get(pk=council_id)
 
     def get_data(self, filetype, filename):
         options = {}
@@ -233,18 +235,14 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def check_station_point(self, station_record):
         if station_record["location"]:
             try:
-                council = Council.objects.get(area__covers=station_record["location"])
-                if self.council_id not in council.identifiers:
+                council = Council.objects.get(
+                    geography__geography__covers=station_record["location"]
+                )
+                if self.council_id != council.council_id:
                     self.logger.log_message(
                         logging.WARNING,
-                        "Polling station %s is in %s (%s) but target council is %s (%s) - manual check recommended\n",
-                        variable=(
-                            station_record["internal_council_id"],
-                            council.name,
-                            council.council_id,
-                            self.council.name,
-                            self.council.council_id,
-                        ),
+                        f"Polling station {station_record['internal_council_id']} is in {council.name} ({council.council_id}) "
+                        f"but target council is {self.council.name} ({self.council.council_id}) - manual check recommended\n",
                     )
             except Council.DoesNotExist:
                 self.logger.log_message(
@@ -407,7 +405,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
         pass
 
     def check_district_overlap(self, district_record):
-        if self.council.area.contains(district_record["area"]):
+        if self.council.geography.geography.contains(district_record["area"]):
             self.logger.log_message(
                 logging.INFO,
                 "District %s is fully contained by target local auth",
@@ -416,7 +414,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             return 100
 
         try:
-            intersection = self.council.area.intersection(
+            intersection = self.council.geography.geography.intersection(
                 district_record["area"].transform(4326, clone=True)
             )
             district_area = district_record["area"].transform(27700, clone=True).area
@@ -520,7 +518,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.write_info("Contextual Data:")
         self.write_info(
             "Total UPRNs in AddressBase: {:,}".format(
-                dwellings.from_addressbase(self.council.area)
+                dwellings.from_addressbase(self.council.geography.geography)
             )
         )
         self.write_info(
