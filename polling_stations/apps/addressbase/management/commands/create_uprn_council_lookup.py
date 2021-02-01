@@ -35,8 +35,8 @@ class Command(BaseCommand):
         self.cursor.execute(
             """
             CREATE TABLE councils_council_subdivided AS
-            SELECT council_id, st_subdivide(area) AS geom
-            FROM councils_council;
+            SELECT gss, st_subdivide(geography) AS geom
+            FROM councils_councilgeography;
             """
         )
 
@@ -47,7 +47,7 @@ class Command(BaseCommand):
             """
             COPY (SELECT
                     a.uprn as uprn,
-                    c.council_id as lad,
+                    c.gss as lad,
                     '' as polling_station_id
                 FROM
                     addressbase_address a
