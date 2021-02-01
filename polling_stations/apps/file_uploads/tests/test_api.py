@@ -1,9 +1,25 @@
+from django.core.management import call_command
 from rest_framework.test import APITestCase
+
+from councils.tests.factories import CouncilFactory
 from file_uploads.models import File, Upload
 
 
 class AddressTest(APITestCase):
-    fixtures = ["polling_stations/apps/file_uploads/fixtures/test_api.json"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="X01000001",
+            name="Piddleton Parish Council",
+            identifiers=["X01000001"],
+            geography__geography=None,
+        )
+
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/file_uploads/fixtures/test_api.json",
+            verbosity=0,
+        )
 
     def test_invalid_payload(self):
         invalid_payloads = [
