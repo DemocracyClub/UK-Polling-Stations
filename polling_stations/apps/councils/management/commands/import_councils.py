@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from requests.exceptions import HTTPError
 from retry import retry
-from councils.models import Council
+from councils.models import Council, CouncilGeography
 
 
 def union_areas(a1, a2):
@@ -49,7 +49,7 @@ class Command(BaseCommand):
             default=False,
             action="store_true",
             required=False,
-            help="<Optional> Clear Councils table before importing",
+            help="<Optional> Clear Councils and CouncilGeography tables before importing",
         )
         parser.add_argument(
             "-u",
@@ -104,20 +104,24 @@ class Command(BaseCommand):
         self.stdout.write("Downloading ONS boundaries from %s..." % (url))
         feature_collection = self.get_ons_boundary_json(url)
         for feature in feature_collection["features"]:
-            council_id = feature["properties"][id_field]
+            gss_code = feature["properties"][id_field]
             try:
-                council = Council.objects.get(identifiers__contains=[council_id])
+                council = Council.objects.get(identifiers__contains=[gss_code])
                 self.stdout.write(
-                    "Found boundary for %s: %s" % (council_id, council.name)
+                    "Found boundary for %s: %s" % (gss_code, council.name)
                 )
             except Council.DoesNotExist:
                 self.stderr.write(
-                    "No council object with ID {} found".format(council_id)
+                    "No council object with GSS {} found".format(gss_code)
                 )
                 continue
 
-            council.area = self.feature_to_multipolygon(feature)
-            council.save()
+            council_geography, _ = CouncilGeography.objects.get_or_create(
+                council=council
+            )
+            council_geography.gss = gss_code
+            council_geography.geography = self.feature_to_multipolygon(feature)
+            council_geography.save()
 
     def load_contact_details(self):
         return requests.get(settings.EC_COUNCIL_CONTACT_DETAILS_API_URL).json()
@@ -186,6 +190,8 @@ class Command(BaseCommand):
         if options["teardown"]:
             self.stdout.write("Clearing councils table..")
             Council.objects.all().delete()
+            self.stdout.write("Clearing councils_geography table..")
+            CouncilGeography.objects.all().delete()
 
         self.seen_ids = set()
         self.import_councils_from_ec()
