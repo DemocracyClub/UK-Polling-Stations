@@ -15,7 +15,7 @@ class Address(AbstractAddress):
 
     @property
     def council(self):
-        return Council.objects.defer("area").get(council_id=self.council_id)
+        return Council.objects.get(council_id=self.council_id)
 
     @property
     def polling_station_id(self):
