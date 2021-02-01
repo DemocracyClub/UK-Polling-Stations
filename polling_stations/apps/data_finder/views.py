@@ -259,7 +259,7 @@ class ExamplePostcodeView(BasePollingStationView):
         )
 
     def get_council(self, geocode_result):
-        return Council.objects.defer("area").get(pk="BST")
+        return Council.objects.get(pk="BST")
 
     def get_station(self):
         return PollingStation(

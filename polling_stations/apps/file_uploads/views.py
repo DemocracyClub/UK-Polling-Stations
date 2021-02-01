@@ -73,7 +73,6 @@ class FileUploadView(RequireStaffMixin, TemplateView):
         context["council"] = (
             Council.objects.all()
             .exclude(council_id__startswith="N09")
-            .defer("area")
             .get(council_id=self.kwargs["gss"])
         )
         return context
@@ -148,7 +147,6 @@ class CouncilView:
         qs = (
             Council.objects.all()
             .exclude(council_id__startswith="N09")
-            .defer("area")
             .order_by("name")
             .prefetch_related(Prefetch("upload_set", uploads))
             .prefetch_related("upload_set__file_set")

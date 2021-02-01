@@ -133,8 +133,6 @@ def geocode(postcode):
 
 def get_council(geocode_result):
     try:
-        return Council.objects.defer("area").get(
-            council_id=geocode_result.get_code("lad")
-        )
+        return Council.objects.get(council_id=geocode_result.get_code("lad"))
     except Council.DoesNotExist:
-        return Council.objects.defer("area").get(area__covers=geocode_result.centroid)
+        return Council.objects.get(area__covers=geocode_result.centroid)
