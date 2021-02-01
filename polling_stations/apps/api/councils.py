@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework_gis.fields import GeometrySerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from councils.models import Council
@@ -23,24 +24,43 @@ def contact_type_to_dict(obj, contact_type):
     return data
 
 
-class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
+COUNCIL_FIELDS = (
+    "url",
+    "council_id",
+    "name",
+    "email",
+    "phone",
+    "website",
+    "postcode",
+    "address",
+    "electoral_services_contacts",
+    "registration_contacts",
+    "identifiers",
+    "nation",
+)
+
+
+class CouncilContactsMixin(object):
+    def get_phone(self, obj):
+        try:
+            return obj.electoral_services_phone_numbers[0]
+        except IndexError:
+            return ""
+
+    def get_electoral_services_contacts(self, obj):
+        return contact_type_to_dict(obj, "electoral_services")
+
+    def get_registration_contacts(self, obj):
+        return contact_type_to_dict(obj, "registration")
+
+
+class CouncilDataSerializer(
+    serializers.HyperlinkedModelSerializer, CouncilContactsMixin
+):
     class Meta:
         model = Council
         lookup_field = "council_id"
-        fields = (
-            "url",
-            "council_id",
-            "name",
-            "email",
-            "phone",
-            "website",
-            "postcode",
-            "address",
-            "identifiers",
-            "electoral_services_contacts",
-            "registration_contacts",
-            "nation",
-        )
+        fields = COUNCIL_FIELDS
 
     email = serializers.EmailField(source="electoral_services_email")
     phone = serializers.SerializerMethodField()
@@ -52,38 +72,19 @@ class CouncilDataSerializer(serializers.HyperlinkedModelSerializer):
     registration_contacts = serializers.SerializerMethodField()
     nation = serializers.CharField()
 
-    def get_phone(self, obj):
-        try:
-            return obj.electoral_services_phone_numbers[0]
-        except IndexError:
-            return ""
 
-    def get_electoral_services_contacts(self, obj):
-        return contact_type_to_dict(obj, "electoral_services")
+class CouncilGeoSerializer(GeoFeatureModelSerializer, CouncilContactsMixin):
+    geography_model_geo_field = GeometrySerializerMethodField()
 
-    def get_registration_contacts(self, obj):
-        return contact_type_to_dict(obj, "registration")
+    def get_geography_model_geo_field(self, obj):
+        return obj.geography.geography
 
-
-class CouncilGeoSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Council
-        geo_field = "area"
+        geo_field = "geography_model_geo_field"
         id_field = "council_id"
         extra_kwargs = {"url": {"view_name": "council-geo", "lookup_field": "pk"}}
-        fields = (
-            "url",
-            "council_id",
-            "name",
-            "email",
-            "phone",
-            "website",
-            "postcode",
-            "address",
-            "electoral_services_contacts",
-            "registration_contacts",
-            "identifiers",
-        )
+        fields = COUNCIL_FIELDS
 
     email = serializers.EmailField(source="electoral_services_email")
     phone = serializers.SerializerMethodField()
@@ -94,21 +95,9 @@ class CouncilGeoSerializer(GeoFeatureModelSerializer):
     electoral_services_contacts = serializers.SerializerMethodField()
     registration_contacts = serializers.SerializerMethodField()
 
-    def get_phone(self, obj):
-        try:
-            return obj.electoral_services_phone_numbers[0]
-        except IndexError:
-            return ""
-
-    def get_electoral_services_contacts(self, obj):
-        return contact_type_to_dict(obj, "electoral_services")
-
-    def get_registration_contacts(self, obj):
-        return contact_type_to_dict(obj, "registration")
-
 
 class CouncilViewSet(ReadOnlyModelViewSet):
-    queryset = Council.objects.all().defer("area")
+    queryset = Council.objects.all()
     serializer_class = CouncilDataSerializer
 
     def retrieve(self, request, *args, **kwargs):
