@@ -11,11 +11,11 @@ from pollingstations.models import PollingStation
 class Address(AbstractAddress):
     @property
     def council_id(self):
-        return self.uprntocouncil.lad
+        return self.council.council_id
 
     @property
     def council(self):
-        return Council.objects.get(council_id=self.council_id)
+        return Council.objects.get(identifiers__contains=[self.uprntocouncil.lad])
 
     @property
     def polling_station_id(self):
