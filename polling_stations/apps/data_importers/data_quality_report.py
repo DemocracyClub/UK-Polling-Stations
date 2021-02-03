@@ -2,6 +2,8 @@ import re
 
 from django.db import connection
 from django.db.models import Q
+
+from councils.models import Council
 from pollingstations.models import PollingStation, PollingDistrict
 from addressbase.models import UprnToCouncil
 
@@ -247,14 +249,15 @@ class DistrictReport:
 class AddressReport:
     def __init__(self, council_id):
         self.council_id = council_id
+        self.gss_code = Council.objects.get(pk=council_id).geography.gss
 
     def get_uprns_in_addressbase(self):
-        return UprnToCouncil.objects.filter(lad=self.council_id).count()
+        return UprnToCouncil.objects.filter(lad=self.gss_code).count()
 
     def get_addresses_with_station_id(self):
         return (
             UprnToCouncil.objects.filter(
-                lad=self.council_id, polling_station_id__isnull=False
+                lad=self.gss_code, polling_station_id__isnull=False
             )
             .exclude(polling_station_id="")
             .count()
@@ -263,7 +266,7 @@ class AddressReport:
     def get_addresses_without_station_id(self):
         return UprnToCouncil.objects.filter(
             Q(polling_station_id__isnull=True) | Q(polling_station_id=""),
-            council_id=self.council_id,
+            council_id=self.gss_code,
         ).count()
 
     def get_addresses_with_valid_station_id_ref(self):
@@ -278,7 +281,7 @@ class AddressReport:
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [self.council_id, self.council_id],
+            [self.council_id, self.gss_code],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -295,7 +298,7 @@ class AddressReport:
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [self.council_id, self.council_id],
+            [self.council_id, self.gss_code],
         )
         results = cursor.fetchall()
         return results[0][0]
