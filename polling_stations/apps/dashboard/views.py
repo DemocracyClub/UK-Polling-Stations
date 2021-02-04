@@ -168,6 +168,7 @@ class PostCodeGeoJSONView(View):
                                 )
                             ],
                             "uprn": address.uprn,
+                            "polling_station_id": address.polling_station_id,
                             "url": reverse("address_view", args=(address.uprn,)),
                         },
                     }

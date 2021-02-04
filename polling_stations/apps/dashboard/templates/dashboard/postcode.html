@@ -39,7 +39,10 @@
                             var popup = document.createElement("div");
                             popup.appendChild(document.createElement("p")).textContent = feature.properties.address;
                             if (feature.properties.uprn) {
-                                popup.appendChild(document.createElement("p")).textContent = feature.properties.uprn;
+                                popup.appendChild(document.createElement("p")).textContent = "uprn: " + feature.properties.uprn;
+                            }
+                            if (feature.properties.polling_station_id) {
+                                popup.appendChild(document.createElement("p")).textContent = "Station: " + feature.properties.polling_station_id;
                             }
                             var viewLink = popup.appendChild(document.createElement("a"));
                             viewLink.textContent = "View";
