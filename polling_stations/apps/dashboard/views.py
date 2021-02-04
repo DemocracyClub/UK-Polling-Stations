@@ -166,7 +166,9 @@ class PostCodeGeoJSONView(View):
                                     address.council_id,
                                     address.polling_station_id,
                                 )
-                            ],
+                            ]
+                            if address.polling_station_id
+                            else "white",
                             "uprn": address.uprn,
                             "polling_station_id": address.polling_station_id,
                             "url": reverse("address_view", args=(address.uprn,)),
