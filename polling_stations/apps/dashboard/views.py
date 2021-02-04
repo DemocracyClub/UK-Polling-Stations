@@ -36,14 +36,14 @@ class CouncilDetailView(DetailView):
                     SELECT aa.postcode, st_transform(st_collect(aa.location), 27700) AS multipoint
                     FROM addressbase_address aa  JOIN addressbase_uprntocouncil uc
                     ON aa.uprn = uc.uprn
-                    WHERE uc.lad = %s
+                    WHERE uc.lad IN %s AND uc.polling_station_id != ''
                     GROUP BY aa.postcode
                 ) AS subquery
                 WHERE multipoint IS NOT NULL
                 ORDER BY maxdistance DESC
                 LIMIT 20;
             """,
-                (object.pk,),
+                (tuple(object.identifiers),),
             )
             context["postcodes_by_diameter"] = cursor.fetchall()
 
@@ -57,25 +57,27 @@ class CouncilDetailView(DetailView):
                     aa.postcode,
                     st_distance(
                         st_transform(ps.location, 27700),
-                        st_transform(COALESCE(aa.location, onspd.location), 27700)
+                        st_transform(COALESCE(aa.location), 27700)
                     )::int AS distance
                 FROM
                     pollingstations_pollingstation ps,
                     addressbase_address aa JOIN
                     addressbase_uprntocouncil uc ON
-                        aa.uprn = uc.uprn
-                    LEFT OUTER JOIN uk_geo_utils_onspd onspd ON
-                        onspd.pcds=LEFT(aa.postcode, LENGTH(aa.postcode)-3) || ' ' || RIGHT(aa.postcode, 3)
-                WHERE ps.council_id=uc.lad
+                        aa.uprn = uc.uprn JOIN
+                    councils_council cc ON
+                        uc.lad = ANY(cc.identifiers)
+                WHERE
+                    cc.council_id = %s
+                    AND ps.council_id=cc.council_id
                     AND uc.polling_station_id=ps.internal_council_id
-                    AND uc.lad=%s
                     AND ps.location IS NOT NULL
-                    AND COALESCE(aa.location, onspd.location) IS NOT NULL
+                    AND aa.location IS NOT NULL
                 ORDER BY distance DESC, aa.uprn
                 LIMIT 100;
-            """,
-                (object.pk,),
+                """,
+                (object.council_id,),
             )
+
             context["distances_to_stations"] = cursor.fetchall()
 
         context["pollingstation_list"] = PollingStation.objects.filter(council=object)
