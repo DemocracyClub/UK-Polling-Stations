@@ -1,8 +1,11 @@
 from collections import namedtuple
 from unittest import mock
 
+from django.core.management import call_command
 from django.http import QueryDict
 from django.test import TestCase
+
+from councils.tests.factories import CouncilFactory
 from data_finder.helpers import RoutingHelper
 
 MockAddress = namedtuple(
@@ -12,13 +15,26 @@ MockAddress = namedtuple(
 
 
 class RoutingHelperTest(TestCase):
-    fixtures = [
-        "test_single_address_single_polling_station.json",
-        "test_single_address_blank_polling_station.json",
-        "test_multiple_addresses_single_polling_station.json",
-        "test_multiple_polling_stations.json",
-        "test_multiple_polling_stations_with_null",
-    ]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="X01",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+
+        for fixture in [
+            "test_single_address_single_polling_station.json",
+            "test_single_address_blank_polling_station.json",
+            "test_multiple_addresses_single_polling_station.json",
+            "test_multiple_polling_stations.json",
+            "test_multiple_polling_stations_with_null",
+        ]:
+            call_command(  # Hack to avoid converting all fixtures to factories
+                "loaddata",
+                fixture,
+                verbosity=0,
+            )
 
     def setUp(self):
         self.no_addresses_rh = RoutingHelper("")

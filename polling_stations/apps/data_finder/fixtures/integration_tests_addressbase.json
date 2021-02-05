@@ -1,45 +1,4 @@
-[    {
-        "fields": {
-            "name": "Foo Council",
-            "electoral_services_email": "",
-            "electoral_services_phone_numbers": [""],
-            "electoral_services_website": "",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["X01"]
-        },
-        "model": "councils.council",
-        "pk": "FOO"
-    },
-    {
-        "fields": {
-            "name": "Bristol City Council",
-            "electoral_services_email": "",
-            "electoral_services_phone_numbers": [""],
-            "electoral_services_website": "",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["E06000023"]
-        },
-        "model": "councils.council",
-        "pk": "BST"
-    },
-    {
-        "fields": {
-            "name": "",
-            "electoral_services_email": "info@eoni.org.uk",
-            "electoral_services_phone_numbers": [""],
-            "electoral_services_website": "http://www.eoni.org.uk/",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["N09000003"]
-        },
-        "model": "councils.council",
-        "pk": "N09000003"
-    },
+[
     {
         "fields": {
             "council": "FOO",
@@ -84,14 +43,14 @@
     },
     {
         "fields": {
-            "lad": "FOO"
+            "lad": "X01"
         },
         "model": "addressbase.uprntocouncil",
         "pk": "04"
     },
     {
         "fields": {
-            "lad": "FOO",
+            "lad": "X01",
             "polling_station_id": "1A"
         },
         "model": "addressbase.uprntocouncil",
@@ -99,7 +58,7 @@
     },
     {
         "fields": {
-            "lad": "FOO"
+            "lad": "X01"
         },
         "model": "addressbase.uprntocouncil",
         "pk": "06"
@@ -116,7 +75,7 @@
     },
     {
         "fields": {
-            "lad": "NWP",
+            "lad": "W06000022",
             "polling_station_id": "3B"
         },
         "model": "addressbase.uprntocouncil",

@@ -1,21 +1,6 @@
 [
     {
         "fields": {
-            "name": "Foo Council",
-            "electoral_services_email": "",
-            "electoral_services_phone_numbers": [""],
-            "electoral_services_website": "",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["X01"]
-        },
-        "model": "councils.council",
-        "pk": "X01"
-    },
-
-    {
-        "fields": {
             "uprn": "100",
             "lad": "X01",
             "polling_station_id": "1A"
