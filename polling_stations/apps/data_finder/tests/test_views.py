@@ -1,11 +1,27 @@
+from django.core.management import call_command
 from django.test import TestCase
+
+from councils.tests.factories import CouncilFactory
 
 
 class HomeViewTestCase(TestCase):
-    fixtures = [
-        "test_routing.json",
-        "test_multiple_addresses_single_polling_station.json",
-    ]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="X01",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+
+        for fixture in [
+            "test_routing.json",
+            "test_multiple_addresses_single_polling_station.json",
+        ]:
+            call_command(  # Hack to avoid converting all fixtures to factories
+                "loaddata",
+                fixture,
+                verbosity=0,
+            )
 
     def test_get(self):
         response = self.client.get("/")
@@ -22,7 +38,20 @@ class HomeViewTestCase(TestCase):
 
 
 class PostCodeViewTestCase(TestCase):
-    fixtures = ["test_routing.json", "test_multiple_polling_stations.json"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="X01",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+
+        for fixture in ["test_routing.json", "test_multiple_polling_stations.json"]:
+            call_command(  # Hack to avoid converting all fixtures to factories
+                "loaddata",
+                fixture,
+                verbosity=0,
+            )
 
     def test_redirect_if_should_be_other_view(self):
         # This should go to the address picker, because it's split over multiple polling districts
@@ -34,10 +63,25 @@ class PostCodeViewTestCase(TestCase):
 
 
 class PostCodeViewNoStationTestCase(TestCase):
-    fixtures = [
-        "test_single_address_blank_polling_station.json",
-        "test_postcode_not_in_addressbase.json",
-    ]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="X01",
+            name="Foo Council",
+            electoral_services_phone_numbers=["01314 159265"],
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+
+        for fixture in [
+            "test_single_address_blank_polling_station.json",
+            "test_postcode_not_in_addressbase.json",
+        ]:
+            call_command(  # Hack to avoid converting all fixtures to factories
+                "loaddata",
+                fixture,
+                verbosity=0,
+            )
 
     def test_polling_station_is_blank(self):
         response = self.client.get(
@@ -57,12 +101,32 @@ class PostCodeViewNoStationTestCase(TestCase):
 
 
 class WeDontknowViewTestCase(TestCase):
-    fixtures = ["test_uprns_in_multiple_councils"]
     """
     'FF22FF' is a postcode with uprns in multiple councils and some polling stations.
     'GG22GG' is a postcode with uprns in multiple councils and no polling stations.
     'HH22HH' is a postcode with uprns in a single council and no polling stations.
     """
+
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="FOO",
+            name="Foo Council",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+        CouncilFactory(
+            council_id="BAR",
+            name="Bar Borough",
+            identifiers=["X02"],
+            geography__geography=None,
+        )
+
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "test_uprns_in_multiple_councils",
+            verbosity=0,
+        )
 
     def test_not_multiple_redirect(self):
         response = self.client.post(

@@ -31,19 +31,5 @@
         },
         "model": "pollingstations.pollingstation",
         "pk": 2
-    },
-    {
-        "fields": {
-            "name": "Foo Council",
-            "electoral_services_email": "",
-            "electoral_services_phone_numbers": ["01314 159265"],
-            "electoral_services_website": "",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["X01"]
-        },
-        "model": "councils.council",
-        "pk": "X01"
     }
 ]
