@@ -9,6 +9,7 @@ from collections import namedtuple
 from django.db import connection
 
 from addressbase.models import get_uprn_hash_table, UprnToCouncil
+from councils.models import Council
 from pollingstations.models import PollingDistrict, PollingStation
 from uk_geo_utils.helpers import Postcode
 
@@ -71,11 +72,15 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
             else:
                 return e.council.council_id
 
+    @property
+    def gss_code(self):
+        return Council.objects.get(pk=self.council_id).geography.gss
+
     def update_uprn_to_council_model(self, polling_station_lookup=None):
         if not polling_station_lookup:
             polling_station_lookup = self.get_polling_station_lookup()
 
-        uprns_in_council = UprnToCouncil.objects.filter(lad=self.council_id)
+        uprns_in_council = UprnToCouncil.objects.filter(lad=self.gss_code)
         for polling_station_id, uprns in polling_station_lookup.items():
             uprns_in_council.filter(uprn__in=uprns).update(
                 polling_station_id=polling_station_id
@@ -125,7 +130,7 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
                 WHERE d.council_id=%s
                 AND u.lad=%s
             """,
-            [self.council_id, self.council_id],
+            [self.council_id, self.gss_code],
         )
         return cursor.fetchall()
 
@@ -145,7 +150,7 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
                 AND u.lad=%s
                 AND s.council_id=%s
             """,
-            [self.council_id, self.council_id, self.council_id],
+            [self.council_id, self.gss_code, self.council_id],
         )
         return cursor.fetchall()
 
@@ -183,7 +188,7 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
                 districts_have_station_ids
             )
 
-        uprns_in_council = UprnToCouncil.objects.filter(lad=self.council_id)
+        uprns_in_council = UprnToCouncil.objects.filter(lad=self.gss_code)
         seen = set()
         for polling_station_id, uprns in polling_station_lookup.items():
             uprns_in_council.filter(uprn__in=uprns).update(
@@ -314,6 +319,6 @@ class AddressList(AssignPollingStationsMixin):
 
     def check_records(self):
         self.remove_duplicate_uprns()
-        addressbase_data = get_uprn_hash_table(self.council_id)
+        addressbase_data = get_uprn_hash_table(self.gss_code)
         self.remove_records_not_in_addressbase(addressbase_data)
         self.remove_records_that_dont_match_addressbase(addressbase_data)

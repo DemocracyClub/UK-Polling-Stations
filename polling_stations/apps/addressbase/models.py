@@ -55,8 +55,8 @@ class UprnToCouncil(models.Model):
     polling_station_id = models.CharField(blank=True, max_length=255)
 
 
-def get_uprn_hash_table(council_id):
-    addresses = Address.objects.filter(uprntocouncil__lad=council_id)
+def get_uprn_hash_table(gss_code):
+    addresses = Address.objects.filter(uprntocouncil__lad=gss_code)
     # return result a hash table keyed by UPRN
     return {
         a.uprn: {
