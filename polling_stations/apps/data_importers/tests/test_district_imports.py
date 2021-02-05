@@ -2,7 +2,7 @@
 from django.db import IntegrityError
 from django.test import TestCase
 
-from councils.models import Council
+from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import (
     stub_specialcases,
     stub_duplicatestation,
@@ -21,7 +21,7 @@ class ImporterTest(TestCase):
 
     # create a dummy council which we're going to import data for
     def create_dummy_council(self):
-        Council.objects.update_or_create(pk="AAA", identifiers=["X01000000"])
+        CouncilFactory(pk="AAA", identifiers=["X01000000"])
 
     def test_special_cases(self):
         """

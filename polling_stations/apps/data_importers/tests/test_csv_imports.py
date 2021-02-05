@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from addressbase.models import UprnToCouncil, Address
-from councils.models import Council
+from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import stub_addressimport
 
 
@@ -14,13 +14,12 @@ class ImporterTest(TestCase):
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="Foo")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
 
-        Council.objects.update_or_create(pk="Foo", identifiers=["X01000000"])
+        CouncilFactory(pk="ABC", identifiers=["X01000000"])
 
         cmd = stub_addressimport.Command()
         cmd.addresses_name = addresses_name
-
         cmd.handle(**self.opts)
 
     def test_duplicate_uprns(self):
@@ -48,7 +47,7 @@ class ImporterTest(TestCase):
         self.set_up(**test_params)
 
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="Foo")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", "polling_station_id")
@@ -74,7 +73,7 @@ class ImporterTest(TestCase):
         self.set_up(**test_params)
 
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="Foo")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", "polling_station_id")
@@ -99,10 +98,10 @@ class ImporterTest(TestCase):
         }
         self.set_up(**test_params)
 
-        UprnToCouncil.objects.update_or_create(pk=4, lad="Bar")
+        UprnToCouncil.objects.update_or_create(pk=4, lad="X01000002")
 
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="Foo")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", "polling_station_id")
@@ -128,7 +127,7 @@ class ImporterTest(TestCase):
         self.set_up(**test_params)
 
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="Foo")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", "polling_station_id")
@@ -170,7 +169,7 @@ class ImporterTest(TestCase):
         self.set_up(**test_params)
 
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="Foo")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", "polling_station_id")

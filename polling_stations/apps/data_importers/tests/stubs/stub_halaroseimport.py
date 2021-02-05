@@ -3,7 +3,7 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "X01000000"
+    council_id = "AAA"
     addresses_name = "test.csv"
     stations_name = "test.csv"
     base_folder_path = os.path.join(

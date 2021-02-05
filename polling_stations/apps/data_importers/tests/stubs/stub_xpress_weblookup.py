@@ -3,7 +3,7 @@ from data_importers.management.commands import BaseXpressWebLookupCsvImporter
 
 
 class Command(BaseXpressWebLookupCsvImporter):
-    council_id = "X01000000"
+    council_id = "AAA"
     addresses_name = "test_weblookup.csv"
     stations_name = "test_weblookup.csv"
     base_folder_path = os.path.join(

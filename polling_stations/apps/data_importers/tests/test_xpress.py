@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from councils.models import Council
+from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import stub_xpress_democlub, stub_xpress_weblookup
 from pollingstations.models import PollingStation
 from addressbase.models import UprnToCouncil, Address
@@ -42,15 +42,15 @@ class XpressDemocracyClubImportTests(TestCase):
         for address in self.addressbase:
             Address.objects.update_or_create(**address)
 
-        Council.objects.update_or_create(pk="AAA", identifiers=["X01000000"])
+        CouncilFactory(pk="AAA", identifiers=["X01000000"])
         for uprn in self.uprns:
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
         cmd = stub_xpress_democlub.Command()
         cmd.handle(**self.opts)
 
     def test_addresses(self):
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="AAA")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", flat=True)
@@ -128,16 +128,16 @@ class XpressWebLookupImportTests(TestCase):
         for address in self.addressbase:
             Address.objects.update_or_create(**address)
 
-        Council.objects.update_or_create(pk="AAA", identifiers=["X01000000"])
+        CouncilFactory(pk="AAA", identifiers=["X01000000"])
         for uprn in self.uprns:
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
 
         cmd = stub_xpress_weblookup.Command()
         cmd.handle(**self.opts)
 
     def test_addresses(self):
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="AAA")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", flat=True)

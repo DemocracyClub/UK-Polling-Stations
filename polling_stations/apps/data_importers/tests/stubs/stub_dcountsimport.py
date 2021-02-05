@@ -3,7 +3,7 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
-    council_id = "X01000000"
+    council_id = "AAA"
     addresses_name = "districts.csv"
     stations_name = "stations.csv"
     base_folder_path = os.path.join(

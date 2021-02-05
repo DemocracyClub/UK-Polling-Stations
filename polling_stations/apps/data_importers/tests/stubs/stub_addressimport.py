@@ -10,7 +10,7 @@ Define a stub implementation of address importer we can run tests against
 class Command(BaseCsvStationsCsvAddressesImporter):
 
     srid = 4326
-    council_id = "X01000000"
+    council_id = "ABC"
     addresses_name = "addresses.csv"
     stations_name = "stations.csv"
     base_folder_path = os.path.join(

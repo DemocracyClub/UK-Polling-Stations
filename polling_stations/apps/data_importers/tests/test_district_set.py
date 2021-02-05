@@ -3,13 +3,14 @@ from django.test import TestCase
 
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
+from councils.tests.factories import CouncilFactory
 from data_importers.data_types import DistrictSet
 from pollingstations.models import PollingDistrict
 
 
 class DistrictSetTest(TestCase):
     def setUp(self):
-        Council.objects.update_or_create(pk="AAA")
+        CouncilFactory(pk="AAA", identifiers=["X01000000"])
 
     def tearDown(self):
         PollingDistrict.objects.all().delete()
@@ -62,7 +63,7 @@ class DistrictSetTest(TestCase):
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
 
         district_set = DistrictSet()
         for element in polling_districts:
@@ -128,7 +129,7 @@ class DistrictSetTest(TestCase):
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
         district_set = DistrictSet()
         for element in polling_districts:
             district_set.add(element)
@@ -203,7 +204,7 @@ class DistrictSetTest(TestCase):
             Address.objects.update_or_create(**address)
 
         for uprn in uprns:
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
 
         district_set = DistrictSet()
         for element in polling_districts:
@@ -234,7 +235,7 @@ class DistrictSetTest(TestCase):
 
         for uprn in uprns:
             Address.objects.update_or_create(pk=uprn)
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
 
         # '2' fell in an overlapping section of the two districts.
         # '4' fell in no districts.
