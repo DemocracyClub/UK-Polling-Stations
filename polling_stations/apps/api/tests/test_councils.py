@@ -1,10 +1,28 @@
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from api.councils import CouncilViewSet
+from councils.tests.factories import CouncilFactory
 
 
 class CouncilsTest(TestCase):
-    fixtures = ["polling_stations/apps/api/fixtures/test_councils.json"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="ABC",
+            name="ABC Council",
+            electoral_services_email="",
+            electoral_services_phone_numbers=[""],
+            electoral_services_website="",
+            electoral_services_postcode="",
+            electoral_services_address="",
+            identifiers=["X01000001", "E06000001"],
+            geography__geography="MULTIPOLYGON (((-2.83447265625 53.64203274279828,1.549072265625 53.64203274279828,1.549072265625 52.52691653862567,-2.83447265625 52.52691653862567,-2.83447265625 53.64203274279828)))",
+        )
+        CouncilFactory(
+            council_id="DEF",
+            identifiers=["X01000002"],
+            geography__geography=None,
+        )
 
     def setUp(self):
         factory = APIRequestFactory()
@@ -63,7 +81,7 @@ class CouncilsTest(TestCase):
                 "council_id": "ABC",
                 "email": "",
                 "identifiers": ["X01000001", "E06000001"],
-                "name": "X01000001",
+                "name": "ABC Council",
                 "nation": "England",
                 "phone": "",
                 "postcode": "",

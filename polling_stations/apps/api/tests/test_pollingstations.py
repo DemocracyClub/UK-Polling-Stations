@@ -1,12 +1,33 @@
+from django.core.management import call_command
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
 from api.pollingstations import PollingStationViewSet
+from councils.tests.factories import CouncilFactory
 
 
 class PollingStationsTest(TestCase):
-    fixtures = [
-        "polling_stations/apps/api/fixtures/test_api_pollingdistricts_stations.json"
-    ]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="ABC",
+            identifiers=["X01000001"],
+            geography__geography=None,
+        )
+        CouncilFactory(
+            council_id="DEF",
+            identifiers=["X01000002"],
+            geography__geography=None,
+        )
+        CouncilFactory(
+            council_id="GHI",
+            identifiers=["X01000003"],
+            geography__geography=None,
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/api/fixtures/test_api_pollingdistricts_stations.json",
+            verbosity=0,
+        )
 
     def test_bad_request(self):
         # passing a station_id param with no council_id param should throw

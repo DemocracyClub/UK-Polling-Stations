@@ -1,52 +1,6 @@
 [
     {
         "fields": {
-            "name": "",
-            "electoral_services_email": "",
-            "electoral_services_phone_numbers": [""],
-            "electoral_services_website": "",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["X01000001"]
-
-        },
-        "model": "councils.council",
-        "pk": "ABC"
-    },
-    {
-        "fields": {
-            "name": "",
-            "electoral_services_email": "",
-            "electoral_services_phone_numbers": [""],
-            "electoral_services_website": "",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["X01000002"]
-
-        },
-        "model": "councils.council",
-        "pk": "DEF"
-    },
-    {
-        "fields": {
-            "name": "",
-            "electoral_services_email": "",
-            "electoral_services_phone_numbers": [""],
-            "electoral_services_website": "",
-            "electoral_services_postcode": "",
-            "electoral_services_address": "",
-            "area": null,
-            "identifiers": ["X01000003"]
-
-        },
-        "model": "councils.council",
-        "pk": "GHI"
-    },
-
-    {
-        "fields": {
             "location": "POINT (-2.39501953125 52.67638208083924)",
             "address": "St Foo's Church Hall, Bar Town",
             "internal_council_id": "1",
