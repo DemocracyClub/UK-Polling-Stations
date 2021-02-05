@@ -1,9 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
+from django.core.management import call_command
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.views import APIView
 from api.postcode import PostcodeViewSet
+from councils.tests.factories import CouncilFactory
 from data_finder.helpers import PostcodeError
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
@@ -55,7 +57,23 @@ def mock_geocode(postcode):
 
 
 class PostcodeTest(APITestCase):
-    fixtures = ["polling_stations/apps/api/fixtures/test_address_postcode.json"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="ABC",
+            identifiers=["X01000001"],
+            geography__geography="MULTIPOLYGON (((-2.83447265625 53.64203274279828,1.549072265625 53.64203274279828,1.549072265625 52.52691653862567,-2.83447265625 52.52691653862567,-2.83447265625 53.64203274279828)))",
+        )
+        CouncilFactory(
+            council_id="DEF",
+            identifiers=["X01000002"],
+            geography__geography="MULTIPOLYGON (((-4.141845703125 52.20491365416633,-2.8125 52.20491365416633,-2.8125 51.731111030918306,-4.141845703125 51.731111030918306,-4.141845703125 52.20491365416633)))",
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/api/fixtures/test_address_postcode.json",
+            verbosity=0,
+        )
 
     def setUp(self):
         factory = APIRequestFactory()
