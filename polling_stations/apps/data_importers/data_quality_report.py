@@ -306,8 +306,9 @@ class AddressReport:
 
 # generate all the stats
 class DataQualityReportBuilder:
-    def __init__(self, council_id, expecting_districts):
+    def __init__(self, council_id, expecting_districts, csv_rows=None):
         self.council_id = council_id
+        self.csv_rows = csv_rows
         self.report = []
         # Whether the importer is expected to have imported districts;
         # controls whether relevant summaries appear in the report.
@@ -493,7 +494,11 @@ class DataQualityReportBuilder:
                     f" - As % of uprns in addressbase  : {round(100 * station_ids / uprns_in_council_area, 1)}%"
                 )
             )
-
+            self.report.append(
+                ANSI.ok_bold(
+                    f" - As % of rows in council csv   : {round(100 * station_ids / self.csv_rows, 1)}%"
+                )
+            )
             self.report.append("----------------------------------")
             self.report.append(
                 ANSI.ok(

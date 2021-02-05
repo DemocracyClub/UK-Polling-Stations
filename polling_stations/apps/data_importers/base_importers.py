@@ -128,7 +128,9 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
     def report(self):
         # build report
         report = DataQualityReportBuilder(
-            self.council.pk, expecting_districts=self.imports_districts
+            self.council.pk,
+            expecting_districts=self.imports_districts,
+            csv_rows=len(self.addresses.elements),
         )
         station_report = StationReport(self.council.pk)
         district_report = DistrictReport(self.council.pk)
