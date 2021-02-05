@@ -60,12 +60,13 @@ class Command(BaseCommand):
             council_id = kwargs["council"]
             print("Deleting data for council %s..." % (council_id))
             # check this council exists
-            Council.objects.get(pk=council_id)
+            council_obj = Council.objects.get(pk=council_id)
+            gss_code = council_obj.geography.gss
 
             PollingStation.objects.filter(council=council_id).delete()
             PollingDistrict.objects.filter(council=council_id).delete()
 
-            UprnToCouncil.objects.filter(lad=council_id).update(polling_station_id="")
+            UprnToCouncil.objects.filter(lad=gss_code).update(polling_station_id="")
 
             dq = DataQuality.objects.get(council_id=council_id)
             dq.report = ""
