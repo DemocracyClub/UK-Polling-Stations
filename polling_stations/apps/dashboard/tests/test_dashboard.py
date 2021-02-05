@@ -1,9 +1,11 @@
 import json
 
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from django.test import TestCase
 
 from councils.models import Council
+from councils.tests.factories import CouncilFactory
 from pollingstations.models import PollingStation
 
 """
@@ -16,13 +18,39 @@ UserModel = get_user_model()
 
 
 class DashboardTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="FOO",
+            name="Foo Council",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/dashboard/fixtures/test_dashboard.json",
+            verbosity=0,
+        )
+
     def setUp(self):
         self.user = UserModel.objects.create(username="staff", is_staff=True)
         self.client.force_login(self.user)
 
 
 class CouncilDetailViewTestCase(DashboardTestCase):
-    fixtures = ["test_dashboard"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="FOO",
+            name="Foo Council",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/dashboard/fixtures/test_dashboard.json",
+            verbosity=0,
+        )
 
     def test_get(self):
         council = Council.objects.get(pk="FOO")
@@ -32,7 +60,19 @@ class CouncilDetailViewTestCase(DashboardTestCase):
 
 
 class PostCodeViewTestCase(DashboardTestCase):
-    fixtures = ["test_dashboard"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="FOO",
+            name="Foo Council",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/dashboard/fixtures/test_dashboard.json",
+            verbosity=0,
+        )
 
     def test_known_postcode(self):
         response = self.client.get("/dashboard/postcode/AA11AA/")
@@ -41,7 +81,19 @@ class PostCodeViewTestCase(DashboardTestCase):
 
 
 class PostCodeGeoJSONTestCase(DashboardTestCase):
-    fixtures = ["test_dashboard"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="FOO",
+            name="Foo Council",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/dashboard/fixtures/test_dashboard.json",
+            verbosity=0,
+        )
 
     def test_unknown_postcode(self):
         response = self.client.get("/dashboard/postcode/ZZ11ZZ.geojson")
@@ -81,7 +133,19 @@ class PostCodeGeoJSONTestCase(DashboardTestCase):
 
 
 class PollingStationDetailView(DashboardTestCase):
-    fixtures = ["test_dashboard"]
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="FOO",
+            name="Foo Council",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/dashboard/fixtures/test_dashboard.json",
+            verbosity=0,
+        )
 
     def test_get(self):
         polling_station = PollingStation.objects.get(pk=1)
