@@ -2,7 +2,7 @@ from collections import namedtuple
 from django.test import TestCase
 
 from addressbase.models import Address, UprnToCouncil
-from councils.models import Council
+from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import stub_halaroseimport
 from pollingstations.models import PollingStation
 
@@ -43,15 +43,15 @@ class HalaroseImportTests(TestCase):
         for address in self.addressbase:
             Address.objects.update_or_create(**address)
 
-        Council.objects.update_or_create(pk="AAA", identifiers=["X01000000"])
+        CouncilFactory(pk="AAA", identifiers=["X01000000"])
         for uprn in self.uprns:
-            UprnToCouncil.objects.update_or_create(pk=uprn, lad="AAA")
+            UprnToCouncil.objects.update_or_create(pk=uprn, lad="X01000000")
         cmd = stub_halaroseimport.Command()
         cmd.handle(**self.opts)
 
     def test_addresses(self):
         imported_uprns = (
-            UprnToCouncil.objects.filter(lad="AAA")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", flat=True)
@@ -63,7 +63,7 @@ class HalaroseImportTests(TestCase):
 
     def test_station_ids(self):
         imported_uprns_and_ids = (
-            UprnToCouncil.objects.filter(lad="AAA")
+            UprnToCouncil.objects.filter(lad="X01000000")
             .exclude(polling_station_id="")
             .order_by("uprn")
             .values_list("uprn", "polling_station_id")

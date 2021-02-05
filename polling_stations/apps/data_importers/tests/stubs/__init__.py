@@ -6,7 +6,7 @@ from data_importers.management.commands import BaseCsvStationsJsonDistrictsImpor
 
 class BaseStubCsvStationsJsonDistrictsImporter(BaseCsvStationsJsonDistrictsImporter):
 
-    council_id = "X01000000"
+    council_id = "AAA"
 
     def district_record_to_dict(self, record):
         properties = record["properties"]
@@ -29,7 +29,7 @@ class BaseStubCsvStationsJsonDistrictsImporter(BaseCsvStationsJsonDistrictsImpor
 
 class BaseStubCsvStationsKmlDistrictsImporter(BaseCsvStationsKmlDistrictsImporter):
 
-    council_id = "X01000000"
+    council_id = "AAA"
 
     def district_record_to_dict(self, record):
         geojson = record.geom.geojson

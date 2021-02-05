@@ -13,7 +13,7 @@ station_record_to_dict() may return None or a list
 class Command(BaseCsvStationsJsonDistrictsImporter):
 
     srid = 4326
-    council_id = "X01000000"
+    council_id = "AAA"
     districts_name = "test.geojson"
     stations_name = "test.csv"
     base_folder_path = os.path.join(
