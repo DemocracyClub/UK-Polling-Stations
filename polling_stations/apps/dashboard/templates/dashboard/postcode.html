@@ -44,6 +44,9 @@
                             if (feature.properties.polling_station_id) {
                                 popup.appendChild(document.createElement("p")).textContent = "Station: " + feature.properties.polling_station_id;
                             }
+                            if (feature.properties.internal_council_id) {
+                                popup.appendChild(document.createElement("p")).textContent = "ID: " + feature.properties.internal_council_id;
+                            }
                             var viewLink = popup.appendChild(document.createElement("a"));
                             viewLink.textContent = "View";
                             viewLink.setAttribute("href", feature.properties.url);
