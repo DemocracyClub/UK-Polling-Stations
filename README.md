@@ -31,7 +31,7 @@ From a clean install of Ubuntu 18.04 (Bionic):
 ```
 sudo apt-get install postgresql-10 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-10-postgis-2.4 libxml2-dev libxslt1-dev nodejs npm
 
-sudo npm install -g npm
+sudo npm install -g npm@latest-6
 ```
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
