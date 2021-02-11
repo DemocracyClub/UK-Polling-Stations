@@ -90,13 +90,7 @@
     {% endif %}
 
     {% if not error and request.brand == 'democracyclub' and not messages %}
-      <div class="card">
-        <h2>Free election reminders</h2>
-        <p>We can email you the next time there is an election in {{ postcode }}.</p>
-        {% include "email_form/election_reminders_form.html" %}
-      </div>
       {% include "fragments/ical_feed.html" %}
-
     {% endif %}
 
 {% endblock content %}
