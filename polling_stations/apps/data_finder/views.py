@@ -168,6 +168,7 @@ class BasePollingStationView(
 
         ee = self.get_ee_wrapper()
         context["has_election"] = ee.has_election()
+        context["multiple_elections"] = ee.multiple_elections
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()
         context["voter_id_pilot"] = ee.get_id_pilot_info()

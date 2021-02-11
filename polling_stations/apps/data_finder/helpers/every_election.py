@@ -204,3 +204,11 @@ class EveryElectionWrapper:
 
     def get_id_pilot_info(self):
         return self.get_metadata_by_key("2019-05-02-id-pilot")
+
+    @property
+    def multiple_elections(self):
+        if self.has_election and self.request_success:
+            uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
+            return len(uncancelled_ballots) > 1
+        else:
+            return False

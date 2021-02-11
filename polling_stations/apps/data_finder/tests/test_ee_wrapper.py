@@ -100,6 +100,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
         self.assertEqual(None, ee.get_id_pilot_info())
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -117,6 +118,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
         self.assertEqual(None, ee.get_id_pilot_info())
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -139,6 +141,7 @@ class EveryElectionWrapperTests(TestCase):
             {"voter_id": {"this election": "has an ID pilot"}}, ee.get_metadata()
         )
         self.assertEqual({"this election": "has an ID pilot"}, ee.get_id_pilot_info())
+        self.assertTrue(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -160,6 +163,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
         self.assertEqual(None, ee.get_id_pilot_info())
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -177,6 +181,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
         self.assertEqual(None, ee.get_id_pilot_info())
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -194,6 +199,7 @@ class EveryElectionWrapperTests(TestCase):
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
         self.assertEqual(None, ee.get_id_pilot_info())
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
@@ -239,6 +245,7 @@ class EveryElectionWrapperTests(TestCase):
         ee = EveryElectionWrapper(postcode="AA11AA")
         self.assertTrue(ee.request_success)
         self.assertTrue(ee.has_election())
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -252,6 +259,7 @@ class EveryElectionWrapperTests(TestCase):
         ee = EveryElectionWrapper(postcode="AA11AA")
         self.assertTrue(ee.request_success)
         self.assertFalse(ee.has_election())
+        self.assertFalse(ee.multiple_elections)
 
 
 def get_data_two_ballots_one_cancelled(self, query_url):
@@ -378,6 +386,7 @@ class CancelledElectionTests(TestCase):
         self.assertEqual(cancelled_info["name"], None)
         self.assertEqual(cancelled_info["rescheduled_date"], None)
         self.assertEqual(cancelled_info["metadata"], None)
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -396,6 +405,7 @@ class CancelledElectionTests(TestCase):
         self.assertEqual(cancelled_info["name"], None)
         self.assertEqual(cancelled_info["rescheduled_date"], None)
         self.assertEqual(cancelled_info["metadata"], None)
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -414,6 +424,7 @@ class CancelledElectionTests(TestCase):
         self.assertEqual(cancelled_info["name"], "some election")
         self.assertEqual(cancelled_info["rescheduled_date"], None)
         self.assertEqual(cancelled_info["metadata"], None)
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -435,6 +446,7 @@ class CancelledElectionTests(TestCase):
             (datetime.now() + timedelta(weeks=1)).strftime("%-d %B %Y"),
         )
         self.assertEqual(cancelled_info["metadata"], None)
+        self.assertFalse(ee.multiple_elections)
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
@@ -456,3 +468,4 @@ class CancelledElectionTests(TestCase):
             "Oh noes!" in cancelled_info["metadata"]["cancelled_election"]["detail"]
         )
         self.assertTrue("cancelled_election" in ee.get_metadata())
+        self.assertFalse(ee.multiple_elections)
