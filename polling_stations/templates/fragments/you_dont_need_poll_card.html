@@ -1,7 +1,10 @@
 {% load i18n %}
   {% if voter_id_pilot %}
     <div class="card">
-        <h3>{{ voter_id_pilot.title }}</h3>
+        <h3>
+          <span aria-hidden="true">🗳</span>️
+          {{ voter_id_pilot.title }}
+        </h3>
         <p>{{ voter_id_pilot.detail }}</p>
         <p>
           <a href="{{ voter_id_pilot.url }}">More information on voter ID pilots in your area</a>
@@ -11,7 +14,10 @@
   {% else %}
     <div class="card">
         {% blocktrans %}
-        <h3>You don't need your poll card to vote</h3>
+          <h3>
+            <span aria-hidden="true">🗳</span>️
+            You don't need your poll card to vote
+          </h3>
         <p>
           If you are registered to vote, but you don't have your poll card, you
           can go to the polling station and give them your name and address.

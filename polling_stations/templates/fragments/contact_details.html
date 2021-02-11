@@ -2,9 +2,15 @@
 
 <div class="card">
   {% if territory == 'NI' %}
-    <h3>The Electoral Office for Northern Ireland</h3>
+    <h3>
+        <span aria-hidden="true">📇</span>
+        The Electoral Office for Northern Ireland
+    </h3>
   {% else %}
-    <h3>{% trans "Council Contact info" %}</h3>
+      <h3>
+          <span aria-hidden="true">📇</span>
+          {% trans "Council Contact info" %}
+      </h3>
   {% endif %}
   <address>
     {% if council.electoral_services_address %}

@@ -1,7 +1,10 @@
 {% load i18n %}
 <div class="card">
     {% blocktrans with council.electoral_services_phone_numbers.0 as council_phone and council.name as council_name and council.electoral_services_email as council_electoral_services_email %}
-        <h3>Your election (might) need you!</h3>
+        <h3>
+            <span aria-hidden="true">👉</span>
+            Your election (might) need you!
+        </h3>
         <p>
           A lot of people are needed to make an election happen.
           Your council may be hiring polling station and counting staff for the upcoming elections.
