@@ -5,12 +5,11 @@
         <p>
           A lot of people are needed to make an election happen.
           Your council may be hiring polling station and counting staff for the upcoming elections.
-          Contact your council electoral services team to see if they need help.
+          Contact {{ council_name }} Electoral Services team to see if they need help.
         </p>
         <p>
-          You can <strong><a href="{{ council_electoral_services_email }}">email</a></strong>
-          {{ council_name }} electoral services or call them on
-	        <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
+          You can email them at <strong><a href="mailto:{{ council_electoral_services_email }}">{{ council_electoral_services_email }}</a></strong>
+          or call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
         </p>
     {% endblocktrans %}
 </div>

@@ -60,16 +60,15 @@
       {% endif %}
 
     </div>
+    {% if multiple_elections %}
+       {% include "fragments/multiple_elections.html" %}
+    {% endif %}
 
     {% include "fragments/register_to_vote.html" %}
     {% include "fragments/you_dont_need_poll_card.html" %}
 
-    {% if council.electoral_services_phone_numbers and council.electoral_services_email %}
+    {% if council.electoral_services_phone_numbers and council.electoral_services_email and has_election and council.nation != 'Northern Ireland' %}
         {% include "fragments/help_your_council.html" %}
-    {% endif %}
-
-    {% if we_know_where_you_should_vote and election_explainers and has_election and not error %}
-      {% include "election_explainers.html" %}
     {% endif %}
 
     {% include "fragments/info_on_your_candidates.html" %}
