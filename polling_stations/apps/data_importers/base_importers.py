@@ -525,7 +525,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         )
         self.write_info(
             "Total Dwellings from 2011 Census: {:,}".format(
-                dwellings.from_census(self.council_id)
+                dwellings.from_census(self.council.geography.gss)
             )
         )
         self.write_info("----------------------------------")
