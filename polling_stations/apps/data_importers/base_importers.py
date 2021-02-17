@@ -9,6 +9,7 @@ import os
 import tempfile
 import urllib.request
 
+import rtree
 from django.apps import apps
 from django.contrib.gis import geos
 from django.core.management.base import BaseCommand
@@ -241,22 +242,82 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def check_station_point(self, station_record):
         if station_record["location"]:
-            try:
-                council = Council.objects.get(
-                    geography__geography__covers=station_record["location"]
-                )
-                if self.council_id != council.council_id:
-                    self.logger.log_message(
-                        logging.WARNING,
-                        f"Polling station {station_record['internal_council_id']} is in {council.name} ({council.council_id}) "
-                        f"but target council is {self.council.name} ({self.council.council_id}) - manual check recommended\n",
-                    )
-            except Council.DoesNotExist:
+            self.check_in_council_bounds(station_record)
+            self.check_duplicate_location(station_record)
+
+    def check_duplicate_location(self, station_record):
+        stations_with_location_and_different_postcode = [
+            s
+            for s in self.stations.elements
+            if s.location and (s.postcode != station_record["postcode"])
+        ]
+
+        if not stations_with_location_and_different_postcode:
+            return
+
+        srids = [
+            GEOSGeometry(s.location).srid
+            for s in stations_with_location_and_different_postcode
+        ]
+        srid_to_use = max(srids, key=srids.count)
+
+        if srid_to_use == 4326:
+            threshold = 0.001
+        if srid_to_use == 27700:
+            threshold = 10
+
+        station_index = rtree.index.Index()
+        for i, station in enumerate(stations_with_location_and_different_postcode):
+            geom = GEOSGeometry(station.location).transform(srid_to_use, clone=True)
+            station_index.insert(i, (geom.x, geom.y, geom.x, geom.y))
+
+        record_geom = station_record["location"].transform(srid_to_use, clone=True)
+        nearest_ids = list(
+            station_index.intersection(
+                (
+                    record_geom.x - threshold,
+                    record_geom.y - threshold,
+                    record_geom.x + threshold,
+                    record_geom.y + threshold,
+                ),
+                1,
+            )
+        )
+
+        if not nearest_ids:
+            return
+
+        for i in nearest_ids:
+            station = stations_with_location_and_different_postcode[i.id]
+
+            def get_name(address):
+                return " ".join(address.split("\n")[:2])
+
+            self.logger.log_message(
+                logging.WARNING,
+                f"Polling stations '{get_name(station_record['address'])}' and "
+                f"'{get_name(station.address)}' "
+                "are at approximately the same location, but have different postcodes:\n"
+                f"qgis filter exp: \"internal_council_id\" IN ('{station_record['internal_council_id']}','{station.internal_council_id}')",  # qgis filter expression
+            )
+
+    def check_in_council_bounds(self, station_record):
+        try:
+            council = Council.objects.get(
+                geography__geography__covers=station_record["location"]
+            )
+            if self.council_id != council.council_id:
                 self.logger.log_message(
                     logging.WARNING,
-                    "Polling station %s is not covered by any council area - manual check recommended\n",
-                    variable=(station_record["internal_council_id"]),
+                    f"Polling station {station_record['internal_council_id']} is in {council.name} ({council.council_id}) "
+                    f"but target council is {self.council.name} ({self.council.council_id}) - manual check recommended\n",
                 )
+        except Council.DoesNotExist:
+            self.logger.log_message(
+                logging.WARNING,
+                "Polling station %s is not covered by any council area - manual check recommended\n",
+                variable=(station_record["internal_council_id"]),
+            )
 
     def import_polling_stations(self):
         stations = self.get_stations()
