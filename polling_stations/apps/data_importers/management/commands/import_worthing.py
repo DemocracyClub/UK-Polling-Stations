@@ -1,29 +1,18 @@
-from django.contrib.gis.geos import Point
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000229"
-    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
-    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "WOT"
+    addresses_name = "2021-02-15T11:21:49.443491/WBCDemocracy_Club__06May2021.tsv"
+    stations_name = "2021-02-15T11:21:49.443491/WBCDemocracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
 
-        # user error report #205
-        # Richmond Room (adj. to Assembly Hall)
-        if record.polling_place_id == "1837":
-            rec["location"] = Point(-0.372557, 50.814974, srid=4326)
+        # Moved to correct address => Richmond Room (adj. to Assembly Hall), Stoke Abbott Road, Worthing
+        if record.polling_place_id == "2171":
+            record = record._replace(polling_place_easting="514729")
+            record = record._replace(polling_place_northing="102975")
 
-        return rec
-
-    def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-
-        if record.addressline6 in ["BN11 2FL", "BN11 2FJ", "BN11 1BF"]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().station_record_to_dict(record)
