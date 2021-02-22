@@ -127,11 +127,16 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
 
     def report(self):
         # build report
-        report = DataQualityReportBuilder(
-            self.council.pk,
-            expecting_districts=self.imports_districts,
-            csv_rows=len(self.addresses.elements),
-        )
+        if self.csv_row_count:
+            report = DataQualityReportBuilder(
+                self.council.pk,
+                expecting_districts=self.imports_districts,
+                csv_rows=self.csv_row_count,
+            )
+        else:
+            report = DataQualityReportBuilder(
+                self.council.pk, expecting_districts=self.imports_districts
+            )
         station_report = StationReport(self.council.pk)
         district_report = DistrictReport(self.council.pk)
         address_report = AddressReport(self.council.pk)
@@ -534,8 +539,9 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         if self.validation_checks:
             self.write_context_data()
         addresses = self.get_addresses()
+        self.csv_row_count = len(addresses)
         self.write_info(
-            "Addresses: Found {:,} rows in input file".format(len(addresses))
+            "Addresses: Found {:,} rows in input file".format(self.csv_row_count)
         )
         self.write_info("----------------------------------")
         for address in addresses:
