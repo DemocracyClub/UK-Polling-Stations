@@ -8,7 +8,7 @@ from collections import namedtuple
 
 from django.db import connection
 
-from addressbase.models import get_uprn_hash_table, UprnToCouncil
+from addressbase.models import get_uprn_hash_table, UprnToCouncil, Address
 from councils.models import Council
 from pollingstations.models import PollingDistrict, PollingStation
 from uk_geo_utils.helpers import Postcode
@@ -326,8 +326,31 @@ class AddressList(AssignPollingStationsMixin):
             else:
                 self.elements.remove(input_record)
 
+    def remove_records_missing_uprns(self):
+        self.elements = [e for e in self.elements if e.get("uprn", None)]
+
+    def check_split_postcodes_are_split(self, split_postcodes):
+        for postcode in split_postcodes:
+            addresslist_records = [
+                e for e in self.elements if e["postcode"] == postcode
+            ]
+            if len({r["polling_station_id"] for r in addresslist_records}) > 1:
+                continue
+            db_records = Address.objects.filter(postcode=postcode)
+            if len(db_records) > len(addresslist_records):
+                continue
+            self.logger.log_message(
+                logging.WARNING,
+                f"The same polling station will be assigned to all addresses in {postcode}, "
+                f"but {postcode} has more than one polling station assigned in council data.",
+                pretty=True,
+            )
+
     def check_records(self):
+        split_postcodes = self.get_council_split_postcodes()
+        self.remove_records_missing_uprns()
         self.remove_duplicate_uprns()
         addressbase_data = get_uprn_hash_table(self.gss_code)
         self.remove_records_not_in_addressbase(addressbase_data)
         self.remove_records_that_dont_match_addressbase(addressbase_data)
+        self.check_split_postcodes_are_split(split_postcodes)
