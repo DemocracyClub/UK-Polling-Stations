@@ -8,6 +8,52 @@ class MockLogger:
 
 
 class AddressListTest(TestCase):
+    def test_append(self):
+        in_list = [
+            {
+                "address": "foo",
+                "postcode": "AA11AA",
+                "council": "AAA",
+                "polling_station_id": "01",
+                "uprn": "1",
+            },
+            {  # Doesn't need a uprn - this should be added
+                "address": "bar",
+                "postcode": "AA11AA",
+                "council": "AAA",
+                "polling_station_id": "01",
+                "uprn": "",
+            },
+            {  # Does need a postcode - this shouldn't
+                "address": "baz",
+                "postcode": "",
+                "council": "AAA",
+                "polling_station_id": "01",
+                "uprn": "1",
+            },
+        ]
+        expected = [
+            {
+                "address": "foo",
+                "postcode": "AA11AA",
+                "council": "AAA",
+                "polling_station_id": "01",
+                "uprn": "1",
+            },
+            {
+                "address": "bar",
+                "postcode": "AA11AA",
+                "council": "AAA",
+                "polling_station_id": "01",
+                "uprn": "",
+            },
+        ]
+        address_list = AddressList(MockLogger())
+        for el in in_list:
+            address_list.append(el)
+
+        self.assertEqual(expected, address_list.elements)
+
     def test_add_with_duplicates(self):
         in_list = [
             {

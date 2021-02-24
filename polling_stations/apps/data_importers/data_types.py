@@ -254,7 +254,6 @@ class AddressList(AssignPollingStationsMixin):
         if (
             not address["address"]
             or not address["postcode"]
-            or not address["uprn"]
             or not address["council"]
             or not address["polling_station_id"]
         ):
