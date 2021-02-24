@@ -281,6 +281,16 @@ class AddressList(AssignPollingStationsMixin):
 
         return uprn_lookup
 
+    def get_council_split_postcodes(self):
+        postcode_lookup = {}
+        for record in self.elements:
+            postcode = record["postcode"]
+            if postcode in postcode_lookup:
+                postcode_lookup[postcode].add(record["polling_station_id"])
+            else:
+                postcode_lookup[postcode] = {record["polling_station_id"]}
+        return [k for k, v in postcode_lookup.items() if len(v) > 1]
+
     # TODO be more clever to report on duplicates.
     def remove_duplicate_uprns(self):
         uprn_lookup = self.get_uprn_lookup()
