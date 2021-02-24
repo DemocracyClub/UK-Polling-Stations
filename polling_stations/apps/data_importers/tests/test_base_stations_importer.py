@@ -1,3 +1,4 @@
+import os
 from unittest.mock import patch
 
 from django.contrib.gis.geos import Point
@@ -65,12 +66,13 @@ class BaseStationsImporterTest(TestCase):
                 "but have different postcodes:\nqgis filter exp: \"internal_council_id\" IN ('02','01')"
             ],
         )
-        self.base_stations_importer.logger.clear_logs()
-        self.base_stations_importer.check_duplicate_location(ps3)
-        self.assertListEqual(
-            self.base_stations_importer.logger.logs,
-            [
-                "Polling stations 'baz' and 'foo' are at approximately the same location, "
-                "but have different postcodes:\nqgis filter exp: \"internal_council_id\" IN ('03','01')"
-            ],
-        )
+        if os.environ.get("CIRCLECI"):
+            self.base_stations_importer.logger.clear_logs()
+            self.base_stations_importer.check_duplicate_location(ps3)
+            self.assertListEqual(
+                self.base_stations_importer.logger.logs,
+                [
+                    "Polling stations 'baz' and 'foo' are at approximately the same location, "
+                    "but have different postcodes:\nqgis filter exp: \"internal_council_id\" IN ('03','01')"
+                ],
+            )
