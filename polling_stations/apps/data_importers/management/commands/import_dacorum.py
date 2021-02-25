@@ -27,4 +27,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
 
+        if record.addressline6 in ["HP2 4AP", "HP2 6JN"]:
+            return None
         return rec

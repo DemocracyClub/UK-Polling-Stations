@@ -26,7 +26,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().address_record_to_dict(record)
 
         if record.post_code in [
-            "SO31 7BJ",  # Spilt postcode
+            "SO31 7BJ",
+            "PO16 7LR",
+            "SO31 6BH",
+            "PO14 4QS",
         ]:
             return None
 
