@@ -36,14 +36,14 @@ class CouncilDetailView(DetailView):
                     SELECT aa.postcode, st_transform(st_collect(aa.location), 27700) AS multipoint
                     FROM addressbase_address aa  JOIN addressbase_uprntocouncil uc
                     ON aa.uprn = uc.uprn
-                    WHERE uc.lad IN %s AND uc.polling_station_id != ''
+                    WHERE uc.lad = %s AND uc.polling_station_id != ''
                     GROUP BY aa.postcode
                 ) AS subquery
                 WHERE multipoint IS NOT NULL
                 ORDER BY maxdistance DESC
                 LIMIT 20;
             """,
-                (tuple(object.identifiers),),
+                (object.geography.gss,),
             )
             context["postcodes_by_diameter"] = cursor.fetchall()
 
@@ -64,11 +64,11 @@ class CouncilDetailView(DetailView):
                     addressbase_address aa JOIN
                     addressbase_uprntocouncil uc ON
                         aa.uprn = uc.uprn JOIN
-                    councils_council cc ON
-                        uc.lad = ANY(cc.identifiers)
+                    councils_councilgeography cg ON
+                        uc.lad = cg.gss
                 WHERE
-                    cc.council_id = %s
-                    AND ps.council_id=cc.council_id
+                    cg.council_id = %s
+                    AND ps.council_id=cg.council_id
                     AND uc.polling_station_id=ps.internal_council_id
                     AND ps.location IS NOT NULL
                     AND aa.location IS NOT NULL
