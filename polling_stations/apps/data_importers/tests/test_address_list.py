@@ -543,8 +543,7 @@ class AddressListTest(TestCase):
         self.assertListEqual(
             address_list.logger.logs,
             [
-                "The same polling station will be assigned to all addresses in BB11BB, but BB11BB has more than one polling station assigned in council data.",
-                "The same polling station will be assigned to all addresses in CC11CC, but CC11CC has more than one polling station assigned in council data.",
+                'These postcodes are split in council data: "BB11BB", "CC11CC", but won\'t be in the db once imported.'
             ],
         )
 
