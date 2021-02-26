@@ -330,6 +330,7 @@ class AddressList(AssignPollingStationsMixin):
         self.elements = [e for e in self.elements if e.get("uprn", None)]
 
     def check_split_postcodes_are_split(self, split_postcodes):
+        postcodes_to_warn = []
         for postcode in split_postcodes:
             addresslist_records = [
                 e for e in self.elements if e["postcode"] == postcode
@@ -339,10 +340,13 @@ class AddressList(AssignPollingStationsMixin):
             db_records = Address.objects.filter(postcode=postcode)
             if len(db_records) > len(addresslist_records):
                 continue
+
+            postcodes_to_warn.append('"' + postcode + '"')
+        if postcodes_to_warn:
             self.logger.log_message(
                 logging.WARNING,
-                f"The same polling station will be assigned to all addresses in {postcode}, "
-                f"but {postcode} has more than one polling station assigned in council data.",
+                f"These postcodes are split in council data: {', '.join(postcodes_to_warn)}, "
+                "but won't be in the db once imported.",
                 pretty=True,
             )
 
