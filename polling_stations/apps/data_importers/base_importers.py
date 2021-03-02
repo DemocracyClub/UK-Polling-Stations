@@ -128,7 +128,7 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
 
     def report(self):
         # build report
-        if self.csv_row_count:
+        if hasattr(self, "csv_row_count"):
             report = DataQualityReportBuilder(
                 self.council.pk,
                 expecting_districts=self.imports_districts,
