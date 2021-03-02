@@ -494,11 +494,12 @@ class DataQualityReportBuilder:
                     f" - As % of uprns in addressbase  : {round(100 * station_ids / uprns_in_council_area, 1)}%"
                 )
             )
-            self.report.append(
-                ANSI.ok_bold(
-                    f" - As % of rows in council csv   : {round(100 * station_ids / self.csv_rows, 1)}%"
+            if self.csv_rows:
+                self.report.append(
+                    ANSI.ok_bold(
+                        f" - As % of rows in council csv   : {round(100 * station_ids / self.csv_rows, 1)}%"
+                    )
                 )
-            )
             self.report.append("----------------------------------")
             self.report.append(
                 ANSI.ok(
