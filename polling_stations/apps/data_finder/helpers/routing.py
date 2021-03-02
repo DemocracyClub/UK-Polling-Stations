@@ -25,7 +25,7 @@ class RoutingHelper:
 
     @property
     def councils(self):
-        council_ids = {a.council_id for a in self.addresses}
+        council_ids = {a.council_id for a in self.addresses if a.council_id}
         if len(council_ids) == 1:
             return None
         else:

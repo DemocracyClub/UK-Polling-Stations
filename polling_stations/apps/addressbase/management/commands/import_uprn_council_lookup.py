@@ -2,6 +2,8 @@ from django.db import connection
 from django.core.management.base import BaseCommand
 from pathlib import Path
 
+from addressbase.models import Address, UprnToCouncil
+
 
 class Command(BaseCommand):
     """
@@ -29,3 +31,18 @@ class Command(BaseCommand):
             cursor.copy_from(f, self.table_name, sep=",")
 
         self.stdout.write("...done")
+        self.stdout.write(
+            "Looking for addresses outside council areas... (aka the pier check...)"
+        )
+        for address in Address.objects.filter(uprntocouncil__isnull=True):
+            council = address.get_council_from_others_in_postcode()
+            if council:
+                self.stdout.write(
+                    f"Creating UprnToCouncil record for {address.uprn} with gss {council.geography.gss}"
+                )
+                UprnToCouncil.objects.create(
+                    uprn=address, lad=council.geography.gss, polling_station_id=""
+                )
+            else:
+                self.stdout.write(f"Council ambiguous for {address.uprn}, deleting")
+                address.delete()
