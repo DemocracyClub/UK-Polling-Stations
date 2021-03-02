@@ -9,6 +9,17 @@ from pollingstations.models import PollingStation
 
 
 class Address(AbstractAddress):
+    def get_council_from_others_in_postcode(self):
+        others = (
+            Address.objects.filter(postcode=self.postcode)
+            .exclude(uprntocouncil__isnull=True)
+            .distinct("uprntocouncil__lad")
+        )
+        if len(others) == 1:
+            return others[0].council
+        else:
+            return None
+
     @property
     def council_id(self):
         return self.council.council_id
