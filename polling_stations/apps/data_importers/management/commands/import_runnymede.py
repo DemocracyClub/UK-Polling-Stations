@@ -2,21 +2,26 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000212"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Runny.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Runny.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "RUN"
+    addresses_name = (
+        "2021-03-03T10:09:37.682656/Runnymede Democracy_Club__06May2021 (1).tsv"
+    )
+    stations_name = (
+        "2021-03-03T10:09:37.682656/Runnymede Democracy_Club__06May2021 (1).tsv"
+    )
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100061498464",  # TW200BJ -> TW200BQ : Chestnuts, Royal Holloway University - Halls of Residence, Englefield Green, Egham, Surrey
-            "200001732773",  # TW208HJ -> TW200HJ : Brook Lodge, Wick Road, Englefield Green, Egham, Surrey
+            "10002019662",  # MOBILE HOME GREENACRES BITTAMS LANE, CHERTSEY
+            "10092959794",  # ACCOMMODATION AT THE BLACK PRINCE WOODHAM LANE, ADDLESTONE
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        return rec
+        if record.addressline6 in ["KT16 8QD", "KT16 8AG"]:
+            return None
+
+        return super().address_record_to_dict(record)
