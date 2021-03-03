@@ -1,33 +1,30 @@
-from django.contrib.gis.geos import Point
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E09000019"
-    addresses_name = "parl.2019-12-12/Version 1/islington.gov.uk-1573121124000-.TSV"
-    stations_name = "parl.2019-12-12/Version 1/islington.gov.uk-1573121124000-.TSV"
-    elections = ["parl.2019-12-12"]
-    csv_delimiter = "\t"
+    council_id = "ISL"
+    addresses_name = "2021-03-02T14:57:29.698707/Democracy_Club__06May2021.csv"
+    stations_name = "2021-03-02T14:57:29.698707/Democracy_Club__06May2021.csv"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        # postcode corrections
-        if uprn in ["10093623311", "10093623312", "10093623313"]:
-            rec["postcode"] = "EC1M 5UD"
-        if uprn == "10012788158":
-            rec["postcode"] = "EC1V 0ET"
+        if record.addressline6 in [
+            "N1 8LU",
+            "N7 9RE",
+            "EC1V 9AE",
+            "N7 9RB",
+            "N5 1HP",
+            "N1 1NY",
+            "N7 6LJ",
+        ]:
+            return None
 
-        return rec
+        if uprn in [
+            "5300090455",  # 84 THORNHILL ROAD, LONDON
+        ]:
+            return None
 
-    def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
-
-        # Location corrections carried forward
-        if rec["internal_council_id"] == "1698":  #    St. Thomas` Church Hall
-            rec["location"] = Point(-0.104049, 51.560139, srid=4326)
-        if rec["internal_council_id"] == "1686":  # St Joan of Arc Community Centre
-            rec["location"] = Point(-0.0966823, 51.5559102, srid=4326)
-
-        return rec
+        return super().address_record_to_dict(record)
