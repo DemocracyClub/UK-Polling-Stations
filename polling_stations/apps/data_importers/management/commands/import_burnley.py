@@ -1,52 +1,73 @@
-from django.contrib.gis.geos import Point
 from data_importers.management.commands import (
     BaseXpressDCCsvInconsistentPostcodesImporter,
 )
 
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
-    council_id = "E07000117"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019burn.CSV"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019burn.CSV"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "BUN"
+    addresses_name = (
+        "2021-03-03T11:07:51.228358/Burnley Democracy_Club__06May2021 (1).CSV"
+    )
+    stations_name = (
+        "2021-03-03T11:07:51.228358/Burnley Democracy_Club__06May2021 (1).CSV"
+    )
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
+
+    def station_record_to_dict(self, record):
+
+        # Rosewood Primary School Moorland Road Entrance Burnley
+        if record.polling_place_id == "4816":
+            record = record._replace(polling_place_postcode="BB11 2PH")
+            record = record._replace(polling_place_easting=383468)
+            record = record._replace(polling_place_northing=431243)
+
+        # St Matthews Church Hall Albion Street Burnley
+        if record.polling_place_id == "4804":
+            record = record._replace(polling_place_postcode="BB11 4JJ")
+            record = record._replace(polling_place_easting=383312)
+            record = record._replace(polling_place_northing=431998)
+
+        # Dorset Street Entrance Rosegrove Infants School Dorset Street Burnley
+        if record.polling_place_id == "4839":
+            record = record._replace(polling_place_postcode="BB12 6HW")
+            record = record._replace(polling_place_easting=381471)
+            record = record._replace(polling_place_northing=432575)
+
+        # Burnley Football Club 1882 Lounge Harry Potts Way Burnley
+        if record.polling_place_id == "4776":
+            record = record._replace(polling_place_postcode="BB10 4BX")
+
+        # St Cuthbert`s Community Hall Sharp Street Burnley BB10 1UG
+        if record.polling_place_id == "4737":
+            record = record._replace(polling_place_postcode="BB10 1UJ")
+
+        # Middlesex Over 50s Social Centre, Middlesex Avenue, Burnley
+        if record.polling_place_id == "4867":
+            record = record._replace(polling_place_postcode="BB12 6AA")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
-        rec = super().address_record_to_dict(record)
-
-        if uprn == "100012382699":
-            rec["postcode"] = "BB10 3QS"
 
         if uprn in [
-            "10014136930",  # BB103PF -> BB103PQ : Swinden School House, Todmorden Road, Briercliffe, Burnley
-            "10003781759",  # BB128EH -> BB128HD : 6 Smithy`s Court, Padiham, Burnley
-            "10003781760",  # BB128EH -> BB128HD : 7 Smithy`s Court, Padiham, Burnley
-            "100012383004",  # BB113EX -> BB113HB : Woodman Inn, Oxford Road, Burnley
-            "100012382405",  # BB114NS -> BB114PG : Coal Clough Hotel, 41 Coal Clough Lane, Burnley
-            "100012382408",  # BB114NW -> BB114NJ : Coal Clough Cottage, Coal Clough Lane, Burnley
-            "10003758680",  # BB111JZ -> BB111JG : Inn On The Wharf, Manchester Road, Burnley
+            "10023759126",  # ROWLEY HALL FARM, ROWLEY LANE, BURNLEY
+            "10023759125",  # THE STABLES, ROWLEY FARM, ROWLEY LANE, BURNLEY
+            "10023759124",  # THE COACH HOUSE, ROWLEY FARM, ROWLEY LANE, BURNLEY
+            "10023759122",  # ROWLEY COTTAGE, ROWLEY LANE, BURNLEY
+            "10023759123",  # ROWLEY HALL, ROWLEY LANE, BURNLEY
+            "10023763578",  # FLAT A 66 BRIERCLIFFE ROAD, BURNLEY
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "100012536092",  # BB102JF -> BB101XH : 5 Burnley Road, Briercliffe, Burnley
-            "100012536996",  # BB112QR -> BB112RQ : Whinn Scarr, Moseley Road, Habergham Eaves, Burnley
-            "10003759507",  # BB127LA -> BB128HF : 11 Church Street, Hapton, Burnley
-            "200001589427",  # BB115SA -> BB128TX : 1 Mere Court, Burnley
+        if record.addressline6 in [
+            "BB10 3BD",
+            "BB10 3PF",
+            "BB11 2QR",
+            "BB12 8EH",
+            "BB10 3JY",
         ]:
-            rec["accept_suggestion"] = False
+            return None
 
-        return rec
-
-    def station_record_to_dict(self, record):
-        if record.polling_place_id == "4502":
-            record = record._replace(polling_place_postcode="BB10 4SN")
-
-        if record.polling_place_id == "4447":
-            record = record._replace(polling_place_postcode="")
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-2.292241, 53.790222, srid=4326)
-            return rec
-
-        return super().station_record_to_dict(record)
+        return super().address_record_to_dict(record)
