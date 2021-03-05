@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "COT"
-    addresses_name = "2021-02-23T13:29:42.051423/Democracy_Club__06May2021.tsv"
-    stations_name = "2021-02-23T13:29:42.051423/Democracy_Club__06May2021.tsv"
+    addresses_name = "2021-03-05T09:20:27.484157/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-05T09:20:27.484157/Democracy_Club__06May2021.tsv"
     elections = ["2021-05-06"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
@@ -28,12 +28,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-
-        # source: https://britishlistedbuildings.co.uk/101340859-village-hall-icomb
-        # Icomb Village Hall
-        if record.polling_place_id == "17236":
-            record = record._replace(polling_place_northing="222640")
-
-        return super().station_record_to_dict(record)
