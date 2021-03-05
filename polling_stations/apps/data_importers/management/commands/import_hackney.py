@@ -1,78 +1,55 @@
-from django.contrib.gis.geos import Point
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E09000012"
+    council_id = "HCK"
     addresses_name = (
-        "local.2018-05-03/Version 2/Democracy_Club__03May2018 (1) Hackney.CSV"
+        "2021-03-04T10:42:08.975751/Hackney Democracy_Club__06May2021 (1).tsv"
     )
     stations_name = (
-        "local.2018-05-03/Version 2/Democracy_Club__03May2018 (1) Hackney.CSV"
+        "2021-03-04T10:42:08.975751/Hackney Democracy_Club__06May2021 (1).tsv"
     )
-    elections = ["local.2018-05-03"]
-
-    def station_record_to_dict(self, record):
-
-        if record.polling_place_id == "3082":
-            record = record._replace(polling_place_postcode="N1 6EL")
-
-        if record.polling_place_id == "3154":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-0.0542398, 51.5677442, srid=4326)
-            return rec
-
-        return super().station_record_to_dict(record)
+    elections = ["2021-05-06"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        bad_postcodes = [
-            "N1 7GH",
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10008353260",  # BASEMENT FLAT, 75 ICKBURGH ROAD, LONDON
+            "10008322617",  # FLAT 2 357A WICK ROAD, HACKNEY, LONDON
+            "10008245689",  # SECOND FLOOR FLAT 126 KINGSLAND HIGH STREET, HACKNEY, LONDON
+            "10008349782",  # 3 MIAH HOUSE 149D BROOKE ROAD, HACKNEY, LONDON
+            "10008342758",  # 1 MIAH HOUSE 149D BROOKE ROAD, HACKNEY, LONDON
+            "10008342260",  # 20 MILLFIELDS PARADE, MILLFIELDS ROAD, LONDON
+            "100021050062",  # BASEMENT AND GROUND FLOOR 100 LOWER CLAPTON ROAD, HACKNEY, LONDON
+            "10008294596",  # 1A SHEPHERDESS WALK, LONDON
+            "10008294592",  # FIRST FLOOR AND SECOND FLOOR FLAT 111 STOKE NEWINGTON ROAD, HACKNEY, LONDON
+            "10008294594",  # FLAT, 97 STOKE NEWINGTON ROAD, LONDON
+            "10008294598",  # 2 MIAH HOUSE 149D BROOKE ROAD, HACKNEY, LONDON
+            "10008306167",  # 4 MIAH HOUSE 149D BROOKE ROAD, HACKNEY, LONDON
+            "100021076655",  # 10 CORNTHWAITE ROAD, LONDON
+            "10008318539",  # FLAT B 45 STOKE NEWINGTON CHURCH STREET, HACKNEY, LONDON
+            "10008340028",  # FLAT E, 112 KINGSLAND ROAD, LONDON
+            "100021030699",  # 108 GEORGE DOWNING ESTATE, CAZENOVE ROAD, LONDON
+            "10008300957",  # 85 CASTLEWOOD ROAD, HACKNEY, LONDON
+            "10008245689",  # SECOND FLOOR FLAT 126 KINGSLAND HIGH STREET, HACKNEY, LONDON
+            "10008245688",  # FIRST FLOOR FLAT 126 KINGSLAND HIGH STREET, HACKNEY, LONDON
+            "10008245690",  # THIRD FLOOR FLAT 126 KINGSLAND HIGH STREET, HACKNEY, LONDON
+            "100021051676",  # SECOND FLOOR FLAT 417 KINGSLAND ROAD, HACKNEY, LONDON
+            "200001073528",  # POTTERY HOUSE, ELRINGTON ROAD, LONDON
+        ]:
+            return None
+
+        if record.addressline6 in [
+            "E2 8FZ",
+            "E5 8BE",
+            "N16 0SD",
+            "N16 0RT",
+            "N4 2WN",
+            "N4 2LD",
             "E8 3RL",
-            "N16 5DG",
-            "N16 7DT",
-            "E9 7HH",
-            "E9 5EE",
-            "E1 6JE",
-            "N1 7QE",
-            "EC2A 4JH",
-            "N1 5SB",
-            "N4 1SN",
-            "E8 1AY",
-            "N1 6JB",
-            "E5 0QR",
-            "N16 9AT",
-            "N16 8DJ",
-            "E8 2PB",
-            "E2 8DP",
-            "E2 8FJ",
-            "E8 2NS",
-            "E8 3BJ",
-            "E8 2DP",
-            "E5 8NF",
-            "N16 6UA",
-            "E5 9EG",
-            "E5 8HL",
-            "E8 2BS",
-            "N16 6NA",
-            "N16 5TU",
-            "E8 4JR",
-            "N1 6HD",
-            "E5 0AU",
-            "E5 0NP",
-            "N16 8BX",
-            "E5 9AT",
-            "EC2A 2ER",
-            "E8 1HE",
-        ]
-        if record.addressline6 in bad_postcodes:
+        ]:
             return None
 
-        if record.addressline6 == "E5 9ND":
-            return None
-
-        rec = super().address_record_to_dict(record)
-
-        if rec and "coster avenue" in rec["address"].lower():
-            return None
-
-        return rec
+        return super().address_record_to_dict(record)
