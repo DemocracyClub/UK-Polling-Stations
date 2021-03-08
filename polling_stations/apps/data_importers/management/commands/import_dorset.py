@@ -1,150 +1,138 @@
 from django.contrib.gis.geos import Point
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import (
+    BaseXpressDCCsvInconsistentPostcodesImporter,
+)
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E06000059"
-    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
-    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
-    elections = ["parl.2019-12-12"]
+class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
+    council_id = "DOR"
+    addresses_name = "2021-03-04T13:35:03.539800/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-04T13:35:03.539800/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
     # There have been a lot of fixes, so try letting rest through.
-    allow_station_point_from_postcode = True
 
-    def station_record_to_dict(self, record):
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-        # Allendale House
-        # user issue report #39
-        if record.polling_place_id == "34414":
-            record = record._replace(polling_place_uprn="100041099964")
+        if uprn in [
+            "10002059554",  # EAST BARN, WOOTTON FITZPAINE, BRIDPORT
+            "10002639052",  # WEST BARN, WOOTTON FITZPAINE, BRIDPORT
+            "100040632406",  # 3 CONINGSBY PLACE, POUNDBURY
+            "100041117551",  # WARDENS CARAVAN SEAVIEW HOLIDAY PARK PRESTON ROAD, WEYMOUTH
+            "10013012017",  # 4 CANN COURT, BUTTS KNAPP, SHAFTESBURY
+            "100040632405",  # 3 CANN COURT, BUTTS KNAPP, SHAFTESBURY
+            "100040620232",  # 1 CANN COURT, BUTTS KNAPP, SHAFTESBURY
+            "10002643131",  # 2 CANN COURT, BUTTS KNAPP, SHAFTESBURY
+            "200000753878",  # THE PRESBYTERY, CULLIFORD ROAD NORTH, DORCHESTER
+            "10093508099",  # FLAT 3, 3A VICKERY COURT, POUNDBURY, DORCHESTER
+            "10093508100",  # POPPY BANK FARM HIGHER STREET, OKEFORD FITZPAINE
+            "200000767496",  # ICEN BARN, GRANGE ROAD, WAREHAM
+            "200000767497",  # OAKS 1 HERSTON YARD CAMPSITE WASHPOND LANE, HERSTON, SWANAGE
+            "10002641794",  # 21A EAST STREET, CORFE CASTLE, WAREHAM
+            "100040644451",  # 11 BUTTS KNAPP, SHAFTESBURY
+            "10023248033",  # YARD FARM, PILSDON, BRIDPORT
+            "200000768680",  # THE OLD CIDER PRESS, EAST STREET, BEAMINSTER
+            "10023250031",  # 1 ANGEL COTTAGES LONG ASH LANE, WARDON HILL
+            "10093510179",  # COCKWELL FARM, MORCOMBELAKE, BRIDPORT
+            "100041115108",  # CLEAR VIEW, MARTINSTOWN, DORCHESTER
+            "10023242607",  # GRAYS FARM, CLIFT LANE, TOLLER PORCORUM, DORCHESTER
+            "10013291491",  # STATION LODGE, HOLYWELL, DORCHESTER
+            "10013293094",  # SHERBORNE SCHOOL FOR GIRLS, ALDHELMSTED EAST HOUSE, BRADFORD ROAD, SHERBORNE
+            "10013293093",  # GRAYS FARMHOUSE, CLIFT LANE, TOLLER PORCORUM, DORCHESTER
+            "10013293091",  # BOAR COTTAGE, CLIFT LANE, TOLLER PORCORUM, DORCHESTER
+            "10013293092",  # GRAYS COTTAGE CLIFT LANE, TOLLER PORCORUM
+            "10013297602",  # THE DOVE HOUSE, GRANGE ROAD, WAREHAM
+            "10013297222",  # CORFE WAY, VALLEY ROAD, SWANAGE
+            "10071152307",  # THE OLD COFFEE SHOP, WARDON HILL, DORCHESTER
+            "200001871356",  # "2 COCKWELL FARMHOUSE TIZARD'S KNAP, MORCOMBELAKE"
+            "200004826761",  # BRACKEN COTTAGE, EAST BURTON ROAD, WOOL, WAREHAM
+            "10013733675",  # FLAT, LYTCHETT HEATH, LYTCHETT HEATH, POOLE
+            "100041048946",  # FLAT, 30A SALISBURY STREET, BLANDFORD FORUM
+            "100041099139",  # THE COURTYARD CRAFT CENTRE, HUNTICK ROAD, LYTCHETT MINSTER, POOLE
+            "10011954350",  # 5 HIGHER COMMON, CHILD OKEFORD, BLANDFORD FORUM
+            "100041231992",  # LITTLE RIDGE, WATERSTON, DORCHESTER
+            "200004827276",  # HEWISH FARM, FRIAR WADDON, WEYMOUTH
+            "10023251192",  # MOBILE HOME BIRCH YARD RYE WATER LANE, CORSCOMBE
+        ]:
+            return None
 
-        # last-minute change for parl.2019-12-12
-        # https://trello.com/c/Ij4tgMP1
-        if record.polling_place_id == "35139":
-            record = record._replace(polling_place_name="The Parish Pavilion")
-            record = record._replace(polling_place_address_1="Buckland Newton")
-            record = record._replace(polling_place_address_2="Dorchester")
-            record = record._replace(polling_place_address_3="Dorset")
-            record = record._replace(polling_place_address_4="")
-            record = record._replace(polling_place_postcode="DT2 7DP")
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-            rec = super().station_record_to_dict(record)
-            rec["location"] = None
-            return rec
+        if record.addressline6 in [
+            "DT4 0BA",
+            "DT4 7QN",
+            "DT3 6SD",
+            "DT6 4QH",
+            "DT6 6EU",
+            "DT6 4LD",
+            "DT2 0JE",
+            "DT9 5FP",
+            "DT2 8DX",
+            "SP7 8RE",
+            "SP8 4AL",
+            "SP8 4DG",
+            "DT10 1HG",
+            "DT10 1QZ",
+            "BH21 7LY",
+            "BH21 7BG",
+            "BH21 2DE",
+            "BH31 6PA",
+            "BH21 3NF",
+            "BH21 4AD",
+            "BH31 6EH",
+            "BH31 6QG",
+            "BH21 5NP",
+            "BH21 5JD",
+            "BH21 4JU",
+            "BH19 2PG",
+            "BH20 5JJ",
+            "BH20 4BJ",
+            "BH20 5PT",
+            "DT5 2FD",
+            "DT3 4GF",
+            "DT5 2FB",
+            "DT2 8GD",
+            "BH19 1BS",
+            "BH19 1DQ",
+        ]:
+            return None
 
-        rec = super().station_record_to_dict(record)
+        rec = super().address_record_to_dict(record)
 
-        # Corfe Mullen Village Hall
-        if record.polling_place_id in ["34405", "34401"]:
-            rec["location"] = Point(-2.017478, 50.774375, srid=4326)
-            rec["postcode"] = "BH21 3UA"
-
-        # Portesham Village Hall
-        # user issue report #38
-        if record.polling_place_id == "35170":
-            rec["location"] = Point(-2.567644, 50.668385, srid=4326)
-
-        # Bishops Caundle Village Hall
-        # user issue report #40
-        if record.polling_place_id == "35252":
-            rec["location"] = Point(-2.437757, 50.915554, srid=4326)
-
-        # All Saints Church Hall
-        # user issue report #41
-        if record.polling_place_id in ["34319", "34315"]:
-            rec["location"] = Point(-1.834570, 50.831005, srid=4326)
-
-        # Ferndown Village Hall
-        # user issue report #42
-        if record.polling_place_id in ["34287", "34277"]:
-            rec["location"] = Point(-1.896419, 50.801961, srid=4326)
-
-        # St Marys Church Hall
-        if record.polling_place_id == "35117":
-            rec["location"] = Point(-2.443608, 50.709373, srid=4326)
-
-        # Southill Community Centre
-        # user issue report #47
-        if record.polling_place_id == "34801":
-            rec["location"] = Point(-2.477398, 50.623534, srid=4326)
-
-        # Moose Lodge
-        # user issue report #43
-        if record.polling_place_id == "34771":
-            rec["location"] = Point(-2.466883, 50.606307, srid=4326)
-
-        # Charlton Marshall Parish Centre
-        if record.polling_place_id == "34446":
-            rec["location"] = Point(-2.14121, 50.83429, srid=4326)
-
-        # West Moors Memorial Hall
-        # user issue report #132
-        if record.polling_place_id in ["34298", "34301"]:
-            rec["location"] = Point(-1.89013, 50.82904, srid=4326)
-
-        # Dorset Fire & Rescue, Peverell Avenue West...
-        if record.polling_place_id == "35112":
-            rec["location"] = Point(-2.471750, 50.713013, srid=4326)
-
-        # Furzebrook Village Hall
-        if record.polling_place_id == "34895":
-            rec["location"] = Point(-2.10060, 50.65811, srid=4326)
+        if uprn in [
+            "10013731266",  # FLAT 2 PURBECK LODGE 15 BONNETS LANE, WAREHAM
+            "10013731265",  # FLAT 1 PURBECK LODGE 15 BONNETS LANE, WAREHAM
+        ]:
+            rec["postcode"] = "BH20 4HA"
 
         return rec
 
-    def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
+    def station_record_to_dict(self, record):
 
-        if record.addressline6.strip() == "DT4 OTU":
-            rec["postcode"] = "DT4 0TU"
+        if (
+            "NEW LOCATION" in record.polling_place_name
+        ):  # Multiple station address names contain undesired text
+            record = record._replace(polling_place_name="")
 
-        if record.addressline6 == "DT9 4FG":
-            return None
+        if (
+            record.polling_place_id == "39510"
+        ):  # Thorncombe Village Hall Chard Street Thorncombe TA20 4ME
+            record = record._replace(polling_place_postcode="TA20 4NF")
 
-        if record.addressline6.strip() in [
-            "DT8 3DS",
-            "BH20 5AL",
-            "BH16 6AE",
-            "DT10 1JQ",
-            "DT11 7AR",
-            "BH20 5ED",
-        ]:
-            return None
+        if (
+            record.polling_place_id == "39843"
+        ):  # St Marks Church Hall New Road West Parley Ferndown Dorset
+            record = record._replace(polling_place_postcode="BH22 8EW")
 
-        if uprn in ["10013731265", "10013731266"]:
-            rec["postcode"] = "BH20 4HA"
-            rec["accept_suggestion"] = False
+        if (
+            record.polling_place_id == "39899"
+        ):  # Weymouth Outdoor Education Centre Knightsdale Road Weymouth DT4 OHS
+            record = record._replace(polling_place_postcode="DT4 0HS")
 
-        if uprn in [
-            "10002640153",  # DT28HW -> DT28NJ : Seafield, Holworth, Dorchester, Dorset
-            "200004827271",  # BH214AD -> BH214AB : South Oak, Dullar Farm, Dullar Farm Lane, Sturminster Marshall
-            "200004827507",  # BH166BA -> BH166BB : 13 Race Farm Cottages, Huntick Road, Lytchett Minster
-            "10023250759",  # DT65JR -> DT65JT : The Dairy House Vearse Farm, West Road, Bridport, Dorset
-            "10023250758",  # DT65JR -> DT65JT : Vearse Farmhouse, West Road, Bridport, Dorset
-            "10011953652",  # BH191LT -> BH191LS : Flat 1 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "10011953653",  # BH191LT -> BH191LS : Flat 2 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "10011953654",  # BH191LT -> BH191LS : Flat 3 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "10011953655",  # BH191LT -> BH191LS : Flat 4 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "10011953656",  # BH191LT -> BH191LS : Flat 5 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "10011953657",  # BH191LT -> BH191LS : Penthouse 1 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "10011953658",  # BH191LT -> BH191LS : Penthouse 2 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "10011953659",  # BH191LT -> BH191LS : Penthouse 3 Spinnakers, 24 Burlington Road, Swanage, Dorset
-            "100040657448",  # DT40LY -> DT40JY : Flat 2, Adelaide Court, Abbotsbury Road, Weymouth, Dorset
-            "100040657451",  # DT40LY -> DT40JY : Flat 5, Adelaide Court, Abbotsbury Road, Weymouth, Dorset
-            "100040657452",  # DT40LY -> DT40JY : Flat 6, Adelaide Court, Abbotsbury Road, Weymouth, Dorset
-            "100040657453",  # DT40LY -> DT40JY : Flat 7, Adelaide Court, Abbotsbury Road, Weymouth, Dorset
-            "100040657450",  # DT40LY -> DT40JY : Flat 4, Adelaide Court, Abbotsbury Road, Weymouth, Dorset
-            "100040657449",  # DT40LY -> DT40JY : Flat 3, Adelaide Court, Abbotsbury Road, Weymouth, Dorset
-            "200000766574",  # DT83HY -> DT83HX : Wayland Farm, Chedington, Beaminster, Dorset
-        ]:
-            rec["accept_suggestion"] = True
+        rec = super().station_record_to_dict(record)
 
-        if uprn in [
-            "200000767829",  # DT65BJ -> DT65BL : Caretaker`s Flat Boldwood House, 13 West Allington, Bridport, Dorset
-            "100040700541",  # BH217JX -> BH217JT : High Trees Burts Lane, Mannington, Horton Heath, Wimborne, Dorset
-        ]:
-            rec["accept_suggestion"] = False
+        # Bishops Caundle Village Hall
+        # user issue report #40
+        if record.polling_place_id == "39641":
+            rec["location"] = Point(-2.437757, 50.915554, srid=4326)
 
         return rec
