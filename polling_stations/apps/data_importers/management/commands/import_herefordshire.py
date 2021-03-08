@@ -1,47 +1,33 @@
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E06000019"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-08here.csv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-08here.csv"
-    )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
-
-    def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
-
-        if record.pollingstationname == "Weobley Village Hall":
-            rec["location"] = Point(-2.869103, 52.159915, srid=4326)
-
-        if record.pollingstationname == "Richards Castle Village Hall":
-            rec["location"] = Point(-2.74213, 52.32607, srid=4326)
-
-        return rec
+    council_id = "HEF"
+    addresses_name = "2021-02-23T12:40:34.098231/polling_station_export-2021-02-22.csv"
+    stations_name = "2021-02-23T12:40:34.098231/polling_station_export-2021-02-22.csv"
+    elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if record.housepostcode.strip() == "HR9 7RA":
-            return None
-
-        if uprn in ["10007369349", "10091655370"]:
-
-            return None
-
-        if record.houseid in [
-            "3072006",
-            "9010513",
+        if uprn in [
+            "10093119764",  # TIRBILL, BLACK HILL FARM, LLANVEYNOE, LONGTOWN, HEREFORD
+            "10023977670",  # STOCKIN FARM COTTAGE, RICHARDS CASTLE, LUDLOW
+            "200002634580",  # SUMMER HILL, HAYNALL LANE, LITTLE HEREFORD, LUDLOW
+            "10009581132",  # CRADOC COTTAGE CRADOC COURT PLOCKS COURT, ALLENSMORE
+            "10009557901",  # SNOW DROP COVERT, HAYNALL LANE, LITTLE HEREFORD, LUDLOW
+            "10009576304",  # GREENWAY AT WOODREDDING FARM A449 FROM HILLINGTON TO WOODREDDING FARM, WOODREDDING
+            "10091654013",  # PLOUGHMANS, WOODREDDING, ROSS-ON-WYE
+            "10023978747",  # CORNERWAYS KENT AVENUE, ROSS-ON-WYE
+            "10009578073",  # CRADOC COURT, ALLENSMORE, HEREFORD
+            "10022775876",  # HOME FARM, CROFT, LEOMINSTER
+            "10022778892",  # GRYMSTYCH COTTAGE EAST STREET, PEMBRIDGE
+            "10022783983",  # THE POPLARS, WIGMORE, LEOMINSTER
+            "10009564500",  # PANTEG, YATTON, ROSS-ON-WYE
         ]:
             return None
 
-        if record.housepostcode.strip() in ["HR1 2PJ", "HR4 8FH"]:
+        if record.housepostcode.strip() in ["HR4 9EN", "HR2 8FH"]:
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
