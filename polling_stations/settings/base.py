@@ -47,7 +47,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = False
+USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
@@ -214,7 +214,10 @@ LOGGING = {
 
 
 LANGUAGE_CODE = "en"
-LANGUAGES = [("en", "English"), ("cy", "Welsh")]
+LANGUAGES = [
+    ("en", "English"),
+    ("cy", "Welsh"),
+]
 USE_I18N = (True,)
 USE_L10N = (True,)
 LOCALE_PATHS = (repo_root("locale"),)
