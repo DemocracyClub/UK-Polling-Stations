@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-16 20:00+0000\n"
+"POT-Creation-Date: 2021-03-09 13:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,117 +17,297 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: polling_stations/apps/data_finder/views.py:148
+#: polling_stations/apps/dashboard/templates/dashboard/council_detail.html:5
+#: polling_stations/apps/dashboard/templates/dashboard/council_list.html:4
+#: polling_stations/apps/dashboard/templates/dashboard/council_list.html:7
+msgid "Dashboard"
+msgstr ""
+
+#: polling_stations/apps/dashboard/templates/dashboard/postcode.html:5
+msgid "Postcode:"
+msgstr ""
+
+#: polling_stations/apps/data_finder/helpers/directions.py:83
 msgid "minute"
 msgstr ""
 
-#: polling_stations/apps/data_finder/views.py:151
+#: polling_stations/apps/data_finder/helpers/directions.py:87
 msgid "miles"
 msgstr ""
 
-#: polling_stations/apps/nus_wales/templates/nus_wales/base.html:9
-#: polling_stations/templates/home.html:12
+#: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:5
+#: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:4
+msgid "Uploads"
+msgstr ""
+
+#: polling_stations/templates/address_select.html:10
+msgid "Choose Your Address"
+msgstr ""
+
+#: polling_stations/templates/address_select.html:17
+msgid "Find my Polling Station"
+msgstr ""
+
+#: polling_stations/templates/custom_finder.html:4
+#: polling_stations/templates/custom_finder.html:7
+#: polling_stations/templates/home.html:23
+#: polling_stations/templates/home.html:29
 msgid "Find your polling station"
 msgstr ""
 
-#: polling_stations/templates/address_select.html:11
-msgid "Choose Your Address / Street"
-msgstr ""
-
-#: polling_stations/templates/address_select.html:19
-#: polling_stations/templates/home.html:21
-msgid "Find your Polling Station"
-msgstr ""
-
-#: polling_stations/templates/home.html:17
-msgid "Enter Your Postcode"
-msgstr ""
-
-#: polling_stations/templates/home.html:20
-msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:10
-msgid "Your Polling Station"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:20
-msgid "Your polling station"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:22
-#, python-format
-msgid "Contact %(council_name)s"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:27
-#, python-format
-msgid "The polling station for <strong>%(postcode)s</strong> is:"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:41
+#: polling_stations/templates/custom_finder.html:14
 #, python-format
 msgid ""
 "\n"
-"              It's about %(walk_dist)s away or a %(walk_time)s walk from "
-"%(postcode)s.\n"
-"            "
+"        <p>Alternatively, contact The Electoral Office for Northern Ireland "
+"on <strong><a href=\"tel:%(council_phone)s\">%(council_phone)s</a></strong></"
+"p>\n"
+"      "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:45
-msgid "Get walking directions"
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:50
+#: polling_stations/templates/custom_finder.html:18
 #, python-format
 msgid ""
 "\n"
-"        <p>We don't have data for your area, so you need to contact the "
-"council.</p>\n"
-"        <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
-"%(council_phone)s</a></strong></p>\n"
-"        "
+"        <p>Alternatively, contact %(council_name)s on <strong><a href=\"tel:"
+"%(council_phone)s\">%(council_phone)s</a></strong></p>\n"
+"      "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:65
+#: polling_stations/templates/election_explainers.html:5
 msgid ""
 "\n"
-"        <h3>You don't need your poll card to vote</h3>\n"
-"        <p>If you don't have your poll card, you can go to the polling\n"
-"            station and give them your name and address.</p>\n"
-"        <p>You don't need any other form of ID.</p>\n"
-"        <p>If you haven’t received a polling card but think you should have "
-"done, contact your council</p>\n"
-"        <p><strong>Polling stations are open from 7am to 10pm on polling day."
-"</strong></p>\n"
-"        <p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" "
-"target=\"_blank\">\n"
-"          Read more about voting in the UK\n"
-"        </a></p>\n"
-"        "
+"  <h2>Elections in your area</h2>\n"
+"  "
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:79
-msgid ""
-"\n"
-"        <h3>You need to be registered in order to vote</h3>\n"
-"        <p>If you aren’t registered to vote visit <a href=\"https://www.gov."
-"uk/register-to-vote\">https://www.gov.uk/register-to-vote</a> <strong>before "
-"the 18th of April</strong>.</p>\n"
-"\n"
-"        "
-msgstr ""
-
-#: polling_stations/templates/postcode_view.html:88
+#: polling_stations/templates/fragments/contact_details.html:12
 msgid "Council Contact info"
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:92
+#: polling_stations/templates/fragments/contact_details.html:24
+#: polling_stations/templates/multiple_councils.html:21
 msgctxt "Short for Phone:"
 msgid "P:"
 msgstr ""
 
-#: polling_stations/templates/postcode_view.html:93
+#: polling_stations/templates/fragments/contact_details.html:26
+#: polling_stations/templates/multiple_councils.html:23
 msgctxt "Short for Email:"
 msgid "E:"
+msgstr ""
+
+#: polling_stations/templates/fragments/errors.html:4
+#, python-format
+msgid ""
+"\n"
+"<h2>Sorry, we can't find %(postcode)s</h2>\n"
+"<p>This doesn't appear to be a valid postcode.</p>\n"
+msgstr ""
+
+#: polling_stations/templates/fragments/errors.html:11
+msgid "Find your Polling Station"
+msgstr ""
+
+#: polling_stations/templates/fragments/help_your_council.html:3
+#, python-format
+msgid ""
+"\n"
+"        <h3>\n"
+"            <span aria-hidden=\"true\">👉</span>\n"
+"            Your election (might) need you!\n"
+"        </h3>\n"
+"        <p>\n"
+"          A lot of people are needed to make an election happen.\n"
+"          Your council may be hiring polling station and counting staff for "
+"the upcoming elections.\n"
+"          Contact %(council_name)s Electoral Services team to see if they "
+"need help.\n"
+"        </p>\n"
+"        <p>\n"
+"          You can email them at <strong><a href=\"mailto:"
+"%(council_electoral_services_email)s\">%(council_electoral_services_email)s</"
+"a></strong>\n"
+"          or call them on <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong>.\n"
+"        </p>\n"
+"    "
+msgstr ""
+
+#: polling_stations/templates/fragments/info_on_your_candidates.html:3
+#, python-format
+msgid ""
+"\n"
+"        <h3>\n"
+"          <span aria-hidden=\"true\">ℹ️</span>\n"
+"          Information on your candidates\n"
+"        </h3>\n"
+"          <p>You can find information on your candidates at <a href="
+"\"https://whocanivotefor.co.uk/elections/%(postcode)s\" target=\"_top\">\n"
+"            WhoCanIVoteFor.co.uk</a>\n"
+"          </p>\n"
+"      "
+msgstr ""
+
+#: polling_stations/templates/fragments/no_election.html:8
+#, python-format
+msgid ""
+"\n"
+"  <p>\n"
+"    We're not aware of any upcoming elections in your area. If you think "
+"there may be elections in your area,\n"
+"    check your local <a href=\"%(council_website)s\">council website</a> for "
+"more information,\n"
+"    or contact %(council_name)s on <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong>.\n"
+"  </p>\n"
+"  "
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_known.html:3
+msgid "Your polling station"
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_known.html:22
+#, python-format
+msgid ""
+"\n"
+"        It's about %(dist)s away or a %(time)s %(mode)s from %(postcode)s.\n"
+"      "
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_known.html:28
+msgid "Walking/driving directions from Google"
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_known.html:32
+msgid "Cycling directions from CycleStreets"
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_unknown.html:3
+#, python-format
+msgid "Contact %(council_name)s"
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_unknown.html:5
+msgid ""
+"\n"
+"  <p>\n"
+"    Your polling station address should be printed on your polling card, "
+"which is delivered by post before an election.\n"
+"  </p>\n"
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_unknown.html:13
+#, python-format
+msgid ""
+"\n"
+"        If you don't have a poll card, you need to contact your local "
+"council.\n"
+"        You can call %(council_name)s on <strong><a href=\"tel:"
+"%(council_phone)s\">%(council_phone)s</a></strong>\n"
+"        or <strong><a href=\"%(council_website)s\">visit their website</a></"
+"strong>.\n"
+"      "
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_unknown.html:19
+#, python-format
+msgid ""
+"\n"
+"        Or, you need to contact %(council_name)s\n"
+"      "
+msgstr ""
+
+#: polling_stations/templates/fragments/polling_station_unknown.html:25
+msgid ""
+"\n"
+"  <p><strong>Polling stations are open from 7am to 10pm on Thursday 6 May.</"
+"strong></p>\n"
+msgstr ""
+
+#: polling_stations/templates/fragments/register_to_vote.html:3
+msgid ""
+"\n"
+"        <h3>\n"
+"            <span aria-hidden=\"true\">📋</span>\n"
+"            You need to be registered in order to vote\n"
+"        </h3>\n"
+"        <p>\n"
+"          If you aren't registered to vote visit\n"
+"          <a href=\"https://www.gov.uk/register-to-vote\" target=\"_top\">\n"
+"            https://www.gov.uk/register-to-vote\n"
+"          </a>\n"
+"        </p>\n"
+"        <p>Register before midnight on Monday 19 April to vote in the "
+"Election(s) on 6 May.</p>\n"
+"        <p>You don't need to register again if you've already registered at "
+"your current address.</p>\n"
+"        "
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:12
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:33
+msgid "You must vote at your assigned polling station."
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:16
+msgid ""
+"\n"
+"          <h3>\n"
+"            <span aria-hidden=\"true\">🗳</span>️\n"
+"            You don't need your poll card to vote\n"
+"          </h3>\n"
+"        <p>\n"
+"          If you are registered to vote, but you don't have your poll card, "
+"you\n"
+"          can go to the polling station and give them your name and "
+"address.\n"
+"        </p>\n"
+"        "
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:28
+msgid "You will need photographic identification"
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:30
+msgid "You don't need any other form of ID."
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:37
+msgid "Read more about voting in Northern Ireland"
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:41
+msgid "Read more about voting in Great Britain"
+msgstr ""
+
+#: polling_stations/templates/home.html:14
+#, python-format
+msgid ""
+"\n"
+"        <h2>Sorry, we can't find %(postcode)s</h2>\n"
+"        <p>This doesn't appear to be a valid postcode.</p>\n"
+"        "
+msgstr ""
+
+#: polling_stations/templates/multiple_councils.html:6
+#: polling_stations/templates/postcode_view.html:33
+msgid "Your Polling Station"
+msgstr ""
+
+#: polling_stations/templates/multiple_councils.html:10
+msgid "Contact Your Council"
+msgstr ""
+
+#: polling_stations/templates/multiple_councils.html:12
+#, python-format
+msgid ""
+"\n"
+"  <p>Your polling station address should be printed on your polling card, "
+"which is delivered by post before an election.</p>\n"
+"  <p>Or, you need to contact your council. Residents in %(postcode)s may be "
+"in one of the following council areas:</p>\n"
+"  "
 msgstr ""
