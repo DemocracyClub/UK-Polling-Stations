@@ -2,8 +2,8 @@ from data_importers.github_importer import BaseGitHubImporter
 
 
 class Command(BaseGitHubImporter):
-    council_id = "E07000121"
-    elections = ["parl.2019-12-12"]
+    council_id = "LAC"
+    elections = ["2021-05-06"]
     geom_type = "geojson"
     srid = 27700
     districts_srid = 27700
