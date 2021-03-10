@@ -9,18 +9,16 @@
 <div class="card">
   <h2>{% blocktrans %}Contact Your Council{% endblocktrans %}</h2>
 
-  {% blocktrans with council.electoral_services_phone_numbers.0 as council_phone %}
-  <p>Your polling station address should be printed on your polling card, which is delivered by post before an election.</p>
-  <p>Or, you need to contact your council. Residents in {{ postcode }} may be in one of the following council areas:</p>
-  {% endblocktrans %}
+  <p>{% trans "Your polling station address should be printed on your polling card, which is delivered by post before an election." %}</p>
+  <p>{% blocktrans %}Or, you need to contact your council. Residents in {{ postcode }} may be in one of the following council areas:{% endblocktrans %}</p>
 
   {% for council in councils %}
   <p>
     <h3>{{ council.name }}</h3>
     {% for phone_number in council.electoral_services_phone_numbers %}
-      <abbr title="Phone">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ phone_number }}">{{ phone_number }}</a><br>
+      <abbr title="{% trans "Phone" context "abbr title attribute" %}">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ phone_number }}">{{ phone_number }}</a><br>
     {% endfor %}
-    <abbr title="Email">{% trans "E:" context "Short for Email:" %}</abbr>
+    <abbr title="{% trans "Email" context "abbr title attribute" %}">{% trans "E:" context "Short for Email:" %}</abbr>
     <a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a>
   </p>
   {% endfor %}

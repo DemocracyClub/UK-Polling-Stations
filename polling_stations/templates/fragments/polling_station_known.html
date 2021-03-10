@@ -19,7 +19,7 @@
 {% if directions.time %}
   <div id="directions">
     <p>
-      {% blocktrans with directions.time as time and directions.dist as dist and directions.mode as mode %}
+      {% blocktrans trimmed with directions.time as time and directions.dist as dist and directions.mode as mode %}
         It's about {{ dist }} away or a {{ time }} {{ mode }} from {{ postcode }}.
       {% endblocktrans %}
     </p>
@@ -34,7 +34,7 @@
   </div>
 {% endif %}
 
-<p><strong>Polling stations are open from 7am to 10pm on Thursday 6 May.</strong></p>
+<p><strong>{% blocktrans %}Polling stations are open from 7am to 10pm on Thursday 6 May.{% endblocktrans %}</strong></p>
 
 {% if station.location %}
   <div id="area_map" class="card_inset"></div>
