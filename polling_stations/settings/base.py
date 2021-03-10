@@ -1,5 +1,8 @@
 import os, sys
 
+from django.utils.translation import gettext_lazy as _
+
+
 # PATH vars
 
 here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
@@ -252,7 +255,7 @@ CORS_URLS_REGEX = r"^/(api|embed)/.*$"
 
 
 INTERNAL_IPS = "127.0.0.1"
-SITE_TITLE = "Where Do I Vote?"
+SITE_TITLE = _("Where Do I Vote?")
 SITE_LOGO = "images/logo-with-text.png"
 SITE_LOGO_WIDTH = "390px"
 
