@@ -29,3 +29,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+
+        # Clock Barn Hall, Clock Barn Farm, Hambledon Road, Busbrudge, Godalming
+        if record.polling_place_id == "4959":
+            record = record._replace(polling_place_address_3="Busbridge")
+
+        return super().station_record_to_dict(record)
