@@ -2,28 +2,39 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E06000046"
-    addresses_name = "parl.2019-12-12/Version 1/iow.gov.uk-1573036635000-.tsv"
-    stations_name = "parl.2019-12-12/Version 1/iow.gov.uk-1573036635000-.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "IOW"
+    addresses_name = "2021-03-10T21:36:45.258417/IOW Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-10T21:36:45.258417/IOW Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        if record.addressline1 == "Le Sage":
-            rec["postcode"] = "PO390AD"
+        uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline1 == "Rookley Holiday Park":
-            rec["postcode"] = "PO383LU"
-        if (
-            record.addressline1 == "Flat 15 Solent House"
-            and record.addressline6 == "PO30 5TG"
-        ):
+        if uprn in [
+            "100060763282",  # 28A HIGH STREET, RYDE
+        ]:
             return None
 
-        if record.addressline1 == "Down House":
+        if record.addressline6 in [
+            "PO33 2BP",
+            "PO30 5GT",
+            "PO36 9NQ",
+            "PO30 2DH",
+            "PO34 5AF",
+        ]:
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # The Annex St Johns Church St. Johns Crescent Sandown PO36 9EQ
+        if record.polling_place_id == "7140":
+            record = record._replace(polling_place_postcode="PO36 8EQ")
+
+        # Chillerton Village Hall Chillerton Newport
+        if record.polling_place_id == "7024":
+            record = record._replace(polling_place_postcode="PO30 3ER")
+
+        return super().station_record_to_dict(record)
