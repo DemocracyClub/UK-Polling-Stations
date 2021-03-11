@@ -2,76 +2,98 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E08000032"
-    addresses_name = (
-        "parl.2019-12-12/Version 2/Bradford Polling Stations_12th December.TSV"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 2/Bradford Polling Stations_12th December.TSV"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "BRD"
+    addresses_name = "2021-03-10T21:40:19.803040/Bradford Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-10T21:40:19.803040/Bradford Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id == "22845":
-            # Toller Youth Café, 2 Duckworth Lane
+
+        # Toller Youth Cafe, 2 Duckworth Lane, Bradford
+        if record.polling_place_id == "25993":
+            record = record._replace(polling_place_easting="414102")
+            record = record._replace(polling_place_northing="434471")
+
+        # St John`s Church South Street Keighley BD22 7BU
+        if record.polling_place_id == "26270":
+            record = record._replace(polling_place_easting="405613")
+            record = record._replace(polling_place_northing="439897")
+
+        # Classroom At Lodge Cafe Bowling Park Lodge Bowling Hall Road Bradford
+        if record.polling_place_id == "26240":
+            record = record._replace(polling_place_easting="417437")
+            record = record._replace(polling_place_northing="431215")
+
+        # Station change - https://trello.com/c/mzcaj34E/346-bradford
+        if record.polling_place_id == "26043":
             record = record._replace(
-                polling_place_easting="414102", polling_place_northing="434471"
+                polling_place_name="Wibsey Methodist Church",
+                polling_place_address_1="School Lane",
+                polling_place_address_2="Bradford",
+                polling_place_address_3="",
+                polling_place_easting="414973",
+                polling_place_northing="430159",
             )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
-        if (
-            record.addressline1.endswith(" All Saints Hall")
-            and record.addressline2 == "All Saints Road"
-        ):
-            record = record._replace(addressline6="BD5 0NZ")
-
-        if record.addressline1 == "4 West Wood View":
-            record = record._replace(
-                property_urn="10093449448", addressline6="BD10 0FJ"
-            )
-
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10010577818",  # BD133SW -> BD133SP : 34 Bottomley Holes, Thornton, Bradford
+            "100051942648",  # STEWARDS FLAT HEADLEY GOLF CLUB HEADLEY LANE, THORNTON, BRADFORD
+            "10090402777",  # OLD SOUTH BARN, MOOR END, BLACK MOOR ROAD, OXENHOPE, KEIGHLEY
+            "100051268913",  # SOUTH BARN COTTAGE, MOOR END, BLACK MOOR ROAD, OXENHOPE, KEIGHLEY
+            "100051268917",  # STELL HILL BARN, STELL HILL, KEIGHLEY
+            "10002321349",  # CLARK HOUSE COTTAGE, WEST LANE, BAILDON, SHIPLEY
+            "10024353033",  # 382 OAKWORTH ROAD, KEIGHLEY
+            "10010571811",  # HILL POINT, OAKWORTH ROAD, KEIGHLEY
+            "10010571812",  # LOW LODGE, BELGRAVE ROAD, KEIGHLEY
+            "100051293123",  # 7 CHURCH FARM CLOSE, BRADFORD
+            "100051293145",  # 72 WEST LANE, BAILDON, SHIPLEY
+            "10024070655",  # ASHLEA, WEST LANE, BAILDON, SHIPLEY
+            "100051293144",  # 4 BARNSTAPLE WAY, BRADFORD
+            "100051293142",  # 6 BARNSTAPLE WAY, BRADFORD
+            "100051122920",  # CLARKE HOUSE FARM, WEST LANE, BAILDON, SHIPLEY
+            "10024070534",  # COTTAGE STANSFIELD ARMS RESTAURANT APPERLEY LANE, APPERLEY BRIDGE, BRADFORD
+            "10090402080",  # SCHOOL HOUSE, WEST LANE, BAILDON, SHIPLEY
+            "10023348334",  # HIGH BIRKS FIRE CLAY WORKS BREWERY LANE, THORNTON, BRADFORD
+            "10090402562",  # 15 BACK BLYTHE AVENUE, BRADFORD
+            "10094870940",  # FLAT AT THE BLACK SWAN 150 THORNTON ROAD, BRADFORD
+            "10090678354",  # 10 BRIGGS WAY, BRADFORD
+            "10023347357",  # 12 BRIGGS WAY, BRADFORD
+            "200001104554",  # HIGHLANDS, LEE LANE, BINGLEY
+            "200001104555",  # FLAT AT THE NEWBY SQUARE BOWLING OLD LANE, BRADFORD
+            "10090978516",  # 926B LEEDS ROAD, BRADFORD
+            "100051186198",  # 43 BRONTE CARAVAN PARK HALIFAX ROAD, KEIGHLEY
+            "100051226974",  # FLAT AT SHOULDER OF MUTTON 28 KIRKGATE, BRADFORD
+            "100051130917",  # 2 THORNBURY ROAD, BRADFORD
+            "10091675521",  # 37 RED HOLT DRIVE, KEIGHLEY
+            "10091675520",  # FLAT AT THE DRUM WINDER THORPE CHAMBERS 12A IVEGATE, BRADFORD
+            "10023347524",  # CRAGG VIEW BARN, LEES MOOR, KEIGHLEY
+            "10023347525",  # CRAGG VIEW FARM, LEES MOOR, KEIGHLEY
         ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "100051146371",  # BD62JZ -> BD62JY : Rock House, 200 Cemetery Road, Low Moor, Bradford
-            "10010577818",  # BD133SW -> BD133SP : 34 Bottomley Holes, Thornton, Bradford
-            "200004700106",  # BD128EW -> BD128EY : 1 Saxon Court, Wyke, Bradford
-            "100051272010",  # BD206PE -> BD206FQ : Longlands, Skipton Road, Steeton, Keighley
-            "10024070042",  # BD48TJ -> BD48SY : Flat At, 2 Parry Lane, Bradford
-            "100051122402",  # BD215RA -> BD215QU : Heather Lodge, Keighley Road, Hainworth Shaw, Keighley
-            "200004702084",  # BD133SP -> BD133SW : 36 Cragg Lane, Thornton, Bradford
-            "100051150769",  # BD133SP -> BD133SW : The Croft, Cragg Lane, Thornton, Bradford
-            "100051935773",  # BD164ED -> BD164TE : Wingfield Nursing Home, Priestthorpe Road, Bingley
-            "10010582254",  # BD157WB -> BD157YS : Willowbank Care Village, Bell Dean Road, Allerton, Bradford
-        ]:
-            rec["accept_suggestion"] = False
-
-        if uprn == "10090402080":
             return None
 
         if record.addressline6 in [
-            "BD4 0BA",
-            "BD22 9SX",
             "BD13 3SD",
-            "BD13 1NQ",
-            "BD13 1NG",
-            "BD14 6PY",
-            "BD3 8HE",
-            "BD21 1RP",
-            "BD21 5AB",
-            "BD21 2HP",
-            "BD17 5DH",
+            "BD1 3PP",
+            "BD1 4AB",
+            "BD1 1NE",
+            "BD1 1SX",
+            "BD1 1SR",
+            "BD1 1JB",
+            "BD5 7DP",
+            "BD4 9AN",
+            "BD3 9TY",
+            "BD16 1NT",
+            "BD15 7WB",
+            "BD7 4RA",
+            "LS29 6QJ",
+            "BD6 2NQ",
+            "BD9 6AS",
         ]:
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
