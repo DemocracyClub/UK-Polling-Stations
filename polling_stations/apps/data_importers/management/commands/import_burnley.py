@@ -5,14 +5,10 @@ from data_importers.management.commands import (
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "BUN"
-    addresses_name = (
-        "2021-03-03T11:07:51.228358/Burnley Democracy_Club__06May2021 (1).CSV"
-    )
-    stations_name = (
-        "2021-03-03T11:07:51.228358/Burnley Democracy_Club__06May2021 (1).CSV"
-    )
+    addresses_name = "2021-03-10T16:07:02.616665/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-10T16:07:02.616665/Democracy_Club__06May2021.tsv"
     elections = ["2021-05-06"]
-    csv_delimiter = ","
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
 
