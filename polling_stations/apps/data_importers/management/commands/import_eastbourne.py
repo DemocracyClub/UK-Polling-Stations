@@ -2,36 +2,22 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E07000061"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-07east.csv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-07east.csv"
-    )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "EAS"
+    addresses_name = "2021-03-04T10:47:15.541961/Eastbourne Borough polling_station_export-2021-03-04.csv"
+    stations_name = "2021-03-04T10:47:15.541961/Eastbourne Borough polling_station_export-2021-03-04.csv"
+    elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn in [
-            "10093961546",
-            "10010653214",
-            "10010654823",
-        ]:
+        if record.housepostcode in ["BN22 7HL", "BN20 8EJ", "BN20 7AU", "BN20 8TL"]:
             return None
 
         if uprn in [
-            "10010663461",  # BN211HG -> BN211HH : THE LAMBE INN HIGH STREET, EASTBOURNE, EAST SUSSEX
+            "10010662297",
+            "10024142453",
+            "10093961546",
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "10024140467",  # BN213EU -> BN228AG : 143 / 145 LANGNEY ROAD, EASTBOURNE, EAST SUSSEX
-            "100061919876",  # BN208NH -> BN208NR : THE DRIVE 153 VICTORIA DRIVE, EASTBOURNE, EAST SUSSEX
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
