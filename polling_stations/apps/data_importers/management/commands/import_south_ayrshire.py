@@ -1,64 +1,135 @@
-import tempfile
-import urllib.request
-from data_importers.github_importer import BaseGitHubImporter
-from data_importers.slugger import Slugger
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-"""
-This one is a bit messy.
-
-The districts file has station addresses in it
-
-There is also a stations file with points, but it has no codes
-so we're going to parse the districts file twice
-(once for the shapes and once to fill in the station addresses)
-and then we'll fill in the points from the stations file
-using address slug where possible.
-"""
-
-
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
-    council_id = "S12000028"
-    elections = ["parl.2019-12-12"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-SouthAyrshire"
-    geom_type = "geojson"
-    stations_query = "districts"
-    station_points = {}
-
-    def pre_import(self):
-        filename = self.base_url % (self.council_id, "stations", "json")
-        with tempfile.NamedTemporaryFile() as tmp:
-            urllib.request.urlretrieve(filename, tmp.name)
-            stations = self.get_data("json", tmp.name)
-            for station in stations:
-                self.station_points[Slugger.slugify(station["place"])] = station
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        return {
-            "internal_council_id": record["polling"],
-            "name": record["polling"],
-            "area": poly,
-            "polling_station_id": record["polling"],
-        }
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "SAY"
+    addresses_name = "2021-03-02T10:37:57.106280/Democracy Club - Polling Districts.csv"
+    stations_name = "2021-03-02T10:37:57.106280/Democracy Club - Polling Stations.csv"
+    elections = ["2021-05-06"]
 
     def station_record_to_dict(self, record):
-        if not record["place"]:
-            return None
+        if record.stationcode == "CDV55":
+            record = record._replace(postcode="KA26 9SB")
+        if record.stationcode == "CDV52":
+            record = record._replace(postcode="KA19 7RJ")
 
-        slug = Slugger.slugify(record["place"])
-        if slug in self.station_points:
-            location = self.extract_geometry(
-                self.station_points[slug], self.geom_type, self.get_srid()
-            )
+        if record.stationcode in [
+            "AYR01",
+            "AYR02",
+            "AYR03",
+            "AYR04",
+            "AYR05",
+            "AYR06_1",
+            "AYR06_2",
+            "AYR07",
+            "AYR08",
+            "AYR09",
+            "AYR10",
+            "AYR11",
+            "AYR12",
+            "AYR13",
+            "AYR14",
+            "AYR15",
+            "AYR16",
+            "AYR17",
+            "AYR18",
+            "AYR19",
+            "AYR20",
+            "AYR21",
+            "AYR22",
+            "AYR23",
+            "AYR24",
+            "AYR25",
+            "AYR26",
+            "AYR27_1",
+            "AYR27_2",
+            "AYR28",
+            "AYR29",
+            "AYR30",
+            "AYR31",
+            "AYR32",
+            "AYR33",
+            "AYR34",
+            "AYR35",
+            "AYR36",
+            "AYR37",
+            "AYR38",
+            "AYR39",
+            "AYR40",
+            "AYR41_1",
+            "AYR41_2",
+            "AYR42",
+            "AYR43",
+            "AYR44",
+            "AYR45",
+            "AYR46",
+            "AYR47",
+            "AYR48",
+            "AYR49",
+            "AYR50",
+            "AYR51",
+            "AYR52",
+            "AYR53",
+            "AYR54",
+            "AYR55",
+            "AYR56",
+            "AYR57",
+            "AYR58_1",
+            "AYR58_2",
+            "AYR59_1",
+            "AYR59_2",
+            "AYR60",
+            "AYR61",
+            "AYR62_1",
+            "AYR62_2",
+            "AYR63",
+            "CDV32",
+            "CDV33",
+            "CDV34",
+            "CDV35",
+            "CDV36",
+            "CDV37_1",
+            "CDV37_2",
+            "CDV38",
+            "CDV39",
+            "CDV40_1",
+            "CDV40_2",
+            "CDV41",
+            "CDV42",
+            "CDV43",
+            "CDV44",
+            "CDV45_1",
+            "CDV45_2",
+            "CDV46_1",
+            "CDV46_2",
+            "CDV47",
+            "CDV48",
+            "CDV49_1",
+            "CDV49_2",
+            "CDV49_3",
+            "CDV50_1",
+            "CDV50_2",
+            "CDV51",
+            "CDV52",
+            "CDV53",
+            "CDV54",
+            "CDV55",
+            "CDV56_1",
+            "CDV56_2",
+            "CDV57",
+            "CDV58_1",
+            "CDV58_2",
+            "CDV59_1",
+            "CDV59_2",
+            "CDV60",
+            "CDV61",
+            "CDV62",
+            "CDV63_1",
+            "CDV63_2",
+            "CDV64",
+            "CDV65",
+            "CDV66",
+        ]:
+            return super().station_record_to_dict(record)
         else:
-            location = None
-
-        return {
-            "internal_council_id": record["polling"],
-            "address": record["place"],
-            "postcode": record["postcode"],
-            "location": location,
-        }
+            return None
