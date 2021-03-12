@@ -1,11 +1,12 @@
 import os
+
 from data_importers.base_importers import ShpMixin
 from data_importers.github_importer import BaseGitHubImporter
 
 
 class Command(BaseGitHubImporter, ShpMixin):
-    council_id = "E07000172"
-    elections = ["2020-05-07"]
+    council_id = "BRT"
+    elections = ["2021-05-06"]
 
     # This one is a bit of a mish-mash
     # The stations are on GitHub
@@ -15,8 +16,8 @@ class Command(BaseGitHubImporter, ShpMixin):
 
     # but we need to import the districts from a file on S3
     districts_srid = 27700
-    districts_name = "local.2019-05-02/Version 1/Polling_Districts_Split"
-    districts_filetype = "shp"
+    districts_name = "2021-03-19T10:01:42.698161566/Polling_Districts_Split_2021.zip"
+    districts_filetype = "shp.zip"
     local_files = True
 
     def get_districts(self):
@@ -40,8 +41,16 @@ class Command(BaseGitHubImporter, ShpMixin):
         else:
             address = "\n".join([record["LABEL"], record["ADDRESS"]])
 
+        # There are several portakabins at each site, we only want one of them.
+        if (
+            record["POLL_DIST"] in ["GRE2", "GRE3", "KIM1"]
+            and "Unit 1" not in record["LABEL"]
+        ):
+            return None
+
         return {
             "internal_council_id": record["POLL_DIST"],
+            "polling_district_id": record["POLL_DIST"].replace(" ", ""),
             "address": address,
             "postcode": "",
             "location": location,
