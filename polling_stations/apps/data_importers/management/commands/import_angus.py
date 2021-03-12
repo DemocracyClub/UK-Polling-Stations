@@ -1,33 +1,31 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000041"
-    council_name = "Angus"
-    elections = ["europarl.2019-05-23"]
-    """
-    In the Angus data, station names are in the districts file but the
-    address is in the stations file, so we need to grab the station name
-    when we import the district polygons and store them so we can grab
-    them later when we import the station points.
-    station_addresses keys are district codes.
-    """
-    station_addresses = {}
+class Command(BaseHalaroseCsvImporter):
+    council_id = "ANS"
+    addresses_name = (
+        "2021-03-04T10:52:18.139732/Angus polling_station_export-2021-03-04.csv"
+    )
+    stations_name = (
+        "2021-03-04T10:52:18.139732/Angus polling_station_export-2021-03-04.csv"
+    )
+    elections = ["2021-05-06"]
 
-    def district_record_to_dict(self, record):
-        code = str(record[0]).strip()
-        self.station_addresses[code] = str(record[3]).strip()
-        return super().district_record_to_dict(record)
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
 
-    def station_record_to_dict(self, record):
-        council_name = str(record[2]).strip()
-        if council_name != self.council_name:
+        if record.housepostcode in [
+            "DD9 7EZ",
+            "DD8 2SF",
+            "DD8 4QB",
+            "DD8 5PP",
+            "DD8 2TJ",
+            "DD11 3ET",
+            "DD8 4QH",
+        ]:
             return None
 
-        code = str(record[0]).strip()
-        if not code:
+        if uprn in ["117078908", "117116533"]:
             return None
 
-        address = "\n".join([self.station_addresses[code], str(record[3]).strip()])
-
-        return {"internal_council_id": code, "postcode": "", "address": address}
+        return super().address_record_to_dict(record)
