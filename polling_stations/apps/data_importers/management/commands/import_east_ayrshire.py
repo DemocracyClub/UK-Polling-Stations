@@ -1,54 +1,121 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000008"
-    council_name = "East Ayrshire"
-    elections = ["parl.2019-12-12"]
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "EAY"
+    addresses_name = "2021-03-02T10:33:59.623219/Democracy Club - Polling Districts.csv"
+    stations_name = "2021-03-02T10:33:59.623219/Democracy Club - Polling Stations.csv"
+    elections = ["2021-05-06"]
+
+    def address_record_to_dict(self, record):
+        if record.postcode in ["KA3 6AZ", "KA2 0BQ", "KA1 2SE", "KA18 2JW", "KA18 2NB"]:
+            return None
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        def duplicate_records(rec, codes, stations):
-            for code in codes:
-                stations.append(
-                    {
-                        "internal_council_id": code,
-                        "postcode": rec["postcode"],
-                        "address": rec["address"],
-                    }
-                )
-            return stations
-
-        rec = super().station_record_to_dict(record)
-        if rec:
-            stations = [rec]
-
-            # Updates from SoPP review.
-            if rec["internal_council_id"] == "E104":
-                stations = duplicate_records(rec, ["E106", "E107"], stations)
-            if rec["internal_council_id"] == "E110":
-                stations = duplicate_records(rec, ["E606"], stations)
-            if rec["internal_council_id"] == "E201":
-                stations = duplicate_records(rec, ["E205"], stations)
-            if rec["internal_council_id"] == "E203":
-                stations = duplicate_records(rec, ["E204"], stations)
-            if rec["internal_council_id"] == "E304":
-                stations = duplicate_records(rec, ["E306"], stations)
-            if rec["internal_council_id"] == "E305":
-                stations = duplicate_records(rec, ["E309"], stations)
-            if rec["internal_council_id"] == "E307":
-                stations = duplicate_records(rec, ["E310"], stations)
-            if rec["internal_council_id"] == "E313":
-                stations = duplicate_records(rec, ["E401"], stations)
-            if rec["internal_council_id"] == "E411":
-                stations = duplicate_records(rec, ["E403", "E404", "E405"], stations)
-            if rec["internal_council_id"] == "E603":
-                stations = duplicate_records(rec, ["E607"], stations)
-            if rec["internal_council_id"] == "E701":
-                stations = duplicate_records(rec, ["E710"], stations)
-            if rec["internal_council_id"] == "E704":
-                stations = duplicate_records(rec, ["E807"], stations)
-            if rec["internal_council_id"] == "E708":
-                stations = duplicate_records(rec, ["E808"], stations)
-
-            return stations
-        return rec
+        if record.stationcode in [
+            "CDV01",
+            "CDV02",
+            "CDV03",
+            "CDV04",
+            "CDV05",
+            "CDV06",
+            "CDV07",
+            "CDV08",
+            "CDV09",
+            "CDV10",
+            "CDV11",
+            "CDV12",
+            "CDV13",
+            "CDV14_1",
+            "CDV14_2",
+            "CDV15",
+            "CDV16",
+            "CDV17_1",
+            "CDV17_2",
+            "CDV18",
+            "CDV19",
+            "CDV20",
+            "CDV21",
+            "CDV22",
+            "CDV23",
+            "CDV24",
+            "CDV25",
+            "CDV26",
+            "CDV27",
+            "CDV28",
+            "CDV29",
+            "CDV30",
+            "CDV31",
+            "KIV01",
+            "KIV02",
+            "KIV03",
+            "KIV04",
+            "KIV05",
+            "KIV06",
+            "KIV07",
+            "KIV08_1",
+            "KIV08_2",
+            "KIV09",
+            "KIV10",
+            "KIV11",
+            "KIV12",
+            "KIV13",
+            "KIV14",
+            "KIV15",
+            "KIV16",
+            "KIV17",
+            "KIV18",
+            "KIV19",
+            "KIV20",
+            "KIV21",
+            "KIV22",
+            "KIV23",
+            "KIV24",
+            "KIV25",
+            "KIV26",
+            "KIV27",
+            "KIV28_1",
+            "KIV28_2",
+            "KIV29",
+            "KIV30",
+            "KIV31",
+            "KIV32",
+            "KIV33",
+            "KIV34",
+            "KIV35",
+            "KIV36",
+            "KIV37",
+            "KIV38",
+            "KIV39",
+            "KIV40",
+            "KIV41",
+            "KIV42",
+            "KIV43",
+            "KIV44",
+            "KIV45",
+            "KIV46",
+            "KIV47",
+            "KIV48",
+            "KIV49",
+            "KIV50",
+            "KIV51",
+            "KIV52",
+            "KIV53",
+            "KIV54",
+            "KIV55",
+            "KIV56",
+            "KIV57",
+            "KIV58",
+            "KIV59_1",
+            "KIV59_2",
+            "KIV60",
+            "KIV61",
+            "KIV62_1",
+            "KIV62_2",
+            "KIV63",
+            "KIV64",
+        ]:
+            return super().station_record_to_dict(record)
+        else:
+            return None
