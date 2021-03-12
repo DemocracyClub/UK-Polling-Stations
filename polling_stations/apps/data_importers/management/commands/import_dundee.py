@@ -7,8 +7,8 @@ class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = "S12000042"
-    elections = ["parl.2019-12-12"]
+    council_id = "DND"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Dundee"
     geom_type = "geojson"
 
@@ -32,7 +32,7 @@ class Command(BaseGitHubImporter):
 
         # Get full address from AddressBase if we can
         try:
-            address, postcode = self.get_address(record["UPRN"])
+            address, postcode = self.get_address(record["UPRN"].lstrip("0"))
         except ObjectDoesNotExist:
             address = record["NAME"]
             postcode = ""
