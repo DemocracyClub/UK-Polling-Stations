@@ -214,7 +214,7 @@ LOGGING = {
 
 
 LANGUAGE_CODE = "en"
-LANGUAGES = [("en", "English"), ("cy-gb", "Welsh")]
+LANGUAGES = [("en", "English"), ("cy", "Welsh")]
 USE_I18N = (True,)
 USE_L10N = (True,)
 LOCALE_PATHS = (repo_root("locale"),)
