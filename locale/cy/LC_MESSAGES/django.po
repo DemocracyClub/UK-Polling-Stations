@@ -45,9 +45,10 @@ msgstr "milltir"
 msgid "Uploads"
 msgstr ""
 
+#  Translated by developer to support development; please check
 #: polling_stations/settings/base.py:259
 msgid "Where Do I Vote?"
-msgstr ""
+msgstr "Ble Ydw i'n Pleidleisio?"
 
 #: polling_stations/templates/address_select.html:10
 #, fuzzy
@@ -463,7 +464,7 @@ msgstr ""
 
 #: polling_stations/templates/fragments/register_to_vote.html:9
 msgid "https://www.gov.uk/register-to-vote"
-msgstr ""
+msgstr "https://www.gov.uk/cofrestru-i-bleidleisio"
 
 #: polling_stations/templates/fragments/register_to_vote.html:12
 msgid ""
@@ -520,10 +521,8 @@ msgid "6 May 2021 Elections"
 msgstr ""
 
 #: polling_stations/templates/home.html:34
-#, fuzzy
-#| msgid "The polling station for <strong>%(postcode)s</strong> is:"
 msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
-msgstr "Yr orsaf bleidleisio ar gyfer <strong>%(postcode)s</strong> yw:"
+msgstr ""
 
 #: polling_stations/templates/home.html:36
 msgid "You don't need your poll card to vote."
@@ -541,10 +540,8 @@ msgid "Your Polling Station"
 msgstr "Eich Gorsaf Bleidleisio"
 
 #: polling_stations/templates/multiple_councils.html:10
-#, fuzzy
-#| msgid "Contact %(council_name)s"
 msgid "Contact Your Council"
-msgstr "Cyswllt %(council_name)s"
+msgstr ""
 
 #: polling_stations/templates/multiple_councils.html:13
 #, python-format
