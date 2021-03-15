@@ -166,6 +166,7 @@ PROJECT_APPS = (
     "feedback",
     "file_uploads",
     "pollingstations",
+    "polling_stations",
     "bug_reports",
     "uk_geo_utils",
     "whitelabel",
