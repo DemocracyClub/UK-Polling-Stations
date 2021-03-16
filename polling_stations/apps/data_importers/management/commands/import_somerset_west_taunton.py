@@ -1,65 +1,66 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000246"
-    addresses_name = (
-        "parl.2019-12-12/Version 2/Democracy_Club__12December2019somersetw.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 2/Democracy_Club__12December2019somersetw.tsv"
-    )
-    elections = ["parl.2019-12-12"]
-    csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
-
-    def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
-
-        # Williams Hall
-        if rec["internal_council_id"] == "8079":
-            rec["location"] = Point(-2.930949, 51.041262, srid=4326)
-
-        # Victoria Park Pavilion
-        if rec["internal_council_id"] == "8219":
-            rec["location"] = Point(-3.091719, 51.017816, srid=4326)
-
-        return rec
+    council_id = "SWT"
+    addresses_name = "2021-03-15T10:53:03.510333/Somerset Democracy_Club__06May2021.CSV"
+    stations_name = "2021-03-15T10:53:03.510333/Somerset Democracy_Club__06May2021.CSV"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 in [
-            "TA4 1CQ",
-            "TA22 9JH",
-            "TA24 8NS",
-            "TA23 0HL",
+        if uprn in [
+            "10003766236",  # WEBBS WEST, DULVERTON
+            "10003766237",  # WEBBS EAST, DULVERTON
+            "10023836744",  # BARN COTTAGE MARSHCLOSE HILL, WITHYPOOL
+            "200003156693",  # 3A PARKHOUSE ROAD, MINEHEAD
+            "10003561537",  # FLAT C, MILLBRIDGE COURT, 11 PARKHOUSE ROAD, MINEHEAD
+            "10003561536",  # FLAT B, MILLBRIDGE COURT, 11 PARKHOUSE ROAD, MINEHEAD
+            "10003561538",  # FLAT D, MILLBRIDGE COURT, 11 PARKHOUSE ROAD, MINEHEAD
+            "200003156566",  # 9A PARKHOUSE ROAD, MINEHEAD
+            "10003561535",  # FLAT A, MILLBRIDGE COURT, 11 PARKHOUSE ROAD, MINEHEAD
+            "100040960688",  # 9B PARKHOUSE ROAD, MINEHEAD
+            "100040960686",  # 7 PARKHOUSE ROAD, MINEHEAD
+            "100040960685",  # OVERS, PARKHOUSE ROAD, MINEHEAD
+            "200003156694",  # 3B PARKHOUSE ROAD, MINEHEAD
+            "10003561539",  # FLAT E, MILLBRIDGE COURT, 11 PARKHOUSE ROAD, MINEHEAD
+            "10003561540",  # FLAT F, MILLBRIDGE COURT, 11 PARKHOUSE ROAD, MINEHEAD
+            "10003766053",  # HARPFORD HOUSE, PAYTON, WELLINGTON
+            "10003764036",  # HARPFORD BARN, PAYTON, WELLINGTON
+            "10093895310",  # KILTON COTTAGES, 11 KILTON, HOLFORD, BRIDGWATER
+            "10014267234",  # MOONBEAMS FARM, WELLINGTON
+            "10008799902",  # HIGHER BARN PIXFORD FRUIT FARM RALEIGHS CROSS ROAD, COMBE FLOREY, TAUNTON
+            "10008799901",  # ROSE COTTAGE, KILTON, HOLFORD, BRIDGWATER
+            "100041178433",  # SLADE TOWER, EIGHT ACRE LANE, WELLINGTON
+            "10023836286",  # MARSHWOOD, EXTON, DULVERTON
+            "10008799958",  # POTTERS COTTAGE, WEST MONKTON, TAUNTON
         ]:
             return None
 
-        if uprn == "10003766208":
-            rec["postcode"] = "TA22 9AD"
+        if record.addressline6 in ["TA3 5FE", "TA23 0NX", "TA23 0ED", "TA24 6TE"]:
+            return None
 
-        if uprn == "10023838852":
-            rec["postcode"] = "TA5 1TW"
+        return super().address_record_to_dict(record)
 
-        if uprn in [
-            "200003159967",  # TA247UF -> TA247TQ : 1 Slades Cottage, Great House Street
-            "10023837182",  # TA43PX -> TA43PU : Sadies Lodge, Elworthy Lydeard St Lawrence
-            "10003560944",  # TA245BG -> TA246BG : Flat 2 5 The Terrace, Bircham Road, Alcombe, Minehead, Somerset
-        ]:
-            rec["accept_suggestion"] = True
+    def station_record_to_dict(self, record):
+        # Elworthy Monksilver & Nettlecombe Community Hall Combe Cross Hill Monksilver Taunton TA4 4JR
+        if record.polling_place_id == "8791":
+            record = record._replace(polling_place_postcode="TA4 4JE")
 
-        if uprn in [
-            "100040951701",  # TA218AQ -> TA218AG : 28 Fore Street, Wellington, Somerset
-            "10008798212",  # TA43EX -> TA43EZ : The Old Granary, 2 Sevenash Cottages, Seven Ash
-            "10008798255",  # TA43PU -> TA43RX : Knights Farm, Lydeard St Lawrence
-        ]:
-            rec["accept_suggestion"] = False
+        # Wellington Rugby Club Corams Lane Wellington TA21 8JA
+        if record.polling_place_id == "9017":
+            record = record._replace(polling_place_postcode="TA21 8LL")
 
-        if uprn == "10008799187":
-            rec["postcode"] = "TA3 5AE"
+        # Williams Hall Dark Lane Stoke St Gregory Taunton TA3 6HA
+        if record.polling_place_id == "8865":
+            record = record._replace(polling_place_easting="334829")
+            record = record._replace(polling_place_northing="127291")
 
-        return rec
+        # Victoria Park Pavilion Victoria Gate Taunton TA1 3ES
+        if record.polling_place_id == "8915":
+            record = record._replace(polling_place_easting="323519")
+            record = record._replace(polling_place_northing="124839")
+
+        return super().station_record_to_dict(record)
