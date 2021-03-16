@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 10:43+0000\n"
+"POT-Creation-Date: 2021-03-22 10:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Uploads"
 msgstr ""
 
-#: polling_stations/settings/base.py:259
+#: polling_stations/settings/base.py:260
 msgid "Where Do I Vote?"
 msgstr ""
 
@@ -358,7 +358,7 @@ msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:3
 #, python-format
-msgid "Contact %(council_name)s"
+msgid "Contact %(council)s"
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:6

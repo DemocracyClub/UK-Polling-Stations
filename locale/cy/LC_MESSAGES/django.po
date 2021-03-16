@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 10:43+0000\n"
+"POT-Creation-Date: 2021-03-22 10:52+0000\n"
 "PO-Revision-Date: 2016-03-16 21:36+0000\n"
 "Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
@@ -46,7 +46,7 @@ msgid "Uploads"
 msgstr ""
 
 #  Translated by developer to support development; please check
-#: polling_stations/settings/base.py:259
+#: polling_stations/settings/base.py:260
 msgid "Where Do I Vote?"
 msgstr "Ble Ydw i'n Pleidleisio?"
 
@@ -413,8 +413,9 @@ msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:3
-#, python-format
-msgid "Contact %(council_name)s"
+#, fuzzy, python-format
+#| msgid "Contact %(council_name)s"
+msgid "Contact %(council)s"
 msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:6

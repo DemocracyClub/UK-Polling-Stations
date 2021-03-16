@@ -1,4 +1,4 @@
-{% load i18n markdown_deux_tags %}
+{% load i18n_with_welsh markdown_deux_tags %}
 {% if cancelled_election.metadata.cancelled_election.title %}
     <h2>{{ cancelled_election.metadata.cancelled_election.title }}</h2>
 {% else %}
@@ -22,11 +22,11 @@
 {% else %}
     {% if council.electoral_services_phone_numbers %}
         <p>
-            {% blocktrans trimmed with council_name=council.name phone_number=council.electoral_services_phone_numbers.0 %}
-                For more information contact {{ council.name }} on <strong><a href="tel:{{ phone_number }}">{{ phone_number }}</a></strong>.
+            {% blocktrans trimmed with phone_number=council.electoral_services_phone_numbers.0 %}
+                For more information contact {{ council }} on <strong><a href="tel:{{ phone_number }}">{{ phone_number }}</a></strong>.
             {% endblocktrans %}
         </p>
     {% else %}
-        <p>{% blocktrans trimmed with council_name=council.name %}For more information contact {{ council.name }}.{% endblocktrans %}</p>
+        <p>{% blocktrans %}For more information contact {{ council }}.{% endblocktrans %}</p>
     {% endif %}
 {% endif %}

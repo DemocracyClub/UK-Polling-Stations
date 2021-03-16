@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n_with_welsh %}
 
 <div class="card">
   {% if territory == 'NI' %}
@@ -17,7 +17,7 @@
       {{ council.electoral_services_address|linebreaksbr }}<br>
       {% if council.electoral_services_postcode %}{{ council.electoral_services_postcode }}<br>{% endif %}
     {% else %}
-      {{ council.name }}<br>
+      {{ council }}<br>
     {% endif %}
     <br>
     {% for phone_number in council.electoral_services_phone_numbers %}
