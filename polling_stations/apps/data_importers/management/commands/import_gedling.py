@@ -2,75 +2,48 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000173"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019gedling.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019gedling.tsv"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "GED"
+    addresses_name = "2021-03-15T11:19:52.370890/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-15T11:19:52.370890/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 in ("NG5 8PQ", "NG4 4PS"):
-            # Unexpected polling stations for one or more properties. Removing just those properties might give
-            # misleading results for the postcode if the polling station was correct.
-            return None
-
         if uprn in [
-            "10035282319",
-            "100032276046",
-            "100032123022",
-            "100031353751",
+            "200004046660",  # COCKLIFFE COUNTRY HOUSE HOTEL, BURNTSTUMP HILL, ARNOLD, NOTTINGHAM
+            "100032118065",  # 848A WOODBOROUGH ROAD, NOTTINGHAM
+            "100031353751",  # 850 WOODBOROUGH ROAD, NOTTINGHAM
+            "100031372068",  # THE FLAT TRAVELLERS REST MAPPERLEY PLAINS, LAMBLEY
+            "100031372065",  # 10A BLENHEIM AVENUE, NOTTINGHAM
+            "100032125606",  # THE FLAT FRIAR TUCK GEDLING ROAD, ARNOLD
+            "100032117629",  # THE FLAT WOODLARK INN CHURCH STREET, LAMBLEY
+            "200002776955",  # 326 CARLTON HILL, CARLTON, NOTTINGHAM
+            "10035282319",  # PENRHYN, MILL LANE, LAMBLEY, NOTTINGHAM
+            "10035286332",  # 4 MILL LANE, LAMBLEY, NOTTINGHAM
+            "100032276589",  # 163 STANDHILL ROAD, CARLTON, NOTTINGHAM
+            "100032302726",  # THE FLAT FOX AND HOUNDS HOTEL STATION ROAD, CARLTON
+            "100032123022",  # DAISIES DAY NURSERY, WOOD LANE, GEDLING, NOTTINGHAM
         ]:
             return None
 
-        if record.addressline1 == "328A Carlton Hill":
+        if record.addressline6 in [
+            "NG5 8PJ",
+            "NG4 1EN",
+            "NG4 3DF",
+            "NG14 6FN",
+            "NG4 2DX",
+            "NG4 3FT",
+            "NG4 3GQ",
+            "NG5 8AU",
+            "NG4 3DH",
+            "NG15 0BD",
+            "NG15 8GD",
+            "NG3 6HE",
+            "NG3 6BN",
+            "NG4 3DY",
+        ]:
             return None
 
-        if uprn in [
-            "10035281242",  # NG35TQ -> NG35QQ : Flat 2 840 Woodborough Road, Mapperley, Nottinghamshire
-            "10035281241",  # NG35TQ -> NG35QQ : Flat 1 840 Woodborough Road, Mapperley, Nottinghamshire
-            "10035281243",  # NG35TQ -> NG35QQ : Flat 3 840 Woodborough Road, Mapperley, Nottinghamshire
-            "10035281244",  # NG35TQ -> NG35QQ : Flat 4 840 Woodborough Road, Mapperley, Nottinghamshire
-            "10035281246",  # NG35TQ -> NG35QQ : Flat 5 840 Woodborough Road, Mapperley, Nottinghamshire
-            "10035281247",  # NG35TQ -> NG35QQ : Flat 6 840 Woodborough Road, Mapperley, Nottinghamshire
-            "100031358592",  # NG41LX -> NG41LZ : 64 Ernest Road, Carlton, Nottinghamshire
-            "100032100963",  # NG158GD -> NG159HP : The Gatehouse Lodge, Newstead, Nottinghamshire
-            "10002888179",  # NG158GD -> NG158GE : Mount Charlotte, Newstead Abbey Park, Ravenshead, Nottinghamshire
-            "100031366279",  # NG36BN -> NG36BS : 106 Kent Road, Mapperley, Nottinghamshire
-            "100031366280",  # NG36BN -> NG36BS : 108 Kent Road, Mapperley, Nottinghamshire
-            "100031360828",  # NG57BN -> NG57BP : Ernehale Lodge Nursing Home, Furlong Street, Arnold, Nottinghamshire
-            "100031370521",  # NG58PB -> NG58PE : Wernbank Cottage, Mansfield Road, Bestwood, Nottinghamshire
-            "10002896029",  # NG36HE -> NG36HG : Flat above The Punchbowl, 214 Porchester Road, Mapperley, Nottingham
-        ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "200001152310",  # NG44FL -> NG44FG : 267A Westdale Lane East, Carlton, Nottinghamshire
-            "200001152316",  # NG44FN -> NG44FG : 273A Westdale Lane East, Carlton, Nottinghamshire
-            "10002892754",  # NG44FL -> NG44FG : 275A Westdale Lane East, Carlton, Nottinghamshire
-            "200001152115",  # NG43JW -> NG43JU : 69 Westdale Lane East, Carlton, Nottinghamshire
-            "200001152117",  # NG43JW -> NG43JU : 71 Westdale Lane East, Carlton, Nottinghamshire
-            "200001152308",  # NG44FN -> NG44FW : 266A Westdale Lane East, Gedling, Nottinghamshire
-            "200001152313",  # NG44FN -> NG44FW : 270 Westdale Lane East, Gedling, Nottinghamshire
-            "200001152312",  # NG44FN -> NG44FW : 270A Westdale Lane East, Gedling, Nottinghamshire
-            "200001152248",  # NG44FN -> NG44FT : 202 Westdale Lane East, Carlton, Nottinghamshire
-            "100031346832",  # NG146EF -> NG146EE : Woodborough Hall, Bank Hill, Woodborough, Nottinghamshire
-            "100031347797",  # NG58NE -> NG58HT : Beauclark House, Bestwood Lodge Drive, Bestwood, Nottinghamshire
-            "100031359284",  # NG146JZ -> NG146LN : Oxgang, Flatts Lane, Calverton, Nottinghamshire
-            "100032099652",  # NG146FG -> NG146FN : The Flat Oscar`s Lounge & Restaurant,, Main Street, Calverton, Nottinghamshire
-            "100031348280",  # NG146FR -> NG146ED : The Poplars, Bonner Hill, Calverton, Nottinghamshire
-            "10002896692",  # NG58PJ -> NG158FJ : Miller and Carter Steakhouse, Mansfield Road, Arnold, Nottingham
-            "10035287615",  # NG158JU -> NG44LU : 31 Askew Road, Linby, Nottinghamshire
-        ]:
-            rec["accept_suggestion"] = False
-
-        if record.addressline6 in ["NG3 6DS", "NG4 3DQ"]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
