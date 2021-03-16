@@ -299,15 +299,14 @@ class AddressList(AssignPollingStationsMixin):
         ]
 
     def get_polling_station_lookup(self):
+
         # for each address, build a lookup of polling_station_id -> set of uprns
         polling_station_lookup = {}
         for record in self.elements:
             if record["polling_station_id"] in polling_station_lookup:
                 polling_station_lookup[record["polling_station_id"]].add(record["uprn"])
             else:
-                polling_station_lookup[record["polling_station_id"]] = set(
-                    record["uprn"]
-                )
+                polling_station_lookup[record["polling_station_id"]] = {record["uprn"]}
 
         return polling_station_lookup
 
