@@ -264,37 +264,37 @@ class AddressListTest(TestCase):
                 "address": "foo 1",
                 "postcode": "AA1 2BB",
                 "council": "AAA",
-                "uprn": "1",
+                "uprn": "01",
             },
             {
                 "polling_station_id": "01",
                 "address": "foo 2",
                 "postcode": "AA1 2BB",
                 "council": "AAA",
-                "uprn": "2",
+                "uprn": "02",
             },
             {
                 "polling_station_id": "01",
                 "address": "foo 3",
                 "postcode": "AA1 2BB",
                 "council": "AAA",
-                "uprn": "3",
+                "uprn": "03",
             },
             {
                 "polling_station_id": "02",
                 "address": "foo 4",
                 "postcode": "AA1 2BB",
                 "council": "AAA",
-                "uprn": "4",
+                "uprn": "04",
             },
         ]
         expected = {
             "01": {
-                "1",
-                "2",
-                "3",
+                "01",
+                "02",
+                "03",
             },
-            "02": {"4"},
+            "02": {"04"},
         }
         address_list = AddressList(MockLogger())
         for el in in_list:
