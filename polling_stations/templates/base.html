@@ -32,6 +32,36 @@
 {% endif %}
 {% endblock ga_tracking_code %}
 
+{% block header %}
+    <header role="banner">
+        <div class="container">
+            <a class="home-link" href="/">
+                <img src="{% static "dc_theme/icons/apple-touch-icon.png" %}" alt="">
+                <div class="title-text">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% if LANGUAGE_CODE != "en" %}
+                        <div lang="en" dir="ltr">{% language "en" %}{{ site_title }}{% endlanguage %}</div>
+                    {% endif %}
+                    <div{% if LANGUAGE_CODE != "en" %} class="subtitle"{% endif %}>{{ site_title }}</div>
+                </div>
+            </a>
+            <div class="language-select">
+                <form action="{% url 'set_language' %}" method="post">
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+
+                        <button name="language" value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} disabled aria-selected="true" {% endif %}>
+                            {{ language.name_local }}
+                        </button>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    </header>
+{% endblock header %}
 
 {% block site_footer %}
 <footer class="footer">
