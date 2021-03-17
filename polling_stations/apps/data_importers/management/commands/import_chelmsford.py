@@ -2,39 +2,39 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000070"
-    addresses_name = "parl.2019-12-12/Version 2/merged.tsv"
-    stations_name = "parl.2019-12-12/Version 2/merged.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "CHL"
+    addresses_name = "2021-03-23T14:10:30.146530/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-23T14:10:30.146530/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "100091430409":
-            rec["postcode"] = "CM111HZ"
-            rec["accept_suggestion"] = False
-
-        if uprn == "200004627070":
-            rec["postcode"] = "CM6 3XD"
-
-        if uprn == "100091237355":
-            rec["postcode"] = "SS11 7DS"
-
-        if record.addressline6.strip() == "CM1 1PJ":
+        if uprn in [
+            "10093929304",  # 85 BROOMFIELD ROAD, CHELMSFORD
+            "100091234139",  # 1 BANKSIDE, NEW STREET, CHELMSFORD
+            "100091430409",  # BARNES MILL HOUSE, MILL VUE ROAD, CHELMSFORD
+            "100090390510",  # HONEYSTONE, SOUTHEND ROAD, HOWE GREEN, CHELMSFORD
+            "100090390509",  # NEW BUNGALOW, TURKEY FARM, WINDSOR TRADING ESTATE, WINDSOR ROAD, DOWNHAM, BILLERICAY
+            "200004627211",  # FLAT 30 RAINSFORD ROAD, CHELMSFORD
+            "10013265486",  # BASSMENT NIGHTCLUB, 16-18 WELLS STREET, CHELMSFORD
+            "10093928503",  # 67 BROOMFIELD ROAD, CHELMSFORD
+            "200004630041",  # 1 LIBERTY WAY, RUNWELL, WICKFORD
+            "100091236477",  # KENILWORTH, WOODHILL ROAD, DANBURY, CHELMSFORD
+            "10093928503",  # HONEYSTONE, SOUTHEND ROAD, HOWE GREEN, CHELMSFORD
+        ]:
             return None
 
-        if uprn in [
-            "10091492809"  # CM11LA -> CM111LA : 2 The Paddocks, Layland Farm, Sudbury Road, Downham, Billericay, Essex
+        if record.addressline6 in [
+            "CM3 5XW",
+            "CM4 9JL",
+            "CM1 3FH",
+            "CM1 2HL",
+            "CM2 6JL",
+            "CM1 1LA",
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "100091234373"  # CM11AG -> CM35QY : 99 Watson Heights, Chelmsford, Essex
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
