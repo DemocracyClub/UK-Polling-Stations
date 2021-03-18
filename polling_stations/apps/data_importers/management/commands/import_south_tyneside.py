@@ -2,33 +2,24 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E08000023"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019s tynes.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019s tynes.tsv"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "STY"
+    addresses_name = "2021-03-17T14:46:18.378677/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-17T14:46:18.378677/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
+
+    def station_record_to_dict(self, record):
+
+        # Removing undesired text
+        if "NEW STATION" in record.polling_place_address_1:
+            record = record._replace(polling_place_address_1="")
+        if "NEW STATION" in record.polling_place_address_2:
+            record = record._replace(polling_place_address_2="")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        if (
-            record.addressline1.endswith(" Long Row")
-            and record.addressline6 == "NE31 1JA"
-        ):
-            record = record._replace(addressline6="NE33 1JA")
-
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn == "100000345804":
+        if record.addressline6 in ["NE31 2XF", "NE34 8AE"]:
             return None
 
-        if uprn in [
-            "200000002007"  # NE340PW -> NE340YE : Staff Residence, 169 Harton Lane, South Shields
-        ]:
-            rec["accept_suggestion"] = True
-
-        return rec
+        return super().address_record_to_dict(record)
