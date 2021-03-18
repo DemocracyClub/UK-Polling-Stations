@@ -2,32 +2,33 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000105"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Ash.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Ash.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "ASF"
+    addresses_name = "2021-03-18T09:55:17.756012/Ashford Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-18T09:55:17.756012/Ashford Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10012843238",  # TN257AS -> TN257AR : Fairfield Orchard, Bourne Road, Bilsington, Ashford, Kent
-            "100062046273",  # TN263EH -> TN263BS : New Barn Farm, Ashford Road, High Halden, Ashford, Kent
-            "100062567434",  # TN306SS -> TN306SP : Silver Oaks, Ashford Road, St Michaels, Tenterden, Kent
+            "200004389187",  # MOBILE HOME AT CLOVER FARM THE PINNOCK, PLUCKLEY
+            "200001880702",  # THE CHAPEL, FRITH ROAD, ALDINGTON, ASHFORD
+            "200004382948",  # OAKDENE, STATION ROAD, PLUCKLEY, ASHFORD
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "200004387668",  # TN257HH -> TN257DG : Mobile 1 Frithfield Farm, Frith Road, Aldington, Ashford, Kent
-            "100062047443",  # TN270EP -> TN270QE : 2 Home Farm Cottages, Hurstford Lane, Little Chart, Ashford, Kent
-            "100062047442",  # TN270EP -> TN270QE : 1 Home Farm Cottages, Hurstford Lane, Little Chart, Ashford, Kent
-            "200004386965",  # TN257DQ -> TN257DG : Coach House, Pantile, Frith Road, Aldington, Ashford, Kent
-            "100060799977",  # TN261HW -> TN261HL : 79 Tally Ho Road, Shadoxhurst, Ashford, Kent
-            "200001798430",  # TN261LP -> TN261LR : Belantina, Woodchurch Road, Shadoxhurst, Ashford, Kent
-        ]:
-            rec["accept_suggestion"] = False
+        if record.addressline6 in ["TN25 7AS", "TN26 3LL"]:
+            return None
 
-        return rec
+        return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+
+        # Rainbow Room, Tenterden Leisure Centre, Recreation Ground Road, Tenterden, Ashford, Kent, TN30 6RA - postocde was in address line 4 so reorganised data
+        if record.polling_place_id == "8050":
+            record = record._replace(
+                polling_place_address_4="Kent", polling_place_postcode="TN30 6RA"
+            )
+
+        return super().station_record_to_dict(record)
