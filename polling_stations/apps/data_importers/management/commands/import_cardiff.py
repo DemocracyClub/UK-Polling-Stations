@@ -3,30 +3,29 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
 
-    council_id = "W06000015"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019cardiff.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019cardiff.tsv"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "CRF"
+    addresses_name = "2021-03-24T16:24:49.782410/cardiff_deduped.tsv"
+    stations_name = "2021-03-24T16:24:49.782410/cardiff_deduped.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "10023549342":
-            rec["postcode"] = "CF240ES"
-        if uprn == "200001679322":
-            rec["postcode"] = "CF118HP"
-        if record.addressline6 in ["CF72 8NS", "CF14 9UA"]:
+        if uprn == "100100110392":
             return None
 
-        if uprn in ["200001679752", "10002509644"]:
+        if record.addressline6 in [
+            "CF24 3DZ",
+            "CF3 0UH",
+            "CF14 2FN",
+            "CF14 6PE",
+            "CF24 4RU",
+            "CF3 4LL",
+            "CF5 6HF",
+            "CF14 9UA",
+        ]:
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
