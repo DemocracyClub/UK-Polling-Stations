@@ -6,6 +6,11 @@
 # Gair Cymraeg <Gaircymraeg@nus.org.uk>, 2016
 # Gareth Morlais, 2016
 # Sym Roe <sym@talusdesign.co.uk>, 2016
+#
+# Note to translators: Where a string to be translated contains "%(council)s" you can use %(council_aspirate)s,
+# %(council_nasal)s or %(council_soft)s to apply the appropriate mutation in context. These are only applied
+# to council names already in Welsh, e.g. "Cysylltwch â Chyngor Cernyw" but "Cysylltwch â Cornwall Council"
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
@@ -15,7 +20,7 @@ msgstr ""
 "Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
 "club/uk-polling-stations/language/cy_GB/)\n"
-"Language: cy_GB\n"
+"Language: cy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -413,9 +418,9 @@ msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:3
-#, python-format
+#, fuzzy, python-format
 msgid "Contact %(council)s"
-msgstr "Cyswlltwch â %(council_aspirate)s"
+msgstr "Cysylltwch â %(council_aspirate)s"
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:6
 #: polling_stations/templates/multiple_councils.html:12
