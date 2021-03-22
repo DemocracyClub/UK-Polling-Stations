@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 10:52+0000\n"
+"POT-Creation-Date: 2021-03-22 10:59+0000\n"
 "PO-Revision-Date: 2016-03-16 21:36+0000\n"
 "Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
@@ -179,7 +179,7 @@ msgstr ""
 #, fuzzy, python-format
 #| msgid "Contact %(council_name)s"
 msgctxt "phone number link follows"
-msgid "Alternatively, contact %(council_name)s on"
+msgid "Alternatively, contact %(council)s on"
 msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/election_explainers.html:5
@@ -222,7 +222,7 @@ msgstr ""
 #| "%(council_phone)s</a></strong></p>\n"
 #| "        "
 msgid ""
-"For more information contact %(council.name)s on <strong><a href=\"tel:"
+"For more information contact %(council)s on <strong><a href=\"tel:"
 "%(phone_number)s\">%(phone_number)s</a></strong>."
 msgstr ""
 "\n"
@@ -234,7 +234,7 @@ msgstr ""
 #: polling_stations/templates/fragments/cancelled_election.html:30
 #, fuzzy, python-format
 #| msgid "Contact %(council_name)s"
-msgid "For more information contact %(council.name)s."
+msgid "For more information contact %(council)s."
 msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/fragments/contact_details.html:7
@@ -293,7 +293,7 @@ msgstr ""
 msgid ""
 "A lot of people are needed to make an election happen. Your council may be "
 "hiring polling station and counting staff for the upcoming elections. "
-"Contact %(council_name)s Electoral Services team to see if they need help."
+"Contact %(council)s Electoral Services team to see if they need help."
 msgstr ""
 
 #: polling_stations/templates/fragments/help_your_council.html:15
@@ -373,8 +373,8 @@ msgstr ""
 msgid ""
 "If you think there may be elections in your area, check your local <a href="
 "\"%(council_website)s\">council website</a> for more information, or contact "
-"%(council_name)s on <strong><a href=\"tel:%(council_phone)s\">"
-"%(council_phone)s</a></strong>."
+"%(council)s on <strong><a href=\"tel:%(council_phone)s\">%(council_phone)s</"
+"a></strong>."
 msgstr ""
 "\n"
 "<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi gysylltu "
@@ -413,10 +413,9 @@ msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:3
-#, fuzzy, python-format
-#| msgid "Contact %(council_name)s"
+#, python-format
 msgid "Contact %(council)s"
-msgstr "Cyswllt %(council_name)s"
+msgstr "Cyswlltwch â %(council_aspirate)s"
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:6
 #: polling_stations/templates/multiple_councils.html:12
@@ -439,7 +438,7 @@ msgstr ""
 #| "%(council_phone)s</a></strong></p>\n"
 #| "        "
 msgid ""
-"You can call %(council_name)s on <strong><a href=\"tel:%(council_phone)s\">"
+"You can call %(council)s on <strong><a href=\"tel:%(council_phone)s\">"
 "%(council_phone)s</a></strong> or <strong><a href=\"%(council_website)s"
 "\">visit their website</a></strong>."
 msgstr ""
@@ -452,7 +451,7 @@ msgstr ""
 #: polling_stations/templates/fragments/polling_station_unknown.html:17
 #, fuzzy, python-format
 #| msgid "Contact %(council_name)s"
-msgid "Or, you need to contact %(council_name)s"
+msgid "Or, you need to contact %(council)s."
 msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/fragments/register_to_vote.html:5
