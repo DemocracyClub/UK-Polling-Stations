@@ -4,88 +4,36 @@ from data_importers.addresshelpers import (
     format_residential_address,
     format_polling_station_address,
 )
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseCsvStationsCsvAddressesImporter):
-    council_id = "E07000144"
-    addresses_name = "parl.2019-12-12/Version 1/Poll card informationbroad.csv"
-    stations_name = "parl.2019-12-12/Version 1/Poll card informationbroad.csv"
-    elections = ["parl.2019-12-12"]
-    csv_delimiter = ","
-
-    def get_station_hash(self, record):
-        return "-".join([record.district.strip()])
-
-    def get_station_address(self, record):
-        return format_polling_station_address(
-            [
-                record.placename.strip(),
-                record.placeadd1.strip(),
-                record.placeadd2.strip(),
-                record.placeadd3.strip(),
-                record.placeadd4.strip(),
-                record.placeadd5.strip(),
-            ]
-        )
-
-    def get_station_point(self, record):
-        return None
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "BRO"
+    addresses_name = "2021-03-05T09:13:07.744121/Broadland Democracy Club - Polling Districts- Election ID 5 County Council.csv"
+    stations_name = "2021-03-05T09:13:07.744121/Broadland Democracy Club - Polling Stations- Election ID 5 County Council.csv"
+    elections = ["2021-05-06"]
 
     def station_record_to_dict(self, record):
-        district = record.district.strip()
-        location = self.get_station_point(record)
+        if record.placename == "SPROWSTON W CRICKET CLUB":
+            record = record._replace(placename="SPROWSTON CRICKET CLUB")
 
-        return {
-            "internal_council_id": district,
-            "postcode": record.placepcode.strip(),
-            "address": self.get_station_address(record),
-            "location": location,
-        }
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        address = format_residential_address(
-            [
-                record.qualadd1.strip(),
-                record.qualadd2.strip(),
-                record.qualadd3.strip(),
-                record.qualadd4.strip(),
-                record.qualadd5.strip(),
-                record.qualadd6.strip(),
-            ]
-        ).strip()
-        postcode = Postcode(record.qualpcode.strip()).without_space
-        uprn = record.qualuprn.lstrip("0").strip()
+        if record.postcode in ["NR13 3BH"]:  # split
+            return None
 
-        rec = {
-            "address": address,
-            "postcode": postcode,
-            "polling_station_id": record.district.strip(),
-            "uprn": uprn,
-        }
+        if record.postcode in ["NR10 4DA"]:
+            # coincident with another property at different polling place; wide postcode
+            return None
+
+        uprn = record.uprn.lstrip("0").strip()
+
+        if uprn == "200004453970":
+            # errant; multiple addresses, so they'll be told to check
+            return None
 
         if uprn == "100090794910":
-            rec["postcode"] = "NR7 8XA"
+            record = record._replace(postcode="NR7 8XA")
 
-        if uprn == "100090819705":
-            rec["postcode"] = "NR7 9NQ"
-
-        if uprn == "100090830032":
-            rec["postcode"] = "NR7 9HA"
-
-        if uprn in [
-            "200004286426",  # NR134LQ -> NR134LH : SUNNY ACRES, YARMOUTH ROAD, BLOFIELD, NORWICH
-            "100091546289",  # NR134BL -> NR134NH : DAVSCOTT HOUSE, 1 BUCKENHAM LANE, LINGWOOD, NORWICH
-            "100090801722",  # NR70TW -> NR78UB : 35 CLOVER COURT, SPROWSTON, NORWICH
-        ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "10009922833",
-            "100090814819",  # NR65NG -> NR65NS : AMBERLEA, 67 MIDDLETONS LANE, HELLESDON, NORWICH
-            "10009923828",  # NR205PT -> NR205PS : 4 KERDISTON ROAD, THEMELTHORPE, DEREHAM
-            "200004287047",  # NR205PT -> NR205PS : 5 KERDISTON ROAD, THEMELTHORPE, DEREHAM
-            "10014358940",  # AddressBase error
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
