@@ -2,55 +2,28 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000006"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019 Beaconsfield.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019 Beaconsfield.tsv"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "SBU"
+    addresses_name = "2021-03-18T18:05:00.006119/Bucks_dedupe.tsv"
+    stations_name = "2021-03-18T18:05:00.006119/Bucks_dedupe.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
-
-    def station_record_to_dict(self, record):
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if (
-            record.addressline1 == "Pilgrim House"
-            and record.addressline2 == "12H Packhorse Road"
-        ):
-            record = record._replace(property_urn="", addressline6="SL9 7QE")
-
-        if record.addressline6 == "SL0 0AF":
-            return None  # looks odd
-
-        if uprn == "10003242337":
-            record = record._replace(addressline6="SL2 5QR")
-
-        if record.addressline6 == "SL9 0BZ":
-            record = record._replace(addressline6="SL0 9BZ")
-
-        rec = super().address_record_to_dict(record)
-
         if uprn in [
-            "100081076380",  # SL23HW -> SL23HJ : Brook House, Templewood Lane, Stoke Poges, Slough
+            "10090191083",  # 1 LATCHMOOR WAY, CHALFONT ST. PETER, GERRARDS CROSS
+            "10095500760",  # FLAT 1, ORCHE HILL CHAMBERS, 52 PACKHORSE ROAD, GERRARDS CROSS
+            "10090191260",  # TWIN OAKS, OXFORD ROAD, GERRARDS CROSS
+            "10003242246",  # 41 WINDSOR ROAD, GERRARDS CROSS
+            "10003242624",  # 57 PENN ROAD, BEACONSFIELD
+            "10090189602",  # GORSEWOOD, TEMPLEWOOD LANE, FARNHAM COMMON, SLOUGH
+            "10090192931",  # MOBILE HOME AT STABLES AND PADDOCK WILLETTS LANE, DENHAM
+            "10003446603",  # WOODHILL FARM, OXFORD ROAD, GERRARDS CROSS
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "100081076504",  # SL36DH -> SL36DE : Devon Court, Trenches Lane, Middle Green, Slough
-            "10003236731",  # UB94HE -> UB94GY : Southlands Manor, Denham Road, Denham, Uxbridge
-            "10003234581",  # SL97NS -> SL09DA : Rose Cottage, 14 Hedgerley Lane, Gerrards Cross
-            "10003236730",  # UB94HE -> UB94GY : The Lodge,Southlands Manor, Denham Road, Denham, Uxbridge
-            "10003236731",  # UB94HE -> UB94GY : Southlands Manor, Denham Road, Denham, Uxbridge
-            "10003236726",  # UB94DQ -> UB94DG : Flat 4 The Old Mill, Oxford Road, Denham, Uxbridge
-            "10003236727",  # UB94DQ -> UB94DG : Flat 6 The Old Mill, Oxford Road, Denham, Uxbridge
-            "10003236729",  # UB94DQ -> UB94DG : Flat 8 The Old Mill, Oxford Road, Denham, Uxbridge
-        ]:
-            rec["accept_suggestion"] = False
+        if record.addressline6 in ["SL0 0AF", "SL9 7BZ"]:
+            return None
 
-        return rec
+        return super().address_record_to_dict(record)
