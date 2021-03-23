@@ -5,8 +5,8 @@ class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = "E09000022"
-    elections = ["parl.2019-12-12"]
+    council_id = "LBH"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Lambeth"
     geom_type = "geojson"
 
@@ -23,9 +23,16 @@ class Command(BaseGitHubImporter):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
-        return {
-            "internal_council_id": record["DISTRICT_C"],
-            "postcode": record["POSTCODE"],
-            "address": "%s\n%s" % (record["VENUE"], record["ADDRESS_1"]),
-            "location": location,
-        }
+
+        stations = []
+        station_ids = record["DISTRICT_C"].split(",")
+        for station_id in station_ids:
+            stations.append(
+                {
+                    "internal_council_id": station_id.strip(),
+                    "postcode": record["POSTCODE"],
+                    "address": "%s\n%s" % (record["VENUE"], record["ADDRESS_1"]),
+                    "location": location,
+                }
+            )
+        return stations
