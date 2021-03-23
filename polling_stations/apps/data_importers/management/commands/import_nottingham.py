@@ -5,8 +5,8 @@ class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = "E06000018"
-    elections = ["2020-05-07"]
+    council_id = "NGM"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Nottingham"
     geom_type = "geojson"
 
