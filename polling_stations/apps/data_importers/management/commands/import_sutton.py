@@ -3,15 +3,10 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
-    council_id = "E09000029"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Polling Districts Sutton 12 December 2019.csv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Polling Stations Sutton 12 December 2019.csv"
-    )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "STN"
+    addresses_name = "2021-03-10T16:04:41.774562/Democracy Club Polling Districts.csv"
+    stations_name = "2021-03-10T16:04:41.774562/Democracy Club Polling Stations.csv"
+    elections = ["2021-05-06"]
 
     def station_record_to_dict(self, record):
 
@@ -25,10 +20,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.uprn.strip().lstrip("0")
-
-        if uprn == "5870041842":
+        if record.postcode == "SM6 9BY":
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
