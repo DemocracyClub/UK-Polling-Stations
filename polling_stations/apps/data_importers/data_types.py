@@ -314,6 +314,7 @@ class AddressList(AssignPollingStationsMixin):
         self.elements = [e for e in self.elements if e["uprn"] in addressbase_data]
 
     def remove_records_that_dont_match_addressbase(self, addressbase_data):
+        to_remove = []
         for input_record in self.elements:
             addressbase_record = addressbase_data[input_record["uprn"].lstrip("0")]
 
@@ -323,7 +324,8 @@ class AddressList(AssignPollingStationsMixin):
             ):
                 continue
             else:
-                self.elements.remove(input_record)
+                to_remove.append(input_record)
+        self.elements = [e for e in self.elements if e not in to_remove]
 
     def remove_records_missing_uprns(self):
         self.elements = [e for e in self.elements if e.get("uprn", None)]

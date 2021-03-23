@@ -372,6 +372,50 @@ class AddressListTest(TestCase):
         address_list.remove_records_that_dont_match_addressbase(addressbase_data)
         self.assertEqual(expected, address_list.elements)
 
+    def test_remove_records_that_dont_match_addressbase_with_duplicates(self):
+        in_list = [
+            {
+                "polling_station_id": "01",
+                "address": "foo 1",
+                "postcode": "AA1 2BB",
+                "council": "AAA",
+                "uprn": "10",
+            },
+            {
+                "polling_station_id": "01",
+                "address": "foo 2",
+                "postcode": "AA1 2BB",
+                "council": "AAA",
+                "uprn": "20",
+            },
+            {
+                "polling_station_id": "01",
+                "address": "foo 2",
+                "postcode": "AA1 2BB",
+                "council": "AAA",
+                "uprn": "20",
+            },
+        ]
+        addressbase_data = {
+            "10": {"postcode": "AA1 2BB"},
+            "20": {"postcode": "AA1 2CC"},
+        }
+        expected = [
+            {
+                "polling_station_id": "01",
+                "address": "foo 1",
+                "postcode": "AA1 2BB",
+                "council": "AAA",
+                "uprn": "10",
+            },
+        ]
+
+        address_list = AddressList(MockLogger())
+        for el in in_list:
+            address_list.append(el)
+        address_list.remove_records_that_dont_match_addressbase(addressbase_data)
+        self.assertEqual(expected, address_list.elements)
+
     def test_get_council_split_postcodes(self):
         in_list = [
             {
