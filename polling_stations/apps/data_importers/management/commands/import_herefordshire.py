@@ -31,3 +31,14 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Council fix
+        if record.pollingstationnumber == "21":
+            return {
+                "internal_council_id": "21-bromyard-public-hall",
+                "postcode": "HR7 4EB",
+                "address": "Bromyard Public Hall\nRowberry Street\nBromyard",
+                "location": None,
+            }
+        return super().station_record_to_dict(record)
