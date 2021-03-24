@@ -17,12 +17,12 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         # ASKAM COMMUNITY CENTRE
         if record.stationcode in ["LC/1", "LC/2"]:
-            record = record._replace(xordinate="321436")
-            record = record._replace(yordinate="477564")
+            record = record._replace(xordinate="321435")
+            record = record._replace(yordinate="477563")
 
         # VICKERSTOWN METHODIST CHURCH
         if record.stationcode == "AA/1":
-            record = record._replace(xordinate="318608")
-            record = record._replace(yordinate="468975")
+            record = record._replace(xordinate="318614")
+            record = record._replace(yordinate="468960")
 
         return super().station_record_to_dict(record)
