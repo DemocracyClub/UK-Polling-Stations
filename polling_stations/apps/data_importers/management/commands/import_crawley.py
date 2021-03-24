@@ -2,41 +2,40 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000226"
-    addresses_name = "2020-02-04T10:49:54.706223/Democracy_Club__07May2020craw.tsv"
-    stations_name = "2020-02-04T10:49:54.706223/Democracy_Club__07May2020craw.tsv"
-    elections = ["2020-05-07"]
+    council_id = "CRW"
+    addresses_name = "2021-03-19T10:25:17.143451/Crawley Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-19T10:25:17.143451/Crawley Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
 
-    def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if record.addressline1 == "7B Crawley Foyer":
-            rec["postcode"] == "RH11 7AU"
-
-        if uprn in [
-            "10024122201"  # RH110EA -> RH110AE : 50A Ifield Drive, Ifield, Crawley
-        ]:
-            rec["accept_suggestion"] = True
-
-        return rec
-
-    def get_station_point(self, record):
+    def station_record_to_dict(self, record):
 
         # Furnace Green Community Centre
-        if record.polling_place_id == "910":
+        if record.polling_place_id == "968":
             record = record._replace(polling_place_easting="528414")
             record = record._replace(polling_place_northing="135782")
 
         # Wakehams Green Community Centre
-        if record.polling_place_id == "892":
+        if record.polling_place_id == "983":
             record = record._replace(polling_place_easting="529968")
             record = record._replace(polling_place_northing="138172")
 
         # Southgate West Community Centre
-        if record.polling_place_id == "898":
+        if record.polling_place_id == "989":
             record = record._replace(polling_place_easting="526307")
             record = record._replace(polling_place_northing="135610")
 
-        return super().get_station_point(record)
+        return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "200001224606",  # CARETAKER FLAT TA CENTRE 29 KILNMEAD, NORTHGATE, CRAWLEY
+        ]:
+            return None
+
+        if record.addressline6 in ["RH10 7AU"]:
+            return None
+
+        return super().address_record_to_dict(record)
