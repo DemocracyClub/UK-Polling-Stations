@@ -698,7 +698,7 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
             for district_id in missing_ids:
                 self.logger.log_message(
                     logging.WARNING,
-                    "Station id: %s found in districts but not in stations",
+                    "District id: %s found in stations but not in districts",
                     variable=district_id,
                 )
             return False
