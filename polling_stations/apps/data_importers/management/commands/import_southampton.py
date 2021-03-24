@@ -13,10 +13,10 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = "E06000045"
+    council_id = "STH"
     districts_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E06000045/districts.kml"
     stations_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/E06000045/stations.kml"
-    elections = ["2020-05-07"]
+    elections = ["2021-05-06"]
 
     def extract_info_from_district_description(self, description):
         # lxml needs everything to be enclosed in one root element
@@ -60,8 +60,14 @@ class Command(BaseApiKmlStationsKmlDistrictsImporter):
         }
 
     def station_record_to_dict(self, record):
+
+        # Stray record in they're api
+        if str(record["Name"]) == "POLLING_STATIONS.147":
+            return None
+
         # point
         geojson = record.geom.geojson
+
         location = GEOSGeometry(geojson, srid=self.get_srid())
 
         # metadata
