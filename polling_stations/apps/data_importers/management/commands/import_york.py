@@ -4,16 +4,16 @@ from data_importers.github_importer import BaseGitHubImporter
 class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
-    council_id = "E06000014"
-    elections = ["local.2019-05-02"]
+    council_id = "YOR"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-York"
     geom_type = "geojson"
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-
+        code = record["CODE"].replace("/", "")
         return {
-            "internal_council_id": record["CODE"],
+            "internal_council_id": code,
             "name": "%s - %s" % (record["WARD"], record["CODE"]),
             "area": poly,
         }
