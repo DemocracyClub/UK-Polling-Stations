@@ -3,26 +3,24 @@ from data_importers.base_importers import BaseShpStationsShpDistrictsImporter
 
 class Command(BaseShpStationsShpDistrictsImporter):
     srid = 27700
-    council_id = "E07000124"
-    elections = ["europarl.2019-05-23"]
-    districts_name = (
-        "local.2019-05-02/Version 1/RVBC - Polling Districts/RVBC - Polling Districts"
-    )
-    stations_name = (
-        "local.2019-05-02/Version 1/RVBC - Polling Stations/RVBC - Polling Stations"
-    )
+    council_id = "RIB"
+    elections = ["2021-05-06"]
+    districts_name = "2021-03-25T12:14:33.026795747/RVBC Polling Districts.shp"
+    stations_name = "2021-03-25T12:14:33.026795747/RVBC Polling Stations 2021.shp"
 
     def district_record_to_dict(self, record):
-        return {"internal_council_id": record[0], "name": record[1]}
+        print(record)
+        return {"internal_council_id": record[1], "name": record[2]}
 
     def station_record_to_dict(self, record):
         stations = []
+        print(record)
 
-        name = record[0].strip()
-        address = record[1].strip()
-        postcode = record[2].strip()
+        name = record[1].strip()
+        address = record[2].strip()
+        postcode = record[3].strip()
 
-        district_codes = [record[3].strip(), record[4].strip(), record[5].strip()]
+        district_codes = [record[4].strip(), record[5].strip(), record[6].strip()]
         district_codes = [code for code in district_codes if code]
 
         for code in district_codes:
