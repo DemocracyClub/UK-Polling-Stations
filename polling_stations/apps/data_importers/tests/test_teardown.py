@@ -71,7 +71,11 @@ class TestTeardown(TestCase):
         self.assertEqual(PollingStation.objects.count(), 3)
         self.assertEqual(PollingDistrict.objects.count(), 3)
         self.assertListEqual(
-            list(UprnToCouncil.objects.all().values_list("lad", "polling_station_id")),
+            sorted(
+                list(
+                    UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
+                )
+            ),
             [
                 ("X01000000", "ps1"),
                 ("X01000000", "ps2"),
@@ -103,13 +107,11 @@ class TestTeardown(TestCase):
                     UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
                 )
             ),
-            sorted(
-                [
-                    ("X01000001", "ps1"),
-                    ("X01000000", ""),
-                    ("X01000000", ""),
-                ]
-            ),
+            [
+                ("X01000000", ""),
+                ("X01000000", ""),
+                ("X01000001", "ps1"),
+            ],
         )
         self.assertEqual(
             DataQuality.objects.get(council_id="AAA"),
@@ -129,7 +131,11 @@ class TestTeardown(TestCase):
         self.assertEqual(PollingStation.objects.count(), 3)
         self.assertEqual(PollingDistrict.objects.count(), 3)
         self.assertListEqual(
-            list(UprnToCouncil.objects.all().values_list("lad", "polling_station_id")),
+            sorted(
+                list(
+                    UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
+                )
+            ),
             [
                 ("X01000000", "ps1"),
                 ("X01000000", "ps2"),
@@ -168,7 +174,11 @@ class TestTeardown(TestCase):
         self.assertEqual(PollingStation.objects.count(), 0)
         self.assertEqual(PollingDistrict.objects.count(), 0)
         self.assertListEqual(
-            list(UprnToCouncil.objects.all().values_list("lad", "polling_station_id")),
+            sorted(
+                list(
+                    UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
+                )
+            ),
             [("X01000000", ""), ("X01000000", ""), ("X01000001", "")],
         )
         self.assertEqual(
