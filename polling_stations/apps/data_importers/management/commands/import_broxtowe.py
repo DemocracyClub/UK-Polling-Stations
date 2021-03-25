@@ -6,7 +6,7 @@ from data_importers.github_importer import BaseGitHubImporter
 
 class Command(BaseGitHubImporter, ShpMixin):
     council_id = "BRT"
-    elections = ["2021-05-06"]
+    elections = []
 
     # This one is a bit of a mish-mash
     # The stations are on GitHub
