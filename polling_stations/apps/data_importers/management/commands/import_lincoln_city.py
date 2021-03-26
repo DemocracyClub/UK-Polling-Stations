@@ -5,9 +5,12 @@ class Command(BaseHalaroseCsvImporter):
     council_id = "LIC"
     addresses_name = "2021-03-10T14:31:40.987791/polling_station_export-2021-03-10.csv"
     stations_name = "2021-03-10T14:31:40.987791/polling_station_export-2021-03-10.csv"
+
     elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
+        if record.uprn == "235000000":
+            return None
         if record.housepostcode in [
             "LN2 4DY",
             "LN2 4NA",
@@ -17,7 +20,6 @@ class Command(BaseHalaroseCsvImporter):
             "LN2 5EJ",
             "LN2 5LY",
             "LN2 4PA",
-            "LN1 1AW",
             "LN1 1BU",
             "LN1 1DR",
             "LN6 8AZ",
