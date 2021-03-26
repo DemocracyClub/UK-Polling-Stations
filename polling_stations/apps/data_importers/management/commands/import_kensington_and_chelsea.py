@@ -1,31 +1,27 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
-# from django.contrib.gis.geos import Point
-
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E09000020"
-    addresses_name = "2020-03-03T13:22:45.003848/Democracy_Club__07May2020.tsv"
-    stations_name = "2020-03-03T13:22:45.003848/Democracy_Club__07May2020.tsv"
-    elections = ["2020-05-07"]
-    csv_delimiter = "\t"
+    council_id = "KEC"
+    addresses_name = "2021-03-24T11:28:23.977778/RBKC Democracy_Club__06May2021.CSV"
+    stations_name = "2021-03-24T11:28:23.977778/RBKC Democracy_Club__06May2021.CSV"
+    elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
+        if record.addressline6 in ["W11 4HD", "W14 8BA", "SW1X 9SG", "SW3 5RP"]:
+            return None
+
         uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn in ["217125754", "217129279", "217130227", "217029293"]:
+        if uprn in [
+            "217130227",  # BASEMENT AND GROUND FLOOR FLAT 20 TREGUNTER ROAD, LONDON
+        ]:
             return None
 
-        if record.addressline6 == "SW3 3AA":
-            return None
         if uprn == "217108045":
-            rec["postcode"] = "W8 5DH"
-
+            record = record._replace(addressline6="W8 5DH")
         if (
             record.addressline6 == "W11 4LY"
             and record.addressline1 == "2B Drayson Mews"
         ):
-            rec["postcode"] = "W8 4LY"
-
-        return rec
+            record = record._replace(addressline6="W8 4LY")
+        return super().address_record_to_dict(record)
