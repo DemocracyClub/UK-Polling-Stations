@@ -1,16 +1,24 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
-    council_id = "E09000001"
-    addresses_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-06.csv"
-    stations_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-06.csv"
-    elections = ["parl.2019-12-12"]
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "LND"
+    addresses_name = "2021-03-24T11:43:05.269487146/Polling Districts - CoL.csv"
+    stations_name = "2021-03-24T11:43:05.269487146/Polling Stations - CoL.csv"
+    elections = ["2021-05-06"]
 
-    def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
+    def station_record_to_dict(self, record):
+        # "St Bride Foundation Institute"
+        if record.stationcode == "AL":
+            record = record._replace(xordinate="531586")
+            record = record._replace(yordinate="181081")
+        # "St Giles' Cripplegate"
+        if record.stationcode == "BL_1":
+            record = record._replace(xordinate="532350")
+            record = record._replace(yordinate="181702")
+        # "St Giles' Cripplegate"
+        if record.stationcode == "BL_2":
+            record = record._replace(xordinate="532350")
+            record = record._replace(yordinate="181702")
 
-        if record.housepostcode == "EC4Y 9BE":
-            return None
-
-        return rec
+        return super().station_record_to_dict(record)
