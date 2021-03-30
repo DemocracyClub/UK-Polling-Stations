@@ -2,28 +2,29 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E07000030"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-08eden.csv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-08eden.csv"
-    )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "EDN"
+    addresses_name = "2021-03-08T13:56:09.776816/polling_station_export-2021-03-08.csv"
+    stations_name = "2021-03-08T13:56:09.776816/polling_station_export-2021-03-08.csv"
+    elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
+        if record.housepostcode in [
+            "CA11 9HZ",
+            "CA11 7UR",
+            "CA10 2DQ",
+            "CA10 2BZ",
+            "CA11 8BX",
+        ]:
+            return None  # split
+
+        if record.housepostcode in [
+            "CA9 3DD",  # surrounded by properties for another polling stations
+        ]:
+            return None
+
         rec = super().address_record_to_dict(record)
-        uprn = record.uprn.strip().lstrip("0")
 
         if record.houseid == "9143":
-            rec["postcode"] = "CA110TY"
-
-        if uprn in [
-            "100110693228",  # CA119HP -> CA119HR : Lark Hall Mews Robinson Street
-            "10070538147",  # CA174DX -> CA174DS : Fox Tower View Brough, Kirkby Stephen
-            "10000122517",  # CA102DQ -> CA102DG : Cross Fell Cottage Clifton Dykes
-        ]:
-            rec["accept_suggestion"] = True
+            rec["postcode"] = "CA110TY"  # "O" -> "0"
 
         return rec
