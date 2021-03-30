@@ -2,54 +2,34 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E06000022"
-    addresses_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-22.csv"
-    stations_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-22.csv"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "BAS"
+    addresses_name = "2021-03-05T10:59:45.248759/polling_station_export-2021-03-04.csv"
+    stations_name = "2021-03-05T10:59:45.248759/polling_station_export-2021-03-04.csv"
+    elections = ["2021-05-06"]
+
+    # Note: these warning has been checked and all looks fine.
+    # > WARNING: Polling stations 'Welton Vale Community Room 9 Welton Vale' and
+    # > 'The Salvation Army Radstock Road / Stones Cross' are at approximately the same
+    # > location
+    #
+    # The centroid is outside, but the polling place is within.
+    # > WARNING: Polling station 85-prattens-westfield-amateur-sports-club is in Mendip
+    # > District Council (MEN) but target council is Bath & North East Somerset Council
+    # > (BAS) - manual check recommended
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        # Addressbase has this postcode geolocated in the LA, however ONSPD doesn't.
-        # This line is in to squash the
-        # "Postcode centroid is outside target local authority" Warnings
-        if record.housepostcode == "BA3 5SF":
-            return None
-
-        if uprn == "10093714167":
-            rec["postcode"] = "BS140FF"
-
-        if uprn == "10093715348":
-            rec["postcode"] = "BS140FR"
-
-        if uprn in ["10091550422"]:
-            return None
-
-        if record.houseid.strip() == "9006798":
-            rec["postcode"] = "BS31 2FU"
-
-        if record.houseid.strip() == "9014157":
-            rec["postcode"] = "BS14 0FJ"
-
-        if record.houseid.strip() == "9014290":
-            rec["postcode"] = "BS14 0FH"
-
-        if record.houseid.strip() == "9002893":
-            rec["postcode"] = "BA2 0LH"
+        if record.housepostcode in ["BS31 1AJ", "BA2 2RZ", "BA3 4GA", "BS31 1GB"]:
+            return None  # split
 
         if record.pollingstationnumber == "n/a":
             return None
 
-        if record.uprn.strip() == "10001146303":
-            rec["accept_suggestion"] = False
+        if uprn == "10093715348":  # 'O' -> '0'
+            record = record._replace(housepostcode="BS14 0FR")
 
-        if record.houseid.strip() == "9014616":
-            rec["accept_suggestion"] = True
+        if record.houseid.strip() == "9002893":  # 'O' -> '0'
+            record = record._replace(housepostcode="BA2 0LH")
 
-        # https://trello.com/c/uyppyCLq
-        if record.housepostcode == "BA2 6DR":
-            rec["polling_station_id"] = "5-claverton-down-community-hall"
-
-        return rec
+        return super().address_record_to_dict(record)
