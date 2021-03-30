@@ -2,19 +2,18 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E06000017"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-13rut.csv"
-    )
-    stations_name = "parl.2019-12-12/Version 1/polling_station_export-2019-11-13rut.csv"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "RUT"
+    addresses_name = "2021-03-11T15:18:06.577876/polling_station_export-2021-03-11.csv"
+    stations_name = "2021-03-11T15:18:06.577876/polling_station_export-2021-03-11.csv"
+    elections = ["2021-05-06"]
+
+    def station_record_to_dict(self, record):
+        if record.pollingstationname == "WHISSENDINE MEMORIAL HALL":
+            record = record._replace(pollingstationpostcode="LE15 7ET")
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
+        if record.housepostcode in ["PE9 3SR"]:
+            return None  # split
 
-        if record.housepostcode == "PE9 4EG":
-
-            return None
-
-        return rec
+        return super().address_record_to_dict(record)
