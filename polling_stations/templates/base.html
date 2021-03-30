@@ -45,6 +45,7 @@
                     <div{% if LANGUAGE_CODE != "en" %} class="subtitle"{% endif %}>{{ site_title }}</div>
                 </div>
             </a>
+            {% comment "Disabling this pending a design system review. We still respect the browser's language preference." %}
             <div class="language-select">
                 <form action="{% url 'set_language' %}" method="post">
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
@@ -59,6 +60,7 @@
                     {% endfor %}
                 </form>
             </div>
+            {% endcomment %}
         </div>
     </header>
 {% endblock header %}
