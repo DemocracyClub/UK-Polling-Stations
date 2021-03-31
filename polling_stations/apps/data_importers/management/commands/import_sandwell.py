@@ -4,26 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SAW"
     addresses_name = (
-        "2021-02-25T09:04:33.366338/Democracy Club Polling Place Lookup 6 May2021.tsv"
+        "2021-03-23T13:59:51.977373/Democracy_Club__06May2021 - amendments.tsv"
     )
     stations_name = (
-        "2021-02-25T09:04:33.366338/Democracy Club Polling Place Lookup 6 May2021.tsv"
+        "2021-03-23T13:59:51.977373/Democracy_Club__06May2021 - amendments.tsv"
     )
     elections = ["2021-05-06"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        if (
-            record.polling_place_id == "18846"
-        ):  # Hallam Street Methodist Church, Community Room, Lewisham Street, West Bromwich, B71 4HJ
-            record = record._replace(polling_place_postcode="B71 4HG")
-
-        if (
-            record.polling_place_id == "18865"
-        ):  # St Philips Church Hall, Beeches Road, West Bromwich, B70 7PF
-            record = record._replace(polling_place_postcode="B70 6JA")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -38,14 +25,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         if record.addressline6 in [
-            "B65 0BS",
-            "DY4 9NB",
-            "B70 8DB",
-            "B67 7EP",
-            "B64 7JA",
             "B64 5NX",
+            "B64 7JA",
+            "B65 0BS",
+            "B67 7EP",
             "B69 4DH",
-            "B69 3FF",
+            "B70 8DB",
+            "DY4 9NB",
+            "B71 4HS",
+            "DY4 7TY",
+            "B66 4DP",
         ]:
             return None
 
