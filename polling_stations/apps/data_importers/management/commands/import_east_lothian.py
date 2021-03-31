@@ -1,31 +1,34 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.ems_importers import BaseHalaroseCsvImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000010"
-    council_name = "East Lothian"
-    elections = ["parl.2019-12-12"]
+class Command(BaseHalaroseCsvImporter):
+    council_id = "ELN"
+    addresses_name = (
+        "2021-03-22T10:01:23.121519/lothian ERO polling_station_export-2021-03-21.csv"
+    )
+    stations_name = (
+        "2021-03-22T10:01:23.121519/lothian ERO polling_station_export-2021-03-21.csv"
+    )
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
+    csv_encoding = "windows-1252"
+
+    def address_record_to_dict(self, record):
+        if (
+            record.adminarea != "East Lothian"
+            and record.town != "East Lothian"
+            and record.town != "Musselburgh"
+        ):
+            return None
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        if (
+            record.adminarea != "East Lothian"
+            and record.town != "East Lothian"
+            and record.town != "Musselburgh"
+        ):
 
-        # Corrections based on checking notice of polling place
-        addresses = {
-            "EL3A": "TRANENT TOWN HALL, CHURCH STREET, TRANENT",
-            "EL5E": "ATHELSTANEFORD VILLAGE HALL, MAIN STREET, ATHELSTANEFORD",
-            "EL5F": "MORHAM VILLAGE HALL, MORHAM",
-            "EL4D": "FENTON BARNS MAIN OFFICE, FENTON BARNS DIRLETON NORTH BERWICK EH39 5BW",
-            "EL4F": "ST MARYS CHURCH HALL, WHITEKIRK NORTH BERWICK DUNBAR",
-            "EL6I": "OLDHAMSTOCKS VILLAGE HALL, OLDHAMSTOCKS INNERWICK COCKBURNSPATH TD13 5XN",
-        }
+            return None
 
-        rec = super().station_record_to_dict(record)
-
-        if rec:
-            try:
-                rec["address"] = addresses[rec["internal_council_id"]]
-                rec["location"] = None
-                return rec
-            except KeyError:
-                return rec
-
-        return rec
+        return super().station_record_to_dict(record)
