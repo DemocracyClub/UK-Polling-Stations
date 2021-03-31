@@ -8,6 +8,24 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2021-05-06"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # Drax Poole Sea Cadets
+        if record.polling_place_id == "15435":
+            record = record._replace(polling_place_easting="400881")
+            record = record._replace(polling_place_northing="91638")
+
+        # St. Philip`s Church Centre
+        if record.polling_place_id == "15325":
+            record = record._replace(polling_place_easting="406440")
+            record = record._replace(polling_place_northing="95654")
+
+        # St. Johns Church Surrey Road Poole
+        if record.polling_place_id == "15483":
+            record = record._replace(polling_place_easting="406806")
+            record = record._replace(polling_place_northing="92013")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
