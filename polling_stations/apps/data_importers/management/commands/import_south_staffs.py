@@ -3,17 +3,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SST"
-    addresses_name = (
-        "2021-03-23T12:44:29.340168/South Staffs Democracy_Club__06May2021.CSV"
-    )
-    stations_name = (
-        "2021-03-23T12:44:29.340168/South Staffs Democracy_Club__06May2021.CSV"
-    )
+    addresses_name = "2021-03-31T12:26:09.080338/South Staffs Democracy Club Report.csv"
+    stations_name = "2021-03-31T12:26:09.080338/South Staffs Democracy Club Report.csv"
     elections = ["2021-05-06"]
     csv_delimiter = ","
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
@@ -26,15 +21,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         if record.addressline6 in [
-            "DY7 5HL",
-            "ST19 5RH",
+            "ST19 9AB",
             "ST19 9AG",
+            "WV8 1QS",
             "WV9 5BW",
+            "ST19 5QH",
+            "WS6 7BL",
             "WV11 2DN",
+            "DY7 5EF",
+            "WV5 9BN",
+            "DY6 0BA",
+            "WV5 7EY"
+            #         "DY7 5HL",
+            #         "ST19 5RH",
         ]:
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
 
