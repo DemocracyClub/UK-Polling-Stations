@@ -2,24 +2,61 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E09000033"
-    addresses_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-03.csv"
-    )
-    stations_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-03.csv"
-    )
-    elections = ["europarl.2019-05-23"]
+    council_id = "WSM"
+    addresses_name = "2021-03-30T13:02:54.918672/polling_station_export-2021-03-30.csv"
+    stations_name = "2021-03-30T13:02:54.918672/polling_station_export-2021-03-30.csv"
+    elections = ["2021-05-06"]
+
+    # Have checked "Mornington Hotel 12 Lancaster Gate" and
+    # "York Room, Lancaster Hall Hotel 35 Craven Terrace" closeness; all good.
+
+    # These all have wrong locations in AddressBase, but have the right station
+    # for their actual location.
+    #     "10033552804",  # Flat 3, 2 Moreton Close
+    #     "100022803552",  # 9 ST.BARNABAS STREET, LONDON
+    #     "100022749688",  # 50 ELNATHAN MEWS, LONDON
+
+    def replace_station_96(self, record):
+        # https://trello.com/c/HpRDeeyv/401-westminster
+        if record.pollingstationnumber == "96":
+            record = record._replace(
+                pollingstationaddress_1="Cumberland Street",
+                pollingstationaddress_2="London",
+                pollingstationaddress_3="",
+                pollingstationaddress_4="",
+                pollingstationaddress_5="",
+                pollingstationname="Holy Apostles Church Hall",
+                pollingstationpostcode="SW1V 4LY",
+            )
+        return record
+
+    def station_record_to_dict(self, record):
+        record = self.replace_station_96(record)
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
+        # This has to be here too, so the station ID is calculated correctly from the
+        # name.
+        record = self.replace_station_96(record)
+
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if record.houseid == "3007640":
-            return None
+        if record.housepostcode in [
+            "NW8 9LJ",
+            "W1U 8BD",
+            "W2 5HA",
+            "SW1P 4JZ",
+            "NW8 8LH",
+            "W2 2QN",
+            "W9 3DW",
+            "W9 2AL",
+            "W9 1SF",
+            "W10 4PR",
+        ]:
+            return None  # split
 
-        if record.houseid == "10009330":  # W9 1QF
-            rec["postcode"] = "W9 3QF"
+        # Carried-over postcode fixes
 
         if record.houseid == "10010095":  # W9 1DL
             rec["postcode"] = "W9 2DL"
@@ -35,17 +72,5 @@ class Command(BaseHalaroseCsvImporter):
 
         if uprn == "10033561131":
             rec["postcode"] = "SW1P 4SA"
-
-        if record.houseid == "3075271":
-            rec["accept_suggestion"] = False
-
-        if record.houseid == "3036900":
-            rec["accept_suggestion"] = False
-
-        if uprn in ["10033578350", "10033578347", "10033578348", "10033578349"]:
-            rec["accept_suggestion"] = False
-
-        if record.houseid == "10010622":
-            return None
 
         return rec
