@@ -1,5 +1,8 @@
 import os, sys
 
+from django.utils.translation import gettext_lazy as _
+
+
 # PATH vars
 
 here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
@@ -47,7 +50,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = False
+USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
@@ -137,6 +140,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.messages",
+    "django.contrib.postgres",
     "django.contrib.staticfiles",
     "django.contrib.admin",
     "django.contrib.gis",
@@ -214,7 +218,10 @@ LOGGING = {
 
 
 LANGUAGE_CODE = "en"
-LANGUAGES = [("en", "English"), ("cy-gb", "Welsh")]
+LANGUAGES = [
+    ("en", "English"),
+    ("cy", "Welsh"),
+]
 USE_I18N = (True,)
 USE_L10N = (True,)
 LOCALE_PATHS = (repo_root("locale"),)
@@ -249,7 +256,7 @@ CORS_URLS_REGEX = r"^/(api|embed)/.*$"
 
 
 INTERNAL_IPS = "127.0.0.1"
-SITE_TITLE = "Where Do I Vote?"
+SITE_TITLE = _("Where Do I Vote?")
 SITE_LOGO = "images/logo-with-text.png"
 SITE_LOGO_WIDTH = "390px"
 

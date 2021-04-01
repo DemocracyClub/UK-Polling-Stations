@@ -1,17 +1,14 @@
 {% load i18n %}
-    <div class="card">
-        {% blocktrans %}
-        <h3>
-            <span aria-hidden="true">📋</span>
-            You need to be registered in order to vote
-        </h3>
-        <p>
-          If you aren't registered to vote visit
-          <a href="https://www.gov.uk/register-to-vote" target="_top">
-            https://www.gov.uk/register-to-vote
-          </a>
-        </p>
-        <p>Register before midnight on Monday 19th April to vote in the Election(s) on Thursday 6th May.</p>
-        <p>You don't need to register again if you've already registered at your current address.</p>
-        {% endblocktrans %}
-    </div>
+<div class="card">
+    <h3>
+        <span aria-hidden="true">📋</span>
+        {% trans "You need to be registered in order to vote" %}
+    </h3>
+    <p>
+        {% trans "If you aren't registered to vote visit" %}
+        {% trans "https://www.gov.uk/register-to-vote" as register_to_vote_url %}
+        <a href="{{ register_to_vote_url }}" target="_top">{{ register_to_vote_url }}</a>.
+    </p>
+    <p>{% trans "Register before midnight on Monday 19th April to vote in the election(s) on Thursday 6th May." %}</p>
+    <p>{% trans "You don't need to register again if you've already registered at your current address." %}</p>
+</div>

@@ -1,6 +1,5 @@
 {% extends base_template|default:"base_full.html" %}
-{% load static %}
-{% load pipeline %}
+{% load static i18n pipeline %}
 {% block extra_site_css %}
     {% stylesheet 'styles' %}
 {% endblock extra_site_css %}
@@ -9,7 +8,7 @@
 {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
 <div class="container">
   <div class="card centered-card banner_message">
-    <p>This is a staging site.</p>
+    <p>{% trans "This is a staging site." context "not shown to general public" %}</p>
   </div>
 </div>
 {% endif %}
@@ -33,6 +32,44 @@
 {% endif %}
 {% endblock ga_tracking_code %}
 
+{% block header %}
+    {% comment "Disabling until we have better Welsh translations in place" %}
+    <form action="{% url 'set_language' %}" method="post" class="ds-scope">
+        <aside class="ds-language" aria-labelledby="language-label">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <ul>
+                <li id="language-label" aria-hidden="true">Language:</li>
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <li>
+                        <button name="language" value="{{ language.code }}" lang="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} aria-current="true"{% endif %}>
+                            {{ language.name_local }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    </form>
+    {% endcomment %}
+    <header role="banner">
+        <div class="container">
+            <a class="home-link" href="/">
+                <img src="{% static "dc_theme/icons/apple-touch-icon.png" %}" alt="">
+                <div class="title-text">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% if LANGUAGE_CODE != "en" %}
+                        <div lang="en" dir="ltr">{% language "en" %}{{ site_title }}{% endlanguage %}</div>
+                    {% endif %}
+                    <div{% if LANGUAGE_CODE != "en" %} class="subtitle"{% endif %}>{{ site_title }}</div>
+                </div>
+            </a>
+
+        </div>
+    </header>
+{% endblock header %}
 
 {% block site_footer %}
 <footer class="footer">
@@ -40,36 +77,37 @@
     <h3>{{ site_title }}</h3>
     <nav aria-label="primary">
       <ul>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="https://democracyclub.org.uk/projects/polling-stations/">About</a></li>
-        <li><a href="https://democracyclub.org.uk/privacy/">Privacy</a></li>
-        <li><a href="{% url 'api_docs' %}">API</a></li>
-        <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
-        <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
-        <li><a href="https://democracyclub.org.uk/contact/">Contact</a></li>
+        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+        <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About" %}</a></li>
+        <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
+        <li><a href="{% url 'api_docs' %}">{% trans "API" context "Application Programming Interface" %}</a></li>
+        <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+        <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">{% trans "Mailing List" %}</a></li>
+        <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact" %}</a></li>
       </ul>
     </nav>
 
-    <h3>Made by Democracy Club</h3>
-    <p>Democracy Club is a UK based Community Interest Company that builds
-      the digital infrastructure needed for a 21st century democracy</p>
+    <h3>{% trans "Made by Democracy Club" %}</h3>
+    <p>{% trans "Democracy Club is a UK based Community Interest Company that builds the digital infrastructure needed for a 21st century democracy." %}</p>
     <nav aria-label="secondary">
       <ul>
-        <li><a href="https://democracyclub.org.uk/about/">About Democracy Club</a></li>
-        <li><a href="https://democracyclub.org.uk/contact/">Contact Us</a></li>
-        <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
-        <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">Mailing List</a></li>
-        <li><a href="https://twitter.com/democlub">Twitter</a></li>
-        <li><a href="https://facebook.com/DemocracyClub">Facebook</a></li>
-        <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
+        <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
+        <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact Us" %}</a></li>
+        <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+        <li><a href="{% url 'dc_signup_form:mailing_list_signup_view' %}">{% trans "Mailing List" %}</a></li>
+        <li><a href="https://twitter.com/democlub">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
+        <li><a href="https://facebook.com/DemocracyClub">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
+        <li><a href="https://github.com/DemocracyClub">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
       </ul>
     </nav>
 
-    <p>Copyright © {% now "Y" %} Democracy Club Community Interest Company Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
+    {% now "Y" as current_year %}
+    <p>{% blocktrans with company_number="09461226" companies_house_url="https://beta.companieshouse.gov.uk/company/09461226" %}Copyright ©
+        {{ current_year }} Democracy Club Community Interest Company Company No: <a href="{{ companies_house_url }}">{{ company_number }}</a>{% endblocktrans %}</p>
     <p>
-      Contains OS data © Crown copyright and database right {% now "Y" %}<br>
-      Contains Royal Mail data © Royal Mail copyright and database right {% now "Y" %}<br>
-      Contains National Statistics data © Crown copyright and database right {% now "Y" %}<br>
+      {% blocktrans %}Contains OS data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
+      {% blocktrans %}Contains Royal Mail data © Royal Mail copyright and database right {{ current_year }}{% endblocktrans %}<br>
+      {% blocktrans %}Contains National Statistics data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
     </p>
 
   </div>

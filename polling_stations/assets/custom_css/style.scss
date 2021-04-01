@@ -2,6 +2,19 @@
 @import 'cards';
 @import 'feedback_form';
 
+// From the design system
+@import 'design-system-snippets';
+@import 'language';
+
+
+.ds-scope {
+  @include fontMain;
+  @include language;
+}
+// End from the design system
+
+@import 'header';
+
 body.embed {
     padding-top: 0px;
     margin-top: 0px;

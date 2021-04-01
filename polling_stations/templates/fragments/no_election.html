@@ -2,14 +2,15 @@
 {% load dc_forms %}
 
 {% if cancelled_election.cancelled %}
-  {% include "fragments/cancelled_election.html" %}
+    {% include "fragments/cancelled_election.html" %}
 {% else %}
-  <h2>We don't know of any upcoming elections in your area</h2>
-  {% blocktrans with council.name as council_name and council.electoral_services_phone_numbers.0 as council_phone and council.electoral_services_website as council_website %}
-  <p>
-    We're not aware of any upcoming elections in your area. If you think there may be elections in your area,
-    check your local <a href="{{ council_website }}">council website</a> for more information,
-    or contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
-  </p>
-  {% endblocktrans %}
+    <h2>{% trans "We don't know of any upcoming elections in your area" %}</h2>
+    <p>
+        {% trans "We're not aware of any upcoming elections in your area." %}
+        {% blocktrans trimmed with council.name as council_name and council.electoral_services_phone_numbers.0 as council_phone and council.electoral_services_website as council_website %}
+            If you think there may be elections in your area,
+            check your local <a href="{{ council_website }}">council website</a> for more information,
+            or contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
+        {% endblocktrans %}
+    </p>
 {% endif %}

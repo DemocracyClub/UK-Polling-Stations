@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.urls import path
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
@@ -59,6 +60,7 @@ core_patterns = [
         r"^robots\.txt$",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
+    path("i18n/", include("django.conf.urls.i18n")),
 ]
 
 extra_patterns = [

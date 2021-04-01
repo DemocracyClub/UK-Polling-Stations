@@ -1,18 +1,20 @@
 {% load i18n %}
 <div class="card">
-    {% blocktrans with council.electoral_services_phone_numbers.0 as council_phone and council.name as council_name and council.electoral_services_email as council_electoral_services_email %}
-        <h3>
-            <span aria-hidden="true">👉</span>
-            Your election (might) need you!
-        </h3>
-        <p>
-          A lot of people are needed to make an election happen.
-          Your council may be hiring polling station and counting staff for the upcoming elections.
-          Contact {{ council_name }} Electoral Services team to see if they need help.
-        </p>
-        <p>
-          You can email them at <strong><a href="mailto:{{ council_electoral_services_email }}">{{ council_electoral_services_email }}</a></strong>
-          or call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
-        </p>
-    {% endblocktrans %}
+    <h3>
+        <span aria-hidden="true">👉</span>
+        {% trans "Your election (might) need you!" %}
+    </h3>
+    <p>
+        {% blocktrans trimmed with council_name=council.name %}
+            A lot of people are needed to make an election happen.
+            Your council may be hiring polling station and counting staff for the upcoming elections.
+            Contact {{ council_name }} Electoral Services team to see if they need help.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans with council_phone=council.electoral_services_phone_numbers.0 council_electoral_services_email=council.electoral_services_email  %}
+            You can email them at <strong><a href="mailto:{{ council_electoral_services_email }}">{{ council_electoral_services_email }}</a></strong>
+            or call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
+        {% endblocktrans %}
+    </p>
 </div>

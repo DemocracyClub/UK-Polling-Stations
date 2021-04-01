@@ -1,23 +1,24 @@
 {% load i18n %}
 <div>{{ custom.message|safe }}</div>
 {% if custom.base_url and custom.can_pass_postcode %}
-  <p><a href="{{ custom.base_url }}{{ custom.encoded_postcode }}" target="_top">{% trans "Find your polling station" %}</a></p>
+    <p><a href="{{ custom.base_url }}{{ custom.encoded_postcode }}" target="_top">{% trans "Find your polling station" %}</a></p>
 {% else %}
-  {% if custom.base_url %}
-    <p><a href="{{ custom.base_url }}" target="_top">{% trans "Find your polling station" %}</a></p>
-  {% endif %}
+    {% if custom.base_url %}
+        <p><a href="{{ custom.base_url }}" target="_top">{% trans "Find your polling station" %}</a></p>
+    {% endif %}
 {% endif %}
 
 {% if custom.base_url %}
-  {% if council.electoral_services_phone_numbers %}
-    {% if territory == 'NI' %}
-      {% blocktrans with council_phone=council.electoral_services_phone_numbers.0 council_name=council.name %}
-        <p>Alternatively, contact The Electoral Office for Northern Ireland on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-      {% endblocktrans %}
-    {% else %}
-      {% blocktrans with council_phone=council.council.electoral_services_phone_numbers.0 council_name=council.name %}
-        <p>Alternatively, contact {{ council_name }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong></p>
-      {% endblocktrans %}
+    {% if council.electoral_services_phone_numbers %}
+        <p>
+            {% with council_phone=council.council.electoral_services_phone_numbers.0 council_name=council.name %}
+                {% if territory == 'NI' %}
+                    {% trans "Alternatively, contact The Electoral Office for Northern Ireland on" context "phone number link follows" %}
+                {% else %}
+                    {% blocktrans context "phone number link follows" %}Alternatively, contact {{ council_name }} on{% endblocktrans %}
+                {% endif %}
+                <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
+            {% endwith %}
+        </p>
     {% endif %}
-  {% endif %}
 {% endif %}

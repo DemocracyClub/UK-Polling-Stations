@@ -1,45 +1,42 @@
 {% load i18n %}
-  {% if voter_id_pilot %}
+{% if voter_id_pilot %}
     <div class="card">
         <h3>
-          <span aria-hidden="true">🗳</span>️
-          {{ voter_id_pilot.title }}
+            <span aria-hidden="true">🗳</span>️
+            {{ voter_id_pilot.title }}
         </h3>
         <p>{{ voter_id_pilot.detail }}</p>
         <p>
-          <a href="{{ voter_id_pilot.url }}">More information on voter ID pilots in your area</a>
+            <a href="{{ voter_id_pilot.url }}">{% trans "More information on voter ID pilots in your area" context "link text" %}</a>
         </p>
         <p>{% trans "You must vote at your assigned polling station." %}</p>
     </div>
-  {% else %}
+{% else %}
     <div class="card">
-        {% blocktrans %}
-          <h3>
+        <h3>
             <span aria-hidden="true">🗳</span>️
-            You don't need your poll card to vote
-          </h3>
+            {% trans "You don't need your poll card to vote" %}
+        </h3>
         <p>
-          If you are registered to vote, but you don't have your poll card, you
-          can go to the polling station and give them your name and address.
+            {% trans "If you are registered to vote, but you don't have your poll card, you can go to the polling station and give them your name and address." %}
         </p>
-        {% endblocktrans %}
 
         {% if territory == 'NI' %}
-          <p>{% trans "You will need photographic identification" %}</p>
+            <p>{% trans "You will need photographic identification" %}</p>
         {% else %}
-          <p>{% trans "You don't need any other form of ID." %}</p>
+            <p>{% trans "You don't need any other form of ID." %}</p>
         {% endif %}
 
         <p>{% trans "You must vote at your assigned polling station." %}</p>
 
         {% if territory == 'NI' %}
-          <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
-            {% trans "Read more about voting in Northern Ireland" %}
-          </a></p>
+            <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
+                {% trans "Read more about voting in Northern Ireland" %}
+            </a></p>
         {% else %}
-          <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
-            {% trans "Read more about voting in Great Britain" %}
-          </a></p>
+            <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
+                {% trans "Read more about voting in Great Britain" %}
+            </a></p>
         {% endif %}
     </div>
-  {% endif%}
+{% endif%}

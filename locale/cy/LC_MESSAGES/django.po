@@ -1,21 +1,26 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
+# Translators:
+# Gair Cymraeg <Gaircymraeg@nus.org.uk>, 2016
+# Gareth Morlais, 2016
+# Sym Roe <sym@talusdesign.co.uk>, 2016
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-22 10:43+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2016-03-16 21:36+0000\n"
+"Last-Translator: Gareth Morlais\n"
+"Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
+"club/uk-polling-stations/language/cy_GB/)\n"
+"Language: cy_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
+"11) ? 2 : 3;\n"
 
 #: polling_stations/apps/dashboard/templates/dashboard/council_detail.html:5
 #: polling_stations/apps/dashboard/templates/dashboard/council_list.html:4
@@ -29,28 +34,33 @@ msgstr ""
 
 #: polling_stations/apps/data_finder/helpers/directions.py:83
 msgid "minute"
-msgstr ""
+msgstr "munud"
 
 #: polling_stations/apps/data_finder/helpers/directions.py:87
 msgid "miles"
-msgstr ""
+msgstr "milltir"
 
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:5
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:4
 msgid "Uploads"
 msgstr ""
 
+#  Translated by developer to support development; please check
 #: polling_stations/settings/base.py:259
 msgid "Where Do I Vote?"
-msgstr ""
+msgstr "Ble Ydw i'n Pleidleisio?"
 
 #: polling_stations/templates/address_select.html:10
+#, fuzzy
+#| msgid "Choose Your Address / Street"
 msgid "Choose Your Address"
-msgstr ""
+msgstr "Dewis Eich Cyfeiriad / Stryd"
 
 #: polling_stations/templates/address_select.html:17
+#, fuzzy
+#| msgid "Find your Polling Station"
 msgid "Find my Polling Station"
-msgstr ""
+msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/base.html:11
 msgctxt "not shown to general public"
@@ -158,7 +168,7 @@ msgstr ""
 #: polling_stations/templates/home.html:21
 #: polling_stations/templates/home.html:27
 msgid "Find your polling station"
-msgstr ""
+msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/custom_finder.html:16
 msgctxt "phone number link follows"
@@ -166,10 +176,11 @@ msgid "Alternatively, contact The Electoral Office for Northern Ireland on"
 msgstr ""
 
 #: polling_stations/templates/custom_finder.html:18
-#, python-format
+#, fuzzy, python-format
+#| msgid "Contact %(council_name)s"
 msgctxt "phone number link follows"
 msgid "Alternatively, contact %(council_name)s on"
-msgstr ""
+msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/election_explainers.html:5
 msgid ""
@@ -202,16 +213,29 @@ msgid ""
 msgstr ""
 
 #: polling_stations/templates/fragments/cancelled_election.html:25
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "        <p>We don't have data for your area, so you need to contact the "
+#| "council.</p>\n"
+#| "        <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
+#| "%(council_phone)s</a></strong></p>\n"
+#| "        "
 msgid ""
 "For more information contact %(council.name)s on <strong><a href=\"tel:"
 "%(phone_number)s\">%(phone_number)s</a></strong>."
 msgstr ""
+"\n"
+"<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi gysylltu "
+"a'r cyngor.</p>\n"
+"<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong></p>"
 
 #: polling_stations/templates/fragments/cancelled_election.html:30
-#, python-format
+#, fuzzy, python-format
+#| msgid "Contact %(council_name)s"
 msgid "For more information contact %(council.name)s."
-msgstr ""
+msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/fragments/contact_details.html:7
 msgid "The Electoral Office for Northern Ireland"
@@ -219,7 +243,7 @@ msgstr ""
 
 #: polling_stations/templates/fragments/contact_details.html:12
 msgid "Council Contact info"
-msgstr ""
+msgstr "Manylion Cyswllt y Cyngor"
 
 #: polling_stations/templates/fragments/contact_details.html:24
 #: polling_stations/templates/multiple_councils.html:19
@@ -231,7 +255,7 @@ msgstr ""
 #: polling_stations/templates/multiple_councils.html:19
 msgctxt "Short for Phone:"
 msgid "P:"
-msgstr ""
+msgstr "Ff:"
 
 #: polling_stations/templates/fragments/contact_details.html:26
 #: polling_stations/templates/multiple_councils.html:21
@@ -243,7 +267,7 @@ msgstr ""
 #: polling_stations/templates/multiple_councils.html:21
 msgctxt "Short for Email:"
 msgid "E:"
-msgstr ""
+msgstr "E:"
 
 #: polling_stations/templates/fragments/errors.html:5
 #: polling_stations/templates/home.html:14
@@ -258,7 +282,7 @@ msgstr ""
 
 #: polling_stations/templates/fragments/errors.html:10
 msgid "Find your Polling Station"
-msgstr ""
+msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/fragments/help_your_council.html:5
 msgid "Your election (might) need you!"
@@ -273,7 +297,14 @@ msgid ""
 msgstr ""
 
 #: polling_stations/templates/fragments/help_your_council.html:15
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "        <p>We don't have data for your area, so you need to contact the "
+#| "council.</p>\n"
+#| "        <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
+#| "%(council_phone)s</a></strong></p>\n"
+#| "        "
 msgid ""
 "\n"
 "            You can email them at <strong><a href=\"mailto:"
@@ -283,6 +314,11 @@ msgid ""
 "%(council_phone)s</a></strong>.\n"
 "        "
 msgstr ""
+"\n"
+"<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi gysylltu "
+"a'r cyngor.</p>\n"
+"<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong></p>"
 
 #: polling_stations/templates/fragments/ical_feed.html:5
 #, python-format
@@ -326,22 +362,42 @@ msgid "We're not aware of any upcoming elections in your area."
 msgstr ""
 
 #: polling_stations/templates/fragments/no_election.html:10
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "        <p>We don't have data for your area, so you need to contact the "
+#| "council.</p>\n"
+#| "        <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
+#| "%(council_phone)s</a></strong></p>\n"
+#| "        "
 msgid ""
 "If you think there may be elections in your area, check your local <a href="
 "\"%(council_website)s\">council website</a> for more information, or contact "
 "%(council_name)s on <strong><a href=\"tel:%(council_phone)s\">"
 "%(council_phone)s</a></strong>."
 msgstr ""
+"\n"
+"<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi gysylltu "
+"a'r cyngor.</p>\n"
+"<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong></p>"
 
 #: polling_stations/templates/fragments/polling_station_known.html:3
 msgid "Your polling station"
-msgstr ""
+msgstr "Eich gorsaf bleidleisio"
 
 #: polling_stations/templates/fragments/polling_station_known.html:22
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "              It's about %(walk_dist)s away or a %(walk_time)s walk from "
+#| "%(postcode)s.\n"
+#| "            "
 msgid "It's about %(dist)s away or a %(time)s %(mode)s from %(postcode)s."
 msgstr ""
+"\n"
+"Mae'n bellter o tua  %(walk_dist)s neu tua %(walk_time)s wrth gerdded o  "
+"%(postcode)s."
 
 #: polling_stations/templates/fragments/polling_station_known.html:28
 msgid "Walking/driving directions from Google"
@@ -359,7 +415,7 @@ msgstr ""
 #: polling_stations/templates/fragments/polling_station_unknown.html:3
 #, python-format
 msgid "Contact %(council_name)s"
-msgstr ""
+msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:6
 #: polling_stations/templates/multiple_councils.html:12
@@ -373,17 +429,30 @@ msgid "If you don't have a poll card, you need to contact your local council."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:12
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "        <p>We don't have data for your area, so you need to contact the "
+#| "council.</p>\n"
+#| "        <p>You can call them on <strong><a href=\"tel:%(council_phone)s\">"
+#| "%(council_phone)s</a></strong></p>\n"
+#| "        "
 msgid ""
 "You can call %(council_name)s on <strong><a href=\"tel:%(council_phone)s\">"
 "%(council_phone)s</a></strong> or <strong><a href=\"%(council_website)s"
 "\">visit their website</a></strong>."
 msgstr ""
+"\n"
+"<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi gysylltu "
+"a'r cyngor.</p>\n"
+"<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">"
+"%(council_phone)s</a></strong></p>"
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:17
-#, python-format
+#, fuzzy, python-format
+#| msgid "Contact %(council_name)s"
 msgid "Or, you need to contact %(council_name)s"
-msgstr ""
+msgstr "Cyswllt %(council_name)s"
 
 #: polling_stations/templates/fragments/register_to_vote.html:5
 msgid "You need to be registered in order to vote"
@@ -395,7 +464,7 @@ msgstr ""
 
 #: polling_stations/templates/fragments/register_to_vote.html:9
 msgid "https://www.gov.uk/register-to-vote"
-msgstr ""
+msgstr "https://www.gov.uk/cofrestru-i-bleidleisio"
 
 #: polling_stations/templates/fragments/register_to_vote.html:12
 msgid ""
@@ -468,7 +537,7 @@ msgstr ""
 #: polling_stations/templates/multiple_councils.html:6
 #: polling_stations/templates/postcode_view.html:33
 msgid "Your Polling Station"
-msgstr ""
+msgstr "Eich Gorsaf Bleidleisio"
 
 #: polling_stations/templates/multiple_councils.html:10
 msgid "Contact Your Council"
@@ -480,3 +549,97 @@ msgid ""
 "Or, you need to contact your council. Residents in %(postcode)s may be in "
 "one of the following council areas:"
 msgstr ""
+
+#, fuzzy, python-format
+#~| msgid ""
+#~| "\n"
+#~| "        <p>We don't have data for your area, so you need to contact the "
+#~| "council.</p>\n"
+#~| "        <p>You can call them on <strong><a href=\"tel:%(council_phone)s"
+#~| "\">%(council_phone)s</a></strong></p>\n"
+#~| "        "
+#~ msgid ""
+#~ "\n"
+#~ "        <p>Alternatively, contact The Electoral Office for Northern "
+#~ "Ireland on <strong><a href=\"tel:%(council_phone)s\">%(council_phone)s</"
+#~ "a></strong></p>\n"
+#~ "      "
+#~ msgstr ""
+#~ "\n"
+#~ "<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi "
+#~ "gysylltu a'r cyngor.</p>\n"
+#~ "<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">"
+#~ "%(council_phone)s</a></strong></p>"
+
+#, fuzzy, python-format
+#~| msgid ""
+#~| "\n"
+#~| "        <p>We don't have data for your area, so you need to contact the "
+#~| "council.</p>\n"
+#~| "        <p>You can call them on <strong><a href=\"tel:%(council_phone)s"
+#~| "\">%(council_phone)s</a></strong></p>\n"
+#~| "        "
+#~ msgid ""
+#~ "\n"
+#~ "        <p>Alternatively, contact %(council_name)s on <strong><a href="
+#~ "\"tel:%(council_phone)s\">%(council_phone)s</a></strong></p>\n"
+#~ "      "
+#~ msgstr ""
+#~ "\n"
+#~ "<p>Nid oes gennym ddata ar gyfer eich ardal chi, felly gwell ichi "
+#~ "gysylltu a'r cyngor.</p>\n"
+#~ "<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">"
+#~ "%(council_phone)s</a></strong></p>"
+
+#~ msgid "Enter Your Postcode"
+#~ msgstr "Nodwch eich cod post"
+
+#~ msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
+#~ msgstr "e.e. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
+
+#~ msgid "Get walking directions"
+#~ msgstr "Cyfarwyddiadau cerdded"
+
+#~ msgid ""
+#~ "\n"
+#~ "        <h3>You don't need your poll card to vote</h3>\n"
+#~ "        <p>If you don't have your poll card, you can go to the polling\n"
+#~ "            station and give them your name and address.</p>\n"
+#~ "        <p>You don't need any other form of ID.</p>\n"
+#~ "        <p>If you haven’t received a polling card but think you should "
+#~ "have done, contact your council</p>\n"
+#~ "        <p><strong>Polling stations are open from 7am to 10pm on polling "
+#~ "day.</strong></p>\n"
+#~ "        <p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations"
+#~ "\" target=\"_blank\">\n"
+#~ "          Read more about voting in the UK\n"
+#~ "        </a></p>\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "<h3>Nid yw cerdyn pleidleisio yn angenrheidiol er mwyn pleidleisio</h3>\n"
+#~ "<p>Os nad oes gennych gerdyn pleidleisio, gallwch fynd \n"
+#~ "i'ch gorsaf bleidleisio a dweud eich enw a chyfeiriad.</p>\n"
+#~ "<p>Nid oes angen cerdyn adnabod arnoch .</p>\n"
+#~ "<p>Cysyllwch gyda'r cyngor os nad ydych wedi derbyn cerdyn pleidleisio</"
+#~ "p>\n"
+#~ "<p><strong>Mae gorsafoedd pleidleisio ar agor o 7y.b tan 10 y.h. ar "
+#~ "ddiwrnod y bleidlais.</strong></p>\n"
+#~ "<p><a href=\"https://www.gov.uk/voting-in-the-uk/polling-stations\" "
+#~ "target=\"_blank\">\n"
+#~ "Darllen mwy am bleidleisio yn y D.U. \n"
+#~ "</a></p>"
+
+#~ msgid ""
+#~ "\n"
+#~ "        <h3>You need to be registered in order to vote</h3>\n"
+#~ "        <p>If you aren’t registered to vote visit <a href=\"https://www."
+#~ "gov.uk/register-to-vote\">https://www.gov.uk/register-to-vote</a>.</p>\n"
+#~ "\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "<h3>Rhaid eich bod wedi cofrestru i bleidleisio</h3>\n"
+#~ "<p>Os nad ydych wedi cofrestru i bleidleisio ewch i <a href=\"https://www."
+#~ "gov.uk/cofrestru-i-bleidleisio\">https://www.gov.uk/cofrestru-i-"
+#~ "bleidleisio</a>.</p>"

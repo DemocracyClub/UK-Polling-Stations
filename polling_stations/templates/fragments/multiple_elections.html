@@ -1,14 +1,14 @@
+{% load i18n %}
 <div class="card">
-  <h3>
-    <span aria-hidden="true">🗳️🗳️</span>️
-    Multiple elections are happening!
-  </h3>
-  <p>
-    Lucky you! There's more than one election taking place in your area.
-  </p>
-  <p>
-    Don't worry, you can vote in all of them at the same polling station
-    and read about them at:
-    <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}" target="_top">WhoCanIVoteFor.co.uk</a>
-  </p>
+    <h3>
+        <span aria-hidden="true">🗳🗳</span>️
+        {% trans "Multiple elections are happening!" %}
+    </h3>
+    <p>
+        {% trans "Lucky you! There's more than one election taking place in your area." %}
+    </p>
+    <p>
+        {% trans "Don't worry, you can vote in all of them at the same polling station and read about them at" context "followed by link to whocanivotefor.co.uk, with that link text" %}
+        <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}" target="_top">WhoCanIVoteFor.co.uk</a>
+    </p>
 </div>

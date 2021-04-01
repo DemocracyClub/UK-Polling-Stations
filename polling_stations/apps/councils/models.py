@@ -1,12 +1,14 @@
 import re
 
 from django.contrib.gis.db import models
-from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField, JSONField
+from django.utils.translation import get_language
 
 
 class Council(models.Model):
     council_id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(blank=True, max_length=255)
+    name_translated = JSONField(default=dict)
     identifiers = ArrayField(models.CharField(max_length=100), default=list)
 
     electoral_services_email = models.EmailField(blank=True)
@@ -30,7 +32,10 @@ class Council(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return self.name
+        try:
+            return self.name_translated[get_language()]
+        except KeyError:
+            return self.name
 
     class Meta:
         ordering = ("name",)

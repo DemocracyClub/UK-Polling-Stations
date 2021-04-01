@@ -1,0 +1,25 @@
+@mixin language {
+
+  .ds-language {
+    @extend %ds-dark;
+    @extend %ds-cluster;
+    @extend %ds-cluster-right;
+    padding: $ss5;
+    font-size: $ss8;
+  }
+
+  button {
+    @include fontMain;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  .ds-language [aria-current] {
+    text-decoration: underline;
+    text-decoration-thickness: $ss1;
+    color: $blueForBlack;
+  }
+
+}
