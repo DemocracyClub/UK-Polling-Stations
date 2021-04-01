@@ -1,0 +1,111 @@
+
+// Colours
+
+$black: #403F41;
+$blackOpacity: rgba($black, 0.2);
+$white: #fff;
+$pinkForWhite: #E6007C;
+$blueForWhite: #007CAD;
+$blueForBlack: #00B6FF;
+$blueLight: #E4F4FB;
+$greenForWhite: #32841A;
+$greenForBlack: #4BC427;
+$redForWhite: #D91714;
+$redForBlueLight: $redForWhite;
+$amber: #FFC037;
+
+// Large scale
+$ratio: 1.25;
+$s1: 1rem;
+$s2: #{$ratio}rem;
+$s3: #{pow($ratio, 2)}rem;
+$s4: #{pow($ratio, 3)}rem;
+$s5: #{pow($ratio, 4)}rem;
+$s6: #{pow($ratio, 5)}rem;
+$s7: #{pow($ratio, 6)}rem;
+$s8: #{pow($ratio, 7)}rem;
+
+// Small scale
+$increment-small-scale: 0.125rem;
+$ss1: $increment-small-scale;
+$ss2: $ss1 + $increment-small-scale;
+$ss3: $ss2 + $increment-small-scale;
+$ss4: $ss3 + $increment-small-scale;
+$ss5: $ss4 + $increment-small-scale;
+$ss6: $ss5 + $increment-small-scale;
+$ss7: $ss6 + $increment-small-scale;
+$ss8: $ss7 + $increment-small-scale;
+
+
+%ds-dark, %ds-dark * {
+  color: $white;
+  background-color: $black;
+}
+
+%ds-cluster > *,
+%ds-cluster-right > *,
+%ds-cluster-center > * {
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  margin: calc(#{$ss5} * -1);
+}
+
+%ds-cluster > * > *,
+%ds-cluster-right > * > *,
+%ds-cluster-center > * > * {
+  margin: $ss5;
+}
+
+%ds-cluster-right > * {
+  justify-content: flex-end;
+}
+
+%ds-cluster-center > * {
+  justify-content: center;
+}
+
+%ds-cluster-tight > * {
+  margin: calc(#{$ss2} * -1);
+}
+
+%ds-cluster-tight > * > * {
+  margin: $ss2;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/montserrat-medium.woff2') format('woff2'),
+        url('../fonts/montserrat-medium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/montserrat-light.woff2') format('woff2'),
+        url('../fonts/montserrat-light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Font families
+$familyMain: Montserrat, sans-serif;
+$familyBody: Georgia, serif;
+
+// Line heights
+$lineHeight: 1.5; // WCAG 1.4.12 recommended minimum
+$lineHeightTight: 1.125;
+
+
+@mixin fontMain {
+  font-family: $familyMain;
+  font-weight: 500;
+  line-height: $lineHeightTight;
+  color: $black;
+}

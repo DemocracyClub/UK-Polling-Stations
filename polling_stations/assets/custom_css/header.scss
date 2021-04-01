@@ -5,8 +5,10 @@ body > header .container {
   padding: 0.5em 0;
 
   a.home-link {
+    @include fontMain;
+    font-weight: 300;
     display: flex;
-    font-family: "Bitstream Vera Sans";
+
     text-decoration: none;
 
     &, &:visited {
