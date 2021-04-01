@@ -1,56 +1,35 @@
-import os
-from django.contrib.gis.geos import Point
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from pollingstations.models import PollingStation
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E07000174"
-    addresses_name = "parl.2019-12-12/Version 2/polling_station_export-2019-11-12.csv"
-    stations_name = "parl.2019-12-12/Version 2/polling_station_export-2019-11-12.csv"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
-
-    def get_station_hash(self, record):
-        return "-".join(
-            [
-                record.pollingstationnumber.strip(),
-            ]
-        )
+    council_id = "MAS"
+    addresses_name = "2021-03-17T14:10:56.004783/polling_station_export-2021-03-17.csv"
+    stations_name = "2021-03-17T14:10:56.004783/polling_station_export-2021-03-17.csv"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn == "10091484857":
-            rec["postcode"] = "NG19 7NH"
+        if uprn in [
+            "10091484435",  # 33B ALBERT STREET, MANSFIELD
+            "100031427156",  # 207 WESTFIELD LANE, MANSFIELD
+            "100031413924",  # FIRBANK HOUSE, NEWLANDS ROAD, FOREST TOWN, MANSFIELD
+            "100031415038",  # GREENACRES, OAKFIELD LANE, WARSOP, MANSFIELD
+            "10023932919",  # GLEADTHORPE GRANGE FARM NETHERFIELD LANE, MEDEN VALE
+        ]:
+            return None
 
-        return rec
+        if record.housepostcode in [
+            "NG19 6JF",
+            "NG19 6AT",
+            "NG18 5RT",
+            "NG18 1EU",
+            "NG18 1ER",
+            "NG18 1EJ",
+            "NG18 1BQ",
+            "NG18 4LN",
+        ]:
+            return None
 
-    def post_import(self):
-        filepath = os.path.join(
-            self.base_folder_path, "parl.2019-12-12/Version 2/Polling Station.csv"
-        )
-        gridrefs = self.get_data("csv", filepath)
-
-        print("Updating grid refs...")
-        for record in gridrefs:
-            stations = PollingStation.objects.filter(
-                council_id=self.council_id,
-                internal_council_id="-".join([record.number.strip()]),
-            )
-            if len(stations) == 1:
-                station = stations[0]
-                station.location = Point(
-                    float(record.origin_x), float(record.origin_y), srid=27700
-                )
-                self.check_station_point(
-                    {
-                        "location": station.location,
-                        "council_id": station.council_id,
-                    }
-                )
-                station.save()
-            else:
-                print("Could not find station id " + "-".join([record.number.strip()]))
-        print("...done")
+        return super().address_record_to_dict(record)
