@@ -33,6 +33,7 @@
 {% endblock ga_tracking_code %}
 
 {% block header %}
+    {% comment "Disabling until we have better Welsh translations in place" %}
     <form action="{% url 'set_language' %}" method="post" class="ds-scope">
         <aside class="ds-language" aria-labelledby="language-label">
             {% csrf_token %}
@@ -52,6 +53,7 @@
             </ul>
         </aside>
     </form>
+    {% endcomment %}
     <header role="banner">
         <div class="container">
             <a class="home-link" href="/">
