@@ -2,27 +2,33 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000245"
-    addresses_name = "parl.2019-12-12/Version 2/Democracy club website data.csv"
-    stations_name = "parl.2019-12-12/Version 2/Democracy club website data.csv"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "WSK"
+    addresses_name = "2021-03-19T13:58:06.894064/Democracy Club 6 May 2021.CSV"
+    stations_name = "2021-03-19T13:58:06.894064/Democracy Club 6 May 2021.CSV"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "10094768454":
-            return None
-
-        if (uprn, record.addressline1) == ("10094064602", "26 Hambrook Close"):
-            rec["postcode"] = "IP30 0UX"
-
-        if record.addressline6 in [
-            "IP31 2NY",
-            "IP28 8WE",
-            "IP33 1EE",
-            "CB8 8BF",
+        if uprn in [
+            "10090002658",  # 164 LONDON ROAD, BRANDON
+            "10001258706",  # 129 HIGH STREET, LAKENHEATH, BRANDON
+            "10001258707",  # 129A HIGH STREET, LAKENHEATH, BRANDON
+            "10001255117",  # 131 HIGH STREET, LAKENHEATH, BRANDON
+            "10090737493",  # 152 WESTLEY ROAD, BURY ST EDMUNDS
+            "100091029230",  # 23 BURY ROAD, NEWMARKET
+            "200001370253",  # 27 BURY ROAD, NEWMARKET
+            "10094770713",  # THE ANNEXE ATTLETON FARM ATTLETON GREEN, WICKHAMBROOK
+            "10001255061",  # DELPH COTTAGE DELPH DROVE, WEST ROW
+            "10023126363",  # HEAVEN, THETFORD ROAD, CONEY WESTON, BURY ST. EDMUNDS
         ]:
             return None
-        return rec
+
+        if record.addressline6 in ["CB8 9AW", "CB9 7NL", "CB8 8JH"]:
+            return None
+
+        if "Room" in record.addressline1 and "1 The Avenue" == record.addressline2:
+            return None
+
+        return super().address_record_to_dict(record)
