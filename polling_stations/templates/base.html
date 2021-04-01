@@ -33,6 +33,25 @@
 {% endblock ga_tracking_code %}
 
 {% block header %}
+    <form action="{% url 'set_language' %}" method="post" class="ds-scope">
+        <aside class="ds-language" aria-labelledby="language-label">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <ul>
+                <li id="language-label" aria-hidden="true">Language:</li>
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <li>
+                        <button name="language" value="{{ language.code }}" lang="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} aria-current="true"{% endif %}>
+                            {{ language.name_local }}
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    </form>
     <header role="banner">
         <div class="container">
             <a class="home-link" href="/">
@@ -45,22 +64,7 @@
                     <div{% if LANGUAGE_CODE != "en" %} class="subtitle"{% endif %}>{{ site_title }}</div>
                 </div>
             </a>
-            {% comment "Disabling this pending a design system review. We still respect the browser's language preference." %}
-            <div class="language-select">
-                <form action="{% url 'set_language' %}" method="post">
-                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
 
-                        <button name="language" value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} disabled aria-selected="true" {% endif %}>
-                            {{ language.name_local }}
-                        </button>
-                    {% endfor %}
-                </form>
-            </div>
-            {% endcomment %}
         </div>
     </header>
 {% endblock header %}
