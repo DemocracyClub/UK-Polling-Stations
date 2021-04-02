@@ -5,8 +5,8 @@ class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = "E08000031"
-    elections = ["parl.2019-12-12"]
+    council_id = "WLV"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Wolverhampton"
     geom_type = "geojson"
 
@@ -14,17 +14,17 @@ class Command(BaseGitHubImporter):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
 
         return {
-            "internal_council_id": record["DIS_CODE"],
-            "name": record["WARD"] + " - " + record["DIS_CODE"],
+            "internal_council_id": record["DIS_CODE_NEW"],
+            "name": record["WARD"] + " - " + record["DIS_CODE_NEW"],
             "area": poly,
-            "polling_station_id": record["DIS_CODE"],
+            "polling_station_id": record["DIS_CODE_NEW"],
         }
 
     def station_record_to_dict(self, record):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
-        codes = record["DIS_CODE"].split(",")
+        codes = record["DIS_CODE_NEW"].split(",")
         codes = [code.strip() for code in codes]
 
         stations = []
