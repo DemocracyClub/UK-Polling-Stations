@@ -1,25 +1,43 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.geo_utils import fix_bad_polygons
+from data_importers.github_importer import BaseGitHubImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000035"
-    council_name = "Argyll and Bute"
-    elections = ["parl.2019-12-12"]
+class Command(BaseGitHubImporter):
+    council_id = "AGB"
+    elections = ["2021-05-06"]
+    scraper_name = "wdiv-scrapers/DC-PollingStations-Wolverhampton"
+    geom_type = "geojson"
+    srid = 4326
+    districts_srid = 4326
+
+    def district_record_to_dict(self, record):
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+
+        return {
+            "internal_council_id": record["CODE"],
+            "name": record["NAME"] + " - " + record["CODE"],
+            "area": poly,
+            "polling_station_id": record["CODE"],
+        }
 
     def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
-        if rec:
-            codes = rec["internal_council_id"].split(",")
-            stations = []
-            for code in codes:
-                new_rec = {
-                    "internal_council_id": code.strip(),
-                    "postcode": rec["postcode"],
-                    "address": rec["address"],
-                }
+        location = self.extract_geometry(
+            record, self.geom_type, self.get_srid("stations")
+        )
+        codes = record["CODE"].split(",")
+        codes = [code.strip() for code in codes]
 
-                if code == "AA89":
-                    new_rec["address"] = new_rec["address"].replace("?", ",")
-                stations.append(new_rec)
-            return stations
-        return rec
+        stations = []
+        for code in codes:
+            stations.append(
+                {
+                    "internal_council_id": code,
+                    "address": record["ADDRESS"],
+                    "postcode": "",
+                    "location": location,
+                }
+            )
+        return stations
+
+    def post_import(self):
+        fix_bad_polygons()
