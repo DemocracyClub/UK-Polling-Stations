@@ -1,26 +1,22 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000026"
-    council_name = "Scottish Borders"
-    elections = ["parl.2019-12-12"]
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "SCB"
+    addresses_name = "2021-03-25T12:10:21.663474/Democracy Club Polling Districts.csv"
+    stations_name = "2021-03-25T12:10:21.663474/Democracy Club Polling Places.csv"
+    elections = ["2021-05-06"]
 
-    def district_record_to_dict(self, record):
-
-        # Districts with no Station
-        if record[0] in ["03I", "08E", "11E"]:
+    def address_record_to_dict(self, record):
+        if record.postcode in ["EH45 9JJ", "TD1 3NY", "TD12 4LG", "TD5 8PT"]:
             return None
-
-        return super().district_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-
-        record[0] = record[0].zfill(3)
-        rec = super().station_record_to_dict(record)
-
-        if rec and record[0] == "09C":
-            rec["address"] = "ROXBURGH FORMER SCHOOL, ROXBURGH, KELSO, TD5 8LZ"
-            rec["location"] = None
-
-        return rec
+        if record.uprn in [
+            "116074488",
+            "116090401",
+            "116050796",
+            "116060667",
+            "116076251",
+            "116062629",
+        ]:
+            return None
+        return super().address_record_to_dict(record)
