@@ -1,51 +1,54 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
-from data_importers.slugger import Slugger
+from data_importers.ems_importers import BaseHalaroseCsvImporter
 
-"""
-Note:
-This importer provides coverage for 48/51 districts
-due to incomplete/poor quality data
+STG_ADMINAREAS = (
+    "Stirling",
+    "Stirling Ward 1",
+    "Stirling Ward 2",
+    "Stirling Ward 3",
+    "Stirling Ward 4",
+    "Stirling Ward 5",
+    "Stirling Ward 6",
+    "Stirling Ward 7",
+    "Callander",
+    "Crianlarich",
+    "Killin",
+    "Lochearnhead",
+    "Dunblane",
+    "Doune",
+)
 
-Station (Murray Hall) for District SC420 not in source data.
-Station (Aberfoyle Primary School) for District SS165 not in source data.
-Station (Stirling Indoor Bowling Centre) for District SS440 not in source data.
-"""
+STG_EXCLUDE_STATIONS = ()
+
+STG_INCLUDE_STATIONS = (
+    "Cowie Community Centre",
+    "Balfour Centre",
+    "Bannockburn Community Centre",
+)
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000030"
-    council_name = "Stirling"
-    elections = ["europarl.2019-05-23"]
-    station_map = {}
-    seen_codes = set()
-
-    def district_record_to_dict(self, record):
-        if record[2] == self.council_name:
-            station_slug = Slugger.slugify(record[3])
-            if station_slug == "thornhill-village-hall":
-                station_slug = "thornhill-community-hall"
-            elif station_slug == "john-mclintock-hall":
-                station_slug = "mclintock-hall"
-            self.station_map.setdefault(station_slug, []).append(record[0])
-
-            return super().district_record_to_dict(record)
+class Command(BaseHalaroseCsvImporter):
+    council_id = "STG"
+    addresses_name = "2021-04-01T20:40:33.112986/Central Scotland polling_station_export-2021-03-31.csv"
+    stations_name = "2021-04-01T20:40:33.112986/Central Scotland polling_station_export-2021-03-31.csv"
+    elections = ["2021-05-06"]
 
     def station_record_to_dict(self, record):
-        if record[2] == self.council_name:
-            try:
-                station_slug = Slugger.slugify(record[3].split(",")[0])
-                codes = self.station_map[station_slug]
-            except KeyError:
-                return None
+        if (
+            (record.adminarea not in STG_ADMINAREAS)
+            and (record.pollingstationname not in STG_INCLUDE_STATIONS)
+            or (record.pollingstationname in STG_EXCLUDE_STATIONS)
+        ):
+            return None
+        return super().station_record_to_dict(record)
 
-            stations = []
-            for code in codes:
-                if code not in self.seen_codes:
-                    self.seen_codes.add(code)
-                    rec = {
-                        "internal_council_id": code,
-                        "postcode": "",
-                        "address": record[3],
-                    }
-                    stations.append(rec)
-            return stations
+    def address_record_to_dict(self, record):
+        if (
+            (record.adminarea not in STG_ADMINAREAS)
+            and (record.pollingstationname not in STG_INCLUDE_STATIONS)
+            or (record.pollingstationname in STG_EXCLUDE_STATIONS)
+        ):
+            return None
+
+        if record.housepostcode in ["FK9 4JL", "FK8 1TX", "FK7 0LS", "FK17 8HR"]:
+            return None
+        return super().address_record_to_dict(record)
