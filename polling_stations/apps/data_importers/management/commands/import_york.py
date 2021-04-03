@@ -11,10 +11,10 @@ class Command(BaseGitHubImporter):
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        code = record["CODE"].replace("/", "")
+        code = record["Code"].replace("/", "")
         return {
             "internal_council_id": code,
-            "name": "%s - %s" % (record["WARD"], record["CODE"]),
+            "name": "%s - %s" % (record["Ward"], record["Code"]),
             "area": poly,
         }
 
