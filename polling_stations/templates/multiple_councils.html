@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load i18n_with_welsh %}
 {% load static %}
 
 {% block page_title %}{% trans "Your Polling Station" %}{% endblock page_title %}
@@ -14,7 +14,7 @@
 
   {% for council in councils %}
   <p>
-    <h3>{{ council.name }}</h3>
+    <h3>{{ council }}</h3>
     {% for phone_number in council.electoral_services_phone_numbers %}
       <abbr title="{% trans "Phone" context "abbr title attribute" %}">{% trans "P:" context "Short for Phone:" %}</abbr> <a href="tel:{{ phone_number }}">{{ phone_number }}</a><br>
     {% endfor %}

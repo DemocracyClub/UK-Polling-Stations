@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 10:43+0000\n"
+"POT-Creation-Date: 2021-03-22 10:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Uploads"
 msgstr ""
 
-#: polling_stations/settings/base.py:259
+#: polling_stations/settings/base.py:260
 msgid "Where Do I Vote?"
 msgstr ""
 
@@ -168,7 +168,7 @@ msgstr ""
 #: polling_stations/templates/custom_finder.html:18
 #, python-format
 msgctxt "phone number link follows"
-msgid "Alternatively, contact %(council_name)s on"
+msgid "Alternatively, contact %(council)s on"
 msgstr ""
 
 #: polling_stations/templates/election_explainers.html:5
@@ -204,13 +204,13 @@ msgstr ""
 #: polling_stations/templates/fragments/cancelled_election.html:25
 #, python-format
 msgid ""
-"For more information contact %(council.name)s on <strong><a href=\"tel:"
+"For more information contact %(council)s on <strong><a href=\"tel:"
 "%(phone_number)s\">%(phone_number)s</a></strong>."
 msgstr ""
 
 #: polling_stations/templates/fragments/cancelled_election.html:30
 #, python-format
-msgid "For more information contact %(council.name)s."
+msgid "For more information contact %(council)s."
 msgstr ""
 
 #: polling_stations/templates/fragments/contact_details.html:7
@@ -269,7 +269,7 @@ msgstr ""
 msgid ""
 "A lot of people are needed to make an election happen. Your council may be "
 "hiring polling station and counting staff for the upcoming elections. "
-"Contact %(council_name)s Electoral Services team to see if they need help."
+"Contact %(council)s Electoral Services team to see if they need help."
 msgstr ""
 
 #: polling_stations/templates/fragments/help_your_council.html:15
@@ -330,8 +330,8 @@ msgstr ""
 msgid ""
 "If you think there may be elections in your area, check your local <a href="
 "\"%(council_website)s\">council website</a> for more information, or contact "
-"%(council_name)s on <strong><a href=\"tel:%(council_phone)s\">"
-"%(council_phone)s</a></strong>."
+"%(council)s on <strong><a href=\"tel:%(council_phone)s\">%(council_phone)s</"
+"a></strong>."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_known.html:3
@@ -358,7 +358,7 @@ msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:3
 #, python-format
-msgid "Contact %(council_name)s"
+msgid "Contact %(council)s"
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:6
@@ -375,14 +375,14 @@ msgstr ""
 #: polling_stations/templates/fragments/polling_station_unknown.html:12
 #, python-format
 msgid ""
-"You can call %(council_name)s on <strong><a href=\"tel:%(council_phone)s\">"
+"You can call %(council)s on <strong><a href=\"tel:%(council_phone)s\">"
 "%(council_phone)s</a></strong> or <strong><a href=\"%(council_website)s"
 "\">visit their website</a></strong>."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:17
 #, python-format
-msgid "Or, you need to contact %(council_name)s"
+msgid "Or, you need to contact %(council)s."
 msgstr ""
 
 #: polling_stations/templates/fragments/register_to_vote.html:5

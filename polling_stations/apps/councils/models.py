@@ -4,8 +4,10 @@ from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.utils.translation import get_language
 
+from polling_stations.i18n.cy import WelshNameMutationMixin
 
-class Council(models.Model):
+
+class Council(WelshNameMutationMixin, models.Model):
     council_id = models.CharField(primary_key=True, max_length=100)
     name = models.CharField(blank=True, max_length=255)
     name_translated = JSONField(default=dict)

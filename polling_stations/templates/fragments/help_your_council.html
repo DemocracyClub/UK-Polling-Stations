@@ -1,14 +1,14 @@
-{% load i18n %}
+{% load i18n_with_welsh %}
 <div class="card">
     <h3>
         <span aria-hidden="true">👉</span>
         {% trans "Your election (might) need you!" %}
     </h3>
     <p>
-        {% blocktrans trimmed with council_name=council.name %}
+        {% blocktrans trimmed %}
             A lot of people are needed to make an election happen.
             Your council may be hiring polling station and counting staff for the upcoming elections.
-            Contact {{ council_name }} Electoral Services team to see if they need help.
+            Contact {{ council }} Electoral Services team to see if they need help.
         {% endblocktrans %}
     </p>
     <p>
