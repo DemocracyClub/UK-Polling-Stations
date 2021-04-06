@@ -1,9 +1,10 @@
+{% load i18n %}
 <form id="feedback_form" method="post" action="{% url 'feedback_form_view' %}">
   {% csrf_token %}
   {{ feedback_form.token }}
   {{ feedback_form.source_url }}
 
-  <h3>Did you find this useful?</h3>
+  <h3>{% trans "Did you find this useful?" %}</h3>
   <span id="feedback_choices_container">
     {% for choice in feedback_form.found_useful %}
       {{ choice.tag }}
@@ -12,7 +13,7 @@
   </span>
 
   <div class="comments_container">
-    <p>Can you tell us anything more?</p>
+    <p>{% trans "Can you tell us anything more?" %}</p>
     {{ feedback_form.comments }}
     <button type="submit" class="button">Send feedback</button>
   </div>
