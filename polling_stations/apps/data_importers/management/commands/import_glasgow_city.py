@@ -1,70 +1,78 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000049"
-    council_name = "Glasgow City"
-    elections = ["parl.2019-12-12"]
+class Command(BaseHalaroseCsvImporter):
+    council_id = "GLG"
+    addresses_name = (
+        "2021-04-08T12:32:22.361894/Glasgow_polling_station_export-2021-04-05.csv"
+    )
+    stations_name = (
+        "2021-04-08T12:32:22.361894/Glasgow_polling_station_export-2021-04-05.csv"
+    )
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
-    def district_record_to_dict(self, record):
-        # District that falls on Glasgow/N.Lanarkshire boundary change.
-        # Ignore it for now.
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
 
-        if record[0] == "NL43 (part)":
+        if uprn in [
+            "906700157851",  # 2 ELDERPARK STREET, GLASGOW
+            "906700436864",  # 0/1 10 ELDERPARK STREET, GLASGOW
+            "906700436865",  # 0/2 10 ELDERPARK STREET, GLASGOW
+            "906700436866",  # 1/1 10 ELDERPARK STREET, GLASGOW
+            "906700436867",  # 1/2 10 ELDERPARK STREET, GLASGOW
+            "906700436868",  # 2/1 10 ELDERPARK STREET, GLASGOW
+            "906700436869",  # 2/2 10 ELDERPARK STREET, GLASGOW
+            "906700436870",  # 3/1 10 ELDERPARK STREET, GLASGOW
+            "906700436871",  # 3/2 10 ELDERPARK STREET, GLASGOW
+            "906700436872",  # 4/1 10 ELDERPARK STREET, GLASGOW
+            "906700436873",  # 4/2 10 ELDERPARK STREET, GLASGOW
+            "906700221720",  # 6 ST. JOHNS ROAD, GLASGOW
+            "906700306076",  # 0/2 141 THORNLIEBANK ROAD, GLASGOW
+            "906700433663",  # 0/1 141 THORNLIEBANK ROAD, GLASGOW
+            "906700415121",  # SITE 5 CARAVAN PARK 64 STRATHCLYDE STREET, GLASGOW
+        ]:
             return None
 
-        return super().district_record_to_dict(record)
+        if record.housepostcode in [
+            "G61 1QE",
+            "G14 9HQ",
+            "G52 1RZ",
+            "G22 6RL",
+            "G21 2LN",
+            "G21 4UH",
+            "G53 6UW",
+            "G33 3SU",
+            "G51 2WU",
+            "G51 2YJ",
+            "G51 2WX",
+            "G5 9HR",
+            "G5 9HU",
+            "G41 5DW",
+            "G45 9NH",
+            "G15 8JY",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        if "LINTHAUGH NURSERY" in record.pollingstationname:
+            record = record._replace(
+                pollingstationpostcode=record.pollingstationaddress_5
+            )
+            record = record._replace(pollingstationaddress_5="")
 
-        # District that falls on Glasgow/N.Lanarkshire boundary change.
-        # Ignore it for now.
-        if record[0] == "NL43":
-            return None
+        if "CARNTYNE PARISH CHURCH HALL" in record.pollingstationname:
+            record = record._replace(pollingstationpostcode="")
 
-        # Doesn't appear in Districts shapefile
-        if record[0] == "ES0117":
-            return None
+        if "CARNTYNE PRIMARY SCHOOL" in record.pollingstationname:
+            record = record._replace(pollingstationpostcode="")
 
-        # Corrections based on checking notice of polling place
-        addresses = {
-            "KE0310": "GARNETBANK PRIMARY SCHOOL, 231 RENFREW STREET",
-            "SH1609": "SACRED HEART PRIMARY SCHOOL, 31 REID STREET",
-            "SS0706": "ST ALBERT'S PRIMARY SCHOOL, 34 MAXWELL DRIVE",
-            "SS1508": "ST BRIDE'S PRIMARY SCHOOL, 85 CRAIGIE STREET",
-            "SS1607": "ST BRIGID'S PRIMARY SCHOOL, 4 GLENMORE AVENUE",
-            "SS1908": "BLACKFRIARS PRIMARY SCHOOL, 310 CUMBERLAND STREET",
-            "PR0318": "BUDHILL FAMILY LEARNING CENTRE PRE 5 CE CENTRE, 1A HALLHILL ROAD",
-            "PR2621": "BLAIRTUMMOCK HOUSING ASSOCIATION, COMMUNITY HALL, 45 BOYNDIE ROAD",
-            "SH0620": "CALEDONIA PRIMARY SCHOOL, 10 CALDERWOOD DRIVE",
-            "SH0720": "CALEDONIA PRIMARY SCHOOL, 10 CALDERWOOD DRIVE",
-            "SH3119": "EASTBANK ACADEMY, 26 ACADEMY STREET",
-            "SH3319": "ST JOSEPH'S CHURCH HALL, 16 FULLARTON AVENUE",
-            "KE1311": "BELHAVEN NURSERY, 54 KELVINSIDE AVENUE",
-            "MS0516": "SCARAWAY NURSERY, 24 SHAPINSAY STREET",
-            "MS3817": "SPRINGBURN LIBRARY, 10 KAY STREET",
-            "PR3121": "RUCHAZIE COMMUNITY CENTRE, 441 GARTLOCH ROAD",
-            "AN0114": "ANTONINE PRIMARY SCHOOL, 3 ABBOTSHALL AVENUE",
-            "AN0814": "ST MARGARET'S PARISH CHURCH HALL, 2000 GREAT WESTERN ROAD",
-            "AN2613": "SCOTSTOUN PRIMARY SCHOOL, 26 ORMISTON AVENUE, G14 9HN",
-            "AN3312": "BROOMHILL COMMUNITY CHURCH OF THE NAZARENE, 95 BROOMHILL DRIVE (ENTER FROM NORBY ROAD)",
-            "KE2523": "HYNDLAND PRIMARY SCHOOL, 36 FORTROSE STREET",
-            "PK0506": "CRAIGTON PRIMARY SCHOOL, 5 MORVEN STREET",
-            "PK0803": "LINTHAUGH NURSERY SCHOOL, 533 CROOKSTON ROAD",
-            "PK0903": "LINTHAUGH NURSERY SCHOOL, 533 CROOKSTON ROAD",
-            "PK1403": "LINTHAUGH NURSERY SCHOOL, 533 CROOKSTON ROAD",
-            "PK2504": "LOURDES PRIMARY SCHOOL, 144 BERRYKNOWES ROAD",
-            "PK2604": "LOURDES PRIMARY SCHOOL, 144 BERRYKNOWES ROAD",
-            "PK3304": "NETHERCRAIGS (GLASGOW CLUB), 355 CORKERHILL ROAD",
-            "SS0205": "IBROX PRIMARY SCHOOL, 40 HINSHELWOOD DRIVE",
-        }
+        if "ST MUNGO'S PRIMARY SCHOOL" in record.pollingstationname:
+            record = record._replace(pollingstationpostcode="")
 
-        rec = super().station_record_to_dict(record)
+        if "ST MARGARETS PARISH CHURCH HALL" in record.pollingstationname:
+            record = record._replace(pollingstationpostcode="")
 
-        if rec:
-            try:
-                rec["address"] = addresses[rec["internal_council_id"]]
-                rec["location"] = None
-                return rec
-            except KeyError:
-                return rec
+        return super().station_record_to_dict(record)
