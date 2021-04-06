@@ -10,6 +10,9 @@ class Command(BaseHalaroseCsvImporter):
     def station_record_to_dict(self, record):
         if record.pollingstationname == "WHISSENDINE MEMORIAL HALL":
             record = record._replace(pollingstationpostcode="LE15 7ET")
+        if record.pollingstationname == "LANGHAM VILLAGE HALL":
+            record = record._replace(pollingstationpostcode="LE15 7JE")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
