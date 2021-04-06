@@ -28,10 +28,19 @@
         </form>
     </section>
 
-    {% if show_polls_open %}
+    {% if show_polls_open_card %}
         <div class="card centered-card">
-            <h2>{% trans "6 May 2021 Elections" %}</h2>
-            <p>{% trans "Polling stations are open from 7am to 10pm <strong>today</strong>." %}</p>
+            <h2>{% blocktrans with election_date=election_date|date:"DATE_FORMAT" context="Section heading for information about elections on that date. election_date is already localised, e.g. '6 Mai 2021'." %}{{ election_date }} Elections{% endblocktrans %}</h2>
+
+            {% if election_date_is_today %}
+                <p>{% trans "Polling stations are open from 7am to 10pm <strong>today</strong>." %}</p>
+            {% else %}
+                <p>
+                    {% blocktrans trimmed with election_date=election_date|date:"DATE_FORMAT" day_of_week=election_date|date:"l" context "day_of_week  and election_date are localised, e.g. 'Dydd Lau' and '6 Mai 2021'. If it's awkward, leave out the day of the week." %}
+                        Polling stations are open from 7am to 10pm on <strong>{{ day_of_week }} {{ election_date }}</strong>.
+                    {% endblocktrans %}
+                </p>
+            {% endif %}
 
             <p>{% trans "You don't need your poll card to vote." %}</p>
 
