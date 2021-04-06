@@ -1,10 +1,11 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from localflavor.gb.forms import GBPostcodeField
 
 
 class PostcodeLookupForm(forms.Form):
-    postcode = GBPostcodeField(label="Enter your postcode")
+    postcode = GBPostcodeField(label=_("Enter your postcode"))
 
 
 class AddressSelectForm(forms.Form):
