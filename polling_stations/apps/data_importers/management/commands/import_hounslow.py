@@ -2,26 +2,38 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E09000018"
-    addresses_name = "2020-02-19T09:58:45.236148/Democracy_Club__7 May 2020.CSV"
-    stations_name = "2020-02-19T09:58:45.236148/Democracy_Club__7 May 2020.CSV"
-    elections = ["2020-05-07"]
+    council_id = "HNS"
+    addresses_name = (
+        "2021-04-01T10:43:33.063903/Democracy_Club__06May2021 - Hounslow.CSV"
+    )
+    stations_name = (
+        "2021-04-01T10:43:33.063903/Democracy_Club__06May2021 - Hounslow.CSV"
+    )
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
     csv_encoding = "windows-1252"
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 in [
-            "TW4 6DH",
-            "TW3 2PD",
-        ]:
-            return None
-
         if uprn in [
-            "100021554382",  # SCHOOL HOUSE, 104 Martindale Road, Hounslow
+            "100021554382",  # 104 MARTINDALE ROAD, HOUNSLOW
+            "100021539525",  # 208B BATH ROAD, HOUNSLOW
+            "10090801431",  # FLAT 5 95 MASWELL PARK ROAD, HOUNSLOW
+            "10090801430",  # FLAT 4 95 MASWELL PARK ROAD, HOUNSLOW
+            "100021580780",  # FLAT 2 392 CHISWICK HIGH ROAD, CHISWICK, LONDON
             "100021514552",  # FLAT 1 36 HAMILTON ROAD, BRENTFORD
         ]:
             return None
 
-        return rec
+        if record.addressline6 in [
+            "TW4 6DH",
+            "TW3 3DW",
+            "TW3 3TU",
+            "TW13 5JE",
+            "W4 4EU",
+            "TW13 6AB",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
