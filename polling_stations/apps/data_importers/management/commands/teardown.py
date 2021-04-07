@@ -57,24 +57,24 @@ class Command(BaseCommand):
         )
 
         if kwargs["council"]:
-            council_id = kwargs["council"]
-            print("Deleting data for council %s..." % (council_id))
-            # check this council exists
-            council_obj = Council.objects.get(pk=council_id)
-            gss_code = council_obj.geography.gss
+            for council_id in kwargs["council"]:
+                print("Deleting data for council %s..." % (council_id))
+                # check this council exists
+                council_obj = Council.objects.get(pk=council_id)
+                gss_code = council_obj.geography.gss
 
-            PollingStation.objects.filter(council=council_id).delete()
-            PollingDistrict.objects.filter(council=council_id).delete()
+                PollingStation.objects.filter(council=council_id).delete()
+                PollingDistrict.objects.filter(council=council_id).delete()
 
-            UprnToCouncil.objects.filter(lad=gss_code).update(polling_station_id="")
+                UprnToCouncil.objects.filter(lad=gss_code).update(polling_station_id="")
 
-            dq = DataQuality.objects.get(council_id=council_id)
-            dq.report = ""
-            dq.num_addresses = 0
-            dq.num_districts = 0
-            dq.num_stations = 0
-            dq.save()
-            print("..done")
+                dq = DataQuality.objects.get(council_id=council_id)
+                dq.report = ""
+                dq.num_addresses = 0
+                dq.num_districts = 0
+                dq.num_stations = 0
+                dq.save()
+                print("..done")
 
         elif kwargs.get("all"):
             print("Deleting ALL data...")
