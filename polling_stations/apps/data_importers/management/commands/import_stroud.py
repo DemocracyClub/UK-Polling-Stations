@@ -2,38 +2,50 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000082"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.CSV"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019.CSV"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
-
-    def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn in [
-            "100120528842",
-            "10092977212",
-            "10092978161",
-        ]:
-            return None
-
-        return rec
+    council_id = "STO"
+    addresses_name = "2021-04-19T13:57:28.472090/Democracy_Club__06May2021.CSV"
+    stations_name = "2021-04-19T13:57:28.472090/Democracy_Club__06May2021.CSV"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
+    csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-
-        if record.polling_place_id == "16472":  # Arthur S Winterbotham Memorial Hall
+        # Arthur S Winterbotham Memorial Hall High Street Cam
+        if record.polling_place_id == "17930":
             record = record._replace(polling_place_easting="374915")
             record = record._replace(polling_place_northing="200440")
 
-        if record.polling_place_id == "16476":  # Bussage Village Hall
-            record = record._replace(polling_place_postcode="GL68BB")
+        # Bussage Village Hall Bussage Stroud
+        if record.polling_place_id == "18022":
+            record = record._replace(polling_place_postcode="GL6 8BB")
             record = record._replace(polling_place_easting="388393")
             record = record._replace(polling_place_northing="203373")
 
-        if record.polling_place_id == "17096":  # Church of God of Prophecy
-            record = record._replace(polling_place_easting="385658")
-            record = record._replace(polling_place_northing="205119")
+        # Rodborough Tabernacle United Reformed Church Tabernacle Walk Rodborough Stroud GL5 3JJ
+        if record.polling_place_id == "18181":
+            record = record._replace(polling_place_postcode="")
 
         return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "200003108372",  # 5 WORKMANS CLOSE, DURSLEY
+            "100120525233",  # THE FORMER TELEPHONE EXCHANGE, BATH ROAD, HARDWICKE, GLOUCESTER
+        ]:
+            return None
+
+        if record.post_code in [
+            "GL13 9JL",
+            "GL5 4NY",
+            "GL5 3JL",
+            "GL5 1RG",
+            "GL2 7NJ",
+            "GL5 3JN",
+            "GL10 3BN",
+            "GL6 9AH",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
