@@ -23,9 +23,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
         print("removing bad points from AddressBase")
-        bad_uprns = [
-            # nothing yet
-        ]
+        bad_uprns = ["10033560031"]  # Addressbase contains individual's name
         addresses = Address.objects.filter(pk__in=bad_uprns)
         for address in addresses:
             print(address.uprn)
