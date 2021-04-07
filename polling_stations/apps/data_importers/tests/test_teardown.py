@@ -96,7 +96,7 @@ class TestTeardown(TestCase):
             ),
         )
         cmd = Command()
-        cmd.handle(council="AAA")
+        cmd.handle(council=["AAA"])
 
         self.assertEqual(Council.objects.count(), 2)
         self.assertEqual(PollingStation.objects.count(), 1)
