@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 10:59+0000\n"
+"POT-Creation-Date: 2021-04-06 20:32+0100\n"
 "PO-Revision-Date: 2016-03-16 21:36+0000\n"
 "Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
@@ -27,6 +27,20 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
 "11) ? 2 : 3;\n"
 
+#: polling_stations/apps/bug_reports/forms.py:13
+msgid "Description"
+msgstr ""
+
+#: polling_stations/apps/bug_reports/templates/bug_reports/report_form_inline.html:8
+#: polling_stations/apps/bug_reports/templates/bug_reports/report_form_view.html:17
+msgctxt "button to send a bug report"
+msgid "Send Report"
+msgstr ""
+
+#: polling_stations/apps/bug_reports/templates/bug_reports/report_form_view.html:13
+msgid "Report a Problem"
+msgstr ""
+
 #: polling_stations/apps/dashboard/templates/dashboard/council_detail.html:5
 #: polling_stations/apps/dashboard/templates/dashboard/council_list.html:4
 #: polling_stations/apps/dashboard/templates/dashboard/council_list.html:7
@@ -37,6 +51,12 @@ msgstr ""
 msgid "Postcode:"
 msgstr ""
 
+#: polling_stations/apps/data_finder/forms.py:8
+#, fuzzy
+#| msgid "Enter Your Postcode"
+msgid "Enter your postcode"
+msgstr "Nodwch eich cod post"
+
 #: polling_stations/apps/data_finder/helpers/directions.py:83
 msgid "minute"
 msgstr "munud"
@@ -44,6 +64,27 @@ msgstr "munud"
 #: polling_stations/apps/data_finder/helpers/directions.py:87
 msgid "miles"
 msgstr "milltir"
+
+#: polling_stations/apps/feedback/forms.py:19
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:7
+msgid "Did you find this useful?"
+msgstr ""
+
+#: polling_stations/apps/feedback/forms.py:26
+msgid "Comments"
+msgstr ""
+
+#: polling_stations/apps/feedback/models.py:6
+msgid "Yes"
+msgstr ""
+
+#: polling_stations/apps/feedback/models.py:6
+msgid "No"
+msgstr ""
+
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:16
+msgid "Can you tell us anything more?"
+msgstr ""
 
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:5
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:4
@@ -72,71 +113,71 @@ msgctxt "not shown to general public"
 msgid "This is a staging site."
 msgstr ""
 
-#: polling_stations/templates/base.html:72
+#: polling_stations/templates/base.html:80
 msgid "Home"
 msgstr ""
 
-#: polling_stations/templates/base.html:73
+#: polling_stations/templates/base.html:81
 msgid "About"
 msgstr ""
 
-#: polling_stations/templates/base.html:74
+#: polling_stations/templates/base.html:82
 msgid "Privacy"
 msgstr ""
 
-#: polling_stations/templates/base.html:75
+#: polling_stations/templates/base.html:83
 msgctxt "Application Programming Interface"
 msgid "API"
 msgstr ""
 
-#: polling_stations/templates/base.html:76
-#: polling_stations/templates/base.html:88
+#: polling_stations/templates/base.html:84
+#: polling_stations/templates/base.html:96
 msgid "Blog"
 msgstr ""
 
-#: polling_stations/templates/base.html:77
-#: polling_stations/templates/base.html:89
+#: polling_stations/templates/base.html:85
+#: polling_stations/templates/base.html:97
 msgid "Mailing List"
 msgstr ""
 
-#: polling_stations/templates/base.html:78
+#: polling_stations/templates/base.html:86
 msgid "Contact"
 msgstr ""
 
-#: polling_stations/templates/base.html:82
+#: polling_stations/templates/base.html:90
 msgid "Made by Democracy Club"
 msgstr ""
 
-#: polling_stations/templates/base.html:83
+#: polling_stations/templates/base.html:91
 msgid ""
 "Democracy Club is a UK based Community Interest Company that builds the "
 "digital infrastructure needed for a 21st century democracy."
 msgstr ""
 
-#: polling_stations/templates/base.html:86
+#: polling_stations/templates/base.html:94
 msgid "About Democracy Club"
 msgstr ""
 
-#: polling_stations/templates/base.html:87
+#: polling_stations/templates/base.html:95
 msgid "Contact Us"
 msgstr ""
 
-#: polling_stations/templates/base.html:90
+#: polling_stations/templates/base.html:98
 msgctxt "link to Democracy Club Twitter page"
 msgid "Twitter"
 msgstr ""
 
-#: polling_stations/templates/base.html:91
+#: polling_stations/templates/base.html:99
 msgctxt "link to Democracy Club Facebook page"
 msgid "Facebook"
 msgstr ""
 
-#: polling_stations/templates/base.html:92
+#: polling_stations/templates/base.html:100
 msgctxt "link to Democracy Club GitHub page"
 msgid "GitHub"
 msgstr ""
 
-#: polling_stations/templates/base.html:97
+#: polling_stations/templates/base.html:105
 #, python-format
 msgid ""
 "Copyright ©\n"
@@ -144,19 +185,19 @@ msgid ""
 "No: <a href=\"%(companies_house_url)s\">%(company_number)s</a>"
 msgstr ""
 
-#: polling_stations/templates/base.html:100
+#: polling_stations/templates/base.html:108
 #, python-format
 msgid "Contains OS data © Crown copyright and database right %(current_year)s"
 msgstr ""
 
-#: polling_stations/templates/base.html:101
+#: polling_stations/templates/base.html:109
 #, python-format
 msgid ""
 "Contains Royal Mail data © Royal Mail copyright and database right "
 "%(current_year)s"
 msgstr ""
 
-#: polling_stations/templates/base.html:102
+#: polling_stations/templates/base.html:110
 #, python-format
 msgid ""
 "Contains National Statistics data © Crown copyright and database right "
@@ -288,6 +329,10 @@ msgstr ""
 #: polling_stations/templates/fragments/errors.html:10
 msgid "Find your Polling Station"
 msgstr "Dod o hyd i'ch gorsaf bleidleisio"
+
+#: polling_stations/templates/fragments/feedback_js.html:22
+msgid "Report a problem with this page"
+msgstr ""
 
 #: polling_stations/templates/fragments/help_your_council.html:5
 msgid "Your election (might) need you!"
@@ -595,9 +640,6 @@ msgstr ""
 #~ "gysylltu a'r cyngor.</p>\n"
 #~ "<p>Ffoniwch nhw ar  <strong><a href=\"tel:%(council_phone)s\">"
 #~ "%(council_phone)s</a></strong></p>"
-
-#~ msgid "Enter Your Postcode"
-#~ msgstr "Nodwch eich cod post"
 
 #~ msgid "e.g. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"
 #~ msgstr "e.e. <a href=\"postcode/CF105AJ/\">CF10 5AJ</a>"

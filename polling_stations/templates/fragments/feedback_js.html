@@ -1,3 +1,4 @@
+{% load i18n %}
 <script type="text/javascript">
   $(document).ready(function() {
 
@@ -18,7 +19,7 @@
 
       $("#feedback_form .comments_container").hide();
       $('<input type="radio" name="found_useful" value="PROBLEM" required data-toggle="button" id="report_problem" />'+
-        '<label class="link-button" for="report_problem">Report a problem with this page</label>'
+        '<label class="link-button" for="report_problem">{% trans "Report a problem with this page" %}</label>'
       ).insertAfter("#feedback_choices_container");
 
       $('#feedback_form input[name=found_useful]').click(function() {
