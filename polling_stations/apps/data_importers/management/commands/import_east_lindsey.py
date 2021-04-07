@@ -24,6 +24,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
+        if uprn == "10008528388":  # AMERICA FARM, HANNAH, ALFORD
+            record = record._replace(addressline6="LN13 9QP")
+
         if uprn in [
             "100030775814",  # SEA SHADOW, CHURCHILL LANE, THEDDLETHORPE, MABLETHORPE
             "200001828818",  # GRANGE FARM, WELTON-LE-MARSH, SPILSBY
@@ -41,7 +44,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "LN11 0EG",
             "LN11 8DW",
             "LN12 2HX",
-            "LN13 9QN",
             "PE25 2PX",
             "PE25 3BS",
             "PE22 8DQ",
