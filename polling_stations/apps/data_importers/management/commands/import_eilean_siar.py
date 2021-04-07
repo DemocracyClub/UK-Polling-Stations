@@ -1,14 +1,10 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000013"
-    council_name = "Eilean Siar"
-    elections = ["parl.2019-12-12"]
-
-    def station_record_to_dict(self, record):
-
-        rec = super().station_record_to_dict(record)
-        if rec:
-            rec["internal_council_id"] = record[0].replace("EO", "E0")
-        return rec
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "ELS"
+    addresses_name = "2021-04-06T12:11:19.403100/Democracy Club - Polling Districts Western Isles.csv"
+    stations_name = (
+        "2021-04-06T12:11:19.403100/Democracy Club - Polling Stations Western Isles.csv"
+    )
+    elections = ["2021-05-06"]
