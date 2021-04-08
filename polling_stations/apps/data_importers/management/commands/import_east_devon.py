@@ -2,17 +2,34 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000040"
-    addresses_name = "parl.2019-12-12/Version 2/merged.CSV"
-    stations_name = "parl.2019-12-12/Version 2/merged.CSV"
-    elections = ["parl.2019-12-12"]
-    csv_encoding = "Windows-1252"
-    allow_station_point_from_postcode = False
+    council_id = "EDE"
+    addresses_name = "2021-04-07T16:28:34.172331/2 Democracy_Club__06May2021.tsv"
+    stations_name = "2021-04-07T16:28:34.172331/2 Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
+    csv_delimiter = "\t"
+    csv_encoding = "windows-1252"
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
+        uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 == "EX1 3RR":
+        if uprn in [
+            "10093128988",  # CARAVAN 2 GREENDALE LANE, CLYST ST MARY
+            "10094722867",  # MOLLYS COTTAGE SNODWELL FARM POST LANE, COTLEIGH
+            "10093125768",  # THE COACH HOUSE CHATTAN COURT WOODBURY LANE, AXMINSTER
+        ]:
             return None
 
-        return rec
+        if record.post_code in ["EX24 6JY", "EX8 4FA", "EX8 2FQ"]:
+            return None
+
+        return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Seaton Marshlands Centre Harbour Road Seaton EX12 2LT.
+        if record.polling_place_id == "13893":
+            record = record._replace(
+                polling_place_postcode=record.polling_place_address_3.strip(".")
+            )
+            record = record._replace(polling_place_address_3="")
+
+        return super().station_record_to_dict(record)
