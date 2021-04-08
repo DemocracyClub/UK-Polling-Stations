@@ -1,70 +1,56 @@
-from uk_geo_utils.helpers import Postcode
-from data_importers.base_importers import BaseCsvStationsCsvAddressesImporter
-from data_importers.addresshelpers import (
-    format_residential_address,
-    format_polling_station_address,
-)
+from data_importers.ems_importers import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseCsvStationsCsvAddressesImporter):
-    council_id = "E07000080"
-    addresses_name = "parl.2019-12-12/Version 2/POLLINGSTATIONS.csv"
-    stations_name = "parl.2019-12-12/Version 2/POLLINGSTATIONS.csv"
-    elections = ["parl.2019-12-12"]
-    csv_delimiter = ","
-
-    def get_station_hash(self, record):
-        return "-".join([record.polling_district.strip()])
-
-    def get_station_address(self, record):
-        return format_polling_station_address(
-            [
-                record.polling_station.strip(),
-                record.polling_station_address.strip(),
-            ]
-        )
-
-    def get_station_point(self, record):
-        return None
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = "FOE"
+    addresses_name = (
+        "2021-03-23T12:16:24.762200/Forest of Dean Democracy_Club__06May2021 (1).TSV"
+    )
+    stations_name = (
+        "2021-03-23T12:16:24.762200/Forest of Dean Democracy_Club__06May2021 (1).TSV"
+    )
+    csv_delimiter = "\t"
+    elections = ["2021-05-06"]
 
     def station_record_to_dict(self, record):
-        district = record.polling_district.strip()
-        location = self.get_station_point(record)
+        if record.polling_place_name == "Rudford & Highleadon Village Hall":
+            record = record._replace(
+                polling_place_easting="377237",  # was 3777237
+            )
+        elif record.polling_place_name == "Primrose Hill Church Hall":
+            record = record._replace(
+                # Mistyped, but not going to work out what the right answer is.
+                polling_place_easting="",
+                polling_place_northing="",
+                # should probably be GL15 5SL, but on wrong street, so let's just remove
+                # it
+                polling_place_postcode="",  # was GL15 5SF
+                # Wrong UPRN too
+                polling_place_uprn="",
+            )
 
-        return {
-            "internal_council_id": district,
-            "postcode": record.polling_station_postcode.strip(),
-            "address": self.get_station_address(record),
-            "location": location,
-        }
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        address = format_residential_address(
-            [
-                record.add1.strip(),
-                record.add2.strip(),
-                record.add3.strip(),
-                record.add4.strip(),
-                record.add5.strip(),
-                record.add6.strip(),
-                record.add7.strip(),
-                record.add8.strip(),
-                record.add9.strip(),
-            ]
-        ).strip()
-        postcode = Postcode(
-            record.postcode.strip(),
-        ).without_space
-        uprn = record.uprn.lstrip("0").strip()
+        if record.addressline6 in [
+            "GL15 6BP",
+            "GL14 2PP",
+            "GL14 2BB",
+            "GL16 8QD",
+            "GL17 9BE",
+            "GL17 9JS",
+            "GL17 9AL",
+            "GL17 9QU",
+            "GL15 4QH",
+            "GL18 1AF",
+            "GL15 4AN",
+            "GL18 1LN",
+            "GL18 1HJ",
+            "GL16 8LN",
+            "GL16 8JW",
+            "GL15 4PU",
+            "GL15 4RX",
+        ]:
+            return None  # split
 
-        if uprn == "10012752190":
-            postcode = "GL2 8AA"
-
-        rec = {
-            "address": address,
-            "postcode": postcode,
-            "polling_station_id": record.polling_district.strip(),
-            "uprn": uprn,
-        }
-
-        return rec
+        return super().address_record_to_dict(record)
