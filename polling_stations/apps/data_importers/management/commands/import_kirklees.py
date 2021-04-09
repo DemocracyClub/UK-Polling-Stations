@@ -1,59 +1,43 @@
-from django.contrib.gis.geos import Point
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E08000034"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/061219_Democracy_Club__12December2019.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/061219_Democracy_Club__12December2019.tsv"
-    )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "KIR"
+    addresses_name = "2021-03-24T10:25:10.922382/Kirklees Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-24T10:25:10.922382/Kirklees Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
+    csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-        # user issue report #80
-        # Darby and Joan Club
-        if record.polling_place_id == "11271":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(-1.6100925, 53.5945822, srid=4326)
-            return rec
+        # New Mill Working Mens Club Sheffield Road New Mill Holmfirth HD9 7JT
+        if record.polling_place_id == "14458":
+            record = record._replace(polling_place_easting="")
+            record = record._replace(polling_place_northing="")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
-        rec = super().address_record_to_dict(record)
-
-        if uprn == "83246005":
-            rec["postcode"] = "HD2 1HA"
-            rec["accept_suggestion"] = False
 
         if uprn in [
-            "200003798939",  # HD76DU -> HD75TU : Throstle Green Farm, Holt Head Road, Slaithwaite, Huddersfield
-            "83151141",  # WF134JD -> WF134JA : 1 the Bungalows, Halifax Road, Dewsbury
-            "83199907",  # WF134JD -> WF134JA : 2 the Bungalows, Halifax Road, Dewsbury
-            "83002159",  # HD75UZ -> HD75UU : Outbarn, Laund Road, Slaithwaite, Huddersfield
-            "83003456",  # HD74NN -> HD75UU : Nab Farm, Highfield Road, Slaithwaite, Huddersfield
-            "83007989",  # HD75PW -> HD75TR : Pioneer Farm Cottage, 2 Blackmoorfoot Road, Linthwaite, Huddersfield
-            "83007957",  # HD75PW -> HD75TR : Pioneer Farm Cottage, 1 Blackmoorfoot Road, Linthwaite, Huddersfield
-            "83186093",  # HD75TY -> HD75HL : Holt Farm, Varley Road, Slaithwaite, Huddersfield
-            "83132478",  # HD89TU -> HD89TD : Butts Top Cottage, Westfield Lane, Emley Moor, Huddersfield
+            "10094118631",  # 6 HAND BANK LANE, LOWER HOPTON, MIRFIELD
+            "83192424",  # 54 WILDSPUR MILLS, NEW MILL, HOLMFIRTH
+            "83192423",  # 53 WILDSPUR MILLS, NEW MILL, HOLMFIRTH
+            "83192420",  # 50 WILDSPUR MILLS, NEW MILL, HOLMFIRTH
+            "83192421",  # 51 WILDSPUR MILLS, NEW MILL, HOLMFIRTH
+            "83192422",  # 52 WILDSPUR MILLS, NEW MILL, HOLMFIRTH
         ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "83199052"  # BD194AZ -> BD194BE : The Coach House Clough Mills, Dewsbury Road, Gomersal, Cleckheaton
-        ]:
-            rec["accept_suggestion"] = False
-
-        if record.addressline6.strip() == "BD19 5EY":
             return None
 
-        if record.addressline6.strip() == "HD5 0RN":
+        if record.addressline6 in [
+            "WF15 6NP",
+            "HD7 6DU",
+            "HD7 4NN",
+            "HD7 5XB",
+            "HD7 4DJ",
+            "HD9 7EH",
+        ]:
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
