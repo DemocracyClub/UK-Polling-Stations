@@ -341,6 +341,43 @@ SLK_EXCLUDE_STATIONS = (
 )
 
 
+def fix_station_hashes(record):
+    # These fixes are to ensure station hash is unique
+    if (
+        record.pollingstationname == "COMMUNITY EDUCATION CENTRE"
+        and record.pollingstationaddress_1 == "VICTORIA STREET"
+    ):
+        record = record._replace(pollingstationnumber="2")
+
+    if (
+        record.pollingstationname == "ST MARY'S  PRIMARY SCHOOL"
+        and record.pollingstationaddress_1 == "1 LIDDEL ROAD"
+    ):
+        record = record._replace(
+            pollingstationname="ST MARY'S  PRIMARY SCHOOL, CUMBERNAULD"
+        )
+
+    if (
+        record.pollingstationname == "MASONIC HALL"
+        and record.pollingstationaddress_1 == "MAIN STREET"
+    ):
+        record = record._replace(pollingstationname="MASONIC HALL, GLENBOIG")
+    if (
+        record.pollingstationname == "MASONIC HALL"
+        and record.pollingstationaddress_1 == "COLTSWOOD ROAD"
+    ):
+        record = record._replace(pollingstationname="MASONIC HALL, COATBRIDGE")
+    if (
+        record.pollingstationname == "ST MARYS PRIMARY SCHOOL"
+        and record.pollingstationaddress_1 == "HOZIER STREET"
+    ):
+        record = record._replace(
+            pollingstationname="ST MARYS PRIMARY SCHOOL, COATBRIDGE"
+        )
+
+    return record
+
+
 class Command(BaseHalaroseCsvImporter):
     council_id = "NLK"
     addresses_name = "2021-04-06T11:57:09.061900/North and South Lanarkshire polling_station_export-2021-04-02.csv"
@@ -348,6 +385,8 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
+        record = fix_station_hashes(record)
+
         station_hash = self.get_station_hash(record)
         if station_hash in SLK_EXCLUDE_STATIONS:
             return None
@@ -377,15 +416,10 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        record = fix_station_hashes(record)
         station_hash = self.get_station_hash(record)
+
         if station_hash in SLK_EXCLUDE_STATIONS:
             return None
 
-        if station_hash in [
-            "1-st-marys-primary-school",
-            "1-community-education-centre",
-            "1-masonic-hall",
-            "2-masonic-hall",
-        ]:
-            return None
         return super().station_record_to_dict(record)
