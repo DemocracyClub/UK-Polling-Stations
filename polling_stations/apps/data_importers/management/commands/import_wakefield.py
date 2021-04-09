@@ -32,3 +32,21 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        if record.stationcode == "12NF":
+            record = record._replace(placename="Kings Croft")
+
+        if record.stationcode == "15MG":
+            record = record._replace(placename="Temporary Polling Station")
+            record = record._replace(
+                add1="Land Opposite Lofthouse Gate Working Men's Club"
+            )
+            record = record._replace(add2="Canal Lane")
+            record = record._replace(add3="Lofthouse Gate")
+            record = record._replace(add4="Wakefield")
+            record = record._replace(postcode="WF3 3HN")
+            record = record._replace(xordinate="433449")
+            record = record._replace(yordinate="424608")
+
+        return super().station_record_to_dict(record)
