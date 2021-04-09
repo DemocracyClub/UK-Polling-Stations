@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-06 20:32+0100\n"
+"POT-Creation-Date: 2021-04-08 14:13+0100\n"
 "PO-Revision-Date: 2016-03-16 21:36+0000\n"
 "Last-Translator: Gareth Morlais\n"
 "Language-Team: Welsh (United Kingdom) (http://www.transifex.com/democracy-"
@@ -535,7 +535,7 @@ msgstr ""
 
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:12
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:30
-#: polling_stations/templates/home.html:38
+#: polling_stations/templates/home.html:47
 msgid "You must vote at your assigned polling station."
 msgstr ""
 
@@ -544,7 +544,7 @@ msgid "You don't need your poll card to vote"
 msgstr ""
 
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:21
-#: polling_stations/templates/home.html:41
+#: polling_stations/templates/home.html:50
 msgid ""
 "If you are registered to vote, but you don't have your poll card, you can go "
 "to the polling station and give them your name and address."
@@ -567,18 +567,29 @@ msgid "Read more about voting in Great Britain"
 msgstr ""
 
 #: polling_stations/templates/home.html:33
-msgid "6 May 2021 Elections"
-msgstr ""
-
-#: polling_stations/templates/home.html:34
-msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
+#, python-format
+msgid "%(election_date)s Elections"
 msgstr ""
 
 #: polling_stations/templates/home.html:36
+msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
+msgstr ""
+
+#: polling_stations/templates/home.html:39
+#, python-format
+msgctxt ""
+"day_of_week  and election_date are localised, e.g. 'Dydd Lau' and '6 Mai "
+"2021'. If it's awkward, leave out the day of the week."
+msgid ""
+"Polling stations are open from 7am to 10pm on <strong>%(day_of_week)s "
+"%(election_date)s</strong>."
+msgstr ""
+
+#: polling_stations/templates/home.html:45
 msgid "You don't need your poll card to vote."
 msgstr ""
 
-#: polling_stations/templates/home.html:44
+#: polling_stations/templates/home.html:53
 msgid ""
 "In England, Wales and Scotland, you don't need any form of ID. In Northern "
 "Ireland, you must bring photo ID."

@@ -86,18 +86,25 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         https://github.com/DemocracyClub/UK-Polling-Stations/pull/2037/files#diff-78a9fc588889ef751c68b530b1af1e80
         https://github.com/DemocracyClub/UK-Polling-Stations/issues/2051
         """
-        polls_open = timezone.make_aware(
-            datetime.strptime("2019-12-12 7", "%Y-%m-%d %H")
-        )
-        polls_close = timezone.make_aware(
-            datetime.strptime("2019-12-12 22", "%Y-%m-%d %H")
-        )
-        now = timezone.now()
 
-        context["show_polls_open"] = polls_close > now
-        context["poll_date"] = "on Thursday 12 December"
-        if polls_open < now and polls_close > now:
-            context["poll_date"] = "today"
+        election_date = getattr(settings, "NEXT_CHARISMATIC_ELECTION_DATE", None)
+        if election_date:
+            election_date: datetime = timezone.make_aware(
+                datetime.strptime(election_date, "%Y-%m-%d")
+            )
+            polls_close = election_date.replace(hour=22)
+
+            now = timezone.now()
+
+            context.update(
+                {
+                    "election_date": election_date,
+                    "election_date_is_today": election_date.date() == now.date(),
+                    "show_polls_open_card": now < polls_close,
+                }
+            )
+        else:
+            context["show_polls_open_card"] = False
 
         return context
 
