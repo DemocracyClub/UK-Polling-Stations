@@ -2,76 +2,83 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000046"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019torr.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019torr.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "TOR"
+    addresses_name = (
+        "2021-03-23T12:10:44.162180/Torridge Democracy_Club__06May2021 (1).tsv"
+    )
+    stations_name = (
+        "2021-03-23T12:10:44.162180/Torridge Democracy_Club__06May2021 (1).tsv"
+    )
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id == "7148":
-            # Buckland Filleigh Village Hall BUCKLAND FILLEIGH
+        # Buckland Filleigh Parish Hall BUCKLAND FILLEIGH
+        if record.polling_place_id == "8008":
             record = record._replace(polling_place_postcode="EX21 5HZ")
 
-        if record.polling_place_id == "7274":
-            # St Giles In the Wood Parish Hall St Giles In the Wood TORRINGTON
+        # St Giles In the Wood Parish Hall St Giles In the Wood TORRINGTON
+        if record.polling_place_id == "8005":
             record = record._replace(polling_place_postcode="EX38 7JH")
 
-        if record.polling_place_id == "7078":
-            # Appledore - St Mary`s Church Hall, Appledore, BIDEFORD
-            record = record._replace(polling_place_postcode="EX39 1RL")
+        # Bradworthy Methodist Chapel - School Room North Road Bradworthy EX22 7TS
+        if record.polling_place_id == "7889":
+            record = record._replace(polling_place_postcode="")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.lstrip("0")
+        uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 in (
-            "EX39 6HN",
-            "EX39 6EP",
-            "EX39 6EN",
-            "EX39 6HB",
-            "EX39 5SL",
-            "EX39 1HA",
-            "EX39 1HB",
-        ):
-            # multi_address odd-looking station assignment
+        if uprn in [
+            "10002297638",  # GREAT DARRACOTT, TORRINGTON
+            "10090288565",  # 19 BUCKLAND VIEW, BIDEFORD
+            "10023353087",  # FOXLEIGH, ABBOTSHAM, BIDEFORD
+            "10023352955",  # CASTLEBARNS, ABBOTSHAM, BIDEFORD
+            "10002301906",  # FOLLYFOOT MANOR, SANDYMERE ROAD, NORTHAM, BIDEFORD
+            "100040373290",  # MARSHFORD NURSERIES, CHURCHILL WAY, NORTHAM, BIDEFORD
+            "100040374234",  # EARLSWOOD, DIDDYWELL ROAD, NORTHAM, BIDEFORD
+            "100040374229",  # KOVERSADA, DIDDYWELL ROAD, APPLEDORE, BIDEFORD
+            "100040370454",  # 2 GREEN LANE, APPLEDORE, BIDEFORD
+            "10023353009",  # LUNDY VIEW, ABBOTSHAM, BIDEFORD
+            "10003506157",  # CLIFFORD MILL, HIGHER CLOVELLY, BIDEFORD
+            "10002302579",  # KNAPP SHIPPEN, HARTLAND, BIDEFORD
+            "10003506169",  # WATERGAP, HARTLAND, BIDEFORD
+            "200001644184",  # SPRUCE COTTAGE, HARTLAND, BIDEFORD
+            "10002300015",  # THISTLEDOWN, BUCKLAND BREWER, BIDEFORD
+            "10003506186",  # HONEYSUCKLE COTTAGE ROAD PAST WEST ASH FARM, FRITHELSTOCK
+            "10002300509",  # 1 YEO FARM COTTAGES, YEO VALE, BIDEFORD
+            "10003507564",  # LITTLE LAMBERT, PETERS MARLAND, TORRINGTON
+            "10091080003",  # STORMWATCH MOBILE HOME, HOLSWORTHY
+            "10093913426",  # OLD STABLES CARAVAN, MIDDLECOTT, BRANDIS CORNER, HOLSWORTHY
+            "10002298999",  # BUCKHORN HOUSE, CLAWTON, HOLSWORTHY
+            "10003503734",  # CAREY VIEW, ASHMILL, ASHWATER, BEAWORTHY
+            "10093911854",  # MOON HOUSE, ASHMILL, ASHWATER, BEAWORTHY
+            "10093911853",  # BRIDGE HOUSE, ASHMILL, ASHWATER, BEAWORTHY
+        ]:
             return None
 
-        if uprn in [
-            "10002296905",  # EX226YB -> EX226LN : Four Acres, Derril, Pyworthy, HOLSWORTHY
-            "10002299062",  # EX215HA -> EX215EJ : Clarendon House, Ashwater Hill, Ashwater, BEAWORTHY
-            "10002299668",  # EX227ND -> EX227BN : Willow Spring, Beacon, HOLSWORTHY
-            "10002299686",  # EX395DY -> EX395DZ : Johns Cottage, 16 Bucks Mills, BIDEFORD
-            "10002300021",  # EX395NL -> EX395NN : Stonewold Bungalow, Collingsdown, Buckland Brewer, BIDEFORD
-            "10002300274",  # EX388LS -> EX388LR : Ford Haven, Downmoor Cross, Newton St Petrock, TORRINGTON, Devon
-            "10002301419",  # EX227DH -> EX227ND : The Hollies, Holsworthy Beacon, HOLSWORTHY
-            "10002301749",  # EX387JU -> EX387LA : Cranford Inn, St Giles In the Wood, TORRINGTON
-            "10003500004",  # EX395JH -> EX395JQ : Damn View, Coach Drive, BIDEFORD
-            "10003502700",  # EX388AX -> EX388AY : Oakimber, Limers Hill, TORRINGTON
-            "10003502703",  # EX388AX -> EX388AY : Talami, Mill Street Common, Limers Hill, TORRINGTON
-            "10003502708",  # EX388AX -> EX388AY : Crakyland, Mill Street Common, Limers Hill, TORRINGTON
-            "10003502709",  # EX388AX -> EX388AY : Wayfarers, Mill Street Common, Limers Hill, TORRINGTON
-            "10003504562",  # EX388DN -> EX388DL : Woodland Vale, New Street, TORRINGTON
-            "100040372654",  # EX391PU -> EX393PU : Culverkeys, Buckleigh Road, Westward Ho!, BIDEFORD
-            "100040372673",  # EX391PU -> EX393PU : 4 Southmoor, Buckleigh Road, Westward Ho!, BIDEFORD
-            "10013842863",  # EX385RA -> EX395RA : 42 Hartland Forest Golf & Leisure Parc, Woolsery, BIDEFORD
-            "10091078210",  # EX227TD -> EX227DT : Annexe, Underwood Hayes, South Wonford, Thornbury, HOLSWORTHY
-            "10093910069",  # EX395HN -> EX393HN : Mobile Home 1, Unit 3C Clovelly Road Industrial Estate, BIDEFORD
-            "10093912196",  # EX215HN -> EX215HD : Agricultural Workers Dwelling, Thorndon House, Ashwater, Beaworthy
-            "10023352605",  # EX395HQ -> EX215HQ : The Longhouse, West Road, Sheepwash, BEAWORTHY
-            "10003507766",  # EX388QH -> EX388QT : The Yard, Woolaton, Woolaton, Peters Marland, TORRINGTON
-            "10002297258",  # EX227HU -> EX227HX : 1 Hill View, HOLSWORTHY, Devon
+        if record.addressline6 in [
+            "EX39 3TP",
+            "EX39 3NZ",
+            "EX39 1HA",
+            "EX39 1HB",
+            "EX39 5ED",
+            "EX39 5PN",
+            "EX39 1PU",
+            "EX22 6QF",
+            "EX21 5HN",
+            "EX22 7TD",
+            "EX39 5HQ",
+            "EX22 7XE",
+            "EX39 2BH",
+            "EX22 7DQ",
+            "EX39 3BU",
+            "EX39 3DR",
+            "EX39 1LF",
+            "EX39 5JL",
+            "EX39 3LX",
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "10002299987",  # EX227DQ -> EX227DE : The Jays Forge, Thornbury, HOLSWORTHY
-            "10002299992",  # EX227DH -> EX227DQ : Kites, Strawberry Bank, Milton Damerel, HOLSWORTHY
-            "10023351252",  # EX198HA -> EX198PP : Jubilee Park Farm, Loosedown Cross, WINKLEIGH
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
