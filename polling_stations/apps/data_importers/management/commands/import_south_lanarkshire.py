@@ -357,7 +357,23 @@ SLK_EXCLUDE_STATIONS = (
     "1-airdrie-academy",
     "1-ailsa-nursery-centre",
     "1-abronhill-primary-school",
+    "1-st-marys-primary-school",
+    "2-st-marys-primary-school",
+    "3-st-marys-primary-school",
 )
+
+
+def fix_station_hashes(record):
+    # These fixes are to ensure station hash is unique
+    if (
+        record.pollingstationname == "St Mary's Primary School"
+        and record.pollingstationaddress_1 == "Cadzow Street"
+    ):
+        record = record._replace(
+            pollingstationname="St Mary's Primary School, Hamilton"
+        )
+
+    return record
 
 
 class Command(BaseHalaroseCsvImporter):
@@ -367,6 +383,7 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
+        record = fix_station_hashes(record)
         station_hash = self.get_station_hash(record)
         if station_hash in SLK_EXCLUDE_STATIONS:
             return None
@@ -397,17 +414,16 @@ class Command(BaseHalaroseCsvImporter):
             "G72 8FG",
         ]:
             return None
+        if record.uprn in ["484184237", "484184251"]:
+            return None
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+
+        record = fix_station_hashes(record)
         station_hash = self.get_station_hash(record)
+
         if station_hash in SLK_EXCLUDE_STATIONS:
             return None
 
-        if station_hash in [
-            "1-st-marys-primary-school",
-            "2-st-marys-primary-school",
-            "3-st-marys-primary-school",
-        ]:
-            return None
         return super().station_record_to_dict(record)
