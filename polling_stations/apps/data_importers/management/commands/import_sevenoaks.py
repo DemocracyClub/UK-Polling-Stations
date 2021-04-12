@@ -3,18 +3,18 @@ from data_importers.github_importer import BaseGitHubImporter
 
 class Command(BaseGitHubImporter):
     srid = 4326
-    council_id = "E07000111"
-    elections = ["parl.2019-12-12"]
+    council_id = "SEV"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Sevenoaks"
     geom_type = "geojson"
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
         return {
-            "internal_council_id": record["AREA_CODE"],
-            "name": "%s - %s" % (record["Name"], record["AREA_CODE"]),
+            "internal_council_id": record["AreaCode"],
+            "name": "%s - %s" % (record["Name"], record["AreaCode"]),
             "area": poly,
-            "polling_station_id": record["AREA_CODE"],
+            "polling_station_id": record["AreaCode"],
         }
 
     def station_record_to_dict(self, record):
