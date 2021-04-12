@@ -2,30 +2,30 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E09000011"
-    addresses_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-01.csv"
-    )
-    stations_name = (
-        "europarl.2019-05-23/Version 1/polling_station_export-2019-05-01.csv"
-    )
-    elections = ["europarl.2019-05-23"]
+    council_id = "GRE"
+    addresses_name = "2021-04-12T08:58:49.743842/polling_station_export-2021-04-11.csv"
+    stations_name = "2021-04-12T08:58:49.743842/polling_station_export-2021-04-11.csv"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
     csv_encoding = "windows-1252"
 
     def address_record_to_dict(self, record):
-        uprn = record.uprn.strip()
-        rec = super().address_record_to_dict(record)
+        uprn = record.uprn.strip().lstrip("0")
 
-        if record.houseid == "10006012":
-            rec["postcode"] = "SE8 3BU"
+        if uprn in [
+            "10010199305",  # 4-5 HILLREACH, LONDON
+            "10010240758",  # 5 OGILBY STREET, LONDON
+            "10010240756",  # 1 OGILBY STREET, LONDON
+            "10010240757",  # 3 OGILBY STREET, LONDON
+            "100020974501",  # 102A HERBERT ROAD, LONDON
+            "100020980261",  # 67 KINGSLEY WOOD DRIVE, LONDON
+            "100020989060",  # 209 MOORDOWN, LONDON
+            "10010227617",  # 292B PLUMSTEAD COMMON ROAD, PLUMSTEAD
+            "100020940599",  # 132 BEXLEY ROAD, LONDON
+        ]:
+            return None
 
-        if record.houseid == "2024576":
-            rec["postcode"] = "SE9 6UD"
+        if record.housepostcode in ["SE9 6SQ", "SE9 2BU", "SE10 0PR", "SE10 8GS"]:
+            return None
 
-        if record.houseid == "2074605":
-            rec["postcode"] = "SE2 0XW"
-
-        if uprn in ["10010247892", "10010256784"]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
