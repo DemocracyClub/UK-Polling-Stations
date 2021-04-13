@@ -7,8 +7,8 @@ class Command(BaseGitHubImporter):
 
     srid = 4326
     districts_srid = 4326
-    council_id = "E07000106"
-    elections = ["parl.2019-12-12"]
+    council_id = "CAT"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Canterbury"
     geom_type = "geojson"
 
@@ -21,15 +21,6 @@ class Command(BaseGitHubImporter):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
         code = record["ID"].strip()
         address = record["POLLING_PL"].strip()
-
-        # Ad-hoc fixs for parl.2019-12-12
-        # The points got updated in API, but the addresses didn't
-        if code == "CWI2":
-            address = "Thanington Neighbourhood Resource Centre\nThanington Road\nCanterbury\nCT1 3XE"
-        if code == "RCS2":
-            address = (
-                "Chartham Sports Club\nBeech Avenue\nChartham\nCanterbury\nCT4 7TA"
-            )
 
         if code in self.station_addresses and self.station_addresses[code] != address:
             raise ValueError(
