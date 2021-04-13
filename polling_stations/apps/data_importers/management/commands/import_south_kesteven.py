@@ -2,61 +2,47 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000141"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019SK.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019SK.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "SKE"
+    addresses_name = (
+        "2021-03-25T13:38:13.586764/S Kesteven New Democracy_Club__06May2021_2.tsv"
+    )
+    stations_name = (
+        "2021-03-25T13:38:13.586764/S Kesteven New Democracy_Club__06May2021_2.tsv"
+    )
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "10007252542":
-            rec["postcode"] = "NG32 3NG"
-
-        if uprn == "10007257471":
-            rec["postcode"] = "NG34 0NJ"
-
-        if uprn == "10007257235":
-            rec["postcode"] = "PE9 4NT"
-
-        if record.post_code in ("NG31 8NH",):
-            # Assigned polling station looks a bit suss
+        if uprn in [
+            "100030946733",  # TOLL BAR HOUSE UFFINGTON ROAD, STAMFORD
+            "100030901277",  # 64 BURGHLEY STREET, BOURNE
+            "100030901276",  # 60 BURGHLEY STREET, BOURNE
+            "10007275381",  # FLAT 59 LONDON ROAD, GRANTHAM
+            "10007276237",  # 86 THE DEEPINGS CARAVAN PARK TOWNGATE EAST, MARKET DEEPING
+        ]:
             return None
 
-        if uprn in [
-            "100030920062",  # NG321LT -> NG321LD : Bullimore`s Cottage, 89 Main Street, Denton, Grantham, Lincs
-            "10007253051",  # NG321AT -> NG321AN : The Corner Cottage, 5 Hungerton Hollow, Grantham, Lincs
-            "10007246148",  # NG321LT -> NG321LY : 42 Main Street, Woolsthorpe-By-Belvoir, Grantham, Lincs
-            "100032120092",  # NG321NW -> NG321LT : Anvil Cottage, Main Street, Woolsthorpe-By-Belvoir, Grantham, Lincs
-            "10007246156",  # NG321LX -> NG321LT : Hillside, 21 Main Street, Woolsthorpe-By-Belvoir, Grantham, Lincs
-            "10007246168",  # NG321LX -> NG321LT : The Hollies, Main Street, Woolsthorpe-By-Belvoir, Grantham, Lincs
-            "10007252200",  # PE69SF -> PE69NG : Stowe Farm, Langtoft, Peterborough
-            "100030933880",  # PE68EW -> PE68EN : 22 Horsegate, Deeping St James, Peterborough
-            "10007252327",  # PE94AP -> PE94PE : Old Hall Farmhouse, Main Street, Wilsthorpe, Stamford, Lincs
-            "10007252351",  # PE94PE -> PE94DT : Mill Farm, Holywell, Stamford, Lincs
-            "10007248918",  # NG334JQ -> NG334QB : The Old Rectory, Church Lane, Creeton, Grantham, Lincs
-            "10007263316",  # NG319JZ -> NG316JZ : Flat 4 Market View, 61-62 Westgate, Grantham, Lincs
-            "10007246209",  # NG334HE -> NG334DH : Shangri-La, Ponton Road, Boothby Pagnell, Grantham, Lincs
-            "100030918020",  # NG323AU -> NG322AU : Cornerway, Hough Road, Brandon, Grantham, Lincs
-            "100030936930",  # PE68LQ -> PE68GD : Karamanda, 80 Towngate East, Market Deeping, Peterborough
-            "100030933837",  # PE68EB -> PE68ED : The Laurels Residential Home, 45 High Street, Market Deeping, Peterborough
-            "10007247477",  # NG323AU -> NG323AP : Glenville, Main Street, Carlton Scroop, Grantham, Lincs
-            "10007252178",  # NG323AY -> NG323SB : 4 Main Street, Sudbrook, Grantham, Lincs.
-            "100030919971",  # NG322LW -> NG322NH : Corner House, Main Road, Barkston, Grantham, Lincs
-            "10007242167",  # NG322DU -> NG322EF : Willow Top Farm, Gonerby Lane, Allington, Grantham, Lincs
-            "10007246399",  # NG334SP -> NG334SR : The Barn, Porters Lodge Farm, Morkery Lane, Castle Bytham, Grantham, Lincs.
-            "100030904285",  # PE109AE -> PE109EA : Flat Over Bank, R/o 4 North Street, Bourne, Lincs
+        if record.addressline6 in [
+            "NG32 1AT",
+            "NG33 4JQ",
+            "NG33 4HE",
+            "NG33 4SP",
+            "PE9 4PE",
+            "PE10 0AA",
+            "PE10 9RP",
+            "PE9 2XG",
+            "NG32 3AU",
+            "NG32 3AY",
+            "NG23 5HN",
+            "NG32 2LW",
+            "NG31 8RJ",
+            "NG31 9JZ",
+            "NG31 7QP",
+            "NG31 8AB",
+            "NG31 8NH",
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "10007248507",  # NG321LH -> NG318BY : Park Cottage, Park Lane, Denton, Grantham, Lincs
-            "200001873982",  # PE91QP -> PE91QL : Hazel Grove, Emlyns Street, Stamford, Lincs
-            "10007257592",  # PE100TT -> PE100TG : Gatehouse Cottage, Fen Road, Dowsby, Bourne, Lincs
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
