@@ -2,26 +2,28 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000090"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019havant.tsv"
-    )
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019havant.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "HAA"
+    addresses_name = "2021-03-25T12:55:41.884654/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-25T12:55:41.884654/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100062455644",  # PO88BB -> PO78NU : Plough & Barleycorn, Tempest Avenue, Cowplain, Waterlooville, Hampshire
-            "10013680951",  # PO107NH -> PO107DN : 1E St James Road, Emsworth, Hampshire
-            "10013675502",  # PO89UB -> PO89GX : 7A The Kestrels, 76 Eagle Avenue, Waterlooville, Hampshire
-            "10013679840",  # PO93EZ -> PO95EZ : 41 Tyler House, Bishopstoke Road, Havant, Hampshire
-            "10013679413",  # PO92DT -> PO93DT : 2 Mead Terrace, Hooks Lane, Bedhampton, Havant, Hampshire
+            "100062456253",  # 37 LONDON ROAD, COWPLAIN, WATERLOOVILLE
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        return rec
+        if record.addressline6 in [
+            "PO9 2DT",
+            "PO9 3EZ",
+            "PO8 8BB",
+            "PO10 7NH",
+            "PO10 7HN",
+            "PO8 9UB",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
