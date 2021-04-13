@@ -43,10 +43,21 @@ class Command(BaseHalaroseCsvImporter):
 
         # ST MARYS CHURCH HALL BRYN EGLWYS CROESYCEILIOG CWMBRAN TORFAEN NP44  2E - changes two stations with same address
         if record.pollingstationname == "ST MARYS CHURCH HALL":
-            record = record._replace(pollingstationpostcode="NP44  2EJ")
+            record = record._replace(pollingstationpostcode="NP44 2EJ")
 
         # THORNHILL4UTOO THORNHILL COMMUNITY CENTRE LEADON COURT THORNHILL CWMBRAN TORFAEN NP44 5YZ
         if record.pollingstationname == "THORNHILL4UTOO":
             record = record._replace(pollingstationpostcode="NP44 5TZ")
+
+        # GLASLYN COMMUNITY CENTRE GLASLYN COURT CROESYCEILIOG CWMBRAN TORFAEN - station change
+        if record.pollingstationname == "GLASLYN COMMUNITY CENTRE":
+            record = record._replace(
+                pollingstationname="WOODLAND ROAD SOCIAL CENTRE",
+                pollingstationaddress_1="CWMBRAN",
+                pollingstationaddress_2="TORFAEN",
+                pollingstationaddress_3="",
+                pollingstationaddress_4="",
+                pollingstationpostcode="NP44 2DZ",
+            )
 
         return super().station_record_to_dict(record)
