@@ -2,26 +2,28 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000220"
-    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
-    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "RUG"
+    addresses_name = "2021-03-25T13:16:40.725865/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-03-25T13:16:40.725865/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "10010524278":
-            rec["postcode"] = "CV7 9LX"
-
         if uprn in [
-            "100070189342"  # CV227JT -> CV227JS : 83 Lawford Lane, Bilton, Rugby
+            "10010525228",  # 46 STATION AVENUE, HOULTON, RUGBY
+            "10010504659",  # FLAT, BELL & BARGE, BROWNSOVER ROAD, RUGBY
         ]:
-            rec["accept_suggestion"] = False
-
-        if record.addressline6.strip() in ["CV21 1SB", "CV23 9DU", "CV23 9BG"]:
             return None
 
-        return rec
+        if record.addressline6 in [
+            "CV21 2TE",
+            "CV21 2EZ",
+            "CV22 6NR",
+            "CV23 1BP",
+            "CV23 1BT",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
