@@ -5,9 +5,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SOS"
     addresses_name = "2021-03-29T13:06:29.813153/Southend.csv"
     stations_name = "2021-03-29T13:06:29.813153/Southend.csv"
-    elections = [
-        # "2021-05-06"
-    ]
+    elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
         if record.addressline6 in [
