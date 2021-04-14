@@ -8,6 +8,20 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2021-05-06"]
     csv_delimiter = ","
 
+    def get_stations(self):
+        stations = super().get_stations()
+        stations = [
+            record for record in stations if record.streetname != "OTHER ELECTORS"
+        ]
+        return stations
+
+    def get_addresses(self):
+        addresses = super().get_stations()
+        addresses = [
+            record for record in addresses if record.streetname != "OTHER ELECTORS"
+        ]
+        return addresses
+
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
@@ -39,3 +53,14 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        if record.adminarea not in [
+            "EAST DUNBARTONSHIRE",
+            "GLASGOW",
+        ] and record.pollingstationname not in [
+            "HILLHEAD COMMUNITY CENTRE",
+            "LENNOXTOWN PRIMARY SCHOOL",
+        ]:
+            return None
+        return super().station_record_to_dict(record)
