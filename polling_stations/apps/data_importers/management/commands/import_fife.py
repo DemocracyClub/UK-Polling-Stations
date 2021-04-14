@@ -1,13 +1,8 @@
-from data_importers.management.commands import BaseScotlandSpatialHubImporter
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseScotlandSpatialHubImporter):
-    council_id = "S12000047"
-    council_name = "Fife"
-    elections = ["europarl.2019-05-23"]
-
-    def district_record_to_dict(self, record):
-        if record[0].startswith("999ZZ"):  # Fife reservoirs
-            return None
-        rec = super().district_record_to_dict(record)
-        return rec
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "FIF"
+    addresses_name = "2021-04-12T09:21:22.730934/Fife E8 DC Polling Districts.csv"
+    stations_name = "2021-04-12T09:21:22.730934/Fife E8 DC Polling Stations.csv"
+    elections = ["2021-05-06"]
