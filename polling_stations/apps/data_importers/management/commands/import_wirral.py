@@ -3,25 +3,23 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E08000015"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019Wirral.csv"
-    )
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019Wirral.csv"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "WRL"
+    addresses_name = "2021-03-25T18:36:07.708279/wirral_deduped.tsv"
+    stations_name = "2021-03-25T18:36:07.708279/wirral_deduped.tsv"
+    elections = ["2021-05-06"]
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
 
         # Marlowe Road URC Hall
-        if record.polling_place_id in ["5873"]:
+        if record.polling_place_id in ["7516", "7513"]:
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-3.050648, 53.417306, srid=4326)
             return rec
 
         # user issue report #87
         # The Grange Public House
-        if record.polling_place_id == "5895":
+        if record.polling_place_id == "7536":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-3.122875, 53.396797, srid=4326)
             return rec
@@ -29,56 +27,63 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "42194145":
+        if uprn in [
+            "42194110",  # CHARTWELL GAYTON STABLES CHESTER ROAD, GAYTON
+            "42007082",  # 103B BARNSTON ROAD, HESWALL, WIRRAL
+            "42197144",  # 38A FENDER WAY, PRENTON
+            "42192662",  # FRANKBY HALL FRANKBY CEMETERY MONTGOMERY HILL, FRANKBY
+            "42193157",  # THE HAYLOFT, FRANKBY ROAD, FRANKBY, WIRRAL
+            "42198324",  # 1 MANOR FARM BARN FRANKBY ROAD, FRANKBY
+            "42198325",  # 2 MANOR FARM BARN FRANKBY ROAD, FRANKBY
+            "42193209",  # THE BARN, FRANKBY ROAD, FRANKBY, WIRRAL
+            "42005428",  # GROUND FLOOR FLAT 41 AVONDALE ROAD, HOYLAKE
+            "42005429",  # FIRST FLOOR FLAT 41 AVONDALE ROAD, HOYLAKE
+            "42195941",  # 102A MARKET STREET, HOYLAKE
+            "42003905",  # 21A ARROWE PARK ROAD, WIRRAL
+            "42198028",  # 21 BURDEN ROAD, MORETON
+            "42135668",  # WAGNER DEVELOPMENTS LIMITED, 30 DINSDALE ROAD, BROMBOROUGH
+            "42199810",  # FLAT 9, MERSEY GARDENS, OLD CHESTER ROAD, BIRKENHEAD
+            "42192936",  # FLAT 3 55-57 OLD CHESTER ROAD, TRANMERE
+            "42199950",  # BEDSIT 3 181 OLD CHESTER ROAD, TRANMERE
+            "42199948",  # BEDSIT 1 181 OLD CHESTER ROAD, TRANMERE
+            "42199951",  # BEDSIT 4 181 OLD CHESTER ROAD, TRANMERE
+            "42199949",  # BEDSIT 2 181 OLD CHESTER ROAD, TRANMERE
+            "42200745",  # BEDSIT 2 120 WOODCHURCH LANE, PRENTON
+            "42200748",  # BEDSIT 5 120 WOODCHURCH LANE, PRENTON
+            "42200747",  # BEDSIT 4 120 WOODCHURCH LANE, PRENTON
+            "42200746",  # BEDSIT 3 120 WOODCHURCH LANE, PRENTON
+            "42200744",  # BEDSIT 1 120 WOODCHURCH LANE, PRENTON
+            "42193468",  # 84B WOODCHURCH LANE, BIRKENHEAD
+            "42127048",  # 84C WOODCHURCH LANE, BIRKENHEAD
+            "42198034",  # FLAT 6, 90 WOODCHURCH LANE, BIRKENHEAD
+            "42179121",  # 42 CLIFTON ROAD, TRANMERE
+            "42179120",  # 41 CLIFTON ROAD, BIRKENHEAD
+            "42196854",  # BEDSIT 5 33 CLIFTON ROAD, TRANMERE
+            "42196852",  # BEDSIT 3 33 CLIFTON ROAD, TRANMERE
+            "42196850",  # BEDSIT 1 33 CLIFTON ROAD, TRANMERE
+            "42203083",  # BASEMENT FLAT 33 CLIFTON ROAD, TRANMERE
+            "42196853",  # BEDSIT 4 33 CLIFTON ROAD, TRANMERE
+            "42026498",  # 33 CLIFTON ROAD, BIRKENHEAD
+            "42196851",  # BEDSIT 2 33 CLIFTON ROAD, TRANMERE
+            "42196855",  # BEDSIT 6 33 CLIFTON ROAD, TRANMERE
+            "42200795",  # BEDSIT 4 3 CLIFTON ROAD, TRANMERE
+            "42200794",  # BEDSIT 3 3 CLIFTON ROAD, TRANMERE
+            "42200793",  # BEDSIT 2 3 CLIFTON ROAD, TRANMERE
+            "42200796",  # BEDSIT 5 3 CLIFTON ROAD, TRANMERE
+            "42200792",  # BEDSIT 1 3 CLIFTON ROAD, TRANMERE
+            "42200833",  # BEDSIT 4 5 CLIFTON ROAD, TRANMERE
+            "42200832",  # BEDSIT 3 5 CLIFTON ROAD, TRANMERE
+            "42200831",  # BEDSIT 2 5 CLIFTON ROAD, TRANMERE
+            "42200834",  # BEDSIT 5 5 CLIFTON ROAD, TRANMERE
+            "42200830",  # BEDSIT 1 5 CLIFTON ROAD, TRANMERE
+            "42005155",  # TOP FLOOR FLAT 9 ATHERTON STREET, NEW BRIGHTON
+            "42193092",  # 11 GRANGE ROAD WEST, BIRKENHEAD
+        ]:
             return None
 
-        if uprn == "42191192":
-            rec["postcode"] = "CH62 1AB"
-            rec["accept_suggestion"] = False
+        if record.addressline6 in ["CH62 8AB", "CH49 2SE", "CH49 3PG", "CH60 8QH"]:
+            return None
 
-        if (
-            record.addressline1.strip() == "136 Wallasey Road"
-            and record.addressline2.strip() == "Wallasey"
-            and record.addressline3.strip() == "Wirral"
-        ):
-            rec["postcode"] = "CH44 2AF"
-
-        if uprn in [
-            "42072401",  # CH434TS -> CH431TS : 29 Mather Road, Oxton, Wirral
-            "42072402",  # CH434TS -> CH431TS : 29A Mather Road, Oxton, Wirral
-            "42072403",  # CH434TS -> CH431TS : 29B Mather Road, Oxton, Wirral
-            "42081451",  # CH439TT -> CH439UE : Wexford Ridge, Noctorum Lane, Oxton, Wirral
-            "42181578",  # CH474AU -> CH472DH : 10 Market Street, Hoylake, Wirral
-        ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "42092437",  # CH427LQ -> CH427LG : 5 Prenton Road East, Higher Tranmere, Wirral
-            "42168891",  # CH414DB -> CH414DP : Flat 1, 70 Grange Road West, Claughton, Wirral
-            "42168892",  # CH414DB -> CH414DP : Flat 2, 70 Grange Road West, Claughton, Wirral
-            "42080139",  # CH628AB -> CH628BP : Plymyard Lodge, New Chester Road, Bromborough, Wirral
-            "42156413",  # CH421PU -> CH421PP : Flat 1 Summer Hill, The Dell, Rock Ferry, Wirral
-            "42156414",  # CH421PU -> CH421PP : Flat 2 Summer Hill, The Dell, Rock Ferry, Wirral
-            "42156415",  # CH421PU -> CH421PP : Flat 3 Summer Hill, The Dell, Rock Ferry, Wirral
-            "42156416",  # CH421PU -> CH421PP : Flat 4 Summer Hill, The Dell, Rock Ferry, Wirral
-            "42166053",  # CH494LR -> CH494NN : 36A Overchurch Road, Upton, Wirral
-            "42085274",  # CH494LR -> CH494NN : 36 Overchurch Road, Upton, Wirral
-            "42005952",  # CH431US -> CH435RE : Flat 1, 56 Balls Road, Oxton, Wirral
-            "42005953",  # CH431US -> CH435RE : Flat 2, 56 Balls Road, Oxton, Wirral
-            "42005954",  # CH431US -> CH435RE : Flat 3, 56 Balls Road, Oxton, Wirral
-            "42000172",  # CH447BH -> CH484DD : 1 Acacia Grove, Wallasey, Wirral
-            "42181259",  # CH426PU -> CH625BQ : Flat, 30 Bebington Road, Higher Tranmere, Wirral
-            "42016382",  # CH636JA -> CH636HY : Home Farm, Brimstage Lane, Brimstage, Wirral
-            "42166160",  # CH630NN -> CH630NB : 1 Raby Hall Farm Cottage, Raby Hall Road, Raby, Wirral
-            "42189392",  # CH431TE -> CH431SZ : Grove House, 1 Palm Grove, Claughton, Wirral
-            "42120863",  # CH437PN -> CH437PT : Beverley, 39 Vyner Road South, Prenton, Wirral
-            "42132798",  # CH616UZ -> CH616UY : 75 Irby Road, Heswall, Wirral
-            "42119402",  # CH472AN -> CH472AW : 21A Valentia Road, Hoylake, Wirral
-            "42118874",  # CH496LN -> CH496LP : Cherie Field, Upland Road, Upton, Wirral
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
