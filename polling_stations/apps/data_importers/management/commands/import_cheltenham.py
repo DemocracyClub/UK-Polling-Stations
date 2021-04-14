@@ -2,36 +2,35 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E07000078"
+    council_id = "CHT"
     addresses_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-08chelt.csv"
+        "2021-03-25T14:01:18.317528/Cheltenham polling_station_export-2021-03-24.csv"
     )
     stations_name = (
-        "parl.2019-12-12/Version 1/polling_station_export-2019-11-08chelt.csv"
+        "2021-03-25T14:01:18.317528/Cheltenham polling_station_export-2021-03-24.csv"
     )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
-        rec = super().address_record_to_dict(record)
-
-        if uprn in ["100121231365", "100121231366"]:
-            rec["postcode"] = "GL51 6QL"
-            return rec
-
-        if uprn == "100120389274":
-            rec["postcode"] = "GL52 2BT"
-            return rec
-
-        if record.houseid in ["63059", "54850"]:
-            return None
 
         if uprn in [
-            "200002683968",
-            "200002683961",
-            "10024305502",
+            "200002686059",  # 3A CLARENCE ROAD, CHELTENHAM
+            "100120409897",  # BUXTON, NAUNTON LANE, CHELTENHAM
+            "200001494338",  # BASEMENT FLAT, NORTHWICK, DOURO ROAD, CHELTENHAM
+            "10091671112",  # FLAT ABOVE, SOUND & VISION EXPRESS LTD, MEAD ROAD, CHELTENHAM
         ]:
             return None
 
-        return rec
+        if record.housepostcode in [
+            "GL52 2ES",
+            "GL53 7AJ",
+            "GL52 6RN",
+            "GL53 0HL",
+            "GL50 2DZ",
+            "GL50 3RB",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
