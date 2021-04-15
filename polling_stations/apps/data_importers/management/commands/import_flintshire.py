@@ -2,45 +2,89 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "W06000005"
-    addresses_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019flint.tsv"
-    stations_name = "parl.2019-12-12/Version 2/Democracy_Club__12December2019flint.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "FLN"
+    addresses_name = (
+        "2021-03-29T09:58:34.913328/Flintshire Democracy_Club__06May2021.tsv"
+    )
+    stations_name = (
+        "2021-03-29T09:58:34.913328/Flintshire Democracy_Club__06May2021.tsv"
+    )
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
-    allow_station_point_from_postcode = False
-
-    def station_record_to_dict(self, record):
-        if record.polling_place_id == "5162":
-            # Parish Hall/Neuadd Y Plwyf Halkyn/Helygain
-            record = record._replace(polling_place_postcode="CH8 8BU")
-        if record.polling_place_id == "5237":
-            # Ysgol Y LLan, Whitfield
-            record = record._replace(polling_place_uprn="10013703522")
-        if record.polling_place_id == "5094":
-            # War Memorial Institute, Rhydymwyn
-            record = record._replace(polling_place_uprn="10090462071")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         if record.addressline6 in [
-            "CH4 9BS",
-            "CH8 7AX",
-            "CH6 5NF",
+            "CH5 3AR",
+            "CH5 3ER",
+            "CH5 3ES",
+            "CH5 3DL",
+            "CH4 0PE",
+            "CH4 0PT",
+            "CH7 2ED",
+            "CH7 2JP",
+            "CH7 2PU",
+            "CH7 3LH",
+            "CH7 6LG",
+            "CH7 2JR",
+            "CH7 3NG",
+            "CH7 3JU",
+            "CH7 3JQ",
+            "CH7 6RH",
+            "CH5 3EF",
+            "LL12 9DU",
+            "LL12 9AE",
+            "LL12 9EF",
+            "LL12 9HN",
+            "LL12 9DG",
+            "CH5 3LY",
+            "CH5 3LZ",
+            "CH5 3EH",
+            "LL12 9AY",
+            "LL12 9HE",
+            "CH5 3PF",
+            "CH5 1QR",
+            "CH5 1PD",
+            "CH7 5PW",
+            "CH8 8LR",
+            "CH8 8NY",
+            "CH8 8NF",
+            "CH7 5RD",
+            "CH8 8JG",
+            "CH8 8PP",
+            "CH7 6PA",
+            "CH8 8JN",
+            "CH7 5DJ",
+            "CH6 5TP",
+            "CH8 7EZ",
+            "CH8 7ED",
+            "CH7 5JS",
+            "CH8 8DL",
+            "CH8 8JY",
+            "CH8 8DF",
+            "CH8 8HE",
+            "CH8 8LG",
+            "CH8 7SJ",
+            "CH8 7NT",
+            "CH8 7PG",
+            "CH8 7PQ",
+            "CH7 6QQ",
+            "CH8 9AE",
+            "CH8 9AW",
+            "CH7 6TH",
+            "CH7 6SD",
+            "CH7 6YX",
+            "CH7 6LQ",
+            "CH7 6EH",
+            "CH7 6BA",
+            "CH7 6AH",
         ]:
-            return None
+            return None  # split
 
         if record.addressline6 == "CH7 2QC":
             record = record._replace(addressline6="CH7 2QG")
 
         if record.addressline6 == "CH4 0TO":
             record = record._replace(addressline6="CH4 0TP")
-
-        if record.addressline6 == "CH5 DR":
-            record = record._replace(addressline6="CH5 4DR")
-
-        if record.addressline6 == "CH5 2£J":
-            record = record._replace(addressline6="CH5 2EJ")
 
         return super().address_record_to_dict(record)
