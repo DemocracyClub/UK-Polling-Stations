@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DUR"
-    addresses_name = "2021-03-19T15:47:40.490727/durham_deduped.csv"
-    stations_name = "2021-03-19T15:47:40.490727/durham_deduped.csv"
+    addresses_name = "2021-04-14T17:38:11.589300/Democracy_Club__06May2021_Durham County Council_Update.CSV"
+    stations_name = "2021-04-14T17:38:11.589300/Democracy_Club__06May2021_Durham County Council_Update.CSV"
     elections = ["2021-05-06"]
     csv_delimiter = ","
 
@@ -53,7 +53,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             "SR7 7NE",
             "DL12 9UR",
-            "DH1 2RZ",
             "DL4 1DN",
             "SR7 9BS",
             "SR7 7HX",
@@ -68,6 +67,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "DL16 6XF",
             "DH7 7RD",
             "DL13 5RX",
+            "DH6 4BU",
+            "DL16 6JW",
+            "DH9 0RG",
+            "DL16 7PG",
+            "DL13 4NN",
+            "DH1 2JR",
+            "DH8 0TZ",
+            "DH9 9EF",
+            "DL14 8BB",
+            "DL13 2RF",
+            "DH8 0TN",
         ]:
             return None
 
