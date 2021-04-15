@@ -2,43 +2,36 @@ from data_importers.ems_importers import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E09000004"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/L B Bexley - Democracy_Club__12December2019.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/L B Bexley - Democracy_Club__12December2019.tsv"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "BEX"
+    addresses_name = "2021-04-15T09:27:46.954886/Democracy_Club__06May2021 (1).tsv"
+    stations_name = "2021-04-15T09:27:46.954886/Democracy_Club__06May2021 (1).tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
         # Point supplied for Footscray Baptist Church is miles off
-        if record.polling_place_id == "1804":
+        if record.polling_place_id == "2458":
             record = record._replace(
                 polling_place_easting="547145", polling_place_northing="171147"
             )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.lstrip("0")
+        uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6.strip() in ("DA14 6NG", "DA14 6NE"):
-            # The only 6NG property should be 6NE, which is itself split across stations in a surprising way
+        if uprn in [
+            "100020267460",  # 69 CUMBERLAND AVENUE, WELLING
+            "10023303792",  # FLAT 3, LAWRENCE COURT, 120 MAIN ROAD, SIDCUP
+            "10023303790",  # FLAT 1, LAWRENCE COURT, 120 MAIN ROAD, SIDCUP
+            "10023303794",  # FLAT 5, LAWRENCE COURT, 120 MAIN ROAD, SIDCUP
+            "10023303793",  # FLAT 4, LAWRENCE COURT, 120 MAIN ROAD, SIDCUP
+            "10023303796",  # FLAT 7, LAWRENCE COURT, 120 MAIN ROAD, SIDCUP
+            "10023303791",  # FLAT 2, LAWRENCE COURT, 120 MAIN ROAD, SIDCUP
+            "10023303795",  # FLAT 6, LAWRENCE COURT, 120 MAIN ROAD, SIDCUP
+        ]:
             return None
 
-        if uprn in [
-            "10090793686",  # DA74AQ -> DA74QW : 2A Pickford Road, Bexleyheath, Kent
-            "100020221033",  # DA14RN -> DA14RS : 23A Iron Mill Lane, Crayford, Kent
-            "100020221034",  # DA14RN -> DA14RS : 23 Iron Mill Lane, Crayford, Kent
-        ]:
-            rec["accept_suggestion"] = True
+        if record.addressline6 in ["DA15 7DU", "DA7 6BS"]:
+            return None
 
-        if uprn in [
-            "100023522937",  # DA68DP -> DA68HZ : 9 Standard Road, Bexleyheath, Kent
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
