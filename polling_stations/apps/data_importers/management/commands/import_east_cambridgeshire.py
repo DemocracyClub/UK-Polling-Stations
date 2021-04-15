@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "ECA"
     addresses_name = (
-        "2021-03-04T16:04:21.709479/Democracy Club - Polling Districts 2021.csv"
+        "2021-03-26T11:32:58.058350/Democracy Club - polling Districts 2021 V2.csv"
     )
     stations_name = (
-        "2021-03-04T16:04:21.709479/Democracy club - Polliong Stations 2021.csv"
+        "2021-03-26T11:32:58.058350/Democracy Club - Polling Stations 2021 V2.csv"
     )
     elections = ["2021-05-06"]
 
@@ -21,7 +21,12 @@ class Command(BaseDemocracyCountsCsvImporter):
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
-
+        if record.stationcode in [
+            "COV17/1",
+            "NEW43/1",
+            "NEW44/1",
+        ]:
+            return None
         if uprn in ["10002611549"]:
             return None
 
