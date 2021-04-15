@@ -9,8 +9,8 @@ class Command(BaseGitHubImporter):
 
     srid = 27700
     districts_srid = 27700
-    council_id = "E07000240"
-    elections = ["parl.2019-12-12"]
+    council_id = "SAL"
+    elections = ["2021-05-06"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-StAlbans"
     geom_type = "geojson"
 
@@ -56,11 +56,17 @@ class Command(BaseGitHubImporter):
             record, self.geom_type, self.get_srid("stations")
         )
 
+        # Most stations are tiny circular polygons...
+        if location.geom_type == "Point":
+            point = location
+        else:
+            point = location.centroid
+
         return {
             "internal_council_id": record["PD"],
             "address": record["LOCATION"],
             "postcode": "",
-            "location": location,
+            "location": point,
         }
 
     def post_import(self):
