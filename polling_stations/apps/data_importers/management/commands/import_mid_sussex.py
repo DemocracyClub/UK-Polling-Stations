@@ -1,44 +1,53 @@
 from django.contrib.gis.geos import Point
+
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000228"
-    addresses_name = "parl.2019-12-12/Version 1/merged.tsv"
-    stations_name = "parl.2019-12-12/Version 1/merged.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "MSS"
+    addresses_name = (
+        "2021-03-26T11:11:22.528819/Democracy_Club__06May2021 Mid Sussex.tsv"
+    )
+    stations_name = (
+        "2021-03-26T11:11:22.528819/Democracy_Club__06May2021 Mid Sussex.tsv"
+    )
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
     csv_encoding = "windows-1252"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        if record.polling_place_id == "2941":
+        # Church Hall, St Edward the Confessor Church
+        if record.polling_place_id == "3445":
             rec["location"] = Point(-0.14863, 50.96048, srid=4326)
 
         return rec
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in ["10070631101", "10070629962"]:
+        if uprn in [
+            "10093413710",  # 13 THE HOLT, HAYWARDS HEATH
+            "10070621745",  # 149 ROYAL GEORGE ROAD, BURGESS HILL
+        ]:
             return None
 
-        if record.addressline6 == "RH19 1ET":
+        if record.post_code in [
+            "RH19 2DL",
+            "RH10 4SH",
+            "RH19 4LF",
+            "RH16 2QG",
+            "RH16 2QB",
+            "RH16 2QF",
+            "RH17 5AL",
+            "RH17 5UQ",
+            "RH15 8AZ",
+            "RH15 9QU",
+            "BN6 9NE",
+            "RH16 4ET",
+            "RH19 1ET",
+        ]:
             return None
 
-        if uprn in [
-            "10070622514"  # RH162QB -> RH162QE : 2 Diamond Cottages, Snowdrop Lane, Lindfield, Haywards Heath, West Sussex
-        ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "10070641062",  # RH104HU -> RH104HQ : The Granary, Down Park Farm, Sandy Lane, Crawley Down, Crawley, West Sussex
-            "10070644408",  # RH164SA -> RH164RY : Shelter Belt Cottage, Heaselands, Isaacs Lane, Haywards Heath, West Sussex
-            "100062201175",  # RH162QY -> RH162HZ : Hangmans Acre Cottage, Ardingly Road, Lindfield, Haywards Heath, West Sussex
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
