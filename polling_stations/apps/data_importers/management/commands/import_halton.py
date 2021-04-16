@@ -9,9 +9,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # Scout Hut, Hall Avenue, Widnes
+        # Correction from Council
+        # Scout Hut, Hall Avenue, Widnes -> St Michael with St Thomas Church
         if record.polling_place_id == "2404":
-            record = record._replace(polling_place_postcode="WA8 4PU")
+            record = record._replace(
+                polling_place_name="St Michael with St Thomas Church",
+                polling_place_address_1="Ditchfield Road",
+                polling_place_address_2="Widnes",
+                polling_place_address_3="",
+                polling_place_address_4="",
+                polling_place_postcode="WA8 8XR",
+                polling_place_easting="",
+                polling_place_northing="",
+            )
 
         if record.polling_place_id in [
             "2437",  # Mobile Polling Station Galway Ave. Widnes
