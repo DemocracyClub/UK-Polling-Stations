@@ -1,57 +1,43 @@
-"""
-Import Redbridge
-
-note: this script takes quite a long time to run
-"""
-from data_importers.management.commands import BaseCsvStationsCsvAddressesImporter
-from data_finder.helpers import geocode_point_only, PostcodeError
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseCsvStationsCsvAddressesImporter):
-    """
-    Imports the Polling Station data from Redbridge Council
-    """
-
-    council_id = "E09000026"
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = "RDB"
     addresses_name = (
-        "rev01-2016/LLPG Addresses - Polling Station Finder - EU referendum.csv"
+        "2021-04-19T10:11:20.029316/Redbridge Democracy_Club__06May2021.CSV"
     )
-    stations_name = "rev01-2016/Polling Stations - EU referendum.csv"
-    elections = ["ref.2016-06-23"]
-
-    def station_record_to_dict(self, record):
-
-        # no points supplied, so attempt to attach them by geocoding
-        if record.postcode:
-            try:
-                location_data = geocode_point_only(record.postcode)
-                location = location_data.centroid
-            except PostcodeError:
-                location = None
-        else:
-            location = None
-
-        return {
-            "internal_council_id": record.district_code.strip(),
-            "postcode": record.postcode.strip(),
-            "address": record.address.strip(),
-            "location": location,
-        }
+    stations_name = "2021-04-19T10:11:20.029316/Redbridge Democracy_Club__06May2021.CSV"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-        address_parts = record.postal_address.strip().split(", ")
-        postcode = address_parts[-1]  # every address has a postcode :D
-        address = ", ".join(address_parts[:-1])
-
-        # There are 6 addresses which don't
-        # map to any station - exclude them
-        if not record.district_code:
+        if uprn in [
+            "10093036996",  # 40A STANLEY ROAD, ILFORD
+            "10094821359",  # 705C HIGH ROAD, ILFORD
+            "10094821358",  # FLAT 2, 705B HIGH ROAD, ILFORD
+            "10094821357",  # FLAT 1, 705B HIGH ROAD, ILFORD
+            "10094819765",  # 5 PORTLAND TERRACE, ILFORD
+            "10094820912",  # 6 PORTLAND TERRACE, ILFORD
+            "10093040462",  # 366B HORNS ROAD, ILFORD
+            "100022231842",  # 13 PERTH ROAD, ILFORD
+        ]:
             return None
 
-        # 20 exact dupes will be discarded
-        return {
-            "address": address,
-            "postcode": postcode,
-            "polling_station_id": record.district_code.strip(),
-        }
+        if record.addressline6 in [
+            "IG5 0QA",
+            "IG8 8PP",
+            "E18 1ED",
+            "RM6 4JF",
+            "IG1 4SS",
+            "IG3 8DN",
+            "IG1 1QF",
+            "IG1 2FP",
+            "IG1 4EL",
+            "IG5 0FF",
+            "IG6 3FA",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
