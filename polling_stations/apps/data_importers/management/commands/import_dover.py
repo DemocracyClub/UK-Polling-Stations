@@ -23,7 +23,7 @@ class Command(BaseGitHubImporter):
         }
 
     def station_record_to_dict(self, record):
-        if record["POLLING_DI"] == "PSHN":
+        if record["POLLING__1"] == "PAY" and record["OBJECTID"] == 199:
             return None
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
@@ -32,7 +32,7 @@ class Command(BaseGitHubImporter):
             location = location[0]
 
         address = "\n".join([record["NAME_OF_PO"], record["LOCATION"]])
-        codes = record["POLLING_DI"].split("&")
+        codes = record["POLLING__1"].split("&")
         stations = []
         for code in codes:
             stations.append(
