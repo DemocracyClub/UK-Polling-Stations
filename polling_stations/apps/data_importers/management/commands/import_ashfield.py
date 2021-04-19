@@ -2,38 +2,31 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000170"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019ashfield.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019ashfield.tsv"
-    )
+    council_id = "ASH"
+    addresses_name = "2021-03-29T10:18:22.398168/Ashfield Democracy_Club__06May2021.CSV"
+    stations_name = "2021-03-29T10:18:22.398168/Ashfield Democracy_Club__06May2021.CSV"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
-    elections = ["parl.2019-12-12"]
-    csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
+    def station_record_to_dict(self, record):
+
+        # The Summit Centre Room 2 Pavilion Road Kirkby in Ashfield Nottingham NG17 7LL
+        # changing to the same as The Summit Centre Room 1 Pavilion Road Kirkby In Ashfield Nottingham NG17 7LL
+        if record.polling_place_id == "3638":
+            record = record._replace(polling_place_easting="450822")
+            record = record._replace(polling_place_northing="356660")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "200003314149":
-            rec["postcode"] = "DE554PB"
-            rec["accept_suggestion"] = False
-
         if uprn in [
-            "100031234554",  # NG177GX -> NG177HJ : 1A Oak Street, Kirkby In Ashfield, Nottingham
-            "10070852165",  # NG175HS -> NG178HS : Flat 6, 5 Borders Avenue, Kirkby In Ashfield, Nottingham
-            "100031241226",  # NG178JR -> NG178JT : Waverley House, The Hill, Kirkby In Ashfield, Nottingham
-            "10001342248",  # NG177FU -> NG171FU : The Old Coach House, Clumber Street, Sutton In Ashfield
-            "100032100652",  # NG156LR -> NG157LS : Portland Park Lodge, Wood Lane, Hucknall, Nottingham
+            "100031248754",  # 31 COXMOOR ROAD, SUTTON-IN-ASHFIELD
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "100031229455"  # NG178AG -> NG172PA : 4 King Street, Kirkby In Ashfield, Nottingham
-        ]:
-            rec["accept_suggestion"] = False
+        if record.addressline6 in ["NG17 8BE", "NG17 8JR", "NG17 5HS"]:
+            return None
 
-        return rec
+        return super().address_record_to_dict(record)
