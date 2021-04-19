@@ -9,12 +9,10 @@ class Command(BaseShpStationsShpDistrictsImporter):
     stations_name = "2021-03-25T12:14:33.026795747/RVBC Polling Stations 2021.shp"
 
     def district_record_to_dict(self, record):
-        print(record)
         return {"internal_council_id": record[1], "name": record[2]}
 
     def station_record_to_dict(self, record):
         stations = []
-        print(record)
 
         name = record[1].strip()
         address = record[2].strip()
