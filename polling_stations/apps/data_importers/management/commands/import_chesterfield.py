@@ -2,44 +2,25 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000034"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019chesterf.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019chesterf.tsv"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "CHS"
+    addresses_name = "2021-04-01T14:48:16.336851/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-04-01T14:48:16.336851/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "100030109655",  # S403LA -> S403LZ : 1 Faversham Court, 145 Somersall Lane, Chesterfield
-        ]:
-            rec["accept_suggestion"] = True
+        if record.addressline6 in ["S43 1ER", "S40 3LA", "S41 9RL"]:
+            return None
 
-        if uprn in [
-            "74087237",  # S401GA -> S401DU : 1 Pottery Mews, Barker Lane, Brampton, Chesterfield
-            "74087238",  # S401GA -> S401DU : 2 Pottery Mews, Barker Lane, Brampton, Chesterfield
-            "74007391",  # S419RL -> S419QD : Dunston Cottage, Dunston Road, Dunston, Chesterfield
-        ]:
-            rec["accept_suggestion"] = False
+        if uprn in ["74085483"]:
+            return None
 
-        if uprn == "74085483":
-            rec["postcode"] = "S40 2NE"
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
-        if (
-            record.polling_place_id == "5468"
-        ):  # St Barnabas Church  Albert Road Old Whittington Chesterfield
-            record = record._replace(polling_place_postcode="S43 2BH")
-            record = record._replace(polling_place_address_2="New Whittington")
+        # Manor Centre Manor Road Brimington Chesterfield
+        if record.polling_place_id == "6217":
+            record = record._replace(polling_place_postcode="")
         return super().station_record_to_dict(record)
