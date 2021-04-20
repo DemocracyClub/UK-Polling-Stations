@@ -9,6 +9,7 @@ from django.core.management.base import BaseCommand
 from requests.exceptions import HTTPError
 from retry import retry
 from councils.models import Council, CouncilGeography
+from polling_stations.settings.constants.councils import WELSH_COUNCIL_NAMES
 
 
 def union_areas(a1, a2):
@@ -173,6 +174,11 @@ class Command(BaseCommand):
                 council.registration_postcode = registration["postcode"]
                 council.registration_phone_numbers = registration["tel"]
                 council.registration_website = registration["website"].replace("\\", "")
+
+            if council.council_id in WELSH_COUNCIL_NAMES:
+                council.name_translated["cy"] = WELSH_COUNCIL_NAMES[council.council_id]
+            elif council.name_translated.get("cy"):
+                del council.name_translated["cy"]
 
             council.save()
 
