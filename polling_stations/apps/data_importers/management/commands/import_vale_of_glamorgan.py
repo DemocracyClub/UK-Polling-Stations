@@ -1,43 +1,16 @@
-"""
-Import Vale of Glamorgan
-"""
-from data_importers.management.commands import BaseShpStationsShpDistrictsImporter
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    """
-    Imports the Polling Station data from Vale of Glamorgan
-    """
+class Command(BaseDemocracyCountsCsvImporter):
 
-    council_id = "W06000014"
-    districts_name = "parl.2017-06-08/Version 1/Polling Districts.shp"
-    stations_name = "parl.2017-06-08/Version 1/Polling Stations.shp"
-    elections = ["parl.2017-06-08"]
+    council_id = "VGL"
+    addresses_name = "2021-04-13T09:25:56.187046/Polling Districts.csv"
+    stations_name = "2021-04-13T09:25:56.187046/Polling Stations.csv"
 
-    def district_record_to_dict(self, record):
+    elections = ["2021-05-06"]
+    csv_encoding = "windows-1252"
 
-        # this address is missing from the stations file
-        # so put it in an object property where we can
-        # pick it up in station_record_to_dict()
-        if record[1] == "FD1":
-            self.fd1_address = record[5]
-
-        return {
-            "internal_council_id": record[1],
-            "name": record[2],
-            "polling_station_id": record[1],
-        }
-
-    def station_record_to_dict(self, record):
-
-        if record[0] == "FD1":
-            address = self.fd1_address
-        else:
-            address = record[2]
-
-        return {
-            "internal_council_id": record[0],
-            "postcode": "",
-            "address": address,
-            "polling_district_id": record[0],
-        }
+    def address_record_to_dict(self, record):
+        if record.postcode in ["CF62 6BA", "CF64 4TA", "CF71 7QR"]:
+            return None
+        return super().address_record_to_dict(record)
