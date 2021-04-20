@@ -1,58 +1,31 @@
-from data_importers.base_importers import BaseStationsAddressesImporter
+from data_importers.ems_importers import BaseHalaroseCsvImporter
 
 
-class Command(BaseStationsAddressesImporter):
-    srid = 27700
-    districts_srid = 27700
-    stations_filetype = "shp"
-    addresses_filetype = "shp"
-    council_id = "W06000019"
-    addresses_name = "parl.2017-06-08/Version 1/BGCBC Poll Districts.shp"
-    stations_name = "parl.2017-06-08/Version 1/POLLSTATIONS.shp"
-    elections = ["parl.2017-06-08"]
+class Command(BaseHalaroseCsvImporter):
 
-    def parse_string(self, text):
-        try:
-            return text.strip().decode("windows-1252")
-        except AttributeError:
-            return text.strip()
-
-    def address_record_to_dict(self, record):
-        record = record.record
-        address_parts = [self.parse_string(x) for x in record[2:8]]
-        address_parts = [x for x in address_parts if x]
-        address = ", ".join(address_parts)
-        return {
-            "address": address,
-            "postcode": self.parse_string(record[9]),
-            "polling_station_id": self.parse_string(record[1]),
-        }
+    council_id = "BGW"
+    addresses_name = (
+        "2021-03-29T15:39:51.593346/Blaenau Gwent polling_station_export-2021-03-29.csv"
+    )
+    stations_name = (
+        "2021-03-29T15:39:51.593346/Blaenau Gwent polling_station_export-2021-03-29.csv"
+    )
+    elections = ["2021-05-06"]
+    csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-        stations = []
-        codes = self.parse_string(record[1]).split("/")
-        for code in codes:
-            code = code.strip()
-            stations.append(
-                {
-                    "internal_council_id": code,
-                    "postcode": self.parse_string(record[6]),
-                    "address": "\n".join(
-                        [self.parse_string(record[4]), self.parse_string(record[5])]
-                    ),
-                }
-            )
-        return stations
+        # EBENEZER CHAPEL VESTRY
+        if record.pollingstationnumber in [
+            "62",  # EBENEZER CHAPEL VESTRY
+            "54",  # SCOUT HUT, VICTOR ROAD
+            "25",  # ST. JOHN’S AMBULANCE HALL
+        ]:
+            record = record._replace(pollingstationpostcode="")
+        return super().station_record_to_dict(record)
 
+    def address_record_to_dict(self, record):
 
-"""
-There are 1,562 properties which have a district code which does not correspond to a station.
+        if record.housepostcode in ["NP23 5DH", "NP13 3AQ"]:
+            return None
 
-The district codes are:
-BD0001
-BD0002
-CF0001
-CF0002
-Q00001
-Q00002
-"""
+        return super().address_record_to_dict(record)
