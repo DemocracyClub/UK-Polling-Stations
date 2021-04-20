@@ -1,47 +1,31 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.gis.geos import Point
-from data_importers.management.commands import BaseCsvStationsCsvAddressesImporter
-from addressbase.models import Address
+from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseCsvStationsCsvAddressesImporter):
+class Command(BaseDemocracyCountsCsvImporter):
     """
     Imports the Polling Station data from Ceredigion
     """
 
-    council_id = "W06000008"
-    addresses_name = "Ceredigion_Properties_withheaders.csv"
-    stations_name = "Ceredigion_Polling_Stations_processed.csv"
-    srid = 27700
+    council_id = "CGN"
+    addresses_name = (
+        "2021-04-07T14:45:08.852408/DEMOCRACY CLUB - POLLING DISTRICTS 30235.csv"
+    )
+    stations_name = (
+        "2021-04-07T14:45:08.852408/DEMOCRACY CLUB - POLLING STATIONS (2).csv"
+    )
     csv_encoding = "latin-1"
-    elections = ["local.ceredigion.2017-05-04", "parl.2017-06-08"]
-
-    def station_record_to_dict(self, record):
-
-        address = "\n".join(
-            [record.address1, record.address2, record.address3, record.address4]
-        )
-
-        location = Point(
-            float(record.x_coordinate), float(record.y_coordinate), srid=self.get_srid()
-        )
-
-        return {
-            "internal_council_id": record.polling_station_id,
-            "postcode": record.postcode,
-            "address": address,
-            "location": location,
-        }
+    elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
+        uprn = record.uprn.lstrip(" 0")
 
-        try:
-            address = Address.objects.get(pk=record.uprn)
-        except ObjectDoesNotExist:
-            return None
+        if uprn in [
+            "49061701",
+            "49049138",
+            "49069702",
+            "49047840",
+            "49041491",
+        ]:
+            return None  # significantly overlaps other polling areas
 
-        return {
-            "address": address.address,
-            "postcode": address.postcode,
-            "polling_station_id": record.station,
-        }
+        return super().address_record_to_dict(record)
