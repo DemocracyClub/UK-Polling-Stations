@@ -2,28 +2,50 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000045"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tein.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019tein.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "TEI"
+    addresses_name = (
+        "2021-03-30T13:07:24.373977/Teignbridge Democracy_Club__06May2021.tsv"
+    )
+    stations_name = (
+        "2021-03-30T13:07:24.373977/Teignbridge Democracy_Club__06May2021.tsv"
+    )
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
         # Alice Cross Day Centre
-        if record.polling_place_id == "7231":
+        if record.polling_place_id == "7926":
             record = record._replace(polling_place_easting="293930")
             record = record._replace(polling_place_northing="73047")
 
         return super().station_record_to_dict(record)
 
+    #
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
+        if record.addressline6 in [
+            "EX7 9PL",
+            "TQ12 1EW",
+            "TQ12 1HR",
+            "TQ12 2JA",
+            "TQ12 4AH",
+            "TQ12 5HU",
+            "TQ12 6NX",
+            "TQ13 7BU",
+            "TQ13 9TR",
+            "TQ14 8NL",
+            "TQ14 8NX",
+            "TQ14 8SR",
+            "TQ14 9AA",
+            "TQ14 9AZ",
+            "TQ14 9EN",
+            "TQ14 9LD",
+            "TQ14 9LZ",
+        ]:
+            return None
 
-        if record.addressline6.strip() == "TQ13 8JG":
-            rec["postcode"] = "TQ13 9JG"
+            if record.addressline6.strip() == "TQ13 8JG":
+                record._replace(addressline6="TQ13 9JG")
 
         if (
             record.addressline1.strip() == "Little Park Farm"
@@ -31,7 +53,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             and record.addressline3.strip() == "Exeter"
             and record.addressline6.strip() == "EX6 8PA"
         ):
-            rec["postcode"] = "EX6 7PZ"
+            record = record._replace(addressline6="EX6 7PZ")
 
         if (
             record.addressline1.strip() == "Flat 3 Old Globe Hotel"
@@ -39,25 +61,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             and record.addressline3.strip() == "Ashburton"
             and record.addressline6.strip() == "TQ13 9HD"
         ):
-            rec["postcode"] = "TQ13 7QH"
+            record = record._replace(addressline6="TQ13 7QH")
 
-        if record.addressline6.strip() == "TQ12 1FB":
-            return None
-
-        if uprn in [
-            "10032970638",  # TQ121BX -> TQ121BU : Ground Floor, 48 Keyberry Road, Newton Abbot
-            "10032971784",  # EX70LX -> EX70DE : Flat 2, 3 Oak Park Villas, Dawlish
-            "10032955461",  # TQ139TR -> TQ139SN : Wray Farm, Moretonhampstead Road, Lustleigh, Newton Abbot
-            "10032973091",  # TQ148EG -> TQ148EA : Flat Above, 48 Teign Street, Teignmouth
-        ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "10032977482",  # TQ122FX -> TQ139RT : 34 Orleigh Cross, Newton Abbot
-            "10032967238",  # EX29UH -> EX67DD : 2 The Court, Dunchideock, Exeter
-            "10032976388",  # EX67LQ -> EX67XZ : Coombehead Farm, Pound Lane, Bridford, Exeter
-            "10032970470",  # TQ148TG -> TQ148TJ : Eastleigh Cottage, First Drive, Dawlish Road, Teignmouth
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
