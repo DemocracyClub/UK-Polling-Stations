@@ -2,11 +2,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E09000030"
-    addresses_name = "local.2018-05-03/Version 2/Democracy_Club__03May2018.tsv"
-    stations_name = "local.2018-05-03/Version 2/Democracy_Club__03May2018.tsv"
-    elections = ["local.2018-05-03"]
-    csv_delimiter = "\t"
+    council_id = "TWH"
+    addresses_name = "2021-04-19T16:17:20.397298/Tower_Hamlets_deduped.csv"
+    stations_name = "2021-04-19T16:17:20.397298/Tower_Hamlets_deduped.csv"
+    elections = ["2021-05-06"]
     csv_encoding = "windows-1252"
 
     def address_record_to_dict(self, record):
@@ -17,7 +16,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["postcode"] = "E2 9DG"
             return rec
 
-        if record.addressline6 == "E3 2LB" or record.addressline6 == "E3 5EG":
+        # 11 BILLSON STREET, LONDON
+        if uprn in [
+            "6728119",  # 11 BILLSON STREET, LONDON
+            "6146893",  # 80B BRUCE ROAD, LONDON
+            "6703128",  # FLAT 3, BUSTLE COURT, 11 CRINOLINE MEWS, LONDON
+        ]:
+            return None
+        if record.addressline6 in ["E14 6EL", "E1 0BH"]:
             return None
 
         return super().address_record_to_dict(record)
