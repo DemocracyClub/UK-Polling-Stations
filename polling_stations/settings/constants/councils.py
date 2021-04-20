@@ -9,3 +9,28 @@ EC_COUNCIL_CONTACT_DETAILS_API_URL = (
 OLD_TO_NEW_MAP = {}
 
 NEW_COUNCILS = []
+
+WELSH_COUNCIL_NAMES = {
+    "AGY": "Cyngor Sir Ynys Môn",  # Isle of Anglesey County Council
+    "BGE": "Cyngor Bwrdeistref Sirol Pen-y-bont ar Ogwr",  # Bridgend County Borough Council
+    "BGW": "Cyngor Bwrdeistref Sirol Blaenau Gwent",  # Blaenau Gwent County Borough Council
+    "CAY": "Cyngor Bwrdeistref Sirol Caerffili",  # Caerphilly County Borough Council
+    "CGN": "Cyngor Sir Ceredigion",  # Ceredigion County Council
+    "CMN": "Cyngor Sir Gaerfyrddin",  # Carmarthenshire County Council
+    "CRF": "Cyngor Caerdydd",  # Cardiff Council
+    "CWY": "Cyngor Bwrdeistref Sirol Conwy",  # Conwy County Borough Council
+    "DEN": "Cyngor Sir Ddinbych",  # Denbighshire County Council
+    "FLN": "Cyngor Sir y Fflint",  # Flintshire County Council
+    "GWN": "Cyngor Sir Gwynedd",  # Gwynedd Council
+    "MON": "Cyngor Sir Fynwy",  # Monmouthshire County Council
+    "MTY": "Cyngor Bwrdeistref Sirol Merthyr Tudful",  # Merthyr Tydfil County Borough Council
+    "NTL": "Cyngor Bwrdeistref Sirol Castell-nedd Port Talbot",  # Neath Port Talbot County Borough Council
+    "NWP": "Cyngor Dinas Casnewydd",  # Newport City Council
+    "PEM": "Cyngor Sir Penfro",  # Pembrokeshire County Council
+    "POW": "Cyngor Sir Powys",  # Powys County Council
+    "RCT": "Cyngor Bwrdeistref Sirol Rhondda Cynon Taf",  # Rhondda Cynon Taf County Borough Council
+    "SWA": "Cyngor Sir a Dinas Abertawe",  # City and County of Swansea
+    "TOF": "Cyngor Bwrdeistref Sirol Torfaen",  # Torfaen County Borough Council
+    "VGL": "Cyngor Bwrdeistref Sirol Bro Morgannwg",  # The Vale of Glamorgan County Borough Council
+    "WRX": "Cyngor Bwrdeistref Sirol Wrecsam",  # Wrexham County Borough Council
+}
