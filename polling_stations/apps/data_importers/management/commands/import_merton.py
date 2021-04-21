@@ -14,7 +14,7 @@ class Command(BaseHalaroseCsvImporter):
     csv_encoding = "windows-1252"
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
             "48108063",  # HOUSE 159 COMMONSIDE EAST, MITCHAM
