@@ -8,6 +8,9 @@ from addressbase.models import Address
 
 
 # use a postcode to decide which endpoint the user should be directed to
+from councils.models import CouncilGeography
+
+
 class RoutingHelper:
     _query_params_to_preserve = {
         "utm_content",
@@ -21,11 +24,19 @@ class RoutingHelper:
         self.addresses = self.get_addresses()
 
     def get_addresses(self):
-        return Address.objects.filter(postcode=self.postcode.with_space)
+        return Address.objects.filter(postcode=self.postcode.with_space).select_related(
+            "uprntocouncil"
+        )
 
     @property
     def councils(self):
-        council_ids = {a.council_id for a in self.addresses if a.council_id}
+        gss_codes = {a.uprntocouncil.lad for a in self.addresses if a.uprntocouncil.lad}
+        council_ids = set(
+            CouncilGeography.objects.filter(gss__in=gss_codes).values_list(
+                "council_id", flat=True
+            )
+        )
+
         if len(council_ids) == 1:
             return None
         else:
