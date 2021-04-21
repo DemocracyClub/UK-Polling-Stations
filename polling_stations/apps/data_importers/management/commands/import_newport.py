@@ -53,4 +53,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "11949":
             record = record._replace(polling_place_postcode="NP19 9PS")
 
+        # Correction from council addresses going to The Dodger, Chepstow Road now going to Community House, Eton Road
+        if record.polling_place_id == "12187":
+            record = record._replace(
+                polling_place_name="Community House Eton Road",
+                polling_place_address_1="Eton Road",
+                polling_place_address_2="Newport",
+                polling_place_address_3="",
+                polling_place_address_4="",
+                polling_place_postcode="NP19 0BL",
+                polling_place_easting="0",
+                polling_place_northing="0",
+                polling_place_uprn="",
+            )
+
         return super().station_record_to_dict(record)
