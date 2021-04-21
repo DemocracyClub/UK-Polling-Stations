@@ -3,68 +3,75 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-    council_id = "E08000019"
-    addresses_name = "parl.2019-12-12/Version 1/polling_station_export-2019-12-09.csv"
-    stations_name = "parl.2019-12-12/Version 1/polling_station_export-2019-12-09.csv"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "SHF"
+    addresses_name = "2021-04-06T12:06:39.850590/polling_station_export-2021-04-06.csv"
+    stations_name = "2021-04-06T12:06:39.850590/polling_station_export-2021-04-06.csv"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def station_record_to_dict(self, record):
+
+        # St Mary's Walkley Community Hall Howard Road Sheffield S6 3EX
+        if (
+            record.pollingstationnumber == "199"
+            and record.pollingstationpostcode == "S6 3EX"
+        ):
+            record = record._replace(pollingstationpostcode="")
+
         rec = super().station_record_to_dict(record)
 
         # user issue report #82
         if (
             rec
             and rec["internal_council_id"]
-            == "19-hillsborough-trinity-methodist-church-lennox-rd-entrance"
+            == "116-hillsborough-trinity-methodist-church-lennox-rd-entrance"
         ):
             rec["location"] = Point(-1.504240, 53.408718, srid=4326)
 
         return rec
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if record.housepostcode == "S20 3FS":
+        if uprn in [
+            "100050922015",  # BRACKENFIELDS, BLAND LANE, SHEFFIELD
+            "200003021647",  # WHITE LODGE FARM, HIGH BRADFIELD, BRADFIELD, SHEFFIELD
+            "100052101093",  # BROOKFIELD, LONG LANE, STANNINGTON, SHEFFIELD
+            "100051016653",  # EDENFIELD, LONG LANE, STANNINGTON, SHEFFIELD
+            "10013303341",  # SERVITE SISTERS, SERVITE CONVENT, PACK HORSE LANE, HIGH GREEN, SHEFFIELD
+            "200003001575",  # THE BARN, ELLIOT LANE, GRENOSIDE, SHEFFIELD
+            "200002997296",  # THE STABLES, ELLIOT LANE, GRENOSIDE, SHEFFIELD
+            "100052094057",  # HALLWOOD HOUSE, PENISTONE ROAD, CHAPELTOWN, SHEFFIELD
+            "10013646160",  # THE BUNGALOW, HALLWOOD, PENISTONE ROAD, CHAPELTOWN, SHEFFIELD
+            "100050998359",  # MILLSTONE BARN, HIRST COMMON LANE, SHEFFIELD
+            "10022924822",  # 3 WADSLEY LANE, SHEFFIELD
+            "10091127976",  # OLD CROWN INN, MANAGERS ACCOMMODATION 710 PENISTONE ROAD, OWLERTON, SHEFFIELD
+            "100052186977",  # 3 BURTON STREET, SHEFFIELD
+            "10091129074",  # FAGANS, MANAGERS ACCOMMODATION 69 BROAD LANE, SHEFFIELD
+            "100052083193",  # WOODCLIFFE HOUSE, WOODCLIFFE, SHEFFIELD
+            "100052081136",  # 59 CLARKEHOUSE ROAD, SHEFFIELD
+            "100050950378",  # 5 CRUMMOCK ROAD, SHEFFIELD
+            "100051115573",  # 5 WOODSEATS ROAD, SHEFFIELD
+            "10094515334",  # FLAT, ABOVE 649-651, CHESTERFIELD ROAD, SHEFFIELD
+            "10091734040",  # 165B BIRLEY SPA LANE, SHEFFIELD
+            "10091734039",  # 165A BIRLEY SPA LANE, SHEFFIELD
+            "100051088863",  # KNOWLE HILL, STREETFIELDS, HALFWAY, SHEFFIELD
+            "10003573833",  # GROUNDS PLUS, UNIT 6 LONG ACRE WAY, SHEFFIELD
+        ]:
             return None
 
-        if uprn in ["10094514195", "10003573833"]:
+        if record.housepostcode in [
+            "S10 3LG",
+            "S10 3GW",
+            "S8 0PL",
+            "S35 2WW",
+            "S35 2TQ",
+            "S6 2BB",
+            "S6 2BH",
+            "S6 3ED",
+            "S1 4AZ",
+            "S13 7PP",
+        ]:
             return None
 
-        if uprn in [
-            "100050961874",  # S118TB -> S118TD : Flat Over 782 Ecclesall Road, Sheffield
-            "10003572911",  # S80RL -> S80RN : Flat Over 67 Chesterfield Road, Sheffield
-            "100051072577",  # S117AA -> S118ZP : Over 398 Sharrow Vale Road, Sheffield
-        ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "100052084411",  # S118RQ -> S118RP : Coach House, Westwood House, 11 Brocco Bank, Sheffield
-            "10090614322",  # S80ZH -> S87LD : 88 Chippinghouse Road, Sheffield
-            "100051004490",  # S117TG -> S103TE : School House Ivy Cottage Lane, Sheffield
-            "100050928743",  # S104PE -> S104QX : Soughley Cottage Brown Hills Lane, Sheffield
-            "10003573730",  # S66GH -> S66GD : Fern Hill Hollow Meadows, Sheffield
-            "100051072776",  # S124LW -> S124LT : The Fairway 162 Sheffield Road, Hackenthorpe, Sheffield
-            "200002991853",  # S137PL -> S124LP : 1 Beighton Road, Sheffield
-            "10003576025",  # S64HA -> S64GW : Over 49 Middlewood Road, Sheffield
-            "200003024433",  # S62DH -> S64HB : Hillsborough Park Lodge 947 Penistone Road, Sheffield
-            "200003000612",  # S25RS -> S25QQ : 192 Long Henry Row, Sheffield
-            "200003000616",  # S25RS -> S25QQ : 196 Long Henry Row, Sheffield
-            "200002999863",  # S25RH -> S25QQ : 176 Norwich Row, Sheffield
-            "200002999864",  # S25RH -> S25QQ : 177 Norwich Row, Sheffield
-            "200002999874",  # S25RH -> S25QQ : 187 Norwich Row, Sheffield
-            "200002999883",  # S25RH -> S25QQ : 196 Norwich Row, Sheffield
-            "200002999897",  # S25RH -> S25QQ : 210 Norwich Row, Sheffield
-            "200002999315",  # S25RH -> S25QQ : 222 Norwich Row, Sheffield
-            "200002999318",  # S25RH -> S25QQ : 225 Norwich Row, Sheffield
-            "200002999858",  # S25RG -> S25QQ : 98 Norwich Row, Sheffield
-            "200003016406",  # S66LJ -> S66LH : Ashley Cottage, Moor Road, High Bradfield, Sheffield
-            "200003021852",  # S363ZB -> S363ZA : Yew Trees Cottage Yew Trees Lane, Bolsterstone, Sheffield
-            "200003021853",  # S363ZB -> S363ZA : Yew Trees Farm Yew Trees Lane, Bolsterstone, Sheffield
-            "100050981171",  # S361LL -> S364GH : The Cruck Barn Green Farm Green Lane, Stocksbridge, Sheffield
-            "200003025132",  # S362PR -> S362NR : The Boskins Royd Farm Carr Road, Deepcar, Sheffield
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
