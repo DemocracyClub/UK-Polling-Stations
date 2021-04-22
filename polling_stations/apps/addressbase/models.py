@@ -26,7 +26,7 @@ class Address(AbstractAddress):
 
     @property
     def council(self):
-        return Council.objects.get(identifiers__contains=[self.uprntocouncil.lad])
+        return Council.objects.get(geography__gss=self.uprntocouncil.lad)
 
     @property
     def polling_station_id(self):
