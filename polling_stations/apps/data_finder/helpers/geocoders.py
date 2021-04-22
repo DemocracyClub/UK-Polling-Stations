@@ -133,8 +133,7 @@ def geocode(postcode):
 
 def get_council(geocode_result):
     try:
-        return Council.objects.get(
-            identifiers__contains=[geocode_result.get_code("lad")]
-        )
+        return Council.objects.get(geography__gss=geocode_result.get_code("lad"))
+
     except Council.DoesNotExist:
         return Council.objects.get(geography__geography__covers=geocode_result.centroid)
