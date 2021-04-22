@@ -25,6 +25,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "18181":
             record = record._replace(polling_place_postcode="")
 
+        # Trinity Rooms, Field Road
+        if record.polling_place_id == "18121":
+            record = record._replace(polling_place_easting="385644")
+            record = record._replace(polling_place_northing="204909")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
