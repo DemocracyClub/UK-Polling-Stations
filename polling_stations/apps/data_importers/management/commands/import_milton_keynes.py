@@ -2,38 +2,59 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E06000042"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019MK.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019MK.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "MIK"
+    addresses_name = "2021-04-12T09:06:38.958847/Democracy_Club__06May2021.tsv"
+    stations_name = "2021-04-12T09:06:38.958847/Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        if record.polling_place_id == "7950":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-        if record.polling_place_id == "7890":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-        if record.polling_place_id == "7667":  # The Olney Centre
-            record = record._replace(polling_place_easting="488859")
-            record = record._replace(polling_place_northing="251779")
-        if record.polling_place_id == "7915":  # Heronsbrook Meeting Place
-            record = record._replace(polling_place_easting="489631")
-            record = record._replace(polling_place_northing="235987")
-        if record.polling_place_id == "7909":  # Church of The Holy Cross
-            record = record._replace(polling_place_easting="482483")
-            record = record._replace(polling_place_northing="238427")
-        if record.polling_place_id == "7650":  # Portfields Community Centre 2
-            record = record._replace(polling_place_easting="486235")
-            record = record._replace(polling_place_northing="243915")
-        if record.polling_place_id == "7581":  # Oldbrook Community Centre
-            record = record._replace(polling_place_easting="485474")
-            record = record._replace(polling_place_northing="237785")
-        if record.polling_place_id == "7659":  # Lovat Hall Polling Station 2
-            record = record._replace(polling_place_easting="487574")
-            record = record._replace(polling_place_northing="243582")
+        if record.polling_place_id in [
+            "8851",  # Stony Stratford Library 5-7 Church Street Stony Stratford Milton Keynes MK11 1BD
+            "8915",  # Moorlands Family Centre Dodkin Beanhill MK6 4LP
+            "8628",  # St Mary`s Church Newport Road Woughton on the Green Milton Keynes MK6 3BE
+        ]:
+            record = record._replace(polling_place_easting="")
+            record = record._replace(polling_place_northing="")
 
         return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "25098995",  # BUNGALOW WOBURN GOLF AND COUNTRY CLUB BOW BRICKHILL TO LITTLE BRICKHILL ROAD, LITTLE BRICKHILL
+            "25074114",  # DROPSHORT FARM, WATLING STREET, LITTLE BRICKHILL, MILTON KEYNES
+            "25063716",  # SKEW BRIDGE COTTAGE, DRAYTON ROAD, BLETCHLEY, MILTON KEYNES
+            "25003647",  # SHENLEY GROUNDS FARM WHADDON ROAD, CALVERTON
+            "25107493",  # MAYA LOFT AYLESBURY STREET, WOLVERTON
+            "25107492",  # FLAT 1, INCA HOUSE, AYLESBURY STREET, WOLVERTON, MILTON KEYNES
+            "25093780",  # NEW FARM HOUSE, PINDON END, HANSLOPE, MILTON KEYNES
+            "25093789",  # CARAVAN 2 BLACK HORSE LODGE WOLVERTON ROAD, GREAT LINFORD, MILTON KEYNES
+            "25093788",  # CARAVAN 1 BLACK HORSE LODGE WOLVERTON ROAD, GREAT LINFORD, MILTON KEYNES
+            "10094484063",  # THE BUNGALOW WOODLEYS FARM BOW BRICKHILL ROAD, WOBURN SANDS
+            "10094484064",  # THE COTTAGE WOODLEYS FARM BOW BRICKHILL ROAD, WOBURN SANDS
+            "10094480672",  # 5 IVY CLOSE, NEWPORT PAGNELL
+        ]:
+            return None
+
+        if record.addressline6 in [
+            "MK2 2NY",
+            "MK13 9DZ",
+            "MK13 7NH",
+            "MK17 9NH",
+            "MK4 4EL",
+            "MK4 4AG",
+            "MK4 4AU",
+            "MK46 5AF",
+            "MK46 4JS",
+            "MK16 0HW",
+            "MK14 6DL",
+            "MK12 5LS",
+            "MK9 2HS",
+            "MK46 5LN",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
