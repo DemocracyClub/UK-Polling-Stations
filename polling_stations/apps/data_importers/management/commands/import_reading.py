@@ -2,49 +2,52 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-
-    council_id = "E06000038"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019Reading.tsv"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019Reading.tsv"
-    )
-    elections = ["parl.2019-12-12"]
+    council_id = "RDG"
+    addresses_name = "2021-04-22T13:51:28.820490/NewDemocracy_Club__06May2021.tsv"
+    stations_name = "2021-04-22T13:51:28.820490/NewDemocracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn == "310078632":
-            rec["postcode"] = "RG2 0NS"
-
         if uprn in [
-            "310080475",  # RG304RX -> RG304RY : 75 St. Michael`s Road, Tilehurst, Reading
-            "310077642",  # RG27EX -> RG27EZ : Flat 2, The Farmhouse, Sherfield Drive, Sherfield Drive, Reading
+            "310030097",  # FLAT 2 EASTERN COURT EASTERN AVENUE, READING
+            "310045307",  # FLAT 1 EASTERN COURT EASTERN AVENUE, READING
+            "310084262",  # THE GARDEN FLAT 191 KINGS ROAD, READING
+            "310077277",  # 191 KINGS ROAD, READING
+            "310078045",  # FLAT 3, 29A KENDRICK ROAD, READING
+            "310078050",  # FLAT 8, 29A KENDRICK ROAD, READING
+            "310078044",  # FLAT 2, 29A KENDRICK ROAD, READING
+            "310078049",  # FLAT 7, 29A KENDRICK ROAD, READING
+            "310078047",  # FLAT 5, 29A KENDRICK ROAD, READING
+            "310078043",  # FLAT 1, 29A KENDRICK ROAD, READING
+            "310078048",  # FLAT 6, 29A KENDRICK ROAD, READING
+            "310078046",  # FLAT 4, 29A KENDRICK ROAD, READING
+            "310084858",  # FLAT 3, 69 NORTHUMBERLAND AVENUE, READING
+            "310084859",  # FLAT 4, 69 NORTHUMBERLAND AVENUE, READING
+            "310084857",  # FLAT 2, 69 NORTHUMBERLAND AVENUE, READING
+            "310084856",  # FLAT 1, 69 NORTHUMBERLAND AVENUE, READING
+            "310075515",  # 14A BASINGSTOKE ROAD, READING
+            "310037159",  # 12 DARTMOUTH TERRACE, LONDON ROAD, READING
         ]:
-            rec["accept_suggestion"] = True
-
-        if uprn in [
-            "310015114",  # RG315AN -> RG48LP : Flat 9, 52 School Road, Tilehurst, Reading
-            "310008459",  # RG303ES -> RG303QN : Flat 17 Priory Point, 36 Southcote Lane, Southcote, Reading
-            "310055368",  # RG27RU -> RG303HY : White Barn, 45A Cressingham Road, Reading
-            "310023684",  # RG17YJ -> RG17YG : 1 Prospect Cottages, Prospect Mews, Reading
-            "310023686",  # RG17YJ -> RG17YG : 2 Prospect Cottages, Prospect Mews, Reading
-            "310023687",  # RG17YJ -> RG17YG : 3 Prospect Cottages, Prospect Mews, Reading
-        ]:
-            rec["accept_suggestion"] = False
-
-        if record.addressline6 == "RG30 3DZ":
-            return None
-        if (
-            record.addressline1 == "Flat 1"
-            and record.addressline2 == "6 Gosbrook Road"
-            and record.addressline3 == "Caversham"
-            and record.addressline4 == "Reading"
-        ):
             return None
 
-        return rec
+        if record.addressline6 in [
+            "RG1 6DJ",
+            "RG1 7EY",
+            "RG4 5BB",
+            "RG2 8JH",
+            "RG1 5RU",
+            "RG1 5PZ",
+            "RG1 5BY",
+            "RG4 7TQ",
+            "RG1 6AB",
+            "RG4 8ES",
+            "RG2 7EZ",
+            "RG1 4AP",
+            "RG30 3DZ",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
