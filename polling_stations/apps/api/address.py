@@ -29,7 +29,7 @@ def get_bug_report_url(request, station_known):
 
 
 class AddressSerializer(serializers.HyperlinkedModelSerializer):
-    council = serializers.CharField()
+    council = serializers.CharField(source="council_name")
     polling_station_id = serializers.CharField()
 
     class Meta:

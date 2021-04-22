@@ -30,17 +30,37 @@ class RoutingHelper:
 
     @property
     def councils(self):
-        gss_codes = {a.uprntocouncil.lad for a in self.addresses if a.uprntocouncil.lad}
-        council_ids = set(
-            CouncilGeography.objects.filter(gss__in=gss_codes).values_list(
-                "council_id", flat=True
-            )
-        )
+        """
+        This method returns None when all the addresses in the postcode are in the same council, and otherwise returns
+        a list of council_ids that the postcode overlaps.
 
-        if len(council_ids) == 1:
+        It is also being pressed into service to set a `_council_name` property on all the address objects with the
+        postcode. This means we want to call this before serializing the postcode response object in the API.
+        This is not a nice way of doing it, but means we only hit the db once, and can figure out how to do it nicer
+        after May 6th.
+        """
+        gss_codes = {
+            a: a.uprntocouncil.lad for a in self.addresses if a.uprntocouncil.lad
+        }
+
+        council_map = {
+            v[0]: v
+            for v in CouncilGeography.objects.filter(
+                gss__in=gss_codes.values()
+            ).values_list("gss", "council_id", "council__name")
+        }
+        """
+        This is a bit of a hack because it adds a property to each address objects in self.addresses, so that
+        it is already set when the address serializer populates the 'council' field with the council_name property
+        from each address.
+        """
+        for address, gss in gss_codes.items():
+            address._council_name = council_map.get(gss)[2]
+
+        if len(council_map) == 1:
             return None
         else:
-            return list(council_ids)
+            return list(v[1] for v in council_map.values())
 
     @property
     def polling_stations(self):

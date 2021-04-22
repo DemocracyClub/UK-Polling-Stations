@@ -29,6 +29,12 @@ class Address(AbstractAddress):
         return Council.objects.get(geography__gss=self.uprntocouncil.lad)
 
     @property
+    def council_name(self):
+        if not hasattr(self, "_council_name"):
+            self._council_name = self.council.name
+        return self._council_name
+
+    @property
     def polling_station_id(self):
         return self.uprntocouncil.polling_station_id
 
