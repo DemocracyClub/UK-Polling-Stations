@@ -25,7 +25,15 @@ class Command(BaseHalaroseCsvImporter):
             record.pollingstationnumber == "22"
             and record.pollingstationpostcode == "SA9 2HA"
         ):
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(pollingstationpostcode="SA9 2DE")
+
+        # Dyffryn Clydach Memorial Hall The Drive Longford Neath
+        if record.pollingstationname == "Dyffryn Clydach Memorial Hall":
+            record = record._replace(pollingstationpostcode="SA10 7HD")
+
+        # Clyne Community Centre Clyne Resolven
+        if record.pollingstationname == "Clyne Community Centre":
+            record = record._replace(pollingstationpostcode="SA11 4BP")
 
         return super().station_record_to_dict(record)
 
