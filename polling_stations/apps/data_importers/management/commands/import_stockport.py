@@ -63,4 +63,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="")
             record = record._replace(polling_place_northing="")
 
+        # Station change from Council
+        # Change: 1st Romiley Scout Group Heys Avenue Romiley SK6 4H
+        # To:The Cherry Tree Project Hub, 2 Cherry Tree Lane, Romiley SK6 4ER
+        if record.polling_place_id == "10373":
+            record = record._replace(
+                polling_place_name="The Cherry Tree Project Hub",
+                polling_place_address_1="2 Cherry Tree Lane",
+                polling_place_address_2="Romiley",
+                polling_place_address_3="",
+                polling_place_address_4="",
+                polling_place_postcode="SK6 4ER",
+                polling_place_easting="395171",
+                polling_place_northing="390901",
+                polling_place_uprnproperty_urn="100011468406",
+            )
+
         return super().station_record_to_dict(record)
