@@ -369,13 +369,31 @@ class AddressFormView(FormView):
     def get_form(self, form_class=AddressSelectForm):
         self.postcode = Postcode(self.kwargs["postcode"])
 
-        addresses = Address.objects.filter(postcode=self.postcode.with_space)
+        addresses = Address.objects.filter(
+            postcode=self.postcode.with_space
+        ).select_related("uprntocouncil")
 
         if not addresses:
             raise Http404
 
-        sorter = AddressSorter(addresses)
-        addresses = sorter.natural_sort()
+        addresses_with_station = addresses.exclude(uprntocouncil__polling_station_id="")
+        addresses_without_station = addresses.filter(
+            uprntocouncil__polling_station_id=""
+        )
+
+        addresses_with_station = (
+            AddressSorter(addresses_with_station).natural_sort()
+            if addresses_with_station
+            else []
+        )
+        addresses_without_station = (
+            AddressSorter(addresses_without_station).natural_sort()
+            if addresses_without_station
+            else []
+        )
+
+        addresses = addresses_with_station + addresses_without_station
+
         select_addresses = [(element.uprn, element.address) for element in addresses]
         select_addresses.append((self.NOTINLIST, "My address is not in the list"))
         return form_class(
