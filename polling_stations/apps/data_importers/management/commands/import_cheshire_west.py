@@ -2,48 +2,66 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E06000050"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019ches.tsv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019ches.tsv"
-    elections = ["parl.2019-12-12"]
+    council_id = "CHW"
+    addresses_name = "2021-04-16T11:58:13.470921/Cheshire West and Chester Democracy_Club__06May2021.tsv"
+    stations_name = "2021-04-16T11:58:13.470921/Cheshire West and Chester Democracy_Club__06May2021.tsv"
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def station_record_to_dict(self, record):
 
-        # "Ashton Hayes Parish Room" Correction brought forward from local.2019-05-02
-        if record.polling_place_id == "5217":
-            record = record._replace(polling_place_postcode="CH3 8BJ")
-
-        # based on misc fixes in commit: 972106
-        if record.polling_place_id == "5375":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = None
-            return rec
+        if record.polling_place_id in [
+            "7372",  # Meadow Bank Social Club School Road Meadow Bank, Winsford CW7 9PG
+            "7374",  # Darnhall Village Hall Hall Lane Darnhall, Winsford CW7 4D9
+        ]:
+            record = record._replace(polling_place_postcode="")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10013575202",  # CH661NZ -> CH661NT : Station House, Station Road, Little Sutton, Ellesmere Port, Cheshire
-            "200003238279",  # CW82NQ -> CW72NQ : 3 Salterswall Cottages, Chester Road, Winsford, Cheshire
-            "200003237975",  # CW60JQ -> CW69AU : Boot House Farm, Hall Lane, Rushton, Tarporley, Cheshire
-            "100012807237",  # WA60AH -> WA60HS : 2 Meadow Farm Cottages, Lower Rake Lane, Helsby, Frodsham, Cheshire
+            "100012373488",  # THE OLD FARMHOUSE, HOUGH LANE, COMBERBACH, NORTHWICH
+            "10091137631",  # 68 MUSKETT DRIVE, NORTHWICH
+            "10091137623",  # 70 MUSKETT DRIVE, NORTHWICH
+            "10091137622",  # 72 MUSKETT DRIVE, NORTHWICH
+            "10093983974",  # OAKWOOD MARINA, DAVENHAM ROAD, BILLINGE GREEN, NORTHWICH
+            "10091141908",  # MILL COTTAGE, STATION ROAD, CROWTON, NORTHWICH
+            "200003227699",  # THE OLD STABLEHOUSE, DOBERS LANE, FRODSHAM
+            "10091141075",  # SKY HOUSE, TIRLEY LANE, UTKINTON, TARPORLEY
+            "100012360649",  # 6 LEIGHTON COTTAGES, BOATHOUSE LANE, PARKGATE, NESTON
+            "100010033259",  # 45 WEALSTONE LANE, UPTON, CHESTER
+            "10014510578",  # THE COACH HOUSE, PLATTS LANE, HATTON HEATH, CHESTER
+            "10093485405",  # NEWTON FIELDS, OLDCASTLE LANE, CUDDINGTON, MALPAS
+            "200000831359",  # OAK BANK, PARKGATE ROAD, CHESTER
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        if uprn in [
-            "200000832753",  # CH36EA -> CH36EE : The Bungalow,Oakfield Nurseries, Saighton Lane, Huntington, Chester, Cheshire
-            "200000829308",  # CW60RP -> CH38BH : Weldon Farm, Dog Lane, Kelsall, Tarporley, Cheshire
-            "100012353094",  # CW60HA -> CW60ET : The Woodlands, Duddon Heath, Duddon, Tarporley, Cheshire
-            "100012603215",  # CW72QN -> CW72QW : 3 Chester Lane Brook, Chester Lane, Marton, Northwich, Cheshire
-            "200000830166",  # CH38JU -> CW60NQ : Mill Cottage, Mill Lane, Tarvin, Chester, Cheshire
-            "200003331973",  # CH647TD -> CH643TH : Flat, 1 Weatherstones House, Chester High Road, Neston, Cheshire
-            "100012571126",  # CH39HN -> CH39HL : Bolesworth Lake Farm, Bolesworth Hill Road, Tattenhall, Chester, Cheshire
+        if record.addressline6 in [
+            "CH64 7TG",
+            "CH64 3SG",
+            "CH65 9JU",
+            "WA6 0JA",
+            "WA6 9EG",
+            "CW8 4QS",
+            "CW8 2NQ",
+            "CW7 2HL",
+            "CW9 8PU",
+            "CW7 2PU",
+            "CW6 0JQ",
+            "CW6 9EP",
+            "CW7 3EQ",
+            "CW7 2GG",
+            "CW9 6EL",
+            "CW9 7RL",
+            "CW9 7RX",
+            "WA6 7EP",
+            "WA6 7HQ",
+            "CW9 8XB",
+            "CW8 4AB",
+            "CW8 4YP",
         ]:
-            rec["accept_suggestion"] = False
+            return None
 
-        return rec
+        return super().address_record_to_dict(record)
