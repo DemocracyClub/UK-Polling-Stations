@@ -1,30 +1,15 @@
-from data_importers.geo_utils import fix_bad_polygons
-from data_importers.management.commands import BaseShpStationsShpDistrictsImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    council_id = "E08000033"
-    districts_name = "parl.2019-12-12/Version 2/Polling Districts Boundary 2019 Shape Files/POLLING_DISTRICTS.shp"
-    stations_name = "parl.2019-12-12/Version 2/Polling stations shape files 2019-11-13 13-53-23/POLLING_STATIONS.shp"
-    elections = ["parl.2019-12-12"]
-    shp_encoding = "utf-8"
+class Command(BaseDemocracyCountsCsvImporter):
+    council_id = "CLD"
+    addresses_name = "2021-04-16T12:55:22.326313/CMBC Polling Districts.csv"
+    stations_name = "2021-04-16T12:55:22.326313/CMBC Polling Stations.csv"
+    elections = ["2021-05-06"]
 
-    def district_record_to_dict(self, record):
-        code = record[0].strip()
-        name = record[1].strip()
-        return {"internal_council_id": code, "name": name, "polling_station_id": code}
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
 
-    def station_record_to_dict(self, record):
-        code = record[1].strip()
-        address = record[0].strip()
-
-        if code == "BP":
-            code = "BM"
-
-        if code == "" and address == "":
+        if uprn == "200001826572":
             return None
-
-        return {"internal_council_id": code, "address": address, "postcode": ""}
-
-    def post_import(self):
-        fix_bad_polygons()
+        return super().address_record_to_dict(record)
