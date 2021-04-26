@@ -2,37 +2,37 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000136"
+    council_id = "BOT"
     addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019boston.tsv"
+        "2021-04-16T11:13:32.139850/Boston Democracy_Club__06May2021 (2).tsv"
     )
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019boston.tsv"
-    elections = ["parl.2019-12-12"]
+    stations_name = (
+        "2021-04-16T11:13:32.139850/Boston Democracy_Club__06May2021 (2).tsv"
+    )
+    elections = ["2021-05-06"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn == "100030738257":
-            rec["postcode"] = "PE20 2NZ"
-            rec["accept_suggestion"] = False
-
-        if uprn in [
-            "100032168500",  # PE229JN -> PE229JP : The Cottage, Hurn`s End, Old Leake, Boston
-            "10008181290",  # PE202PT -> PE202PJ : C`van Sparrow Hall, Asperton Road, Wigtoft, Boston
-            "10008186479",  # PE202PT -> PE202PS : Taumberland, Asperton Road, Swineshead, Boston, Lincs
-            "10008186513",  # PE220QA -> PE220PX : Field Views, Freiston Ings Farm Lane, Freiston Ings, Boston, Lincs
-            "10008187814",  # PE218QN -> PE218QR : 63 West Street, Boston, Lincs
-            "200004465433",  # PE217LH -> PE217JU : White House Farm, Wyberton West Road, Wyberton, Boston, Lincs
-            "200004467072",  # PE201EG -> PE218SH : 10 High Street, Kirton, Boston, Lincs
-            "200004471567",  # PE220PG -> PE219RZ : Orchard Lea, Wainfleet Road, Freiston, Boston
-            "200004473861",  # PE203QX -> PE203SZ : Fairways, Top Farm, Kirton Drove, Brothertoft, Boston, Lincs
-            "200004475159",  # LN44QJ -> LN44QN : The Wheelwright Bungalow, Kirton Drove, Kirton Fen, Lincoln, Lincs
-            "200004475193",  # PE201SN -> PE201SP : Smith`s Lodge, Holmes Road, Kirton Holme, Boston, Lincs
-            "200004476439",  # PE219QR -> PE219QP : 160 Spilsby Road, Fishtoft, Boston, Lincs
+        if record.addressline6 in [
+            "PE21 7AL",
+            "PE20 3AG",
+            "PE21 8LA",
+            "PE22 9JA",
+            "PE22 9JW",
+            "PE20 3QX",
+            "PE21 0RL",
+            "PE21 7LH",
+            "PE22 9LJ",
+            "PE21 7BJ",
         ]:
-            rec["accept_suggestion"] = True
+            return None
 
-        return rec
+        return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+
+        # St Thomas Church Hall London Road Boston PE21 8AG
+        if record.polling_place_id == "4024":
+            record = record._replace(polling_place_postcode="")
+
+        return super().station_record_to_dict(record)
