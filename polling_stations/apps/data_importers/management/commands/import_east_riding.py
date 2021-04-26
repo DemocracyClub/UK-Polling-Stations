@@ -2,29 +2,22 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
-    council_id = "E06000011"
-    addresses_name = "parl.2019-12-12/Version 1/Democracy Club - Polling Districts.csv"
-    stations_name = "parl.2019-12-12/Version 1/Democracy Club - Polling Stations.csv"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "ERY"
+    addresses_name = (
+        "2021-04-16T11:19:35.745167/Democracy Club - Polling Districts PCC 2021.csv"
+    )
+    stations_name = (
+        "2021-04-16T11:19:35.745167/Democracy Club - Polling Stations PCC 2021.csv"
+    )
+    elections = ["2021-05-06"]
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 
-        if record.add1 == "GOWTHORPE FIELDS HATKILL LANE":
-            rec["postcode"] = "YO411HR"
-
-        if record.add1 in [
-            "M. V. Sabina H.",
-            "Alcuin College",
-        ]:
-            return None
-
         if uprn in [
-            "100052164542",
+            "10024434625",
+            "10094489161",
             "100050024437",
         ]:
             return None
-
-        return rec
+        return super().address_record_to_dict(record)
