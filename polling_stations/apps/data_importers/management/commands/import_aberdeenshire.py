@@ -1,3 +1,5 @@
+from django.utils.text import slugify
+
 from data_importers.ems_importers import BaseHalaroseCsvImporter
 
 ABERDEENSHIRE_EXCLUDE_STATIONS = (
@@ -275,11 +277,22 @@ class Command(BaseHalaroseCsvImporter):
     )
     elections = ["2021-05-06"]
 
+    def get_station_hash(self, record):
+        # There is a collision on 53-victoria-hall and 54-victoria-hall. Adding the town fixes it
+        if record.pollingstationname == "VICTORIA HALL":
+            return "-".join(
+                [
+                    record.pollingstationnumber.strip(),
+                    slugify(record.pollingstationname.strip())[:90],
+                    slugify(record.pollingstationaddress_2),
+                ]
+            )
+        else:
+            return super().get_station_hash(record)
+
     def station_record_to_dict(self, record):
         station_hash = self.get_station_hash(record)
         if station_hash in ABERDEENSHIRE_EXCLUDE_STATIONS:
-            return None
-        if station_hash in ["53-victoria-hall", "54-victoria-hall"]:
             return None
         return super().station_record_to_dict(record)
 
