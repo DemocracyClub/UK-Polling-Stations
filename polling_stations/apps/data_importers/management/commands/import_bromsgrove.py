@@ -2,21 +2,29 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000234"
-    addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019- Bromsgrove.CSV"
-    )
-    stations_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019- Bromsgrove.CSV"
-    )
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    council_id = "BRM"
+    addresses_name = "2021-04-23T10:43:51.069438/Democracy_Club__06May2021Broms.CSV"
+    stations_name = "2021-04-23T10:43:51.069438/Democracy_Club__06May2021Broms.CSV"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in ["100120569259", "10090741909"]:
+        if uprn in [
+            "100120585529",  # 35 CHERRY HILL ROAD, BARNT GREEN, BIRMINGHAM
+            "10090741909",  # THE OLD FORGE, BROMSGROVE ROAD, CLENT, STOURBRIDGE
+        ]:
             return None
 
-        return rec
+        if record.addressline6 in [
+            "B60 3AZ",
+            "B61 7AY",
+            "B61 0NX",
+            "B47 6LX",
+            "B45 8HY",
+            "B60 1QG",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
