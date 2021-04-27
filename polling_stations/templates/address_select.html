@@ -10,7 +10,7 @@
     {% trans "Choose Your Address" %}
   </h2>
 
-  <form method=post class="form form-inline">
+  <form method=post class="form form-inline" id="select-address-form">
     {% csrf_token %}
     {{ form|dc_form }}
     <button type="submit" class="button" id="submit-address">

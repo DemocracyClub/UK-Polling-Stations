@@ -21,7 +21,7 @@
                 <h1>{% trans "Find your polling station" %}</h1>
             </header>
         {% endif %}
-        <form method="post" class="form form-inline">
+        <form id="find-polling-station-form" method="post" class="form form-inline">
             {% csrf_token %}
             {{ form|dc_form }}
             <button type="submit" class="button" id="submit-postcode">{% trans "Find your polling station" %}</button>
