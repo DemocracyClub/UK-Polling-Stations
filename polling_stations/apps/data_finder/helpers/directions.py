@@ -1,5 +1,6 @@
 import abc
 import json
+import math
 import random
 import requests
 from collections import namedtuple
@@ -97,12 +98,67 @@ class GoogleDirectionsClient(DirectionsClient):
         )
 
 
+class MapboxDirectionsClient(DirectionsClient):
+    precision = 5
+
+    def get_data(self, url):
+        resp = requests.get(url)
+        if resp.status_code != 200:
+            raise DirectionsException(
+                "Mapbox Directions API error: HTTP status code %i" % resp.status_code
+            )
+        return resp.json()
+
+    def get_route(self, start, end):
+        distance_km = get_distance(start, end)
+        if distance_km > 1.5:
+            transport_verb = {"base": "drive", "gerund": "driving-traffic"}
+        else:
+            transport_verb = {"base": "walk", "gerund": "walking"}
+
+        url = "{base_url}/{profile}/{coordinates}?&alternatives=false&geometries=polyline&steps=false&access_token={key}".format(
+            base_url=settings.BASE_MAPBOX_URL,
+            profile=transport_verb["gerund"],
+            coordinates="{start_lon},{start_lat};{end_lon},{end_lat}".format(
+                start_lon=start.x, start_lat=start.y, end_lon=end.x, end_lat=end.y
+            ),
+            key=settings.MAPBOX_API_KEY,
+        )
+
+        directions = self.get_data(url)
+
+        if directions["code"] != "Ok":
+            raise DirectionsException(
+                "Mapbox Directions API error: {}".format(directions["code"])
+            )
+
+        route = directions["routes"][0]["geometry"]
+
+        time = f'{math.ceil(directions["routes"][0]["duration"]/60)} {_("minute")}'
+
+        dist = f'{math.ceil(directions["routes"][0]["distance"]*0.0006213712)} {_("miles")}'
+
+        return Directions(
+            time,
+            dist,
+            transport_verb["base"],
+            json.dumps(route),
+            self.precision,
+            "Mapbox",
+        )
+
+
 class DirectionsHelper:
     def get_directions(self, **kwargs):
         if kwargs["start_location"] and kwargs["end_location"]:
-            clients = (GoogleDirectionsClient(),)
+
+            clients = (
+                MapboxDirectionsClient(),
+                GoogleDirectionsClient(),
+            )
             for client in clients:
                 try:
+
                     return client.get_route(
                         kwargs["start_location"], kwargs["end_location"]
                     )
