@@ -20,6 +20,10 @@ def mock_route_google(self, start, end):
     return Directions("1", "1", "walk", "foo", 5, "Google")
 
 
+def mock_route_mapbox(self, start, end):
+    return Directions("1", "1", "walk", "foo", 6, "Mapbox")
+
+
 class DirectionsTest(TestCase):
     def setUp(self):
         self.a = Point(-0.14158760012261312, 51.50100893647978, srid=4326)
@@ -33,6 +37,10 @@ class DirectionsTest(TestCase):
         self.assertIsNone(result)
 
     @mock.patch(
+        "data_finder.helpers.directions.MapboxDirectionsClient.get_route",
+        mock_route_exception,
+    )
+    @mock.patch(
         "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
         mock_route_exception,
     )
@@ -44,12 +52,30 @@ class DirectionsTest(TestCase):
         self.assertIsNone(result)
 
     @mock.patch(
+        "data_finder.helpers.directions.MapboxDirectionsClient.get_route",
+        mock_route_exception,
+    )
+    @mock.patch(
         "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
         mock_route_google,
     )
     def test_google(self):
-        # Mapzen throws an exception
+        # Mapbox throws an exception
         # Fall back to google
         d = DirectionsHelper()
         result = d.get_directions(start_location=self.a, end_location=self.b)
         self.assertEqual("Google", result.source)
+
+    @mock.patch(
+        "data_finder.helpers.directions.MapboxDirectionsClient.get_route",
+        mock_route_mapbox,
+    )
+    @mock.patch(
+        "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
+        mock_route_google,
+    )
+    def test_mapbox(self):
+        # Mapbox returns a valid result
+        d = DirectionsHelper()
+        result = d.get_directions(start_location=self.a, end_location=self.b)
+        self.assertEqual("Mapbox", result.source)

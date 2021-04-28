@@ -5,6 +5,8 @@ import shutil
 import signal
 import tempfile
 from contextlib import contextmanager
+from unittest import mock
+
 from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.core.management import call_command
@@ -14,6 +16,7 @@ from selenium.webdriver import Chrome, ChromeOptions
 import vcr
 
 from councils.tests.factories import CouncilFactory
+from data_finder.helpers.directions import DirectionsException
 
 selenium_vcr = vcr.VCR()
 # We need to ignore localhost as selenium communicates over local http
@@ -21,6 +24,17 @@ selenium_vcr = vcr.VCR()
 selenium_vcr.ignore_localhost = True
 
 temp_dir = tempfile.mkdtemp()
+
+
+def mock_route_exception(self, start, end):
+    raise DirectionsException("oh noes!! terrible things happened :(")
+
+
+# Just use google to avoid messing with vcr cassettes...
+mapbox_patch = mock.patch(
+    "data_finder.helpers.directions.MapboxDirectionsClient.get_route",
+    mock_route_exception,
+)
 
 
 @before.all
@@ -98,6 +112,8 @@ def setup(scenario, outline, steps):
         # call_command("loaddata", "newport_council.json", stdout=f)
         call_command("loaddata", "integration_tests_addressbase.json", stdout=f)
 
+    mapbox_patch.start()
+
 
 @step("No errors were thrown")
 def no_errors(step):
@@ -114,6 +130,7 @@ def take_down(scenario, outline, steps):
     except OSError:
         # ..or we can do this the hard way
         world.browser.service.process.send_signal(signal.SIGTERM)
+    mapbox_patch.stop()
 
 
 @before.each_step
