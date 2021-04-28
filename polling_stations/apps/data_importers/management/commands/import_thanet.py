@@ -1,62 +1,30 @@
-from django.contrib.gis.geos import Point
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseGitHubImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = "THA"
+    addresses_name = "2021-04-28T10:23:11.064744/Democracy_Club__06May2021.CSV"
+    stations_name = "2021-04-28T10:23:11.064744/Democracy_Club__06May2021.CSV"
+    elections = ["2021-05-06"]
+    csv_delimiter = ","
 
-    srid = 4326
-    districts_srid = 4326
-    council_id = "E07000114"
-    elections = ["parl.2019-12-12"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Thanet"
-    geom_type = "geojson"
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        return {
-            "internal_council_id": record["Code"],
-            "name": record["Name"] + " - " + record["Code"],
-            "area": poly,
-            "polling_station_id": record["Code"],
-        }
+        if uprn in [
+            "10013308976",  # FLAT AT BELLE VUE TAVERN PEGWELL ROAD, RAMSGATE
+        ]:
+            return None
+
+        if record.addressline6 in ["CT10 1QL", "CT10 3AE", "CT12 5BX", "CT9 4BT"]:
+            return None
+
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        codes = record["DISTRICT"].split("&")
-        address = record["ADDRESS"]
-        postcode = record["POSTCODE"]
-        if postcode and postcode in address:
-            address = address.replace(postcode, "").strip()
 
-        stations = []
-        for code in codes:
+        # All Saints Church Hall All Saints Avenue Margate Kent CT9 5LQ
+        if record.polling_place_id == "6427":
+            record = record._replace(polling_place_postcode="CT9 5QL")
 
-            # point supplied is bang on the building
-            # but causes google directions API to give us a strange route
-            if code == "MA" and address.startswith(
-                "Christ Church United Reformed Church"
-            ):
-                location = Point(1.338154, 51.38301, srid=4326)
-
-            if code == "MJ1":
-                # https://trello.com/c/sdz5zQvY
-                stations.append(
-                    {
-                        "internal_council_id": code.strip(),
-                        "postcode": "CT9 1RP",
-                        "address": "Quarterdeck Youth Centre\n15 Zion Place\nMargate\nKent",
-                        "location": None,
-                    }
-                )
-            else:
-                stations.append(
-                    {
-                        "internal_council_id": code.strip(),
-                        "postcode": postcode,
-                        "address": address,
-                        "location": location,
-                    }
-                )
-        return stations
+        return super().station_record_to_dict(record)
