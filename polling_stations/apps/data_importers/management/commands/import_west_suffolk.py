@@ -32,3 +32,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+
+        # Lakenheath Peace Memorial Hall, High Street, Lakenheath, Suffolk, IP27 9WE
+        if record.polling_place_id == "15966":
+            record = record._replace(
+                polling_place_name="Lakenheath Community Centre",
+                polling_place_address_2="Lakenheath",
+                polling_place_address_3="Suffolk",
+                polling_place_address_4="",
+                polling_place_postcode="IP27 9DS",
+            )
+
+        return super().station_record_to_dict(record)
