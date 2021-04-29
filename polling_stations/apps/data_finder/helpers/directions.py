@@ -2,15 +2,27 @@ import abc
 import json
 import math
 import random
+from typing import NamedTuple
+
 import requests
-from collections import namedtuple
 from django.conf import settings
-from django.utils.translation import ugettext as _
 
 
-Directions = namedtuple(
-    "Directions", ["time", "dist", "mode", "route", "precision", "source"]
-)
+class Directions(NamedTuple):
+    time: float  # travel time in seconds
+    distance: float  # distance in metres
+    mode: str  # mode of transport, either "walk" or "drive"
+    route: str  # an encoded polyline (https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
+    precision: int  # passed to Leaflet
+    source: str  # the directions provider, e.g. "Google" or "MapBox"
+
+    @property
+    def distance_in_miles(self):
+        return self.distance / 1609.34
+
+    @property
+    def time_in_minutes(self):
+        return math.ceil(self.time / 60)
 
 
 def get_google_directions_token():
@@ -80,17 +92,9 @@ class GoogleDirectionsClient(DirectionsClient):
 
         route = directions["routes"][0]["overview_polyline"]["points"]
 
-        time = str(directions["routes"][0]["legs"][0]["duration"]["text"]).replace(
-            "mins", _("minute")
-        )
-
-        dist = str(directions["routes"][0]["legs"][0]["distance"]["text"]).replace(
-            "mi", _("miles")
-        )
-
         return Directions(
-            time,
-            dist,
+            directions["routes"][0]["legs"][0]["duration"]["value"],
+            directions["routes"][0]["legs"][0]["distance"]["value"],
             transport_verb["base"],
             json.dumps(route),
             self.precision,
@@ -132,17 +136,11 @@ class MapboxDirectionsClient(DirectionsClient):
                 "Mapbox Directions API error: {}".format(directions["code"])
             )
 
-        route = directions["routes"][0]["geometry"]
-
-        time = f'{math.ceil(directions["routes"][0]["duration"]/60)} {_("minute")}'
-
-        dist = f'{math.ceil(directions["routes"][0]["distance"]*0.0006213712)} {_("miles")}'
-
         return Directions(
-            time,
-            dist,
+            directions["routes"][0]["duration"],
+            directions["routes"][0]["distance"],
             transport_verb["base"],
-            json.dumps(route),
+            json.dumps(directions["routes"][0]["geometry"]),
             self.precision,
             "Mapbox",
         )

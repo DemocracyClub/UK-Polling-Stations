@@ -17,12 +17,20 @@
 </div>
 
 {% if directions.time %}
-  <div id="directions">
-    <p>
-      {% blocktrans trimmed with directions.time as time and directions.dist as dist and directions.mode as mode %}
-        It's about {{ dist }} away or a {{ time }} {{ mode }} from {{ postcode }}.
-      {% endblocktrans %}
-    </p>
+    <div id="directions">
+        {% if directions.mode == "walk" %}
+            <p>
+                {% blocktrans trimmed with distance_in_miles=directions.distance_in_miles|floatformat:"1" time_in_minutes=directions.time_in_minutes %}
+                    It's about {{ distance_in_miles }} miles away or a {{ time_in_minutes }} minute walk from {{ postcode }}
+                {% endblocktrans %}
+            </p>
+        {% elif directions.mode == "drive" %}
+            <p>
+                {% blocktrans trimmed with distance_in_miles=directions.distance_in_miles|floatformat:"1" time_in_minutes=directions.time_in_minutes %}
+                    It's about {{ distance_in_miles }} miles away or a {{ time_in_minutes }} minute walk from {{ postcode }}
+                {% endblocktrans %}
+            </p>
+        {% endif %}
     Get
     <a href="https://www.google.com/maps/dir/{{ location.y }},{{ location.x }}/{{ station.location.y }},{{ station.location.x }}" target="_top">
       {% trans "Walking/driving directions from Google" %}
