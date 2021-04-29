@@ -29,4 +29,14 @@ class Command(BaseDemocracyCountsCsvImporter):
             record = record._replace(xordinate="535906")
             record = record._replace(yordinate="201922")
 
+        # Christ Church, Church Hall, Trinity Lane, Waltham Cross, EN8 7ED
+        if record.stationcode == "24":
+            record = record._replace(xordinate="535999")
+            record = record._replace(yordinate="201098")
+
+        # Hurst Drive Primary School, Hurst Drive, Waltham Cross EN8 8DH
+        if record.stationcode == "25":
+            record = record._replace(xordinate="535576")
+            record = record._replace(yordinate="200249")
+
         return super().station_record_to_dict(record)
