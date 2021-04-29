@@ -22,6 +22,17 @@ class Command(BaseHalaroseCsvImporter):
             # Postcode isn't actually in Carmel, and not within polling area
             record = record._replace(pollingstationpostcode="")
 
+        if record.pollingstationnumber == "8":
+            # WOW CAERGYBI/HOLYHEAD YNYS MON LL65 2PB
+            # Station change
+            record = record._replace(
+                pollingstationname="WOW Training Centre",
+                pollingstationaddress_1="15a London Rd",
+                pollingstationaddress_2="Caergybi/Holyhead",
+                pollingstationaddress_3="YNYS MON",
+                pollingstationpostcode="LL65 2NE",
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
