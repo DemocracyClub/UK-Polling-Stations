@@ -17,11 +17,11 @@ def mock_route_exception(self, start, end):
 
 
 def mock_route_google(self, start, end):
-    return Directions("1", "1", "walk", "foo", 5, "Google")
+    return Directions(352, 300, "walk", "foo", 5, "Google", start, end)
 
 
 def mock_route_mapbox(self, start, end):
-    return Directions("1", "1", "walk", "foo", 6, "Mapbox")
+    return Directions(352, 300, "walk", "foo", 6, "Mapbox", start, end)
 
 
 class DirectionsTest(TestCase):
@@ -79,3 +79,19 @@ class DirectionsTest(TestCase):
         d = DirectionsHelper()
         result = d.get_directions(start_location=self.a, end_location=self.b)
         self.assertEqual("Mapbox", result.source)
+
+    def test_unit_conversions(self):
+        directions = Directions(352, 300, "walk", "", 5, "Test", self.a, self.b)
+        self.assertEqual(6, directions.time_in_minutes)
+        self.assertEqual("0.2", "{:.1f}".format(directions.distance_in_miles))
+
+    def test_directions_urls(self):
+        directions = Directions(352, 300, "walk", "", 5, "Test", self.a, self.b)
+        self.assertEqual(
+            "https://www.google.com/maps/dir/51.5010,-0.1416/51.6010,-0.1417",
+            directions.google_maps_url,
+        )
+        self.assertEqual(
+            "https://www.cyclestreets.net/journey/51.5010,-0.1416/51.6010,-0.1417/",
+            directions.cyclestreets_url,
+        )

@@ -68,8 +68,8 @@ class GoogleDirectionsClientTest(TestCase):
     def test_valid(self):
         m = MapboxDirectionsClientValidMock()
         result = m.get_route(self.a, self.b)
-        self.assertEqual("46 minute", result.time)
-        self.assertEqual("9 miles", result.dist)
+        self.assertEqual(2727.832, result.time)
+        self.assertEqual(13276.476, result.distance)
         self.assertEqual(json.dumps("foo\bar"), result.route)
         self.assertEqual(5, result.precision)
         self.assertEqual("Mapbox", result.source)

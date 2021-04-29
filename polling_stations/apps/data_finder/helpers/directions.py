@@ -6,6 +6,7 @@ from typing import NamedTuple
 
 import requests
 from django.conf import settings
+from django.contrib.gis.geos import Point
 
 
 class Directions(NamedTuple):
@@ -15,6 +16,8 @@ class Directions(NamedTuple):
     route: str  # an encoded polyline (https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
     precision: int  # passed to Leaflet
     source: str  # the directions provider, e.g. "Google" or "MapBox"
+    start: Point  # start point
+    end: Point  # end point
 
     @property
     def distance_in_miles(self):
@@ -23,6 +26,17 @@ class Directions(NamedTuple):
     @property
     def time_in_minutes(self):
         return math.ceil(self.time / 60)
+
+    # These two URLs have WGS84 coordinates to four decimal places, using
+    # https://xkcd.com/2170/ as a guide.
+
+    @property
+    def google_maps_url(self):
+        return f"https://www.google.com/maps/dir/{self.start.y:.4f},{self.start.x:.4f}/{self.end.y:.4f},{self.end.x:.4f}"
+
+    @property
+    def cyclestreets_url(self):
+        return f"https://www.cyclestreets.net/journey/{self.start.y:.4f},{self.start.x:.4f}/{self.end.y:.4f},{self.end.x:.4f}/"
 
 
 def get_google_directions_token():
@@ -99,6 +113,8 @@ class GoogleDirectionsClient(DirectionsClient):
             json.dumps(route),
             self.precision,
             "Google",
+            start,
+            end,
         )
 
 
@@ -143,6 +159,8 @@ class MapboxDirectionsClient(DirectionsClient):
             json.dumps(directions["routes"][0]["geometry"]),
             self.precision,
             "Mapbox",
+            start,
+            end,
         )
 
 
