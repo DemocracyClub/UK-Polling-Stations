@@ -19,4 +19,12 @@ class Command(BaseDemocracyCountsCsvImporter):
                 placename="LOCHGELLY CENTRE", add1="BANK STREET", postcode=" KY5 9RD"
             )
 
+        # BALMAISE COMMUNITY CENTRE LINNWOOD DRIVE LEVEN KY8 5AE
+        if record.stationcode in ["259", "260"]:
+            record = record._replace(
+                placename="ST AGATHA'S RC PRIMARY SCHOOL",
+                add1="PARK ROAD",
+                postcode="KY8 5BL",
+            )
+
         return super().station_record_to_dict(record)
