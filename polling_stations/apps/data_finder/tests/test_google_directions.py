@@ -16,7 +16,10 @@ class GoogleDirectionsClientValidMock(GoogleDirectionsClient):
             "routes": [
                 {
                     "legs": [
-                        {"duration": {"text": "4 mins"}, "distance": {"text": "0.2 mi"}}
+                        {
+                            "duration": {"text": "4 mins", "value": 352},
+                            "distance": {"text": "0.2 mi", "value": 300},
+                        }
                     ],
                     "overview_polyline": {"points": "foo\bar"},
                 }
@@ -38,8 +41,8 @@ class GoogleDirectionsClientTest(TestCase):
     def test_valid(self):
         g = GoogleDirectionsClientValidMock()
         result = g.get_route(self.a, self.b)
-        self.assertEqual("4 minute", result.time)
-        self.assertEqual("0.2 miles", result.dist)
+        self.assertEqual(352, result.time)
+        self.assertEqual(300, result.distance)
         self.assertEqual(json.dumps("foo\bar"), result.route)
         self.assertEqual(5, result.precision)
         self.assertEqual("Google", result.source)
