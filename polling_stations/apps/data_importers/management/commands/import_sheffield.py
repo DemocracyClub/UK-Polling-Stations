@@ -4,20 +4,11 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SHF"
-    addresses_name = "2021-04-06T12:06:39.850590/polling_station_export-2021-04-06.csv"
-    stations_name = "2021-04-06T12:06:39.850590/polling_station_export-2021-04-06.csv"
+    addresses_name = "2021-04-29T18:51:39.652720/polling_station_export-2021-04-29.csv"
+    stations_name = "2021-04-29T18:51:39.652720/polling_station_export-2021-04-29.csv"
     elections = ["2021-05-06"]
-    csv_delimiter = ","
 
     def station_record_to_dict(self, record):
-
-        # St Mary's Walkley Community Hall Howard Road Sheffield S6 3EX
-        if (
-            record.pollingstationnumber == "199"
-            and record.pollingstationpostcode == "S6 3EX"
-        ):
-            record = record._replace(pollingstationpostcode="")
-
         rec = super().station_record_to_dict(record)
 
         # user issue report #82
