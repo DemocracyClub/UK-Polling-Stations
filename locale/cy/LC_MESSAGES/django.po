@@ -494,7 +494,7 @@ msgstr "Darllen mwy am bleidleisio ym Mhrydain Fawr"
 #: polling_stations/templates/home.html:33
 #, python-format
 msgid "%(election_date)s Elections"
-msgstr "Etholiadau%(election_date)s "
+msgstr "Etholiadau %(election_date)s"
 
 #: polling_stations/templates/home.html:36
 msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
