@@ -2,7 +2,7 @@ from django.contrib.gis.geos import Point
 
 from addressbase.models import Address
 from data_importers.management.commands import (
-    BaseXpressDCCsvInconsistentPostcodesImporter,
+    BaseXpressDemocracyClubCsvImporter,
 )
 
 
@@ -335,7 +335,7 @@ CORRECTIONS = {
 }
 
 
-class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DOR"
     addresses_name = "2021-03-04T13:35:03.539800/Democracy_Club__06May2021.tsv"
     stations_name = "2021-03-04T13:35:03.539800/Democracy_Club__06May2021.tsv"
@@ -369,65 +369,59 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         if record.polling_place_id == "39802":
             record = record._replace(polling_place_uprn="100041099964")
 
+        if record.polling_place_id in ["40050", "39302"]:
+
+            record = record._replace(polling_place_address_3="")
+
         rec = super().station_record_to_dict(record)
 
         # Portesham Village Hall
         # user issue report #38
         if record.polling_place_id == "39123":
             rec["location"] = Point(-2.567644, 50.668385, srid=4326)
-            return rec
 
         # Bishops Caundle Village Hall
         # user issue report #40
         if record.polling_place_id == "39641":
             rec["location"] = Point(-2.437757, 50.915554, srid=4326)
-            return rec
 
         # All Saints Church Hall
         # user issue report #41
         if record.polling_place_id in ["39684", "39688"]:
             rec["location"] = Point(-1.834570, 50.831005, srid=4326)
-            return rec
 
         # St Marys Church Hall
         if record.polling_place_id == "35117":
             rec["location"] = Point(-2.443608, 50.709373, srid=4326)
-            return rec
 
         # Southill Community Centre
         # user issue report #47
         if record.polling_place_id == "39562":
             rec["location"] = Point(-2.477398, 50.623534, srid=4326)
-            return rec
 
         # Moose Lodge
         # user issue report #43
         if record.polling_place_id == "39576":
             rec["location"] = Point(-2.466883, 50.606307, srid=4326)
-            return rec
 
         # Charlton Marshall Parish Centre
         if record.polling_place_id == "39819":
             rec["location"] = Point(-2.14121, 50.83429, srid=4326)
-            return rec
 
         # West Moors Memorial Hall
         # user issue report #132
         if record.polling_place_id in ["39836", "39833"]:
             rec["location"] = Point(-1.89013, 50.82904, srid=4326)
-            return rec
 
         # Dorset Fire & Rescue, Peverell Avenue West...
         if record.polling_place_id == "35112":
             rec["location"] = Point(-2.471750, 50.713013, srid=4326)
-            return rec
 
         # Furzebrook Village Hall
         if record.polling_place_id == "34895":
             rec["location"] = Point(-2.10060, 50.65811, srid=4326)
-            return rec
 
-        return super().station_record_to_dict(record)
+        return rec
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
