@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-08 14:13+0100\n"
+"POT-Creation-Date: 2021-04-29 21:16+0100\n"
 "PO-Revision-Date: 2021-04-28 15:19+0000\n"
 "Last-Translator: Alex Dutton <transifex@alexdutton.co.uk>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-stations/language/cy/)\n"
@@ -24,6 +24,18 @@ msgstr ""
 #: polling_stations/apps/bug_reports/forms.py:13
 msgid "Description"
 msgstr "Disgrifiad"
+
+#: polling_stations/apps/bug_reports/models.py:15
+msgid "Provide information about the problem to help us improve our service:"
+msgstr ""
+
+#: polling_stations/apps/bug_reports/models.py:23
+msgid "(Optional) Email address:"
+msgstr ""
+
+#: polling_stations/apps/bug_reports/templates/bug_reports/disclaimer.html:3
+msgid "If you provide an email address, we may contact you to request more information or notify you of improvements related to this report. It will not be used for email marketing purposes."
+msgstr ""
 
 #: polling_stations/apps/bug_reports/templates/bug_reports/report_form_inline.html:8
 #: polling_stations/apps/bug_reports/templates/bug_reports/report_form_view.html:17
@@ -49,14 +61,6 @@ msgstr "Cod post:"
 msgid "Enter your postcode"
 msgstr "Rhowch eich cod post"
 
-#: polling_stations/apps/data_finder/helpers/directions.py:83
-msgid "minute"
-msgstr "munud"
-
-#: polling_stations/apps/data_finder/helpers/directions.py:87
-msgid "miles"
-msgstr "milltir"
-
 #: polling_stations/apps/feedback/forms.py:19
 #: polling_stations/apps/feedback/templates/feedback/feedback_form.html:7
 msgid "Did you find this useful?"
@@ -77,6 +81,10 @@ msgstr "Nac oedd"
 #: polling_stations/apps/feedback/templates/feedback/feedback_form.html:16
 msgid "Can you tell us anything more?"
 msgstr "Allwch chi ddweud rhagor i ni?"
+
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:18
+msgid "Send feedback"
+msgstr ""
 
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:5
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:4
@@ -100,38 +108,42 @@ msgctxt "not shown to general public"
 msgid "This is a staging site."
 msgstr "Safle Llwyfannu yw hwn."
 
-#: polling_stations/templates/base.html:80
+#: polling_stations/templates/base.html:41
+msgid "Language:"
+msgstr ""
+
+#: polling_stations/templates/base.html:78
 msgid "Home"
 msgstr "Hafan"
 
-#: polling_stations/templates/base.html:81
+#: polling_stations/templates/base.html:79
 msgid "About"
 msgstr "Amdanom ni"
 
-#: polling_stations/templates/base.html:82
+#: polling_stations/templates/base.html:80
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
-#: polling_stations/templates/base.html:83
+#: polling_stations/templates/base.html:81
 msgctxt "Application Programming Interface"
 msgid "API"
 msgstr "API"
 
-#: polling_stations/templates/base.html:84
-#: polling_stations/templates/base.html:96
+#: polling_stations/templates/base.html:82
+#: polling_stations/templates/base.html:94
 msgid "Blog"
 msgstr "Blog"
 
-#: polling_stations/templates/base.html:85
-#: polling_stations/templates/base.html:97
+#: polling_stations/templates/base.html:83
+#: polling_stations/templates/base.html:95
 msgid "Mailing List"
 msgstr "Rhestr Bostio"
 
-#: polling_stations/templates/base.html:86
+#: polling_stations/templates/base.html:84
 msgid "Contact"
 msgstr "Cyswllt"
 
-#: polling_stations/templates/base.html:90
+#: polling_stations/templates/base.html:88
 msgid "Made by Democracy Club"
 msgstr "Gwnaed gan y <span lang=\"en\">Democracy Club</span>"
 
@@ -141,49 +153,49 @@ msgid ""
 "digital infrastructure needed for a 21st century democracy."
 msgstr "Cwmni Buddiannau Cymunedol yn y DU yw'r <span lang=\"en\">Democracy Club</span> sy'n adeiladu'r isadeiledd digidol sydd ei angen ar gyfer democratiaeth y 21ain ganrif."
 
-#: polling_stations/templates/base.html:94
+#: polling_stations/templates/base.html:92
 msgid "About Democracy Club"
 msgstr "Ynglŷn â'r <span lang=\"en\">Democracy Club</span>"
 
-#: polling_stations/templates/base.html:95
+#: polling_stations/templates/base.html:93
 msgid "Contact Us"
 msgstr "Cysylltu â Ni"
 
-#: polling_stations/templates/base.html:98
+#: polling_stations/templates/base.html:96
 msgctxt "link to Democracy Club Twitter page"
 msgid "Twitter"
 msgstr "Twitter"
 
-#: polling_stations/templates/base.html:99
+#: polling_stations/templates/base.html:97
 msgctxt "link to Democracy Club Facebook page"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: polling_stations/templates/base.html:100
+#: polling_stations/templates/base.html:98
 msgctxt "link to Democracy Club GitHub page"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: polling_stations/templates/base.html:105
+#: polling_stations/templates/base.html:103
 #, python-format
 msgid ""
 "Copyright ©\n"
 "        %(current_year)s Democracy Club Community Interest Company Company No: <a href=\"%(companies_house_url)s\">%(company_number)s</a>"
 msgstr "Hawlfraint ©\n        %(current_year)s <span lang=\"en\">Democracy Club</span> Cwmni Buddiannau Cymunedol Rhif: <a href=\"%(companies_house_url)s\">%(company_number)s</a>"
 
-#: polling_stations/templates/base.html:108
+#: polling_stations/templates/base.html:106
 #, python-format
 msgid "Contains OS data © Crown copyright and database right %(current_year)s"
 msgstr "Yn cynnwys data Arolwg Ordnans © Hawlfraint a hawliau cronfa ddata'r Goron %(current_year)s"
 
-#: polling_stations/templates/base.html:109
+#: polling_stations/templates/base.html:107
 #, python-format
 msgid ""
 "Contains Royal Mail data © Royal Mail copyright and database right "
 "%(current_year)s"
 msgstr "Yn cynnwys data'r Post Brenhinol © Hawlfraint a hawliau cronfa ddata'r Post Brenhinol %(current_year)s"
 
-#: polling_stations/templates/base.html:110
+#: polling_stations/templates/base.html:108
 #, python-format
 msgid ""
 "Contains National Statistics data © Crown copyright and database right "
@@ -193,6 +205,23 @@ msgstr "Yn cynnwys data Ystadegau Gwladol © Hawlfraint a hawliau cronfa ddata'r
 #: polling_stations/templates/base_embed.html:13
 msgid "Democracy Club logo"
 msgstr "Logo'r <span lang=\"en\">Democracy Club</span>"
+
+#: polling_stations/templates/base_full.html:8
+#, fuzzy, python-format
+#| msgid "Made by Democracy Club"
+msgid "%(site_title)s by Democracy Club"
+msgstr "Gwnaed gan y <span lang=\"en\">Democracy Club</span>"
+
+#: polling_stations/templates/base_full.html:12
+#: polling_stations/templates/base_full.html:25
+#, python-format
+msgid "Find out where to vote on %(election_date)s"
+msgstr ""
+
+#: polling_stations/templates/base_full.html:12
+#: polling_stations/templates/base_full.html:25
+msgid "Find out where to vote"
+msgstr ""
 
 #: polling_stations/templates/custom_finder.html:4
 #: polling_stations/templates/custom_finder.html:7
@@ -346,6 +375,42 @@ msgctxt "followed by link to whocanivotefor.co.uk, with that link text"
 msgid "You can find information on your candidates at"
 msgstr "Gallwch ddod o hyd i wybodaeth ar eich ymgeiswyr yn"
 
+#: polling_stations/templates/fragments/keep_safe.html:3
+msgid "Keeping you and fellow voters safe!"
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:4
+msgid "Local election teams will be doing everything they can to ensure voting in person on polling day is safe for everyone. This means there will be safety measures in place at polling stations to prevent the spread of COVID-19, many of which you’ll be very familiar with! "
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:7
+msgid "There will be a limit to the number of people allowed in a polling station at any given time to allow for <strong>social distancing</strong>."
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:8
+msgid "Please remember your <strong>face covering</strong> - you will need this to enter the polling station and will be expected to wear it throughout."
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:9
+msgid "Make sure to <strong>sanitise your hands</strong> before and after voting. In many places, sanitiser will be available but it may be a good idea to carry your own!"
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:10
+msgid "Some polling stations will supply clean pencils for voters but it may be best to bring your own with you."
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:11
+msgid "Polling Stations will be cleaned regularly by polling staff. You may need to wait while a booth is sanitised before you enter."
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:12
+msgid "Polling Station staff may be working behind safety screens - this doesn’t mean you can’t <strong>ask for assistance if you require it!</strong>"
+msgstr ""
+
+#: polling_stations/templates/fragments/keep_safe.html:14
+msgid "With these new safety measures in place, it may take a little bit longer to vote than usual. Remember that if you are in the queue to vote before 10pm, you will still be able to vote even when polls officially close."
+msgstr ""
+
 #: polling_stations/templates/fragments/multiple_elections.html:5
 msgid "Multiple elections are happening!"
 msgstr "Mae nifer o etholiadau'n digwydd!"
@@ -382,20 +447,24 @@ msgstr "Os ydych chi'n credu bod yna etholiadau yn eich ardal chi, gwiriwch wefa
 msgid "Your polling station"
 msgstr "Eich gorsaf bleidleisio"
 
-#: polling_stations/templates/fragments/polling_station_known.html:22
-#, python-format
-msgid "It's about %(dist)s away or a %(time)s %(mode)s from %(postcode)s."
+#: polling_stations/templates/fragments/polling_station_known.html:23
+#, fuzzy, python-format
+#| msgid "It's about %(dist)s away or a %(time)s %(mode)s from %(postcode)s."
+msgid "It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute walk from %(postcode)s."
 msgstr "Mae tua %(dist)s i ffwrdd neu %(time)s %(mode)s o %(postcode)s."
 
-#: polling_stations/templates/fragments/polling_station_known.html:28
-msgid "Walking/driving directions from Google"
-msgstr "Cyfarwyddiadau cerdded/gyrru gan Google"
+#: polling_stations/templates/fragments/polling_station_known.html:29
+#, fuzzy, python-format
+#| msgid "It's about %(dist)s away or a %(time)s %(mode)s from %(postcode)s."
+msgid "It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute drive from %(postcode)s."
+msgstr "Mae tua %(dist)s i ffwrdd neu %(time)s %(mode)s o %(postcode)s."
 
-#: polling_stations/templates/fragments/polling_station_known.html:32
-msgid "Cycling directions from CycleStreets"
-msgstr "Cyfarwyddiadau seiclo gan CycleStreets"
+#: polling_stations/templates/fragments/polling_station_known.html:36
+#, python-format
+msgid "Get <a href=\"%(google_maps_url)s\" target=\"_top\">walking/driving directions from Google</a> or <a href=\"%(cyclestreets_url)s\" target=\"_top\">cycling directions from CycleStreets</a>."
+msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:37
+#: polling_stations/templates/fragments/polling_station_known.html:43
 #: polling_stations/templates/fragments/polling_station_unknown.html:23
 msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
