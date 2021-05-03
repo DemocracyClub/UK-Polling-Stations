@@ -15,6 +15,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="")
             record = record._replace(polling_place_northing="")
 
+        # Roberttown Community Centre
+        # Entrance is on Church Rd
+        if record.polling_place_id == "14258":
+            record = record._replace(polling_place_easting="419480")
+            record = record._replace(polling_place_northing="422649")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):

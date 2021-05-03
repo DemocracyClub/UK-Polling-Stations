@@ -13,9 +13,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="379264")
             record = record._replace(polling_place_northing="246303")
 
-        rec = super().station_record_to_dict(record)
+        # Council not using Welland Village Hall instead of
+        # Castlemorton Village Hall Castlemorton Malvern
+        if record.polling_place_id == "11382":
 
-        return rec
+            record = record._replace(
+                polling_place_name="Welland Village Hall",
+                polling_place_address_1="Welland",
+                polling_place_address_2="Malvern",
+                polling_place_address_3="",
+                polling_place_address_4="",
+                polling_place_postcode="WR13 6AJ",
+                polling_place_easting="379639",
+                polling_place_northing="240002",
+            )
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
