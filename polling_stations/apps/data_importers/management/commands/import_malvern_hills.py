@@ -13,9 +13,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="379264")
             record = record._replace(polling_place_northing="246303")
 
-        rec = super().station_record_to_dict(record)
+        # Castlemorton Village Hall Castlemorton Malvern WR13 6BS was deemed hazardous
+        # and so has been moved to Welland Village Hall Welland Malvern WR13 6AJ
+        if record.polling_place_id == "11382":
+            record = record._replace(
+                polling_place_name="Welland Village Hall",
+                polling_place_address_1="Welland",
+                polling_place_address_2="Malvern",
+                polling_place_postcode="WR13 6AJ",
+                polling_place_easting="379639",
+                polling_place_northing="240002",
+            )
 
-        return rec
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -34,6 +44,5 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "WR14 4JY",
         ]:
             return None
-        rec = super().address_record_to_dict(record)
 
-        return rec
+        return super().address_record_to_dict(record)
