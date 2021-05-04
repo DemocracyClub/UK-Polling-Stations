@@ -141,3 +141,6 @@ class Command(BaseCommand):
 
         print("removing map for station 939 in Kensington and Chelsea...")
         update_station_point("KEC", "939", None)
+
+        print("removing map for station 109A in Barnsley...")
+        update_station_point("BNS", "109A", None)
