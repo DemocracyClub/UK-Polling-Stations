@@ -138,3 +138,6 @@ class Command(BaseCommand):
             print("Deleting data for council %s..." % (council_id))
 
         print("..done")
+
+        print("removing map for station 939 in Kensington and Chelsea...")
+        update_station_point("KEC", "939", None)
