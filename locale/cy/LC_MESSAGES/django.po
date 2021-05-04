@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-29 21:16+0100\n"
-"PO-Revision-Date: 2021-05-04 10:14+0000\n"
-"Last-Translator: Alex Dutton <transifex@alexdutton.co.uk>\n"
+"PO-Revision-Date: 2021-05-04 14:37+0000\n"
+"Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-stations/language/cy/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,18 +27,18 @@ msgstr "Disgrifiad"
 
 #: polling_stations/apps/bug_reports/models.py:15
 msgid "Provide information about the problem to help us improve our service:"
-msgstr ""
+msgstr "Darparwch wybodaeth am y broblem er mwyn ein helpu i wella ein gwasanaeth:"
 
 #: polling_stations/apps/bug_reports/models.py:23
 msgid "(Optional) Email address:"
-msgstr ""
+msgstr "Cyfeiriad e-bost (dewisol):"
 
 #: polling_stations/apps/bug_reports/templates/bug_reports/disclaimer.html:3
 msgid ""
 "If you provide an email address, we may contact you to request more "
 "information or notify you of improvements related to this report. It will "
 "not be used for email marketing purposes."
-msgstr ""
+msgstr "Os byddwch yn darparu cyfeiriad e-bost, efallai byddwn yn cysylltu â chi i ofyn am ragor o wybodaeth neu i roi gwybod i chi am welliannau yn ymwneud â'r adroddiad hwn. Ni fydd yn cael ei defnyddio at ddibenion marchnata."
 
 #: polling_stations/apps/bug_reports/templates/bug_reports/report_form_inline.html:8
 #: polling_stations/apps/bug_reports/templates/bug_reports/report_form_view.html:17
@@ -87,7 +87,7 @@ msgstr "Allwch chi ddweud rhagor i ni?"
 
 #: polling_stations/apps/feedback/templates/feedback/feedback_form.html:18
 msgid "Send feedback"
-msgstr ""
+msgstr "Anfon adborth"
 
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:5
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:4
@@ -218,12 +218,12 @@ msgstr "%(site_title)s gan <span lang=\"en\">Democracy Club</span>"
 #: polling_stations/templates/base_full.html:25
 #, python-format
 msgid "Find out where to vote on %(election_date)s"
-msgstr ""
+msgstr "Gweld ble i bleidleisio ar %(election_date)s"
 
 #: polling_stations/templates/base_full.html:12
 #: polling_stations/templates/base_full.html:25
 msgid "Find out where to vote"
-msgstr ""
+msgstr "Gweld ble i bleidleisio"
 
 #: polling_stations/templates/custom_finder.html:4
 #: polling_stations/templates/custom_finder.html:7
@@ -379,7 +379,7 @@ msgstr "Gallwch ddod o hyd i wybodaeth ar eich ymgeiswyr yn"
 
 #: polling_stations/templates/fragments/keep_safe.html:3
 msgid "Keeping you and fellow voters safe!"
-msgstr ""
+msgstr "Yn eich cadw chi a'ch cyd-bleidleiswyr yn ddiogel!"
 
 #: polling_stations/templates/fragments/keep_safe.html:4
 msgid ""
@@ -387,51 +387,51 @@ msgid ""
 "person on polling day is safe for everyone. This means there will be safety "
 "measures in place at polling stations to prevent the spread of COVID-19, "
 "many of which you’ll be very familiar with! "
-msgstr ""
+msgstr "Bydd timau etholiad lleol yn gwneud popeth y gallant i sicrhau bod pleidleisio mewn person ar ddiwrnod yr etholiad yn ddiogel i bawb. Golyga hynny y bydd yna fesurau diogelwch yn eu lle mewn gorsafoedd pleidleisio er mwyn atal lledaeniad COVID-19, nifer yr ydych eisoes yn gyfarwydd â hwy!"
 
 #: polling_stations/templates/fragments/keep_safe.html:7
 msgid ""
 "There will be a limit to the number of people allowed in a polling station "
 "at any given time to allow for <strong>social distancing</strong>."
-msgstr ""
+msgstr "Bydd nifer cyfyngedig o bobl yn cael bod mewn gorsaf bleidleisio ar unrhyw adeg er mwyn gallu cadw <strong>pellter cymdeithasol</strong>."
 
 #: polling_stations/templates/fragments/keep_safe.html:8
 msgid ""
 "Please remember your <strong>face covering</strong> - you will need this to "
 "enter the polling station and will be expected to wear it throughout."
-msgstr ""
+msgstr "Cofiwch eich <strong>gorchudd wyneb</strong> - bydd angen hwn arnoch i fynd i mewn i'r orsaf bleidleisio a bydd disgwyl i chi ei wisgo yr holl amser."
 
 #: polling_stations/templates/fragments/keep_safe.html:9
 msgid ""
 "Make sure to <strong>sanitise your hands</strong> before and after voting. "
 "In many places, sanitiser will be available but it may be a good idea to "
 "carry your own!"
-msgstr ""
+msgstr "Sicrhewch eich bod yn <strong>diheintio eich dwylo</strong> cyn ac ar ôl pleidleisio. Mewn nifer o leoedd, bydd diheintydd ar gael ond gallai fod yn syniad da dod â rhai eich hun!"
 
 #: polling_stations/templates/fragments/keep_safe.html:10
 msgid ""
 "Some polling stations will supply clean pencils for voters but it may be "
 "best to bring your own with you."
-msgstr ""
+msgstr "Bydd rhai gorsafoedd pleidleisio yn darparu pensiliau glan ar gyfer pleidleiswyr ond gallai fod yn well dod ag un eich hun."
 
 #: polling_stations/templates/fragments/keep_safe.html:11
 msgid ""
 "Polling Stations will be cleaned regularly by polling staff. You may need to"
 " wait while a booth is sanitised before you enter."
-msgstr ""
+msgstr "Bydd Gorsafoedd Pleidleisio'n cael eu glanhau'n rheolaidd gan staff. Mae'n bosib y bydd angen i chi aros tra bod bwth yn cael ei lanhau cyn i chi fynd i mewn."
 
 #: polling_stations/templates/fragments/keep_safe.html:12
 msgid ""
 "Polling Station staff may be working behind safety screens - this doesn’t "
 "mean you can’t <strong>ask for assistance if you require it!</strong>"
-msgstr ""
+msgstr "Mae'n bosib y bydd staff yr Orsaf Bleidleisio'n gweithio y tu ôl i sgriniau diogelwch - nid yw hynny'n golygu na allwch <strong>ofyn am gymorth os ydych angen!</strong>"
 
 #: polling_stations/templates/fragments/keep_safe.html:14
 msgid ""
 "With these new safety measures in place, it may take a little bit longer to "
 "vote than usual. Remember that if you are in the queue to vote before 10pm, "
 "you will still be able to vote even when polls officially close."
-msgstr ""
+msgstr "Gyda'r mesurau diogelwch newydd hyn yn eu lle, mae'n bosib y bydd yn cymryd ychydig yn hirach nag arfer i bleidleisio. Cofiwch os ydych chi yn y ciw i bleidleisio cyn 10pm y byddwch yn dal i allu pleidleisio hyd yn oed pan fydd y bleidlais yn cau'n swyddogol."
 
 #: polling_stations/templates/fragments/multiple_elections.html:5
 msgid "Multiple elections are happening!"
@@ -474,14 +474,14 @@ msgstr "Eich gorsaf bleidleisio"
 msgid ""
 "It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
 "walk from %(postcode)s."
-msgstr ""
+msgstr "Mae tua %(distance_in_miles)s milltir i ffwrdd neu %(time_in_minutes)s o funudau ar droed o %(postcode)s."
 
 #: polling_stations/templates/fragments/polling_station_known.html:29
 #, python-format
 msgid ""
 "It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
 "drive from %(postcode)s."
-msgstr ""
+msgstr "Mae tua %(distance_in_miles)s milltir i ffwrdd neu %(time_in_minutes)s o funudau yn y car o %(postcode)s."
 
 #: polling_stations/templates/fragments/polling_station_known.html:36
 #, python-format
@@ -489,7 +489,7 @@ msgid ""
 "Get <a href=\"%(google_maps_url)s\" target=\"_top\">walking/driving "
 "directions from Google</a> or <a href=\"%(cyclestreets_url)s\" "
 "target=\"_top\">cycling directions from CycleStreets</a>."
-msgstr ""
+msgstr "Cael <a href=\"%(google_maps_url)s\" target=\"_top\">cyfarwyddiadau cerdded/gyrru ar Google</a> neu <a href=\"%(cyclestreets_url)s\" target=\"_top\">gyfarwyddiadau seiclo ar CycleStreets</a>."
 
 #: polling_stations/templates/fragments/polling_station_known.html:43
 #: polling_stations/templates/fragments/polling_station_unknown.html:23
