@@ -164,3 +164,14 @@ class Command(BaseCommand):
             "Assinging addresses in Bargate - AA (Southampton) to Central Baptist Church Hall"
         )
         assign_addresses_by_district("STH", "AA", "AB")
+
+        # Council issue https://trello.com/c/RZ5jKncZ/513-rutland
+        print(
+            "change of station from SOUTH LUFFENHAM VILLAGE HALL to THE BOOT INN (Rutland)..."
+        )
+        update_station_address(
+            "RUT",
+            "28-south-luffenham-village-hall",
+            "The Boot Inn 10, The Street South Luffenham Rutland",
+            "LE15 8NX",
+        )
