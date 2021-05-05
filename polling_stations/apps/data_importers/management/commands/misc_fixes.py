@@ -175,3 +175,14 @@ class Command(BaseCommand):
             "The Boot Inn 10, The Street South Luffenham Rutland",
             "LE15 8NX",
         )
+
+        # Council issue
+        # changing St Gregory's Social Centre, (behind Church), 63 Broad Street, Sileby, LE7 1GH
+        # correct polling place name but incorrect address and postcode
+        print("changing address of St Gregory's Social Centre (Charnwood)...")
+        update_station_address(
+            "CHA",
+            "8532",
+            "St Gregory's Social Centre, (behind Church), 24 The Banks, Sileby",
+            "LE12 7RE",
+        )
