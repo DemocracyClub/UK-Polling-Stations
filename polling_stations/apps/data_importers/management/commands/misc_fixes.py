@@ -156,3 +156,11 @@ class Command(BaseCommand):
             "removing location for station Barton Road Community Centre (Lancaster)..."
         )
         update_station_point("LAC", "SCEA", None)
+
+        # Council bug report
+        # Addresses in Bargate - AA are no longer going to Sembal House, Handel Terrace and
+        # are now going to Central Baptist Church Hall, Devonshire Road
+        print(
+            "Assinging addresses in Bargate - AA (Southampton) to Central Baptist Church Hall"
+        )
+        assign_addresses_by_district("STH", "AA", "AB")
