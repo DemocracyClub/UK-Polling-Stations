@@ -139,8 +139,20 @@ class Command(BaseCommand):
 
         print("..done")
 
-        print("removing map for station 939 in Kensington and Chelsea...")
+        # User issue 466
+        print(
+            "removing location for station: St Philip`s Church (Kensington and Chelsea)..."
+        )
         update_station_point("KEC", "939", None)
 
-        print("removing map for station 109A in Barnsley...")
+        # User issue 467
+        print(
+            "removing location for station: BARNSLEY MBC SPRINGVALE DEPOT (Barnsley)..."
+        )
         update_station_point("BNS", "109A", None)
+
+        # User issue 469
+        print(
+            "removing location for station Barton Road Community Centre (Lancaster)..."
+        )
+        update_station_point("LAC", "SCEA", None)
