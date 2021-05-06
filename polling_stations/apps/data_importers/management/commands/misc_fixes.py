@@ -125,6 +125,7 @@ def delete_council_data(council_id):
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
+        print("*** Applying misc fixes... ***")
         print("removing bad points from AddressBase")
         bad_uprns = [
             "10033560031",  # Addressbase contains individual's name
@@ -186,3 +187,13 @@ class Command(BaseCommand):
             "St Gregory's Social Centre, (behind Church), 24 The Banks, Sileby",
             "LE12 7RE",
         )
+
+        # User issue 473
+        print("Removing point for Quenington Village Hall (Cotswold)...")
+        update_station_point("COT", "17302", None)
+
+        # User issue 476
+        print("Removing point for Pudsey Grangefield School (Leeds)")
+        update_station_point("LDS", "10510", None)
+
+        print("*** ...finished applying misc fixes. ***")
