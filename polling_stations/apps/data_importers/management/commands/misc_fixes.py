@@ -216,4 +216,8 @@ class Command(BaseCommand):
             "",
         )
 
+        # User issue 486
+        print("Removing point for YMCA - Lawnswood Branch (Leeds)...")
+        update_station_point("LDS", "10611", None)
+
         print("*** ...finished applying misc fixes. ***")
