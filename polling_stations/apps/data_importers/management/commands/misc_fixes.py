@@ -203,4 +203,8 @@ class Command(BaseCommand):
             )
             update_station_point("SNO", station_id, None)
 
+        # User issue 482
+        print("Removing point for Haigh Road Community Centre (Leeds)")
+        update_station_point("LDS", "10527", None)
+
         print("*** ...finished applying misc fixes. ***")
