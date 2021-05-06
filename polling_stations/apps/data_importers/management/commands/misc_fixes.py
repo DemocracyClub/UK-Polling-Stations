@@ -193,7 +193,14 @@ class Command(BaseCommand):
         update_station_point("COT", "17302", None)
 
         # User issue 476
-        print("Removing point for Pudsey Grangefield School (Leeds)")
+        print("Removing point for Pudsey Grangefield School (Leeds)...")
         update_station_point("LDS", "10510", None)
+
+        # User issue 114643 (feedback)
+        for station_id in ["92", "93", "95"]:
+            print(
+                f"Removing point for LONG STRATTON TOWN COUNCIL PAVILLION {station_id} (South Norfolk)..."
+            )
+            update_station_point("SNO", station_id, None)
 
         print("*** ...finished applying misc fixes. ***")

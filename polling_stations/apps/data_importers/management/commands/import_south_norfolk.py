@@ -1,5 +1,3 @@
-from django.contrib.gis.geos import Point
-
 from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
@@ -14,16 +12,3 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-
-        # Fix from Council
-        if record.stationcode == "95":
-            return {
-                "internal_council_id": "95",
-                "postcode": "NR15 2XR",
-                "address": "LONG STRATTON TOWN COUNCIL PAVILLION\nMANOR ROAD PLAYING FIELDS\nMANOR ROAD \nLONG STRATTON\nNORFOLK",
-                "location": Point(619333, 293021, srid=27700),
-            }
-
-        return super().station_record_to_dict(record)
