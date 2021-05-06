@@ -207,4 +207,13 @@ class Command(BaseCommand):
         print("Removing point for Haigh Road Community Centre (Leeds)")
         update_station_point("LDS", "10527", None)
 
+        # Council issue https://twitter.com/NewportCouncil/status/1390223449566625792
+        print("Changing location for Portable Unit Layby in front of Shop (Newport)...")
+        update_station_address(
+            "NWP",
+            "11868",
+            "Please note the polling station on Heather Road (usually in the portable building by the shops) has been moved to:, The corner of Goya Close and Brangwyn Crescent, Beechwood, Newport",
+            "",
+        )
+
         print("*** ...finished applying misc fixes. ***")
