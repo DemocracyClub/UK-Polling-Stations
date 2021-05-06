@@ -220,4 +220,8 @@ class Command(BaseCommand):
         print("Removing point for YMCA - Lawnswood Branch (Leeds)...")
         update_station_point("LDS", "10611", None)
 
+        # User issue 487
+        print("Removing point for Attleborough Baptist Church (Breckland)...")
+        update_station_point("BRE", "9897", None)
+
         print("*** ...finished applying misc fixes. ***")
