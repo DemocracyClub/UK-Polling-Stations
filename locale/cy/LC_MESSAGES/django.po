@@ -493,7 +493,9 @@ msgstr "Cael <a href=\"%(google_maps_url)s\" target=\"_top\">cyfarwyddiadau cerd
 
 #: polling_stations/templates/fragments/polling_station_known.html:43
 #: polling_stations/templates/fragments/polling_station_unknown.html:23
-msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
+#, fuzzy
+#| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
+msgid "Polling stations are open from 7am to 10pm."
 msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:3
@@ -536,12 +538,6 @@ msgstr "Os nad ydych chi wedi cofrestru i bleidleisio, ewch i"
 #: polling_stations/templates/fragments/register_to_vote.html:9
 msgid "https://www.gov.uk/register-to-vote"
 msgstr "https://www.gov.uk/cofrestru-i-bleidleisio"
-
-#: polling_stations/templates/fragments/register_to_vote.html:12
-msgid ""
-"Register before midnight on Monday 19th April to vote in the election(s) on "
-"Thursday 6th May."
-msgstr "Cofrestrwch cyn canol nos ar ddydd Llun 19 Ebrill i bleidleisio yn etholiad(au) ddydd Iau 6 Mai."
 
 #: polling_stations/templates/fragments/register_to_vote.html:13
 msgid ""
@@ -631,3 +627,10 @@ msgid ""
 "Or, you need to contact your council. Residents in %(postcode)s may be in "
 "one of the following council areas:"
 msgstr "Neu, mae angen i chi gysylltu â'ch cyngor. Mae'n bosib bod trigolion yn %(postcode)s yn un o'r ardaloedd cyngor canlynol:"
+
+#~ msgid ""
+#~ "Register before midnight on Monday 19th April to vote in the election(s) "
+#~ "on Thursday 6th May."
+#~ msgstr ""
+#~ "Cofrestrwch cyn canol nos ar ddydd Llun 19 Ebrill i bleidleisio yn "
+#~ "etholiad(au) ddydd Iau 6 Mai."
