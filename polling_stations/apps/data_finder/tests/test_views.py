@@ -88,7 +88,7 @@ class PostCodeViewNoStationTestCase(TestCase):
             "/postcode/BB11BB/?utm_source=foo&something=other", follow=False
         )
         self.assertEqual(200, response.status_code)
-        self.assertContains(response, "Contact Foo Council")
+        self.assertContains(response, "ontact Foo Council")
         self.assertContains(response, "tel:01314 159265")
 
     def test_post_code_not_in_addressbase(self):
