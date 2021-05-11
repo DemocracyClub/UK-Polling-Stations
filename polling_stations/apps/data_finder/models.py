@@ -24,7 +24,7 @@ class LoggedPostcode(TimeStampedModel):
     view_used = models.CharField(blank=True, max_length=100)
     api_user = models.CharField(blank=True, null=True, max_length=30)
     has_election = models.NullBooleanField()
-    referer = models.CharField(blank=True, null=True, max_length=100, db_index=True)
+    referer = models.CharField(blank=True, null=True, max_length=800, db_index=True)
 
     def __str__(self):
         return "{0} ({1})".format(self.postcode, self.brand)
