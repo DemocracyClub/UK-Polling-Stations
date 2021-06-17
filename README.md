@@ -38,7 +38,7 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/
 
 The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing API Blueprint. This does not need to be installed manually on linux. On OSX this can be installed using
 ```
-brew install --HEAD https://raw.github.com/apiaryio/drafter/master/tools/homebrew/drafter.rb
+brew install drafter
 ```
 
 ### Install python dependencies
@@ -69,7 +69,7 @@ sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
 On Mac OSX, run:
 ```
 brew tap homebrew/cask
-brew cask install chromedriver
+brew install --cask chromedriver
 ```
 
 and if you don't already have Chrome installed:
@@ -100,6 +100,12 @@ CREATE EXTENSION
 polling_stations=#
 ```
 
+### Update local.py
+Be sure that your database user name matches 
+To check, run: 
+`psql postgres`
+then:
+`\l`
 ### Run migrations
 ```
 python manage.py migrate
