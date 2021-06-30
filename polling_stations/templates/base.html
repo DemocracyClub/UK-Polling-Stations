@@ -97,7 +97,7 @@
         <a class="ds-skip-link" href="#main">skip to content</a>
         <header class="ds-header">
             <a class="ds-logo" href="/">
-                 <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
+                <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
                 <span>
                     Where Do I Vote?<br>
                     {% get_current_language as LANGUAGE_CODE %}
@@ -109,7 +109,7 @@
         </header>
         {% endblock header %}
         <main id="main" tabindex="-1" class="ds-stack">
-             {% if messages %}
+            {% if messages %}
             <aside class="ds-status" aria-label="Status">
                 <ul class="ds-stack">
                     {% for message in messages %}
@@ -126,35 +126,35 @@
             <div class="ds-block-centered ds-text-centered">
                 <div class="ds-cluster-center">
                     <h4>{% trans "Where Do I Vote?"%}</h4>
-                        <ul class="ds-padded" style="list-style:none;">
-                            <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                            <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About" %}</a></li>
-                            <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
-                            <li><a href="{% url 'api_docs' %}">{% trans "API" context "Application Programming Interface" %}</a></li>
-                            <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
-                            <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact" %}</a></li>
-                        </ul>
+                    <ul class="ds-padded" style="list-style:none;">
+                        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                        <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About" %}</a></li>
+                        <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
+                        <li><a href="{% url 'api_docs' %}">{% trans "API" context "Application Programming Interface" %}</a></li>
+                        <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+                        <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact" %}</a></li>
+                    </ul>
 
                     <h4 class="ds-padded">{% trans "Made by Democracy Club" %}</h4>
                     <span class="ds-padded">
                         {% trans "Democracy Club is a UK based Community Interest Company that builds the digital infrastructure needed for a 21st century democracy." %}
                     </span>
-                        <ul class="ds-padded" style="list-style:none;">
-                            <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
-                            <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact Us" %}</a></li>
-                            <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
-                            <li><a href="https://twitter.com/democlub">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
-                            <li><a href="https://facebook.com/DemocracyClub">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
-                            <li><a href="https://github.com/DemocracyClub">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
-                        </ul>
-                 </div>
+                    <ul class="ds-padded" style="list-style:none;">
+                        <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
+                        <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact Us" %}</a></li>
+                        <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+                        <li><a href="https://twitter.com/democlub">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
+                        <li><a href="https://facebook.com/DemocracyClub">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
+                        <li><a href="https://github.com/DemocracyClub">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
+                    </ul>
+                </div>
 
                 {% include "mailing_list.html" %}
 
                 <div class="ds-copyright ds-padded">
                     <div class="ds-cluster-center">
                         <a class="ds-logo" href="/">
-                             <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
+                            <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
                             <span>
                                 {% trans "Where Do I Vote?" %}<br>
                                 {% get_current_language as LANGUAGE_CODE %}

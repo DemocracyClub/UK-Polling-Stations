@@ -10,9 +10,9 @@
         {% for election in election_explainers %}
         <div>
             <h3>{{ election.title }}</h3>
-            {% filter markdown %}
-            {{ election.explanation }}
-            {% endfilter %}
+{% filter markdown %}
+{{ election.explanation }}
+{% endfilter %}
         </div>
         {% endfor %}
     </div>
