@@ -5,13 +5,14 @@ The `/pollingstations` endpoint provides access to the polling station data unde
 
 ## Polling Stations Collection: JSON [/pollingstations.json?council_id={council_id}]
 
-List all polling stations in a local authority.
-Returns an array of [polling station objects](#polling-stations-json-3)
-
 + Parameters
     + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
-### List All Polling Stations in a Local Authority: JSON [GET]
+### Response [GET]
+
+List all polling stations in a local authority.
+Returns an array of [polling station objects](#polling-stations-json-3)
+
 
 + Response 200 (application/json)
     + Attributes (array[PollingStation])
@@ -20,14 +21,16 @@ Returns an array of [polling station objects](#polling-stations-json-3)
 
 ## Polling Stations Collection: GeoJSON [/pollingstations/geo.json?council_id={council_id}]
 
-List all polling stations in a local authority.
-Returns a [GeoJSON FeatureCollection](https://tools.ietf.org/html/rfc7946#section-3.3)
-of [polling station features](#polling-stations-geojson-3)
 
 + Parameters
     + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
-### List All Polling Stations in a Local Authority: GeoJSON [GET]
+### Response [GET]
+
+List all polling stations in a local authority.
+Returns a [GeoJSON FeatureCollection](https://tools.ietf.org/html/rfc7946#section-3.3)
+of [polling station features](#polling-stations-geojson-3)
+
 
 + Response 200 (application/json)
     + Attributes
@@ -38,40 +41,30 @@ of [polling station features](#polling-stations-geojson-3)
 
 ## Polling Stations: JSON [/pollingstations.json?council_id={council_id}&station_id={station_id}]
 
-Retrieve meta-data about a polling station in JSON format.
-
 + Parameters
     + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
     + `station_id`: `SUM4` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
 
-### Retrieve a Polling Station: JSON [GET]
+### Response [GET]
+
+Retrieve meta-data about a polling station in JSON format.
 
 + Response 200 (application/json)
     + Attributes (PollingStation)
 
-+ Response 404 (application/json)
-
-        {
-          "detail": "Not found."
-        }
-
-
 
 ## Polling Stations: GeoJSON [/pollingstations/geo.json?council_id={council_id}&station_id={station_id}]
 
-Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) describing a polling station.
+
 
 + Parameters
     + `council_id`: `E07000170` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
     + `station_id`: `SUM4` (required, string) - Polling Station ID. Polling Station IDs are unique within councils, but are not unique nationally
 
-### Retrieve a Polling Station: GeoJSON [GET]
+### Response [GET]
+
+Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) describing a polling station.
 
 + Response 200 (application/json)
     + Attributes (GeoPollingStation)
 
-+ Response 404 (application/json)
-
-        {
-          "detail": "Not found."
-        }
