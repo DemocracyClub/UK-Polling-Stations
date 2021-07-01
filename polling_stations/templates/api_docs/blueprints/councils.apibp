@@ -7,49 +7,41 @@ Polling stations and districts are maintained by local councils so all of our da
 
 ## Councils Collection: JSON [/councils.json]
 
+
+### Response [GET]
+
 List all councils. Returns an array of [council objects](#retrieve-a-council-json-3)
 
-### List All Councils: JSON [GET]
 
 + Response 200 (application/json)
     + Attributes (array[Council])
 
 
-
 ## Councils: JSON [/councils/{council_id}.json]
 
-Retrieve meta-data about a council in JSON format.
 
 + Parameters
     + `council_id`: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
-### Retrieve a Council: JSON [GET]
+### Response [GET]
+
+Retrieve meta-data about a council in JSON format.
+
 
 + Response 200 (application/json)
     + Attributes (Council)
 
-+ Response 404 (application/json)
-
-        {
-          "detail": "Not found."
-        }
-
-
 
 ## Councils: GeoJSON [/councils/{council_id}/geo.json]
 
-Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a GIS boundary and meta-data about a council.
 
 + Parameters
     + `council_id`: `W06000015` (required, string) - [GSS code](http://data.ordnancesurvey.co.uk/ontology/admingeo/gssCode) for this council
 
-### Retrieve a Council: GeoJSON [GET]
+### Response [GET]
+
+Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) containing a GIS boundary and meta-data about a council.
+
 
 + Response 200 (application/json)
     + Attributes (GeoCouncil)
-
-+ Response 404 (application/json)
-
-        {
-          "detail": "Not found."
-        }
