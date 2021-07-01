@@ -7,6 +7,7 @@ class ApiDocsView(ApiBlueprintView):
     template_name = "api_docs/api_base_template.html"
     styles = {
         "resource": {"class": "card"},
-        "resource_group": {"class": "card"},
+        "resource_group": {"class": "group"},
+        "api-description": {"class": "ds-stack-smaller"},
         "method_GET": {"class": "badge success"},
     }
