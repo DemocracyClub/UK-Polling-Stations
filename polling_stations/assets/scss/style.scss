@@ -99,6 +99,8 @@ $scope: false;
     @include utilities;
 }
 
+@import "api";
+
 main {
     background-color: white;
 }
@@ -110,21 +112,6 @@ select.select_multirow {
 select[size],
 select[multiple] {
     background-image: none;
-}
-
-.api-method {
-    @extend code;
-    border-radius: 5px;
-    padding: 0.2em 0.5em;
-}
-
-.api-http-code {
-    cursor: pointer;
-}
-
-.api-method-GET {
-    background-color: green;
-    color: #FFF;
 }
 
 input[type=radio] {
@@ -146,4 +133,9 @@ input[type=radio] {
     color: white;
     border-color: #0089bc;
     outline: 3px solid #ffbf47;
+}
+
+// TODO: should this be in the design system?
+body.wide main {
+  max-width: 140ch;
 }

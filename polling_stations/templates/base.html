@@ -72,7 +72,7 @@
 
 </head>
 
-<body>
+<body {% block body_attrs %}{% endblock body_attrs %}>
     <div class="ds-page">
         {% block header %}
         <form action="{% url 'set_language' %}" method="post">
