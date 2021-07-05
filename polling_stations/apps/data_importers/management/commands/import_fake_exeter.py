@@ -10,6 +10,6 @@ def make_base_folder_path():
 class Command(BaseXpressDemocracyClubCsvImporter):
     local_files = True
     base_folder_path = make_base_folder_path()
-    council_id = "E07000041"
+    council_id = "EXE"
     addresses_name = "Democracy_Club__02May2019exe.CSV"
     stations_name = "Democracy_Club__02May2019exe.CSV"
