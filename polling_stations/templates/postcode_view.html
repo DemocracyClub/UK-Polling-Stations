@@ -81,14 +81,7 @@
 
 {% if we_know_where_you_should_vote or custom %}
 {% if request.brand == 'democracyclub' and has_election and not error %}
-<div class="ds-card ds-padded">
-    <div class="ds-card-body">
-        {% include "feedback/feedback_form.html" %}
-        <div id="report_form_container" style="display: none;">
-            {% include "bug_reports/report_form_inline.html" %}
-        </div>
-    </div>
-</div>
+{% include "feedback/feedback_form.html" %}
 {% endif %}
 {% endif %}
 

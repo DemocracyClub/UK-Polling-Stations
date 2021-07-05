@@ -10,7 +10,7 @@ class TestBugReport(TestCase):
         expected_strings = [
             '<textarea name="description" cols="40" rows="3" class="" required id="id_description">\n</textarea>',
             '<input type="email" name="email" maxlength="100" class="" id="id_email">',
-            '<button type="submit" class="ds-button-blue">Send Report</button>',
+            '<button type="submit" class="ds-button">Send Report</button>',
         ]
         for string in expected_strings:
             self.assertContains(response, string, html=True)

@@ -1,5 +1,6 @@
 {% load i18n %}
 
+
 <form id="feedback_form" method="post" action="{% url 'feedback_form_view' %}">
     {% csrf_token %}
     {{ feedback_form.token }}
@@ -17,11 +18,9 @@
         {% endfor %}
     </div>
 
-    <div class="ds-stack-smaller ds-padded">
-        <p>{% trans "Can you tell us anything more?" %}</p>
-        {{ feedback_form.comments }}
-        <div>
-          <button type="submit" class="ds-button-pink">{% trans "Send feedback" %}</button>
-        </div>
+    <p>{% trans "Can you tell us anything more?" %}</p>
+    {{ feedback_form.comments }}
+    <div>
+        <button type="submit" class="ds-button">{% trans "Send feedback" %}</button>
     </div>
 </form>

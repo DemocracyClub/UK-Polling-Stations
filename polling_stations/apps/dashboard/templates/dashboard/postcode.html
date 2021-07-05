@@ -95,29 +95,30 @@
 </div>
 <div class="ds-card">
     <div class="ds-card-body">
-        <h2>Addresses</h2>
-
+        <div class="ds-table">
         <table>
-            <tr>
-                <th>Address</th>
-                <th>UPRN</th>
-                <th>Polling place</th>
-            </tr>
-            {% for address in addresses %}
-            <tr>
-                <td>{{ address.address }}</td>
-                <td>{{ address.uprn }}</td>
-                <td><a href="{% url "dashboard:pollingstation_detail" address.council_id address.polling_station_id %}">{{ address.polling_station_id }}</a></td>
-            </tr>
-            {% endfor %}
-            {% for address in unassigned_addresses %}
-            <tr>
-                <td>{{ address.address }}</td>
-                <td>{{ address.uprn }}</td>
-                <td></td>
-            </tr>
-            {% endfor %}
-        </table>
+                <caption>Addresses</caption>
+                <tr>
+                    <th>Address</th>
+                    <th>UPRN</th>
+                    <th>Polling place</th>
+                </tr>
+                {% for address in addresses %}
+                <tr>
+                    <td>{{ address.address }}</td>
+                    <td>{{ address.uprn }}</td>
+                    <td><a href="{% url "dashboard:pollingstation_detail" address.council_id address.polling_station_id %}">{{ address.polling_station_id }}</a></td>
+                </tr>
+                {% endfor %}
+                {% for address in unassigned_addresses %}
+                <tr>
+                    <td>{{ address.address }}</td>
+                    <td>{{ address.uprn }}</td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 </div>
 

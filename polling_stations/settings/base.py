@@ -1,8 +1,6 @@
 import os, sys
 
 from django.utils.translation import gettext_lazy as _
-from dc_utils.settings.pipeline import *
-from dc_utils.settings.pipeline import get_pipeline_settings
 
 # PATH vars
 
@@ -82,7 +80,7 @@ STATIC_URL = "/static/"
 # Additional locations of static files
 STATICFILES_DIRS = (root("assets"), root("../node_modules"))
 
-from .static_files import *  # noqa
+from .static_files import PIPELINE  # noqa
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "asdasdasdasdasdasdasd"
