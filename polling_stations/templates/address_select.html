@@ -14,7 +14,7 @@
         <form method=post class="form form-inline" id="select-address-form">
             {% csrf_token %}
             {{ form|dc_form }}
-            <button type="submit" class="button" id="submit-address">
+            <button type="submit" class="ds-button-blue" id="submit-address">
                 {% trans "Find my Polling Station" %}
             </button>
         </form>
