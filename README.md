@@ -121,6 +121,8 @@ For development purposes, you can use the ONSPD for geocoding. Grab the latest r
 python manage.py import_onspd /path/to/data
 ```
 
+N.B. Path is to data _directory_ which contains the csv, not the csv itself.
+
 #### Import Councils
 
 ```
