@@ -101,8 +101,8 @@ polling_stations=#
 ```
 
 ### Update local.py
-Be sure that your database user name matches 
-To check, run: 
+Be sure that your database user name matches
+To check, run:
 `psql postgres`
 then:
 `\l`
