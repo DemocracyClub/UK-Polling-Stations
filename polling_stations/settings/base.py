@@ -80,7 +80,7 @@ STATIC_URL = "/static/"
 # Additional locations of static files
 STATICFILES_DIRS = (root("assets"), root("../node_modules"))
 
-from .static_files import PIPELINE  # noqa
+from .static_files import PIPELINE, STATICFILES_FINDERS, STATICFILES_STORAGE  # noqa
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "asdasdasdasdasdasdasd"
