@@ -1,9 +1,10 @@
-from dc_utils.settings.pipeline import get_pipeline_settings
-
-PIPELINE = get_pipeline_settings(
-    extra_css=["scss/style.scss"],
-    extra_js=[],
+from dc_utils.settings.pipeline import (  # noqa
+    get_pipeline_settings,
+    STATICFILES_FINDERS,
+    STATICFILES_STORAGE,
 )
+
+PIPELINE = get_pipeline_settings(extra_css=["scss/style.scss"], extra_js=[],)
 
 PIPELINE["STYLESHEETS"].update(
     {
