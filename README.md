@@ -36,10 +36,8 @@ sudo npm install -g npm@latest-6
 
 For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
-The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing API Blueprint. This does not need to be installed manually on linux. On OSX this can be installed using
-```
-brew install drafter
-```
+The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing API Blueprint. This does not need to be installed manually on linux.
+**This currently cannot be done on OSX; Refer to [this issue](https://github.com/DemocracyClub/UK-Polling-Stations/issues/1400) for more details.**
 
 ### Install python dependencies
 ```
@@ -164,6 +162,9 @@ Each council that has unimported data has a Github Issue with the [Data Import](
 
 We make a Django `manage.py` command in the data_importers app for each council which imports the raw data.
 If you are interested in helping the project by writing an import script, see the issues tagged [recommended for beginners](https://github.com/DemocracyClub/UK-Polling-Stations/issues?q=is%3Aissue+is%3Aopen+label%3A%22recommended+for+beginners%22) for more info.
+
+## Welsh Language translations
+`./manage.py compilemessages`
 
 ## Install git hooks
 
