@@ -8,3 +8,5 @@ DATABASES = {
         "PORT": "",  # Set to empty string for default.
     }
 }
+
+EVERY_ELECTION = {"CHECK": False, "HAS_ELECTION": True}
