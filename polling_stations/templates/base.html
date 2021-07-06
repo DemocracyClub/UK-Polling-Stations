@@ -1,12 +1,14 @@
 {% load static i18n pipeline %}
-{% block extra_site_css %}
-{% stylesheet 'styles' %}
-{% endblock extra_site_css %}
 
 <!doctype html>
 <html lang="en">
 
 <head>
+    {% block extra_site_css %}
+    {% stylesheet 'styles' %}
+    {% stylesheet 'map' %}
+    {% endblock extra_site_css %}
+
     {% block top_banner %}
     {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
     <div class="ds-card">
@@ -75,7 +77,7 @@
 <body {% block body_attrs %}{% endblock body_attrs %}>
     <div class="ds-page">
         {% block header %}
-        <form action="{% url 'set_language' %}" method="post">
+        <form id="language-menu" action="{% url 'set_language' %}" method="post">
             <aside class="ds-language" aria-labelledby="language-label">
                 {% csrf_token %}
                 <input name="next" type="hidden" value="{{ request.get_full_path }}">
@@ -193,4 +195,8 @@
 {% endif %}
 
 {% javascript 'scripts' %}
+
 {% endblock extra_javascript %}
+
+{% block in_page_javascript %}
+{% endblock in_page_javascript %}
