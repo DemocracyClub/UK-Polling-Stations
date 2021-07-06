@@ -133,9 +133,25 @@ input[type=radio] {
     color: white;
     border-color: #0089bc;
     outline: 3px solid #ffbf47;
+    .button-group.toggle li:not(first-child) {
+        margin: 0 -0.9rem;
+    }
+}
+
+.comments_container {
+    padding-left: 10px;
+    button {
+        margin-top: 1rem;
+    }
 }
 
 // TODO: should this be in the design system?
 body.wide main {
   max-width: 140ch;
+}
+
+#language-menu {
+    background-color: transparent;
+    margin: 0px;
+    padding: 0px;
 }
