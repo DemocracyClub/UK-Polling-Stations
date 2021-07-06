@@ -5,20 +5,19 @@
 
 {% block content %}
 
-<div class="ds-card">
-    <div class="ds-card-body">
-        <div class="ds-table">
-            <table>
+
+    <div class="ds-table" id="dashboard">
+        <table>
             <caption>{% trans "Dashboard" %}</caption>
-                <tr>
-                    <th>Council</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Stations</th>
-                    <th>Districts</th>
-                    <th>Addresses</th>
-                </tr>
-                {% for council in council_list %}
+            <tr>
+                <th>Council</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Stations</th>
+                <th>Districts</th>
+                <th>Addresses</th>
+            </tr>
+            {% for council in council_list %}
                 <tr>
                     <td>
                         <a href="{% url "dashboard:council_detail" pk=council.pk %}">{{ council }}</a>
@@ -29,9 +28,8 @@
                     <td>{{ council.dataquality.num_districts|default:"" }}</td>
                     <td>{{ council.dataquality.num_addresses|default:"" }}</td>
                 </tr>
-                {% endfor %}
-            </table>
-        </div>
+            {% endfor %}
+        </table>
     </div>
-</div>
+
 {% endblock content %}

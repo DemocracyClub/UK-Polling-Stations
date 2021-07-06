@@ -67,4 +67,3 @@ Retrieve a [GeoJSON Feature](https://tools.ietf.org/html/rfc7946#section-3.2) de
 
 + Response 200 (application/json)
     + Attributes (GeoPollingStation)
-

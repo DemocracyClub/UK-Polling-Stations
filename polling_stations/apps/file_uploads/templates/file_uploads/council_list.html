@@ -4,45 +4,45 @@
 {% block page_title %}{% trans "Uploads" %}{% endblock page_title %}
 
 {% block content %}
-{% include "file_uploads/uploads_header.html" %}
+    {% include "file_uploads/uploads_header.html" %}
 
-<div class="ds-card">
-    <div class="ds-card-body">
-        <div class="ds-table">
-            <table>
-                <caption>Uploads</caption>
-                <tr>
-                    <th>Council ID</th>
-                    <th>Council Name</th>
-                    <th>Email</th>
-                    <th>Upload</th>
-                    <th>Status</th>
-                </tr>
-                {% for council in object_list %}
-                <tr>
-                    <td>{{ council.council_id }}</td>
-                    <td>
-                        <a href="{% url 'file_uploads:councils_detail' pk=council.council_id %}">
-                            {{ council.name }}
-                        </a>
-                    </td>
-                    <td><a href="mailto:{{ council.email }}">{{ council.email }}</a></td>
-                    <td>
-                        <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
-                            upload
-                        </a>
-                    </td>
-                    <td>
-                        {{ council.upload_set.latest.status_emoji }}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4">No councils found!</td>
-                </tr>
-                {% endfor %}
-            </table>
+    <div class="ds-card">
+        <div class="ds-card-body">
+            <div class="ds-table">
+                <table>
+                    <caption>Uploads</caption>
+                    <tr>
+                        <th>Council ID</th>
+                        <th>Council Name</th>
+                        <th>Email</th>
+                        <th>Upload</th>
+                        <th>Status</th>
+                    </tr>
+                    {% for council in object_list %}
+                        <tr>
+                            <td>{{ council.council_id }}</td>
+                            <td>
+                                <a href="{% url 'file_uploads:councils_detail' pk=council.council_id %}">
+                                    {{ council.name }}
+                                </a>
+                            </td>
+                            <td><a href="mailto:{{ council.email }}">{{ council.email }}</a></td>
+                            <td>
+                                <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
+                                    upload
+                                </a>
+                            </td>
+                            <td>
+                                {{ council.upload_set.latest.status_emoji }}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">No councils found!</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     </div>
-</div>
 {% endblock content %}

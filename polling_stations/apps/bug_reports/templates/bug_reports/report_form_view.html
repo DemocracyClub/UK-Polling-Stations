@@ -6,15 +6,15 @@
 
 {% block content %}
 
-<form action="" method="post">
-    {% csrf_token %}
-    <h3>{% trans "Report a Problem" %}</h3>
-    <div class="form-group">
-        <p>{{ form|dc_form }}</p>
-        {% include "bug_reports/disclaimer.html" %}
-        <button type="submit" class="ds-button">{% trans "Send Report" context "button to send a bug report" %}</button>
-    </div>
-</form>
+    <form action="" method="post">
+        {% csrf_token %}
+        <h3>{% trans "Report a Problem" %}</h3>
+        <div class="form-group">
+            <p>{{ form|dc_form }}</p>
+            {% include "bug_reports/disclaimer.html" %}
+            <button type="submit" class="ds-button">{% trans "Send Report" context "button to send a bug report" %}</button>
+        </div>
+    </form>
 
 
 {% endblock content %}

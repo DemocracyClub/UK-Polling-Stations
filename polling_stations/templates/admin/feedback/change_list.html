@@ -2,12 +2,12 @@
 {% load i18n admin_static admin_list %}
 
 {% block object-tools %}
-  <ul class="object-tools">
-    {% block object-tools-items %}
-      {% if user.is_superuser %}
-        <li><a href="export_all">Export All</a></li>
-        <li><a href="export_comments">Export Comments</a></li>
-      {% endif %}
-    {% endblock %}
-  </ul>
+    <ul class="object-tools">
+        {% block object-tools-items %}
+            {% if user.is_superuser %}
+                <li><a href="export_all">Export All</a></li>
+                <li><a href="export_comments">Export Comments</a></li>
+            {% endif %}
+        {% endblock %}
+    </ul>
 {% endblock %}
