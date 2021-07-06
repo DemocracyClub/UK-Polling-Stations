@@ -6,11 +6,11 @@
     {{ feedback_form.token }}
     {{ feedback_form.source_url }}
 
-    <h5>
+    <h3>
         <span aria-hidden="true">🔎</span>
         {% trans "Did you find this useful?" %}
         <span aria-hidden="true">🔎</span>
-    </h5>
+    </h3>
     <div id="feedback_choices_container">
         {% for choice in feedback_form.found_useful %}
             {{ choice.tag }}
