@@ -13,6 +13,8 @@
     },
     "dependencies": {
         "@mapbox/polyline": "^1.1.1",
+        "font-awesome": "^4.7.0",
+        "jquery": "^3.6.0",
         "leaflet": "^1.7.1",
         "leaflet-extra-markers": "^1.2.1",
         "leaflet.markercluster": "^1.5.0"

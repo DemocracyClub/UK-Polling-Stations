@@ -4,7 +4,10 @@ from dc_utils.settings.pipeline import (  # noqa
     STATICFILES_STORAGE,
 )
 
-PIPELINE = get_pipeline_settings(extra_css=["scss/style.scss"], extra_js=[],)
+PIPELINE = get_pipeline_settings(
+    extra_css=["scss/style.scss", "font-awesome/css/font-awesome.min.css"],
+    extra_js=[],
+)
 
 PIPELINE["STYLESHEETS"].update(
     {
@@ -30,6 +33,7 @@ PIPELINE["JAVASCRIPT"].update(
     {
         "map": {
             "source_filenames": [
+                "jquery/dist/jquery.min.js", 
                 "leaflet/dist/leaflet.js",
                 "leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js",
                 "@mapbox/polyline/src/polyline.js",

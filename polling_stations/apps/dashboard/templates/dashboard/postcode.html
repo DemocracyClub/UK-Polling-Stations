@@ -80,9 +80,7 @@
 <h1>{{ postcode }}</h1>
 
 
-<div id="area_map" class="ds-card">
-    <div class="ds-card-body">
-    </div>
+<div id="area_map" class="ds-image-card">
 
 </div>
 
@@ -90,14 +88,14 @@
     <div class="ds-card-body">
         <h2>User view</h2>
 
-        <p><a href="{% url "postcode_view" postcode %}">View ({{ routing_helper.route_type }})</a></p>
+        <p><a class="ds-cta" href="{% url "postcode_view" postcode %}">View ({{ routing_helper.route_type }})</a></p>
     </div>
 </div>
 <div class="ds-card">
     <div class="ds-card-body">
         <div class="ds-table">
         <table>
-                <caption>Addresses</caption>
+            <caption>Addresses</caption>
                 <tr>
                     <th>Address</th>
                     <th>UPRN</th>
