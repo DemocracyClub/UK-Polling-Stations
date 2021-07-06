@@ -13,8 +13,8 @@
     </h5>
     <div id="feedback_choices_container">
         {% for choice in feedback_form.found_useful %}
-        {{ choice.tag }}
-        <label class="link-button" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+            {{ choice.tag }}
+            <label class="link-button" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
         {% endfor %}
     </div>
     <div class="comments_container">

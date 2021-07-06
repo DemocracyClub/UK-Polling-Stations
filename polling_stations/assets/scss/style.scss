@@ -105,6 +105,26 @@ main {
     background-color: white;
 }
 
+main #dashboard {
+    max-width: 90ch !important;
+}
+
+// TODO: should this be in the design system?
+body.wide main {
+    max-width: 140ch;
+}
+
+pre {
+    background-color: #eff0f1;
+    overflow: auto;
+    padding: 5px;
+    width: auto;
+    word-wrap: normal;
+    font-family: monospace;
+    white-space: pre;
+    max-height: none;
+}
+
 select.select_multirow {
     height: auto;
 }
@@ -145,13 +165,27 @@ input[type=radio] {
     }
 }
 
-// TODO: should this be in the design system?
-body.wide main {
-  max-width: 140ch;
+body.embed {
+    padding-top: 0px;
+    margin-top: 0px;
+
+    footer {
+      background-color: transparent;
+      color: grey;
+      display: inline-block;
+
+    }
+}
+.dc-logo {
+    height: 45px;;
 }
 
 #language-menu {
     background-color: transparent;
     margin: 0px;
     padding: 0px;
+}
+
+#embed{
+   text-align: center;
 }

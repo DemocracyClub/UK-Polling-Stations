@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 21.6b0
     hooks:
     -   id: black
 -   repo: local
@@ -18,9 +18,13 @@ repos:
         pass_filenames: false
         stages: [push]
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
     -   id: check-json
+-   repo: https://github.com/rtts/djhtml
+    rev: v1.4.9
+    hooks:
+    -   id: djhtml

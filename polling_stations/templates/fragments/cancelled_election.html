@@ -16,9 +16,9 @@
 {% endif %}
 
 {% if cancelled_election.metadata.cancelled_election.detail %}
-{% filter markdown %}
-{{ cancelled_election.metadata.cancelled_election.detail }}
-{% endfilter %}
+    {% filter markdown %}
+        {{ cancelled_election.metadata.cancelled_election.detail }}
+    {% endfilter %}
 {% else %}
     {% if council.electoral_services_phone_numbers %}
         <p>

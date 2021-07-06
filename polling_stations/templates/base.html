@@ -3,200 +3,230 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    {% block extra_site_css %}
-    {% stylesheet 'styles' %}
-    {% stylesheet 'map' %}
-    {% endblock extra_site_css %}
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock title %} Democracy Club</title>
+        {% block extra_site_css %}
+            {% stylesheet 'styles' %}
+            {% stylesheet 'map' %}
+        {% endblock extra_site_css %}
 
-    {% block top_banner %}
-    {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
-    <div class="ds-card">
-        <div class="ds-card-body">
-            <p>{% trans "This is a staging site." context "not shown to general public" %}</p>
-        </div>
-    </div>
-    {% endif %}
-    {% endblock top_banner %}
-
-
-    {% block ga_tracking_code %}
-    {% if not debug and not disable_ga %}
-    <script type="text/javascript">
-        var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || "0";
-        if (dnt != "1" && dnt != "yes") {
-            (function(i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r;
-                i[r] = i[r] || function() {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-                a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-            ga('create', 'UA-61638489-1', 'auto');
-            ga('send', 'pageview');
-        }
-    </script>
-    {% endif %}
-    {% endblock ga_tracking_code %}
-
-
-    {% block site_meta %}
-    <title>
-        {% block base_title %}
-        {% block page_title %}{% endblock page_title %} | {% blocktrans %} Where Do I Vote? by Democracy Club{% endblocktrans %}
-        {% endblock base_title %}
-    </title>
-
-    <meta name="description" content="{% block description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock %}">
-    <meta name="keywords" content="{% block keywords %}Polling stations,Election,General Election,Local Election{% endblock %}">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-    <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}">
-    <meta property="og:site_name" content="Where Do I Vote?">
-    <meta property="og:url" content="{{ CANONICAL_URL }}{{ request.path }}">
-    <meta property="fb:app_id" content="262795130596272">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@democlub">
-    <meta property="og:image" content="{{ CANONICAL_URL }}{% block og_image %}<img src=" https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />{% endblock og_image %}
-    <meta property="og:title" content="{% block og_title %}{% trans "Where Do I Vote?" %}{% endblock og_title %}">
-    <meta property="og:description" content="{% block og_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_description %}">
-    {% if noindex %}
-    <meta name="robots" content="noindex">
-    {% endif %}
-    {% block page_meta %}{% endblock page_meta %}
-    {% endblock site_meta %}
-
-</head>
-
-<body {% block body_attrs %}{% endblock body_attrs %}>
-    <div class="ds-page">
-        {% block header %}
-        <form id="language-menu" action="{% url 'set_language' %}" method="post">
-            <aside class="ds-language" aria-labelledby="language-label">
-                {% csrf_token %}
-                <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                <ul>
-                    <li id="language-label" aria-hidden="true">{% trans "Language:" %}</li>
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
-                    <li>
-                        <button name="language" value="{{ language.code }}" lang="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} aria-current="true" {% endif %}>
-                            {{ language.name_local }}
-                        </button>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </aside>
-        </form>
-        <a class="ds-skip-link" href="#main">skip to content</a>
-        <header class="ds-header">
-            <a class="ds-logo" href="/">
-                <img src="{% static "images/logo_icon.svg" %}" alt="" />
-                <span>
-                    Where Do I Vote?<br>
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% if LANGUAGE_CODE != "en" %}
-                    <em lang="cy">{% language "cy" %}{% trans "Where Do I Vote?" %}{% endlanguage %}</em>
-                    {% endif %}
-                </span>
-            </a>
-        </header>
-        {% endblock header %}
-        <main id="main" tabindex="-1" class="ds-stack">
-            {% if messages %}
-            <aside class="ds-status" aria-label="Status">
-                <ul class="ds-stack">
-                    {% for message in messages %}
-                    <li {% if message.tags %}class=" {{ message.tags }} ds-status-message " {% endif %}> {{ message }} </li>
-                    {% endfor %}
-                </ul>
-            </aside>
-            {% endif %}
-            {% block content %}
-            {% endblock content %}
-        </main>
-        {% block site_footer %}
-        <footer class="ds-footer">
-            <div class="ds-block-centered ds-text-centered">
-                <div class="ds-cluster-center">
-                    <h4>{% trans "Where Do I Vote?"%}</h4>
-                    <ul class="ds-padded" style="list-style:none;">
-                        <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                        <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About" %}</a></li>
-                        <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
-                        <li><a href="{% url 'api_docs' %}">{% trans "API" context "Application Programming Interface" %}</a></li>
-                        <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
-                        <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact" %}</a></li>
-                    </ul>
-
-                    <h4 class="ds-padded">{% trans "Made by Democracy Club" %}</h4>
-                    <span class="ds-padded">
-                        {% trans "Democracy Club is a UK based Community Interest Company that builds the digital infrastructure needed for a 21st century democracy." %}
-                    </span>
-                    <ul class="ds-padded" style="list-style:none;">
-                        <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
-                        <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact Us" %}</a></li>
-                        <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
-                        <li><a href="https://twitter.com/democlub">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
-                        <li><a href="https://facebook.com/DemocracyClub">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
-                        <li><a href="https://github.com/DemocracyClub">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
-                    </ul>
-                </div>
-
-                {% include "mailing_list.html" %}
-
-                <div class="ds-copyright ds-padded">
-                    <div class="ds-cluster-center">
-                        <a class="ds-logo" href="/">
-                            <img src="https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />
-                            <span>
-                                {% trans "Where Do I Vote?" %}<br>
-                                {% get_current_language as LANGUAGE_CODE %}
-                                {% if LANGUAGE_CODE != "en" %}
-                                <em lang="cy">{% language "cy" %}{% trans "Where Do I Vote?" %}{% endlanguage %}</em>
-                                {% endif %}
-                            </span>
-                        </a>
-                        {% now "Y" as current_year %}
-                        <p class="ds-text-centered ds-padded">
-                            {% blocktrans %}Contains OS data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
-                            {% blocktrans %}Contains Royal Mail data © Royal Mail copyright and database right {{ current_year }}{% endblocktrans %}<br>
-                            {% blocktrans %}Contains National Statistics data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
-                        </p>
-                        <p class="ds-text-centered ds-padded">
-                            {% blocktrans with company_number="09461226" companies_house_url="https://beta.companieshouse.gov.uk/company/09461226" %}Copyright ©
-                            {{ current_year }} Democracy Club Community Interest Company Company No: <a href="{{ companies_house_url }}">{{ company_number }}</a>{% endblocktrans %}
-                        </p>
-
+        {% block top_banner %}
+            {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
+                <div class="ds-card">
+                    <div class="ds-card-body">
+                        <p>{% trans "This is a staging site." context "not shown to general public" %}</p>
                     </div>
                 </div>
-            </div>
-        </footer>
-        {% endblock site_footer %}
-    </div>
-</body>
+            {% endif %}
+        {% endblock top_banner %}
+
+
+        {% block ga_tracking_code %}
+            {% if not debug and not disable_ga %}
+                <script type="text/javascript">
+                    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || "0";
+                    if (dnt != "1" && dnt != "yes") {
+                        (function(i, s, o, g, r, a, m) {
+                            i['GoogleAnalyticsObject'] = r;
+                            i[r] = i[r] || function() {
+                                (i[r].q = i[r].q || []).push(arguments)
+                            }, i[r].l = 1 * new Date();
+                            a = s.createElement(o),
+                            m = s.getElementsByTagName(o)[0];
+                            a.async = 1;
+                            a.src = g;
+                            m.parentNode.insertBefore(a, m)
+                        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                        ga('create', 'UA-61638489-1', 'auto');
+                        ga('send', 'pageview');
+                    }
+                </script>
+            {% endif %}
+        {% endblock ga_tracking_code %}
+
+
+        {% block site_meta %}
+            <title>
+                {% block base_title %}
+                    {% block page_title %}{% endblock page_title %} | {% blocktrans %} Where Do I Vote? by Democracy Club{% endblocktrans %}
+                {% endblock base_title %}
+            </title>
+
+            <meta name="description" content="{% block description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock %}">
+            <meta name="keywords" content="{% block keywords %}Polling stations,Election,General Election,Local Election{% endblock %}">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+            <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}">
+            <meta property="og:site_name" content="Where Do I Vote?">
+            <meta property="og:url" content="{{ CANONICAL_URL }}{{ request.path }}">
+            <meta property="fb:app_id" content="262795130596272">
+            <meta name="twitter:card" content="summary">
+            <meta name="twitter:site" content="@democlub">
+            <meta property="og:image" content="{{ CANONICAL_URL }}{% block og_image %}<img src=" https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />{% endblock og_image %}
+                <meta property="og:title" content="{% block og_title %}{% trans "Where Do I Vote?" %}{% endblock og_title %}">
+                <meta property="og:description" content="{% block og_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_description %}">
+                {% if noindex %}
+                    <meta name="robots" content="noindex">
+                {% endif %}
+                {% block page_meta %}{% endblock page_meta %}
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% endblock site_meta %}
+
+    </head>
+
+    <body {% block body_attrs %}class="ds-width-full"{% endblock body_attrs %}>
+        <div class="ds-page">
+            {% block header %}
+                <form id="language-menu" action="{% url 'set_language' %}" method="post">
+                    <aside class="ds-language" aria-labelledby="language-label">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <ul>
+                            <li id="language-label" aria-hidden="true">{% trans "Language:" %}</li>
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                                <li>
+                                    <button name="language" value="{{ language.code }}" lang="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} aria-current="true" {% endif %}>
+                                        {{ language.name_local }}
+                                    </button>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </form>
+                <a class="ds-skip-link" href="#main">skip to content</a>
+                <header class="ds-header">
+                    <a class="ds-logo" href="/">
+                        <img src="{% static "images/logo_icon.svg" %}" alt="" />
+                        <span>
+                            Where Do I Vote?<br>
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE != "en" %}
+                                <em lang="cy">{% language "cy" %}{% trans "Where Do I Vote?" %}{% endlanguage %}</em>
+                            {% endif %}
+                        </span>
+                    </a>
+                </header>
+            {% endblock header %}
+            <main id="main" tabindex="-1" class="ds-stack">
+                {% if messages %}
+                    <aside class="ds-status" aria-label="Status">
+                        <ul class="ds-stack">
+                            {% for message in messages %}
+                                <li {% if message.tags %}class=" {{ message.tags }} ds-status-message " {% endif %}> {{ message }} </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                {% endif %}
+                {% block content %}
+                {% endblock content %}
+            </main>
+            {% block site_footer %}
+                <footer class="ds-footer">
+                    <div class="ds-block-centered ds-text-centered">
+                        <div class="ds-cluster-center">
+                            <h4>{% trans "Where Do I Vote?"%}</h4>
+                            <ul class="ds-padded" style="list-style:none;">
+                                <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                                <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About" %}</a></li>
+                                <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
+                                <li><a href="{% url 'api_docs' %}">{% trans "API" context "Application Programming Interface" %}</a></li>
+                                <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+                                <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact" %}</a></li>
+                            </ul>
+
+                            <h4 class="ds-padded">{% trans "Made by Democracy Club" %}</h4>
+                            <span class="ds-padded">
+                                {% trans "Democracy Club is a UK based Community Interest Company that builds the digital infrastructure needed for a 21st century democracy." %}
+                            </span>
+                            <ul class="ds-padded" style="list-style:none;">
+                                <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
+                                <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact Us" %}</a></li>
+                                <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+                                <li><a href="https://twitter.com/democlub">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
+                                <li><a href="https://facebook.com/DemocracyClub">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
+                                <li><a href="https://github.com/DemocracyClub">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
+                            </ul>
+                        </div>
+
+                        {% include "mailing_list.html" %}
+
+                        <div class="ds-copyright ds-padded">
+                            <div class="ds-cluster-center">
+                                <a class="ds-logo" href="/">
+                                    <img src="{% static "images/logo_icon.svg" %}" alt="" />
+                                    <span class="ds-text-left">
+                                        {% trans "democracy" %}<br>{% trans "club" %}
+                                        {% get_current_language as LANGUAGE_CODE %}
+                                        {% if LANGUAGE_CODE != "en" %}
+                                            <em lang="cy">{% language "cy" %}{% trans "Where Do I Vote?" %}{% endlanguage %}</em>
+                                        {% endif %}
+                                    </span>
+                                </a>
+                                {% now "Y" as current_year %}
+                                <p class="ds-text-centered ds-padded">
+                                    {% blocktrans %}Contains OS data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
+                                    {% blocktrans %}Contains Royal Mail data © Royal Mail copyright and database right {{ current_year }}{% endblocktrans %}<br>
+                                    {% blocktrans %}Contains National Statistics data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
+                                </p>
+                                <p class="ds-text-centered ds-padded">
+                                    {% blocktrans with company_number="09461226" companies_house_url="https://beta.companieshouse.gov.uk/company/09461226" %}Copyright ©
+                                        {{ current_year }} Democracy Club Community Interest Company Company No: <a href="{{ companies_house_url }}">{{ company_number }}</a>{% endblocktrans %}
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            {% endblock site_footer %}
+        </div>
+
+
+        {% block ga_tracking_code %}
+            {% if not debug and not disable_ga %}
+                <script type="text/javascript">
+                    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || "0";
+                    if (dnt != "1" && dnt != "yes") {
+                        (function(i, s, o, g, r, a, m) {
+                            i['GoogleAnalyticsObject'] = r;
+                            i[r] = i[r] || function() {
+                                (i[r].q = i[r].q || []).push(arguments)
+                            }, i[r].l = 1 * new Date();
+                            a = s.createElement(o),
+                            m = s.getElementsByTagName(o)[0];
+                            a.async = 1;
+                            a.src = g;
+                            m.parentNode.insertBefore(a, m)
+                        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                        ga('create', 'UA-61638489-1', 'auto');
+                        ga('send', 'pageview');
+                    }
+                </script>
+            {% endif %}
+        {% endblock ga_tracking_code %}
+
+    </body>
+
+    {% block extra_javascript %}
+
+        {% if RAVEN_CONFIG %}
+            {% load raven %}
+            <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js"></script>
+            <script>
+                Raven.config('{% sentry_public_dsn %}').install()
+            </script>
+        {% endif %}
+        {% javascript 'scripts' %}
+
+    {% endblock extra_javascript %}
+
+    {% block in_page_javascript %}
+    {% endblock in_page_javascript %}
 
 </html>
-{% block extra_javascript %}
-{% if RAVEN_CONFIG %}
-{% load raven %}
-<script src="https://cdn.ravenjs.com/3.26.4/raven.min.js"></script>
-<script>
-    Raven.config('{% sentry_public_dsn %}').install()
-</script>
-{% endif %}
-
-{% javascript 'scripts' %}
-
-{% endblock extra_javascript %}
-
-{% block in_page_javascript %}
-{% endblock in_page_javascript %}

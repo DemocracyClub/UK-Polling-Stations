@@ -1,20 +1,20 @@
 {% load i18n %}
 {% load markdown_deux_tags %}
 {% if request.brand == 'democracyclub' %}
-<div class="ds-card">
-    <div class="ds-card-body">>
-        {% blocktrans %}
-        <h2>Elections in your area</h2>
-        {% endblocktrans %}
+    <div class="ds-card">
+        <div class="ds-card-body">>
+            {% blocktrans %}
+                <h2>Elections in your area</h2>
+            {% endblocktrans %}
 
-        {% for election in election_explainers %}
-        <div>
-            <h3>{{ election.title }}</h3>
-{% filter markdown %}
-{{ election.explanation }}
-{% endfilter %}
+            {% for election in election_explainers %}
+                <div>
+                    <h3>{{ election.title }}</h3>
+                    {% filter markdown %}
+                        {{ election.explanation }}
+                    {% endfilter %}
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 {% endif %}

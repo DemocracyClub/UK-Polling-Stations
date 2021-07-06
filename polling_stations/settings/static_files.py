@@ -33,7 +33,7 @@ PIPELINE["JAVASCRIPT"].update(
     {
         "map": {
             "source_filenames": [
-                "jquery/dist/jquery.min.js", 
+                "jquery/dist/jquery.min.js",
                 "leaflet/dist/leaflet.js",
                 "leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js",
                 "@mapbox/polyline/src/polyline.js",

@@ -3,17 +3,17 @@
 <h2>{% trans "Your polling station" %}</h2>
 
 <div>
-  <address>
-    {% if station.formatted_address %}
-      {{ station.formatted_address|linebreaksbr }}<br />
-    {% endif %}
+    <address>
+        {% if station.formatted_address %}
+            {{ station.formatted_address|linebreaksbr }}<br />
+        {% endif %}
 
-    {% if station.postcode %}
-      {% if not station.postcode in station.address %}
-        {{ station.postcode }}
-      {% endif %}
-    {% endif %}
-  </address>
+        {% if station.postcode %}
+            {% if not station.postcode in station.address %}
+                {{ station.postcode }}
+            {% endif %}
+        {% endif %}
+    </address>
 </div>
 
 {% if directions.time %}
@@ -37,7 +37,7 @@
                 Get <a href="{{ google_maps_url }}" target="_top">walking/driving directions from Google</a> or <a href="{{ cyclestreets_url }}" target="_top">cycling directions from CycleStreets</a>.
             {% endblocktrans %}
         </p>
-  </div>
+    </div>
 {% endif %}
 
 <p><strong>{% blocktrans %}Polling stations are open from 7am to 10pm.{% endblocktrans %}</strong></p>
