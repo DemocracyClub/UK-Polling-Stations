@@ -154,7 +154,6 @@ INSTALLED_APPS = (
     "apiblueprint_view",
     "dc_design_system",
     "dc_utils",
-    "dc_signup_form.signup_server",
 )
 
 PROJECT_APPS = (
@@ -170,7 +169,6 @@ PROJECT_APPS = (
     "bug_reports",
     "uk_geo_utils",
     "whitelabel",
-    "mailing_list",
 )
 
 INSTALLED_APPS += PROJECT_APPS

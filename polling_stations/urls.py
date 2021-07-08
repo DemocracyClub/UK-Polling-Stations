@@ -58,7 +58,6 @@ core_patterns = [
         r"^robots\.txt$",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
-    url(r"^mailing_list/", include("mailing_list.urls", "dc_signup_form")),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
 
@@ -80,6 +79,7 @@ extra_patterns = [
         ),
         name="about",
     ),
+    url(r"^email/", include("dc_signup_form.urls")),
 ]
 
 if "dashboard" in settings.INSTALLED_APPS:
