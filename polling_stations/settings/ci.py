@@ -1,3 +1,5 @@
+STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
