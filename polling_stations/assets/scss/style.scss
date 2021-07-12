@@ -101,7 +101,8 @@ $scope: false;
 
 @import "api";
 
-main {
+.ds-page main {
+    margin-top: 0rem;
     background-color: white;
 }
 
