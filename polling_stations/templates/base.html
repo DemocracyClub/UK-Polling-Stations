@@ -65,14 +65,14 @@
             <meta property="fb:app_id" content="262795130596272">
             <meta name="twitter:card" content="summary">
             <meta name="twitter:site" content="@democlub">
-            <meta property="og:image" content="{{ CANONICAL_URL }}{% block og_image %}<img src=" https://DemocracyClub.github.io/design-system/images/logo_icon.svg" alt="" />{% endblock og_image %}
+            <meta property="og:image" content="{{ CANONICAL_URL }}{% block og_image %}<img src="{% static "images/logo_icon.svg" %}" alt="" />{% endblock og_image %}
                 <meta property="og:title" content="{% block og_title %}{% trans "Where Do I Vote?" %}{% endblock og_title %}">
                 <meta property="og:description" content="{% block og_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_description %}">
                 {% if noindex %}
                     <meta name="robots" content="noindex">
                 {% endif %}
                 {% block page_meta %}{% endblock page_meta %}
-                <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
         {% endblock site_meta %}
 
     </head>
