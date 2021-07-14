@@ -75,16 +75,20 @@ $scope: false;
     .ds-scope *::after {
         box-sizing: border-box;
     }
+    body {
+        margin: 0;
+    }
 }
 
 @else {
-     :root {
+     body {
+        font-size: 100%;
         font-size: clamp(#{$s1}, 2vw, #{$s2});
         @include fontMain;
     }
-     :root *,
-     :root *::before,
-     :root *::after {
+     :body *,
+     :body *::before,
+     :body *::after {
         box-sizing: border-box;
     }
     body {
@@ -146,6 +150,13 @@ input[type=radio] {
     font-size: 1rem;
     padding: 1rem 2rem 1.0625rem 2rem;
     text-decoration: none;
+}
+
+
+#language-menu {
+    background-color: transparent;
+    margin: 0px;
+    padding: 0px;
 }
 
 #feedback_form input[data-toggle]:checked+label,
