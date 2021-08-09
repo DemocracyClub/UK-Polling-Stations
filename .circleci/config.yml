@@ -56,6 +56,10 @@ jobs:
           key: polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - run:
+          name: Install HTML Tidy
+          command: wget https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i tidy-5.8.0-Linux-64bit.deb
+
+      - run:
           name: Tests
           command: |
             . .venv/bin/activate
