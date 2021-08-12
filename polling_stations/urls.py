@@ -9,8 +9,6 @@ from django.urls import path
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 
-from dc_theme.urls import dc_server_error
-
 from api.router import router
 from api.docs import ApiDocsView
 from data_finder.views import (
@@ -60,6 +58,7 @@ core_patterns = [
         r"^robots\.txt$",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
+    url(r"^mailing_list/", include("mailing_list.urls", "dc_signup_form")),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
 
@@ -73,7 +72,6 @@ extra_patterns = [
     url(r"^report_problem/", include("bug_reports.urls")),
     url(r"^uploads/", include("file_uploads.urls", namespace="file_uploads")),
     url(r"^example/$", ExamplePostcodeView.as_view(), name="example"),
-    url(r"^email/", include("dc_signup_form.urls", namespace="dc_signup_form")),
     url(
         r"^about/$",
         RedirectView.as_view(
@@ -99,4 +97,9 @@ urlpatterns = (
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )
 
-handler500 = dc_server_error
+handler500 = "dc_utils.urls.dc_server_error"
+
+if settings.DEBUG:
+    from dc_utils.urls import dc_utils_testing_patterns
+
+    urlpatterns += dc_utils_testing_patterns

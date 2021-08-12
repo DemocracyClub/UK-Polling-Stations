@@ -1,7 +1,8 @@
 import os, sys
 
 from django.utils.translation import gettext_lazy as _
-
+from dc_utils.settings.pipeline import *
+from dc_utils.settings.pipeline import get_pipeline_settings
 
 # PATH vars
 
@@ -116,7 +117,6 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
-                "dc_theme.context_processors.dc_theme_context",
                 "dc_signup_form.context_processors.signup_form",
                 "feedback.context_processors.feedback_form",
                 "bug_reports.context_processors.bug_report_form",
@@ -154,6 +154,9 @@ INSTALLED_APPS = (
     "pipeline",
     "dc_signup_form",
     "apiblueprint_view",
+    "dc_design_system",
+    "dc_utils",
+    "dc_signup_form.signup_server",
 )
 
 PROJECT_APPS = (
@@ -162,7 +165,6 @@ PROJECT_APPS = (
     "councils",
     "data_finder",
     "data_importers",
-    "dc_theme",
     "feedback",
     "file_uploads",
     "pollingstations",
@@ -170,9 +172,14 @@ PROJECT_APPS = (
     "bug_reports",
     "uk_geo_utils",
     "whitelabel",
+    "mailing_list",
 )
 
 INSTALLED_APPS += PROJECT_APPS
+
+import dc_design_system
+
+PIPELINE["SASS_ARGUMENTS"] += " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
