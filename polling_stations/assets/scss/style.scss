@@ -1,0 +1,149 @@
+// DC DESIGN SYSTEM
+@import 'partials/_fonts.scss';
+@import 'partials/_variables.scss';
+@import 'partials/_type.scss';
+@import 'partials/_forms.scss';
+@import 'partials/_description-lists.scss';
+@import 'partials/_button.scss';
+@import 'partials/_call-to-action.scss';
+@import 'partials/_details.scss';
+@import 'partials/_stack.scss';
+@import 'partials/_cluster.scss';
+@import 'partials/_grid.scss';
+@import 'partials/_sidebar.scss';
+@import 'partials/_breadcrumbs.scss';
+@import 'partials/_card.scss';
+@import 'partials/_candidate.scss';
+@import 'partials/_table.scss';
+@import 'partials/_language.scss';
+@import 'partials/_header.scss';
+@import 'partials/_subnav.scss';
+@import 'partials/_footer.scss';
+@import 'partials/_radio.scss';
+@import 'partials/_checkbox.scss';
+@import 'partials/_select.scss';
+@import 'partials/_filter.scss';
+@import 'partials/_status.scss';
+@import 'partials/_codeblock.scss';
+@import 'partials/_dark.scss';
+@import 'partials/_page.scss';
+@import 'partials/_utilities.scss';
+@import 'partials/_logo.scss';
+// // Generate atomic classes for documentation demos
+@import 'partials/_classes-colors.scss';
+@import 'partials/_classes-scales.scss';
+$scope: false;
+@mixin optional-styles {
+    @include description-lists;
+    @include button;
+    @include cta;
+    @include cluster;
+    @include grid;
+    @include sidebar;
+    @include details;
+    @include card;
+    @include candidate;
+    @include breadcrumbs;
+    @include table;
+    @include language;
+    @include header;
+    @include subnav;
+    @include footer;
+    @include radio;
+    @include checkbox;
+    @include select;
+    @include filter;
+    @include status;
+    @include codeblock;
+    @include logo;
+}
+
+@if $scope {
+    .ds-scope {
+        font-size: clamp(#{$s1}, 2vw, #{$s2});
+        @include fontMain;
+        @include type;
+        @include forms;
+        @include stack;
+        @include optional-styles;
+        @include dark;
+        @include page;
+        @include utilities;
+    }
+    .ds-scope *,
+    .ds-scope *::before,
+    .ds-scope *::after {
+        box-sizing: border-box;
+    }
+}
+
+@else {
+     :root {
+        font-size: clamp(#{$s1}, 2vw, #{$s2});
+        @include fontMain;
+    }
+     :root *,
+     :root *::before,
+     :root *::after {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+    }
+    @include type;
+    @include forms;
+    @include stack;
+    @include optional-styles;
+    @include dark;
+    @include page;
+    @include utilities;
+}
+
+main {
+    background-color: white;
+}
+
+select.select_multirow {
+    height: auto;
+}
+
+select[size],
+select[multiple] {
+    background-image: none;
+}
+
+.api-method {
+    @extend code;
+    border-radius: 5px;
+    padding: 0.2em 0.5em;
+}
+
+.api-http-code {
+    cursor: pointer;
+}
+
+.api-method-GET {
+    background-color: green;
+    color: #FFF;
+}
+
+input[type=radio] {
+    visibility: hidden;
+}
+
+.link-button {
+    display: inline-block;
+    border: 2px solid #00AEEF;
+    color: #00AEEF;
+    font-size: 1rem;
+    padding: 1rem 2rem 1.0625rem 2rem;
+    text-decoration: none;
+}
+
+#feedback_form input[data-toggle]:checked+label,
+#feedback_form input[data-toggle]:checked+label:active {
+    background-color: #00AEEF;
+    color: white;
+    border-color: #0089bc;
+    outline: 3px solid #ffbf47;
+}
