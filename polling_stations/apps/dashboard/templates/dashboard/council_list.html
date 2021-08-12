@@ -6,30 +6,30 @@
 {% block content %}
 
 
-            <div class="ds-table" id="dashboard">
-                <table>
-                    <caption>{% trans "Dashboard" %}</caption>
-                    <tr>
-                        <th>Council</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Stations</th>
-                        <th>Districts</th>
-                        <th>Addresses</th>
-                    </tr>
-                    {% for council in council_list %}
-                        <tr>
-                            <td>
-                                <a href="{% url "dashboard:council_detail" pk=council.pk %}">{{ council }}</a>
-                            </td>
-                            <td>{% if council.email %}<a href="mailto:{{ council.email }}">{{ council.email }}</a>{% endif %}</td>
-                            <td>{{ council.electoral_services_phone_numbers.0 }}</td>
-                            <td>{{ council.dataquality.num_stations|default:"" }}</td>
-                            <td>{{ council.dataquality.num_districts|default:"" }}</td>
-                            <td>{{ council.dataquality.num_addresses|default:"" }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
+    <div class="ds-table" id="dashboard">
+        <table>
+            <caption>{% trans "Dashboard" %}</caption>
+            <tr>
+                <th>Council</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Stations</th>
+                <th>Districts</th>
+                <th>Addresses</th>
+            </tr>
+            {% for council in council_list %}
+                <tr>
+                    <td>
+                        <a href="{% url "dashboard:council_detail" pk=council.pk %}">{{ council }}</a>
+                    </td>
+                    <td>{% if council.email %}<a href="mailto:{{ council.email }}">{{ council.email }}</a>{% endif %}</td>
+                    <td>{{ council.electoral_services_phone_numbers.0 }}</td>
+                    <td>{{ council.dataquality.num_stations|default:"" }}</td>
+                    <td>{{ council.dataquality.num_districts|default:"" }}</td>
+                    <td>{{ council.dataquality.num_addresses|default:"" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 
 {% endblock content %}
