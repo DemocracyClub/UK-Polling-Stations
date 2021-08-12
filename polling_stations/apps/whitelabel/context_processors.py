@@ -10,4 +10,4 @@ def base_template(request):
             ["%s.html" % base_path, "%s/base.html" % base_path, "base_embed.html"]
         )
         return {"base_template": template_name, "is_whitelabel": True}
-    return {"base_template": "base_full.html"}
+    return {"base_template": "base.html"}
