@@ -54,32 +54,4 @@
             {% include "fragments/keep_safe.html" %}
         {% endif %}
     </div>
-    {% if show_polls_open_card %}
-    <div class="ds-card">
-        <div class="ds-card-body">
-            <h2>{% blocktrans with election_date=election_date|date:"DATE_FORMAT" context="Section heading for information about elections on that date. election_date is already localised, e.g. '6 Mai 2021'." %}{{ election_date }} Elections{% endblocktrans %}</h2>
-
-            {% if election_date_is_today %}
-            <p>{% trans "Polling stations are open from 7am to 10pm <strong>today</strong>." %}</p>
-            {% else %}
-            <p>
-                {% blocktrans trimmed with election_date=election_date|date:"DATE_FORMAT" day_of_week=election_date|date:"l" context "day_of_week  and election_date are localised, e.g. 'Dydd Lau' and '6 Mai 2021'. If it's awkward, leave out the day of the week." %}
-                Polling stations are open from 7am to 10pm on <strong>{{ day_of_week }} {{ election_date }}</strong>.
-                {% endblocktrans %}
-            </p>
-            {% endif %}
-
-            <p>{% trans "You don't need your poll card to vote." %}</p>
-
-            <p>{% trans "You must vote at your assigned polling station." %}</p>
-
-            <p>
-                {% trans "If you are registered to vote, but you don't have your poll card, you can go to the polling station and give them your name and address." %}
-            </p>
-
-            <p>{% trans "In England, Wales and Scotland, you don't need any form of ID. In Northern Ireland, you must bring photo ID." %}</p>
-        </div>
-    </div>
-    {% include "fragments/keep_safe.html" %}
-    {% endif %}
 {% endblock content %}
