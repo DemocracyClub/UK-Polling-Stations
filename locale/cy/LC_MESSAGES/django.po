@@ -211,8 +211,8 @@ msgstr "Logo <span lang=\"en\">Democracy Club</span>"
 
 #: polling_stations/templates/base.html:8
 #, python-format
-msgid "%(site_title)s by Democracy Club"
-msgstr "%(site_title)s gan <span lang=\"en\">Democracy Club</span>"
+msgid "Where Do I Vote? by Democracy Club"
+msgstr "Gwnaed gan <span lang=\"en\">Democracy Club</span>"
 
 #: polling_stations/templates/base.html:12
 #: polling_stations/templates/base.html:25
@@ -220,8 +220,8 @@ msgstr "%(site_title)s gan <span lang=\"en\">Democracy Club</span>"
 msgid "Find out where to vote on %(election_date)s"
 msgstr "Gweld ble i bleidleisio ar %(election_date)s"
 
-#: polling_stations/templates/base_full.html:12
-#: polling_stations/templates/base_full.html:25
+#: polling_stations/templates/base.html:12
+#: polling_stations/templates/base.html:25
 msgid "Find out where to vote"
 msgstr "Gweld ble i bleidleisio"
 
