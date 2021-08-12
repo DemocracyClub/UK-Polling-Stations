@@ -1,10 +1,12 @@
 {% load i18n %}
-<div class="card">
-    <h3>
-        <span aria-hidden="true">⏰</span>
-        {% blocktrans %}Add future elections in {{ postcode }} to your calendar:{% endblocktrans %}
-    </h3>
-    <p>
-        <a href="webcal://whocanivotefor.co.uk/elections/{{ postcode }}.ics">{% trans "iCal feed" %}</a>
-    </p>
-</div>
+<div class="ds-card-body">
+    <div class="ds-card">
+        <h3>
+            <span aria-hidden="true">⏰</span>
+            {% blocktrans %}Add future elections in {{ postcode }} to your calendar:{% endblocktrans %}
+        </h3>
+        <p>
+            <a href="webcal://whocanivotefor.co.uk/elections/{{ postcode }}.ics">{% trans "iCal feed" %}</a>
+        </p>
+    </div>
+<div>
