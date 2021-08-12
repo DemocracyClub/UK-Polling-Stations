@@ -4,21 +4,21 @@
 {% block page_title %}{% trans "Dashboard" %}{% endblock page_title %}
 
 {% block content %}
-    <h1>{% trans "Dashboard" %}</h1>
+<h1>{% trans "Dashboard" %}</h1>
 
-    <section class="card">
-        <table>
-            <thead>
-            <tr>
-                <th>Council</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Stations</th>
-                <th>Districts</th>
-                <th>Addresses</th>
-            </tr>
-            </thead>
-            <tbody>{% for council in council_list %}
+<div class="ds-card">
+    <div class="ds-card-body">
+        <div class="ds-table">
+            <table>
+                <tr>
+                    <th>Council</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Stations</th>
+                    <th>Districts</th>
+                    <th>Addresses</th>
+                </tr>
+                {% for council in council_list %}
                 <tr>
                     <td>
                         <a href="{% url "dashboard:council_detail" pk=council.pk %}">{{ council }}</a>
@@ -28,8 +28,10 @@
                     <td>{{ council.dataquality.num_stations|default:"" }}</td>
                     <td>{{ council.dataquality.num_districts|default:"" }}</td>
                     <td>{{ council.dataquality.num_addresses|default:"" }}</td>
-                </tr>{% endfor %}
-            </tbody>
-        </table>
-    </section>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock content %}

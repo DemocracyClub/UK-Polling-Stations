@@ -1,20 +1,22 @@
 {% load i18n_with_welsh %}
-<div class="card">
-    <h3>
-        <span aria-hidden="true">👉</span>
-        {% trans "Your election (might) need you!" %}
-    </h3>
-    <p>
-        {% blocktrans trimmed %}
+<div class="ds-card">
+    <div class="ds-card-body">
+        <h3>
+            <span aria-hidden="true">👉</span>
+            {% trans "Your election (might) need you!" %}
+        </h3>
+        <p>
+            {% blocktrans trimmed %}
             A lot of people are needed to make an election happen.
             Your council may be hiring polling station and counting staff for the upcoming elections.
             Contact {{ council }} Electoral Services team to see if they need help.
-        {% endblocktrans %}
-    </p>
-    <p>
-        {% blocktrans with council_phone=council.electoral_services_phone_numbers.0 council_electoral_services_email=council.electoral_services_email  %}
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans with council_phone=council.electoral_services_phone_numbers.0 council_electoral_services_email=council.electoral_services_email  %}
             You can email them at <strong><a href="mailto:{{ council_electoral_services_email }}">{{ council_electoral_services_email }}</a></strong>
             or call them on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
-        {% endblocktrans %}
-    </p>
+            {% endblocktrans %}
+        </p>
+    </div>
 </div>

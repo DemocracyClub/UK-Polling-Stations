@@ -8,9 +8,9 @@ class TestBugReport(TestCase):
         response = c.get("/report_problem/?source=foo&source_url=barbaz")
         self.assertEqual(200, response.status_code)
         expected_strings = [
-            '<textarea name="description" required id="id_description" rows="3" cols="40" class=" form-control">\n</textarea>',
-            '<input type="email" name="email" id="id_email" maxlength="100" class=" form-control" />',
-            '<button type="submit" class="button">Send Report</button>',
+            '<textarea name="description" cols="40" rows="3" class="" required id="id_description">\n</textarea>',
+            '<input type="email" name="email" maxlength="100" class="" id="id_email">',
+            '<button type="submit" class="ds-button-blue">Send Report</button>',
         ]
         for string in expected_strings:
             self.assertContains(response, string, html=True)
@@ -67,7 +67,7 @@ class TestBugReport(TestCase):
         self.assertEqual(200, response.status_code)
         reports = BugReport.objects.all()
         self.assertEqual(0, len(reports))
-        self.assertIn('<div class="form-group has-error">', str(response.content))
+        self.assertIn('<div class="error">', str(response.content))
 
     def test_no_malicious_redirects_post_body(self):
         c = Client()

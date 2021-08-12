@@ -1,6 +1,7 @@
 {% load i18n %}
 {% if voter_id_pilot %}
-    <div class="card">
+<div class="ds-card">
+    <div class="ds-card-body">
         <h3>
             <span aria-hidden="true">🗳</span>️
             {{ voter_id_pilot.title }}
@@ -11,8 +12,10 @@
         </p>
         <p>{% trans "You must vote at your assigned polling station." %}</p>
     </div>
+</div>
 {% else %}
-    <div class="card">
+<div class="ds-card">
+    <div class="ds-card-body">
         <h3>
             <span aria-hidden="true">🗳</span>️
             {% trans "You don't need your poll card to vote" %}
@@ -22,21 +25,22 @@
         </p>
 
         {% if territory == 'NI' %}
-            <p>{% trans "You will need photographic identification" %}</p>
+        <p>{% trans "You will need photographic identification" %}</p>
         {% else %}
-            <p>{% trans "You don't need any other form of ID." %}</p>
+        <p>{% trans "You don't need any other form of ID." %}</p>
         {% endif %}
 
         <p>{% trans "You must vote at your assigned polling station." %}</p>
 
         {% if territory == 'NI' %}
-            <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
+        <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
                 {% trans "Read more about voting in Northern Ireland" %}
             </a></p>
         {% else %}
-            <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
+        <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
                 {% trans "Read more about voting in Great Britain" %}
             </a></p>
         {% endif %}
     </div>
+</div>
 {% endif%}
