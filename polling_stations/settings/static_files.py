@@ -1,8 +1,7 @@
-from dc_theme.settings import get_pipeline_settings
-from dc_theme.settings import STATICFILES_FINDERS, STATICFILES_STORAGE  # noqa
+from dc_utils.settings.pipeline import get_pipeline_settings
 
 PIPELINE = get_pipeline_settings(
-    extra_css=["custom_css/style.scss", "font-awesome/css/font-awesome.min.css"],
+    extra_css=["scss/style.scss"],
     extra_js=[],
 )
 
