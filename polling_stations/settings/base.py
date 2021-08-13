@@ -312,3 +312,9 @@ if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
 
 if os.environ.get("CIRCLECI"):
     from .ci import *  # noqa
+
+
+# Register Rich as default handler for stacktraces
+from rich.traceback import install
+
+install(show_locals=True)
