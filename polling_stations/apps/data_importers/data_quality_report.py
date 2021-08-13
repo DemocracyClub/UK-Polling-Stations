@@ -476,7 +476,9 @@ class DataQualityReportBuilder:
         return table
 
     def build_report(self):
-        self.report.add_row(Panel(Text("DATA QUALITY REPORT", justify="center")))
+        self.report.add_row(
+            Panel(Text("DATA QUALITY REPORT", justify="center", style="bold"))
+        )
         if self.expecting_districts:
             self.report.add_row(self.build_district_report())
         self.report.add_row(self.build_station_report())
