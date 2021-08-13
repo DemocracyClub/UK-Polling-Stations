@@ -1,38 +1,13 @@
-import re
-
 from django.db import connection
 from django.db.models import Q
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
 
 from councils.models import Council
 from pollingstations.models import PollingStation, PollingDistrict
 from addressbase.models import UprnToCouncil
-
-
-class ANSI:
-    OKGREEN = "\033[92m"
-    WARNING = "\033[93m"
-    ENDC = "\033[0m"
-    BOLD = "\033[1m"
-
-    @classmethod
-    def ok(cls, text):
-        return cls.OKGREEN + text + cls.ENDC
-
-    @classmethod
-    def warning(cls, text):
-        return cls.WARNING + text + cls.ENDC
-
-    @classmethod
-    def bold(cls, text):
-        return cls.BOLD + text + cls.ENDC
-
-    @classmethod
-    def ok_bold(cls, text):
-        return cls.OKGREEN + cls.BOLD + text + cls.ENDC
-
-    @staticmethod
-    def remove_escapes(text):
-        return re.sub("\033\\[[0-9;]+m", "", text)
 
 
 # data quality stats for polling stations
@@ -309,224 +284,210 @@ class DataQualityReportBuilder:
     def __init__(self, council_id, expecting_districts, csv_rows=None):
         self.council_id = council_id
         self.csv_rows = csv_rows
-        self.report = []
+        self.report = Table.grid()
         # Whether the importer is expected to have imported districts;
         # controls whether relevant summaries appear in the report.
         self.expecting_districts = expecting_districts
 
-    def build_header(self):
-        self.report.append("==================================")
-        self.report.append(ANSI.bold("        DATA QUALITY REPORT"))
-        self.report.append("==================================\n")
-
     def build_station_report(self):
+        table = Table(title="STATIONS", show_header=False, min_width=50)
+        table.add_column("Caption")
+        table.add_column("Number", justify="right")
+
         stations_report = StationReport(self.council_id)
 
         stations_imported = stations_report.get_stations_imported()
         if stations_imported > 0:
-            self.report.append(
-                ANSI.bold("STATIONS IMPORTED                : %i" % (stations_imported))
+            table.add_row(
+                "STATIONS IMPORTED",
+                str(stations_imported),
+                style="bold",
+                end_section=True,
             )
-            self.report.append("----------------------------------")
 
             if self.expecting_districts:
                 district_ids = stations_report.get_stations_with_district_id()
                 if district_ids > 0:
-                    self.report.append(
-                        ANSI.ok_bold(
-                            " - with district id              : %i" % (district_ids)
-                        )
+                    table.add_row(
+                        " - with district id", str(district_ids), style="bold green"
                     )
-                    self.report.append(
-                        ANSI.ok(
-                            "   - valid district id refs      : %i"
-                            % (
-                                stations_report.get_stations_with_valid_district_id_ref()
-                            ),
-                        )
+                    table.add_row(
+                        "   - valid district id refs",
+                        str(stations_report.get_stations_with_valid_district_id_ref()),
+                        style="green",
                     )
-                    self.report.append(
-                        ANSI.warning(
-                            "   - invalid district id refs    : %i"
-                            % (
-                                stations_report.get_stations_with_invalid_district_id_ref()
-                            )
-                        )
+                    table.add_row(
+                        "   - invalid district id refs",
+                        str(
+                            stations_report.get_stations_with_invalid_district_id_ref()
+                        ),
+                        style="yellow",
                     )
                 else:
-                    self.report.append(
-                        ANSI.ok(
-                            " - with district id              : %i" % (district_ids)
-                        )
+                    table.add_row(
+                        " - with district id", str(district_ids), style="green"
                     )
+                table.add_row(
+                    " - without district id",
+                    str(stations_report.get_stations_without_district_id()),
+                    style="yellow",
+                )
+            table.add_row(
+                " - with point",
+                str(stations_report.get_stations_with_point()),
+                style="green",
+            )
+            table.add_row(
+                " - without point",
+                str(stations_report.get_stations_without_point()),
+                style="yellow",
+            )
+            table.add_row(
+                " - with address",
+                str(stations_report.get_stations_with_address()),
+                style="green",
+            )
+            table.add_row(
+                " - without address",
+                str(stations_report.get_stations_without_address()),
+                style="yellow",
+                end_section=True,
+            )
 
-                self.report.append(
-                    ANSI.warning(
-                        " - without district id           : %i"
-                        % (stations_report.get_stations_without_district_id())
-                    )
-                )
-            self.report.append(
-                ANSI.ok(
-                    " - with point                    : %i"
-                    % (stations_report.get_stations_with_point())
-                )
-            )
-            self.report.append(
-                ANSI.warning(
-                    " - without point                 : %i"
-                    % (stations_report.get_stations_without_point()),
-                )
-            )
-            self.report.append(
-                ANSI.ok(
-                    " - with address                  : %i"
-                    % (stations_report.get_stations_with_address()),
-                )
-            )
-            self.report.append(
-                ANSI.warning(
-                    " - without address               : %i"
-                    % (stations_report.get_stations_without_address())
-                )
-            )
             if self.expecting_districts:
-                self.report.append("----------------------------------")
-                self.report.append(ANSI.bold("POLYGON LOOKUPS"))
-                self.report.append(
-                    ANSI.warning(
-                        "Stations in 0 districts          : %i"
-                        % (stations_report.get_stations_in_zero_districts())
-                    )
+                table.add_row("POLYGON LOOKUPS", "", style="bold")
+                table.add_row(
+                    "Stations in 0 districts",
+                    str(stations_report.get_stations_in_zero_districts()),
+                    style="yellow",
                 )
-                self.report.append(
-                    ANSI.ok(
-                        "Stations in 1 districts          : %i"
-                        % (stations_report.get_stations_in_one_districts())
-                    )
+                table.add_row(
+                    "Stations in 1 districts",
+                    str(stations_report.get_stations_in_one_districts()),
+                    style="green",
                 )
-                self.report.append(
-                    ANSI.warning(
-                        "Stations in >1 districts         : %i"
-                        % (stations_report.get_stations_in_more_districts()),
-                    )
+                table.add_row(
+                    "Stations in >1 districts",
+                    str(stations_report.get_stations_in_more_districts()),
+                    style="yellow",
                 )
-            self.report.append("\n")
+
+        return table
 
     def build_district_report(self):
+        table = Table(title="DISTRICTS", show_header=False, min_width=50)
+        table.add_column("Caption")
+        table.add_column("Number", justify="right")
+
         districts_report = DistrictReport(self.council_id)
 
         districts_imported = districts_report.get_districts_imported()
         if self.expecting_districts:
-            self.report.append(
-                ANSI.bold(
-                    "DISTRICTS IMPORTED               : %i" % (districts_imported)
-                )
+            table.add_row(
+                "DISTRICTS IMPORTED",
+                str(districts_imported),
+                style="bold",
+                end_section=True,
             )
-            self.report.append("----------------------------------")
 
             station_ids = districts_report.get_districts_with_station_id()
             if station_ids > 0:
-                self.report.append(
-                    ANSI.ok_bold(
-                        " - with station id               : %i" % (station_ids),
-                    )
+                table.add_row(
+                    " - with station id", str(station_ids), style="bold green"
                 )
-                self.report.append(
-                    ANSI.ok(
-                        "   - valid station id refs       : %i"
-                        % (districts_report.get_districts_with_valid_station_id_ref()),
-                    )
+                table.add_row(
+                    "   - valid station id refs",
+                    str(districts_report.get_districts_with_valid_station_id_ref()),
+                    style="green",
                 )
-                self.report.append(
-                    ANSI.warning(
-                        "   - invalid station id refs     : %i"
-                        % (districts_report.get_districts_with_invalid_station_id_ref())
-                    )
+                table.add_row(
+                    "   - invalid station id refs",
+                    str(districts_report.get_districts_with_invalid_station_id_ref()),
+                    style="yellow",
                 )
             else:
-                self.report.append(
-                    ANSI.ok(
-                        " - with station id               : %i" % (station_ids),
-                    )
-                )
+                table.add_row(" - with station id", str(station_ids), style="green")
 
-            self.report.append(
-                ANSI.warning(
-                    " - without station id            : %i"
-                    % (districts_report.get_districts_without_station_id()),
-                )
+            table.add_row(
+                " - without station id",
+                str(districts_report.get_districts_without_station_id()),
+                style="yellow",
+                end_section=True,
             )
-            self.report.append("----------------------------------")
-            self.report.append(ANSI.bold("POLYGON LOOKUPS"))
-            self.report.append(
-                ANSI.warning(
-                    "Districts containing 0 stations  : %i"
-                    % (districts_report.get_districts_containing_zero_stations())
-                )
+            table.add_row("POLYGON LOOKUPS", "", style="bold")
+            table.add_row(
+                "Districts containing 0 stations",
+                str(districts_report.get_districts_containing_zero_stations()),
+                style="yellow",
             )
-            self.report.append(
-                ANSI.ok(
-                    "Districts containing 1 stations  : %i"
-                    % (districts_report.get_districts_containing_one_stations())
-                )
+            table.add_row(
+                "Districts containing 1 stations",
+                str(districts_report.get_districts_containing_one_stations()),
+                style="green",
             )
-            self.report.append(
-                ANSI.warning(
-                    "Districts containing >1 stations : %i"
-                    % (districts_report.get_districts_containing_more_stations()),
-                )
+            table.add_row(
+                "Districts containing >1 stations",
+                str(districts_report.get_districts_containing_more_stations()),
+                style="yellow",
             )
-            self.report.append("\n")
+
+        return table
 
     def build_address_report(self):
+        table = Table(title="ADDRESSES", show_header=False, min_width=50)
+        table.add_column("Caption")
+        table.add_column("Number", justify="right")
+
         address_report = AddressReport(self.council_id)
         uprns_in_council_area = address_report.get_uprns_in_addressbase()
         addresses_imported = address_report.get_addresses_with_station_id()
         station_ids = address_report.get_addresses_with_station_id()
         if addresses_imported > 0:
-            self.report.append(
-                ANSI.bold(f"UPRNS ASSIGNED STATION ID        : {station_ids}")
+            table.add_row(
+                "UPRNS ASSIGNED STATION ID",
+                str(station_ids),
+                style="bold",
+                end_section=True,
             )
 
-            self.report.append(
-                ANSI.ok_bold(
-                    f" - As % of uprns in addressbase  : {round(100 * station_ids / uprns_in_council_area, 1)}%"
-                )
+            table.add_row(
+                " - As % of uprns in addressbase",
+                f"{round(100 * station_ids / uprns_in_council_area, 1)}%",
             )
             if self.csv_rows:
-                self.report.append(
-                    ANSI.ok_bold(
-                        f" - As % of rows in council csv   : {round(100 * station_ids / self.csv_rows, 1)}%"
-                    )
+                table.add_row(
+                    " - As % of rows in council csv",
+                    f"{round(100 * station_ids / self.csv_rows, 1)}%",
                 )
-            self.report.append("----------------------------------")
-            self.report.append(
-                ANSI.ok(
-                    "   - valid station id refs       : %i"
-                    % (address_report.get_addresses_with_valid_station_id_ref()),
-                )
+            table.add_row(
+                " - valid station id refs",
+                str(address_report.get_addresses_with_valid_station_id_ref()),
+                style="green",
             )
-            self.report.append(
-                ANSI.warning(
-                    "   - invalid station id refs     : %i"
-                    % (address_report.get_addresses_with_invalid_station_id_ref()),
-                )
+            table.add_row(
+                " - invalid station id refs",
+                str(address_report.get_addresses_with_invalid_station_id_ref()),
+                style="yellow",
             )
         else:
-
-            self.report.append(ANSI.warning("NO POLLING STATIONS ASSIGNED...      "))
-        self.report.append("----------------------------------")
-        self.report.append("\n")
+            table.add_row(
+                "NO POLLING STATIONS ASSIGNED", "", style="yellow", end_section=True
+            )
+        return table
 
     def build_report(self):
-        self.build_header()
-        self.build_district_report()
-        self.build_station_report()
-        self.build_address_report()
+        self.report.add_row(Panel(Text("DATA QUALITY REPORT", justify="center")))
+        if self.expecting_districts:
+            self.report.add_row(self.build_district_report())
+        self.report.add_row(self.build_station_report())
+        self.report.add_row(self.build_address_report())
 
     def output_console_report(self):
-        print("\n".join(self.report))
+        console = Console()
+        console.print(self.report)
 
     def generate_string_report(self):
-        return ANSI.remove_escapes("\n".join(self.report))
+        recorder = Console(record=True)
+        with recorder.capture():
+            recorder.print(self.report)
+        return recorder.export_text()
