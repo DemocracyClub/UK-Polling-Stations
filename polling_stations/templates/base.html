@@ -98,7 +98,7 @@
             </main>
             {% block site_footer %}
                 <footer class="ds-footer">
-                    <div class="ds-block-centered ds-text-centered">
+                    <div class="ds-block-centered ds-text-centered ds-stack">
                         <div class="ds-cluster-center">
                             <h4>{% trans "Where Do I Vote?"%}</h4>
                             <ul class="ds-padded" style="list-style:none;">
@@ -126,7 +126,7 @@
 
                         {% include "mailing_list.html" %}
 
-                        <div class="ds-copyright ds-padded">
+                        <div class="ds-copyright">
                             <div class="ds-cluster-center">
                                 <a class="ds-logo" href="/">
                                     <img src="{% static "images/logo_icon.svg" %}" alt="" />
@@ -139,20 +139,19 @@
                                     </span>
                                 </a>
                                 {% now "Y" as current_year %}
-                                <p class="ds-text-centered ds-padded">
+                                <p>
                                     {% blocktrans %}Contains OS data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
                                     {% blocktrans %}Contains Royal Mail data © Royal Mail copyright and database right {{ current_year }}{% endblocktrans %}<br>
                                     {% blocktrans %}Contains National Statistics data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
                                 </p>
-                                <p class="ds-text-centered ds-padded">
+                                <p>
                                     {% blocktrans with company_number="09461226" companies_house_url="https://beta.companieshouse.gov.uk/company/09461226" %}Copyright ©
                                         {{ current_year }} Democracy Club Community Interest Company Company No: <a href="{{ companies_house_url }}">{{ company_number }}</a>{% endblocktrans %}
                                 </p>
 
                             </div>
                         </div>
-                    </div>
-                </footer>
+                    </footer>
             {% endblock site_footer %}
         </div>
 
