@@ -157,6 +157,20 @@ input[type=radio] {
     background-color: transparent;
     margin: 0px;
     padding: 0px;
+    line-height: 1;
+
+    button {
+        font-family: Montserrat, sans-serif;
+        background: none!important;
+        border: none;
+        padding: 0!important;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+#language-label {
+    font-family: Montserrat, sans-serif;
 }
 
 #feedback_form input[data-toggle]:checked+label,
