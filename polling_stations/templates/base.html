@@ -50,7 +50,8 @@
     <body {% block body_attrs %}class="ds-width-full"{% endblock body_attrs %}>
         <div class="ds-page">
             {% block header %}
-                <form id="language-menu" action="{% url 'set_language' %}" method="post">
+                <a class="ds-skip-link" href="#main">skip to content</a>
+                <form action="{% url 'set_language' %}" id="language-menu" method="post">
                     <aside class="ds-language" aria-labelledby="language-label">
                         {% csrf_token %}
                         <input name="next" type="hidden" value="{{ request.get_full_path }}">
@@ -61,7 +62,7 @@
                             {% get_language_info_list for LANGUAGES as languages %}
                             {% for language in languages %}
                                 <li>
-                                    <button name="language" value="{{ language.code }}" lang="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} aria-current="true" {% endif %}>
+                                    <button name="language" value="{{ language.code }}" lang="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} aria-current="true"{% endif %}>
                                         {{ language.name_local }}
                                     </button>
                                 </li>
@@ -69,7 +70,6 @@
                         </ul>
                     </aside>
                 </form>
-                <a class="ds-skip-link" href="#main">skip to content</a>
                 <header class="ds-header">
                     <a class="ds-logo" href="/">
                         <img src="{% static "images/logo_icon.svg" %}" alt="" />
