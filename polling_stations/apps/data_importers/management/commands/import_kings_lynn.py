@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KIN"
-    addresses_name = "2021-04-29T10:57:28.594826/Democracy-Club-Data-West-Norfolk.csv"
-    stations_name = "2021-04-29T10:57:28.594826/Democracy-Club-Data-West-Norfolk.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2021-07-13T09:32:08.917883197/KIN-Democracy Club Data.csv"
+    stations_name = "2021-07-13T09:32:08.917883197/KIN-Democracy Club Data.csv"
+    elections = ["2021-07-29"]
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
