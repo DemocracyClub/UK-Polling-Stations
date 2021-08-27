@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WIL"
-    addresses_name = "2021-04-14T17:40:57.372275/wiltshire-deduped.tsv"
-    stations_name = "2021-04-14T17:40:57.372275/wiltshire-deduped.tsv"
-    elections = ["2021-05-06"]
+    addresses_name = "2021-07-26/WiltsDemocracy_Club__19August2021.tsv"
+    stations_name = "2021-07-26/WiltsDemocracy_Club__19August2021.tsv"
+    elections = ["2021-08-19"]
     csv_delimiter = "\t"
 
     # Checked 63862 (out of council area) and 64258/64219 proximity.
