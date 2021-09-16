@@ -1,6 +1,6 @@
 import csv
 import datetime
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -41,8 +41,8 @@ class BugReportAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            url("export_all/", self.export_all),
-            url("export_open/", self.export_open),
+            re_path("export_all/", self.export_all),
+            re_path("export_open/", self.export_open),
         ]
         return my_urls + urls
 

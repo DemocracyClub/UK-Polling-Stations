@@ -1,6 +1,6 @@
 import csv
 import datetime
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.http import HttpResponse, HttpResponseForbidden
 from .models import Feedback
@@ -21,8 +21,8 @@ class FeedbackAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            url("export_all/", self.export_all_feedback),
-            url("export_comments/", self.export_feedback_with_comments),
+            re_path("export_all/", self.export_all_feedback),
+            re_path("export_comments/", self.export_feedback_with_comments),
         ]
         return my_urls + urls
 
