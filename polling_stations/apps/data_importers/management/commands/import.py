@@ -49,7 +49,7 @@ class Command(BaseCommand):
     'data_importers' and 'pollingstations' apps
     """
 
-    requires_system_checks = False
+    requires_system_checks = []
 
     summary = []
 
