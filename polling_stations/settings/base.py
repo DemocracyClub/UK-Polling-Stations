@@ -249,6 +249,8 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {"anon": "1000/day"},
 }
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 EMBED_PREFIXES = ("embed",)
 
 WHITELABEL_PREFIXES = ()
