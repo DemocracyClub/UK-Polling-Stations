@@ -1,7 +1,8 @@
 import re
 
 from django.contrib.gis.db import models
-from django.contrib.postgres.fields import ArrayField, JSONField
+from django.db.models import JSONField
+from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import get_language
 
 from polling_stations.i18n.cy import WelshNameMutationMixin
