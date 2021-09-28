@@ -26,8 +26,9 @@ class UrlTests(TestCase):
             )
         )
         urls = [rec["url"] for rec in data]
+        urls.remove("/admin/<url>")
         for url in urls:
 
             if self.is_exception(url):
                 continue
-            assert url[-1] == "/" or ">", url + " does not end with /"
+            assert url[-1] == "/", url + " does not end with /"
