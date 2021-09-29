@@ -24,4 +24,4 @@ uk-geo-utils==0.10.3
 
 git+https://github.com/DemocracyClub/dc_signup_form.git@2.1.1
 git+https://github.com/DemocracyClub/design-system.git@0.1.6
-git+https://github.com/DemocracyClub/dc_django_utils.git@0.1.4
+git+https://github.com/DemocracyClub/dc_django_utils.git@0.1.5
