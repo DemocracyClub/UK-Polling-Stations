@@ -1,9 +1,9 @@
 import csv
 import datetime
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
 from django.http import HttpResponse, HttpResponseForbidden
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from .models import BugReport
 
@@ -31,7 +31,7 @@ class BugReportAdmin(admin.ModelAdmin):
         return qs
 
     def preview_url(self, obj):
-        if obj.source == "wheredoivote" and is_safe_url(
+        if obj.source == "wheredoivote" and url_has_allowed_host_and_scheme(
             obj.source_url, allowed_hosts=None
         ):
             link = self.request.build_absolute_uri(obj.source_url)
@@ -41,8 +41,8 @@ class BugReportAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            url("export_all/", self.export_all),
-            url("export_open/", self.export_open),
+            re_path("export_all/", self.export_all),
+            re_path("export_open/", self.export_open),
         ]
         return my_urls + urls
 

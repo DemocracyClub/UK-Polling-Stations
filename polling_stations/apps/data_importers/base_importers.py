@@ -56,7 +56,7 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
     'data_importers' and 'pollingstations' apps
     """
 
-    requires_system_checks = False
+    requires_system_checks = []
 
     srid = 27700
     council_id = None

@@ -10,7 +10,7 @@ class Command(BaseCommand):
     'data_importers' and 'pollingstations' apps
     """
 
-    requires_system_checks = False
+    requires_system_checks = []
 
     def add_arguments(self, parser):
         parser.add_argument(
