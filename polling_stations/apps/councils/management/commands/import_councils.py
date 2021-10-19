@@ -40,7 +40,7 @@ class Command(BaseCommand):
     'councils' and 'pollingstations' apps
     """
 
-    requires_system_checks = False
+    requires_system_checks = []
     contact_details = {}
 
     def add_arguments(self, parser):

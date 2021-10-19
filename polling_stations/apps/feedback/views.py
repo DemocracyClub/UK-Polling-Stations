@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.views.generic import View, UpdateView
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib import messages
 
 from .forms import FeedbackForm
@@ -23,7 +23,7 @@ class FeedbackFormView(UpdateView):
         messages.success(self.request, "Thank you for your feedback!")
 
         if (
-            is_safe_url(self.object.source_url, allowed_hosts=None)
+            url_has_allowed_host_and_scheme(self.object.source_url, allowed_hosts=None)
             and self.object.source_url != "/feedback/"
         ):
             return self.object.source_url

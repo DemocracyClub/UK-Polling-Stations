@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import CreateView
 from .forms import BugReportForm
 from django.contrib import messages
@@ -14,7 +14,9 @@ class BugReportFormView(CreateView):
 
         if (
             self.source_redirect
-            and is_safe_url(self.object.source_url, allowed_hosts=None)
+            and url_has_allowed_host_and_scheme(
+                self.object.source_url, allowed_hosts=None
+            )
             and "report_problem" not in self.object.source_url
         ):
 
@@ -33,7 +35,7 @@ class BugReportFormView(CreateView):
             report.user_agent = request.META.get("HTTP_USER_AGENT", "")
 
             # if the source_url came from our hidden field
-            # we'll try to redirect to it if it passes 'is_safe_url()'
+            # we'll try to redirect to it if it passes 'url_has_allowed_host_and_scheme()'
             self.source_redirect = True
 
             # try to populate these from request params
@@ -43,7 +45,7 @@ class BugReportFormView(CreateView):
 
                 # if the source_url came from request.GET
                 # we don't want to try and redirect
-                # even if it passes 'is_safe_url()'
+                # even if it passes 'url_has_allowed_host_and_scheme()'
                 self.source_redirect = False
 
             if not report.source:
