@@ -50,6 +50,7 @@ class File(models.Model):
     upload = models.ForeignKey(Upload, on_delete=models.CASCADE)
     csv_valid = models.BooleanField()
     csv_rows = models.IntegerField(default=0)
+    csv_encoding = models.CharField(max_length=20, blank=True)
     ems = models.CharField(max_length=40)
     key = models.CharField(max_length=255)
     errors = models.TextField(blank=True)

@@ -39,6 +39,7 @@ class AddressTest(APITestCase):
                     {
                         "csv_valid": "ello dave",  # wrong type (should be a bool)
                         "csv_rows": 25432,
+                        "csv_encoding": "utf-8",
                         "ems": "Xpress DC",
                         "errors": "Incomplete file: Expected 38 columns on row 25432 found 7",
                         "key": "E07000223/2020-01-10T15:38:59.029979/richmondshire-Democracy_Club__02May2019.CSV",
@@ -108,6 +109,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": False,
                     "csv_rows": 25432,
+                    "csv_encoding": "utf-8",
                     "ems": "Xpress DC",
                     "errors": "Incomplete file: Expected 38 columns on row 25432 found 7",
                     "key": "E07000223/2020-01-10T15:38:59.029979/richmondshire-Democracy_Club__02May2019.CSV",
@@ -129,6 +131,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 86109,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "",
                     "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
@@ -136,6 +139,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 69,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "",
                     "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
@@ -159,6 +163,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 86109,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "",
                     "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
@@ -166,6 +171,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 69,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "",
                     "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
@@ -194,6 +200,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 69,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "Expected 2 files, found 1",
                     "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
@@ -219,6 +226,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 86109,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "",
                     "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
@@ -226,6 +234,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 69,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "",
                     "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
@@ -233,6 +242,7 @@ class AddressTest(APITestCase):
                 {
                     "csv_valid": True,
                     "csv_rows": 100,
+                    "csv_encoding": "utf-8",
                     "ems": "Democracy Counts",
                     "errors": "",
                     "key": "E07000223/2020-01-10T15:38:21.962203/some other file.csv",

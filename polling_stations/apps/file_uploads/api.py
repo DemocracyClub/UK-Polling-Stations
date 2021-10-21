@@ -7,7 +7,7 @@ from .models import File, Upload
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ("csv_valid", "csv_rows", "ems", "key", "errors")
+        fields = ("csv_valid", "csv_rows", "csv_encoding", "ems", "key", "errors")
 
 
 class UploadSerializer(serializers.ModelSerializer):
