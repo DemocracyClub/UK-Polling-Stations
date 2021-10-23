@@ -8,6 +8,7 @@ django==3.2.11
 djangorestframework==3.13.1
 djangorestframework-gis==0.18
 django-cors-headers==3.10.0
+django-sesame==2.4
 fastkml==0.12
 rapidfuzz==1.9.1
 lxml==4.7.1
