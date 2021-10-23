@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h1>Something went wrong</h1>
+  <p>Your authentication token may have timed out. Please request a new magic link from the <a href="{% url 'file_uploads:council_login_view' %}">login page</a> and try again.</p>
+
+{% endblock %}

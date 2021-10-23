@@ -1,6 +1,12 @@
-from django.urls import re_path
-
-from .views import CouncilListView, CouncilDetailView, FileDetailView, FileUploadView
+from django.urls import re_path, path
+from .views import (
+    CouncilListView,
+    CouncilDetailView,
+    FileDetailView,
+    FileUploadView,
+    CouncilLoginView,
+    AuthenticateView,
+)
 
 app_name = "file_uploads"
 urlpatterns = [
@@ -20,4 +26,6 @@ urlpatterns = [
         FileUploadView.as_view(),
         name="file_upload",
     ),
+    path("login/", CouncilLoginView.as_view(), name="council_login_view"),
+    path("authenticate/", AuthenticateView.as_view(), name="council_authenticate"),
 ]
