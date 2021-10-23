@@ -128,6 +128,15 @@ TEMPLATES = [
     }
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "sesame.backends.ModelBackend",
+]
+
+SESAME_MAX_AGE = 60 * 10
+SESAME_ONE_TIME = True
+SESAME_TOKEN_NAME = "login_token"
+
 ROOT_URLCONF = "polling_stations.urls"
 
 # Python dotted path to the WSGI application used by Django's runserver.
