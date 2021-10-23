@@ -1,5 +1,6 @@
 import re
 
+from django.conf import settings
 from django.contrib.gis.db import models
 from django.db.models import JSONField
 from django.contrib.postgres.fields import ArrayField
@@ -31,6 +32,8 @@ class Council(WelshNameMutationMixin, models.Model):
     registration_website = models.URLField(blank=True)
     registration_postcode = models.CharField(blank=True, null=True, max_length=100)
     registration_address = models.TextField(blank=True, null=True)
+
+    users = models.ManyToManyField(through="UserCouncils", to=settings.AUTH_USER_MODEL)
 
     objects = models.Manager()
 
@@ -97,3 +100,11 @@ class CouncilGeography(models.Model):
     )
     gss = models.CharField(blank=True, max_length=20)
     geography = models.MultiPolygonField(null=True)
+
+
+class UserCouncils(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    council = models.ForeignKey(Council, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "User Councils"
