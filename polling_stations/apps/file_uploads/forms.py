@@ -8,8 +8,6 @@ from django.utils.regex_helper import _lazy_re_compile
 
 User = get_user_model()
 
-__all__ = ["LoginForm"]
-
 
 class CouncilEmailValidator(EmailValidator):
     domain_regex = _lazy_re_compile(r".*\.gov\.uk$", re.IGNORECASE)
