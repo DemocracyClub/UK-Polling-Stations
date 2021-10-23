@@ -3,13 +3,23 @@ import logging
 from datetime import datetime
 
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db.models import Prefetch
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView, FormView
+from sesame.utils import get_query_string, get_user
+
+from .utils import get_domain, assign_councils_to_user
+
+User = get_user_model()
 
 import boto3
 from boto.pyami.config import Config
@@ -17,6 +27,7 @@ from botocore.exceptions import ClientError
 from marshmallow import Schema, fields, validate
 from marshmallow import ValidationError as MarshmallowValidationError
 
+from file_uploads.forms import CouncilLoginForm
 from councils.models import Council
 from .models import File, Upload
 
@@ -165,3 +176,65 @@ class CouncilDetailView(RequireStaffMixin, CouncilView, DetailView):
 class FileDetailView(RequireStaffMixin, DetailView):
     template_name = "file_uploads/file_detail.html"
     model = File
+
+
+class CouncilLoginView(FormView):
+    form_class = CouncilLoginForm
+    template_name = "file_uploads/council_login.html"
+
+    def form_valid(self, form):
+        """
+        Create or retrieve a user trigger the send login email
+        """
+        user, created = User.objects.get_or_create(
+            email=form.cleaned_data["email"], username=form.cleaned_data["email"],
+        )
+        if created:
+            user.set_unusable_password()
+            user.save()
+
+        self.send_login_url(user=user)
+        messages.success(
+            self.request,
+            "Thank you, please check your email for your magic link to log in to your account.",
+            fail_silently=True,
+        )
+        return HttpResponseRedirect(self.get_success_url())
+
+    def send_login_url(self, user):
+        """
+        Send an email to the user with a link to authenticate and log in
+        """
+        querystring = get_query_string(user=user)
+        domain = get_domain(request=self.request)
+        path = reverse("file_uploads:council_authenticate")
+        url = f"{self.request.scheme}://{domain}{path}{querystring}"
+        subject = "Your magic link to log in to the Electoral Commision API"
+        txt = render_to_string(
+            template_name="file_uploads/email/login_message.txt",
+            context={"authenticate_url": url, "subject": subject,},
+        )
+        return user.email_user(subject=subject, message=txt)
+
+    def get_success_url(self):
+        """
+        Redirect to same page where success message will be displayed
+        """
+        return reverse("file_uploads:council_login_view")
+
+
+class AuthenticateView(TemplateView):
+    template_name = "file_uploads/authenticate.html"
+
+    def get(self, request, *args, **kwargs):
+        """
+        Attempts to get user from the request, log them in, and redirect them to
+        their profile page. Renders an error message if django-sesame fails to
+        get a user from the request.
+        """
+        user = get_user(self.request.GET.get("login_token"))
+        if not user:
+            return super().get(request, *args, **kwargs)
+        login(request, user, backend="sesame.backends.ModelBackend")
+        assign_councils_to_user(user)
+        return redirect("file_uploads:councils_list")

@@ -1,0 +1,1 @@
+Use the following URL to log in: {{ authenticate_url }}.
