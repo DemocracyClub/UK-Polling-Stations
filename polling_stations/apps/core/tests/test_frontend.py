@@ -68,12 +68,13 @@ class TestHtml:
         ]
 
     @pytest.mark.django_db
-    @mock.patch("file_uploads.views.RequireStaffMixin.test_func")
-    def test_html_valid(self, test_func, client, subtests, urls):
+    @mock.patch("file_uploads.views.CouncilFileUploadAllowedMixin.test_func")
+    def test_html_valid(self, test_func, admin_client, subtests, urls):
         test_func.return_value = True
         for url in urls:
             with subtests.test(msg=url):
-                assert client.get(url).status_code == 200
-                _, errors = validate_html(client, url)
-                print(url, errors)
+                assert admin_client.get(url).status_code == 200
+                _, errors = validate_html(admin_client, url)
+                if errors:
+                    print(url, errors)
                 assert errors == ""

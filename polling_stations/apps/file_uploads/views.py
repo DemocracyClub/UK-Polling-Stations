@@ -65,15 +65,15 @@ def get_s3_client():
     )
 
 
-class RequireStaffMixin(UserPassesTestMixin):
+class CouncilFileUploadAllowedMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_active and self.request.user.is_staff
+        return self.request.user.is_active
 
 
 logger = logging.getLogger(__name__)
 
 
-class FileUploadView(RequireStaffMixin, TemplateView):
+class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
     template_name = "file_uploads/upload.html"
 
     @method_decorator(ensure_csrf_cookie)
@@ -162,18 +162,31 @@ class CouncilView:
             .prefetch_related(Prefetch("upload_set", uploads))
             .prefetch_related("upload_set__file_set")
         )
+        if not self.request.user.is_staff:
+            qs = qs.filter(usercouncils__user=self.request.user)
         return qs
 
 
-class CouncilListView(RequireStaffMixin, CouncilView, ListView):
+class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
     template_name = "file_uploads/council_list.html"
 
+    def get(self, request, *args, **kwargs):
+        user_councils = self.get_queryset()
+        if user_councils.count() == 1:
+            return redirect(
+                reverse(
+                    "file_uploads:councils_detail",
+                    kwargs={"pk": user_councils.first().pk},
+                )
+            )
+        return super().get(request, *args, **kwargs)
 
-class CouncilDetailView(RequireStaffMixin, CouncilView, DetailView):
+
+class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
     template_name = "file_uploads/council_detail.html"
 
 
-class FileDetailView(RequireStaffMixin, DetailView):
+class FileDetailView(CouncilFileUploadAllowedMixin, DetailView):
     template_name = "file_uploads/file_detail.html"
     model = File
 
@@ -187,7 +200,8 @@ class CouncilLoginView(FormView):
         Create or retrieve a user trigger the send login email
         """
         user, created = User.objects.get_or_create(
-            email=form.cleaned_data["email"], username=form.cleaned_data["email"],
+            email=form.cleaned_data["email"],
+            username=form.cleaned_data["email"],
         )
         if created:
             user.set_unusable_password()
@@ -212,7 +226,10 @@ class CouncilLoginView(FormView):
         subject = "Your magic link to log in to the Electoral Commision API"
         txt = render_to_string(
             template_name="file_uploads/email/login_message.txt",
-            context={"authenticate_url": url, "subject": subject,},
+            context={
+                "authenticate_url": url,
+                "subject": subject,
+            },
         )
         return user.email_user(subject=subject, message=txt)
 
