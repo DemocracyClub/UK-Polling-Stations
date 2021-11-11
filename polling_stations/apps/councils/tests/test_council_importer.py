@@ -21,7 +21,7 @@ class MockCouncilsImporter(Command):
                     "type": "Feature",
                     "properties": {
                         "objectid": 1,
-                        "lad19cd": auth["code"],
+                        "LAD20CD": auth["code"],
                         "lad19nm": auth["name"],
                         "lad19nmw": " ",
                         "st_areashape": 123,
@@ -90,4 +90,4 @@ class TestCouncilImporter(TestCase):
             }
         )
 
-        assert Council.objects.count() == 6
+        assert Council.objects.count() == 7
