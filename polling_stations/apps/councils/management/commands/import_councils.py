@@ -90,7 +90,7 @@ class Command(BaseCommand):
             raise HTTPError("202 Accepted", response=r)
         return r.json()
 
-    def attach_boundaries(self, url=None, id_field="lad19cd"):
+    def attach_boundaries(self, url=None, id_field="LAD20CD"):
         """
         Fetch each council's boundary from ONS and attach it to an existing
         council object
@@ -149,8 +149,36 @@ class Command(BaseCommand):
     def import_councils_from_ec(self):
         self.stdout.write("Importing councils...")
 
+        bucks_defaults = {
+            "name": "Buckinghamshire Council",
+            "electoral_services_email": "elections@buckinghamshire.gov.uk (general enquiries), postalvote@buckinghamshire.gov.uk (postal vote enquiries), proxyvote@buckinghamshire.gov.uk (proxy vote enquiries), overseasvote@buckinghamshire.gov.uk (overseas voter enquiries)",
+            "electoral_services_website": "https://www.buckinghamshire.gov.uk/your-council/council-and-democracy/election-and-voting/",
+            "electoral_services_postcode": "HP19 8FF",
+            "electoral_services_address": "Electoral Services\r\nBuckinghamshire Council\r\nThe Gateway\r\nGatehouse Road\r\nAylesbury",
+            "electoral_services_phone_numbers": ["01296 798141"],
+            "identifiers": ["E06000060"],
+            "registration_address": None,
+            "registration_email": "",
+            "registration_phone_numbers": [],
+            "registration_postcode": None,
+            "registration_website": "",
+            "name_translated": {},
+        }
+        bucks_council, created = Council.objects.get_or_create(
+            council_id="BUC", defaults=bucks_defaults
+        )
+        if not created:
+            for key, value in bucks_defaults.items():
+                setattr(bucks_council, key, value)
+            bucks_council.save()
+        self.seen_ids.add("BUC")
+
         for council_data in self.load_contact_details():
             self.seen_ids.add(council_data["code"])
+
+            if council_data["code"] in ("CHN", "AYL", "SBU", "WYO"):
+                continue
+
             council, _ = Council.objects.get_or_create(council_id=council_data["code"])
 
             council.name = self.get_council_name(council_data)
