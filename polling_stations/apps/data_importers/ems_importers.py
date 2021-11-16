@@ -4,6 +4,8 @@ popular Electoral Management Software packages
 """
 import abc
 import logging
+import os
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
@@ -96,15 +98,20 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         ab_postcode = Postcode(ab_rec.postcode)
         station_postcode = Postcode(self.get_station_postcode(record))
         if ab_postcode != station_postcode:
-            self.logger.log_message(
-                logging.WARNING,
-                "Using UPRN {uprn} for station ID {station_id}, but '{pc1}' != '{pc2}'".format(
-                    uprn=uprn,
-                    station_id=getattr(record, self.station_id_field),
-                    pc1=ab_postcode.with_space,
-                    pc2=station_postcode.with_space,
-                ),
+            ab_address = ab_rec.address
+            rec_address = self.get_station_address(record).replace(os.linesep, ", ")
+            station_id = getattr(record, self.station_id_field)
+            message = "\n".join(
+                [
+                    "Geocoding with UPRN. Station record postcode does not match addressbase postcode.",
+                    f"Station address: '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
+                    f"Addressbase: '{ab_address}, {ab_postcode.with_space}'",
+                    "SUGGESTION:",
+                    f"        # '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
+                    f"        if record.{self.station_id_field} == '{station_id}': record = record._replace({self.station_postcode_field}='{ab_postcode.with_space}')",
+                ]
             )
+            self.logger.log_message(logging.WARNING, message + "\n")
         return ab_rec.location
 
     def get_station_point(self, record):
