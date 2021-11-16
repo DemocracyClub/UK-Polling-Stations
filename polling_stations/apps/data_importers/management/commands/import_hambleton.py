@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HAE"
-    addresses_name = "2021-03-02T16:29:16.566032/Democracy_Club__06May2021 Hambleton District Council.tsv"
-    stations_name = "2021-03-02T16:29:16.566032/Democracy_Club__06May2021 Hambleton District Council.tsv"
-    elections = ["2021-05-06"]
+    addresses_name = "2021-11-02T16:43:28.379178/Democracy_Club__25November2021.tsv"
+    stations_name = "2021-11-02T16:43:28.379178/Democracy_Club__25November2021.tsv"
+    elections = ["2021-11-25"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -16,15 +16,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
 
-        if record.addressline6 in ["YO7 3NG", "DL7 8DA"]:
+        if record.addressline6 in ["DL7 8DA", "YO7 2BR", "YO7 3NG", "YO61 3GT"]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        if (
-            record.polling_place_id == "8653"
-        ):  # Thirkleby Parish Hall Great Thirkleby Thirsk - https://trello.com/c/uAHT7T8d/330-hambleton
-            record = record._replace(polling_place_postcode="YO7 2AT")
-
-        return super().station_record_to_dict(record)

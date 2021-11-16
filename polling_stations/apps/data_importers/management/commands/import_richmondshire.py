@@ -3,14 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RIH"
-    addresses_name = (
-        "2021-04-09T11:16:17.947077/RichmondshireDemocracy_Club__06May2021.tsv"
-    )
-    stations_name = (
-        "2021-04-09T11:16:17.947077/RichmondshireDemocracy_Club__06May2021.tsv"
-    )
-    elections = ["2021-05-06"]
-    csv_delimiter = "\t"
+    addresses_name = "2021-11-08T12:16:18.989510/Democracy_Club__25November2021.CSV"
+    stations_name = "2021-11-08T12:16:18.989510/Democracy_Club__25November2021.CSV"
+    elections = ["2021-11-25"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -41,48 +36,57 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10090348313",  # THE HAMMOND WAITLANDS LANE, RAVENSWORTH
         ]:
             return None
-
         if record.addressline6 in [
-            "DL8 3EA",
-            "DL8 4DH",
-            "DL8 4AS",
-            "DL8 4DY",
+            "DL8 3HJ",
+            "DL8 4LY",
+            "DL10 4SN",
+            "DL10 7AZ",
             "DL10 7ES",
+            "DL11 6NT",
+            "DL11 6RE",
+            "DL11 7TF",
+            "DL8 3EA",
+            "DL8 4AS",
+            "DL8 4DH",
+            "DL9 3NJ",
+            "DL9 4JA",
+            "DL9 4LA",
             "DL9 4NN",
             "DL9 4RT",
-            "DL9 4JA",
-            "DL10 4SN",
-            "DL9 3NJ",
-            "DL10 7AZ",
-            "DL9 4LA",
-            "DL11 7TF",
-            "DL11 7AE",
-            "DL11 6RE",
-            "DL11 6NT",
+            "DL10 4TJ",
             "DL11 6JJ",
             "DL8 3DF",
             "DL8 3PN",
-            "DL10 4TJ",
+            "DL116AB",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
+    #
     def station_record_to_dict(self, record):
+        # 'Cleasby and Stapleton Village Hall, Cleasby,  ' (id: 7527)
+        if record.polling_place_id == "7527":
+            record = record._replace(polling_place_postcode="DL2 2RA")
 
-        if record.polling_place_id in [
-            "6793",  # Aysgarth Village Hall, Main Street, Aysgarth DL8 3AH
-            "6837",  # Colburn Village Hall, Colburn Lane, Colburn DL9 4LS
-            "6848",  # North Cowton Village Hall, North Cowton, Northallerton DL7 0HR
-            "6882",  # Hunton Village Hall, Ratten Row, Hunton DL8 1LY
-            "6890",  # Harmby Village Hall, Hillfoot, Harmby DL8 5PG
-            "6900",  # Newton-le-Willows Village Hall, Newton-le-Willows DL8 1SB
-            "6931",  # Middleton Tyas Memorial Hall, The Green, Middleton Tyas, Richmond, North Yorkshire DL10 6PP
-            "6935",  # Skeeby Village Hall, Richmond Road, Skeeby DL10 5DX
-            "6939",  # Eppleby Village Hall, Chapel Row, Eppleby DL11 7AP
-            "6978",  # Richmond Market Hall, Market Place, Richmond DL10 4JJ
-            "7002",  # Muker Public Hall, Muker DL11 6QG
-        ]:
-            record = record._replace(polling_place_postcode="")
+        # 'Colburn Village Hall, Colburn Lane, Colburn, DL9 4LS' (id: 7558)
+        if record.polling_place_id == "7558":
+            record = record._replace(polling_place_postcode="DL9 4LZ")
+
+        # 'North Cowton Village Hall, North Cowton, Northallerton, DL7 0HR' (id: 7569)
+        if record.polling_place_id == "7569":
+            record = record._replace(polling_place_postcode="DL7 0HF")
+
+        # 'Eppleby Village Hall, Chapel Row, Eppleby, DL11 7AP' (id: 7661)
+        if record.polling_place_id == "7661":
+            record = record._replace(polling_place_postcode="DL11 7AU")
+
+        # 'Aysgarth Village Hall, Main Street, Aysgarth, DL8 3AH' (id: 7515)
+        if record.polling_place_id == "7515":
+            record = record._replace(polling_place_postcode="DL8 3AD")
+
+        # 'Bainbridge Village Hall, Bainbridge,  ' (id: 7519)
+        if record.polling_place_id == "7519":
+            record = record._replace(polling_place_postcode="DL8 3EF")
 
         return super().station_record_to_dict(record)
