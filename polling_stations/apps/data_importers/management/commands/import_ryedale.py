@@ -4,30 +4,31 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "RYE"
     addresses_name = (
-        "2021-02-18T12:35:00.191788/rydale_polling_station_export-2021-02-18.csv"
+        "2021-11-08T12:14:12.775016/RYEDALE_polling_station_export-2021-11-03.csv"
     )
     stations_name = (
-        "2021-02-18T12:35:00.191788/rydale_polling_station_export-2021-02-18.csv"
+        "2021-11-08T12:14:12.775016/RYEDALE_polling_station_export-2021-11-03.csv"
     )
-    elections = ["2021-05-06"]
+    elections = ["2021-11-25"]
 
     def address_record_to_dict(self, record):
         if record.housepostcode in [
+            "YO62 6PE",
+            "YO17 9RL",
+            "YO17 9LB",
             "YO60 7HQ",
             "YO41 1JF",
             "YO60 7NB",
+            "YO62 6JA",
+            "YO17 8AD",
             "YO17 9QY",
             "YO13 9PT",
             "YO18 7UE",
+            "YO17 6BU",
             "YO17 6BW",
             "YO17 6BX",
         ]:
             return None
-
-        if record.houseid == "2001336":
-            rec = super().address_record_to_dict(record)
-            rec["postcode"] = "YO61 4AY"
-            return rec
 
         if record.houseid == "2004865":
             rec = super().address_record_to_dict(record)
