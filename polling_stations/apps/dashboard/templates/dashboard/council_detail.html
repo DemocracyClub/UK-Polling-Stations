@@ -39,22 +39,14 @@
         <div class="ds-card-body">
             <div class="ds-table">
                 <table>
-                    <caption>Largest distances to polling places</caption>
+                    <caption>Postcodes with Longest Journeys</caption>
                     <tr>
-                        <th>UPRN</th>
-                        <th>Address</th>
-                        <th>Post code</th>
-                        <th>Polling station</th>
+                        <th>Postcode</th>
                         <th>Distance (metres)</th>
                     </tr>
-                    {% for pollingstation_id, uprn, address, postcode, distance in distances_to_stations %}
+                    {% for postcode, distance in distances_to_stations %}
                         <tr>
-                            <td>{{ uprn }}</td>
-                            <td>
-                                <a href="{% url "address_view" uprn %}">{{ address }}</a>
-                            </td>
                             <td><a href="{% url "dashboard:postcode" postcode=postcode %}">{{ postcode }}</a> (<a href="{% url "postcode_view" postcode %}">site</a>)</td>
-                            <td>{{ pollingstation_id }}</td>
                             <td>{{ distance|intcomma }}</td>
                         </tr>
                     {%  endfor %}
