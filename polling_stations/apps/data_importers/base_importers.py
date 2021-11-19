@@ -687,18 +687,32 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
             for station_id in missing_ids:
                 self.logger.log_message(
                     logging.WARNING,
-                    "Station id: %s found in districts but not in stations",
+                    "Station id: %s attached to a district but not found in stations",
+                    variable=station_id,
+                )
+
+            for station_id in get_missing(station_ids, station_ids_from_districts):
+                self.logger.log_message(
+                    logging.WARNING,
+                    "Station id: %s found in stations but not attached to any station",
                     variable=station_id,
                 )
             return True
 
         elif district_ids_from_stations:
             self.write_info("Stations have district ids attached")
-            missing_ids = get_missing(district_ids_from_stations, district_ids)
-            for district_id in missing_ids:
+
+            for district_id in get_missing(district_ids_from_stations, district_ids):
                 self.logger.log_message(
                     logging.WARNING,
-                    "District id: %s found in stations but not in districts",
+                    "District id: %s attached to a station but not found in districts",
+                    variable=district_id,
+                )
+
+            for district_id in get_missing(district_ids, district_ids_from_stations):
+                self.logger.log_message(
+                    logging.WARNING,
+                    "District id: %s found in districts but not attached to any station",
                     variable=district_id,
                 )
             return False
