@@ -34,7 +34,7 @@ class CouncilDetailView(DetailView):
                 SELECT postcode, st_maxdistance(multipoint, multipoint)::int AS maxdistance
                 FROM (
                     SELECT aa.postcode, st_transform(st_collect(aa.location), 27700) AS multipoint
-                    FROM addressbase_address aa  JOIN addressbase_uprntocouncil uc
+                    FROM addressbase_address aa JOIN addressbase_uprntocouncil uc
                     ON aa.uprn = uc.uprn
                     WHERE uc.lad = %s AND uc.polling_station_id != ''
                     GROUP BY aa.postcode
@@ -50,30 +50,24 @@ class CouncilDetailView(DetailView):
         with connection.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT
-                    ps.internal_council_id,
-                    aa.uprn,
-                    aa.address,
-                    aa.postcode,
-                    st_distance(
+                SELECT aa.postcode, max(st_distance(
                         st_transform(ps.location, 27700),
                         st_transform(COALESCE(aa.location), 27700)
-                    )::int AS distance
+                    )::int) AS distance
                 FROM
-                    pollingstations_pollingstation ps,
-                    addressbase_address aa JOIN
-                    addressbase_uprntocouncil uc ON
-                        aa.uprn = uc.uprn JOIN
-                    councils_councilgeography cg ON
-                        uc.lad = cg.gss
+                    addressbase_address aa
+                    JOIN addressbase_uprntocouncil uc
+                        ON aa.uprn = uc.uprn
+                    JOIN pollingstations_pollingstation ps
+                        ON uc.polling_station_id = ps.internal_council_id
+                    JOIN councils_councilgeography cg
+                        ON ps.council_id = cg.council_id
                 WHERE
                     cg.council_id = %s
-                    AND ps.council_id=cg.council_id
-                    AND uc.polling_station_id=ps.internal_council_id
                     AND ps.location IS NOT NULL
-                    AND aa.location IS NOT NULL
-                ORDER BY distance DESC, aa.uprn
-                LIMIT 100;
+                GROUP BY aa.postcode
+                ORDER BY distance DESC
+                LIMIT 50;
                 """,
                 (object.council_id,),
             )
