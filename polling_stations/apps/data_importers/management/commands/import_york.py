@@ -22,7 +22,7 @@ class Command(BaseGitHubImporter):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
-        codes = record["POLLINGDIS"].split(" / ")
+        codes = [code.strip() for code in record["POLLINGDIS"].split("/")]
         stations = []
         for code in codes:
             stations.append(
