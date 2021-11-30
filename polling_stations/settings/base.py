@@ -121,6 +121,8 @@ TEMPLATES = [
                 "pollingstations.context_processors.google_analytics",
                 "pollingstations.context_processors.global_settings",
                 "whitelabel.context_processors.base_template",
+                "core.context_processors.canonical_url",
+                "core.context_processors.site_title",
             ],
         },
     }
