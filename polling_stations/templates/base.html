@@ -36,7 +36,7 @@
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:site" content="@democlub">
             <meta name="twitter:url" content="{{ CANONICAL_URL }}">
-            <meta name="twitter:image" content="{% block og_image_twitter_content %}{{ CANONICAL_URL }}{% static 'images/maze_illustration_no_text.png' %}{% endblock og_image_twitter_content %}" />
+            <meta name="twitter:image" content="{% block og_image_twitter_content %}{{ CANONICAL_URL }}{% static 'images/maze_illustration.png' %}{% endblock og_image_twitter_content %}" />
             <meta name="twitter:description" content="{% block og_twitter_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_twitter_description %}">
             <meta name="twitter:image:alt" content="{{ SITE_TITLE }}">
             <link rel="shortcut icon" href="{%  static 'images/logo_icon.svg' %}">
