@@ -2,6 +2,7 @@ import re
 
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.db import DEFAULT_DB_ALIAS
 from django.db.models import JSONField
 from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import get_language

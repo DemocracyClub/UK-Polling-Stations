@@ -1,3 +1,7 @@
+from django.conf import settings
+from django.db import DEFAULT_DB_ALIAS
+
+
 class LoggerRouter(object):
 
     logger_apps = [
@@ -13,12 +17,12 @@ class LoggerRouter(object):
 
     def db_for_read(self, model, **hints):
         if model._meta.app_label in self.logger_apps:
-            return "logger"
+            return settings.LOGGER_DB_NAME
         return None
 
     def db_for_write(self, model, **hints):
         if model._meta.app_label in self.logger_apps:
-            return "logger"
+            return settings.LOGGER_DB_NAME
         return None
 
     def allow_relation(self, obj1, obj2, **hints):
@@ -28,5 +32,11 @@ class LoggerRouter(object):
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.logger_apps:
-            return db == "logger"
+            return db == settings.LOGGER_DB_NAME
         return None
+
+
+def get_logger_db_name():
+    if settings.LOGGER_DB_NAME in settings.DATABASES.keys():
+        return settings.LOGGER_DB_NAME
+    return DEFAULT_DB_ALIAS

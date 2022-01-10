@@ -299,6 +299,7 @@ CLEAN_SERVER_FILE = "~/clean"
 
 # import application constants
 from .constants.councils import *  # noqa
+from .constants.db import *  # noqa
 from .constants.directions import *  # noqa
 from .constants.elections import *  # noqa
 from .constants.importers import *  # noqa
