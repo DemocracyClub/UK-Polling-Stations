@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "file_uploads/council_user_base.html" %}
 {% load i18n %}
 
 {% block page_title %}{{ object.filename }}{% endblock page_title %}
@@ -23,8 +23,8 @@
     </style>
 {% endblock extra_page_css %}
 
-{% block content %}
-    {% include "file_uploads/uploads_header.html" %}
+{% block council_content %}
+
 
     <section class="ds-card">
         <h1>{{ object.filename }}</h1>
@@ -44,4 +44,4 @@
         </dl>
 
     </section>
-{% endblock content %}
+{% endblock council_content %}

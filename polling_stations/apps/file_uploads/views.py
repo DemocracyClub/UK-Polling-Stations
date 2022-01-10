@@ -11,7 +11,7 @@ from django.db.models import Prefetch
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, TemplateView, FormView
@@ -68,6 +68,9 @@ def get_s3_client():
 
 
 class CouncilFileUploadAllowedMixin(UserPassesTestMixin):
+    def get_login_url(self):
+        return reverse_lazy("file_uploads:council_login_view")
+
     def test_func(self):
         return self.request.user.is_active
 

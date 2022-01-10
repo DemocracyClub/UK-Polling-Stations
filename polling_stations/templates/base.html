@@ -93,7 +93,7 @@
                     <aside class="ds-status" aria-label="Status">
                         <ul class="ds-stack">
                             {% for message in messages %}
-                                <li {% if message.tags %}class=" {{ message.tags }} ds-status-message " {% endif %}> {{ message }} </li>
+                                <li {% if message.tags %}class=" {{ message.tags }} ds-status-message ds-status-{{ message.level_tag }} " {% endif %}> {{ message }} </li>
                             {% endfor %}
                         </ul>
                     </aside>

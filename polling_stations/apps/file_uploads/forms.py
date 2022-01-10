@@ -23,7 +23,12 @@ class CouncilLoginForm(forms.Form):
     Login form for a User.
     """
 
-    email = CouncilEmailField(required=True)
+    email = CouncilEmailField(
+        required=True,
+        help_text="""Enter your council email address and we will sent you a
+        one time password. Please make sure you have access to the
+        email address you enter.""",
+    )
 
     def clean_email(self):
         """
