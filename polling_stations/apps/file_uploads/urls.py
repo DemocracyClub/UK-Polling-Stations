@@ -1,4 +1,6 @@
 from django.urls import re_path, path
+from django.views.generic import TemplateView
+
 from .views import (
     CouncilListView,
     CouncilDetailView,
@@ -27,5 +29,15 @@ urlpatterns = [
         name="file_upload",
     ),
     path("login/", CouncilLoginView.as_view(), name="council_login_view"),
+    path(
+        "about/",
+        TemplateView.as_view(template_name="file_uploads/about.html"),
+        name="council_uploader_alpha",
+    ),
+    path(
+        "logout/",
+        TemplateView.as_view(template_name="file_uploads/logout_confirm.html"),
+        name="logout_confirm",
+    ),
     path("authenticate/", AuthenticateView.as_view(), name="council_authenticate"),
 ]

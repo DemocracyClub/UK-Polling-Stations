@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <aside class="ds-status" aria-label="Status">
+    <ul class="ds-stack">
+      <li class="ds-status-message">This is an alpha service.
+        Please <a href="{% url "file_uploads:council_uploader_alpha" %}">read more</a>
+        or <a href="mailto:hello@democracyclub.org.uk">get in touch with feedback</a></li>
+    </ul>
+  </aside>
+  {% include "file_uploads/uploads_header.html" %}
+  {% block council_content %}{% endblock council_content %}
+{% endblock content %}

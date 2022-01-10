@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "file_uploads/council_user_base.html" %}
 {% load humanize %}
 {% load i18n %}
 
 {% block page_title %}{{ object.name }} - {% trans "Uploads" %}{% endblock page_title %}
 {% block title %}{{ object.name }} - {% trans "Uploads" %}{% endblock title %}
 
-{% block content %}
+{% block council_content %}
     {% include "file_uploads/uploads_header.html" %}
 
     <div class="ds-card">
@@ -46,4 +46,4 @@
             {% endfor %}
         </div>
     </div>
-{% endblock content %}
+{% endblock council_content %}

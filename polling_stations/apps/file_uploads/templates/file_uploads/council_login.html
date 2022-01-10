@@ -1,19 +1,23 @@
-{% extends "base.html" %}
+{% extends "file_uploads/council_user_base.html" %}
 {% load dc_forms %}
 
 {% block title %}Log in{% endblock %}
 
-{% block content %}
+{% block council_content %}
+  <h1>Log in to upload polling station data</h1>
   <form method="post">
     {%  csrf_token %}
-    {% if form.errors %}
+
+    {{ form|dc_form }}
+    {% if form.email.errors %}
       <div role="alert">
-    <div class="ds-error">
-    {{ form.errors }}
-    </div>
+        {% for error in form.email.errors %}
+          <div class="ds-error">
+            <span role="img" aria-label="Error">❌</span> {{ error }}
+          </div>
+        {% endfor %}
       </div>
     {% endif %}
-    {{ form|dc_form }}
   <button type="submit" class="ds-button">Log in</button>
   </form>
 {% endblock %}

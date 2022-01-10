@@ -1,49 +1,47 @@
-{% extends "base.html" %}
+{% extends "file_uploads/council_user_base.html" %}
 {% load i18n %}
 
 {% block page_title %}{% trans "Uploads" %}{% endblock page_title %}
 {% block title %}Upload{% endblock %}
 
-{% block content %}
-    {% include "file_uploads/uploads_header.html" %}
+{% block council_content %}
+  {% if object_list %}
+    <table>
+      <caption>Uploads</caption>
+      <tr>
+        <th>Council ID</th>
+        <th>Council Name</th>
+        <th>Email</th>
+        <th>Upload</th>
+        <th>Status</th>
+      </tr>
+      {% for council in object_list %}
+        <tr>
+          <td>{{ council.council_id }}</td>
+          <td>
+            <a href="{% url 'file_uploads:councils_detail' pk=council.council_id %}">
+              {{ council.name }}
+            </a>
+          </td>
+          <td><a href="mailto:{{ council.email }}">{{ council.email }}</a></td>
+          <td>
+            <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
+              upload
+            </a>
+          </td>
+          <td>
+            {{ council.upload_set.latest.status_emoji }}
+          </td>
+        </tr>
 
-    <div class="ds-card">
-        <div class="ds-card-body">
-            <div class="ds-table">
-                <table>
-                    <caption>Uploads</caption>
-                    <tr>
-                        <th>Council ID</th>
-                        <th>Council Name</th>
-                        <th>Email</th>
-                        <th>Upload</th>
-                        <th>Status</th>
-                    </tr>
-                    {% for council in object_list %}
-                        <tr>
-                            <td>{{ council.council_id }}</td>
-                            <td>
-                                <a href="{% url 'file_uploads:councils_detail' pk=council.council_id %}">
-                                    {{ council.name }}
-                                </a>
-                            </td>
-                            <td><a href="mailto:{{ council.email }}">{{ council.email }}</a></td>
-                            <td>
-                                <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
-                                    upload
-                                </a>
-                            </td>
-                            <td>
-                                {{ council.upload_set.latest.status_emoji }}
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="4">No councils found!</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
-    </div>
-{% endblock content %}
+      {% endfor %}
+    </table>
+
+  {% else %}
+    <h2>You have no councils assigned.</h2>
+    <p>Please <a href="mailto:pollingstations@democracyclub.org.uk">email us</a>
+      with the email address you used to log in and we'll investigate.</p>
+
+    <p>In the mean time, you can email the export from your EMS to the same address and we'll manually process your data.</p>
+  {% endif %}
+{% endblock council_content %}

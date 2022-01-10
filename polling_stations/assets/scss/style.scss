@@ -213,3 +213,8 @@ body.embed {
 #embed{
    text-align: center;
 }
+
+// TODO: remove when https://github.com/DemocracyClub/design-system/issues/37 is closed
+.ds-status-message a {
+  color: $white;
+}
