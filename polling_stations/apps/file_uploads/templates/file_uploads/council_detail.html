@@ -3,6 +3,7 @@
 {% load i18n %}
 
 {% block page_title %}{{ object.name }} - {% trans "Uploads" %}{% endblock page_title %}
+{% block title %}{{ object.name }} - {% trans "Uploads" %}{% endblock title %}
 
 {% block content %}
     {% include "file_uploads/uploads_header.html" %}
