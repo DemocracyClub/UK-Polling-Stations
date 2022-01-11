@@ -194,6 +194,11 @@ class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
 class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
     template_name = "file_uploads/council_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["EC_COUNCIL_CONTACT_EMAIL"] = settings.EC_COUNCIL_CONTACT_EMAIL
+        return context
+
 
 class FileDetailView(CouncilFileUploadAllowedMixin, DetailView):
     template_name = "file_uploads/file_detail.html"

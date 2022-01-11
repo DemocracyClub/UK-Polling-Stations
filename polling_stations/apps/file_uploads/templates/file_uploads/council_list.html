@@ -5,9 +5,9 @@
 {% block title %}Upload{% endblock %}
 
 {% block council_content %}
+  <h1>Your councils</h1>
   {% if object_list %}
-    <table>
-      <caption>Uploads</caption>
+    <table class="ds-table">
       <tr>
         <th>Council ID</th>
         <th>Council Name</th>
@@ -23,7 +23,7 @@
               {{ council.name }}
             </a>
           </td>
-          <td><a href="mailto:{{ council.email }}">{{ council.email }}</a></td>
+          <td><a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a></td>
           <td>
             <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
               upload
