@@ -48,52 +48,60 @@
   <p>Please double check this information. If anything is wrong,
     <a href="mailto:{{ EC_COUNCIL_CONTACT_EMAIL }}">please email The Electoral Commission</a></p>
 
-  <table class="ds-table">
-    <caption>Electoral services contact details</caption>
-    <tr>
-      <td>Email</td>
-      <td>{{ object.electoral_services_email }}</td>
-    </tr>
-    <tr>
-      <td>Phone number{{ object.electoral_services_phone_numbers|pluralize }}</td>
-      <td>{{ object.electoral_services_phone_numbers|join:", " }}</td>
-    </tr>
-    <tr>
-      <td>Website</td>
-      <td>{{ object.electoral_services_website }}</td>
-    </tr>
-    <tr>
-      <td>Address</td>
-      <td>
-        {{ object.electoral_services_address|linebreaksbr }}
-        <br>{{ object.electoral_services_postcode }}
-      </td>
-    </tr>
-  </table>
-
+  <div class="ds-card ds-padded">
+    <div class="ds-table">
+      <table>
+        <caption>Electoral services contact details</caption>
+        <tr>
+          <td>Email</td>
+          <td>{{ object.electoral_services_email }}</td>
+        </tr>
+        <tr>
+          <td>Phone number{{ object.electoral_services_phone_numbers|pluralize }}</td>
+          <td>{{ object.electoral_services_phone_numbers|join:", " }}</td>
+        </tr>
+        <tr>
+          <td>Website</td>
+          <td>{{ object.electoral_services_website }}</td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>
+            {{ object.electoral_services_address|linebreaksbr }}
+            <br>{{ object.electoral_services_postcode }}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
   {% if object.registration_email %}
-    <table class="ds-table">
-      <caption>Registration contact details</caption>
-      <tr>
-        <td>Email</td>
-        <td>{{ object.registration_email }}</td>
-      </tr>
-      <tr>
-        <td>Phone number{{ object.registration_phone_numbers|pluralize }}</td>
-        <td>{{ object.registration_phone_numbers|join:", " }}</td>
-      </tr>
-      <tr>
-        <td>Website</td>
-        <td>{{ object.registration_website }}</td>
-      </tr>
-      <tr>
-        <td>Address</td>
-        <td>
-          {{ object.registration_address|linebreaksbr }}
-          <br>{{ object.registration_postcode }}
-        </td>
-      </tr>
-    </table>
+    <div class="ds-card ds-padded">
+      <div class="ds-table">
+
+        <table>
+          <caption>Registration contact details</caption>
+          <tr>
+            <td>Email</td>
+            <td>{{ object.registration_email }}</td>
+          </tr>
+          <tr>
+            <td>Phone number{{ object.registration_phone_numbers|pluralize }}</td>
+            <td>{{ object.registration_phone_numbers|join:", " }}</td>
+          </tr>
+          <tr>
+            <td>Website</td>
+            <td>{{ object.registration_website }}</td>
+          </tr>
+          <tr>
+            <td>Address</td>
+            <td>
+              {{ object.registration_address|linebreaksbr }}
+              <br>{{ object.registration_postcode }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
   {% endif %}
 {% endblock council_content %}
