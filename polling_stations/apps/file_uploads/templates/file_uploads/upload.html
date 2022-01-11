@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "file_uploads/council_user_base.html" %}
 
 {% load i18n %}
 {% load static %}
@@ -12,9 +12,8 @@
   </style>
 {% endblock extra_page_css %}
 
-{% block content %}
+{% block council_content %}
 
-  {% include "file_uploads/uploads_header.html" %}
 
   <noscript>
     <div class="error-summary">
@@ -24,7 +23,9 @@
     </div>
   </noscript>
 
-  <h2>Upload Files: {{ council.name }}</h2>
+  <h1>{{ council.name }}</h1>
+  <h2>Upload EMS export</h2>
+  <p>Please follow the instructions...TODO </p>
 
   <form id="file_upload_form" method="POST">
     <div class="error-summary" id="error" hidden></div>
@@ -46,7 +47,7 @@
     <button type="submit" class="ds-button" id="submit">Upload</button>
   </form>
 
-{% endblock content %}
+{% endblock council_content %}
 
 {% block in_page_javascript %}
   <script>
