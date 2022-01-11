@@ -6,44 +6,94 @@
 {% block title %}{{ object.name }} - {% trans "Uploads" %}{% endblock title %}
 
 {% block council_content %}
-    {% include "file_uploads/uploads_header.html" %}
 
-    <div class="ds-card">
-        <div class="ds-card-body">
-            <h1>{{ object.name }} - Uploads</h1>
+  <h1>{{ object.name }}</h1>
+  <h2>Uploads</h2>
+  <p>
+    <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
+      Upload
+    </a>
+  </p>
 
-            <p>
-                <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
-                    Upload
-                </a>
-            </p>
+  {% for upload in object.upload_set.all %}
+    <h3>{{ upload.timestamp | naturaltime }}
+      {% if upload.github_issue %} -
+        <a href="{{ upload.github_issue }}">GitHub issue</a>
+      {% endif %}
+    </h3>
 
-            {% for upload in object.upload_set.all %}
-                <h3>{{ upload.timestamp | naturaltime }}
-                    {% if upload.github_issue %} -
-                        <a href="{{ upload.github_issue }}">GitHub issue</a>
-                    {% endif %}
-                </h3>
+    {% if upload.file_set.all %}
+      <ul style="list-style-type:none">
+        {% for file in upload.file_set.all %}
+          <li>
+            {{ file.status_emoji }}
+            {{ file.path }}
+            <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
+              {{ file.filename }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Waiting...</p>
+    {% endif %}
 
-                {% if upload.file_set.all %}
-                    <ul style="list-style-type:none">
-                        {% for file in upload.file_set.all %}
-                            <li>
-                                {{ file.status_emoji }}
-                                {{ file.path }}
-                                <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
-                                    {{ file.filename }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>Waiting...</p>
-                {% endif %}
+  {% empty %}
+    <p>No uploads found!</p>
+  {% endfor %}
 
-            {% empty %}
-                <p>No uploads found!</p>
-            {% endfor %}
-        </div>
-    </div>
+  <h2>Contact details</h2>
+  <p>We hold the following contact details for {{ object.name }}. These details are shown to the general public on our
+    websites, widgets and via our API.</p>
+  <p>Please double check this information. If anything is wrong,
+    <a href="mailto:{{ EC_COUNCIL_CONTACT_EMAIL }}">please email The Electoral Commission</a></p>
+
+  <table class="ds-table">
+    <caption>Electoral services contact details</caption>
+    <tr>
+      <td>Email</td>
+      <td>{{ object.electoral_services_email }}</td>
+    </tr>
+    <tr>
+      <td>Phone number{{ object.electoral_services_phone_numbers|pluralize }}</td>
+      <td>{{ object.electoral_services_phone_numbers|join:", " }}</td>
+    </tr>
+    <tr>
+      <td>Website</td>
+      <td>{{ object.electoral_services_website }}</td>
+    </tr>
+    <tr>
+      <td>Address</td>
+      <td>
+        {{ object.electoral_services_address|linebreaksbr }}
+        <br>{{ object.electoral_services_postcode }}
+      </td>
+    </tr>
+  </table>
+
+
+  {% if object.registration_email %}
+    <table class="ds-table">
+      <caption>Registration contact details</caption>
+      <tr>
+        <td>Email</td>
+        <td>{{ object.registration_email }}</td>
+      </tr>
+      <tr>
+        <td>Phone number{{ object.registration_phone_numbers|pluralize }}</td>
+        <td>{{ object.registration_phone_numbers|join:", " }}</td>
+      </tr>
+      <tr>
+        <td>Website</td>
+        <td>{{ object.registration_website }}</td>
+      </tr>
+      <tr>
+        <td>Address</td>
+        <td>
+          {{ object.registration_address|linebreaksbr }}
+          <br>{{ object.registration_postcode }}
+        </td>
+      </tr>
+    </table>
+  {% endif %}
 {% endblock council_content %}
