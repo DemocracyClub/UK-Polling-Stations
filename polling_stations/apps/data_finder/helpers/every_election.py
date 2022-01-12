@@ -5,9 +5,9 @@ from uk_geo_utils.helpers import Postcode
 
 
 class EveryElectionWrapper:
-    def __init__(self, postcode=None, point=None):
-        if not postcode and not point:
-            raise ValueError("Expected either a point or a postcode")
+    def __init__(self, postcode=None, point=None, council_id=None):
+        if not any((postcode, point, council_id)):
+            raise ValueError("Expected either a point, postcode or council_id")
         try:
             self.request_success = False
             if postcode:
@@ -15,8 +15,11 @@ class EveryElectionWrapper:
                     Postcode(postcode).with_space
                 )
                 self.request_success = True
-            elif point:
+            if point:
                 self.elections = self.get_data_by_point(point)
+                self.request_success = True
+            if council_id:
+                self.elections = self.get_data_council_id(council_id)
                 self.request_success = True
             self.ballots = self.get_ballots_for_next_date()
             self.cancelled_ballots = self.get_cancelled_ballots()
@@ -35,6 +38,13 @@ class EveryElectionWrapper:
             settings.EE_BASE,
             point.y,
             point.x,
+        )
+        return self.get_data(query_url)
+
+    def get_data_council_id(self, council_id):
+        query_url = "%sapi/elections.json?organisation_identifier=%s&future=1" % (
+            settings.EE_BASE,
+            council_id,
         )
         return self.get_data(query_url)
 
