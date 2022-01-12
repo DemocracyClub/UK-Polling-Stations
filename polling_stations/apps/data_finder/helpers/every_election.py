@@ -72,6 +72,12 @@ class EveryElectionWrapper:
         ]
         return sorted(ballots, key=lambda k: k["poll_open_date"])
 
+    def get_future_election_dates(self):
+        if not self.request_success:
+            return []
+        dates = set([e["poll_open_date"] for e in self.elections if not e["cancelled"]])
+        return sorted(list(dates))
+
     def _get_next_election_date(self):
         ballots = self.get_all_ballots()
         next_charismatic_election_date = getattr(
