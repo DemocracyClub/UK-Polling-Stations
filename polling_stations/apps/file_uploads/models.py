@@ -24,6 +24,7 @@ class Upload(models.Model):
         on_delete=models.DO_NOTHING,
     )
     timestamp = models.DateTimeField()
+    election_date = models.DateField(null=True)
     github_issue = models.CharField(blank=True, max_length=100)
 
     class Meta:
@@ -48,6 +49,7 @@ class Upload(models.Model):
 
 class File(models.Model):
     upload = models.ForeignKey(Upload, on_delete=models.CASCADE)
+    version = models.PositiveIntegerField(default=1)
     csv_valid = models.BooleanField()
     csv_rows = models.IntegerField(default=0)
     csv_encoding = models.CharField(max_length=20, blank=True)
