@@ -17,6 +17,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, TemplateView, FormView
 from sesame.utils import get_query_string, get_user
 
+from data_finder.helpers import EveryElectionWrapper
 from polling_stations.db_routers import get_logger_db_name
 from .utils import get_domain, assign_councils_to_user
 
@@ -56,6 +57,7 @@ class UploadRequestSchema(Schema):
         required=True,
         validate=validate.Length(min=1, max=2),
     )
+    election_date = fields.Date(required=True)
 
 
 def get_s3_client():
@@ -92,6 +94,19 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
             .exclude(council_id__startswith="N09")
             .get(council_id=self.kwargs["gss"])
         )
+        upcoming_election_dates = EveryElectionWrapper(
+            council_id=self.kwargs["gss"]
+        ).get_future_election_dates()
+
+        # If the list returns no items, flag that there are no upcoming elections
+        # that we know about.
+        context["NO_UPCOMING_ELECTIONS"] = bool(upcoming_election_dates)
+
+        # Only show the date picker if there's more than one upcoming election date
+        context["SHOW_DATE_PICKER"] = len(upcoming_election_dates) > 1
+
+        context["UPCOMING_ELECTION_DATES"] = upcoming_election_dates
+
         return context
 
     def validate_body(self, body):
@@ -130,12 +145,12 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
             return JsonResponse({"error": e.message}, status=400)
 
         client = get_s3_client()
-        now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        election_date = body["election_date"]
 
         resp = {"files": []}
         for f in body["files"]:
             bucket_name = settings.S3_UPLOADS_BUCKET
-            object_name = f"{self.kwargs['gss']}/{now}/{f['name']}"
+            object_name = f"{self.kwargs['gss']}/{election_date}/{f['name']}"
             fields = {"Content-Type": f["type"]}
             conditions = [
                 {"Content-Type": f["type"]},
@@ -152,7 +167,9 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
                         ExpiresIn=expiration,
                     )
                 )
-                Upload.objects.get_or_create(gss=council, timestamp=now)
+                Upload.objects.get_or_create(
+                    gss=council, election_date=election_date, timestamp=datetime.now()
+                )
             except ClientError:
                 return JsonResponse(
                     {"error": "Could not authorize request"}, status=400
