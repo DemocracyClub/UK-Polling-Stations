@@ -13,8 +13,6 @@
 {% endblock extra_page_css %}
 
 {% block council_content %}
-
-
   <noscript>
     <div class="error-summary">
       <h2>Javascript disabled</h2>
@@ -30,27 +28,54 @@
   <form id="file_upload_form" method="POST">
     <div class="error-summary" id="error" hidden></div>
 
-    <div class="ds-field">
-      <label for="file0">File 1</label>
-      <input type="file" id="file0" name="file0" accept=".csv,.tsv" required />
-      <progress id="progressBar0" value="0" max="100"></progress>
-    </div>
-    <div class="ds-field">
-      <label for="file1">File 2 (optional)
-      <small>Only required if you use the 'Democracy Counts' EMS</small>
-      </label>
+    {% if SHOW_DATE_PICKER %}
+      <fieldset>
+        <legend>Election date</legend>
+        <p>We will only use data for a single election date. As you have more than one upcoming election, please
+          pick the date this upload is for. You will need to upload differnt data exports for each election you have,
+          or email us if you would like us to reuse the data.</p>
+        <div class="ds-stack-smallest">
+          {% for election_date in UPCOMING_ELECTION_DATES %}
+            <label class="ds-field-radio">
+              <input type="radio" name="election_date" value="{{ election_date }}" required >
+              <span>{{ election_date }}</span>
+            </label>
+          {% endfor %}
 
-      <input type="file" id="file1" name="file1" accept=".csv,.tsv" />
-      <progress id="progressBar1" value="0" max="100"></progress>
-    </div>
+        </div>
+      </fieldset>
 
-    <button type="submit" class="ds-button" id="submit">Upload</button>
+    {% else %}
+      <p>Please upload data for the elections taking place on <strong>{{ UPCOMING_ELECTION_DATES.0 }}</strong></p>
+      <input type="hidden" name="election_date" value="{{ UPCOMING_ELECTION_DATES.0 }}">
+    {% endif %}
+
+    <fieldset>
+      <legend>Exported data</legend>
+      <p>Please upload the file(s) exported from your EMS</p>
+
+      <div class="ds-field">
+        <label for="file0">File 1</label>
+        <input type="file" id="file0" name="file0" accept=".csv,.tsv"  />
+        <progress id="progressBar0" value="0" max="100"></progress>
+      </div>
+      <div class="ds-field">
+        <label for="file1">File 2 (optional)
+          <small>Only required if you use the 'Democracy Counts' EMS</small>
+        </label>
+
+        <input type="file" id="file1" name="file1" accept=".csv,.tsv" />
+        <progress id="progressBar1" value="0" max="100"></progress>
+      </div>
+    </fieldset>
+    <button type="submit" class="ds-button" id="submit" disabled>Upload</button>
   </form>
 
 {% endblock council_content %}
 
 {% block in_page_javascript %}
   <script>
+    document.getElementById("submit").disabled = false;
     var getCookie = function(name) {
       var cookieValue = null;
       if (document.cookie && document.cookie !== '') {
@@ -97,7 +122,8 @@
           files: [
             serializeFile(document.getElementById('file0').files[0]),
             serializeFile(document.getElementById('file1').files[0])
-          ].filter(Boolean)
+          ].filter(Boolean),
+          election_date: document.querySelector('input[name="election_date"]:checked').value
         };
         xhr.send(JSON.stringify(payload));
         xhr.onload = function() {
