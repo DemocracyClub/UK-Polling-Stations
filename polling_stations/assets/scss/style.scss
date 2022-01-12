@@ -218,3 +218,9 @@ body.embed {
 .ds-status-message a {
   color: $white;
 }
+
+// TODO: see https://github.com/DemocracyClub/design-system/issues/38
+input[type="radio"] {
+  visibility: unset;
+  opacity: 0;
+}
