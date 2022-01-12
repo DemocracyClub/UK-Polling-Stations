@@ -9,38 +9,58 @@
 
   <h1>{{ object.name }}</h1>
   <h2>Uploads</h2>
+  {% if object.upload_set.exists %}
+    <table class="ds-table">
+    <th>Election Date</th>
+    <th>Uploaded</th>
+    <th>Files</th>
+    <th>Status</th>
+
+    {% for upload in object.upload_set.all %}
+
+      <tr>
+        <td>
+          {% if upload.github_issue %} -
+            <a href="{{ upload.github_issue }}">{{ upload.election_date }}</a>
+          {% else %}
+            {{ upload.election_date }}
+          {% endif %}
+        </td>
+        <td>{{ upload.timestamp|naturaltime }}</td>
+        <td>
+          {% if upload.file_set.exists %}
+            <ul style="list-style-type:none">
+              {% for file in upload.file_set.all %}
+                <li>
+                  {{ file.status_emoji }}
+                  {{ file.path }}
+                  <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
+                    {{ file.filename }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </td>
+        <td>{{ upload.status }}</td>
+      </tr>
+
+    {% endfor %}
+    </table>
+
+  {% else %}
+    <p>We've not received any data for future elections yet.</p>
+  {% endif %}
   <p>
     <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
       Upload
+      {% if object.upload_set.exists %}
+       an updated
+      {% endif %}
+      EMS export
     </a>
   </p>
 
-  {% for upload in object.upload_set.all %}
-    <h3>{{ upload.timestamp | naturaltime }}
-      {% if upload.github_issue %} -
-        <a href="{{ upload.github_issue }}">GitHub issue</a>
-      {% endif %}
-    </h3>
-
-    {% if upload.file_set.all %}
-      <ul style="list-style-type:none">
-        {% for file in upload.file_set.all %}
-          <li>
-            {{ file.status_emoji }}
-            {{ file.path }}
-            <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
-              {{ file.filename }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>Waiting...</p>
-    {% endif %}
-
-  {% empty %}
-    <p>No uploads found!</p>
-  {% endfor %}
 
   <h2>Contact details</h2>
   <p>We hold the following contact details for {{ object.name }}. These details are shown to the general public on our
