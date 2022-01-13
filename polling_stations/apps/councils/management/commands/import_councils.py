@@ -6,6 +6,7 @@ from django.apps import apps
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.db import DEFAULT_DB_ALIAS
 from requests.exceptions import HTTPError
 from retry import retry
 from councils.models import Council, CouncilGeography
@@ -64,6 +65,11 @@ class Command(BaseCommand):
             help="Only update contact information for imported councils, "
             "don't update boundaries",
         )
+        parser.add_argument(
+            "--database",
+            default=DEFAULT_DB_ALIAS,
+            help='Nominates a database to import in to. Defaults to the "default" database.',
+        )
 
     def feature_to_multipolygon(self, feature):
         geometry = GEOSGeometry(json.dumps(feature["geometry"]), srid=4326)
@@ -107,7 +113,9 @@ class Command(BaseCommand):
         for feature in feature_collection["features"]:
             gss_code = feature["properties"][id_field]
             try:
-                council = Council.objects.get(identifiers__contains=[gss_code])
+                council = Council.objects.using(self.database).get(
+                    identifiers__contains=[gss_code]
+                )
                 self.stdout.write(
                     "Found boundary for %s: %s" % (gss_code, council.name)
                 )
@@ -117,9 +125,9 @@ class Command(BaseCommand):
                 )
                 continue
 
-            council_geography, _ = CouncilGeography.objects.get_or_create(
-                council=council
-            )
+            council_geography, _ = CouncilGeography.objects.using(
+                self.database
+            ).get_or_create(council=council)
             council_geography.gss = gss_code
             council_geography.geography = self.feature_to_multipolygon(feature)
             council_geography.save()
@@ -179,7 +187,9 @@ class Command(BaseCommand):
             if council_data["code"] in ("CHN", "AYL", "SBU", "WYO"):
                 continue
 
-            council, _ = Council.objects.get_or_create(council_id=council_data["code"])
+            council, _ = Council.objects.using(self.database).get_or_create(
+                council_id=council_data["code"]
+            )
 
             council.name = self.get_council_name(council_data)
             council.identifiers = council_data["identifiers"]
@@ -221,11 +231,13 @@ class Command(BaseCommand):
             [apps.get_app_config("councils"), apps.get_app_config("pollingstations")]
         )
 
+        self.database = options["database"]
+
         if options["teardown"]:
             self.stdout.write("Clearing councils table..")
-            Council.objects.all().delete()
+            Council.objects.using(self.database).all().delete()
             self.stdout.write("Clearing councils_geography table..")
-            CouncilGeography.objects.all().delete()
+            CouncilGeography.objects.using(self.database).all().delete()
 
         self.seen_ids = set()
         self.import_councils_from_ec()
@@ -234,6 +246,8 @@ class Command(BaseCommand):
             self.attach_boundaries(options.get("alt_url"))
 
         # Clean up old councils that we've not seen in the EC data
-        Council.objects.exclude(council_id__in=self.seen_ids).delete()
+        Council.objects.using(self.database).exclude(
+            council_id__in=self.seen_ids
+        ).delete()
 
         self.stdout.write("..done")

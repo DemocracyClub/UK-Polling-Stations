@@ -1,4 +1,6 @@
 from io import StringIO
+
+from django.db import DEFAULT_DB_ALIAS
 from django.test import TestCase, override_settings
 from councils.models import Council
 from councils.management.commands.import_councils import Command
@@ -87,6 +89,7 @@ class TestCouncilImporter(TestCase):
                 "teardown": False,
                 "alt_url": None,
                 "only_contact_details": False,
+                "database": DEFAULT_DB_ALIAS,
             }
         )
 
