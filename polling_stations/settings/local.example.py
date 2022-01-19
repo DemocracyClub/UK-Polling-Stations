@@ -10,3 +10,4 @@ DATABASES = {
 }
 
 EVERY_ELECTION = {"CHECK": False, "HAS_ELECTION": True}
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
