@@ -7,121 +7,121 @@
 
 {% block council_content %}
 
-  <h1>{{ object.name }}</h1>
-  <h2>Uploads</h2>
-  {% if object.upload_set.exists %}
-    <table class="ds-table">
-    <th>Election Date</th>
-    <th>Uploaded</th>
-    <th>Files</th>
-    <th>Status</th>
+    <h1>{{ object.name }}</h1>
+    <h2>Uploads</h2>
+    {% if object.upload_set.exists %}
+        <table class="ds-table">
+            <th>Election Date</th>
+            <th>Uploaded</th>
+            <th>Files</th>
+            <th>Status</th>
 
-    {% for upload in object.upload_set.all %}
+            {% for upload in object.upload_set.all %}
 
-      <tr>
-        <td>
-          {% if upload.github_issue %} -
-            <a href="{{ upload.github_issue }}">{{ upload.election_date }}</a>
-          {% else %}
-            {{ upload.election_date }}
-          {% endif %}
-        </td>
-        <td>{{ upload.timestamp|naturaltime }}</td>
-        <td>
-          {% if upload.file_set.exists %}
-            <ul style="list-style-type:none">
-              {% for file in upload.file_set.all %}
-                <li>
-                  {{ file.status_emoji }}
-                  {{ file.path }}
-                  <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
-                    {{ file.filename }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </td>
-        <td>{{ upload.status }}</td>
-      </tr>
+                <tr>
+                    <td>
+                        {% if upload.github_issue %} -
+                            <a href="{{ upload.github_issue }}">{{ upload.election_date }}</a>
+                        {% else %}
+                            {{ upload.election_date }}
+                        {% endif %}
+                    </td>
+                    <td>{{ upload.timestamp|naturaltime }}</td>
+                    <td>
+                        {% if upload.file_set.exists %}
+                            <ul style="list-style-type:none">
+                                {% for file in upload.file_set.all %}
+                                    <li>
+                                        {{ file.status_emoji }}
+                                        {{ file.path }}
+                                        <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
+                                            {{ file.filename }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                    <td>{{ upload.status }}</td>
+                </tr>
 
-    {% endfor %}
-    </table>
-
-  {% else %}
-    <p>We've not received any data for future elections yet.</p>
-  {% endif %}
-  <p>
-    <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
-      Upload
-      {% if object.upload_set.exists %}
-       an updated
-      {% endif %}
-      EMS export
-    </a>
-  </p>
-
-
-  <h2>Contact details</h2>
-  <p>We hold the following contact details for {{ object.name }}. These details are shown to the general public on our
-    websites, widgets and via our API.</p>
-  <p>Please double check this information. If anything is wrong,
-    <a href="mailto:{{ EC_COUNCIL_CONTACT_EMAIL }}">please email The Electoral Commission</a></p>
-
-  <div class="ds-card ds-padded">
-    <div class="ds-table">
-      <table>
-        <caption>Electoral services contact details</caption>
-        <tr>
-          <td>Email</td>
-          <td>{{ object.electoral_services_email }}</td>
-        </tr>
-        <tr>
-          <td>Phone number{{ object.electoral_services_phone_numbers|pluralize }}</td>
-          <td>{{ object.electoral_services_phone_numbers|join:", " }}</td>
-        </tr>
-        <tr>
-          <td>Website</td>
-          <td>{{ object.electoral_services_website }}</td>
-        </tr>
-        <tr>
-          <td>Address</td>
-          <td>
-            {{ object.electoral_services_address|linebreaksbr }}
-            <br>{{ object.electoral_services_postcode }}
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  {% if object.registration_email %}
-    <div class="ds-card ds-padded">
-      <div class="ds-table">
-
-        <table>
-          <caption>Registration contact details</caption>
-          <tr>
-            <td>Email</td>
-            <td>{{ object.registration_email }}</td>
-          </tr>
-          <tr>
-            <td>Phone number{{ object.registration_phone_numbers|pluralize }}</td>
-            <td>{{ object.registration_phone_numbers|join:", " }}</td>
-          </tr>
-          <tr>
-            <td>Website</td>
-            <td>{{ object.registration_website }}</td>
-          </tr>
-          <tr>
-            <td>Address</td>
-            <td>
-              {{ object.registration_address|linebreaksbr }}
-              <br>{{ object.registration_postcode }}
-            </td>
-          </tr>
+            {% endfor %}
         </table>
-      </div>
+
+    {% else %}
+        <p>We've not received any data for future elections yet.</p>
+    {% endif %}
+    <p>
+        <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
+            Upload
+            {% if object.upload_set.exists %}
+                an updated
+            {% endif %}
+            EMS export
+        </a>
+    </p>
+
+
+    <h2>Contact details</h2>
+    <p>We hold the following contact details for {{ object.name }}. These details are shown to the general public on our
+        websites, widgets and via our API.</p>
+    <p>Please double check this information. If anything is wrong,
+        <a href="mailto:{{ EC_COUNCIL_CONTACT_EMAIL }}">please email The Electoral Commission</a></p>
+
+    <div class="ds-card ds-padded">
+        <div class="ds-table">
+            <table>
+                <caption>Electoral services contact details</caption>
+                <tr>
+                    <td>Email</td>
+                    <td>{{ object.electoral_services_email }}</td>
+                </tr>
+                <tr>
+                    <td>Phone number{{ object.electoral_services_phone_numbers|pluralize }}</td>
+                    <td>{{ object.electoral_services_phone_numbers|join:", " }}</td>
+                </tr>
+                <tr>
+                    <td>Website</td>
+                    <td>{{ object.electoral_services_website }}</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>
+                        {{ object.electoral_services_address|linebreaksbr }}
+                        <br>{{ object.electoral_services_postcode }}
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-  {% endif %}
+
+    {% if object.registration_email %}
+        <div class="ds-card ds-padded">
+            <div class="ds-table">
+
+                <table>
+                    <caption>Registration contact details</caption>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ object.registration_email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone number{{ object.registration_phone_numbers|pluralize }}</td>
+                        <td>{{ object.registration_phone_numbers|join:", " }}</td>
+                    </tr>
+                    <tr>
+                        <td>Website</td>
+                        <td>{{ object.registration_website }}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            {{ object.registration_address|linebreaksbr }}
+                            <br>{{ object.registration_postcode }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    {% endif %}
 {% endblock council_content %}

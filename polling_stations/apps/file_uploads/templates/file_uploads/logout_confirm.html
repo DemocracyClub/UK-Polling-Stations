@@ -1,15 +1,15 @@
 {% extends "file_uploads/council_user_base.html" %}
 {% block title %}
-Log out
+    Log out
 {% endblock %}
 
 {% block council_content %}
-  <h1>Log out</h1>
-<p>Are you sure you want to log out?</p>
-  <div class="ds-cluster">
-    <div>
-      <a href="{% url "file_uploads:councils_list" %}" class="ds-cta ds-button-blue">Cancel</a>
-      <a href="{% url "logout" %}" class="ds-cta">Confirm</a>
+    <h1>Log out</h1>
+    <p>Are you sure you want to log out?</p>
+    <div class="ds-cluster">
+        <div>
+            <a href="{% url "file_uploads:councils_list" %}" class="ds-cta ds-button-blue">Cancel</a>
+            <a href="{% url "logout" %}" class="ds-cta">Confirm</a>
+        </div>
     </div>
-  </div>
 {% endblock %}
