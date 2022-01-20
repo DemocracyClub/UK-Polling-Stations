@@ -1,15 +1,15 @@
 <nav class="ds-subnav" aria-label="About">
-  <ul>
-    <li>
-      <a href="{% url 'file_uploads:councils_list' %}">Home</a>
-    </li>
-    <li>
-      <a href="{% url 'file_uploads:council_uploader_alpha' %}">About</a>
-    </li>
-    {% if request.user.is_authenticated %}
-      <li>
-        <a href="{% url 'file_uploads:logout_confirm' %}">Logout</a>
-      </li>
-    {% endif %}
-  </ul>
+    <ul>
+        <li>
+            <a href="{% url 'file_uploads:councils_list' %}">Home</a>
+        </li>
+        <li>
+            <a href="{% url 'file_uploads:council_uploader_alpha' %}">About</a>
+        </li>
+        {% if request.user.is_authenticated %}
+            <li>
+                <a href="{% url 'file_uploads:logout_confirm' %}">Logout</a>
+            </li>
+        {% endif %}
+    </ul>
 </nav>

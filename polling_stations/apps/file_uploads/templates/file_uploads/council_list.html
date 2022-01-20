@@ -5,51 +5,51 @@
 {% block title %}Upload{% endblock %}
 
 {% block council_content %}
-  <h1>{% if request.user.is_staff %}
-    All councils
-  {% else %}
-    Your councils
-  {% endif %}
-  </h1>
-  {% if object_list %}
-    <table class="ds-table">
-      <tr>
-        {% if request.user.is_staff %}<th>Council ID</th>{% endif %}
-        <th>Council Name</th>
-        {% if request.user.is_staff %}<th>Email</th>{% endif %}
-        {% if request.user.is_staff %}<th>Upload</th>{% endif %}
-        <th>Status</th>
-      </tr>
-      {% for council in object_list %}
-        <tr>
-          {% if request.user.is_staff %}<td>{{ council.council_id }}</td>{% endif %}
-          <td>
-            <a href="{% url 'file_uploads:councils_detail' pk=council.council_id %}">
-              {{ council.name }}
-            </a>
-          </td>
-          {% if request.user.is_staff %}
-            <td><a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a></td>
-          {% endif %}
-          {% if request.user.is_staff %}<td>
-            <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
-              upload
-            </a>
-          </td>
-          {% endif %}
-          <td>
-            {{ council.upload_set.latest.status_emoji }}
-          </td>
-        </tr>
+    <h1>{% if request.user.is_staff %}
+        All councils
+    {% else %}
+        Your councils
+    {% endif %}
+    </h1>
+    {% if object_list %}
+        <table class="ds-table">
+            <tr>
+                {% if request.user.is_staff %}<th>Council ID</th>{% endif %}
+                <th>Council Name</th>
+                {% if request.user.is_staff %}<th>Email</th>{% endif %}
+                {% if request.user.is_staff %}<th>Upload</th>{% endif %}
+                <th>Status</th>
+            </tr>
+            {% for council in object_list %}
+                <tr>
+                    {% if request.user.is_staff %}<td>{{ council.council_id }}</td>{% endif %}
+                    <td>
+                        <a href="{% url 'file_uploads:councils_detail' pk=council.council_id %}">
+                            {{ council.name }}
+                        </a>
+                    </td>
+                    {% if request.user.is_staff %}
+                        <td><a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a></td>
+                    {% endif %}
+                    {% if request.user.is_staff %}<td>
+                        <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
+                            upload
+                        </a>
+                    </td>
+                    {% endif %}
+                    <td>
+                        {{ council.upload_set.latest.status_emoji }}
+                    </td>
+                </tr>
 
-      {% endfor %}
-    </table>
+            {% endfor %}
+        </table>
 
-  {% else %}
-    <h2>You have no councils assigned.</h2>
-    <p>Please <a href="mailto:pollingstations@democracyclub.org.uk">email us</a>
-      with the email address you used to log in and we'll investigate.</p>
+    {% else %}
+        <h2>You have no councils assigned.</h2>
+        <p>Please <a href="mailto:pollingstations@democracyclub.org.uk">email us</a>
+            with the email address you used to log in and we'll investigate.</p>
 
-    <p>In the mean time, you can email the export from your EMS to the same address and we'll manually process your data.</p>
-  {% endif %}
+        <p>In the mean time, you can email the export from your EMS to the same address and we'll manually process your data.</p>
+    {% endif %}
 {% endblock council_content %}
