@@ -192,6 +192,16 @@ class CouncilView:
             qs = qs.filter(usercouncils__user=self.request.user)
         return qs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.kwargs.get("pk"):
+            upcoming_election_dates = EveryElectionWrapper(
+                council_id=self.kwargs["pk"]
+            ).get_future_election_dates()
+            context["HAS_UPCOMING_ELECTIONS"] = bool(upcoming_election_dates)
+            context["NO_COUNCILS"] = False
+        return context
+
 
 class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
     template_name = "file_uploads/council_list.html"

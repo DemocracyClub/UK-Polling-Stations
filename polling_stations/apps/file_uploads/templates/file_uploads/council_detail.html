@@ -9,58 +9,66 @@
 
     <h1>{{ object.name }}</h1>
     <h2>Uploads</h2>
-    {% if object.upload_set.exists %}
-        <table class="ds-table">
-            <th>Election Date</th>
-            <th>Uploaded</th>
-            <th>Files</th>
-            <th>Status</th>
+    {% if HAS_UPCOMING_ELECTIONS %}
 
-            {% for upload in object.upload_set.all %}
+        {% if object.upload_set.exists %}
+            <table class="ds-table">
+                <th>Election Date</th>
+                <th>Uploaded</th>
+                <th>Files</th>
+                <th>Status</th>
 
-                <tr>
-                    <td>
-                        {% if upload.github_issue %} -
-                            <a href="{{ upload.github_issue }}">{{ upload.election_date }}</a>
-                        {% else %}
-                            {{ upload.election_date }}
-                        {% endif %}
-                    </td>
-                    <td>{{ upload.timestamp|naturaltime }}</td>
-                    <td>
-                        {% if upload.file_set.exists %}
-                            <ul style="list-style-type:none">
-                                {% for file in upload.file_set.all %}
-                                    <li>
-                                        {{ file.status_emoji }}
-                                        {{ file.path }}
-                                        <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
-                                            {{ file.filename }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </td>
-                    <td>{{ upload.status }}</td>
-                </tr>
+                {% for upload in object.upload_set.all %}
 
-            {% endfor %}
-        </table>
+                    <tr>
+                        <td>
+                            {% if upload.github_issue %} -
+                                <a href="{{ upload.github_issue }}">{{ upload.election_date }}</a>
+                            {% else %}
+                                {{ upload.election_date }}
+                            {% endif %}
+                        </td>
+                        <td>{{ upload.timestamp|naturaltime }}</td>
+                        <td>
+                            {% if upload.file_set.exists %}
+                                <ul style="list-style-type:none">
+                                    {% for file in upload.file_set.all %}
+                                        <li>
+                                            {{ file.status_emoji }}
+                                            {{ file.path }}
+                                            <a href="{% url 'file_uploads:files_detail' pk=file.id %}">
+                                                {{ file.filename }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                        <td>{{ upload.status }}</td>
+                    </tr>
 
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <p>We've not received any data for future elections yet.</p>
+        {% endif %}
+        <p>
+            <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
+                Upload
+                {% if object.upload_set.exists %}
+                    an updated
+                {% endif %}
+                EMS export
+            </a>
+        </p>
     {% else %}
-        <p>We've not received any data for future elections yet.</p>
+        <p>
+            We don't know about any upcoming elections administered by {{ object.name }}.
+            If you have data to upload, please <a href="mailto:pollingstations@democracyclub.org.uk.">get in touch</a>
+            to tell us which election you want to upload data for.
+        </p>
     {% endif %}
-    <p>
-        <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
-            Upload
-            {% if object.upload_set.exists %}
-                an updated
-            {% endif %}
-            EMS export
-        </a>
-    </p>
-
 
     <h2>Contact details</h2>
     <p>We hold the following contact details for {{ object.name }}. These details are shown to the general public on our
