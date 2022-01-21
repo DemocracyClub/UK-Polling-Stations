@@ -17,7 +17,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "SS9 1NH",
             "SS9 1QY",
             "SS9 1RP",
-            "SS9 3BG" "SS9 3BG",
+            "SS9 3BG",
+            "SS9 3BG",
             "SS9 5EW",
         ]:
             return None
