@@ -9,7 +9,7 @@
     <div class="ds-cluster">
         <div>
             <a href="{% url "file_uploads:councils_list" %}" class="ds-cta ds-button-blue">Cancel</a>
-            <a href="{% url "logout" %}" class="ds-cta">Confirm</a>
+            <a href="{% url "logout" %}?next={% url "file_uploads:council_login_view" %}" class="ds-cta">Confirm</a>
         </div>
     </div>
 {% endblock %}
