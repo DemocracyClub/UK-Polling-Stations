@@ -5,6 +5,10 @@
 {% block title %}Upload{% endblock %}
 
 {% block council_content %}
+    <p>
+        Welcome to Democracy Club’s polling station data uploader. Select a council to upload a file.
+        If you experience any problems, please contact <a href="mailto:pollingstations@democracyclub.org.uk">pollingstations@democracyclub.org.uk</a>.
+    </p>
     <h1>{% if request.user.is_staff %}
         All councils
     {% else %}
