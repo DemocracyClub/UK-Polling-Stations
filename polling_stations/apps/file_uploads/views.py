@@ -145,12 +145,13 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
             return JsonResponse({"error": e.message}, status=400)
 
         client = get_s3_client()
+        now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         election_date = body["election_date"]
 
         resp = {"files": []}
         for f in body["files"]:
             bucket_name = settings.S3_UPLOADS_BUCKET
-            object_name = f"{self.kwargs['gss']}/{election_date}/{f['name']}"
+            object_name = f"{self.kwargs['gss']}/{election_date}/{now}/{f['name']}"
             fields = {"Content-Type": f["type"]}
             conditions = [
                 {"Content-Type": f["type"]},
@@ -168,7 +169,7 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
                     )
                 )
                 Upload.objects.get_or_create(
-                    gss=council, election_date=election_date, timestamp=datetime.now()
+                    gss=council, election_date=election_date, timestamp=now
                 )
             except ClientError:
                 return JsonResponse(
