@@ -15,7 +15,7 @@ class UploadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Upload
-        fields = ("gss", "timestamp", "github_issue", "file_set")
+        fields = ("gss", "timestamp", "github_issue", "file_set", "election_date")
 
     @transaction.atomic
     def create(self, validated_data):
@@ -23,6 +23,7 @@ class UploadSerializer(serializers.ModelSerializer):
             upload = Upload.objects.create(
                 gss=validated_data["gss"],
                 timestamp=validated_data["timestamp"],
+                election_date=validated_data["election_date"],
                 github_issue=validated_data["github_issue"],
             )
             for f in validated_data["file_set"]:
@@ -31,7 +32,9 @@ class UploadSerializer(serializers.ModelSerializer):
 
         try:
             existing_upload = Upload.objects.get(
-                gss=validated_data["gss"], timestamp=validated_data["timestamp"]
+                gss=validated_data["gss"],
+                election_date=validated_data["election_date"],
+                timestamp=validated_data["timestamp"],
             )
             existing_files = File.objects.filter(upload=existing_upload)
             if len(validated_data["file_set"]) > len(existing_files):
