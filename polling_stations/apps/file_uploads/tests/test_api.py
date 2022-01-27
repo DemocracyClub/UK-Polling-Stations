@@ -91,6 +91,7 @@ class AddressTest(APITestCase):
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
             "github_issue": "",
             "file_set": [],
         }
@@ -104,6 +105,7 @@ class AddressTest(APITestCase):
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
             "github_issue": "",
             "file_set": [
                 {
@@ -126,6 +128,7 @@ class AddressTest(APITestCase):
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
             "github_issue": "",
             "file_set": [
                 {
@@ -158,6 +161,8 @@ class AddressTest(APITestCase):
         payload1 = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
+            "election_date": "2020-05-07",
             "github_issue": "",
             "file_set": [
                 {
@@ -195,6 +200,7 @@ class AddressTest(APITestCase):
         payload2 = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
             "github_issue": "",
             "file_set": [
                 {
@@ -221,6 +227,7 @@ class AddressTest(APITestCase):
         payload3 = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
             "github_issue": "",
             "file_set": [
                 {
