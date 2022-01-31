@@ -39,16 +39,25 @@ class UploadSerializer(serializers.ModelSerializer):
                 # if the new one has more stuff in it
                 existing_files.delete()
                 existing_upload.delete()
-                return save(validated_data)
+                upload = save(validated_data)
             else:
                 # In the situation where we're processing multiple files
                 # if there's already an upload and it has more files in it
                 # than the new one we're trying to write, assume an
                 # out-of-order delivery has happened (entirely possible)
                 # and leave the existing data in place.
-                return existing_upload
+                upload = existing_upload
         except Upload.DoesNotExist:
-            return save(validated_data)
+            upload = save(validated_data)
+
+        file_set = upload.file_set
+        if file_set.exists():
+            if (
+                file_set.first().ems == "Democracy Counts" and file_set.count() == 2
+            ) or file_set.first().ems != "Democracy Counts":
+                upload.make_pull_request()
+
+        return upload
 
 
 class UploadViewSet(viewsets.ModelViewSet):
