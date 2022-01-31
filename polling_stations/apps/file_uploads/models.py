@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 
 from councils.models import Council
-
+from data_importers.import_script import ImportScript
 
 status_map = {
     "Pending": "⌛",
@@ -44,6 +44,47 @@ class Upload(models.Model):
     @property
     def status_emoji(self):
         return status_to_emoji(self.status)
+
+    @property
+    def import_script(self):
+        if not self.status == "OK":
+            return None
+
+        elections = [str(self.election_date)]
+        council_id = self.gss.council_id
+
+        if len(self.file_set.all()) == 1:
+            file = self.file_set.first()
+            path = "/".join(file.key.split("/")[1:])
+            import_script = ImportScript(
+                **{
+                    "council_id": council_id,
+                    "ems": file.ems,
+                    "addresses_name": path,
+                    "stations_name": path,
+                    "encoding": file.csv_encoding,
+                    "elections": elections,
+                }
+            )
+
+        elif len(self.file_set.all()) == 2:
+            stations_file, addresses_file = sorted(
+                self.file_set.all(), key=lambda f: f.csv_rows
+            )
+            import_script = ImportScript(
+                **{
+                    "council_id": council_id,
+                    "ems": stations_file.ems,
+                    "addresses_name": "/".join(addresses_file.key.split("/")[1:]),
+                    "stations_name": "/".join(stations_file.key.split("/")[1:]),
+                    "encoding": stations_file.csv_encoding,
+                    "elections": elections,
+                }
+            )
+        else:
+            return None
+
+        return import_script.script
 
 
 class File(models.Model):
