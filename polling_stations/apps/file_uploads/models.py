@@ -99,7 +99,7 @@ class Upload(models.Model):
 
     @property
     def pr_title(self):
-        title = f"Import script for {self.gss.short_name}"
+        title = f"Import script for {self.gss.short_name} ({self.election_date})"
         server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
         if server_env == "prod":
             return title
