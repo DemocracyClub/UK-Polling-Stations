@@ -18,12 +18,12 @@ class PollingStationSerializer:
             {"council_id": record.council_id, "station_id": record.internal_council_id}
         )
 
-        detail_url = u"%s?%s" % (
+        detail_url = "%s?%s" % (
             reverse("pollingstation-list", request=self.context["request"]),
             query_args,
         )
 
-        geo_url = u"%s?%s" % (
+        geo_url = "%s?%s" % (
             reverse("pollingstation-geo", request=self.context["request"]),
             query_args,
         )
