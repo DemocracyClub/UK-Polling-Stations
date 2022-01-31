@@ -16,3 +16,5 @@ MAPZEN_API_KEY = ""
 GOOGLE_API_KEYS = []
 
 STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
+
+RUNNING_TESTS = True

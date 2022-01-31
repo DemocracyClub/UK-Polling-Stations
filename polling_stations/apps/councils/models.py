@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 from django.contrib.gis.db import models
 from django.db.models import JSONField
@@ -89,6 +90,38 @@ class Council(WelshNameMutationMixin, models.Model):
             return identifier_nations.pop()
         else:
             return ""
+
+    @property
+    def short_name(self):
+        short_name = self.name
+        extras = [
+            " London Borough of",  # Don't throw away 'London'
+            " City & District Council",  # Don't throw away 'City'
+            " City Council",  # Don't throw away 'City'
+            " Metropolitan",
+            " Borough",
+            " Council",
+        ]
+        for extra in extras:
+            short_name = short_name.replace(extra, "")
+        return short_name
+
+    @property
+    def import_script_path(self):
+        import_script_path = None
+
+        scripts = Path(
+            "./polling_stations/apps/data_importers/management/commands/"
+        ).glob("import_*.py")
+        for script in scripts:
+            if f'council_id = "{self.council_id}"' in script.read_text():
+                import_script_path = script
+        if not import_script_path:
+            import_script_path = Path(
+                f'./polling_stations/apps/data_importers/management/commands/import_{self.short_name.lower().replace(" ", "_")}'
+            )
+
+        return str(import_script_path)
 
 
 class CouncilGeography(models.Model):

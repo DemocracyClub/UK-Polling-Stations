@@ -1,4 +1,8 @@
+from commitment import GitHubCredentials, GitHubClient
+from django.conf import settings
 from django.contrib.gis.db import models
+
+from requests import HTTPError
 
 from councils.models import Council
 from data_importers.import_script import ImportScript
@@ -85,6 +89,76 @@ class Upload(models.Model):
             return None
 
         return import_script.script
+
+    @property
+    def branch_name(self):
+        return f"import-{self.gss.short_name}-{self.election_date}".lower().replace(
+            " ", "-"
+        )
+
+    @property
+    def pr_title(self):
+        title = f"Import script for {self.gss.short_name}"
+        server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
+        if server_env == "prod":
+            return title
+        elif server_env == "test":
+            return f"TEST/{title}"
+        else:
+            return f"LOCALTEST/{title}"
+
+    @property
+    def pr_body(self):
+        message = f"PR triggered by upload at #{self.github_issue}"
+        server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
+        if server_env == "prod":
+            return message
+        elif server_env == "test":
+            return f"**NB triggered from staging instance**\n{message}"
+        else:
+            return f"**NB triggered from local machine**\n{message}"
+
+    def make_pull_request(self):
+        print("creating pull request")
+        if getattr(settings, "RUNNING_TESTS", False):
+            return
+
+        creds = GitHubCredentials(
+            repo=settings.GITHUB_REPO,
+            name=settings.GITHUB_USERNAME,
+            api_key=settings.GITHUB_API_KEY,
+            email=settings.GITHUB_EMAIL,
+        )
+        client = GitHubClient(creds)
+        try:
+            client.create_branch(self.branch_name)
+        except HTTPError as e:
+            if e.response.json()["message"] == "Reference already exists":
+                print("Branch already exists")
+            else:
+                raise e
+
+        client.push_file(
+            content=self.import_script,
+            filename=self.gss.import_script_path,
+            message=self.pr_title,
+            branch=self.branch_name,
+        )
+
+        try:
+            client.open_pull_request(
+                head_branch=self.branch_name,
+                title=self.pr_title,
+                body=self.pr_body,
+            )
+        except HTTPError as e:
+            if (
+                e.response.json()["errors"][0]["message"]
+                == f"A pull request already exists for DemocracyClub:{self.branch_name}."
+            ):
+                print("PR already exists.")
+            else:
+                raise e
 
 
 class File(models.Model):
