@@ -19,7 +19,9 @@ class EveryElectionWrapper:
                 self.elections = self.get_data_by_point(point)
                 self.request_success = True
             if council_id:
-                self.elections = self.get_data_council_id(council_id)
+                self.elections = self.get_election_intersecting_local_authority(
+                    council_id
+                )
                 self.request_success = True
             self.ballots = self.get_ballots_for_next_date()
             self.cancelled_ballots = self.get_cancelled_ballots()
@@ -41,10 +43,13 @@ class EveryElectionWrapper:
         )
         return self.get_data(query_url)
 
-    def get_data_council_id(self, council_id):
-        query_url = "%sapi/elections.json?organisation_identifier=%s&future=1" % (
-            settings.EE_BASE,
-            council_id,
+    def get_election_intersecting_local_authority(self, council_id):
+        query_url = (
+            "%sapi/elections.json?election_intersects_local_authority=%s&future=1"
+            % (
+                settings.EE_BASE,
+                council_id,
+            )
         )
         return self.get_data(query_url)
 
