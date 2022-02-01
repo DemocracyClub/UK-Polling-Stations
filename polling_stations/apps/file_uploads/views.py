@@ -283,7 +283,7 @@ class CouncilLoginView(FormView):
         domain = get_domain(request=self.request)
         path = reverse("file_uploads:council_authenticate")
         url = f"{self.request.scheme}://{domain}{path}{querystring}"
-        subject = "Your magic link to log in to the Electoral Commision API"
+        subject = "Your magic link to log in to the WhereDoIVote Uploader"
         txt = render_to_string(
             template_name="file_uploads/email/login_message.txt",
             context={
