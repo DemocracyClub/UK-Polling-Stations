@@ -37,6 +37,8 @@ class LoggerRouter(object):
 
 
 def get_logger_db_name():
-    if settings.LOGGER_DB_NAME in settings.DATABASES.keys():
+    if settings.LOGGER_DB_NAME in settings.DATABASES.keys() and not getattr(
+        settings, "RUNNING_TESTS", False
+    ):
         return settings.LOGGER_DB_NAME
     return DEFAULT_DB_ALIAS

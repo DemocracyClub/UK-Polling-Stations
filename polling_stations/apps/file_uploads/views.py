@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import DEFAULT_DB_ALIAS
 from django.db.models import Prefetch, Exists, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -189,7 +190,6 @@ class CouncilView:
             .order_by("name")
             .prefetch_related(Prefetch("upload_set", uploads))
             .prefetch_related("upload_set__file_set")
-            .annotate(data_imported=Count("pollingstation"))
         )
         if not self.request.user.is_staff:
             qs = qs.filter(usercouncils__user=self.request.user)
@@ -197,12 +197,20 @@ class CouncilView:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        qs = (
+            Council.objects.using(DEFAULT_DB_ALIAS)
+            .annotate(ps_count=Count("pollingstation"))
+            .filter(ps_count__gt=0)
+        )
+        context["COUNCILS_WITH_STATIONS"] = {council.council_id for council in qs}
+
         if self.kwargs.get("pk"):
             upcoming_election_dates = EveryElectionWrapper(
                 council_id=self.kwargs["pk"]
             ).get_future_election_dates()
             context["HAS_UPCOMING_ELECTIONS"] = bool(upcoming_election_dates)
             context["NO_COUNCILS"] = False
+
         return context
 
 
@@ -228,7 +236,10 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["EC_COUNCIL_CONTACT_EMAIL"] = settings.EC_COUNCIL_CONTACT_EMAIL
-        council = context["council"]
+        council_from_logger_db = context["council"]
+        council_from_default_db = Council.objects.using(DEFAULT_DB_ALIAS).get(
+            council_id=council_from_logger_db.council_id
+        )
         context["STATIONS"] = [
             {
                 "address": station.address,
@@ -236,12 +247,12 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                 "location": "✔️" if station.location else "❌",
                 "example_uprn": UprnToCouncil.objects.filter(
                     polling_station_id=station.internal_council_id,
-                    lad=council.geography.gss,
+                    lad=council_from_default_db.geography.gss,
                 )
                 .first()
                 .uprn.uprn,
             }
-            for station in council.pollingstation_set.all()
+            for station in council_from_default_db.pollingstation_set.all()
         ]
         return context
 
