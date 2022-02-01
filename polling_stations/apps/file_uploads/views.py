@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Exists, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -17,6 +17,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, TemplateView, FormView
 from sesame.utils import get_query_string, get_user
 
+from addressbase.models import UprnToCouncil
 from data_finder.helpers import EveryElectionWrapper
 from polling_stations.db_routers import get_logger_db_name
 from .utils import get_domain, assign_councils_to_user
@@ -188,6 +189,7 @@ class CouncilView:
             .order_by("name")
             .prefetch_related(Prefetch("upload_set", uploads))
             .prefetch_related("upload_set__file_set")
+            .annotate(data_imported=Count("pollingstation"))
         )
         if not self.request.user.is_staff:
             qs = qs.filter(usercouncils__user=self.request.user)
@@ -209,6 +211,7 @@ class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
 
     def get(self, request, *args, **kwargs):
         user_councils = self.get_queryset()
+
         if user_councils.count() == 1:
             return redirect(
                 reverse(
@@ -225,6 +228,21 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["EC_COUNCIL_CONTACT_EMAIL"] = settings.EC_COUNCIL_CONTACT_EMAIL
+        council = context["council"]
+        context["STATIONS"] = [
+            {
+                "address": station.address,
+                "postcode": station.postcode,
+                "location": "✔️" if station.location else "❌",
+                "example_uprn": UprnToCouncil.objects.filter(
+                    polling_station_id=station.internal_council_id,
+                    lad=council.geography.gss,
+                )
+                .first()
+                .uprn.uprn,
+            }
+            for station in council.pollingstation_set.all()
+        ]
         return context
 
 
