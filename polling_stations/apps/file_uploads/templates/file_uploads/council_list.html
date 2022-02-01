@@ -45,7 +45,7 @@
                     <td>
                         {{ council.upload_set.latest.status_emoji }}
                     </td>
-                    {% if council.data_imported %}
+                    {% if council.council_id in COUNCILS_WITH_STATIONS  %}
                         <td>✔️</td>
                     {% else %}
                         <td>❌</td>
@@ -55,6 +55,7 @@
 
             {% endfor %}
         </table>
+        {{ COUNCILS_WITH_STATIONS }}
 
     {% else %}
         <h2>You have no councils assigned.</h2>
