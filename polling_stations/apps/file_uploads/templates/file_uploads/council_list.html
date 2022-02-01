@@ -22,7 +22,8 @@
                 <th>Council Name</th>
                 {% if request.user.is_staff %}<th>Email</th>{% endif %}
                 {% if request.user.is_staff %}<th>Upload</th>{% endif %}
-                <th>Status</th>
+                <th>File Uploaded</th>
+                <th>Stations Imported</th>
             </tr>
             {% for council in object_list %}
                 <tr>
@@ -44,6 +45,12 @@
                     <td>
                         {{ council.upload_set.latest.status_emoji }}
                     </td>
+                    {% if council.data_imported %}
+                        <td>✔️</td>
+                    {% else %}
+                        <td>❌</td>
+                    {% endif %}
+
                 </tr>
 
             {% endfor %}

@@ -132,4 +132,27 @@
             </div>
         </div>
     {% endif %}
+
+    <div class="ds-card ds-padded">
+        <div class="ds-table">
+            <table>
+                <caption>Imported Polling Stations</caption>
+                <tr>
+                    <th>Address</th>
+                    <th>Postcode</th>
+                    <th>Has Location</th>
+                    <th>Example</th>
+                </tr>
+                {% for station in STATIONS %}
+                    <tr>
+                        <td>{{ station.address }}</td>
+                        <td>{{ station.postcode }}</td>
+                        <td>{{ station.location }} </td>
+                        <td><a href={%  url "address_view" station.example_uprn %}>Example page</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
 {% endblock council_content %}
