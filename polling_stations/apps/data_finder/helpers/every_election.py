@@ -58,7 +58,7 @@ class EveryElectionWrapper:
         if hasattr(settings, "CUSTOM_UA"):
             headers["User-Agent"] = settings.CUSTOM_UA
 
-        res = requests.get(query_url, timeout=4, headers=headers)
+        res = requests.get(query_url, timeout=10, headers=headers)
 
         if res.status_code != 200:
             res.raise_for_status()
