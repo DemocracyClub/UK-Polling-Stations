@@ -1,6 +1,7 @@
 from datetime import datetime
 import requests
 from django.conf import settings
+from django.core.cache import cache
 from uk_geo_utils.helpers import Postcode
 
 
@@ -51,19 +52,24 @@ class EveryElectionWrapper:
                 council_id,
             )
         )
-        return self.get_data(query_url)
+        # Only used by council users atm so seems safe to cache for a whole day
+        return self.get_data(query_url, cache_hours=24)
 
-    def get_data(self, query_url):
-        headers = {}
-        if hasattr(settings, "CUSTOM_UA"):
-            headers["User-Agent"] = settings.CUSTOM_UA
+    def get_data(self, query_url, cache_hours=0.5):
+        res_json = cache.get(query_url)
+        if not res_json:
+            headers = {}
+            if hasattr(settings, "CUSTOM_UA"):
+                headers["User-Agent"] = settings.CUSTOM_UA
 
-        res = requests.get(query_url, timeout=10, headers=headers)
+            res = requests.get(query_url, timeout=10, headers=headers)
 
-        if res.status_code != 200:
-            res.raise_for_status()
+            if res.status_code != 200:
+                res.raise_for_status()
 
-        res_json = res.json()
+            res_json = res.json()
+            cache.set(query_url, res_json, 60 * 60 * cache_hours)
+
         if "results" in res_json:
             return res_json["results"]
         return res_json
