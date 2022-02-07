@@ -1,317 +1,56 @@
-from django.utils.text import slugify
-
-from data_importers.ems_importers import BaseHalaroseCsvImporter
-
-ABERDEENSHIRE_EXCLUDE_STATIONS = (
-    "1-dyce-community-centre",
-    "1-houldsworth-institute",
-    "10-beacon-sports-centre",
-    "10-fleming-hall",
-    "100-aberdeen-citadel-salvation-army-building",
-    "101-st-marys-church",
-    "102-st-marys-episcopal-church",
-    "103-st-marys-episcopal-church",
-    "104-st-marys-episcopal-church",
-    "105-queens-cross-parish-church",
-    "106-queens-cross-parish-church",
-    "107-holburn-west-church",
-    "108-holburn-west-church",
-    "109-holburn-west-church",
-    "11-beacon-sports-centre",
-    "11-mortlach-memorial-hall",
-    "110-broomhill-school",
-    "111-broomhill-school",
-    "112-ruthrieston-community-centre",
-    "113-ferryhill-community-centre",
-    "114-ferryhill-community-centre",
-    "115-ferryhill-community-centre",
-    "116-ferryhill-community-centre",
-    "117-south-holburn-parish-church",
-    "118-south-holburn-parish-church",
-    "119-ferryhill-parish-church-hall",
-    "12-bucksburn-stoneywood-church",
-    "12-mortlach-memorial-hall",
-    "120-ferryhill-parish-church-hall",
-    "121-culter-village-hall",
-    "122-culter-village-hall",
-    "123-culter-village-hall",
-    "124-peterculter-sports-centre",
-    "125-milltimber-community-hall",
-    "126-milltimber-community-hall",
-    "127-st-devenicks-church-hall",
-    "128-st-devenicks-church-hall",
-    "129-cults-kirk-centre",
-    "13-bucksburn-stoneywood-church",
-    "13-glenlivet-public-hall",
-    "130-cults-kirk-centre",
-    "131-cults-kirk-centre",
-    "132-cults-kirk-centre",
-    "133-hazelhead-school",
-    "134-hazelhead-school",
-    "135-fernielea-school",
-    "136-craigiebuckler-church-hall",
-    "137-craigiebuckler-church-hall",
-    "138-airyhall-community-centre",
-    "139-airyhall-community-centre",
-    "14-danestone-community-centre",
-    "14-richmond-memorial-hall",
-    "140-airyhall-community-centre",
-    "141-airyhall-community-centre",
-    "142-mannofield-church-hall",
-    "143-mannofield-church-hall",
-    "144-mannofield-church-hall",
-    "145-mannofield-church-hall",
-    "146-st-francis-church-hall",
-    "147-kaimhill-community-centre",
-    "148-kaimhill-community-centre",
-    "149-kaimhill-community-centre",
-    "15-danestone-community-centre",
-    "15-newmill-public-hall",
-    "150-kaimhill-community-centre",
-    "151-torry-united-free-church-of-scotland",
-    "152-torry-united-free-church-of-scotland",
-    "153-old-torry-community-centre",
-    "154-old-torry-community-centre",
-    "155-tullos-learning-centre",
-    "156-balnagask-community-centre",
-    "157-south-st-nicholas-church",
-    "158-kincorth-community-centre",
-    "159-altens-community-centre",
-    "16-old-ogilvie-school-hall",
-    "16-oldmachar-church",
-    "160-south-st-nicholas-church",
-    "161-south-st-nicholas-church",
-    "162-kincorth-community-centre",
-    "163-loirston-annexe-community-centre",
-    "164-loirston-annexe-community-centre",
-    "165-loirston-annexe-community-centre",
-    "166-cove-library",
-    "167-cove-library",
-    "17-longmore-halls",
-    "17-oldmachar-church",
-    "18-greenbrae-school",
-    "18-longmore-halls",
-    "19-greenbrae-school",
-    "19-longmore-halls",
-    "2-dyce-community-centre",
-    "2-the-grant-hall",
-    "20-glashieburn-school",
-    "20-lhanbryde-community-centre",
-    "21-glashieburn-school",
-    "21-lhanbryde-community-centre",
-    "22-greenbrae-school",
-    "22-urquhart-village-hall",
-    "23-forehill-school",
-    "23-garmouth-hall",
-    "24-forehill-school",
-    "24-spey-bay-hall",
-    "25-middleton-park-school",
-    "25-portgordon-community-centre",
-    "26-fogwatt-hall",
-    "26-middleton-park-school",
-    "27-mosstodloch-village-hall-speymouth-hall",
-    "27-st-columbas-church",
-    "28-fochabers-public-institute",
-    "28-st-columbas-church",
-    "29-balgownie-community-centre",
-    "29-fochabers-public-institute",
-    "3-dyce-church-hall",
-    "3-the-grant-hall",
-    "30-balgownie-community-centre",
-    "30-clochan-community-hall",
-    "31-balgownie-community-centre",
-    "31-burghead-free-church-hall",
-    "32-burghead-free-church-hall",
-    "32-kingswells-community-centre",
-    "33-kingswells-community-centre",
-    "33-memorial-hall",
-    "34-kingswells-community-centre",
-    "34-memorial-hall",
-    "35-kingswells-community-centre",
-    "35-lossiemouth-football-social-club",
-    "36-kingsford-school",
-    "36-lossiemouth-football-social-club",
-    "37-kingsford-school",
-    "37-lossiemouth-football-social-club",
-    "38-sheddocksley-community-centre",
-    "38-town-hall",
-    "39-sheddocksley-community-centre",
-    "39-town-hall",
-    "4-boharm-village-hall",
-    "4-dyce-community-centre",
-    "40-muirfield-school",
-    "40-town-hall",
-    "41-duffus-village-hall",
-    "41-muirfield-school",
-    "42-alves-hall",
-    "42-sheddocksley-baptist-church",
-    "43-miltonduff-public-hall",
-    "43-sheddocksley-baptist-church",
-    "44-bishopmill-hall",
-    "44-heathryburn-school",
-    "45-bishopmill-hall",
-    "45-heathryburn-school",
-    "46-bishopmill-hall",
-    "46-manor-park-school",
-    "47-manor-park-school",
-    "47-seafield-school",
-    "48-northfield-community-centre",
-    "48-seafield-school",
-    "49-northfield-community-centre",
-    "49-seafield-school",
-    "5-dyce-community-centre",
-    "5-margach-hall",
-    "50-northfield-community-centre",
-    "50-williamson-hall",
-    "51-cummings-park-community-centre",
-    "51-williamson-hall",
-    "52-cummings-park-community-centre",
-    "52-elgin-district-indoor-bowling-club",
-    "53-mastrick-community-centre",
-    "53-moray-conference-centre-mansefield-hotel",
-    "54-mcboyle-hall",
-    "54-moray-conference-centre-mansefield-hotel",
-    "54-quarryhill-school",
-    "55-cullen-bowling-and-tennis-club",
-    "55-moray-conference-centre-mansefield-hotel",
-    "55-quarryhill-school",
-    "56-cullen-bowling-and-tennis-club",
-    "56-greenwards-school",
-    "56-hilton-community-centre",
-    "57-deskford-jubilee-hall",
-    "57-greenwards-school",
-    "57-hilton-community-centre",
-    "58-greenwards-school",
-    "58-hilton-community-centre",
-    "58-king-memorial-hall-off-a95",
-    "59-new-elgin-ashgrove-hall",
-    "59-rothiemay-hall",
-    "59-woodside-fountain-centre",
-    "6-archiestown-hall",
-    "6-beacon-sports-centre",
-    "60-function-hall",
-    "60-new-elgin-ashgrove-hall",
-    "60-woodside-fountain-centre",
-    "61-function-hall",
-    "61-high-church-hilton",
-    "61-new-elgin-ashgrove-hall",
-    "62-buckie-methodist-church-hall",
-    "62-high-church-hilton",
-    "62-moray-sports-centre",
-    "63-high-church-hilton",
-    "63-moray-sports-centre",
-    "63-north-church-hall",
-    "64-cairncry-community-centre",
-    "64-james-milne-institute",
-    "64-royal-british-legion-hall",
-    "65-cairncry-community-centre",
-    "65-dyke-district-hall",
-    "65-royal-british-legion-hall",
-    "66-cairncry-community-centre",
-    "66-kinloss-church-of-scotland-hall",
-    "66-portessie-methodist-church-hall",
-    "67-kinloss-church-of-scotland-hall",
-    "67-kittybrewster-school",
-    "67-town-hall",
-    "68-forres-tennis-clubhouse",
-    "68-st-georges-tillydrone-church",
-    "69-forres-house-community-centre",
-    "69-st-georges-tillydrone-church",
-    "7-craigellachie-village-hall",
-    "7-stoneywood-school",
-    "70-forres-house-community-centre",
-    "70-st-georges-tillydrone-church",
-    "71-forres-town-hall",
-    "71-seaton-school",
-    "72-forres-town-hall",
-    "72-seaton-school",
-    "73-forres-town-hall",
-    "73-seaton-school",
-    "74-pilmuir-school",
-    "74-st-peters-rc-school",
-    "75-pilmuir-school",
-    "75-st-peters-rc-school",
-    "76-pilmuir-school",
-    "76-st-marys-church",
-    "77-midstocket-parish-church",
-    "77-pilmuir-school",
-    "78-midstocket-parish-church",
-    "78-rafford-hall",
-    "79-edinkillie-hall",
-    "79-midstocket-parish-church",
-    "8-drummuir-hall",
-    "8-stoneywood-school",
-    "80-midstocket-parish-church",
-    "81-ashgrove-childrens-centre",
-    "82-skene-square-school",
-    "83-skene-square-school",
-    "84-silver-city-church",
-    "85-silver-city-church",
-    "86-st-marys-cathedral",
-    "87-st-marys-cathedral",
-    "88-catherine-street-community-centre",
-    "89-sunnybank-school",
-    "9-danestone-community-centre",
-    "9-fleming-hall",
-    "90-sunnybank-school",
-    "91-catherine-street-community-centre",
-    "92-catherine-street-community-centre",
-    "93-seamount-court-tenants-room",
-    "94-seamount-court-tenants-room",
-    "95-hanover-community-centre",
-    "96-hanover-community-centre",
-    "97-hanover-community-centre",
-    "98-hanover-community-centre",
-    "99-aberdeen-citadel-salvation-army-building",
-)
+from addressbase.models import UprnToCouncil
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "ABD"
-    addresses_name = (
-        "2021-04-06T10:27:33.508149/Grampian polling_station_export-2021-04-05.csv"
-    )
+    addresses_name = "2022-05-05/2022-04-12T10:11:25.128402/polling_station_export-2022-04-07.edited.csv"
+    stations_name = "2022-05-05/2022-04-12T10:11:25.128402/polling_station_export-2022-04-07.edited.csv"
+    elections = ["2022-05-05"]
 
-    stations_name = (
-        "2021-04-06T10:27:33.508149/Grampian polling_station_export-2021-04-05.csv"
-    )
-    elections = ["2021-05-06"]
+    def pre_import(self):
+        # We need to consider rows that don't have a uprn when importing data.
+        # However there are lots of rows for other councils in this file.
+        # So build a list of stations from rows that do have UPRNS
+        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
 
-    def get_station_hash(self, record):
-        # There is a collision on 53-victoria-hall and 54-victoria-hall. Adding the town fixes it
-        if record.pollingstationname == "VICTORIA HALL":
-            return "-".join(
-                [
-                    record.pollingstationnumber.strip(),
-                    slugify(record.pollingstationname.strip())[:90],
-                    slugify(record.pollingstationaddress_2),
-                ]
+        council_uprns = set(
+            UprnToCouncil.objects.filter(lad=self.council.geography.gss).values_list(
+                "uprn", flat=True
             )
-        else:
-            return super().get_station_hash(record)
+        )
+        self.COUNCIL_STATIONS = set()
+        data = self.get_addresses()
 
-    def station_record_to_dict(self, record):
-        station_hash = self.get_station_hash(record)
-        if station_hash in ABERDEENSHIRE_EXCLUDE_STATIONS:
-            return None
-        return super().station_record_to_dict(record)
+        for record in data:
+            if record.uprn in council_uprns:
+                self.COUNCIL_STATIONS.add(self.get_station_hash(record))
 
     def address_record_to_dict(self, record):
+        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+            return None
+
         if record.housepostcode in [
             "AB39 2UJ",
             "AB30 1SL",
             "AB43 7LN",
-            "AB42 3BS",
             "AB42 5JB",
             "AB51 8XH",
+            "AB41 7UA",
             "AB51 5DU",
             "AB21 0QJ",
             "AB35 5PR",
-            "AB34 5PE",
         ]:
-            return None
-        station_hash = self.get_station_hash(record)
-        if station_hash in ABERDEENSHIRE_EXCLUDE_STATIONS:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        station_hash = self.get_station_hash(record)
+        if station_hash not in self.COUNCIL_STATIONS:
+            return None
+
+        if station_hash == "74-hanover-community-centre":
+            return None
+
+        return super().station_record_to_dict(record)
