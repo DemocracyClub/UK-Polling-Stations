@@ -29,8 +29,6 @@
     </p>
 
     <form id="file_upload_form" method="POST">
-        <div class="error-summary" id="error" hidden></div>
-
         {% if SHOW_DATE_PICKER %}
             <fieldset>
                 <legend>Election date</legend>
@@ -96,12 +94,13 @@
         };
 
         var handleError = function(err) {
-            var error = '<h2>Sorry, something has gone wrong</h2> '
+            var error = '<div role="alert"><div class="ds-error">'
+            error += '<strong>Sorry, something has gone wrong</strong> '
             error += '<p>Ensure the file you are uploading is of type .csv or .tsv. ';
             error += 'If the problem continues, ';
             error += '<a href="mailto:pollingstations@democracyclub.org.uk">contact us</a>.</p>';
-            document.getElementById("error").innerHTML = error;
-            document.getElementById("error").hidden = false;
+            error += '</div></div>';
+            document.getElementById("submit").insertAdjacentHTML('beforebegin', error);
             document.getElementById("submit").disabled = false;
         };
 
@@ -174,8 +173,15 @@
 
             document.getElementById('file_upload_form').addEventListener("submit", function(e) {
                 e.preventDefault();
-                document.getElementById("error").innerHTML = "";
-                document.getElementById("error").hidden = true;
+                
+                var errors = document.querySelectorAll("form .ds-error")
+                if (errors) {
+                  console.log(errors)
+                  errors.forEach(function (e) {
+                    return e.remove();
+                  });
+                }
+
                 document.getElementById("submit").disabled = true;
 
                 getPresignedPostData().then(
