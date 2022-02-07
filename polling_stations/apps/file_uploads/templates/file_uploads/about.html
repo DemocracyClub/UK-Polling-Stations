@@ -1,40 +1,60 @@
 {% extends "file_uploads/council_user_base.html" %}
 
 {% block council_content %}
-    <h3>Uploading Data</h3>
 
-    <p>
-        Welcome to Democracy Club’s new polling station uploader tool! We hope this will streamline the process for providing your lists of polling places to us.
-    </p>
-    <p>
-        Information on how to create the necessary file can be found <a href="https://democracyclub.org.uk/projects/polling-stations/upload/">here</a>.
-    </p>
-    <p>
-        Each time you log in you will need to create a new 'magic link', as long as you use your council email this
-        should automatically match you to your council.
-        If you are responsible for elections in more than one council area, please contact us, and we can assign extra
-        councils to your account
-    </p>
-    <p>
-        If you have any questions please <a href="mailto:pollingstations@democracyclub.org.uk">get in touch</a>.
-    </p>
-    <h3>About the Polling Station Finder</h3>
+  <p>
+    Welcome to Democracy Club’s new polling station uploader tool! We hope this will streamline the process for providing your lists of polling places to us.
+  </p>
+  <p>
+    Information on <a href="https://democracyclub.org.uk/projects/polling-stations/upload/">
+    how to export the necessary files can be found on our websites</a>.
+  </p>
+  <p>
+    If you have any questions please <a href="mailto:pollingstations@democracyclub.org.uk">get in touch</a>.
+  </p>
+  <h2>How the uploader works</h2>
 
-    <p>
-        Democracy Club’s <a href="https://wheredoivote.co.uk/">WhereDoIVote.co.uk</a> allows voters to find their assigned
-        polling station using nothing more than a postcode.
-        The data you provide also powers the postcode look-up on <a href="https://www.electoralcommission.org.uk/i-am-a/voter">
-            The Electoral Commission</a> voter pages,
-        and is available for other organisations to use, free of charge.
-    </p>
-    <p>
-        You can add our <a href="https://democracyclub.org.uk/projects/polling-stations/embed/">
-            polling station widget</a> to your own website for free.
-    </p>
-    <p>
-        Once you have uploaded your data, our developers check the file for problems and import it into the finder. Once the data is live on the site, we will contact you to let you know using the email address used to upload the file.
-        All data is removed immediately after the election it is assigned to is over. We always err on the side of caution, and will not display information if we are at all unsure about it.
-        Please note the finder does not at present cover town and parish elections, or other forms of local polls (eg. planning referendums).
+  <p>
+    Each time you log in we will email you a new 'magic link'. Check your emails for an email from us that contains 
+    the link. Click the link to log in. This only works once per email message. 
+  </p>
+  
+  <p>When you log in, we automatically assign you to a council that relates to your email address.
+    If you manage polling station data for other councils then get in touch and we'll give your profile permission to upload
+    for them.</p>
 
-    </p>
+  <p>We then present you with a page that shows your contact information (as shown on The Electoral Commission website) and
+    the status of any existing uploads</p>
+
+  <p>If we have upcoming elections in our system for the council then you'll see an upload button. Press this and upload
+    the export from your EMS.</p>
+  <p>Once uploaded, we do some processing and inital checks to make sure the export worked properly.</p>
+  <p>If it did, the file <strong>does not</strong> get added to the polling station finder automatically. Our developers will have to process
+    it manually. This could take up to a couple of weeks depending on how busy we are.</p>
+
+  <p>
+    Once you have uploaded your data, our developers check the file for problems and import it into the finder.
+    When the data is live on the site, we will contact you to let you know using the email address used to upload the file.
+  </p>
+
+  <p>At that point you can log back in and check an example page for each polling station.</p>
+
+  <p>All data is removed immediately after the election it is assigned to is over. We always err on the side of caution, and will not display information if we are at all unsure about it.</p>
+
+  <p>Please note the finder does not at present cover town and parish elections, or other forms of local polls (eg. planning referendums).</p>
+
+  <h2>About the Polling Station Finder</h2>
+
+  <p>
+    Democracy Club’s <a href="https://wheredoivote.co.uk/">WhereDoIVote.co.uk</a> allows voters to find their assigned
+    polling station using nothing more than a postcode.
+    The data you provide also powers the postcode look-up on <a href="https://www.electoralcommission.org.uk/i-am-a/voter">
+    The Electoral Commission</a> voter pages,
+    and is available for other organisations to use, free of charge.
+  </p>
+  <p>
+    You can add our <a href="https://democracyclub.org.uk/projects/polling-stations/embed/">
+    polling station widget</a> to your own website for free.
+  </p>
+
 {% endblock %}
