@@ -173,13 +173,13 @@
 
             document.getElementById('file_upload_form').addEventListener("submit", function(e) {
                 e.preventDefault();
-                
+
                 var errors = document.querySelectorAll("form .ds-error")
                 if (errors) {
-                  console.log(errors)
-                  errors.forEach(function (e) {
-                    return e.remove();
-                  });
+                    console.log(errors)
+                    errors.forEach(function (e) {
+                        return e.remove();
+                    });
                 }
 
                 document.getElementById("submit").disabled = true;
