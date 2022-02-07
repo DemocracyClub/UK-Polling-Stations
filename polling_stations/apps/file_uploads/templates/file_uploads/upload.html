@@ -176,10 +176,9 @@
 
                 var errors = document.querySelectorAll("form .ds-error")
                 if (errors) {
-                    console.log(errors)
-                    errors.forEach(function (e) {
-                        return e.remove();
-                    });
+                    for (var i = 0; i < errors.length; i++) {
+                        return errors[i].remove();
+                    }
                 }
 
                 document.getElementById("submit").disabled = true;
