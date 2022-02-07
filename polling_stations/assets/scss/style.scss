@@ -224,3 +224,8 @@ input[type="radio"] {
   visibility: unset;
   opacity: 0;
 }
+
+.ds-status-message a, .ds-status-error * {
+  color: $white;
+  font-family: Montserrat, sans-serif;
+}
