@@ -1,6 +1,7 @@
 from commitment import GitHubCredentials, GitHubClient
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.utils.timezone import now
 
 from requests import HTTPError
 
@@ -20,6 +21,11 @@ def status_to_emoji(status):
     return status
 
 
+class UploadQuerySet(models.QuerySet):
+    def future(self):
+        return self.filter(election_date__gte=now())
+
+
 class Upload(models.Model):
     gss = models.ForeignKey(
         Council,
@@ -30,6 +36,8 @@ class Upload(models.Model):
     timestamp = models.DateTimeField()
     election_date = models.DateField(null=True)
     github_issue = models.CharField(blank=True, max_length=100)
+
+    objects = UploadQuerySet.as_manager()
 
     class Meta:
         get_latest_by = "timestamp"
