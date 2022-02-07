@@ -1,5 +1,5 @@
-from django.urls import re_path, path
-from django.views.generic import TemplateView
+from django.urls import re_path, path, reverse_lazy
+from django.views.generic import TemplateView, RedirectView
 
 from .views import (
     CouncilListView,
@@ -12,6 +12,7 @@ from .views import (
 
 app_name = "file_uploads"
 urlpatterns = [
+    path("", RedirectView.as_view(url=reverse_lazy("file_uploads:councils_list"))),
     re_path(r"^councils/$", CouncilListView.as_view(), name="councils_list"),
     re_path(
         r"^councils/(?P<pk>.+)/$",
