@@ -11,7 +11,7 @@
     <h2>Uploads</h2>
     {% if HAS_UPCOMING_ELECTIONS %}
 
-        {% if object.upload_set.exists %}
+        {% if object.upload_set.future.exists %}
             <table class="ds-table">
                 <th>Election Date</th>
                 <th>Uploaded</th>
@@ -19,7 +19,7 @@
                 <th>File upload status</th>
                 <th>Data live?</th>
 
-                {% for upload in object.upload_set.all %}
+                {% for upload in object.upload_set.future %}
 
                     <tr>
                         <td>
