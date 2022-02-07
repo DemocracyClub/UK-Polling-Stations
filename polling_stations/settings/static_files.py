@@ -8,6 +8,7 @@ PIPELINE = get_pipeline_settings(
     extra_css=["scss/style.scss", "font-awesome/css/font-awesome.min.css"],
     extra_js=[],
 )
+AWS_S3_OBJECT_PARAMETERS = {"Cache-Control": "max-age=315576000, immutable"}
 
 PIPELINE["STYLESHEETS"].update(
     {
