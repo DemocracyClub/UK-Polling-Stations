@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import Prefetch, Exists, Count
+from django.db.models import Prefetch, Count
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
