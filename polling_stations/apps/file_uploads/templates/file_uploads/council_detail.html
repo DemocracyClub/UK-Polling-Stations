@@ -45,7 +45,12 @@
                                 </ul>
                             {% endif %}
                         </td>
-                        <td>{{ upload.status }}</td>
+                        <td>
+                          {{ upload.status }}
+                          {% if upload.status == "Pending" %}
+                            <br><small>(Refresh page to update)</small>
+                          {% endif %}
+                        </td>
                         <td>
                         {% if upload.status != "Pending" %}
                           {% if STATIONS  %}✔{% else %}❌{% endif %}
