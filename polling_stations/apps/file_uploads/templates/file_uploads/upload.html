@@ -114,7 +114,7 @@
         };
 
         var getPresignedPostData = function() {
-            return new Promise(function(resolve, reject) {
+            var presignedPostDataPromise = new Promise(function(resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 var url = '{% url "file_uploads:file_upload" gss=gss %}';
                 xhr.open("POST", url, true);
@@ -142,10 +142,11 @@
                     }
                 };
             });
+            return presignedPostDataPromise;
         };
 
         var uploadFileToS3 = function(presignedPostData, file, progressBar) {
-            return new Promise(function(resolve, reject) {
+            var uploadPromise = new Promise(function(resolve, reject) {
                 var formData = new FormData();
                 Object.keys(presignedPostData.fields).forEach(function(key) {
                     formData.append(key, presignedPostData.fields[key]);
@@ -167,6 +168,7 @@
                     }
                 };
             });
+            return uploadPromise;
         };
 
         document.addEventListener('DOMContentLoaded', function() {
