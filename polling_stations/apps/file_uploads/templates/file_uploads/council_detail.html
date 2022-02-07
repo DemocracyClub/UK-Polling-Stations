@@ -16,7 +16,8 @@
                 <th>Election Date</th>
                 <th>Uploaded</th>
                 <th>Files</th>
-                <th>Status</th>
+                <th>File upload status</th>
+                <th>Data live?</th>
 
                 {% for upload in object.upload_set.all %}
 
@@ -45,6 +46,11 @@
                             {% endif %}
                         </td>
                         <td>{{ upload.status }}</td>
+                        <td>
+                        {% if upload.status != "Pending" %}
+                          {% if STATIONS  %}✔{% else %}❌{% endif %}
+                        {% endif %}
+                        </td>
                     </tr>
 
                 {% endfor %}
