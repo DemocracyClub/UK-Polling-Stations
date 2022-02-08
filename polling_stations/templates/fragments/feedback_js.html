@@ -1,4 +1,11 @@
 {% load i18n %}
+{% load pipeline %}
+
+{% block extra_javascript %}
+    {% javascript 'jquery' %}
+{% endblock extra_javascript%}
+
+
 <script type="text/javascript">
     $(document).ready(function() {
 

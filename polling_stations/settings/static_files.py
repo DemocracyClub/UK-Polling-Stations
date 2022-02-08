@@ -42,11 +42,24 @@ PIPELINE["JAVASCRIPT"].update(
             ],
             "output_filename": "js/map.js",
         },
+        "jquery": {
+            "source_filenames": [
+                "jquery/dist/jquery.min.js",
+            ],
+            "output_filename": "js/jquery.js",
+        },
         "dashboard": {
             "source_filenames": [
                 "leaflet.markercluster/dist/leaflet.markercluster.js",
             ],
             "output_filename": "js/dashboard.js",
+        },
+        "file_uploads": {
+            "source_filenames": [
+                "promise-polyfill/dist/polyfill.min.js",
+                "jquery/dist/jquery.min.js",
+            ],
+            "output_filename": "js/file_uploads.js",
         },
     }
 )

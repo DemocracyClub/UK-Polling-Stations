@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load static %}
+{% load pipeline %}
 
 {% block extra_page_css %}
     <style>
@@ -11,6 +12,10 @@
         }
     </style>
 {% endblock extra_page_css %}
+
+{% block extra_javascript %}
+    {% javascript 'file_uploads' %}
+{% endblock extra_javascript %}
 
 {% block council_content %}
     <noscript>

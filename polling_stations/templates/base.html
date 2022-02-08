@@ -22,8 +22,6 @@
         {% endblock top_banner %}
 
         {% block site_meta %}
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
             <meta name="description" content="{% block description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock %}">
             <meta name="keywords" content="{% block keywords %}Polling stations,Election,General Election,Local Election{% endblock %}">
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

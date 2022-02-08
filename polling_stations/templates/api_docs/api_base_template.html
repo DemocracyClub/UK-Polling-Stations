@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load static %}
+{% load pipeline %}
 
 {% block body_attrs %}class="wide"{% endblock body_attrs %}
 
@@ -22,6 +23,11 @@
         }
     </style>
 {% endblock extra_page_css %}
+
+{% block extra_javascript %}
+    {% javascript 'jquery' %}
+{% endblock extra_javascript%}
+
 
 {% block page_title %}API Documentation{% endblock page_title %}
 
