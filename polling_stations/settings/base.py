@@ -274,8 +274,7 @@ CORS_URLS_REGEX = r"^/(api|embed)/.*$"
 
 INTERNAL_IPS = "127.0.0.1"
 SITE_TITLE = _("Where Do I Vote?")
-SITE_LOGO = "images/logo_icon.svg"
-SITE_LOGO_WIDTH = "390px"
+
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
