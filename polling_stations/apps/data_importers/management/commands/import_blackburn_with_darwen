@@ -1,0 +1,10 @@
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+
+
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = "BBD"
+    addresses_name = "2022-05-05/2022-02-08T19:52:07.043819/wdiv-upload-test.tsv"
+    stations_name = "2022-05-05/2022-02-08T19:52:07.043819/wdiv-upload-test.tsv"
+    elections = ['2022-05-05']
+    csv_encoding = "windows-1252"
+    csv_delimiter = "\t"
