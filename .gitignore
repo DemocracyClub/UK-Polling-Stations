@@ -70,3 +70,6 @@ s3cache/*
 
 # node js dependencies
 node_modules/
+
+# Address import artifact
+uprn-to-councils.csv
