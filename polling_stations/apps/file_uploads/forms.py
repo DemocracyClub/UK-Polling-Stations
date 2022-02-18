@@ -30,7 +30,7 @@ class CouncilLoginForm(forms.Form):
     email = CouncilEmailField(
         required=True,
         help_text="""Enter your council email address and we will send you a
-        one time magic link. Please make sure you have access to the
+        magic link to log in with. Please make sure you have access to the
         email address you enter.""",
     )
 
