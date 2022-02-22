@@ -4,6 +4,7 @@ from django.db import DEFAULT_DB_ALIAS
 from django.test import TestCase, override_settings
 from councils.models import Council
 from councils.management.commands.import_councils import Command
+from polling_stations.settings.constants.councils import COUNCIL_ID_FIELD
 
 
 class MockCouncilsImporter(Command):
@@ -23,7 +24,7 @@ class MockCouncilsImporter(Command):
                     "type": "Feature",
                     "properties": {
                         "objectid": 1,
-                        "LAD20CD": auth["code"],
+                        COUNCIL_ID_FIELD: auth["code"],
                         "lad19nm": auth["name"],
                         "lad19nmw": " ",
                         "st_areashape": 123,
