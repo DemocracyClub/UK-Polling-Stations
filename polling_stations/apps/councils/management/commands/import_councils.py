@@ -10,7 +10,10 @@ from django.db import DEFAULT_DB_ALIAS
 from requests.exceptions import HTTPError
 from retry import retry
 from councils.models import Council, CouncilGeography
-from polling_stations.settings.constants.councils import WELSH_COUNCIL_NAMES
+from polling_stations.settings.constants.councils import (
+    WELSH_COUNCIL_NAMES,
+    COUNCIL_ID_FIELD,
+)
 
 
 def union_areas(a1, a2):
@@ -96,7 +99,7 @@ class Command(BaseCommand):
             raise HTTPError("202 Accepted", response=r)
         return r.json()
 
-    def attach_boundaries(self, url=None, id_field="LAD20CD"):
+    def attach_boundaries(self, url=None, id_field=COUNCIL_ID_FIELD):
         """
         Fetch each council's boundary from ONS and attach it to an existing
         council object
