@@ -160,34 +160,79 @@ class Command(BaseCommand):
     def import_councils_from_ec(self):
         self.stdout.write("Importing councils...")
 
-        bucks_defaults = {
-            "name": "Buckinghamshire Council",
-            "electoral_services_email": "elections@buckinghamshire.gov.uk (general enquiries), postalvote@buckinghamshire.gov.uk (postal vote enquiries), proxyvote@buckinghamshire.gov.uk (proxy vote enquiries), overseasvote@buckinghamshire.gov.uk (overseas voter enquiries)",
-            "electoral_services_website": "https://www.buckinghamshire.gov.uk/your-council/council-and-democracy/election-and-voting/",
-            "electoral_services_postcode": "HP19 8FF",
-            "electoral_services_address": "Electoral Services\r\nBuckinghamshire Council\r\nThe Gateway\r\nGatehouse Road\r\nAylesbury",
-            "electoral_services_phone_numbers": ["01296 798141"],
-            "identifiers": ["E06000060"],
-            "registration_address": None,
-            "registration_email": "",
-            "registration_phone_numbers": [],
-            "registration_postcode": None,
-            "registration_website": "",
-            "name_translated": {},
+        council_defaults = {
+            "BUC": {
+                "name": "Buckinghamshire Council",
+                "electoral_services_email": "elections@buckinghamshire.gov.uk (general enquiries), postalvote@buckinghamshire.gov.uk (postal vote enquiries), proxyvote@buckinghamshire.gov.uk (proxy vote enquiries), overseasvote@buckinghamshire.gov.uk (overseas voter enquiries)",
+                "electoral_services_website": "https://www.buckinghamshire.gov.uk/your-council/council-and-democracy/election-and-voting/",
+                "electoral_services_postcode": "HP19 8FF",
+                "electoral_services_address": "Electoral Services\r\nBuckinghamshire Council\r\nThe Gateway\r\nGatehouse Road\r\nAylesbury",
+                "electoral_services_phone_numbers": ["01296 798141"],
+                "identifiers": ["E06000060"],
+                "registration_address": "",
+                "registration_email": "",
+                "registration_phone_numbers": [],
+                "registration_postcode": None,
+                "registration_website": "",
+                "name_translated": {},
+            },
+            "WNT": {
+                "name": "West Northamptonshire Council",
+                "electoral_services_email": "",
+                "electoral_services_website": "https://www.westnorthants.gov.uk/elections-and-voting/contact-your-local-elections-office",
+                "electoral_services_postcode": "NN1 1ED",
+                "electoral_services_address": "",
+                "electoral_services_phone_numbers": ["0300 126 7000"],
+                "identifiers": ["E06000062"],
+                "registration_address": None,
+                "registration_email": "",
+                "registration_phone_numbers": [],
+                "registration_postcode": None,
+                "registration_website": "",
+                "name_translated": {},
+            },
+            "NNT": {
+                "name": "North Northamptonshire Council",
+                "electoral_services_email": "elections@northnorthants.gov.uk",
+                "electoral_services_website": "https://www.northnorthants.gov.uk/democracy-elections-and-voting/contact-elections-office",
+                "electoral_services_postcode": "NN8 1BP",
+                "electoral_services_address": "",
+                "electoral_services_phone_numbers": ["01832 742076"],
+                "identifiers": ["E06000061"],
+                "registration_address": None,
+                "registration_email": "",
+                "registration_phone_numbers": [],
+                "registration_postcode": None,
+                "registration_website": "",
+                "name_translated": {},
+            },
         }
-        bucks_council, created = Council.objects.get_or_create(
-            council_id="BUC", defaults=bucks_defaults
-        )
-        if not created:
-            for key, value in bucks_defaults.items():
-                setattr(bucks_council, key, value)
-            bucks_council.save()
-        self.seen_ids.add("BUC")
+        for council_id, defaults in council_defaults.items():
+            council, created = Council.objects.get_or_create(
+                council_id=council_id, defaults=defaults
+            )
+            if not created:
+                for key, value in defaults.items():
+                    setattr(council, key, value)
+                council.save()
+            self.seen_ids.add(council_id)
 
         for council_data in self.load_contact_details():
             self.seen_ids.add(council_data["code"])
 
-            if council_data["code"] in ("CHN", "AYL", "SBU", "WYO"):
+            if council_data["code"] in (
+                "CHN",  # Bucks
+                "AYL",  # Bucks
+                "SBU",  # Bucks
+                "WYO",  # Bucks
+                "COR",  # North Northamptonshire Council
+                "DAV",  # West Northamptonshire Council
+                "ENO",  # North Northamptonshire Council
+                "KET",  # North Northamptonshire Council
+                "NOR",  # West Northamptonshire Council
+                "SNR",  # West Northamptonshire Council
+                "WEL",  # North Northamptonshire Council
+            ):
                 continue
 
             council, _ = Council.objects.using(self.database).get_or_create(
