@@ -48,7 +48,8 @@ class Command(BaseCommand):
             COPY (SELECT
                     a.uprn as uprn,
                     c.gss as lad,
-                    '' as polling_station_id
+                    '' as polling_station_id,
+                    null as advance_voting_station_id
                 FROM
                     addressbase_address a
                     JOIN
