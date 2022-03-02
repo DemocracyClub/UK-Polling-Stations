@@ -141,3 +141,13 @@ class CustomFinder(models.Model):
     )
 
     objects = CustomFinderManager()
+
+
+class AdvanceVotingStation(models.Model):
+    name = models.CharField(max_length=100)
+    postcode = models.CharField(blank=True, null=True, max_length=100)
+    address = models.TextField(blank=True, null=True)
+    location = models.PointField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.postcode})"
