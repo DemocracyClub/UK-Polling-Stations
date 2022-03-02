@@ -4,6 +4,7 @@ from councils.models import Council
 from pollingstations.tests.factories import (
     PollingStationFactory,
     PollingDistrictFactory,
+    AdvanceVotingStationFactory,
 )
 
 
@@ -19,3 +20,11 @@ class TestPollingDistrictFactory(TestCase):
         station = PollingDistrictFactory()
         self.assertIsInstance(station.council, Council)
         self.assertRegex(station.internal_council_id, r"^PD-\d+$")
+
+
+class TestAdvanceVotingStationFactory(TestCase):
+    def test_advance_voting_station_factory(self):
+        advance_station = AdvanceVotingStationFactory(
+            postcode="CF99 1SN", name="Welsh Parliament"
+        )
+        self.assertEqual(str(advance_station), "Welsh Parliament (CF99 1SN)")
