@@ -294,12 +294,21 @@ class AddressList(AssignPollingStationsMixin):
     # TODO be more clever to report on duplicates.
     def remove_duplicate_uprns(self):
         uprn_lookup = self.get_uprn_lookup()
+
+        duplicate_count = len(
+            [e for e in self.elements if len(uprn_lookup[e["uprn"]]) > 1]
+        )
+        if duplicate_count >= 1:
+            self.logger.log_message(
+                logging.WARNING,
+                f"{duplicate_count} UPRNs are duplicated in council data. These have been discarded.",
+            )
+
         self.elements = [
             record for record in self.elements if len(uprn_lookup[record["uprn"]]) == 1
         ]
 
     def get_polling_station_lookup(self):
-
         # for each address, build a lookup of polling_station_id -> set of uprns
         polling_station_lookup = {}
         for record in self.elements:
@@ -311,6 +320,14 @@ class AddressList(AssignPollingStationsMixin):
         return polling_station_lookup
 
     def remove_records_not_in_addressbase(self, addressbase_data):
+        not_in_address_base_count = len(
+            [e for e in self.elements if e["uprn"] not in addressbase_data]
+        )
+        if not_in_address_base_count >= 1:
+            self.logger.log_message(
+                logging.WARNING,
+                f"{not_in_address_base_count} UPRNs from council data not found in addressbase. These have been discarded.",
+            )
         self.elements = [e for e in self.elements if e["uprn"] in addressbase_data]
 
     def remove_records_that_dont_match_addressbase(self, addressbase_data):
@@ -325,9 +342,20 @@ class AddressList(AssignPollingStationsMixin):
                 continue
             else:
                 to_remove.append(input_record)
+        if len(to_remove) >= 1:
+            self.logger.log_message(
+                logging.WARNING,
+                f"{len(to_remove)} council records have the same UPRN but different postcodes. These have been discarded.",
+            )
         self.elements = [e for e in self.elements if e not in to_remove]
 
     def remove_records_missing_uprns(self):
+        uprn_missing_count = len([e for e in self.elements if not e.get("uprn")])
+        if uprn_missing_count >= 1:
+            self.logger.log_message(
+                logging.WARNING,
+                f"{uprn_missing_count} Addresses are missing a UPRN in council data. These have been discarded",
+            )
         self.elements = [e for e in self.elements if e.get("uprn", None)]
 
     def check_split_postcodes_are_split(self, split_postcodes):
