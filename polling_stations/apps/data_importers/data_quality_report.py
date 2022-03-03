@@ -456,7 +456,7 @@ class DataQualityReportBuilder:
             )
             if self.csv_rows:
                 table.add_row(
-                    " - As % of rows in council csv",
+                    " - As % of distinct records in council csv",
                     f"{round(100 * station_ids / self.csv_rows, 1)}%",
                 )
             table.add_row(

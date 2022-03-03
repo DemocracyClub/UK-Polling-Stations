@@ -604,7 +604,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.write_info(
             "Addresses: Found {:,} rows in input file".format(self.csv_row_count)
         )
-        self.write_info("----------------------------------")
         for address in addresses:
             address_info = self.address_record_to_dict(address)
 
@@ -618,6 +617,21 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
                 continue
 
             self.add_residential_address(address_info)
+
+        element_set = set(frozenset(d.items()) for d in self.addresses.elements)
+        self.write_info(
+            "Addresses: Found {:,} unique records after converting to dicts. Removing duplicates".format(
+                len(element_set)
+            )
+        )
+        self.addresses.elements = [dict(s) for s in element_set]
+        self.csv_row_count = len(self.addresses.elements)
+        self.write_info(
+            "Addresses: Found {:,} distinct records in input file".format(
+                self.csv_row_count
+            )
+        )
+        self.write_info("----------------------------------")  #
 
     def add_residential_address(self, address_info):
 
@@ -745,7 +759,6 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
             self.pre_import()
         except NotImplementedError:
             pass
-
         self.stations = StationSet()
         self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
