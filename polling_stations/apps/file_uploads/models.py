@@ -106,8 +106,12 @@ class Upload(models.Model):
         )
 
     @property
+    def gh_issue_number(self):
+        return self.github_issue.split("/")[-1]
+
+    @property
     def pr_title(self):
-        title = f"Import script for {self.gss.short_name} ({self.election_date})"
+        title = f"Import script for {self.gss.short_name} ({self.election_date}) (closes #{self.gh_issue_number})"
         server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
         if server_env == "prod":
             return title
@@ -118,7 +122,7 @@ class Upload(models.Model):
 
     @property
     def pr_body(self):
-        message = f"PR triggered by upload at #{self.github_issue}"
+        message = f"PR triggered by upload at {self.github_issue}"
         server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
         if server_env == "prod":
             return message
