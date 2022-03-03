@@ -3,49 +3,47 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SWA"
-    addresses_name = "2021-04-08T09:24:44.681755/polling_station_export-2021-04-06.csv"
-    stations_name = "2021-04-08T09:24:44.681755/polling_station_export-2021-04-06.csv"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
+    addresses_name = (
+        "2022-05-05/2022-03-03T11:41:12.072581/polling_station_export-2022-03-03.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-03T11:41:12.072581/polling_station_export-2022-03-03.csv"
+    )
+    elections = ["2022-05-05"]
     csv_encoding = "windows-1252"
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
-            "10010059192",  # CARAVAN 81 BURROWS CARAVAN SITE A4118 FROM JUNCTION WITH PORT EYNON BUS TURNING CIRCLE TO JUNCTION WITH CLASSIFIED SECTION B4247, PORT EYNON, SWANSEA
-            "10010038594",  # THE FARMHOUSE, CEFN GORWYDD FAWR, GOWERTON, SWANSEA
-            "10010041547",  # FLAT, 9 HIGH STREET, GORSEINON, SWANSEA
-            "10011729497",  # FLAT THE MARY DILLWYN FFORDD CYNORE, FFORESTFACH, SWANSEA
-            "10010059620",  # PENTRE COTTAGE, PENTRE ROAD, PONTARDDULAIS, SWANSEA
-            "10010043604",  # CARAVAN CWMDULAIS FARM UNCLASSIFIED SECTION-Y920, PONTARDDULAIS, SWANSEA
-            "100101045973",  # FIRST FLOOR FLAT 4 WALTER ROAD, CITY CENTRE, SWANSEA
-            "10010035134",  # FLAT 1 141 TERRACE ROAD, MOUNT PLEASANT, SWANSEA
-            "100100360550",  # FLAT 2 141 TERRACE ROAD, MOUNT PLEASANT, SWANSEA
-            "100100360551",  # FLAT 3 141 TERRACE ROAD, MOUNT PLEASANT, SWANSEA
-            "10010037937",  # MAISONETTE FLAT - BOTTOM FLAT 143 TERRACE ROAD, MOUNT PLEASANT, SWANSEA
-            "100100360552",  # FIRST FLOOR FLAT TOP FLAT 143 TERRACE ROAD, MOUNT PLEASANT, SWANSEA
-            "10010059308",  # CARAVAN EAST MOOR B4247 FROM HILL VIEW TO KIMLEY MOOR FARM, RHOSSILI, SWANSEA
-            "10010045307",  # THE NATIONAL TRUST, THE OLD RECTORY UNCLASSIFIED SECTION-Y2402, RHOSSILI, SWANSEA
-            "10010059384",  # COTTAGE AT ROBINS NEST UNCLASSIFIED SECTION-Y2085, PENMAEN, SWANSEA
+            "10091617114",  # 5 DUNVANT PARK HOUSES, DUNVANT, SWANSEA, SA2 7SH
+            "10010061246",  # SWANSEA & BRECON DIOCESAN BOARD, 1-3 BEACONS VIEW ROAD, CLASE, SWANSEA, SA6 7HJ
+            "10010037747",  # FIRST FLOOR FLAT ABOVE YATES 1-4 CAER STREET, CITY CENTRE, SWANSEA, SA1 3PP
+            "10094784277",  # ROOM A 116 OLDWAY CENTRE 39 HIGH STREET, CITY CENTRE, SWANSEA, SA1 1LD
+            "100100401496",  # 37A HIGH STREET, GORSEINON, SWANSEA, SA4 4BT
+            "10011729995",  # ROSE COTTAGE UNCLASSIFIED SECTION-Y2117, OXWICH, SWANSEA, SA3 1LN
+            "10010058515",  # THE LAUNDRY MIDDLETON HALL UNCLASSIFIED SECTION-Y2400, RHOSSILI, SWANSEA,SA3 1PJ
         ]:
             return None
 
         if record.housepostcode in [
-            "SA5 4NN",
-            "SA4 3QX",
-            "SA6 5JS",
-            "SA5 7PH",
-            "SA5 7DR",
-            "SA5 7HY",
-            "SA6 6BW",
             "SA1 8PN",
-            "SA3 1AS",
-            "SA3 3JS",
-            "SA3 4QE",
+            "SA5 7HY",
+            "SA1 3LQ",
             "SA1 6NQ",
-            "SA6 6QA",
-            "SA1 6JP",
+            "SA3 1AS",
+            "SA5 7DR",
+            "SA3 1BX",
+            "SA3 4QE",
+            "SA6 6BW",
+            "SA6 5JS",
+            "SA6 6DS",
+            "SA5 4NN",
+            "SA3 3JS",
+            "SA5 7PH",
+            "SA4 3QX",
+            "SA1 7GE",
+            "SA2 0EU",
         ]:
             return None
 
