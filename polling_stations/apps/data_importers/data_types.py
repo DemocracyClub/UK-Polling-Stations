@@ -345,7 +345,7 @@ class AddressList(AssignPollingStationsMixin):
         if len(to_remove) >= 1:
             self.logger.log_message(
                 logging.WARNING,
-                f"{len(to_remove)} council records have the same UPRN but different postcodes. These have been discarded.",
+                f"{len(to_remove)} council records UPRNs found in addressbase but postcodes don't match. These have been discarded.",
             )
         self.elements = [e for e in self.elements if e not in to_remove]
 
