@@ -121,7 +121,7 @@ class Council(WelshNameMutationMixin, models.Model):
                 import_script_path = script
         if not import_script_path:
             import_script_path = Path(
-                f'./polling_stations/apps/data_importers/management/commands/import_{self.short_name.lower().replace(" ", "_")}'
+                f'./polling_stations/apps/data_importers/management/commands/import_{self.short_name.lower().replace(" ", "_")}.py'
             )
 
         return str(import_script_path)
