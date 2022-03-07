@@ -1,6 +1,6 @@
 # settings for councils scraper
 
-EC_COUNCIL_CONTACT_EMAIL = "digitalteam@electoralcommission.org.uk"
+EC_COUNCIL_CONTACT_EMAIL = "digitalcommunications@electoralcommission.org.uk"
 
 BOUNDARIES_URL = "https://ons-cache.s3.amazonaws.com/Local_Authority_Districts_(December_2021)_UK_BFE.geojson"
 COUNCIL_ID_FIELD = "LAD21CD"
