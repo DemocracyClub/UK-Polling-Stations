@@ -14,6 +14,8 @@ from data_finder.helpers import (
     RoutingHelper,
 )
 from uk_geo_utils.helpers import Postcode
+
+from pollingstations.models import AdvanceVotingStation
 from .councils import CouncilDataSerializer
 from .fields import PointField
 from .pollingstations import PollingStationGeoSerializer
@@ -39,6 +41,12 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
         fields = ("url", "address", "postcode", "council", "polling_station_id", "uprn")
 
 
+class AdvanceVotingStationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdvanceVotingStation
+        fields = ("name", "address", "postcode", "location")
+
+
 class BallotSerializer(serializers.Serializer):
     ballot_paper_id = serializers.SerializerMethodField()
     ballot_title = serializers.SerializerMethodField()
@@ -60,6 +68,7 @@ class PostcodeResponseSerializer(serializers.Serializer):
     polling_station_known = serializers.BooleanField(read_only=True)
     postcode_location = PointField(read_only=True)
     custom_finder = serializers.CharField(read_only=True)
+    advance_voting_station = AdvanceVotingStationSerializer(read_only=True)
     council = CouncilDataSerializer(read_only=True)
     polling_station = PollingStationGeoSerializer(read_only=True)
     addresses = AddressSerializer(read_only=True, many=True)
@@ -104,6 +113,7 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
 
         # council object
         ret["council"] = address.council
+        ret["advance_voting_station"] = address.uprntocouncil.advance_voting_station
 
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
