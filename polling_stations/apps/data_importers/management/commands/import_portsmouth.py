@@ -1,36 +1,45 @@
 from django.contrib.gis.geos import Point
+
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "POR"
     addresses_name = (
-        "2021-03-24T11:20:37.542789/Portsmouth Democracy_Club__06May2021.tsv"
+        "2022-05-05/2022-03-07T11:47:50.740409/Democracy_Club__05May2022.tsv"
     )
     stations_name = (
-        "2021-03-24T11:20:37.542789/Portsmouth Democracy_Club__06May2021.tsv"
+        "2022-05-05/2022-03-07T11:47:50.740409/Democracy_Club__05May2022.tsv"
     )
-    elections = ["2021-05-06"]
+    elections = ["2022-05-05"]
     csv_delimiter = "\t"
 
-    def address_record_to_dict(self, record):
-        if record.addressline6 in ["PO5 2BT", "PO4 0LF", "PO2 8LR"]:
-            return None  # split
-        rec = super().address_record_to_dict(record)
-        return rec
-
     def station_record_to_dict(self, record):
-        # Christ Church Church Hall
-        if record.polling_place_id == "4918":
-            record = record._replace(polling_place_uprn="1775049305")
+        # Council thinks postcodes are correct as is for:
+        # Portsmouth Methodist Church (Eastney), Highland Road, Southsea, PO4 9NJ
+        # Moorings Way Infant School, Moorings Way, Southsea, PO4 8YJ
+        # Christ Church, London Road, Widley, Portsmouth, PO6 3NA
+
+        # 'Cathedral House (Becket Hall), St Thomas`s Street, Portsmouth, PO1 2HH' (id: 5282)
+        if record.polling_place_id == "5282":
+            record = record._replace(polling_place_postcode="PO1 2EZ")
+        # 'King's Church, Somers Road, Southsea, PO5 1EE' (id: 5294)
+        if record.polling_place_id == "5294":
+            record = record._replace(polling_place_postcode="PO5 4QA")
+        # 'Francis Lodge, Fernhurst Junior School, Heidelberg Road, Southsea, PO4 0AG' (id: 5314)
+        if record.polling_place_id == "5314":
+            record = record._replace(polling_place_postcode="PO4 0AP")
+        # 'St Margaret's Parish Centre, Highland Road, Southsea, PO4 8AY' (id: 5322)
+        if record.polling_place_id == "5322":
+            record = record._replace(polling_place_postcode="PO4 9DD")
+        # 'Hillside and Wymering Centre, Cheltenham Road, Portsmouth, PO6 3QY' (id: 5466)
+        if record.polling_place_id == "5466":
+            record = record._replace(polling_place_postcode="PO6 3PY")
 
         rec = super().station_record_to_dict(record)
 
         # St Margaret's Parish Centre
-        if rec["internal_council_id"] == "4730":
+        if rec["internal_council_id"] == "5322":
             rec["location"] = Point(-1.067090, 50.786643, srid=4326)
-        # Eastney Methodist Church
-        if rec["internal_council_id"] == "4743":
-            rec["location"] = Point(-1.059545, 50.7866578, srid=4326)
 
         return rec
