@@ -48,7 +48,12 @@ class ShpMixin:
         return {"shp_encoding": self.shp_encoding}
 
 
-class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
+class BaseBaseImporter:
+    def post_import(self):
+        pass
+
+
+class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
 
     """
     Turn off auto system check for all apps
@@ -124,7 +129,7 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         pass
 
     def post_import(self):
-        raise NotImplementedError
+        super().post_import()
 
     def report(self):
         # build report
@@ -205,10 +210,7 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         self.import_data()
 
         # Optional step for post import tasks
-        try:
-            self.post_import()
-        except NotImplementedError:
-            pass
+        self.post_import()
 
         # save and output data quality report
         if self.verbosity > 0:
