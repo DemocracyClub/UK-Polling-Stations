@@ -99,8 +99,11 @@ class Council(WelshNameMutationMixin, models.Model):
         short_name = self.name
         extras = [
             "London Borough of ",  # Don't throw away 'London'
+            "City of ",
+            "City & County of ",
             " City & District Council",  # Don't throw away 'City'
             " City Council",  # Don't throw away 'City'
+            " District Council",
             " Metropolitan",
             " Borough",
             " Council",
