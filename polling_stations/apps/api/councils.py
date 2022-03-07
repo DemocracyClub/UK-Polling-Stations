@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.http import HttpResponsePermanentRedirect, Http404
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -146,10 +147,7 @@ class CouncilCSVSerializer(CouncilDataSerializer):
         model = Council
         fields = ("council_id", "name", "station_count")
 
-    station_count = serializers.SerializerMethodField()
-
-    def get_station_count(self, council):
-        return council.pollingstation_set.count()
+    station_count = serializers.IntegerField(source="stations", read_only=True)
 
 
 class CouncilCSVRenderer(CSVRenderer):
@@ -164,4 +162,8 @@ class CouncilCSVViewSet(ReadOnlyModelViewSet):
 
     renderer_classes = (CouncilCSVRenderer,)
     serializer_class = CouncilCSVSerializer
-    queryset = Council.objects.all().order_by("council_id")
+    queryset = (
+        Council.objects.all()
+        .order_by("council_id")
+        .annotate(stations=Count("pollingstation"))
+    )

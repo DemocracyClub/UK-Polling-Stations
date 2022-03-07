@@ -110,9 +110,10 @@ class CouncilsTest(TestCase):
         )
 
     def test_council_csv_endpoint(self):
-        response = CouncilCSVViewSet.as_view({"get": "list"})(
-            APIRequestFactory().get("/api/beta/council_csv/", format="csv")
-        )
+        with self.assertNumQueries(1):
+            response = CouncilCSVViewSet.as_view({"get": "list"})(
+                APIRequestFactory().get("/api/beta/council_csv/", format="csv")
+            )
         self.assertEqual(response.status_code, 200)
         response.render()
         self.assertEqual(
