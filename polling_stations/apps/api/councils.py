@@ -1,9 +1,11 @@
+from django.db.models import Count
 from django.http import HttpResponsePermanentRedirect, Http404
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework_csv.renderers import CSVRenderer
 from rest_framework_gis.fields import GeometrySerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from django.core.exceptions import ObjectDoesNotExist
@@ -138,3 +140,30 @@ class CouncilViewSet(ReadOnlyModelViewSet):
         return Response(
             CouncilGeoSerializer(council, context={"request": request}).data
         )
+
+
+class CouncilCSVSerializer(CouncilDataSerializer):
+    class Meta:
+        model = Council
+        fields = ("council_id", "name", "station_count")
+
+    station_count = serializers.IntegerField(source="stations", read_only=True)
+
+
+class CouncilCSVRenderer(CSVRenderer):
+    header = ["council_id", "name", "station_count"]
+
+
+class CouncilCSVViewSet(ReadOnlyModelViewSet):
+    """
+    A View used to export council names and whether data is live.
+    Used by Google Sheets to keep track of which councils are live.
+    """
+
+    renderer_classes = (CouncilCSVRenderer,)
+    serializer_class = CouncilCSVSerializer
+    queryset = (
+        Council.objects.all()
+        .order_by("council_id")
+        .annotate(stations=Count("pollingstation"))
+    )

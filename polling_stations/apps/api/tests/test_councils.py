@@ -1,6 +1,7 @@
+from django.core.management import call_command
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
-from api.councils import CouncilViewSet
+from api.councils import CouncilViewSet, CouncilCSVViewSet
 from councils.tests.factories import CouncilFactory
 
 
@@ -23,6 +24,16 @@ class CouncilsTest(TestCase):
             identifiers=["X01000002"],
             geography__geography=None,
         )
+        CouncilFactory(
+            council_id="GHI",
+            identifiers=["X01000002"],
+            geography__geography=None,
+        )
+        call_command(  # Hack to avoid converting all fixtures to factories
+            "loaddata",
+            "polling_stations/apps/api/fixtures/test_api_pollingdistricts_stations.json",
+            verbosity=0,
+        )
 
     def setUp(self):
         factory = APIRequestFactory()
@@ -31,7 +42,7 @@ class CouncilsTest(TestCase):
     def test_list(self):
         response = CouncilViewSet.as_view({"get": "list"})(self.request)
         self.assertEqual(200, response.status_code)
-        self.assertEqual(2, len(response.data))
+        self.assertEqual(3, len(response.data))
 
     def test_valid_council(self):
         response = CouncilViewSet.as_view({"get": "retrieve"})(self.request, pk="ABC")
@@ -96,4 +107,19 @@ class CouncilsTest(TestCase):
                     "website": "",
                 },
             },
+        )
+
+    def test_council_csv_endpoint(self):
+        with self.assertNumQueries(1):
+            response = CouncilCSVViewSet.as_view({"get": "list"})(
+                APIRequestFactory().get("/api/beta/council_csv/", format="csv")
+            )
+        self.assertEqual(response.status_code, 200)
+        response.render()
+        self.assertEqual(
+            response.content.decode(),
+            "council_id,name,station_count\r\n"
+            "ABC,ABC Council,2\r\n"
+            "DEF,,1\r\n"
+            "GHI,,0\r\n",
         )
