@@ -1,6 +1,18 @@
 {% load i18n %}
 
-<h2>{% trans "Your polling station" %}</h2>
+<h2>
+    {% blocktrans count has_avs=advance_voting_station|default_if_none:"1"|length %}
+        Your polling station
+    {% plural %}
+        Your polling stations
+    {% endblocktrans %}
+</h2>
+
+{% if not show_polls_open_card and advance_voting_station %}
+    <h3>{% trans "Vote in advance" %}</h3>
+    {% include "fragments/advance_voting_station.html" %}
+    <h3>{% trans "Vote on polling day" %}</h3>
+{% endif %}
 
 <div>
     <address>
@@ -38,6 +50,12 @@
             {% endblocktrans %}
         </p>
     </div>
+{% endif %}
+
+
+{% if show_polls_open_card and advance_voting_station %}
+    <h3>{% trans "Alternative polling station" %}</h3>
+    {% include "fragments/advance_voting_station.html" %}
 {% endif %}
 
 <p><strong>{% blocktrans %}Polling stations are open from 7am to 10pm.{% endblocktrans %}</strong></p>

@@ -6,7 +6,7 @@
 
 {% block extra_page_css %}
 
-    {% if we_know_where_you_should_vote and station.location %}
+    {% if we_know_where_you_should_vote and station.location or advance_voting_station.location %}
         {% stylesheet 'map' %}
     {% endif %}
 
@@ -96,6 +96,18 @@
 
 {% block in_page_javascript %}
     <script type="text/javascript">
+        {% if request.brand == 'embed' %}
+            var embed = true;
+        {% else %}
+            var embed = false;
+        {% endif %}
+
+        {% if mq_key %}
+            var mq_key = '{{ mq_key }}';
+        {% else %}
+            var mq_key = null;
+        {% endif %}
+
         {% if we_know_where_you_should_vote and station.location %}
             $(document).ready(function() {
                 var station_point = [{{ station.location.1 }}, {{ station.location.0 }}];
@@ -110,21 +122,15 @@
                     var directions = {};
                 {% endif %}
 
-                {% if request.brand == 'embed' %}
-                    var embed = true;
-                {% else %}
-                    var embed = false;
-                {% endif %}
-
-                {% if mq_key %}
-                    var mq_key = '{{ mq_key }}';
-                {% else %}
-                    var mq_key = null;
-                {% endif %}
-
                 var map = new PollingStationMap('area_map');
                 map.draw(station_point, embed, tile_layer, mq_key, directions);
             });
+        {% endif %}
+        {% if we_know_where_you_should_vote and advance_voting_station.location %}
+            var avs_station_point = [{{ advance_voting_station.location.1 }}, {{ advance_voting_station.location.0 }}];
+            var avs_tile_layer = '{{ tile_layer }}';
+            var avs_map = new PollingStationMap('advance_voting_station_map');
+            avs_map.draw(avs_station_point, embed, avs_tile_layer, mq_key, {});
         {% endif %}
     </script>
 {% endblock in_page_javascript %}
@@ -134,7 +140,7 @@
 
     {% javascript 'scripts' %}
 
-    {% if we_know_where_you_should_vote and station.location and has_election and not error %}
+    {% if we_know_where_you_should_vote and station.location or advance_voting_station.location and has_election and not error %}
         {% javascript 'map' %}
     {% endif %}
 
