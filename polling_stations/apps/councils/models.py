@@ -106,6 +106,7 @@ class Council(WelshNameMutationMixin, models.Model):
             " District Council",
             " Metropolitan",
             " Borough",
+            " County",
             " Council",
         ]
         for extra in extras:
