@@ -2,6 +2,7 @@ from typing import List
 
 from rich.table import Table
 
+from addressbase.models import UprnToCouncil
 from councils.models import Council
 from data_importers.base_importers import BaseImporter, BaseBaseImporter
 from pollingstations.models import AdvanceVotingStation
@@ -48,3 +49,9 @@ class AdvanceVotingMixin(BaseBaseImporter):
     def post_import(self):
         super().post_import()
         self.add_advance_voting_stations()
+
+    def teardown(self, council):
+        super().teardown(council)
+        UprnToCouncil.objects.filter(lad=council.geography.gss).update(
+            advance_voting_station=None
+        )

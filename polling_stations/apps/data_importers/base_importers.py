@@ -56,6 +56,9 @@ class BaseBaseImporter:
     def get_extra_reports(self):
         return []
 
+    def teardown(self, council):
+        pass
+
 
 class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
 
@@ -99,6 +102,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         )
 
     def teardown(self, council):
+        super().teardown(council)
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
         UprnToCouncil.objects.filter(lad__in=council.identifiers).update(
