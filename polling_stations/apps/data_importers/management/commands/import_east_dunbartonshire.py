@@ -1,53 +1,41 @@
+from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "EDU"
-    addresses_name = "2021-03-22T09:26:21.784038/polling_station_export-2021-03-21.csv"
-    stations_name = "2021-03-22T09:26:21.784038/polling_station_export-2021-03-21.csv"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
+    addresses_name = "2022-05-05/2022-03-09T10:31:50.428778/polling_station_export-2022-03-02-3.csv 9th.csv"
+    stations_name = "2022-05-05/2022-03-09T10:31:50.428778/polling_station_export-2022-03-02-3.csv 9th.csv"
+    elections = ["2022-05-05"]
 
-    def get_stations(self):
-        stations = super().get_stations()
-        stations = [
-            record for record in stations if record.streetname != "OTHER ELECTORS"
-        ]
-        return stations
+    def pre_import(self):
+        # We need to consider rows that don't have a uprn when importing data.
+        # However there are lots of rows for other councils in this file.
+        # So build a list of stations from rows that do have UPRNS
+        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
 
-    def get_addresses(self):
-        addresses = super().get_stations()
-        addresses = [
-            record for record in addresses if record.streetname != "OTHER ELECTORS"
-        ]
-        return addresses
+        council_uprns = set(
+            UprnToCouncil.objects.filter(lad=self.council.geography.gss).values_list(
+                "uprn", flat=True
+            )
+        )
+        self.COUNCIL_STATIONS = set()
+        data = self.get_addresses()
+
+        for record in data:
+            if record.uprn in council_uprns:
+                self.COUNCIL_STATIONS.add(self.get_station_hash(record))
 
     def address_record_to_dict(self, record):
-        uprn = record.uprn.strip().lstrip("0")
-
-        if uprn in [
-            "132016488",  # WINDYKNOWE COTTAGE, STATION ROAD, LENNOXTOWN, GLASGOW
-            "132043041",  # BRAES O YETTS FARM, KIRKINTILLOCH, GLASGOW
-            "132023751",  # 4 LENZIE ROAD, KIRKINTILLOCH, GLASGOW
-            "132023752",  # 6 LENZIE ROAD, KIRKINTILLOCH, GLASGOW
-            "132023979",  # PARKVIEW, LENZIE ROAD, KIRKINTILLOCH, GLASGOW
-            "132023978",  # KIRROUGHTREE, LENZIE ROAD, KIRKINTILLOCH, GLASGOW
-            "132008358",  # ORCHARDLEA, TORRANCE, GLASGOW
-            "132007850",  # 145 BALMUILDY ROAD, BISHOPBRIGGS, GLASGOW
-            "132008282",  # HILTON COTTAGE, BALMUILDY ROAD, BISHOPBRIGGS, GLASGOW
-            "132008265",  # HILTON FARM COTTAGE, BALMUILDY ROAD, BISHOPBRIGGS, GLASGOW
-            "132001702",  # 129 MILNGAVIE ROAD, BEARSDEN, GLASGOW
-        ]:
+        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
 
         if record.housepostcode in [
-            "G66 7HE",
             "G66 7HL",
-            "G66 7AS",
+            "G66 7HE",
             "G64 2DF",
             "G64 4DQ",
-            "G66 4QH",
-            "G64 1FR",
+            "G66 7AS",
             "G61 1RS",
         ]:
             return None
@@ -55,12 +43,7 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if record.adminarea not in [
-            "EAST DUNBARTONSHIRE",
-            "GLASGOW",
-        ] and record.pollingstationname not in [
-            "HILLHEAD COMMUNITY CENTRE",
-            "LENNOXTOWN PRIMARY SCHOOL",
-        ]:
+        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
+
         return super().station_record_to_dict(record)
