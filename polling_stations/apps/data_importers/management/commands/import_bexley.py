@@ -1,17 +1,23 @@
-from data_importers.ems_importers import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BEX"
-    addresses_name = "2021-11-22T15:59:25.137997/Democracy_Club__02December2021.tsv"
-    stations_name = "2021-11-22T15:59:25.137997/Democracy_Club__02December2021.tsv"
-    elections = ["2021-12-02"]
+    addresses_name = (
+        "2022-05-05/2022-03-10T09:24:15.450401/Democracy_Club__05May2022.tsv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-10T09:24:15.450401/Democracy_Club__05May2022.tsv"
+    )
+    elections = ["2022-05-05"]
     csv_delimiter = "\t"
 
-    def station_record_to_dict(self, record):
-        # Point supplied for Footscray Baptist Church is miles off
-        if record.polling_place_id == "2812":
-            record = record._replace(
-                polling_place_easting="547145", polling_place_northing="171147"
-            )
-        return super().station_record_to_dict(record)
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10094789367",  # 51A MAYPLACE ROAD WEST, BEXLEYHEATH
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
