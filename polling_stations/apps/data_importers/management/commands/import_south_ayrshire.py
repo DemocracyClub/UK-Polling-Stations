@@ -1,135 +1,50 @@
-from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
+from addressbase.models import UprnToCouncil
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "SAY"
-    addresses_name = "2021-03-02T10:37:57.106280/Democracy Club - Polling Districts.csv"
-    stations_name = "2021-03-02T10:37:57.106280/Democracy Club - Polling Stations.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2022-05-05/2022-03-11T15:12:43.190348/Democracy Club Polling Districts Ayrshire.csv"
+    stations_name = "2022-05-05/2022-03-11T15:12:43.190348/Democracy Club Polling Stations Ayrshire.csv"
+    elections = ["2022-05-05"]
+
+    def pre_import(self):
+        # We need to consider rows that don't have a uprn when importing data.
+        # However there are lots of rows for other councils in this file.
+        # So build a list of stations from rows that do have UPRNS
+        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
+
+        council_uprns = set(
+            UprnToCouncil.objects.exclude(
+                uprn__in=[
+                    "141045107",  # in SAY, but assigned to station in EAY
+                    "141040335",  # in SAY, but assigned to station in EAY
+                ]
+            )
+            .filter(lad=self.council.geography.gss)
+            .values_list("uprn", flat=True)
+        )
+        self.COUNCIL_STATIONS = set()
+        data = self.get_addresses()
+
+        for record in data:
+            if record.uprn in council_uprns:
+                self.COUNCIL_STATIONS.add(record.stationcode)
+
+    def address_record_to_dict(self, record):
+        if record.stationcode not in self.COUNCIL_STATIONS:
+            return None
+
+        if record.postcode in [
+            "KA6 6LU",
+            "KA1 5QR",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if record.stationcode == "CDV55":
-            record = record._replace(postcode="KA26 9SB")
-        if record.stationcode == "CDV52":
-            record = record._replace(postcode="KA19 7RJ")
-
-        if record.stationcode in [
-            "AYR01",
-            "AYR02",
-            "AYR03",
-            "AYR04",
-            "AYR05",
-            "AYR06_1",
-            "AYR06_2",
-            "AYR07",
-            "AYR08",
-            "AYR09",
-            "AYR10",
-            "AYR11",
-            "AYR12",
-            "AYR13",
-            "AYR14",
-            "AYR15",
-            "AYR16",
-            "AYR17",
-            "AYR18",
-            "AYR19",
-            "AYR20",
-            "AYR21",
-            "AYR22",
-            "AYR23",
-            "AYR24",
-            "AYR25",
-            "AYR26",
-            "AYR27_1",
-            "AYR27_2",
-            "AYR28",
-            "AYR29",
-            "AYR30",
-            "AYR31",
-            "AYR32",
-            "AYR33",
-            "AYR34",
-            "AYR35",
-            "AYR36",
-            "AYR37",
-            "AYR38",
-            "AYR39",
-            "AYR40",
-            "AYR41_1",
-            "AYR41_2",
-            "AYR42",
-            "AYR43",
-            "AYR44",
-            "AYR45",
-            "AYR46",
-            "AYR47",
-            "AYR48",
-            "AYR49",
-            "AYR50",
-            "AYR51",
-            "AYR52",
-            "AYR53",
-            "AYR54",
-            "AYR55",
-            "AYR56",
-            "AYR57",
-            "AYR58_1",
-            "AYR58_2",
-            "AYR59_1",
-            "AYR59_2",
-            "AYR60",
-            "AYR61",
-            "AYR62_1",
-            "AYR62_2",
-            "AYR63",
-            "CDV32",
-            "CDV33",
-            "CDV34",
-            "CDV35",
-            "CDV36",
-            "CDV37_1",
-            "CDV37_2",
-            "CDV38",
-            "CDV39",
-            "CDV40_1",
-            "CDV40_2",
-            "CDV41",
-            "CDV42",
-            "CDV43",
-            "CDV44",
-            "CDV45_1",
-            "CDV45_2",
-            "CDV46_1",
-            "CDV46_2",
-            "CDV47",
-            "CDV48",
-            "CDV49_1",
-            "CDV49_2",
-            "CDV49_3",
-            "CDV50_1",
-            "CDV50_2",
-            "CDV51",
-            "CDV52",
-            "CDV53",
-            "CDV54",
-            "CDV55",
-            "CDV56_1",
-            "CDV56_2",
-            "CDV57",
-            "CDV58_1",
-            "CDV58_2",
-            "CDV59_1",
-            "CDV59_2",
-            "CDV60",
-            "CDV61",
-            "CDV62",
-            "CDV63_1",
-            "CDV63_2",
-            "CDV64",
-            "CDV65",
-            "CDV66",
-        ]:
-            return super().station_record_to_dict(record)
-        else:
+        if record.stationcode not in self.COUNCIL_STATIONS:
             return None
+
+        return super().station_record_to_dict(record)
