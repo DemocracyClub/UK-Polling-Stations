@@ -8,7 +8,7 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
-        if record.addressline6 in ["PO12 2EH"]:
+        if record.postcode in ["PO12 2EH"]:
             return None
 
         return super().address_record_to_dict(record)
