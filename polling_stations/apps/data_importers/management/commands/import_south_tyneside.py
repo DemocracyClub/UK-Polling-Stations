@@ -3,18 +3,23 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STY"
-    addresses_name = "2021-03-17T14:46:18.378677/Democracy_Club__06May2021.tsv"
-    stations_name = "2021-03-17T14:46:18.378677/Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-03-11T15:09:17.360297/Democracy_Club__05May2022.tsv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-11T15:09:17.360297/Democracy_Club__05May2022.tsv"
+    )
+    elections = ["2022-05-05"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
-        # Removing undesired text
-        if "NEW STATION" in record.polling_place_address_1:
-            record = record._replace(polling_place_address_1="")
-        if "NEW STATION" in record.polling_place_address_2:
-            record = record._replace(polling_place_address_2="")
+        # Cleadon Park Health Centre, Polling Station A
+        # Cleadon Park Health Centre, Polling Station B
+        # *PLEASE USE PRINCE EDWARD ROAD ENTRANCE*
+        # Change coords to make maps right
+        if record.polling_place_id in ["3586", "3699"]:
+            record = record._replace(polling_place_easting="437517")
+            record = record._replace(polling_place_northing="564289")
 
         return super().station_record_to_dict(record)
 
