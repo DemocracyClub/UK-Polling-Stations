@@ -1,12 +1,17 @@
 {% load i18n %}
 <p>{% trans "Your council is trialing a system that allow you to vote before polling day at a specific location." %}</p>
-<p>{% trans "From X to Y you can vote at:" %}</p>
 <address>
     {{ advance_voting_station }}
     {{ advance_voting_station.name }}<br>
     {{ advance_voting_station.address|linebreaksbr }}
     {{ advance_voting_station.postcode }}
 </address>
+
+{% if advance_voting_station.opening_times %}
+    <h4>{% trans "Opening times" %}</h4>
+    {% include "fragments/opening_times.html" %}
+
+{% endif %}
 
 {% if advance_voting_station.location %}
     <div id="advance_voting_station_map" class="ds-card-image"></div>

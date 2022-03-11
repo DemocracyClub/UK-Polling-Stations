@@ -1,14 +1,15 @@
 """
 Models for actual Polling Stations and Polling Districts!
 """
-
 from itertools import groupby
 import urllib.parse
 
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import JSONField
 from django.utils.translation import ugettext as _
 
+from core.opening_times import OpeningTimes
 from councils.models import Council
 from uk_geo_utils.helpers import Postcode
 
@@ -148,6 +149,11 @@ class AdvanceVotingStation(models.Model):
     postcode = models.CharField(blank=True, null=True, max_length=100)
     address = models.TextField(blank=True, null=True)
     location = models.PointField(null=True, blank=True)
+    opening_times = JSONField(null=True)
 
     def __str__(self):
         return f"{self.name} ({self.postcode})"
+
+    @property
+    def opening_times_table(self):
+        return OpeningTimes.from_dict(self.opening_times).as_table()
