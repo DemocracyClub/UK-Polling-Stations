@@ -1,121 +1,47 @@
-from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
+from addressbase.models import UprnToCouncil
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "EAY"
-    addresses_name = "2021-03-02T10:33:59.623219/Democracy Club - Polling Districts.csv"
-    stations_name = "2021-03-02T10:33:59.623219/Democracy Club - Polling Stations.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2022-05-05/2022-03-11T15:11:08.302788/Democracy Club Polling Districts Ayrshire.csv"
+    stations_name = "2022-05-05/2022-03-11T15:11:08.302788/Democracy Club Polling Stations Ayrshire.csv"
+    elections = ["2022-05-05"]
+
+    def pre_import(self):
+        # We need to consider rows that don't have a uprn when importing data.
+        # However there are lots of rows for other councils in this file.
+        # So build a list of stations from rows that do have UPRNS
+        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
+
+        council_uprns = set(
+            UprnToCouncil.objects.filter(lad=self.council.geography.gss).values_list(
+                "uprn", flat=True
+            )
+        )
+        self.COUNCIL_STATIONS = set()
+        data = self.get_addresses()
+
+        for record in data:
+            if record.uprn in council_uprns:
+                self.COUNCIL_STATIONS.add(record.stationcode)
 
     def address_record_to_dict(self, record):
-        if record.postcode in ["KA3 6AZ", "KA2 0BQ", "KA1 2SE", "KA18 2JW", "KA18 2NB"]:
+        if record.stationcode not in self.COUNCIL_STATIONS:
             return None
+        if record.postcode in [
+            "KA18 1UD",
+            "KA18 2LF",
+            "KA1 2SE",
+            "KA18 2NB",
+            "KA3 6AZ",
+        ]:
+            return None
+
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if record.stationcode in [
-            "CDV01",
-            "CDV02",
-            "CDV03",
-            "CDV04",
-            "CDV05",
-            "CDV06",
-            "CDV07",
-            "CDV08",
-            "CDV09",
-            "CDV10",
-            "CDV11",
-            "CDV12",
-            "CDV13",
-            "CDV14_1",
-            "CDV14_2",
-            "CDV15",
-            "CDV16",
-            "CDV17_1",
-            "CDV17_2",
-            "CDV18",
-            "CDV19",
-            "CDV20",
-            "CDV21",
-            "CDV22",
-            "CDV23",
-            "CDV24",
-            "CDV25",
-            "CDV26",
-            "CDV27",
-            "CDV28",
-            "CDV29",
-            "CDV30",
-            "CDV31",
-            "KIV01",
-            "KIV02",
-            "KIV03",
-            "KIV04",
-            "KIV05",
-            "KIV06",
-            "KIV07",
-            "KIV08_1",
-            "KIV08_2",
-            "KIV09",
-            "KIV10",
-            "KIV11",
-            "KIV12",
-            "KIV13",
-            "KIV14",
-            "KIV15",
-            "KIV16",
-            "KIV17",
-            "KIV18",
-            "KIV19",
-            "KIV20",
-            "KIV21",
-            "KIV22",
-            "KIV23",
-            "KIV24",
-            "KIV25",
-            "KIV26",
-            "KIV27",
-            "KIV28_1",
-            "KIV28_2",
-            "KIV29",
-            "KIV30",
-            "KIV31",
-            "KIV32",
-            "KIV33",
-            "KIV34",
-            "KIV35",
-            "KIV36",
-            "KIV37",
-            "KIV38",
-            "KIV39",
-            "KIV40",
-            "KIV41",
-            "KIV42",
-            "KIV43",
-            "KIV44",
-            "KIV45",
-            "KIV46",
-            "KIV47",
-            "KIV48",
-            "KIV49",
-            "KIV50",
-            "KIV51",
-            "KIV52",
-            "KIV53",
-            "KIV54",
-            "KIV55",
-            "KIV56",
-            "KIV57",
-            "KIV58",
-            "KIV59_1",
-            "KIV59_2",
-            "KIV60",
-            "KIV61",
-            "KIV62_1",
-            "KIV62_2",
-            "KIV63",
-            "KIV64",
-        ]:
-            return super().station_record_to_dict(record)
-        else:
+        if record.stationcode not in self.COUNCIL_STATIONS:
             return None
+
+        return super().station_record_to_dict(record)
