@@ -240,20 +240,26 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
         council_from_default_db = Council.objects.using(DEFAULT_DB_ALIAS).get(
             council_id=council_from_logger_db.council_id
         )
-        context["STATIONS"] = [
-            {
-                "address": station.address,
-                "postcode": station.postcode,
-                "location": "✔️" if station.location else "❌",
-                "example_uprn": UprnToCouncil.objects.filter(
-                    polling_station_id=station.internal_council_id,
-                    lad=council_from_default_db.geography.gss,
+        context["STATIONS"] = []
+        for station in council_from_default_db.pollingstation_set.all():
+            try:
+                context["STATIONS"].append(
+                    {
+                        "address": station.address,
+                        "postcode": station.postcode,
+                        "location": "✔️" if station.location else "❌",
+                        "example_uprn": UprnToCouncil.objects.filter(
+                            polling_station_id=station.internal_council_id,
+                            lad=council_from_default_db.geography.gss,
+                        )
+                        .first()
+                        .uprn.uprn,
+                    }
                 )
-                .first()
-                .uprn.uprn,
-            }
-            for station in council_from_default_db.pollingstation_set.all()
-        ]
+            except AttributeError:
+                # We might have accidentally imported a station that has no addresses assigned
+                continue
+
         return context
 
 
