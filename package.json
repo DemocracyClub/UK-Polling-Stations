@@ -18,6 +18,6 @@
         "leaflet": "^1.7.1",
         "leaflet-extra-markers": "^1.2.1",
         "leaflet.markercluster": "^1.5.3",
-        "promise-polyfill": "^8.2.1"
+        "promise-polyfill": "^8.2.3"
     }
 }
