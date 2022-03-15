@@ -262,7 +262,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
         srid_to_use = max(srids, key=srids.count)
 
         if srid_to_use == 4326:
-            threshold = 0.001
+            threshold = 0.0001
         if srid_to_use == 27700:
             threshold = 10
 
