@@ -302,6 +302,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             )
 
     def check_in_council_bounds(self, station_record):
+        station_name = station_record["address"].split("\n")[0]
         try:
             council = Council.objects.get(
                 geography__geography__covers=station_record["location"]
@@ -309,14 +310,17 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             if self.council_id != council.council_id:
                 self.logger.log_message(
                     logging.WARNING,
-                    f"Polling station {station_record['internal_council_id']} is in {council.name} ({council.council_id}) "
+                    f"Polling station {station_name} ({station_record['internal_council_id']}) is in {council.name} ({council.council_id}) "
                     f"but target council is {self.council.name} ({self.council.council_id}) - manual check recommended\n",
                 )
         except Council.DoesNotExist:
             self.logger.log_message(
                 logging.WARNING,
-                "Polling station %s is not covered by any council area - manual check recommended\n",
-                variable=(station_record["internal_council_id"]),
+                "Polling station %s (%s) is not covered by any council area - manual check recommended\n",
+                variable=(
+                    station_name,
+                    station_record["internal_council_id"],
+                ),
             )
 
     def import_polling_stations(self):
