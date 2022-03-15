@@ -25,3 +25,8 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        if record.pollingstationnumber == "191":
+            record = record._replace(pollingstationaddress_1="")
+        return super().station_record_to_dict(record)
