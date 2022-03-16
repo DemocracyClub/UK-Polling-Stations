@@ -1,17 +1,15 @@
-from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "STV"
-    addresses_name = "2021-03-08T10:02:40.312121/Democracy Club - Polling Districts.csv"
-    stations_name = "2021-03-08T10:02:40.312121/Democracy Club - Polling Stations.csv"
-    elections = ["2021-05-06"]
-
-    def address_record_to_dict(self, record):
-        if record.postcode == "SG1 4XS":
-            return None
-
-        return super().address_record_to_dict(record)
+    addresses_name = (
+        "2022-05-05/2022-03-16T14:30:37.871583/Democracy Club - Polling Districts.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-16T14:30:37.871583/Democracy Club - Polling Stations.csv"
+    )
+    elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
         # https://trello.com/c/5gWxFAJw/369-stevenage
