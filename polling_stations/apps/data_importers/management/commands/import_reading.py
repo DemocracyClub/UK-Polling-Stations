@@ -14,9 +14,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def address_record_to_dict(self, record):
 
+        if record.property_urn.strip().lstrip("0") == "310088234":
+            record = record._replace(addressline6="RG1 1SN")
+
         if record.addressline6 in [
             "RG30 4RX",
-            "RG1 3NF",
             "RG4 8ES",
             "RG2 7PS",
         ]:
