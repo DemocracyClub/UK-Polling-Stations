@@ -4,21 +4,21 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "RCT"
     addresses_name = (
-        "2021-03-30T10:12:37.728458/Rhondda polling_station_export-2021-03-30.csv"
+        "2022-05-05/2022-03-17T12:13:36.470138/polling_station_export-2022-03-17.csv"
     )
     stations_name = (
-        "2021-03-30T10:12:37.728458/Rhondda polling_station_export-2021-03-30.csv"
+        "2022-05-05/2022-03-17T12:13:36.470138/polling_station_export-2022-03-17.csv"
     )
-    elections = ["2021-05-06"]
+    elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-        if record.pollingstationnumber == "121":
+        if record.pollingstationnumber == "124":
             # ST DAVIDS CHURCH, LLANTRISANT ROAD, GROESFAEN, PONTYCLUN
             # "CF72 8NU" → "CF72 8NS"
             # Source: https://www.churchinwales.org.uk/en/structure/church/4123/
             record = record._replace(pollingstationpostcode="CF72 8NS")
 
-        if record.pollingstationnumber == "94":
+        if record.pollingstationnumber == "97":
             # CILFYNYDD & NORTON BRIDGE COMMUNITY CENTRE, CILFYNYDD ROAD, …
             # Was "CF37 3NR", but that's not on Cilfyndd Road
             record = record._replace(pollingstationpostcode="")
@@ -27,29 +27,27 @@ class Command(BaseHalaroseCsvImporter):
 
     def address_record_to_dict(self, record):
         if record.housepostcode in [
-            "CF44 9DT",
-            "CF44 0PD",
-            "CF37 3EW",
-            "CF37 4DX",
-            "CF38 2SA",
-            "CF37 2HL",
-            "CF37 1UA",
+            "CF37 3BS",
+            "CF38 1DR",
             "CF37 1LD",
-            "CF39 8AT",
+            "CF38 2JF",
+            "CF37 3EW",
+            "CF38 2HH",
+            "CF44 0PD",
+            "CF37 1UA",
+            "CF38 2SA",
+            "CF37 1TG",
+            "CF44 9TB",
+            "CF40 2SN",
+            "CF44 9DT",
             "CF39 8FA",
+            "CF40 2ER",
+            "CF37 4DX",
+            "CF39 8AT",
+            "CF38 2JZ",
+            "CF42 6BH",
+            "CF72 9JZ",
             "CF42 6LX",
-        ]:
-            return None  # split
-
-        if record.housepostcode in [
-            "CF72 8LQ",  # overlapping districts; looks odd
-        ]:
-            return None
-
-        uprn = getattr(record, self.residential_uprn_field).strip()
-
-        if uprn in [
-            "100100774832",  # improbable distance; crosses other district
         ]:
             return None
 
