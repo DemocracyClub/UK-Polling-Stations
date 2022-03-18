@@ -4,42 +4,31 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MOL"
     addresses_name = (
-        "2021-03-02T12:34:43.331647/Mole Valley Democracy_Club__06May2021 (1).tsv"
+        "2022-05-05/2022-03-18T10:50:42.011286/Democracy_Club__05May2022.tsv"
     )
     stations_name = (
-        "2021-03-02T12:34:43.331647/Mole Valley Democracy_Club__06May2021 (1).tsv"
+        "2022-05-05/2022-03-18T10:50:42.011286/Democracy_Club__05May2022.tsv"
     )
-    elections = ["2021-05-06"]
-    csv_delimiter = "\t"
+    elections = ["2022-05-05"]
     csv_encoding = "windows-1252"
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10000828460",  # 26A OTTWAYS LANE, ASHTEAD
+            "10010534294",
+            "10010537566",
+            "10010536978",
+            "10010536968",
         ]:
+            return None
+
+        if record.addressline6 in ["KT21 2HL", "KT22 9QD"]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Catholic Church Hall, (Main Hall) of our Lady & St Peter, Copthorne Road, Leatherhead
-        if record.polling_place_id == "4783":
-            record = record._replace(polling_place_postcode="KT22 7EZ")
-
-        # Pippbrook (Council Offices), Reigate Road, Dorking, (Entrance Behind Bus Stop)
-        if record.polling_place_id == "4630":
-            record = record._replace(polling_place_postcode="RH4 1SJ")
-
-        # Wotton Village Hall Guildford Road Wotton RH5 6QQ - change of station
-        if record.polling_place_id == "4684":
-            record = record._replace(
-                polling_place_name="Wotton House",
-                polling_place_address_1="Guilford Road",
-                polling_place_address_2="Dorking",
-                polling_place_address_3="Surrey",
-                polling_place_postcode="RH5 6HS",
-            )
 
         return super().station_record_to_dict(record)
