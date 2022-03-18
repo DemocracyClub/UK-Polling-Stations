@@ -1,10 +1,10 @@
-from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "ELS"
-    addresses_name = "2021-04-06T12:11:19.403100/Democracy Club - Polling Districts Western Isles.csv"
+    addresses_name = "2022-05-05/2022-03-18T12:34:38.484076/WI Democracy Club - Polling Districts.csv"
     stations_name = (
-        "2021-04-06T12:11:19.403100/Democracy Club - Polling Stations Western Isles.csv"
+        "2022-05-05/2022-03-18T12:34:38.484076/WI Democracy Club - Polling Stations.csv"
     )
-    elections = ["2021-05-06"]
+    elections = ["2022-05-05"]
