@@ -1,31 +1,31 @@
-from data_importers.ems_importers import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-
     council_id = "BGW"
     addresses_name = (
-        "2021-03-29T15:39:51.593346/Blaenau Gwent polling_station_export-2021-03-29.csv"
+        "2022-05-05/2022-03-21T12:39:42.933221/polling_station_export-2022-03-21.csv"
     )
     stations_name = (
-        "2021-03-29T15:39:51.593346/Blaenau Gwent polling_station_export-2021-03-29.csv"
+        "2022-05-05/2022-03-21T12:39:42.933221/polling_station_export-2022-03-21.csv"
     )
-    elections = ["2021-05-06"]
+    elections = ["2022-05-05"]
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-        # EBENEZER CHAPEL VESTRY
         if record.pollingstationnumber in [
-            "62",  # EBENEZER CHAPEL VESTRY
-            "54",  # SCOUT HUT, VICTOR ROAD
-            "25",  # ST. JOHN’S AMBULANCE HALL
+            "61",  # EBENEZER CHAPEL VESTRY
         ]:
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(pollingstationpostcode="NP22 4RQ")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
 
-        if record.housepostcode in ["NP23 5DH", "NP13 3AQ"]:
+        if record.housepostcode in [
+            "NP23 5DH",
+            "NP13 3JU",
+            "NP13 3AQ",
+        ]:
             return None
 
         return super().address_record_to_dict(record)
