@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NET"
-    addresses_name = "2021-04-08T11:07:29.855297/Democracy_Club__06May2021.tsv"
-    stations_name = "2021-04-08T11:07:29.855297/Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-03-21T11:45:58.853591/Democracy_Club__05May2022.tsv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-21T11:45:58.853591/Democracy_Club__05May2022.tsv"
+    )
+    elections = ["2022-05-05"]
     csv_delimiter = "\t"
 
     # West End Community Centre and Library, Condercum Road's postcode is correct, but
@@ -17,7 +21,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     # maps.
 
     def address_record_to_dict(self, record):
-        if record.addressline6 in ["NE3 1AR", "NE4 9NQ", "NE5 1QF", "NE2 1AA"]:
+        if record.addressline6 in [
+            "NE3 1AR",
+            "NE4 9NQ",
+            "NE5 1QF",
+        ]:
             return None  # split
 
         return super().address_record_to_dict(record)
