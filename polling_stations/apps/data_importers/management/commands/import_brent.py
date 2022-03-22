@@ -3,12 +3,17 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BEN"
-    addresses_name = "2021-03-30T11:24:08.732705/Brent DC -polling districts.csv"
-    stations_name = "2021-03-30T11:24:08.732705/Brent DC -polling stations (2).csv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-03-22T16:39:49.511741/Democracy Club - Polling Districts.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-22T16:39:49.511741/Democracy Club - Polling Stations.csv"
+    )
+    elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-        if record.stationcode == "CDU4_1":
+        # St Mary's Willesden Parish Church, Neasden Lane, London
+        if record.stationcode == "RW4_1":
             record = record._replace(yordinate="184797")
             record = record._replace(xordinate="521445")
 
@@ -17,11 +22,8 @@ class Command(BaseDemocracyCountsCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
         if uprn in [
-            "202228638",
-            "202038378",
-            "202228580",
+            "202228638",  # long way from rest of postcode
             "202053053",
-            "202053054",
         ]:
             return None
 
