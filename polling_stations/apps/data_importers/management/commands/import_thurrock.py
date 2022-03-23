@@ -2,31 +2,22 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E06000034"
+    council_id = "THR"
     addresses_name = (
-        "local.2018-05-03/Version 1/Democracy_Club__03May2018 (1) Thurrock.tsv"
+        "2022-05-05/2022-03-23T16:02:05.092550/Democracy_Club__05May2022.tsv"
     )
     stations_name = (
-        "local.2018-05-03/Version 1/Democracy_Club__03May2018 (1) Thurrock.tsv"
+        "2022-05-05/2022-03-23T16:02:05.092550/Democracy_Club__05May2022.tsv"
     )
-    elections = ["local.2018-05-03"]
+    elections = ["2022-05-05"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-
-        """
-        File supplied contained obviously inaccurate point
-        remove it and fall back to geocoding
-        """
-        if record.polling_place_id == "5323":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
 
-        if record.addressline6.strip() == "SS17 0QT":
-            return None
+        if record.addressline6.strip() in [
+            "RM16 4RB",
+            "RM19 1QJ",
+        ]:
+            return None  # split
 
         return super().address_record_to_dict(record)
