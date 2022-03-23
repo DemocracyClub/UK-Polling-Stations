@@ -4,8 +4,8 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "EAY"
-    addresses_name = "2022-05-05/2022-03-11T15:11:08.302788/Democracy Club Polling Districts Ayrshire.csv"
-    stations_name = "2022-05-05/2022-03-11T15:11:08.302788/Democracy Club Polling Stations Ayrshire.csv"
+    addresses_name = "2022-05-05/2022-03-23T11:07:08.127290/Democracy Club Polling Districts Ayrshire.csv"
+    stations_name = "2022-05-05/2022-03-23T11:07:08.127290/Democracy Club Polling Stations Ayrshire.csv"
     elections = ["2022-05-05"]
 
     def pre_import(self):
@@ -35,6 +35,7 @@ class Command(BaseDemocracyCountsCsvImporter):
             "KA1 2SE",
             "KA18 2NB",
             "KA3 6AZ",
+            "KA5 5EY",
         ]:
             return None
 
