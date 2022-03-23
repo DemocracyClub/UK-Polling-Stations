@@ -144,6 +144,8 @@ class BasePollingStationView(
         pass
 
     def get_advance_voting_station(self):
+        if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
+            return None
         if hasattr(self, "address"):
             return self.address.uprntocouncil.advance_voting_station
 
