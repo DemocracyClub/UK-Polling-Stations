@@ -44,7 +44,12 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
 class AdvanceVotingStationSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdvanceVotingStation
-        fields = ("name", "address", "postcode", "location")
+        fields = ("name", "address", "postcode", "location", "opening_times")
+
+    opening_times = serializers.SerializerMethodField()
+
+    def get_opening_times(self, obj: AdvanceVotingStation):
+        return obj.opening_times_table
 
 
 class BallotSerializer(serializers.Serializer):
