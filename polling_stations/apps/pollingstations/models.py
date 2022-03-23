@@ -154,6 +154,12 @@ class AdvanceVotingStation(models.Model):
     def __str__(self):
         return f"{self.name} ({self.postcode})"
 
+    def save(self, **kwargs):
+        self.address = "\n".join(
+            [line.lstrip() for line in self.address.split("\n")]
+        ).strip()
+        return super().save(**kwargs)
+
     @property
     def opening_times_table(self):
         return OpeningTimes.from_dict(self.opening_times).as_table()
