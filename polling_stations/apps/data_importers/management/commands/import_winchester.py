@@ -3,39 +3,29 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WIN"
-    addresses_name = "2021-04-16T14:39:51.352187/Democracy_Club__06May2021.CSV"
-    stations_name = "2021-04-16T14:39:51.352187/Democracy_Club__06May2021.CSV"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-03-23T16:46:37.210490/Democracy_Club__05May2022.tsv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-23T16:46:37.210490/Democracy_Club__05May2022.tsv"
+    )
+    elections = ["2022-05-05"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn in [
-            "100060590951",  # THE WHITE COTTAGE, DUNDRIDGE LANE, BISHOPS WALTHAM, SOUTHAMPTON
-            "200000179223",  # PADDOCK HOUSE GALLEY DOWN FARM, DUNDRIDGE LANE, BISHOPS WALTHAM, SOUTHAMPTON
-            "100062525886",  # GALLEY DOWN FARM, DUNDRIDGE LANE, BISHOPS WALTHAM, SOUTHAMPTON
-        ]:
-            return None
 
         if record.addressline6 in [
-            "SO24 0PD",
-            "SO24 0QA",
-            "SO21 1JR",
-            "SO21 2BN",
-            "SO32 1HP",
-            "SO23 7JX",
             "SO24 9HZ",
-            "SO21 2EG",
-            "SO32 2JR",
+            "SO32 1HP",
             "SO32 3PJ",
-            "SO21 1FD",
+            "SO32 3LA",
         ]:
             return None
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
         # Upham New Millennium Village Hall (Cttee Room)
-        if record.polling_place_id == "9135":
+        if record.polling_place_id == "10194":
             record = record._replace(polling_place_easting="452220")
             record = record._replace(polling_place_northing="119570")
 
