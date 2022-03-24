@@ -49,6 +49,11 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         else:
             return None
 
+    def generate_advance_voting_station(self, routing_helper):
+        if routing_helper.route_type == "single_address":
+            return routing_helper.addresses[0].uprntocouncil.advance_voting_station
+        return None
+
     def get_ee_wrapper(self, postcode):
         return EveryElectionWrapper(postcode)
 
@@ -98,6 +103,9 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         ret["custom_finder"] = None
         if not ret["polling_station_known"] and loc:
             ret["custom_finder"] = self.generate_custom_finder(loc, postcode)
+
+        # get advance voting station
+        ret["advance_voting_station"] = self.generate_advance_voting_station(rh)
 
         ret["metadata"] = ee.get_metadata()
 

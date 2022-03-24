@@ -8,6 +8,7 @@ import logging
 import os
 import tempfile
 import urllib.request
+from typing import List, Callable
 
 import rtree
 from django.apps import apps
@@ -48,7 +49,18 @@ class ShpMixin:
         return {"shp_encoding": self.shp_encoding}
 
 
-class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
+class BaseBaseImporter:
+    def post_import(self):
+        pass
+
+    def get_extra_reports(self):
+        return []
+
+    def teardown(self, council):
+        pass
+
+
+class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
 
     """
     Turn off auto system check for all apps
@@ -90,6 +102,7 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         )
 
     def teardown(self, council):
+        super().teardown(council)
         PollingStation.objects.filter(council=council).delete()
         PollingDistrict.objects.filter(council=council).delete()
         UprnToCouncil.objects.filter(lad__in=council.identifiers).update(
@@ -124,7 +137,11 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         pass
 
     def post_import(self):
-        raise NotImplementedError
+        super().post_import()
+
+    def get_extra_reports(self) -> List[Callable]:
+        extra_reports: List = super().get_extra_reports()
+        return extra_reports
 
     def report(self):
         # build report
@@ -141,7 +158,11 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         station_report = StationReport(self.council.pk)
         district_report = DistrictReport(self.council.pk)
         address_report = AddressReport(self.council.pk)
+
         report.build_report()
+
+        for extra_report in self.get_extra_reports():
+            report.report.add_row(extra_report(self, self.council))
 
         # save a static copy in the DB that we can serve up on the website
         record = DataQuality.objects.get_or_create(council_id=self.council.pk)
@@ -205,10 +226,7 @@ class BaseImporter(BaseCommand, metaclass=abc.ABCMeta):
         self.import_data()
 
         # Optional step for post import tasks
-        try:
-            self.post_import()
-        except NotImplementedError:
-            pass
+        self.post_import()
 
         # save and output data quality report
         if self.verbosity > 0:

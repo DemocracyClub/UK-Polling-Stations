@@ -70,6 +70,12 @@ class UprnToCouncil(models.Model):
         db_column="uprn",
     )
     polling_station_id = models.CharField(blank=True, max_length=255)
+    advance_voting_station = models.ForeignKey(
+        "pollingstations.AdvanceVotingStation",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
 
 
 def get_uprn_hash_table(gss_code):

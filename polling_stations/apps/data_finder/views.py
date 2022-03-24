@@ -143,6 +143,12 @@ class BasePollingStationView(
     def get_station(self):
         pass
 
+    def get_advance_voting_station(self):
+        if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
+            return None
+        if hasattr(self, "address"):
+            return self.address.uprntocouncil.advance_voting_station
+
     def get_ee_wrapper(self):
         return EveryElectionWrapper(postcode=self.postcode)
 
@@ -182,6 +188,7 @@ class BasePollingStationView(
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()
         context["voter_id_pilot"] = ee.get_id_pilot_info()
+        context["advance_voting_station"] = self.get_advance_voting_station()
 
         context["postcode"] = self.postcode.with_space
         context["location"] = self.location
