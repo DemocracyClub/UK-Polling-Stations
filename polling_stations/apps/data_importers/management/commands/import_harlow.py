@@ -2,26 +2,19 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-    council_id = "E07000073"
+    council_id = "HAR"
     addresses_name = (
-        "parl.2019-12-12/Version 1/Democracy_Club__12December2019harlow.CSV"
+        "2022-05-05/2022-03-24T13:51:39.265303/Democracy_Club__05May2022.tsv"
     )
-    stations_name = "parl.2019-12-12/Version 1/Democracy_Club__12December2019harlow.CSV"
-    elections = ["parl.2019-12-12"]
-    allow_station_point_from_postcode = False
+    stations_name = (
+        "2022-05-05/2022-03-24T13:51:39.265303/Democracy_Club__05May2022.tsv"
+    )
+    elections = ["2022-05-05"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        rec = super().address_record_to_dict(record)
-        uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6 in ["CM17 0GE", "CM17 9DS"]:
-            return None
-        if uprn in ["10023423798", "100091437906"]:
+        if record.addressline6 in ["CM20 1BA", "CM17 9QL"]:
             return None
 
-        if uprn in [
-            "200002566340"  # CM179LU -> CM179DS : The Farmhouse, London Road, Harlow, Essex
-        ]:
-            rec["accept_suggestion"] = False
-
-        return rec
+        return super().address_record_to_dict(record)
