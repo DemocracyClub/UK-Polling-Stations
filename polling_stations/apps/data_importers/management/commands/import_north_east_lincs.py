@@ -3,12 +3,23 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "NEL"
-    addresses_name = "2021-03-11T16:28:19.988914/polling_station_export-2021-03-11.csv"
-    stations_name = "2021-03-11T16:28:19.988914/polling_station_export-2021-03-11.csv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-03-24T10:29:54.923749/polling_station_export-2022-03-24.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-24T10:29:54.923749/polling_station_export-2022-03-24.csv"
+    )
+    elections = ["2022-05-05"]
 
-    def station_record_to_dict(self, record):
-        # https://trello.com/c/kXIT1oFl/380-north-east-lincolnshire
-        if record.pollingstationname == "HABROUGH VILLAGE HALL":
-            record = record._replace(pollingstationpostcode="DN40 3BD")
-        return super().station_record_to_dict(record)
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
+
+        if uprn in []:
+            return None
+
+        if record.housepostcode in [
+            "DN33 2AD",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
