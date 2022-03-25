@@ -3,40 +3,25 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "MTY"
-    addresses_name = (
-        "2021-03-29T15:37:08.595129/Merthyr polling_station_export-2021-03-29.csv"
-    )
-    stations_name = (
-        "2021-03-29T15:37:08.595129/Merthyr polling_station_export-2021-03-29.csv"
-    )
-    elections = ["2021-05-06"]
-    csv_encoding = "latin-1"
+    addresses_name = "2022-05-05/2022-03-25T08:16:11.219335/Eros_SQL_Output004.csv"
+    stations_name = "2022-05-05/2022-03-25T08:16:11.219335/Eros_SQL_Output004.csv"
+    elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-        if record.pollingstationnumber == "42":
-            # CWM GOLAU INTEGRATED CHILDREN'S CENTRE, DUFFRYN ROAD, PENTREBACH,
-            # MERTHYR TYDFIL
-            # "CF28 2DN" → "CF48 4BJ"
-            # Source: UPRN 10034652721
-            record = record._replace(pollingstationpostcode="CF48 4BJ")
-
-        if record.pollingstationnumber == "60":
-            # Trelewis OAP Hall, Bontnewydd Terrace, Trelewis
-            # "CF48 6AG" → "CF46 6AF"
-            # Address mentioned in an MP's newsletter; not in AddressBase
-            # https://www.geraldjones.co.uk/wp-content/uploads/sites/256/2019/05/Gerald-Jones-Newsletter-April-2019.pdf
-            record = record._replace(pollingstationpostcode="CF46 6AF")
-
-        if record.pollingstationnumber == "25":
-            # Georgetown Boys & Girls Club, Dynevor Street, Georgetown
-            # "CF47 1AY" → "CF48 1AY"
-            # https://find-and-update.company-information.service.gov.uk/company/08180489
-            record = record._replace(pollingstationpostcode="CF48 1AY")
+        if record.pollingstationnumber == "55":
+            # PONTSTICILL MEMORIAL HALL, CF48 2UR
+            # 10034657547
+            record = record._replace(pollingstationpostcode="CF48 2TU")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        if record.housepostcode in ["CF48 3NE", "CF47 9AH", "CF48 1TL"]:
-            return None  # split
+        uprn = record.uprn.strip().lstrip("0")
+        if uprn in ["10034658436"]:
+            return None
+        if record.housepostcode in [
+            "CF48 1TL",  # split
+        ]:
+            return None
 
         return super().address_record_to_dict(record)
