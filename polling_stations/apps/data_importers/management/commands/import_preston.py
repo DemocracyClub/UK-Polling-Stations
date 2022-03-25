@@ -1,37 +1,36 @@
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PRE"
-    elections = ["2021-05-06"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Preston"
-    geom_type = "geojson"
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-
-        return {
-            "internal_council_id": record["polling_district_ref"],
-            "name": "%s - %s" % (record["ward_name"], record["polling_district_ref"]),
-            "area": poly,
-            "polling_station_id": record["polling_station_ref"],
-        }
-
-    def format_address(self, record):
-        return "\n".join(
-            [record["polling_station_name"], record["polling_station_address"]]
-        ).strip()
+    addresses_name = (
+        "2022-05-05/2022-03-25T10:08:40.592532/Democracy_Club__05May2022.tsv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-25T10:08:40.592532/Democracy_Club__05May2022.tsv"
+    )
+    elections = ["2022-05-05"]
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
 
-        return {
-            "internal_council_id": record["polling_station_ref"],
-            "address": self.format_address(record),
-            "postcode": "",
-            "location": location,
-        }
+        if record.polling_place_id in [
+            "4167",  # Millennium Hall
+            "4223",  # Goosnargh Village Hall
+        ]:
+            record = record._replace(
+                polling_place_easting="", polling_place_northing=""
+            )
+
+        return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in ["10093760928", "100010579401", "100010574023"]:
+            return None
+
+        if record.addressline6 in []:
+            return None
+
+        return super().address_record_to_dict(record)
