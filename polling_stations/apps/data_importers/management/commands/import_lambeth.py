@@ -1,38 +1,23 @@
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseGitHubImporter):
-
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "LBH"
-    elections = ["2021-05-06"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Lambeth"
-    geom_type = "geojson"
+    addresses_name = (
+        "2022-05-05/2022-03-29T12:35:09.475993/LBDemocracy_Club__05May2022_2.tsv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-29T12:35:09.475993/LBDemocracy_Club__05May2022_2.tsv"
+    )
+    elections = ["2022-05-05"]
+    csv_encoding = "windows-1252"
+    csv_delimiter = "\t"
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        return {
-            "internal_council_id": record["DISTRICT_CODE"],
-            "name": "%s - %s" % (record["WARD"], record["DISTRICT_CODE"]),
-            "area": poly,
-            "polling_station_id": record["DISTRICT_CODE"],
-        }
+    def address_record_to_dict(self, record):
+        if record.addressline6 in [
+            "SE11 5UG",
+            "SW2 5RS",
+        ]:
+            return None
 
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-
-        stations = []
-        station_ids = record["DISTRICT_C"].split(",")
-        for station_id in station_ids:
-            stations.append(
-                {
-                    "internal_council_id": station_id.strip(),
-                    "postcode": record["POSTCODE"],
-                    "address": "%s\n%s" % (record["VENUE"], record["ADDRESS_1"]),
-                    "location": location,
-                }
-            )
-        return stations
+        return super().address_record_to_dict(record)
