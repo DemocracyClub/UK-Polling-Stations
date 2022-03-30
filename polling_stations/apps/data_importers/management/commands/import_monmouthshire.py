@@ -3,64 +3,63 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MON"
-    addresses_name = "2021-04-09T11:13:40.300549/Democracy_Club__06May2021.tsv"
-    stations_name = "2021-04-09T11:13:40.300549/Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-03-30T13:32:24.067252/Democracy_Club__05May2022.tsv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-30T13:32:24.067252/Democracy_Club__05May2022.tsv"
+    )
+    elections = ["2022-05-05"]
     csv_delimiter = "\t"
+
+    def station_record_to_dict(self, record):
+        # Leisure Centre, Crossway Green, Chepstow, Monmouthshire
+        if record.polling_place_id == "9987":
+            # source: https://vinsights.co.uk/Business/225657
+            record = record._replace(polling_place_postcode="NP16 5LX")  # was NP6 5LX
+
+        # Village Hall, Whitebrook, Monmouth
+        if record.polling_place_id == "10097":
+            # source: https://www.uk-hallhire.co.uk/halls/NP/74220.php
+            record = record._replace(polling_place_postcode="NP25 4TT")  # was NP27 4TT
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         if record.addressline6.strip() in [
-            "NP7 7DH",
-            "NP7 7EE",
-            "NP7 7HU",
-            "NP7 7DW",
-            "NP7 5LL",
-            "NP7 5LF",
-            "NP7 5LB",
-            "NP7 6AN",
-            "NP7 5SS",
-            "NP26 5NS",
-            "NP26 3AR",
-            "NP16 6HX",
-            "NP16 6JS",
-            "NP16 5JF",
-            "NP16 6RQ",
-            "NP7 8NL",
-            "NP15 1NP",
-            "NP7 9UL",
-            "NP7 9EG",
-            "NP15 1PY",
-            "NP7 0LL",
-            "NP7 0EY",
-            "NP7 9HT",
-            "NP7 7EY",
-            "NP7 9BT",
-            "NP7 9EU",
             "NP25 5DJ",
-            "NP25 5EJ",
-            "NP25 5BG",
+            "NP7 5PW",
+            "NP7 7DH",
+            "NP16 5BE",
             "NP25 3LP",
-            "NP25 5AP",
-            "NP25 4BP",
+            "NP26 4NB",
+            "NP26 4AG",
+            "NP7 9EU",
+            "NP26 4PQ",
+            "NP7 5LF",
+            "NP25 5BG",
+            "NP7 7DW",
+            "NP25 5UF",
+            "NP7 5LL",
+            "NP26 5SD",
+            "NP26 3NU",
+            "NP7 7EY",
+            "NP16 6HX",
+            "NP26 4HL",
+            "NP7 8RP",
+            "NP7 7EE",
+            "NP25 3BQ",
+            "NP26 3AR",
+            "NP7 5LB",
             "NP25 4TS",
+            "NP25 4AE",
+            "NP7 9EG",
         ]:
             return None  # split
 
-        if (
-            record.addressline6 == "NP25 4BG"
-            and record.polling_place_district_reference == "9458"
-        ):
-            return None  # far from other properties in this area
-
-        if record.property_urn.strip(" 0") in [
-            "10033355660",
-            "10033360145",
-            "10033346790",
-            "10033356456",
-            "10033348014",
-            "10033355660",
-            "10033339048",
+        if record.addressline6.strip() in [
+            "NP26 4RL",  # four properties a long way from their stations
         ]:
-            return None  # far from other properties in this area
+            return None
 
         return super().address_record_to_dict(record)
