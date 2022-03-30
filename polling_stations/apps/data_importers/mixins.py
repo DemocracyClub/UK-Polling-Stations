@@ -19,6 +19,12 @@ def advance_voting_report(import_cls: "AdvanceVotingMixin", council: Council) ->
     if avs_qs.exists():
         for avs in avs_qs:
             table.add_row(avs.name, str(avs.uprntocouncil_set.count()))
+        if len(avs_qs) > 1:
+            table.add_row(
+                "TOTAL",
+                str(sum([avs.uprntocouncil_set.count() for avs in avs_qs])),
+                style="bold",
+            )
     else:
         table.add_row("WARNING: No Advance stations imported")
     return table
