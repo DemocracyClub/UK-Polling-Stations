@@ -1,7 +1,11 @@
+from addressbase.models import Address, UprnToCouncil
+from core.opening_times import OpeningTimes
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.mixins import AdvanceVotingMixin
+from pollingstations.models import AdvanceVotingStation
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalaroseCsvImporter, AdvanceVotingMixin):
     council_id = "BGW"
     addresses_name = (
         "2022-05-05/2022-03-21T12:39:42.933221/polling_station_export-2022-03-21.csv"
@@ -29,3 +33,22 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def add_advance_voting_stations(self):
+        opening_times = OpeningTimes()
+        opening_times.add_open_time("2022-05-03", "08:00", "16:00")
+        opening_times.add_open_time("2022-05-04", "08:00", "16:00")
+
+        advance_station = AdvanceVotingStation(
+            name="Ebbw Vale Learning Zone",
+            address="""Lime Avenue
+            Ebbw Vale
+                """,
+            postcode="NP23 6GL",
+            location=Address.objects.get(uprn="10014120799").location,
+            opening_times=opening_times.as_string_table(),
+        )
+        advance_station.save()
+        UprnToCouncil.objects.filter(lad=self.council.geography.gss).update(
+            advance_voting_station=advance_station
+        )
