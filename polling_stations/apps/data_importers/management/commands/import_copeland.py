@@ -3,25 +3,26 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "COP"
-    addresses_name = "2021-03-15T11:52:14.388522/polling_station_export-2021-03-15.csv"
-    stations_name = "2021-03-15T11:52:14.388522/polling_station_export-2021-03-15.csv"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
+    addresses_name = (
+        "2022-05-05/2022-03-30T12:34:42.381612/polling_station_export-2022-03-16.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-03-30T12:34:42.381612/polling_station_export-2022-03-16.csv"
+    )
+    elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
         if record.housepostcode in [
+            "CA19 1UU",
             "CA25 5JE",
+            "CA22 2TD",
+            "LA19 5XT",
             "CA28 7QS",
             "CA28 6TU",
-            "CA19 1UU",
-            "CA25 5LN",
-            "CA25 5LH",
-            "CA22 2TD",
-            "CA28 6AQ",
         ]:
-            return None
+            return None  # split
 
         if uprn in [
             "10000899045",  # STABLE COTTAGE, STEEL GREEN, MILLOM
@@ -29,7 +30,6 @@ class Command(BaseHalaroseCsvImporter):
             "10000906979",  # FLAT AT HERDWICKS STEEL GREEN, MILLOM
             "10000898773",  # LANGLEY FARM, BOOTLE, MILLOM
             "10000890830",  # FLOSH FARM CLEATOR, CLEATOR
-            "10000901390",  # FURNACE COTTAGE, DUDDON BRIDGE, BROUGHTON-IN-FURNESS
         ]:
             return None
 
