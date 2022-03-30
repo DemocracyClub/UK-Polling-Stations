@@ -74,7 +74,9 @@ class CouncilDetailView(DetailView):
 
             context["distances_to_stations"] = cursor.fetchall()
 
-        context["pollingstation_list"] = PollingStation.objects.filter(council=object)
+        context["pollingstation_list"] = PollingStation.objects.filter(
+            council=object
+        ).order_by("internal_council_id")
 
         return context
 
