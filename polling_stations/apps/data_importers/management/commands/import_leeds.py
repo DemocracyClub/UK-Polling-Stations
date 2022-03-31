@@ -160,4 +160,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="418531")
             record = record._replace(polling_place_northing="442305")
 
+        # Haigh Road Community Centre, Haigh Road LS26 0LW
+        if record.polling_place_id == "13046":
+            record = record._replace(polling_place_easting="434066")
+            record = record._replace(polling_place_northing="428893")
+
         return super().station_record_to_dict(record)
