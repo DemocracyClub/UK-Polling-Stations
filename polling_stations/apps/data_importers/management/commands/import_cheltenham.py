@@ -27,6 +27,14 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+
+        # ST. PHILIP & ST. JAMES PARISH CHURCH CENTRE
+        # name duplicated
         if record.pollingstationnumber == "191":
             record = record._replace(pollingstationaddress_1="")
+
+        # ST NICOLAS CHURCH HALL SWINDON LANE CHELTENHAM, GL50 4PF
+        if record.pollingstationnumber == "182":
+            record = record._replace(pollingstationpostcode="GL50 4PF")
+
         return super().station_record_to_dict(record)

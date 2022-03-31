@@ -29,4 +29,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="")
             record = record._replace(polling_place_northing="")
 
+        # Mobile Polling Station, Junction of Broadway and Beauvale Avenue, Offerton SK2 6SF
+        if record.polling_place_id == "11293":
+            record = record._replace(polling_place_postcode="SK2 5SF")
+
         return super().station_record_to_dict(record)

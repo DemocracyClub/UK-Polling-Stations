@@ -17,3 +17,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+
+        # Name change from council - don't carry forward
+        # https://trello.com/c/Ig6nZ8NZ
+        if record.polling_place_id == "11293":
+            record = record._replace(polling_place_name="Oglethorpe Pre-School")
+
+        return super().station_record_to_dict(record)
