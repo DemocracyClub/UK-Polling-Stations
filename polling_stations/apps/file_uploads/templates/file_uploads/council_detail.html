@@ -156,12 +156,14 @@
                         <th>Example</th>
                     </tr>
                     {% for station in STATIONS %}
-                        <tr>
-                            <td>{{ station.address }}</td>
-                            <td>{{ station.postcode }}</td>
-                            <td>{{ station.location }} </td>
-                            <td><a href={%  url "address_view" station.example_uprn %}>Example page</a></td>
-                        </tr>
+                        {% if station.example_uprn %}
+                            <tr>
+                                <td>{{ station.address }}</td>
+                                <td>{{ station.postcode }}</td>
+                                <td>{{ station.location }} </td>
+                                <td><a href={%  url "address_view" station.example_uprn %}>Example page</a></td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </div>

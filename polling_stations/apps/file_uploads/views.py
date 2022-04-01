@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import Prefetch, Count
+from django.db.models import Prefetch, Count, Max
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -241,24 +241,23 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
             council_id=council_from_logger_db.council_id
         )
         context["STATIONS"] = []
+        example_uprn_map = dict(
+            UprnToCouncil.objects.filter(lad="W06000020")
+            .values("polling_station_id")
+            .annotate(uprn=Max("uprn__uprn"))
+            .values_list("polling_station_id", "uprn")
+        )
+
         for station in council_from_default_db.pollingstation_set.all():
-            try:
-                context["STATIONS"].append(
-                    {
-                        "address": station.address,
-                        "postcode": station.postcode,
-                        "location": "✔️" if station.location else "❌",
-                        "example_uprn": UprnToCouncil.objects.filter(
-                            polling_station_id=station.internal_council_id,
-                            lad=council_from_default_db.geography.gss,
-                        )
-                        .first()
-                        .uprn.uprn,
-                    }
-                )
-            except AttributeError:
-                # We might have accidentally imported a station that has no addresses assigned
-                continue
+
+            context["STATIONS"].append(
+                {
+                    "address": station.address,
+                    "postcode": station.postcode,
+                    "location": "✔️" if station.location else "❌",
+                    "example_uprn": example_uprn_map.get(station.internal_council_id),
+                }
+            )
 
         return context
 
