@@ -12,8 +12,12 @@ from addressbase.models import UprnToCouncil
 
 # data quality stats for polling stations
 class StationReport:
-    def __init__(self, council_id):
+    def __init__(self, council_id, additional_report_councils=None):
+        if not additional_report_councils:
+            additional_report_councils = []
+        self.additional_report_councils = additional_report_councils
         self.council_id = council_id
+        self.councils = self.additional_report_councils + [self.council_id]
         # fmt: off
         self.counts = {
             "0": 0,
@@ -24,12 +28,12 @@ class StationReport:
         self.generate_counts()
 
     def get_stations_imported(self):
-        return PollingStation.objects.filter(council_id=self.council_id).count()
+        return PollingStation.objects.filter(council_id__in=self.councils).count()
 
     def get_stations_with_district_id(self):
         return (
             PollingStation.objects.filter(
-                council_id=self.council_id, polling_district_id__isnull=False
+                council_id__in=self.councils, polling_district_id__isnull=False
             )
             .exclude(polling_district_id="")
             .count()
@@ -38,7 +42,7 @@ class StationReport:
     def get_stations_without_district_id(self):
         return PollingStation.objects.filter(
             Q(polling_district_id__isnull=True) | Q(polling_district_id=""),
-            council_id=self.council_id,
+            council_id__in=self.councils,
         ).count()
 
     def get_stations_with_valid_district_id_ref(self):
@@ -48,12 +52,12 @@ class StationReport:
             SELECT COUNT(*) FROM pollingstations_pollingstation
             WHERE polling_district_id IN
                 (SELECT internal_council_id FROM pollingstations_pollingdistrict
-                WHERE council_id=%s)
+                WHERE council_id IN %s)
             AND council_id=%s
             AND polling_district_id != ''
             AND polling_district_id IS NOT NULL;
             """,
-            [self.council_id, self.council_id],
+            [tuple(self.councils), tuple(self.council_id)],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -65,30 +69,30 @@ class StationReport:
             SELECT COUNT(*) FROM pollingstations_pollingstation
             WHERE polling_district_id NOT IN
                 (SELECT internal_council_id FROM pollingstations_pollingdistrict
-                WHERE council_id=%s)
+                WHERE council_id IN %s)
             AND council_id=%s
             AND polling_district_id != ''
             AND polling_district_id IS NOT NULL;
             """,
-            [self.council_id, self.council_id],
+            [tuple(self.councils), tuple(self.council_id)],
         )
         results = cursor.fetchall()
         return results[0][0]
 
     def get_stations_with_point(self):
         return PollingStation.objects.filter(
-            council_id=self.council_id, location__isnull=False
+            council_id__in=self.councils, location__isnull=False
         ).count()
 
     def get_stations_without_point(self):
         return PollingStation.objects.filter(
-            council_id=self.council_id, location__isnull=True
+            council_id__in=self.councils, location__isnull=True
         ).count()
 
     def get_stations_with_address(self):
         return (
             PollingStation.objects.filter(
-                council_id=self.council_id, address__isnull=False
+                council_id__in=self.councils, address__isnull=False
             )
             .exclude(address="")
             .count()
@@ -96,11 +100,11 @@ class StationReport:
 
     def get_stations_without_address(self):
         return PollingStation.objects.filter(
-            Q(address__isnull=True) | Q(address=""), council_id=self.council_id
+            Q(address__isnull=True) | Q(address=""), council_id__in=self.councils
         ).count()
 
     def generate_counts(self):
-        stations = PollingStation.objects.filter(council_id=self.council_id)
+        stations = PollingStation.objects.filter(council_id__in=self.councils)
         counts = []
         for station in stations:
             if station.location is not None:
@@ -129,8 +133,12 @@ class StationReport:
 
 # data quality stats for polling districts
 class DistrictReport:
-    def __init__(self, council_id):
+    def __init__(self, council_id, additional_report_councils=None):
+        if not additional_report_councils:
+            additional_report_councils = []
+        self.additional_report_councils = additional_report_councils
         self.council_id = council_id
+        self.councils = self.additional_report_councils + [self.council_id]
         # fmt: off
         self.counts = {
             "0": 0,
@@ -141,12 +149,12 @@ class DistrictReport:
         self.generate_counts()
 
     def get_districts_imported(self):
-        return PollingDistrict.objects.filter(council_id=self.council_id).count()
+        return PollingDistrict.objects.filter(council_id__in=self.councils).count()
 
     def get_districts_with_station_id(self):
         return (
             PollingDistrict.objects.filter(
-                council_id=self.council_id, polling_station_id__isnull=False
+                council_id__in=self.councils, polling_station_id__isnull=False
             )
             .exclude(polling_station_id="")
             .count()
@@ -155,7 +163,7 @@ class DistrictReport:
     def get_districts_without_station_id(self):
         return PollingDistrict.objects.filter(
             Q(polling_station_id__isnull=True) | Q(polling_station_id=""),
-            council_id=self.council_id,
+            council_id__in=self.councils,
         ).count()
 
     def get_districts_with_valid_station_id_ref(self):
@@ -165,12 +173,12 @@ class DistrictReport:
             SELECT COUNT(*) FROM pollingstations_pollingdistrict
             WHERE polling_station_id IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id=%s)
+                WHERE council_id IN %s)
             AND council_id=%s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [self.council_id, self.council_id],
+            [tuple(self.councils), tuple(self.council_id)],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -183,17 +191,17 @@ class DistrictReport:
             WHERE polling_station_id NOT IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
                 WHERE council_id=%s)
-            AND council_id=%s
+            AND council_id IN %s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [self.council_id, self.council_id],
+            [tuple(self.councils), tuple(self.council_id)],
         )
         results = cursor.fetchall()
         return results[0][0]
 
     def generate_counts(self):
-        districts = PollingDistrict.objects.filter(council_id=self.council_id)
+        districts = PollingDistrict.objects.filter(council_id__in=self.councils)
         counts = []
         for district in districts:
             if district.area is not None:
@@ -222,17 +230,26 @@ class DistrictReport:
 
 # data quality stats for UPRNs assigned polling station ids
 class AddressReport:
-    def __init__(self, council_id):
+    def __init__(self, council_id, additional_report_councils=None):
+        if not additional_report_councils:
+            additional_report_councils = []
+        self.additional_report_councils = additional_report_councils
         self.council_id = council_id
-        self.gss_code = Council.objects.get(pk=council_id).geography.gss
+        self.councils = self.additional_report_councils + [self.council_id]
+        self.gss_codes = [
+            council.geography.gss
+            for council in Council.objects.filter(pk__in=self.councils).select_related(
+                "geography"
+            )
+        ]
 
     def get_uprns_in_addressbase(self):
-        return UprnToCouncil.objects.filter(lad=self.gss_code).count()
+        return UprnToCouncil.objects.filter(lad__in=self.gss_codes).count()
 
     def get_addresses_with_station_id(self):
         return (
             UprnToCouncil.objects.filter(
-                lad=self.gss_code, polling_station_id__isnull=False
+                lad__in=self.gss_codes, polling_station_id__isnull=False
             )
             .exclude(polling_station_id="")
             .count()
@@ -241,7 +258,7 @@ class AddressReport:
     def get_addresses_without_station_id(self):
         return UprnToCouncil.objects.filter(
             Q(polling_station_id__isnull=True) | Q(polling_station_id=""),
-            council_id=self.gss_code,
+            council_id__in=self.councils,
         ).count()
 
     def get_addresses_with_valid_station_id_ref(self):
@@ -251,12 +268,12 @@ class AddressReport:
             SELECT COUNT(*) FROM addressbase_uprntocouncil
             WHERE polling_station_id IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id=%s)
-            AND lad=%s
+                WHERE council_id IN %s)
+            AND lad IN %s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [self.council_id, self.gss_code],
+            [tuple(self.councils), tuple(self.gss_codes)],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -268,12 +285,12 @@ class AddressReport:
             SELECT COUNT(*) FROM addressbase_uprntocouncil
             WHERE polling_station_id NOT IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id=%s)
-            AND lad=%s
+                WHERE council_id IN %s)
+            AND lad IN %s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [self.council_id, self.gss_code],
+            [tuple(self.councils), tuple(self.gss_codes)],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -281,10 +298,17 @@ class AddressReport:
 
 # generate all the stats
 class DataQualityReportBuilder:
-    def __init__(self, council_id, expecting_districts, csv_rows=None):
+    def __init__(
+        self,
+        council_id,
+        expecting_districts,
+        csv_rows=None,
+        additional_report_councils=None,
+    ):
         self.council_id = council_id
         self.csv_rows = csv_rows
         self.report = Table.grid()
+        self.additional_report_councils = additional_report_councils
         # Whether the importer is expected to have imported districts;
         # controls whether relevant summaries appear in the report.
         self.expecting_districts = expecting_districts
@@ -294,7 +318,9 @@ class DataQualityReportBuilder:
         table.add_column("Caption")
         table.add_column("Number", justify="right")
 
-        stations_report = StationReport(self.council_id)
+        stations_report = StationReport(
+            self.council_id, additional_report_councils=self.additional_report_councils
+        )
 
         stations_imported = stations_report.get_stations_imported()
         if stations_imported > 0:
@@ -438,7 +464,9 @@ class DataQualityReportBuilder:
         table.add_column("Caption")
         table.add_column("Number", justify="right")
 
-        address_report = AddressReport(self.council_id)
+        address_report = AddressReport(
+            self.council_id, additional_report_councils=self.additional_report_councils
+        )
         uprns_in_council_area = address_report.get_uprns_in_addressbase()
         addresses_imported = address_report.get_addresses_with_station_id()
         station_ids = address_report.get_addresses_with_station_id()

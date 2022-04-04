@@ -77,6 +77,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
     batch_size = None
     imports_districts = False
     use_postcode_centroids = False
+    additional_report_councils = []
 
     def write_info(self, message):
         if self.verbosity > 0:
@@ -150,14 +151,19 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
                 self.council.pk,
                 expecting_districts=self.imports_districts,
                 csv_rows=self.csv_row_count,
+                additional_report_councils=self.additional_report_councils,
             )
         else:
             report = DataQualityReportBuilder(
-                self.council.pk, expecting_districts=self.imports_districts
+                self.council.pk,
+                expecting_districts=self.imports_districts,
+                additional_report_councils=self.additional_report_councils,
             )
-        station_report = StationReport(self.council.pk)
+        station_report = StationReport(self.council.pk, self.additional_report_councils)
         district_report = DistrictReport(self.council.pk)
-        address_report = AddressReport(self.council.pk)
+        address_report = AddressReport(
+            self.council.pk, additional_report_councils=self.additional_report_councils
+        )
 
         report.build_report()
 

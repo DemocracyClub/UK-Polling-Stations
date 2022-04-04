@@ -30,6 +30,7 @@ class Command(BaseStationsImporter, CsvMixin):
     stations_name = "eoni_stations.csv"
     stations_filetype = "csv"
     csv_encoding = "latin-1"
+    additional_report_councils = NIR_IDS
 
     def add_arguments(self, parser):
         parser.add_argument("eoni_csv", help="The path to the EONI export csv")
