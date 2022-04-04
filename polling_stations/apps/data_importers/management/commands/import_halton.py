@@ -13,19 +13,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
+        # Holy Trinity Church Trinity Street Runcorn WA7 1BJ
+        if record.polling_place_id == "2817":
+            record = record._replace(polling_place_easting="351595")
+            record = record._replace(polling_place_northing="383048")
 
-        if record.polling_place_id in [
-            "2809",  # Mobile Polling Station Galway Ave. Widnes
-            "2817",  # Holy Trinity Church Trinity Street Runcorn WA7 1BJ
-        ]:
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
-
-        if record.polling_place_id in [
-            "2561",  # Prescot Road Changing Rooms Hough Green Road Widnes WA8 7PD
-        ]:
-            record = record._replace(polling_place_postcode="")
-
+        # Mobile Polling Station Galway Ave. Widnes
+        if record.polling_place_id == "2809":
+            record = record._replace(polling_place_easting="350205")
+            record = record._replace(polling_place_northing="387147")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
