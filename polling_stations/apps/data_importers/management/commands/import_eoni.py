@@ -26,8 +26,7 @@ UPRN_TO_COUNCIL_CACHE = {}
 
 
 class Command(BaseStationsImporter, CsvMixin):
-    council_id = "EONI"
-    council_gss_code = "EONI"
+    council_id = "ANN"  # This is a hack to make the command initialise
     stations_name = "eoni_stations.csv"
     stations_filetype = "csv"
     csv_encoding = "latin-1"
@@ -49,8 +48,8 @@ class Command(BaseStationsImporter, CsvMixin):
         self.stations_path = self.eoni_data_root / "eoni_stations.csv"
         self.stations_only = options.get("stations_only")
         self.pre_process_data()
-        self.assign_uprn_to_councils()
         self.copy_data()
+        self.assign_uprn_to_councils()
         super().handle(*args, **options)
 
     def teardown(self, council):
@@ -58,7 +57,7 @@ class Command(BaseStationsImporter, CsvMixin):
         # is populated by this command previously, so deleting data form it
         # isn't useful.
         CustomFinder.objects.filter(area_code="N07000001").delete()
-        PollingStation.objects.filter(council=council).delete()
+        PollingStation.objects.filter(council_id__in=NIR_IDS).delete()
 
     def get_base_folder_path(self):
         return str(self.eoni_data_root)
@@ -132,16 +131,19 @@ class Command(BaseStationsImporter, CsvMixin):
 
     def copy_data(self):
         # Clear old data
-
         # Include the fake "EONI" ID in the clean up, just in case
-        NIR_AND_EONI = NIR_IDS[:]
+        NIR_AND_EONI = [
+            c.geography.gss
+            for c in Council.objects.filter(council_id__in=NIR_IDS).select_related(
+                "geography"
+            )
+        ]
         NIR_AND_EONI.append("EONI")
         PollingStation.objects.filter(council_id__in=NIR_AND_EONI).delete()
 
         if not self.stations_only:
             Address.objects.filter(uprntocouncil__lad__in=NIR_AND_EONI).delete()
             UprnToCouncil.objects.filter(lad__in=NIR_AND_EONI).delete()
-
             cursor = connection.cursor()
             cursor.copy_expert(
                 "COPY addressbase_address FROM STDIN CSV HEADER",
