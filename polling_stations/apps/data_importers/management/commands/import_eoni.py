@@ -1,16 +1,14 @@
 import csv
-import tempfile
 from pathlib import Path
 
 from django.contrib.gis.geos import Point
-from django.core.management import BaseCommand
 from django.db import connection
-from django.forms.models import model_to_dict
 
 from addressbase.models import UprnToCouncil, Address
+from councils.management.commands.import_councils import NIR_IDS
 from councils.models import Council
 from data_importers.base_importers import BaseStationsImporter, CsvMixin
-from data_importers.data_types import StationSet, AddressList
+from data_importers.data_types import StationSet
 from pollingstations.models import PollingStation, CustomFinder
 
 ADDRESSES_FIELDS = ["uprn", "address", "postcode", "location", "addressbase_postal"]
@@ -21,7 +19,10 @@ STATION_FIELDS = [
     "postcode",
     "location",
     "council_id",
+    "sample_uprn",
 ]
+
+UPRN_TO_COUNCIL_CACHE = {}
 
 
 class Command(BaseStationsImporter, CsvMixin):
@@ -48,8 +49,8 @@ class Command(BaseStationsImporter, CsvMixin):
         self.stations_path = self.eoni_data_root / "eoni_stations.csv"
         self.stations_only = options.get("stations_only")
         self.pre_process_data()
+        self.assign_uprn_to_councils()
         self.copy_data()
-        self.council = self.add_pseudo_council()
         super().handle(*args, **options)
 
     def teardown(self, council):
@@ -117,6 +118,7 @@ class Command(BaseStationsImporter, CsvMixin):
                     "location_y": row["PREM_Y_COR"],
                     "location_x": row["PREM_X_COR"],
                     "council_id": "EONI",
+                    "sample_uprn": row["PRO_UPRN"].strip(),
                 }
             for internal_council_id, station in station_data.items():
                 location = Point(
@@ -130,11 +132,15 @@ class Command(BaseStationsImporter, CsvMixin):
 
     def copy_data(self):
         # Clear old data
-        PollingStation.objects.filter(council_id="EONI").delete()
+
+        # Include the fake "EONI" ID in the clean up, just in case
+        NIR_AND_EONI = NIR_IDS[:]
+        NIR_AND_EONI.append("EONI")
+        PollingStation.objects.filter(council_id__in=NIR_AND_EONI).delete()
 
         if not self.stations_only:
-            Address.objects.filter(uprntocouncil__lad="EONI").delete()
-            UprnToCouncil.objects.filter(lad="EONI").delete()
+            Address.objects.filter(uprntocouncil__lad__in=NIR_AND_EONI).delete()
+            UprnToCouncil.objects.filter(lad__in=NIR_AND_EONI).delete()
 
             cursor = connection.cursor()
             cursor.copy_expert(
@@ -146,41 +152,42 @@ class Command(BaseStationsImporter, CsvMixin):
                 open(self.uprn_to_council_path),
             )
 
-    def add_pseudo_council(self):
-        """
-        EONI isn't a real council, but people only need to contact EONI about
-        elections, and never the local authority.
-
-        Because of this, we create a fake council with EONI's contact details
-        that we can link each NI address to.
-        """
-        random_ni_council = Council.objects.filter(
-            identifiers__icontains="N09000"
-        ).first()
-        new_council_data = model_to_dict(random_ni_council)
-        new_council_data.pop("users", None)
-        new_council_data["council_id"] = "EONI"
-        new_council_data["identifiers"] = ["EONI"]
-
-        council, _ = Council.objects.update_or_create(
-            council_id=new_council_data.pop("council_id"), defaults=new_council_data
+    def assign_uprn_to_councils(self):
+        ni_councils = Council.objects.filter(council_id__in=NIR_IDS).select_related(
+            "geography"
         )
-        return council
+        for council in ni_councils:
+            uprns_in_council = UprnToCouncil.objects.filter(lad="EONI").filter(
+                uprn__location__within=council.geography.geography
+            )
+            uprns_in_council.update(lad=council.geography.gss)
 
     def station_record_to_dict(self, record):
-        return {
-            "internal_council_id": getattr(record, "internal_council_id").strip(),
-            "postcode": record.postcode,
-            "address": record.address,
-            "location": Point().from_ewkt(record.location),
-        }
+        if not record.sample_uprn in UPRN_TO_COUNCIL_CACHE:
+            UPRN_TO_COUNCIL_CACHE[record.sample_uprn] = Council.objects.get(
+                identifiers__contains=[
+                    UprnToCouncil.objects.get(uprn=record.sample_uprn).lad
+                ]
+            )
+        station_council = UPRN_TO_COUNCIL_CACHE[record.sample_uprn]
+        if station_council == self.council:
+            return {
+                "internal_council_id": getattr(record, "internal_council_id").strip(),
+                "postcode": record.postcode,
+                "address": record.address,
+                "location": Point().from_ewkt(record.location),
+            }
 
     def import_data(self):
         # We only need to import stations as addresses and UPRN to Council
         # is added using COPY
-        self.stations = StationSet()
-        self.import_polling_stations()
-        self.stations.save()
+        ni_councils = Council.objects.filter(council_id__in=NIR_IDS)
+        for council in ni_councils:
+            self.council = council
+            self.council_id = council.council_id
+            self.stations = StationSet()
+            self.import_polling_stations()
+            self.stations.save()
 
     def check_in_council_bounds(self, station_record):
         if not station_record["postcode"].startswith("BT"):
