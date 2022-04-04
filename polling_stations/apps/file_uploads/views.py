@@ -242,7 +242,7 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
         )
         context["STATIONS"] = []
         example_uprn_map = dict(
-            UprnToCouncil.objects.filter(lad="W06000020")
+            UprnToCouncil.objects.filter(lad=council_from_default_db.geography.gss)
             .values("polling_station_id")
             .annotate(uprn=Max("uprn__uprn"))
             .values_list("polling_station_id", "uprn")
