@@ -56,6 +56,7 @@ class Command(BaseStationsImporter, CsvMixin):
         ]
         self.stations_only = options.get("stations_only")
         self.pre_process_data()
+        self.clear_old_data()
         self.copy_data()
         self.assign_uprn_to_councils()
         super().handle(*args, **options)
@@ -139,21 +140,24 @@ class Command(BaseStationsImporter, CsvMixin):
                 station["location"] = location.ewkt
                 stations.writerow(station)
 
-    def copy_data(self):
-        # Clear old data
-        # Include the fake "EONI" ID in the clean up, just in case
-        NIR_AND_EONI = [
-            c.geography.gss
-            for c in Council.objects.filter(council_id__in=NIR_IDS).select_related(
-                "geography"
-            )
-        ]
-        NIR_AND_EONI.append("EONI")
-        PollingStation.objects.filter(council_id__in=NIR_AND_EONI).delete()
+    def clear_old_data(self):
+        # Polling stations use reg codes
+        PollingStation.objects.filter(council_id__in=NIR_IDS).delete()
 
         if not self.stations_only:
+            # UprnToCouncil uses GSS codes
+            NIR_AND_EONI = [
+                c.geography.gss
+                for c in Council.objects.filter(council_id__in=NIR_IDS).select_related(
+                    "geography"
+                )
+            ]
+            NIR_AND_EONI.append("EONI")  # Include fake 'EONI' gss just in case
             Address.objects.filter(uprntocouncil__lad__in=NIR_AND_EONI).delete()
             UprnToCouncil.objects.filter(lad__in=NIR_AND_EONI).delete()
+
+    def copy_data(self):
+        if not self.stations_only:
             cursor = connection.cursor()
             cursor.copy_expert(
                 "COPY addressbase_address FROM STDIN CSV HEADER",
