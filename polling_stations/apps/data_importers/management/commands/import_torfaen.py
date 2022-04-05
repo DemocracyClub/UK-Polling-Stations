@@ -60,6 +60,7 @@ class Command(BaseHalaroseCsvImporter, AdvanceVotingMixin):
             postcode="NP4 6YB",
             location=Address.objects.get(uprn=100101048589).location,
             opening_times=opening_times.as_string_table(),
+            council=self.council,
         )
         advance_station.save()
         UprnToCouncil.objects.filter(lad=self.council.geography.gss).update(

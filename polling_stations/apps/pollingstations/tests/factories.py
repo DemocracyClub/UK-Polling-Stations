@@ -42,3 +42,4 @@ class AdvanceVotingStationFactory(factory.django.DjangoModelFactory):
     address = factory.Faker("address", locale="en_GB")
     postcode = factory.Faker("postcode", locale="en_GB")
     location = factory.Faker("geo_point", country_code="GB")
+    council = factory.SubFactory(CouncilFactory)

@@ -150,6 +150,7 @@ class AdvanceVotingStation(models.Model):
     address = models.TextField(blank=True, null=True)
     location = models.PointField(null=True, blank=True)
     opening_times = JSONField(null=True)
+    council = models.ForeignKey(Council, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name} ({self.postcode})"
