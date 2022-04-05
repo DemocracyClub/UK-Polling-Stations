@@ -38,13 +38,13 @@ class Command(BaseHalaroseCsvImporter):
 
         if record.housepostcode in [
             "EH31 2B",
-            "EH32 0LN",
-            "EH31 2HS",
+            "EH32 0LN",
+            "EH31 2HS",
             "EH21 8F",
-            "EH35 5ND",
+            "EH35 5ND",
             "EH32 0F",
-            "EH39 5EY",
-            "EH41 4DQ",
+            "EH39 5EY",
+            "EH41 4DQ",
         ]:
             return None
 
