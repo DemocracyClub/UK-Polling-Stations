@@ -39,6 +39,9 @@ class Command(BaseStationsImporter, CsvMixin):
             help="Don't process address, only update stations",
             action="store_true",
         )
+        parser.add_argument(
+            "--cleanup", help="Delete intermediate CSVs", action="store_true"
+        )
 
     def handle(self, *args, **options):
         self.eoni_export_path = Path(options["eoni_csv"])
@@ -46,11 +49,18 @@ class Command(BaseStationsImporter, CsvMixin):
         self.addresses_path = self.eoni_data_root / "eoni_address.csv"
         self.uprn_to_council_path = self.eoni_data_root / "eoni_uprn_to_council.csv"
         self.stations_path = self.eoni_data_root / "eoni_stations.csv"
+        self.paths = [
+            self.addresses_path,
+            self.uprn_to_council_path,
+            self.stations_path,
+        ]
         self.stations_only = options.get("stations_only")
         self.pre_process_data()
         self.copy_data()
         self.assign_uprn_to_councils()
         super().handle(*args, **options)
+        if options.get("cleanup"):
+            [path.unlink() for path in self.paths if path.exists()]
 
     def teardown(self, council):
         # Only remove old polling stations, as the UPRN to Council table
