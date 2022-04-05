@@ -37,6 +37,7 @@ class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
             postcode="EX1 1JN",
             location=Point(-3.5245510056787057, 50.72486002944331, srid=4326),
             opening_times=opening_times.as_string_table(),
+            council=self.council,
         )
         advance_station.save()
         UprnToCouncil.objects.filter(lad=self.council.geography.gss).update(
