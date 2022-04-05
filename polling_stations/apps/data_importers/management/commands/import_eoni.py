@@ -65,24 +65,24 @@ class Command(BaseStationsImporter, CsvMixin):
     def pre_process_data(self):
         if not self.stations_only:
             addresses = csv.DictWriter(
-                open(self.addresses_path, "w", encoding="latin-1"),
+                open(self.addresses_path, "w", encoding=self.csv_encoding),
                 fieldnames=ADDRESSES_FIELDS,
             )
             addresses.writeheader()
             uprns = csv.DictWriter(
-                open(self.uprn_to_council_path, "w", encoding="latin-1"),
+                open(self.uprn_to_council_path, "w", encoding=self.csv_encoding),
                 fieldnames=UPRN_FIELDS,
             )
             uprns.writeheader()
 
         stations = csv.DictWriter(
-            open(self.stations_path, "w", encoding="latin-1"),
+            open(self.stations_path, "w", encoding=self.csv_encoding),
             fieldnames=STATION_FIELDS,
         )
         stations.writeheader()
         station_data = {}
 
-        with self.eoni_export_path.open("r", encoding="latin-1") as eoni_csv:
+        with self.eoni_export_path.open("r", encoding=self.csv_encoding) as eoni_csv:
             # Do a single loop over the whole data file
             reader = csv.DictReader(eoni_csv)
             for row in reader:
