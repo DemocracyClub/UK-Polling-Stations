@@ -1,5 +1,3 @@
-import pdb
-
 from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseHalaroseCsvImporter
 

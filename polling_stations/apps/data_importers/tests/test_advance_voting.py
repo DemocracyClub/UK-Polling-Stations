@@ -1,17 +1,10 @@
 import os
-import sys
-import tempfile
-from pathlib import Path
 
-from django.conf import settings
-from django.contrib.gis.geos import Point
-from django.test import TestCase, override_settings
-
+from django.test import TestCase
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
-from data_importers.base_importers import BaseImporter, BaseStationsImporter
-from data_importers.data_types import StationSet
+from data_importers.base_importers import BaseImporter
 from data_importers.ems_importers import BaseXpressDemocracyClubCsvImporter
 from data_importers.mixins import AdvanceVotingMixin
 from pollingstations.models import PollingStation, AdvanceVotingStation
