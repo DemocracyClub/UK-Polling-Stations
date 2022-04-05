@@ -5,7 +5,7 @@ from django.contrib.gis.geos import Point
 from django.db import connection
 
 from addressbase.models import UprnToCouncil, Address
-from councils.management.commands.import_councils import NIR_IDS
+from polling_stations.settings.constants.councils import NIR_IDS
 from councils.models import Council
 from data_importers.base_importers import BaseStationsImporter, CsvMixin
 from data_importers.data_types import StationSet

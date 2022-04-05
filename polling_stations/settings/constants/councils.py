@@ -37,3 +37,18 @@ WELSH_COUNCIL_NAMES = {
     "VGL": "Cyngor Bwrdeistref Sirol Bro Morgannwg",  # The Vale of Glamorgan County Borough Council
     "WRX": "Cyngor Bwrdeistref Sirol Wrecsam",  # Wrexham County Borough Council
 }
+
+
+NIR_IDS = [
+    "ABC",
+    "AND",
+    "ANN",
+    "BFS",
+    "CCG",
+    "DRS",
+    "FMO",
+    "LBC",
+    "MEA",
+    "MUL",
+    "NMD",
+]
