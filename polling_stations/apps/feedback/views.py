@@ -34,10 +34,15 @@ class FeedbackFormView(UpdateView):
 class RecordJsonFeedback(View):
     def post(self, request):
         found_useful = request.POST.get("found_useful")
+        vote = request.POST.get("vote")
         source_url = request.POST.get("source_url")
         token = request.POST.get("token")
         Feedback.objects.update_or_create(
             token=token,
-            defaults={"found_useful": found_useful, "source_url": source_url},
+            defaults={
+                "found_useful": found_useful,
+                "vote": vote,
+                "source_url": source_url,
+            },
         )
         return HttpResponse()
