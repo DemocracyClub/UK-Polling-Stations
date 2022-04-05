@@ -4,10 +4,10 @@ from django.core.management.base import BaseCommand
 from addressbase.models import UprnToCouncil
 from councils.models import Council
 from data_importers.models import DataQuality
-from pollingstations.models import PollingStation, PollingDistrict
+from pollingstations.models import PollingStation, PollingDistrict, AdvanceVotingStation
 
 """
-Clear PollingDistrict and PollingStation models
+Clear PollingDistrict, PollingStation, and AdvancedVotingStation models
 Clear polling_station_id field in UprnToCouncil model
 Clear report, num_addresses, num_districts and num_stations
 fields in DataQuality model
@@ -65,6 +65,7 @@ class Command(BaseCommand):
 
                 PollingStation.objects.filter(council=council_id).delete()
                 PollingDistrict.objects.filter(council=council_id).delete()
+                AdvanceVotingStation.objects.filter(council=council_id).delete()
 
                 UprnToCouncil.objects.filter(lad=gss_code).update(polling_station_id="")
 
@@ -80,6 +81,7 @@ class Command(BaseCommand):
             print("Deleting ALL data...")
             PollingDistrict.objects.all().delete()
             PollingStation.objects.all().delete()
+            AdvanceVotingStation.objects.all().delete()
 
             UprnToCouncil.objects.exclude(polling_station_id="").update(
                 polling_station_id=""
