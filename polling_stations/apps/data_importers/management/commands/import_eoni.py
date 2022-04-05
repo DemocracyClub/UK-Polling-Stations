@@ -46,14 +46,12 @@ class Command(BaseStationsImporter, CsvMixin):
     def handle(self, *args, **options):
         self.eoni_export_path = Path(options["eoni_csv"])
         self.eoni_data_root = self.eoni_export_path.absolute().parent
-        self.addresses_path = self.eoni_data_root / "eoni_address.csv"
-        self.uprn_to_council_path = self.eoni_data_root / "eoni_uprn_to_council.csv"
-        self.stations_path = self.eoni_data_root / "eoni_stations.csv"
-        self.paths = [
-            self.addresses_path,
-            self.uprn_to_council_path,
-            self.stations_path,
-        ]
+
+        self.paths = {
+            "addresses": self.eoni_data_root / "eoni_address.csv",
+            "uprn_to_council": self.eoni_data_root / "eoni_uprn_to_council.csv",
+            "stations": self.eoni_data_root / "eoni_stations.csv",
+        }
         self.stations_only = options.get("stations_only")
         self.pre_process_data()
         self.clear_old_data()
@@ -61,7 +59,7 @@ class Command(BaseStationsImporter, CsvMixin):
         self.assign_uprn_to_councils()
         super().handle(*args, **options)
         if options.get("cleanup"):
-            [path.unlink() for path in self.paths if path.exists()]
+            [path.unlink() for path in self.paths.values() if path.exists()]
 
     def teardown(self, council):
         # Only remove old polling stations, as the UPRN to Council table
@@ -76,18 +74,18 @@ class Command(BaseStationsImporter, CsvMixin):
     def pre_process_data(self):
         if not self.stations_only:
             addresses = csv.DictWriter(
-                open(self.addresses_path, "w", encoding=self.csv_encoding),
+                open(self.paths["addresses"], "w", encoding=self.csv_encoding),
                 fieldnames=ADDRESSES_FIELDS,
             )
             addresses.writeheader()
             uprns = csv.DictWriter(
-                open(self.uprn_to_council_path, "w", encoding=self.csv_encoding),
+                open(self.paths["uprn_to_council"], "w", encoding=self.csv_encoding),
                 fieldnames=UPRN_FIELDS,
             )
             uprns.writeheader()
 
         stations = csv.DictWriter(
-            open(self.stations_path, "w", encoding=self.csv_encoding),
+            open(self.paths["stations"], "w", encoding=self.csv_encoding),
             fieldnames=STATION_FIELDS,
         )
         stations.writeheader()
@@ -161,11 +159,11 @@ class Command(BaseStationsImporter, CsvMixin):
             cursor = connection.cursor()
             cursor.copy_expert(
                 "COPY addressbase_address FROM STDIN CSV HEADER",
-                open(self.addresses_path),
+                open(self.paths["addresses"]),
             )
             cursor.copy_expert(
                 "COPY addressbase_uprntocouncil FROM STDIN WITH NULL AS 'NULL' CSV HEADER",
-                open(self.uprn_to_council_path),
+                open(self.paths["uprn_to_council"]),
             )
 
     def assign_uprn_to_councils(self):
