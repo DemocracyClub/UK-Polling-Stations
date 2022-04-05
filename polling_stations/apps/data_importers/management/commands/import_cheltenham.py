@@ -35,6 +35,6 @@ class Command(BaseHalaroseCsvImporter):
 
         # ST NICOLAS CHURCH HALL SWINDON LANE CHELTENHAM, GL50 4PF
         if record.pollingstationnumber == "182":
-            record = record._replace(pollingstationpostcode="GL50 4PF")
+            record = record._replace(pollingstationpostcode="GL50 4PA")
 
         return super().station_record_to_dict(record)
