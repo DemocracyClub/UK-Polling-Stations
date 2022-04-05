@@ -13,6 +13,7 @@ from councils.models import Council, CouncilGeography
 from polling_stations.settings.constants.councils import (
     WELSH_COUNCIL_NAMES,
     COUNCIL_ID_FIELD,
+    NIR_IDS,
 )
 
 
@@ -20,21 +21,6 @@ def union_areas(a1, a2):
     if not a1:
         return a2
     return MultiPolygon(a1.union(a2))
-
-
-NIR_IDS = [
-    "ABC",
-    "AND",
-    "ANN",
-    "BFS",
-    "CCG",
-    "DRS",
-    "FMO",
-    "LBC",
-    "MEA",
-    "MUL",
-    "NMD",
-]
 
 
 class Command(BaseCommand):
