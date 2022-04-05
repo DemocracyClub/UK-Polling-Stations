@@ -124,7 +124,7 @@ class Command(BaseStationsImporter, CsvMixin):
                 station_data[row["PREM_ID"]] = {
                     "internal_council_id": row["PREM_ID"],
                     "postcode": row["PREM_POSTCODE"].strip(),
-                    "address": row["PREM_FULLADDRESS"],
+                    "address": f'{row["PREM_NAME"].strip()}, {row["PREM_FULLADDRESS"].strip()}',
                     "location_y": row["PREM_Y_COR"],
                     "location_x": row["PREM_X_COR"],
                     "council_id": "EONI",
