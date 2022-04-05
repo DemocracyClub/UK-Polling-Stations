@@ -55,3 +55,4 @@ class AdvanceVotingMixin(BaseBaseImporter):
         UprnToCouncil.objects.filter(lad=council.geography.gss).update(
             advance_voting_station=None
         )
+        AdvanceVotingStation.objects.filter(council=council).delete()
