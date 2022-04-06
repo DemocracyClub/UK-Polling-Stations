@@ -20,5 +20,5 @@ class Command(BaseDemocracyCountsCsvImporter):
 
     def station_record_to_dict(self, record):
         if record.stationcode in ["W01 001", "W05 053"]:
-            return None
+            record = record._replace(xordinate="", yordinate="")
         return super().station_record_to_dict(record)
