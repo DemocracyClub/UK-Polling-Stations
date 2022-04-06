@@ -1,22 +1,49 @@
+from addressbase.models import Address, UprnToCouncil
+from core.opening_times import OpeningTimes
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.mixins import AdvanceVotingMixin
+from pollingstations.models import AdvanceVotingStation
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalaroseCsvImporter, AdvanceVotingMixin):
     council_id = "CAY"
-    addresses_name = "2021-04-09T11:11:07.483794/polling_station_export-2021-04-08.csv"
-    stations_name = "2021-04-09T11:11:07.483794/polling_station_export-2021-04-08.csv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-04-06T17:29:17.555011/polling_station_export-2022-04-06.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-04-06T17:29:17.555011/polling_station_export-2022-04-06.csv"
+    )
+    elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
-        if record.housepostcode in ["CF83 8RL", "NP11 6JE", "NP10 9GG"]:
+        if record.housepostcode in [
+            "NP22 5HU",
+            "NP10 9GG",
+            "NP11 6JE",
+            "CF83 8RL",
+        ]:
             return None  # split
 
         return super().address_record_to_dict(record)
 
-    def station_record_to_dict(self, record):
-        if record.pollingstationnumber == "123":
-            # Conflicting sources on postcode
-            # Actual location: 318554.925,198088.857
-            record = record._replace(pollingstationpostcode="")
+    def add_advance_voting_stations(self):
+        opening_times = OpeningTimes()
+        opening_times.add_open_time("2022-04-30", "10:00", "16:00")
+        opening_times.add_open_time("2022-05-01", "10:00", "16:00")
 
-        return super().station_record_to_dict(record)
+        advance_station = AdvanceVotingStation(
+            name="Council Headquarters",
+            address="""Penallta House,
+            Tredomen Business Park,
+            Ystrad Mynach,
+            Hengoed
+                """,
+            postcode="CF82 7PG",
+            location=Address.objects.get(uprn=43164445).location,
+            opening_times=opening_times.as_string_table(),
+            council=self.council,
+        )
+        advance_station.save()
+        UprnToCouncil.objects.filter(lad=self.council.geography.gss).update(
+            advance_voting_station=advance_station
+        )
