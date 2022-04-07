@@ -19,6 +19,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Coigach Community Hall, Achiltibuie
         if record.stationcode in ["W01 001", "W05 053"]:
-            record = record._replace(xordinate="", yordinate="")
+            record = record._replace(xordinate="202914", yordinate="907677")
         return super().station_record_to_dict(record)

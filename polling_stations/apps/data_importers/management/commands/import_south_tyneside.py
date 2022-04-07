@@ -21,6 +21,31 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="437517")
             record = record._replace(polling_place_northing="564289")
 
+        # Mortimer Community Centre, Polling Station B
+        if record.polling_place_id == "3701":
+            record = record._replace(polling_place_easting="436749")
+            record = record._replace(polling_place_northing="565333")
+
+        # West Boldon Primary School, Polling Station B
+        if record.polling_place_id == "3702":
+            record = record._replace(polling_place_easting="435412")
+            record = record._replace(polling_place_northing="561508")
+
+        # Scout Hut, Polling Station B, Rear of Grey Horse Pub
+        if record.polling_place_id == "3706":
+            record = record._replace(polling_place_easting="436472")
+            record = record._replace(polling_place_northing="561331")
+
+        # St Josephs Community Hall, Polling Station B
+        if record.polling_place_id == "3704":
+            record = record._replace(polling_place_easting="433025")
+            record = record._replace(polling_place_northing="562375")
+
+        #  Primrose Community Centre, Polling Station B
+        if record.polling_place_id == "3703":
+            record = record._replace(polling_place_easting="432889")
+            record = record._replace(polling_place_northing="563590")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):

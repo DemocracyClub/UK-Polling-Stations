@@ -20,6 +20,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ):
             record = record._replace(polling_place_easting="0")
             record = record._replace(polling_place_northing="0")
+
+        # St Marys CE Primary School
+        if record.polling_place_id == "9043":
+            record = record._replace(polling_place_postcode="N8 7BU")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):

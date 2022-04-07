@@ -11,6 +11,26 @@ class Command(BaseHalaroseCsvImporter):
     )
     elections = ["2022-05-05"]
 
+    def station_record_to_dict(self, record):
+
+        # Danubius Hotel
+        if record.pollingstationnumber == "74":
+            rec = super().station_record_to_dict(record)
+            rec[
+                "address"
+            ] = "Danubius Hotel\n18 Lodge Road\n(Entrance on Park Road)\nSt John's Wood\nLondon"
+            return rec
+
+        # Seymour Leisure Centre
+        if record.pollingstationnumber == "48":
+            rec = super().station_record_to_dict(record)
+            rec[
+                "address"
+            ] = "Seymour Leisure Centre\nSeymour Place\n(Entrance on Shouldham Street)\nLondon"
+            return rec
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
 
         rec = super().address_record_to_dict(record)
