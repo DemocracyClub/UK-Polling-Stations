@@ -1,22 +1,22 @@
-from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "SCB"
-    addresses_name = "2021-03-25T12:10:21.663474/Democracy Club Polling Districts.csv"
-    stations_name = "2021-03-25T12:10:21.663474/Democracy Club Polling Places.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2022-05-05/2022-04-07T10:22:42.135500/Polling Districts.csv"
+    stations_name = "2022-05-05/2022-04-07T10:22:42.135500/Polling Stations.csv"
+    elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
-        if record.postcode in ["EH45 9JJ", "TD1 3NY", "TD12 4LG", "TD5 8PT"]:
+        if record.postcode in [
+            "TD1 3NY",
+            "TD9 0SP",
+        ]:
             return None
         if record.uprn in [
             "116074488",
-            "116090401",
-            "116050796",
-            "116060667",
-            "116076251",
-            "116062629",
+            "116095151",
+            "116054256",
         ]:
             return None
         return super().address_record_to_dict(record)
