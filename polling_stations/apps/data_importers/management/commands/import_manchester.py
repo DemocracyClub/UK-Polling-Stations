@@ -21,11 +21,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="387244", polling_place_northing="401944"
             )
 
-        # Holy Trinity Church Hall Goodman Street Blackley Manchester M9 4BW (386441,402233)
-        if record.polling_place_id == "9332":
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
-
         if record.addressline1 in ["NEW POLLING STATION", "CHANGE OF STATION"]:
             record = record._replace(addressline1="")
 
