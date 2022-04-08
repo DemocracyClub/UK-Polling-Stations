@@ -1,5 +1,5 @@
-from django.core.exceptions import ObjectDoesNotExist
-from addressbase.models import Address
+from django.utils.text import slugify
+
 from data_importers.github_importer import BaseGitHubImporter
 
 
@@ -8,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "DND"
-    elections = ["2021-05-06"]
+    elections = ["2022-05-05"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Dundee"
     geom_type = "geojson"
 
@@ -21,26 +21,14 @@ class Command(BaseGitHubImporter):
             "area": poly,
         }
 
-    def get_address(self, uprn):
-        ab = Address.objects.get(pk=uprn.lstrip("0"))
-        return (ab.address, ab.postcode)
-
     def station_record_to_dict(self, record):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
-
-        # Get full address from AddressBase if we can
-        try:
-            address, postcode = self.get_address(record["UPRN"].lstrip("0"))
-        except ObjectDoesNotExist:
-            address = record["NAME"]
-            postcode = ""
-
         return {
-            "internal_council_id": record["ID"],
-            "address": address,
-            "postcode": postcode,
+            "internal_council_id": f'{slugify(record["WARD"])}-{record["POLLINGSTATIONID"]}',
+            "address": record["PS_ADDRESS"],
+            "postcode": "",
             "location": location,
-            "polling_district_id": record["POLLING_DISTRICT"],
+            "polling_district_id": record["POLLINGDISTRICTREFERENCE"],
         }
