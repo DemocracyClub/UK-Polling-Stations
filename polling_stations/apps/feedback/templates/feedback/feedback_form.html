@@ -17,13 +17,15 @@
             <label class="link-button" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
         {% endfor %}
     </span>
-    <h3><span aria-hidden="true">🗳️</span>
-        {% trans "Has this information made you more likely to vote?" %}
-        <span aria-hidden="true">🗳️</span></h3>
-    {% for choice in feedback_form.vote %}
-        {{ choice.tag }}
-        <label class="link-button" for="{{ choice.id_for_label }}"> {{ choice.choice_label }}</label>
-    {% endfor %}
+    <div id="vote_choices_container">
+        <h3><span aria-hidden="true">🗳️</span>
+            {% trans "Has this information made you more likely to vote?" %}
+            <span aria-hidden="true">🗳️</span></h3>
+        {% for choice in feedback_form.vote %}
+            {{ choice.tag }}
+            <label class="link-button" for="{{ choice.id_for_label }}"> {{ choice.choice_label }}</label>
+        {% endfor %}
+    </div>
 
     <div class="comments_container">
         <p>{% trans "Can you tell us anything more?" %}</p>
