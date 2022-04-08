@@ -44,13 +44,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id in [
-            "13693",  # South Pudsey Community Education Training Centre,(Access via Lumby Lane), Pudsey
-            "13304",  # St Peters Church, (Worship Area), Hough Lane
-            "13575",  # Seacroft Community Hub, (Boardroom 1),  1 Seacroft Avenue
-        ]:
+        # South Pudsey Community Education Training Centre,(Access via Lumby Lane), Pudsey
+        if record.polling_place_id == "13693":
             record = record._replace(
-                polling_place_easting="", polling_place_northing=""
+                polling_place_easting="422971", polling_place_northing="432645"
+            )
+        # St Peters Church, (Worship Area), Hough Lane
+        if record.polling_place_id == "13304":
+            record = record._replace(
+                polling_place_easting="424519", polling_place_northing="435050"
+            )
+        # Seacroft Community Hub, (Boardroom 1),  1 Seacroft Avenue
+        if record.polling_place_id == "13575":
+            record = record._replace(
+                polling_place_easting="435693", polling_place_northing="436219"
             )
 
         # Corrections from council
