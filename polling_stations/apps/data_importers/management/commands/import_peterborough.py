@@ -20,11 +20,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # St Andrews Church Russell Hill Thornhaugh Peterborough PE6 6NW
         if record.polling_place_id == "9397":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="PE8 6HL")
 
-        # Hampton Community Sports Association, PE7 8DN
-        if record.polling_place_id == "9367":
-            record = record._replace(polling_place_postcode="")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
