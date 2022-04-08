@@ -3,22 +3,13 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "WEW"
-    addresses_name = "2021-04-16T15:42:48.310782/polling_station_export-2021-04-16.csv"
-    stations_name = "2021-04-16T15:42:48.310782/polling_station_export-2021-04-16.csv"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
+    addresses_name = (
+        "2022-05-05/2022-04-08T11:34:35.289156/polling_station_export-2022-04-07.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-04-08T11:34:35.289156/polling_station_export-2022-04-07.csv"
+    )
+    elections = ["2022-05-05"]
 
-    def address_record_to_dict(self, record):
-
-        if record.housepostcode in [
-            "AL10 0TA",
-            "AL10 0SZ",
-            "AL6 9AF",
-            "AL6 9FJ",
-            "AL6 9HT",
-            "AL10 9BG",
-            "AL7 2BQ",
-        ]:
-            return None
-
-        return super().address_record_to_dict(record)
+    # Checked the properties on Digswell Hill/Welwyn Bypass Road/Great North Road
+    # and White Hill, and concluded they're fine, despite looking embedded in another area.
