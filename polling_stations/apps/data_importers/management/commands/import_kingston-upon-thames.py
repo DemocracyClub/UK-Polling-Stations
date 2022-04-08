@@ -1,32 +1,8 @@
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseDemocracyCountsCsvImporter):
     council_id = "KTT"
-    elections = ["2021-05-06"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Kingston"
-    geom_type = "geojson"
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-
-        return {
-            "internal_council_id": record["CODE"],
-            "name": record["CODE"],
-            "area": poly,
-            "polling_station_id": record["CODE"],
-        }
-
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-
-        return {
-            "internal_council_id": record["CODE"],
-            "address": record["ADDRESS"],
-            "postcode": "",
-            "location": location,
-        }
+    addresses_name = "2022-05-05/2022-04-08T10:23:22.521537/RBK_Polling Districs.csv"
+    stations_name = "2022-05-05/2022-04-08T10:23:22.521537/RBK_Polling Stations.csv"
+    elections = ["2022-05-05"]
