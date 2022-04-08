@@ -9,18 +9,23 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-        var feedback_form = $('#feedback_form');
-        var feedback_form_token = $('#feedback_form').find('#id_token').val();
-        var csrfmiddlewaretoken = $('#feedback_form').find('[name=csrfmiddlewaretoken]').val();
-        $('#feedback_form').find('[name=found_useful]').click(function(el) {
-            var found_useful = $(this).val();
+        function post_partial_form (event) {
+            var radio_group = event.target
+            var radio_group_value = radio_group.value;
+            var radio_group_name = radio_group.name
             $.post('{% url 'json_feedback_view' %}', {
-                found_useful: found_useful,
+                [radio_group_name]: radio_group_value,
                 token: feedback_form_token,
                 csrfmiddlewaretoken: csrfmiddlewaretoken,
                 source_url: window.location.pathname
             });
-        });
+        }
+
+        var feedback_form = $('#feedback_form');
+        var feedback_form_token = $('#feedback_form').find('#id_token').val();
+        var csrfmiddlewaretoken = $('#feedback_form').find('[name=csrfmiddlewaretoken]').val();
+
+        $('#feedback_form').find('[type=radio]').click(post_partial_form);
 
         if ($('#feedback_form input[name=found_useful]:checked').val() === undefined) {
 
@@ -30,15 +35,30 @@
             ).insertAfter("#feedback_choices_container");
 
             $('#feedback_form input[name=found_useful]').click(function() {
-                var radio_value = $('#feedback_form input[name=found_useful]:checked').val();
-                if ((radio_value === 'YES') || (radio_value === 'NO')) {
-                    $("#feedback_form .comments_container").show();
-                    $("#report_form_container").hide();
-                }
-                if ((radio_value === 'PROBLEM')) {
+                var found_useful_radio_value = $('#feedback_form input[name=found_useful]:checked').val();
+                var vote_radio_value = $('#feedback_form input[name=vote]:checked').val();
+                if (((found_useful_radio_value === 'YES') || (found_useful_radio_value === 'NO')) &
+                    ((vote_radio_value === 'YES') || (vote_radio_value === 'NO'))) {
+                        $("#feedback_form .comments_container").show();
+                        $("#report_form_container").hide();
+                    }
+                if ((found_useful_radio_value === 'PROBLEM')) {
                     $("#feedback_form .comments_container").hide();
+                    $("#feedback_form #vote_choices_container").hide();
                     $("#report_form_container").show();
+                } else {
+                    $("#feedback_form #vote_choices_container").show();
                 }
+            });
+            $('#feedback_form input[name=vote]').click(function() {
+                var found_useful_radio_value = $('#feedback_form input[name=found_useful]:checked').val();
+                var vote_radio_value = $('#feedback_form input[name=vote]:checked').val();
+                if (((found_useful_radio_value === 'YES') || (found_useful_radio_value === 'NO')) &
+                    ((vote_radio_value === 'YES') || (vote_radio_value === 'NO'))) {
+                        $("#feedback_form .comments_container").show();
+                        $("#report_form_container").hide();
+                    }
+
             });
         }
 
