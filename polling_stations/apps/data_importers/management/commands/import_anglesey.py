@@ -4,45 +4,33 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "AGY"
     addresses_name = (
-        "2021-03-29T13:38:58.901511/Anglesey polling_station_export-2021-03-29.csv"
+        "2022-05-05/2022-03-25T12:55:17.013189/polling_station_export-2022-03-24.csv"
     )
     stations_name = (
-        "2021-03-29T13:38:58.901511/Anglesey polling_station_export-2021-03-29.csv"
+        "2022-05-05/2022-03-25T12:55:17.013189/polling_station_export-2022-03-24.csv"
     )
-    elections = ["2021-05-06"]
+    elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-        if record.pollingstationnumber == "22":
+        if record.pollingstationnumber == "21":
             # NEUADD BENTREF LLANFACHRAETH, LLANFACHRAETH, YNYS MON
             # Is LL65 2UH; should probably be LL65 4UL, but let's not guess
             record = record._replace(pollingstationpostcode="")
 
-        if record.pollingstationnumber == "21":
+        if record.pollingstationnumber == "20":
             # YSGOLDY CAPEL M C CARMEL CARMEL
             # Postcode isn't actually in Carmel, and not within polling area
             record = record._replace(pollingstationpostcode="")
-
-        if record.pollingstationnumber == "8":
-            # WOW CAERGYBI/HOLYHEAD YNYS MON LL65 2PB
-            # Station change
-            record = record._replace(
-                pollingstationname="WOW Training Centre",
-                pollingstationaddress_1="15a London Rd",
-                pollingstationaddress_2="Caergybi/Holyhead",
-                pollingstationaddress_3="YNYS MON",
-                pollingstationpostcode="LL65 2NE",
-            )
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         if record.housepostcode in [
             "LL65 1NU",
-            "LL65 1BG",
             "LL65 2ED",
-            "LL65 2EL",
-            "LL65 3SE",
             "LL72 8LJ",
+            "LL65 1BG",
+            "LL65 2EL",
             "LL74 8ST",
         ]:
             return None  # split
@@ -51,9 +39,8 @@ class Command(BaseHalaroseCsvImporter):
 
         if uprn in [
             "200002650495",  # suspicious distance, overlap
-            "200002649098",  # suspicious distance, overlap
             "10013457915",  # suspicious distance, overlap
+            "200002650498",  # suspicious distance, overlap; coincident
         ]:
             return None
-
         return super().address_record_to_dict(record)
