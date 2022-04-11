@@ -29,7 +29,8 @@ class Command(BaseStationsImporter, CsvMixin):
     council_id = "ANN"  # This is a hack to make the command initialise
     stations_name = "eoni_stations.csv"
     stations_filetype = "csv"
-    csv_encoding = "latin-1"
+    csv_encoding = "utf-8"
+    eoni_csv_encoding = "latin-1"
     additional_report_councils = NIR_IDS
 
     def add_arguments(self, parser):
@@ -91,7 +92,9 @@ class Command(BaseStationsImporter, CsvMixin):
         stations.writeheader()
         station_data = {}
 
-        with self.eoni_export_path.open("r", encoding=self.csv_encoding) as eoni_csv:
+        with self.eoni_export_path.open(
+            "r", encoding=self.eoni_csv_encoding
+        ) as eoni_csv:
             # Do a single loop over the whole data file
             reader = csv.DictReader(eoni_csv)
             for row in reader:
