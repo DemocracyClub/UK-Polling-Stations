@@ -484,12 +484,7 @@ class DataQualityReportBuilder:
         self.report.add_row(self.build_station_report())
         self.report.add_row(self.build_address_report())
 
-    def output_console_report(self):
-        console = Console()
-        console.print(self.report)
-
     def generate_string_report(self):
         recorder = Console(record=True)
-        with recorder.capture():
-            recorder.print(self.report)
+        recorder.print(self.report)
         return recorder.export_text()

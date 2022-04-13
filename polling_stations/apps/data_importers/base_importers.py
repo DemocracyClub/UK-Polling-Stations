@@ -166,15 +166,11 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
 
         # save a static copy in the DB that we can serve up on the website
         record = DataQuality.objects.get_or_create(council_id=self.council.pk)
-        record[0].report = report.generate_string_report()
         record[0].num_stations = station_report.get_stations_imported()
         record[0].num_districts = district_report.get_districts_imported()
         record[0].num_addresses = address_report.get_addresses_with_station_id()
-
+        record[0].report = report.generate_string_report()
         record[0].save()
-
-        # output to console
-        report.output_console_report()
 
     @property
     def data_path(self):
