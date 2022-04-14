@@ -1,18 +1,28 @@
 {% load i18n %}
-<p>{% trans "Your council is trialing a system that allow you to vote before polling day at a specific location." %}</p>
-<address>
-    {{ advance_voting_station }}
-    {{ advance_voting_station.name }}<br>
-    {{ advance_voting_station.address|linebreaksbr }}
-    {{ advance_voting_station.postcode }}
-</address>
+<div class="ds-card">
+    <div class="ds-card-body">
+        <h3>{% trans "Vote in advance" %}</h3>
+        <address>
+            {{ advance_voting_station }}
+            {{ advance_voting_station.name }}<br>
+            {{ advance_voting_station.address|linebreaksbr }}
+            {{ advance_voting_station.postcode }}
+        </address>
 
-{% if advance_voting_station.opening_times %}
-    <h4>{% trans "Opening times" %}</h4>
-    {% include "fragments/opening_times.html" %}
+        {% if advance_voting_station.opening_times %}
+            <h4>{% trans "Opening times" %}</h4>
+            {% include "fragments/opening_times.html" %}
 
-{% endif %}
+        {% endif %}
 
-{% if advance_voting_station.location %}
-    <div id="advance_voting_station_map" class="ds-card-image"></div>
-{% endif %}
+        <p>
+            {% blocktrans trimmed %}
+                You can deliver postal votes to this advance station during opening hours.
+                If you are acting as a proxy for someone, you can cast your proxy vote at this advance voting station"
+            {% endblocktrans %}
+        </p>
+    </div>
+    {% if advance_voting_station.location %}
+        <div id="advance_voting_station_map" class="ds-card-image"></div>
+    {% endif %}
+</div>
