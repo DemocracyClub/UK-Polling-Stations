@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import JSONField
 from django.utils.translation import ugettext as _
 
+
 from core.opening_times import OpeningTimes
 from councils.models import Council
 from uk_geo_utils.helpers import Postcode
@@ -66,8 +67,14 @@ class PollingStation(models.Model):
 class CustomFinderManager(models.Manager):
     def get_custom_finder(self, geocoder, postcode):
         try:
+            from addressbase.models import UprnToCouncil
+
+            eoni_data_in_db = UprnToCouncil.objects.filter(
+                uprn__postcode__startswith="BT"
+            ).exists()
+
             code = geocoder.get_code("lad")
-            if code.startswith("N"):
+            if code.startswith("N") and not eoni_data_in_db:
                 finder = self.get(pk="N07000001")
                 finder.message = _(finder.message)
                 """
