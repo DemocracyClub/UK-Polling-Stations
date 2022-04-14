@@ -13,6 +13,17 @@ class Command(BaseHalaroseCsvImporter):
             # 10034657547
             record = record._replace(pollingstationpostcode="CF48 2TU")
 
+        # Station Change from council
+        # REAR OF THE WINDSOR HOTEL & BAR
+        if record.pollingstationnumber == "37":
+            record = record._replace(
+                pollingstationname="MOBILE POLLING STATION",
+                pollingstationaddress_1="BELLE VUE TERRACE",
+                pollingstationaddress_2="MERTHYR VALE",
+                pollingstationaddress_3="MERTHYR TYDFIL",
+                pollingstationpostcode="CF48 4SP",
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):

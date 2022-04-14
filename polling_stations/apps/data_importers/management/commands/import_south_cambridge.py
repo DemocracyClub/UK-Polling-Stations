@@ -12,6 +12,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # Station change from council
+        if record.polling_place_id == "8757":
+            record = record._replace(
+                polling_place_name="St John the Evangelist Church",
+                polling_place_address_1="Church Road",
+                polling_place_address_2="Little Wilbraham",
+                polling_place_address_3="",
+                polling_place_address_4="Cambridge",
+                polling_place_postcode="CB21 5LE",
+            )
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
 
         if record.addressline6 in [

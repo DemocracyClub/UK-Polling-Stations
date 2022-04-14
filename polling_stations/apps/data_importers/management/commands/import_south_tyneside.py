@@ -13,6 +13,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
+        # All fixes from Council
         # Cleadon Park Health Centre, Polling Station A
         # Cleadon Park Health Centre, Polling Station B
         # *PLEASE USE PRINCE EDWARD ROAD ENTRANCE*
@@ -45,6 +46,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "3703":
             record = record._replace(polling_place_easting="432889")
             record = record._replace(polling_place_northing="563590")
+
+        #  Territorial Army (TA) Centre, Entrance off Highfield Road next to Callum Drive
+        if record.polling_place_id == "3694":
+            record = record._replace(polling_place_easting="438015")
+            record = record._replace(polling_place_northing="565762")
 
         return super().station_record_to_dict(record)
 
