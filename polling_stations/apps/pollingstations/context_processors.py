@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.conf import settings
 from django.utils.datetime_safe import datetime
 
@@ -10,7 +12,7 @@ NEXT_CHARISMATIC_ELECTION_DATE = getattr(
     settings, "NEXT_CHARISMATIC_ELECTION_DATE", None
 )
 NEXT_CHARISMATIC_ELECTION_DATE = (
-    datetime.strptime(NEXT_CHARISMATIC_ELECTION_DATE, "%Y-%m-%d")
+    datetime.strptime(NEXT_CHARISMATIC_ELECTION_DATE, "%Y-%m-%d").date()
     if NEXT_CHARISMATIC_ELECTION_DATE
     else None
 )
