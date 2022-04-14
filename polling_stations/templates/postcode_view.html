@@ -35,38 +35,30 @@
 {% block page_title %}{% trans "Your Polling Station" %}{% endblock page_title %}
 
 {% block content %}
-    <div class="ds-card">
-        <div class="ds-card-body">
 
-            {% if error %}
-                {% include "fragments/errors.html" %}
+    {% if error %}
+        {% include "fragments/errors.html" %}
+    {% else %}
+        {% if has_election %}
+
+            {% if custom %}
+                {% include "custom_finder.html" %}
             {% else %}
-                {% if has_election %}
 
-                    {% if custom %}
-                        {% include "custom_finder.html" %}
-                    {% else %}
-
-                        {% if we_know_where_you_should_vote %}
-                            {% include "fragments/polling_station_known.html" %}
-                        {% else %}
-                            {% include "fragments/polling_station_unknown.html" %}
-                        {% endif %}
-
-                    {% endif %}
-
+                {% if we_know_where_you_should_vote %}
+                    {% include "fragments/polling_station_known.html" %}
                 {% else %}
-                    {% include "fragments/no_election.html" %}
+                    {% include "fragments/polling_station_unknown.html" %}
                 {% endif %}
 
             {% endif %}
-        </div>
-        {% if has_election %}
-            {% if station.location %}
-                <div id="area_map" class="ds-card-image"></div>
-            {% endif %}
+
+        {% else %}
+            {% include "fragments/no_election.html" %}
         {% endif %}
-    </div>
+
+    {% endif %}
+
     {% include "fragments/register_to_vote.html" %}
     {% if has_election %}
         {% include "fragments/you_dont_need_poll_card.html" %}

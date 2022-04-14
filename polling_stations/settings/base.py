@@ -292,6 +292,8 @@ EMAIL_SIGNUP_API_KEY = ""
 BASICAUTH_DISABLE = True
 
 
+SHOW_ADVANCE_VOTING_STATIONS = True
+
 # settings for load balancer status check
 CHECK_SERVER_CLEAN = True
 CLEAN_SERVER_FILE = "~/clean"
