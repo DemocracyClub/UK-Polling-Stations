@@ -57,7 +57,7 @@ the following conditions can be observed in the response body:
                 + coordinates: (array[number], fixed-type)
                     + `-0.2770293269230769` (number)
                     + `50.83664266538461` (number)
-        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
         + `polling_station` (GeoPollingStation, nullable) - A GeoJSON polling station feature
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
@@ -95,7 +95,7 @@ the following conditions can be observed in the response body:
                 + coordinates: (array[number], fixed-type)
                     + `-0.26353977212676555` (number)
                     + `50.84477241345472` (number)
-        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
             + (object)
                 + url: `https://wheredoivote.co.uk/api/beta/address/60017557/` (string) - Call this URL to get data for this registered address
@@ -146,7 +146,7 @@ the following conditions can be observed in the response body:
                 + coordinates: (array[number], fixed-type)
                     + `-0.2770293269230769` (number)
                     + `50.83664266538461` (number)
-        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
         + `polling_station` (object, nullable) - A GeoJSON polling station feature
         + council (Council, nullable) - A Council object describing the local authority which covers this postcode. If we do not know the user's polling station, this can be used to provide contact info for their local council.
@@ -186,7 +186,7 @@ the following conditions can be observed in the response body:
                 + coordinates: (array[number], fixed-type)
                     + `-0.26353977212676555` (number)
                     + `50.84477241345472` (number)
-        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder. This will always be populated for users in Northern Ireland where Electoral Office for Northern Ireland run their own service.
+        + `custom_finder`: (string, nullable) - If we don't know a user's polling station, sometimes we can provide the URL of another polling station finder.
         + addresses (array[object], fixed-type) - An array of address objects containing the addresses applicable to this request (if necessary)
             + (object)
                 + url: `https://wheredoivote.co.uk/api/beta/address/60017559/` (string) - Call this URL to get data for this registered address
@@ -204,12 +204,13 @@ the following conditions can be observed in the response body:
 
 ## Group Northern Ireland
 
-WhereDoIVote will not hold any polling station data for Northern Ireland in 2019.
+WhereDoIVote will sometimes hold polling station data for Northern Ireland.
 
-If we don't know a user's polling station, sometimes we may provide an
-external link for more info in the `custom_finder` key. This will always
-be populated for users in Northern Ireland where the
-Electoral Office for Northern Ireland run their own service. e.g:
+If we hold data then the postcode and address endpoints will behave the same for locations in Northern Ireland as
+those in England, Scotland and Wales.
+
+If we don't have information about polling stations in Northern Ireland we provide an external link to the polling station
+finder service run by the Electoral Office for Northern Ireland run their own service. e.g:
 
 <pre><code>{
 ...
