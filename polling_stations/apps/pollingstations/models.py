@@ -1,12 +1,14 @@
 """
 Models for actual Polling Stations and Polling Districts!
 """
+from datetime import datetime
 from itertools import groupby
 import urllib.parse
 
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import JSONField
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 
 
@@ -168,6 +170,16 @@ class AdvanceVotingStation(models.Model):
         ).strip()
         return super().save(**kwargs)
 
+    @cached_property
+    def get_opening_times(self):
+        return OpeningTimes.from_dict(self.opening_times)
+
     @property
     def opening_times_table(self):
-        return OpeningTimes.from_dict(self.opening_times).as_table()
+        return self.get_opening_times.as_table()
+
+    @property
+    def open_in_future(self):
+        last_open_row = self.opening_times_table[-1]
+        last_date, last_open, last_close = last_open_row
+        return datetime.combine(last_date, last_close) > datetime.now()
