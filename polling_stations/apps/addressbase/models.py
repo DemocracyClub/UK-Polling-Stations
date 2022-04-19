@@ -72,7 +72,7 @@ class UprnToCouncil(models.Model):
     polling_station_id = models.CharField(blank=True, max_length=255)
     advance_voting_station = models.ForeignKey(
         "pollingstations.AdvanceVotingStation",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
     )
