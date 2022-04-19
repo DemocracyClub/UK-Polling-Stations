@@ -13,19 +13,23 @@
         {% if NEXT_CHARISMATIC_ELECTION_DATE %}
             {% blocktrans trimmed %}
                 Your council is trialling a system that allows you to vote in person before polling day.
-                You can vote in advance at this location, or vote at your polling station as normal on {{ NEXT_CHARISMATIC_ELECTION_DATE }}.
+                You can <a href="#vote-in-advance">vote in advance</a>
+                at this location, or <a href="#vote-on-polling-day">vote at your polling station</a>
+                as normal on&nbsp;{{ NEXT_CHARISMATIC_ELECTION_DATE }}.
             {% endblocktrans %}
         {% else %}
             {% blocktrans trimmed %}
                 Your council is trialling a system that allows you to vote in person before polling day.
-                You can vote in advance at this location, or vote at your polling station as normal on polling day.
+                You can <a href="#vote-in-advance">vote in advance</a>
+                at this location, or <a href="#vote-on-polling-day">vote at your polling station</a>
+                as normal on&nbsp;polling day.
             {% endblocktrans %}
         {% endif %}
     </p>
     {% include "fragments/advance_voting_station.html" %}
 {% endif %}
 
-<div class="ds-card">
+<div class="ds-card" id="vote-on-polling-day">
     <div class="ds-card-body">
         {% if advance_voting_station %}
             {% if NEXT_CHARISMATIC_ELECTION_DATE %}
