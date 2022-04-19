@@ -11,6 +11,20 @@ class Command(BaseHalaroseCsvImporter):
     )
     elections = ["2022-05-05"]
 
+    def apply_council_station_corrections(self, record):
+        # Has to be applied in both station and address methods, so that the generated station ID
+        # is consistent.
+
+        # Correction from council: https://trello.com/c/yQq53X7N/582-lincoln
+        if record.pollingstationnumber in ("21", "26"):
+            record = record._replace(
+                pollingstationname="ST BOTOLPH'S COURT",
+                pollingstationaddress_1="ST BOTOLPH'S CRESCENT",
+                pollingstationaddress_2="LINCOLN",
+                pollingstationpostcode="LN5 8BL",
+            )
+        return record
+
     def station_record_to_dict(self, record):
         # Have checked THE LINCOLN GREEN PUBLIC HOUSE - THE BAR STATION (out of area), and it's fine
 
@@ -18,6 +32,9 @@ class Command(BaseHalaroseCsvImporter):
         # has a different postcode attested on the web (LN6 0QJ), but AddressBase has the
         # council-provided one (LN6 0PB) as being for exactly the one building that is the church,
         # so we'll leave it be.
+
+        record = self.apply_council_station_corrections(record)
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -42,5 +59,7 @@ class Command(BaseHalaroseCsvImporter):
             "LN1 1XE",
         ]:
             return None  # split
+
+        record = self.apply_council_station_corrections(record)
 
         return super().address_record_to_dict(record)
