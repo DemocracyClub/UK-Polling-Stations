@@ -1,30 +1,34 @@
-from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "FIF"
-    addresses_name = "2021-04-12T09:21:22.730934/Fife E8 DC Polling Districts.csv"
-    stations_name = "2021-04-12T09:21:22.730934/Fife E8 DC Polling Stations.csv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2022-05-05/2022-04-19T11:25:34.787070/Democracy Club - Polling Districts.csv"
+    )
+    stations_name = (
+        "2022-05-05/2022-04-19T11:25:34.787070/Democracy Club - Polling Stations.csv"
+    )
+    elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
 
-        # LOCHGELLY TOWN HALL BANK STREET LOCHGELLY KY5 9QQ
         if record.stationcode in [
-            "130",
-            "131",
-            "132",
+            "176",  # MARKINCH TOWN HALL
+            "177",  # MARKINCH TOWN HALL
+            "178",  # MARKINCH TOWN HALL
+            "229",  # BURNSIDE VILLAGE HALL
+            "230",  # BURNSIDE VILLAGE HALL
         ]:
-            record = record._replace(
-                placename="LOCHGELLY CENTRE", add1="BANK STREET", postcode=" KY5 9RD"
-            )
-
-        # BALMAISE COMMUNITY CENTRE LINNWOOD DRIVE LEVEN KY8 5AE
-        if record.stationcode in ["259", "260"]:
-            record = record._replace(
-                placename="ST AGATHA'S RC PRIMARY SCHOOL",
-                add1="PARK ROAD",
-                postcode="KY8 5BL",
-            )
+            record = record._replace(xordinate="", yordinate="")
 
         return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        if record.postcode in [
+            "KY1 2EZ",
+            "KY5 9EY",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
