@@ -34,7 +34,9 @@ jobs:
             google-chrome --version
             chromedriver --version
 
-      - node/install
+      - node/install:
+          node-version: '10.19.0'
+
       - node/install-packages:
           cache-path: ~/repo/node_modules
           override-ci-command: npm install
