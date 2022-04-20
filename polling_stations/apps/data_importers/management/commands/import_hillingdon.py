@@ -24,6 +24,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
+        # Correction from Council
+        if uprn in [
+            "10095322450",
+            "10095322452",
+            "10095322453",
+            "100021454152",
+            "100021454154",
+            "100021454156",
+            "100021454217",
+            "100021454218",
+            "100021454148",
+        ]:
+            rec = super().address_record_to_dict(record)
+            rec["polling_station_id"] = "11638"
+            return rec
+
         if uprn in [
             "100022832219",
             "100021461989",

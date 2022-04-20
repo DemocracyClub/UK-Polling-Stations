@@ -10,8 +10,8 @@ class Command(BaseHalaroseCsvImporter):
     def station_record_to_dict(self, record):
         if record.pollingstationnumber == "55":
             # PONTSTICILL MEMORIAL HALL, CF48 2UR
-            # 10034657547
-            record = record._replace(pollingstationpostcode="CF48 2TU")
+            # ignore 10034657547 Council says it's CF48 2UD
+            record = record._replace(pollingstationpostcode="CF48 2UD")
 
         # Station Change from council
         # REAR OF THE WINDSOR HOTEL & BAR
