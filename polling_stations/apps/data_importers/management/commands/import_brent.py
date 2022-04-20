@@ -24,6 +24,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         if uprn in [
             "202228638",  # long way from rest of postcode
             "202053053",
+            "202053054",
         ]:
             return None
 
