@@ -13,7 +13,23 @@ class Command(BaseHalaroseCsvImporter):
     )
     elections = ["2022-05-05"]
 
+    def apply_council_station_corrections(self, record):
+        # Has to be applied in both station and address methods, so that the generated station ID
+        # is consistent.
+
+        # Correction from council: https://trello.com/c/Od6Ski5i
+        if record.pollingstationnumber in ("62"):
+            record = record._replace(
+                pollingstationname="Cabin on land adjacent to 4 Handsworth Avenue",
+                pollingstationaddress_1="",
+                pollingstationaddress_2="Sheffield",
+                pollingstationpostcode="S9 4BT",
+            )
+        return record
+
     def station_record_to_dict(self, record):
+        record = self.apply_council_station_corrections(record)
+
         # Laycock's Sports Club, Archer Road, Sheffield
         if record.pollingstationnumber == "109":
             record = record._replace(pollingstationpostcode="S8 0JZ")  # was S8 0JY
@@ -61,5 +77,7 @@ class Command(BaseHalaroseCsvImporter):
             "S10 3LG",
         ]:
             return None
+
+        record = self.apply_council_station_corrections(record)
 
         return super().address_record_to_dict(record)

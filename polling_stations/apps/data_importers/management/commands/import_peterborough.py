@@ -14,6 +14,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
 
+        # Council fix Madeley House -> All Saints Church Hall
+        if record.polling_place_id == "9228":
+            record = record._replace(
+                Polling_Place_Name="All Saints Church Hall",
+                Polling_Place_Address_1="Park Road",
+                Polling_Place_Address_2="",
+                Polling_Place_Address_3="",
+                Polling_Place_Address_4="Peterborough",
+                Polling_Place_Postcode="PE1 2UL",
+            )
+
         # Hampton Leisure Centre Clayburn Road Hampton Vale Peterborough PE7 8HQ
         if record.polling_place_id == "9249":
             record = record._replace(polling_place_postcode="PE7 8HG")
