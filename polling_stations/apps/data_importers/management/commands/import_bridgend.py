@@ -8,10 +8,10 @@ from pollingstations.models import AdvanceVotingStation, PollingStation
 class Command(BaseHalaroseCsvImporter, AdvanceVotingMixin):
     council_id = "BGE"
     addresses_name = (
-        "2022-05-05/2022-03-29T11:07:35.962819/polling_station_export-2022-03-29.csv"
+        "2022-05-05/2022-04-14T10:42:05.436399/polling_station_export-2022-04-14.csv"
     )
     stations_name = (
-        "2022-05-05/2022-03-29T11:07:35.962819/polling_station_export-2022-03-29.csv"
+        "2022-05-05/2022-04-14T10:42:05.436399/polling_station_export-2022-04-14.csv"
     )
     elections = ["2022-05-05"]
 
