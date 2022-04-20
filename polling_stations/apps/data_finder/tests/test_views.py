@@ -61,6 +61,29 @@ class PostCodeViewTestCase(TestCase):
         self.assertEqual(302, response.status_code)
         self.assertEqual(response["Location"], "/address_select/DD11DD/?utm_source=foo")
 
+    def test_dc_logging(self):
+        with self.assertLogs(level="DEBUG") as captured:
+            self.client.get(
+                "/postcode/DD11DD/",
+                {
+                    "foo": "bar",
+                    "utm_source": "test",
+                    "utm_campaign": "better_tracking",
+                    "utm_medium": "pytest",
+                },
+                HTTP_AUTHORIZATION="Token foo",
+            )
+
+        for record in captured.records:
+            if record.message.startswith("dc-postcode-searches"):
+                logging_message = record
+        assert logging_message
+        assert '"postcode": "DD11DD"' in logging_message.message
+        assert '"dc_product": "WDIV"' in logging_message.message
+        assert '"utm_source": "test"' in logging_message.message
+        assert '"utm_campaign": "better_tracking"' in logging_message.message
+        assert '"utm_medium": "pytest"' in logging_message.message
+
 
 class PostCodeViewNoStationTestCase(TestCase):
     @classmethod

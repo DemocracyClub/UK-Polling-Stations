@@ -1,5 +1,6 @@
 import os, sys
 
+from dc_logging_client import DCWidePostcodeLoggingClient
 from django.utils.translation import gettext_lazy as _
 
 # PATH vars
@@ -293,6 +294,9 @@ BASICAUTH_DISABLE = True
 
 
 SHOW_ADVANCE_VOTING_STATIONS = True
+
+# DC Logging Client
+POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)
 
 # settings for load balancer status check
 CHECK_SERVER_CLEAN = True
