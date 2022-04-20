@@ -73,7 +73,7 @@ class CustomFinderManager(models.Manager):
 
             eoni_data_in_db = UprnToCouncil.objects.filter(
                 uprn__postcode__startswith="BT"
-            ).exists()
+            )[:1]
 
             code = geocoder.get_code("lad")
             if code.startswith("N") and not eoni_data_in_db:
