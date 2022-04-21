@@ -4,6 +4,37 @@ from django.test import TestCase
 from councils.tests.factories import CouncilFactory
 
 
+class LogTestMixin:
+    def test_dc_logging(self):
+
+        with self.assertLogs(level="DEBUG") as captured:
+            self.client.get(
+                f"/postcode/{self.test_dc_logging_postcode}/",
+                {
+                    "foo": "bar",
+                    "utm_source": "test",
+                    "utm_campaign": "better_tracking",
+                    "utm_medium": "pytest",
+                },
+                HTTP_AUTHORIZATION="Token foo",
+                follow=True,
+            )
+
+        for record in captured.records:
+            if record.message.startswith("dc-postcode-searches"):
+                logging_message = record
+
+        assert logging_message
+
+        assert (
+            f'"postcode": "{self.test_dc_logging_postcode}"' in logging_message.message
+        )
+        assert '"dc_product": "WDIV"' in logging_message.message
+        assert '"utm_source": "test"' in logging_message.message
+        assert '"utm_campaign": "better_tracking"' in logging_message.message
+        assert '"utm_medium": "pytest"' in logging_message.message
+
+
 class HomeViewTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -37,7 +68,9 @@ class HomeViewTestCase(TestCase):
         self.assertRegex(response["Location"], r"/address/10[23]/")
 
 
-class PostCodeViewTestCase(TestCase):
+class PostCodeViewTestCase(TestCase, LogTestMixin):
+    test_dc_logging_postcode = "AA11AA"
+
     @classmethod
     def setUpTestData(cls):
         CouncilFactory(
@@ -46,7 +79,11 @@ class PostCodeViewTestCase(TestCase):
             geography__geography=None,
         )
 
-        for fixture in ["test_routing.json", "test_multiple_polling_stations.json"]:
+        for fixture in [
+            "test_routing.json",
+            "test_multiple_polling_stations.json",
+            "test_single_address_single_polling_station.json",
+        ]:
             call_command(  # Hack to avoid converting all fixtures to factories
                 "loaddata",
                 fixture,
@@ -61,31 +98,10 @@ class PostCodeViewTestCase(TestCase):
         self.assertEqual(302, response.status_code)
         self.assertEqual(response["Location"], "/address_select/DD11DD/?utm_source=foo")
 
-    def test_dc_logging(self):
-        with self.assertLogs(level="DEBUG") as captured:
-            self.client.get(
-                "/postcode/DD11DD/",
-                {
-                    "foo": "bar",
-                    "utm_source": "test",
-                    "utm_campaign": "better_tracking",
-                    "utm_medium": "pytest",
-                },
-                HTTP_AUTHORIZATION="Token foo",
-            )
 
-        for record in captured.records:
-            if record.message.startswith("dc-postcode-searches"):
-                logging_message = record
-        assert logging_message
-        assert '"postcode": "DD11DD"' in logging_message.message
-        assert '"dc_product": "WDIV"' in logging_message.message
-        assert '"utm_source": "test"' in logging_message.message
-        assert '"utm_campaign": "better_tracking"' in logging_message.message
-        assert '"utm_medium": "pytest"' in logging_message.message
+class PostCodeViewNoStationTestCase(TestCase, LogTestMixin):
+    test_dc_logging_postcode = "BB11BB"
 
-
-class PostCodeViewNoStationTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         CouncilFactory(
@@ -129,6 +145,34 @@ class WeDontknowViewTestCase(TestCase):
     'GG22GG' is a postcode with uprns in multiple councils and no polling stations.
     'HH22HH' is a postcode with uprns in a single council and no polling stations.
     """
+
+    def test_dc_logging(self):
+        # This test case is for when user's address isn't in the list and the postcode
+        # is split over multiple councils.
+        with self.assertLogs(level="DEBUG") as captured:
+            self.client.get(
+                "/multiple_councils/FF22FF/",
+                {
+                    "foo": "bar",
+                    "utm_source": "test",
+                    "utm_campaign": "better_tracking",
+                    "utm_medium": "pytest",
+                },
+                HTTP_AUTHORIZATION="Token foo",
+                follow=True,
+            )
+
+        for record in captured.records:
+            if record.message.startswith("dc-postcode-searches"):
+                logging_message = record
+
+        assert logging_message
+
+        assert '"postcode": "FF22FF"' in logging_message.message
+        assert '"dc_product": "WDIV"' in logging_message.message
+        assert '"utm_source": "test"' in logging_message.message
+        assert '"utm_campaign": "better_tracking"' in logging_message.message
+        assert '"utm_medium": "pytest"' in logging_message.message
 
     @classmethod
     def setUpTestData(cls):
