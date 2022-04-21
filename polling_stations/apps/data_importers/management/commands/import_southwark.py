@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SWK"
     addresses_name = (
-        "2022-05-05/2022-03-09T13:17:31.002506/Democracy_Club__05May2022.tsv"
+        "2022-05-05/2022-04-21T16:34:23.867873/Democracy_Club__05May2022.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-09T13:17:31.002506/Democracy_Club__05May2022.tsv"
+        "2022-05-05/2022-04-21T16:34:23.867873/Democracy_Club__05May2022.tsv"
     )
     elections = ["2022-05-05"]
     csv_encoding = "windows-1252"
@@ -22,6 +22,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10090283768",  # KILIMANJARO LIVE LTD, SECOND FLOOR NORTH 15 BERMONDSEY SQUARE, LONDON
             "200003468937",  # GROUNDSMANS COTTAGE COLLEGE ROAD, LONDON
             "10091665680",  # 23 CAMBERWELL GROVE, LONDON
+            "10094086807",
         ]:
             return None
 
@@ -37,6 +38,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "SE1 2AD",
             "SE15 2ND",
             "SE1 0AA",
+            "SE5 8DB",
         ]:
             return None
 
