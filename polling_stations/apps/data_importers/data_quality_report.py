@@ -174,11 +174,11 @@ class DistrictReport:
             WHERE polling_station_id IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
                 WHERE council_id IN %s)
-            AND council_id=%s
+            AND council_id IN %s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [tuple(self.councils), tuple(self.council_id)],
+            [tuple(self.councils), tuple(self.councils)],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -190,12 +190,12 @@ class DistrictReport:
             SELECT COUNT(*) FROM pollingstations_pollingdistrict
             WHERE polling_station_id NOT IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id=%s)
+                WHERE council_id IN %s)
             AND council_id IN %s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [tuple(self.councils), tuple(self.council_id)],
+            [tuple(self.councils), tuple(self.councils)],
         )
         results = cursor.fetchall()
         return results[0][0]
