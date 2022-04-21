@@ -30,6 +30,15 @@ from .helpers import (
 class LogLookUpMixin(object):
     def log_postcode(self, postcode, context, view_used):
 
+        if view_used != "api":
+            # Log to firehose
+            entry = settings.POSTCODE_LOGGER.entry_class(
+                postcode=postcode,
+                dc_product=settings.POSTCODE_LOGGER.dc_product.wdiv,
+                **self.request.session.get("utm_data"),
+            )
+            settings.POSTCODE_LOGGER.log(entry)
+
         if "language" in context:
             language = context["language"]
         else:
@@ -221,14 +230,6 @@ class PostcodeView(BasePollingStationView):
             self.kwargs["postcode"] = kwargs["postcode"] = request.GET["postcode"]
         if "postcode" not in kwargs or kwargs["postcode"] == "":
             return HttpResponseRedirect(reverse("home"))
-
-        # Log to firehose
-        entry = settings.POSTCODE_LOGGER.entry_class(
-            postcode=kwargs["postcode"],
-            dc_product=settings.POSTCODE_LOGGER.dc_product.wdiv,
-            **self.request.session.get("utm_data"),
-        )
-        settings.POSTCODE_LOGGER.log(entry)
 
         rh = RoutingHelper(self.kwargs["postcode"])
 
