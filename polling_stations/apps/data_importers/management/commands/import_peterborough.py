@@ -17,12 +17,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Council fix Madeley House -> All Saints Church Hall
         if record.polling_place_id == "9228":
             record = record._replace(
-                Polling_Place_Name="All Saints Church Hall",
-                Polling_Place_Address_1="Park Road",
-                Polling_Place_Address_2="",
-                Polling_Place_Address_3="",
-                Polling_Place_Address_4="Peterborough",
-                Polling_Place_Postcode="PE1 2UL",
+                polling_place_name="All Saints Church Hall",
+                polling_place_address_1="Park Road",
+                polling_place_address_2="",
+                polling_place_address_3="",
+                polling_place_address_4="Peterborough",
+                polling_place_postcode="PE1 2UL",
             )
 
         # Hampton Leisure Centre Clayburn Road Hampton Vale Peterborough PE7 8HQ
