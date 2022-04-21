@@ -222,6 +222,14 @@ class PostcodeView(BasePollingStationView):
         if "postcode" not in kwargs or kwargs["postcode"] == "":
             return HttpResponseRedirect(reverse("home"))
 
+        # Log to firehose
+        entry = settings.POSTCODE_LOGGER.entry_class(
+            postcode=kwargs["postcode"],
+            dc_product=settings.POSTCODE_LOGGER.dc_product.wdiv,
+            **self.request.session.get("utm_data"),
+        )
+        settings.POSTCODE_LOGGER.log(entry)
+
         rh = RoutingHelper(self.kwargs["postcode"])
 
         if rh.view != "postcode_view":

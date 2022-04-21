@@ -16,3 +16,10 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
     }
 }
+
+
+# To test the DC logging client you must authenticate against the AWS monitoring
+# account directly by exporting the AWS creds (or using SSO) and then
+# enable the `direct_connection` mode
+# from dc_logging_client import DCWidePostcodeLoggingClient
+# POSTCODE_LOGGER = DCWidePostcodeLoggingClient(direct_connection=True)
