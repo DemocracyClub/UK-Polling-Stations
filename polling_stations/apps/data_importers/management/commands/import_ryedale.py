@@ -15,7 +15,7 @@ class Command(BaseHalaroseCsvImporter):
 
         # Swinton Reading Rooms, Swinton, Malton North YO17 6SG
         if record.pollingstationnumber == "4":
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(pollingstationpostcode="YO17 6SL")
 
         return super().station_record_to_dict(record)
 
