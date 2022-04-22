@@ -204,22 +204,10 @@ class Command(BaseCommand):
             self.seen_ids.add(council_id)
 
         for council_data in self.load_contact_details():
-            self.seen_ids.add(council_data["code"])
-
-            if council_data["code"] in (
-                "CHN",  # Bucks
-                "AYL",  # Bucks
-                "SBU",  # Bucks
-                "WYO",  # Bucks
-                "COR",  # North Northamptonshire Council
-                "DAV",  # West Northamptonshire Council
-                "ENO",  # North Northamptonshire Council
-                "KET",  # North Northamptonshire Council
-                "NOR",  # West Northamptonshire Council
-                "SNR",  # West Northamptonshire Council
-                "WEL",  # North Northamptonshire Council
-            ):
+            if council_data["code"] in self.seen_ids:
                 continue
+
+            self.seen_ids.add(council_data["code"])
 
             council, _ = Council.objects.using(self.database).get_or_create(
                 council_id=council_data["code"]
