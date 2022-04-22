@@ -95,5 +95,4 @@ class TestCouncilImporter(TestCase):
         )
 
         # This is 6 councils in the MockCouncilsImporter above
-        # plus three unitaries hardcoded in the management command.
-        assert Council.objects.count() == 9
+        assert Council.objects.count() == 6
