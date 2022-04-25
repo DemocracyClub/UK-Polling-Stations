@@ -1,4 +1,5 @@
 import csv
+import subprocess
 from pathlib import Path
 
 from django.contrib.gis.geos import Point
@@ -43,6 +44,11 @@ class Command(BaseStationsImporter, CsvMixin):
         parser.add_argument(
             "--cleanup", help="Delete intermediate CSVs", action="store_true"
         )
+        parser.add_argument(
+            "--reprojected",
+            help="Coordinates available in 4326. Fieldnames: PRO_{X,Y}_4326 & PREM_{X,Y}_4326",
+            action="store_true",
+        )
 
     def handle(self, *args, **options):
         self.eoni_export_path = Path(options["eoni_csv"])
@@ -54,7 +60,7 @@ class Command(BaseStationsImporter, CsvMixin):
             "stations": self.eoni_data_root / "eoni_stations.csv",
         }
         self.stations_only = options.get("stations_only")
-        self.pre_process_data()
+        self.pre_process_data(reprojected=options["reprojected"])
         self.clear_old_data()
         self.copy_data()
         self.assign_uprn_to_councils()
@@ -72,7 +78,7 @@ class Command(BaseStationsImporter, CsvMixin):
     def get_base_folder_path(self):
         return str(self.eoni_data_root)
 
-    def pre_process_data(self):
+    def pre_process_data(self, reprojected=False):
         if not self.stations_only:
             addresses = csv.DictWriter(
                 open(self.paths["addresses"], "w", encoding=self.csv_encoding),
@@ -91,7 +97,6 @@ class Command(BaseStationsImporter, CsvMixin):
         )
         stations.writeheader()
         station_data = {}
-
         with self.eoni_export_path.open(
             "r", encoding=self.eoni_csv_encoding
         ) as eoni_csv:
@@ -99,16 +104,22 @@ class Command(BaseStationsImporter, CsvMixin):
             reader = csv.DictReader(eoni_csv)
             for row in reader:
                 if not self.stations_only:
-                    address_location = Point(
-                        int(row["PRO_X_COR"]), int(row["PRO_Y_COR"]), srid=29902
-                    )
-                    address_location.transform(4326)
+                    if reprojected:
+                        address_location_ewkt = (
+                            f"SRID=4326;POINT({row['PRO_X_4326']} {row['PRO_Y_4326']})"
+                        )
+                    else:
+                        address_location = Point(
+                            int(row["PRO_X_COR"]), int(row["PRO_Y_COR"]), srid=29902
+                        )
+                        address_location.transform(4326)
+                        address_location_ewkt = address_location.ewkt
                     addresses.writerow(
                         {
                             "uprn": row["PRO_UPRN"].strip(),
                             "address": row["PRO_FULLADDRESS"].strip(),
                             "postcode": row["PRO_POSTCODE"].strip(),
-                            "location": address_location.ewkt,
+                            "location": address_location_ewkt,
                             "addressbase_postal": "D",
                         }
                     )
@@ -122,23 +133,26 @@ class Command(BaseStationsImporter, CsvMixin):
                         }
                     )
 
-                station_data[row["PREM_ID"]] = {
-                    "internal_council_id": row["PREM_ID"],
-                    "postcode": row["PREM_POSTCODE"].strip(),
-                    "address": f'{row["PREM_NAME"].strip()}, {row["PREM_FULLADDRESS"].strip()}',
-                    "location_y": row["PREM_Y_COR"],
-                    "location_x": row["PREM_X_COR"],
-                    "council_id": "EONI",
-                    "sample_uprn": row["PRO_UPRN"].strip(),
-                }
+                if row["PREM_ID"] not in station_data:
+                    if reprojected:
+                        station_location_ewkt = f"SRID=4326;POINT({row['PREM_X_4326']} {row['PREM_Y_4326']})"
+                    else:
+                        location = Point(
+                            int(row["PREM_X_COR"]),
+                            int(row["PREM_Y_COR"]),
+                            srid=29902,
+                        )
+                        location.transform(4326)
+                        station_location_ewkt = location.ewkt
+                    station_data[row["PREM_ID"]] = {
+                        "internal_council_id": row["PREM_ID"],
+                        "postcode": row["PREM_POSTCODE"].strip(),
+                        "address": f'{row["PREM_NAME"].strip()}, {row["PREM_FULLADDRESS"].strip()}',
+                        "location": station_location_ewkt,
+                        "council_id": "EONI",
+                        "sample_uprn": row["PRO_UPRN"].strip(),
+                    }
             for internal_council_id, station in station_data.items():
-                location = Point(
-                    int(station.pop("location_x")),
-                    int(station.pop("location_y")),
-                    srid=29902,
-                )
-                location.transform(4326)
-                station["location"] = location.ewkt
                 stations.writerow(station)
 
     def clear_old_data(self):
