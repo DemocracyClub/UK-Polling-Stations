@@ -48,8 +48,8 @@ class Command(BaseHalaroseCsvImporter, AdvanceVotingMixin):
 
     def add_advance_voting_stations(self):
         opening_times = OpeningTimes()
+        opening_times.add_open_time("2022-04-30", "10:00", "16:00")
         opening_times.add_open_time("2022-05-01", "10:00", "16:00")
-        opening_times.add_open_time("2022-05-02", "10:00", "16:00")
 
         advance_station = AdvanceVotingStation(
             name="Pontypool Civic Centre",
