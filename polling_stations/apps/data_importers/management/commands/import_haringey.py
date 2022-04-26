@@ -14,9 +14,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         if record.polling_place_id in (
-            "9027",  # t Michael`s CE Primary School N6 4BG
+            "9027",  # St Michael`s CE Primary School N6 4BG
             "9149",  # The Scout Hall, All Hallows Road, N17 7AD
             "9062",  # Calvary Church Hall, N17 0TB
+            "9000",  # St Andrew`s Centre
         ):
             record = record._replace(polling_place_easting="0")
             record = record._replace(polling_place_northing="0")

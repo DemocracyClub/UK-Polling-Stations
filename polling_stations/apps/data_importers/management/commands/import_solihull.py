@@ -40,6 +40,32 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "9323":
             record = record._replace(polling_place_postcode="B36 0NF")
 
+        # Info from council - x/y from UPRN. 5th Solihull Scouts (UPRN is 010008212576)
+        if record.polling_place_id == "9457":
+            record = record._replace(
+                polling_place_easting="412782", polling_place_northing="279167"
+            )
+        # Info from council - x/y from UPRN. Elmwood Place (UPRN is 010090947819)
+        if record.polling_place_id == "9320":
+            record = record._replace(
+                polling_place_easting="417106", polling_place_northing="289542"
+            )
+        # Info from council - x/y from UPRN. The Pavilion, Hockley Heath Recreation Ground (UPRN is 010008211687)
+        if record.polling_place_id == "9417":
+            record = record._replace(
+                polling_place_easting="415489", polling_place_northing="272625"
+            )
+        # Info from council - x/y from UPRN. The Pavilion (Castle Bromwich Parish Council) (UPRN should be 100071459690)
+        if record.polling_place_id == "9354":
+            record = record._replace(
+                polling_place_easting="415430", polling_place_northing="289942"
+            )
+        # Info from council - x/y from UPRN. Tudor Grange Leisure Centre (UPRN is 010023646733)
+        if record.polling_place_id == "9523":
+            record = record._replace(
+                polling_place_easting="414506", polling_place_northing="279399"
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
