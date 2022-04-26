@@ -17,13 +17,21 @@ class Command(BaseHalaroseCsvImporter):
         # Has to be applied in both station and address methods, so that the generated station ID
         # is consistent.
 
-        # Correction from council: https://trello.com/c/Od6Ski5i
+        # Corrections from council: https://trello.com/c/Od6Ski5i
         if record.pollingstationnumber in ("62"):
             record = record._replace(
                 pollingstationname="Cabin on land adjacent to 4 Handsworth Avenue",
                 pollingstationaddress_1="",
                 pollingstationaddress_2="Sheffield",
                 pollingstationpostcode="S9 4BT",
+            )
+
+        if record.pollingstationnumber in ("3"):
+            record = record._replace(
+                pollingstationname="Cabin on land at Chancet Wood Drive ",
+                pollingstationaddress_1="(opposite the junction with Chancet Wood Close)",
+                pollingstationaddress_2="Sheffield",
+                pollingstationpostcode="S8 7TR",
             )
         return record
 
@@ -36,13 +44,20 @@ class Command(BaseHalaroseCsvImporter):
 
         rec = super().station_record_to_dict(record)
 
-        # user issue report #82; wrong location is that of another station
-        if (
-            rec
-            and rec["internal_council_id"]
-            == "117-hillsborough-trinity-methodist-church-lennox-rd-entrance"
-        ):
-            rec["location"] = Point(-1.504240, 53.408718, srid=4326)
+        locations = {
+            "117-hillsborough-trinity-methodist-church-lennox-rd-entrance": Point(
+                -1.504240, 53.408718, srid=4326
+            ),  # user issue report #82; wrong location is that of another station
+            "62-cabin-on-land-adjacent-to-4-handsworth-avenue": Point(
+                -1.402476, 53.382645, srid=4326
+            ),  # Council fix - https://trello.com/c/Od6Ski5i
+            "3-cabin-on-land-at-chancet-wood-drive": Point(
+                -1.482287, 53.332078, srid=4326
+            ),  # Council fix - https://trello.com/c/Od6Ski5i
+        }
+
+        if rec and rec["internal_council_id"] in locations:
+            rec["location"] = locations[rec["internal_council_id"]]
 
         return rec
 
