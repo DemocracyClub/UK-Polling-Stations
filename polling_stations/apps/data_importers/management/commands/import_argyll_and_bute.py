@@ -36,8 +36,9 @@ class Command(BaseGitHubImporter):
                 "location": location,
             }
             if code == "AA19":
-                station["name"] = "Islay Customer Service Point"
-                station["address"] = "Jamieson Street, Bowmore, Isle of Islay, PA43 7HP"
+                station[
+                    "address"
+                ] = "Islay Customer Service Point, Jamieson Street, Bowmore, Isle of Islay, PA43 7HP"
                 station["location"] = None
             stations.append(station)
         return stations
