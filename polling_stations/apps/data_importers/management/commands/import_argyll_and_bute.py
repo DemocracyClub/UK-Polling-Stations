@@ -29,14 +29,17 @@ class Command(BaseGitHubImporter):
 
         stations = []
         for code in codes:
-            stations.append(
-                {
-                    "internal_council_id": code,
-                    "address": record["ADDRESS"],
-                    "postcode": "",
-                    "location": location,
-                }
-            )
+            station = {
+                "internal_council_id": code,
+                "address": record["ADDRESS"],
+                "postcode": "",
+                "location": location,
+            }
+            if code == "AA19":
+                station["name"] = "Islay Customer Service Point"
+                station["address"] = "Jamieson Street, Bowmore, Isle of Islay, PA43 7HP"
+                station["location"] = None
+            stations.append(station)
         return stations
 
     def post_import(self):

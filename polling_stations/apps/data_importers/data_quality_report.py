@@ -53,11 +53,11 @@ class StationReport:
             WHERE polling_district_id IN
                 (SELECT internal_council_id FROM pollingstations_pollingdistrict
                 WHERE council_id IN %s)
-            AND council_id=%s
+            AND council_id IN %s
             AND polling_district_id != ''
             AND polling_district_id IS NOT NULL;
             """,
-            [tuple(self.councils), tuple(self.council_id)],
+            [tuple(self.councils), tuple(self.councils)],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -70,11 +70,11 @@ class StationReport:
             WHERE polling_district_id NOT IN
                 (SELECT internal_council_id FROM pollingstations_pollingdistrict
                 WHERE council_id IN %s)
-            AND council_id=%s
+            AND council_id IN %s
             AND polling_district_id != ''
             AND polling_district_id IS NOT NULL;
             """,
-            [tuple(self.councils), tuple(self.council_id)],
+            [tuple(self.councils), tuple(self.councils)],
         )
         results = cursor.fetchall()
         return results[0][0]

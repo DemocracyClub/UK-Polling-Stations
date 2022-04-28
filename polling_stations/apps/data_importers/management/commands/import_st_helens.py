@@ -18,6 +18,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="0")
             record = record._replace(polling_place_northing="0")
 
+        # Newton Childrens Centre
+        if record.polling_place_id == "4831":
+            record = record._replace(polling_place_easting="0")
+            record = record._replace(polling_place_northing="0")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
