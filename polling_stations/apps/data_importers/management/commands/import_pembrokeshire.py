@@ -1,3 +1,5 @@
+import re
+
 from data_importers.github_importer import BaseGitHubImporter
 
 
@@ -6,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "PEM"
-    elections = ["2021-05-06"]
+    elections = ["2022-05-05"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Pembrokeshire"
     geom_type = "geojson"
     seen_stations = set()
@@ -26,7 +28,7 @@ class Command(BaseGitHubImporter):
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
-        codes = record["DistricttRef"].split(";")
+        codes = re.findall("[A-Z]{2}[0-9][A-Z]?", record["DistricttRef"])
         stations = []
         for code in codes:
             if code not in self.seen_stations:
