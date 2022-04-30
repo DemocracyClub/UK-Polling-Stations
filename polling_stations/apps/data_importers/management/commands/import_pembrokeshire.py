@@ -15,6 +15,8 @@ class Command(BaseGitHubImporter):
 
     def district_record_to_dict(self, record):
         poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+        if record["DistrictName"] == "DX1A - St Mary Ward, Pembroke":
+            record["DistrictRef"] = "DX1A"
         return {
             "internal_council_id": record["DistrictRef"],
             "name": record["DistrictName"],
