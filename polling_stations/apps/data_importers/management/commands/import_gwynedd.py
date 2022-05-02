@@ -67,9 +67,14 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
-        # These three stations all seem to serve another's area. Have queried with council. We'll drop
-        # these data for now until we have a response.
-        if record.pollingstationnumber in ["34", "35", "36"]:
-            return None
+        rec = super().address_record_to_dict(record)
 
-        return super().address_record_to_dict(record)
+        fix_stations = {
+            "34-festri-capel-brynaerau-pontllyfni": "35-neuadd-bentref-clynnog-fawr",
+            "35-neuadd-bentref-clynnog-fawr": "36-festri-capel-mc-pantglas",
+            "36-festri-capel-mc-pantglas": "34-festri-capel-brynaerau-pontllyfni",
+        }
+        if rec and rec["polling_station_id"] in fix_stations.keys():
+            rec["polling_station_id"] = fix_stations[rec["polling_station_id"]]
+
+        return rec
