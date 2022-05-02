@@ -1,3 +1,4 @@
+from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand
 
 # from django.contrib.gis.geos import Point
@@ -23,6 +24,8 @@ def update_station_point(council_id, station_id, point):
         council_id=council_id, internal_council_id=station_id
     )
     if len(stations) == 1:
+        if not point:
+            print("Setting station location to None")
         station = stations[0]
         station.location = point
         station.save()
@@ -139,3 +142,26 @@ class Command(BaseCommand):
             print("Deleting data for council %s..." % (council_id))
 
         print("..done")
+
+        # User issue 530 - https://trello.com/c/tYHaUP2O/596-user-report-530
+        print("Changing address and location for Temporary building, Kara st (Salford)")
+        update_station_address(
+            council_id="SLF",
+            station_id="6406",
+            address="Temporary Building, Alexander Street, Salford",
+            postcode="M6 5PY",
+        )
+
+        update_station_point(
+            council_id="SLF",
+            station_id="6406",
+            point=Point(380295, 398754, srid=27700).transform(4326, clone=True),
+        )
+
+        # https://trello.com/c/aabsmQ3U
+        print(
+            "Removing map for Murrayfield Parish Church Centre 2b Ormidale Terrace  (Edinburgh)"
+        )
+        update_station_point(council_id="EDH", station_id="NC06L", point=None)
+
+        print("*** ...finished applying misc fixes. ***")
