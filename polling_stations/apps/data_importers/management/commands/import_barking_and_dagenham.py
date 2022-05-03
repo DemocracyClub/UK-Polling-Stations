@@ -28,7 +28,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "RM8 1DF",
             "IG11 7XS",
             "IG11 9BW",
-            "RM10 7TD",
+            # "RM10 7TD", Don't exclude this one Council have requested.
             "IG11 9EA",
             "RM6 6DJ",
             "RM9 4DS",
