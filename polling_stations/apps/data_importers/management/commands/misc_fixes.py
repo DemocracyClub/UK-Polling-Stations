@@ -158,9 +158,4 @@ class Command(BaseCommand):
             point=Point(380295, 398754, srid=27700).transform(4326, clone=True),
         )
 
-        # https://trello.com/c/aabsmQ3U
-        print("Removing maps for several stations in Edinburgh:")
-        for station_code in ["NC06L", "WC05L", "EC10E", "SS09H", "SWS08H"]:
-            update_station_point(council_id="EDH", station_id=station_code, point=None)
-
         print("*** ...finished applying misc fixes. ***")
