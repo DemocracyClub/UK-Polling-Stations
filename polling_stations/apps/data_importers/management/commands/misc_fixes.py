@@ -159,9 +159,8 @@ class Command(BaseCommand):
         )
 
         # https://trello.com/c/aabsmQ3U
-        print(
-            "Removing map for Murrayfield Parish Church Centre 2b Ormidale Terrace  (Edinburgh)"
-        )
-        update_station_point(council_id="EDH", station_id="NC06L", point=None)
+        print("Removing maps for several stations in Edinburgh:")
+        for station_code in ["NC06L", "WC05L", "EC10E", "SS09H", "SWS08H"]:
+            update_station_point(council_id="EDH", station_id=station_code, point=None)
 
         print("*** ...finished applying misc fixes. ***")
