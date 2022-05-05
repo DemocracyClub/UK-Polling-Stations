@@ -10,15 +10,17 @@ from addressbase.models import Address, UprnToCouncil
 def update_station_point(council_id, station_id, point):
     """
     Assigns a new location to station
-    'point' should be instance of geos Point
+    'point' should be an instance of geos Point
         - Point(x-coord, y-coord, srid=epsg-code)
 
     If you take the coords from googlemaps then the srid will be 4326
     If you take the coords from BNG then the srid will be 27700
 
     Points are stored in the database in EPSG: 4326, so use this, or call transform.
-    eg Point(-4.4330, 55.9124, srid=4326)
-    or Point(248023, 671487, srid=27700).transform(4326)
+    eg point=Point(-4.4330, 55.9124, srid=4326)
+    or point=Point(248023, 671487, srid=27700).transform(4326, clone=True)
+
+    If you don't include 'clone=True', the transform method returns None.
     """
     stations = PollingStation.objects.filter(
         council_id=council_id, internal_council_id=station_id
@@ -156,6 +158,32 @@ class Command(BaseCommand):
             council_id="SLF",
             station_id="6406",
             point=Point(380295, 398754, srid=27700).transform(4326, clone=True),
+        )
+
+        # User issue 528 - https://trello.com/c/wXII0Fn2/594-user-report-528
+        print("Correcting point for Newton Childrens Centre (St Helens)")
+        update_station_point(
+            council_id="SHN",
+            station_id="4831",
+            point=Point(357498, 395524, srid=27700).transform(4326, clone=True),
+        )
+
+        # User issue https://trello.com/c/xZSwX0qz/595-user-report-l24-4bh
+        print("Removing point for Hale Village Hall (Halton)")
+        update_station_point(
+            council_id="HAL",
+            station_id="2845",
+            point=None,
+        )
+
+        # User issue https://wheredoivote.co.uk/admin/bug_reports/bugreport/534/change/
+        print(
+            "Updating point for  Mobile station @ corner of Corncrake/Mallards Way (Cherwell)"
+        )
+        update_station_point(
+            council_id="CHR",
+            station_id="24684",
+            point=Point(51.8951794, -1.14138768, srid=4326),
         )
 
         print("*** ...finished applying misc fixes. ***")
