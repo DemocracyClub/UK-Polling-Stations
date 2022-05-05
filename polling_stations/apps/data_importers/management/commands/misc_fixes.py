@@ -227,4 +227,13 @@ class Command(BaseCommand):
             point=None,
         )
 
+        # User issue https://wheredoivote.co.uk/admin/bug_reports/bugreport/549/change/
+        print("Better point for Dalton Community Centre, Barrow-in-Furness")
+        for station_id in ["LA1", "MA1"]:
+            update_station_point(
+                council_id="BAR",
+                station_id=station_id,
+                point=Point(-3.1822415, 54.1573844, srid=4326),
+            )
+
         print("*** ...finished applying misc fixes. ***")
