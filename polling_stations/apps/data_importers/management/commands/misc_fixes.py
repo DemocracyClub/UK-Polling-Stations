@@ -103,6 +103,15 @@ def unassign_uprns(uprns_to_unassign):
     print("...updated")
 
 
+def unassign_uprns_for_single_station(council_id, station_id):
+    uprns = UprnToCouncil.objects.filter(
+        lad=Council.objects.get(council_id=council_id).geography.gss,
+        polling_station_id=station_id,
+    )
+    uprns.update(polling_station_id="")
+    print("...updated")
+
+
 def remove_points_from_addressbase(bad_uprns):
     addresses = Address.objects.filter(pk__in=bad_uprns)
     for address in addresses:
@@ -264,5 +273,11 @@ class Command(BaseCommand):
             station_id="9087",
             point=None,
         )
+
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/560/change/
+        print(
+            "Unassigning all addresses directed to The Tab London, Algernon Road, SE13 7AT"
+        )
+        unassign_uprns_for_single_station(council_id="LEW", station_id="20340")
 
         print("*** ...finished applying misc fixes. ***")
