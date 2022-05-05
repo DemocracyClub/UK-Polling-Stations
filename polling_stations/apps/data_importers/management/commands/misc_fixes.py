@@ -236,4 +236,13 @@ class Command(BaseCommand):
                 point=Point(-3.1822415, 54.1573844, srid=4326),
             )
 
+        # Poor location for walking directions, reported via Fb
+        print("Better point for 4th Worcester Park Scout Hut, LB of Sutton")
+        for station_id in ["BA/1", "BA/2"]:
+            update_station_point(
+                council_id="STN",
+                station_id=station_id,
+                point=Point(-0.2415592, 51.3748792, srid=4326),
+            )
+
         print("*** ...finished applying misc fixes. ***")
