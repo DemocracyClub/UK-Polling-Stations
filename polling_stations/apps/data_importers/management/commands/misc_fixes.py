@@ -245,4 +245,16 @@ class Command(BaseCommand):
                 point=Point(-0.2415592, 51.3748792, srid=4326),
             )
 
+        # Request from Ryedale
+        print(
+            "Change address for The Wesley Centre to Malton Milton Rooms, 2 – 4 Market Place, Malton YO17 7LX (Ryedale)"
+        )
+        for station_id in ["78-the-wesley-centre", "75-the-wesley-centre"]:
+            update_station_address(
+                council_id="RYE",
+                station_id=station_id,
+                address="Malton Milton Rooms, 2 – 4 Market Place, Malton",
+                postcode="YO17 7LX",
+            )
+
         print("*** ...finished applying misc fixes. ***")
