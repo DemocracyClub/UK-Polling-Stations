@@ -196,4 +196,20 @@ class Command(BaseCommand):
             point=Point(-0.0292106, 51.5455498, srid=4326),
         )
 
+        # At council request
+        print("Better point for Fortismere School")
+        update_station_point(
+            council_id="HRY",
+            station_id="8990",
+            point=Point(-0.1498665, 51.5931802, srid=4326),
+        )
+
+        # At council request
+        print("Removing point for Round Chapel, 1D Glenarm Road, Hackney")
+        update_station_point(
+            council_id="HCK",
+            station_id="6112",
+            point=None,
+        )
+
         print("*** ...finished applying misc fixes. ***")
