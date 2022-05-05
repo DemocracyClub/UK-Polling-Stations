@@ -1,12 +1,13 @@
 from django.utils.text import slugify
 
+from data_importers.geo_utils import fix_bad_polygons
 from data_importers.github_importer import BaseGitHubImporter
 
 
 class Command(BaseGitHubImporter):
 
-    srid = 4326
-    districts_srid = 4326
+    srid = 27700
+    districts_srid = 27700
     council_id = "DND"
     elections = ["2022-05-05"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Dundee"
@@ -32,3 +33,6 @@ class Command(BaseGitHubImporter):
             "location": location,
             "polling_district_id": record["POLLINGDISTRICTREFERENCE"],
         }
+
+    def post_import(self):
+        fix_bad_polygons()
