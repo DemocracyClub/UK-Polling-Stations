@@ -220,4 +220,11 @@ class Command(BaseCommand):
             point=Point(-0.1338591, 51.4611662, srid=4326),
         )
 
+        print("Remove point for St Philip's church (RBKC)")
+        update_station_point(
+            council_id="KEC",
+            station_id="1096",
+            point=None,
+        )
+
         print("*** ...finished applying misc fixes. ***")
