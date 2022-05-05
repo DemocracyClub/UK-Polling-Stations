@@ -257,4 +257,12 @@ class Command(BaseCommand):
                 postcode="YO17 7LX",
             )
 
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/557/change/
+        print("Remove point for St John Vianney School (RBKC)")
+        update_station_point(
+            council_id="HRY",
+            station_id="9087",
+            point=None,
+        )
+
         print("*** ...finished applying misc fixes. ***")
