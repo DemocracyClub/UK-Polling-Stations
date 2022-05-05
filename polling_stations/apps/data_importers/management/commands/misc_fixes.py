@@ -212,4 +212,12 @@ class Command(BaseCommand):
             point=None,
         )
 
+        # User issue https://wheredoivote.co.uk/admin/bug_reports/bugreport/542/change/
+        print("Better point for William Bonney Community Centre, Lambeth")
+        update_station_point(
+            council_id="LBH",
+            station_id="6999",
+            point=Point(-0.1338591, 51.4611662, srid=4326),
+        )
+
         print("*** ...finished applying misc fixes. ***")
