@@ -28,7 +28,7 @@ class Command(BaseGitHubImporter):
         )
         return {
             "internal_council_id": f'{slugify(record["WARD"])}-{record["POLLINGSTATIONID"]}',
-            "address": record["PS_ADDRESS"],
+            "address": f'{record["POLLINGSTATIONNAME"]}, {record["PS_ADDRESS"]}',
             "postcode": "",
             "location": location,
             "polling_district_id": record["POLLINGDISTRICTREFERENCE"],
