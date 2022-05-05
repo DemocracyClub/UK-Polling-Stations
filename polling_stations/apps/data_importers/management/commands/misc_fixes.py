@@ -183,7 +183,7 @@ class Command(BaseCommand):
         update_station_point(
             council_id="CHR",
             station_id="24684",
-            point=Point(51.8951794, -1.14138768, srid=4326),
+            point=Point(-1.14138768, 51.8951794, srid=4326),
         )
 
         print("*** ...finished applying misc fixes. ***")
