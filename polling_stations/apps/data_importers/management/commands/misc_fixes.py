@@ -186,4 +186,14 @@ class Command(BaseCommand):
             point=Point(-1.14138768, 51.8951794, srid=4326),
         )
 
+        # User issue https://wheredoivote.co.uk/admin/bug_reports/bugreport/540/change/
+        print(
+            "Updating point for Trowbridge Senior Citizens Club (a bit more accuracy)"
+        )
+        update_station_point(
+            council_id="HCK",
+            station_id="6082",
+            point=Point(-0.0292106, 51.5455498, srid=4326),
+        )
+
         print("*** ...finished applying misc fixes. ***")
