@@ -1,3 +1,4 @@
+import requests.exceptions
 from commitment import GitHubCredentials, GitHubClient
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -58,8 +59,7 @@ class Upload(models.Model):
     def status_emoji(self):
         return status_to_emoji(self.status)
 
-    @property
-    def import_script(self):
+    def get_import_script(self, existing_script=None):
         if not self.status == "OK":
             return None
 
@@ -77,6 +77,7 @@ class Upload(models.Model):
                     "stations_name": path,
                     "encoding": file.csv_encoding,
                     "elections": elections,
+                    "existing_script": existing_script,
                 }
             )
 
@@ -92,6 +93,7 @@ class Upload(models.Model):
                     "stations_name": "/".join(stations_file.key.split("/")[1:]),
                     "encoding": stations_file.csv_encoding,
                     "elections": elections,
+                    "existing_script": existing_script,
                 }
             )
         else:
@@ -151,8 +153,15 @@ class Upload(models.Model):
             else:
                 raise e
 
+        try:
+            existing_script = client.get_file_str(
+                self.gss.import_script_path, branch=self.branch_name
+            )
+        except requests.exceptions.HTTPError:
+            existing_script = None
+
         client.push_file(
-            content=self.import_script,
+            content=self.get_import_script(existing_script=existing_script),
             filename=self.gss.import_script_path,
             message=self.pr_title,
             branch=self.branch_name,
