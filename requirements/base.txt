@@ -5,7 +5,7 @@ django-basicauth==0.5.3
 django-extensions==3.1.5
 django-localflavor==3.1
 django-markdown-deux==1.0.5
-django==3.2.13
+django==3.2.14
 djangorestframework==3.13.1
 djangorestframework-csv==2.1.1
 djangorestframework-gis==0.18
