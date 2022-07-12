@@ -10,7 +10,7 @@ djangorestframework==3.13.1
 djangorestframework-csv==2.1.1
 djangorestframework-gis==0.18
 django-cors-headers==3.10.0
-django-sesame==2.4
+django-sesame==3.0
 fastkml==0.12
 rapidfuzz==2.0.11
 lxml==4.8.0
