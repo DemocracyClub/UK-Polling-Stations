@@ -5,12 +5,20 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "CAB"
     addresses_name = (
-        "2022-05-05/2022-03-22T14:45:23.854113/polling_station_export-2022-03-22.csv"
+        "2022-08-18/2022-07-14T16:27:44.445503/polling_station_export-2022-07-14.csv"
     )
     stations_name = (
-        "2022-05-05/2022-03-22T14:45:23.854113/polling_station_export-2022-03-22.csv"
+        "2022-08-18/2022-07-14T16:27:44.445503/polling_station_export-2022-07-14.csv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2022-08-18"]
+
+    def address_record_to_dict(self, record):
+        if record.housepostcode in [
+            "CB4 2QA",
+            "CB4 1LD",
+        ]:
+            return None
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
@@ -34,9 +42,3 @@ class Command(BaseHalaroseCsvImporter):
             rec["location"] = Point(0.099002518, 52.215464, srid=4326)
 
         return rec
-
-    def address_record_to_dict(self, record):
-        if record.housepostcode in ["CB4 2QA", "CB4 1LD"]:
-            return None
-
-        return super().address_record_to_dict(record)
