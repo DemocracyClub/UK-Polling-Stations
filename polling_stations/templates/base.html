@@ -1,106 +1,120 @@
+{% extends 'dc_base.html' %}
 {% load static i18n pipeline %}
 
-<!doctype html>
-<html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <title>{% block title %}Find your polling station{% endblock title %} | Where Do I Vote?</title>
-        {% block extra_site_css %}
-            {% stylesheet 'styles' %}
-            {% stylesheet 'map' %}
-        {% endblock extra_site_css %}
+{% block base_title %}
+    {% block page_title %}Find your polling station{% endblock page_title %}
+    | {{SITE_TITLE}}
+{% endblock base_title %}
 
-        {% block extra_page_css %}
-        {% endblock extra_page_css %}
+{% block extra_site_css %}
+    {% stylesheet 'styles' %}
+    {% stylesheet 'map' %}
+{% endblock extra_site_css %}
 
-        {% block top_banner %}
-            {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
-                <div class="ds-card">
-                    <div class="ds-card-body">
-                        <p>{% trans "This is a staging site." context "not shown to general public" %}</p>
-                    </div>
-                </div>
-            {% endif %}
-        {% endblock top_banner %}
+{% block top_banner %}
+    {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
+        <div class="ds-card">
+            <div class="ds-card-body">
+                <p>{% trans "This is a staging site." context "not shown to general public" %}</p>
+            </div>
+        </div>
+    {% endif %}
+{% endblock top_banner %}
+{% block page_meta %}{% endblock page_meta %}
+{% block site_meta %}
+    <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}">
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="{{ SITE_TITLE }}" />
+    {% block site_icons %}
+        <link rel="shortcut icon" href="{{ CANONICAL_URL }}{% static 'images/logo_icon.svg' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ CANONICAL_URL }}{% static 'icons/apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" href="{{ CANONICAL_URL }}{% static 'icons/favicon-32x32.png' %}" sizes="32x32">
+        <link rel="icon" type="image/png" href="{{ CANONICAL_URL }}{% static 'icons/favicon-16x16.png' %}" sizes="16x16">
+        <link rel="mask-icon" href="{{ CANONICAL_URL }}{% static 'icons/safari-pinned-tab.svg' %}" color="#ec008c">
+    {% endblock site_icons %}
 
-        {% block site_meta %}
-            <meta name="description" content="{% block description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock %}">
-            <meta name="keywords" content="{% block keywords %}Polling stations,Election,General Election,Local Election{% endblock %}">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {% block base_og_tags %}
+        <meta name="keywords" content="{% block keywords %}Polling stations,Election,General Election,Local Election{% endblock %}">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta property="og:site_name" content="Where Do I Vote?">
+        <meta name="type" property="og:type" content="{% block og_type_content %}website{% endblock og_type_content %}">
+        <meta name="url" property="og:url" content="{{ CANONICAL_URL }}{{ request.path }}">
+        <meta name="image" property="og:image" content="{% block og_image %}{% static 'images/og_image_logo.png' %}{% endblock og_image %}">
+        <meta name="title" property="og:title" content="{% block og_title %}{% trans 'Where Do I Vote?' %}{% endblock og_title %}">
+        <meta name="description" property="og:description" content="{% block og_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_description %}">
+    {% endblock base_og_tags %}
 
-            <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}">
-            <meta property="og:site_name" content="Where Do I Vote?">
-            <meta property="og:url" content="{{ CANONICAL_URL }}{{ request.path }}">
-            <meta property="fb:app_id" content="262795130596272">
-            <meta name="twitter:title" content="{{ SITE_TITLE }}">
-            <meta name="twitter:card" content="summary">
-            <meta name="twitter:site" content="@democlub">
-            <meta name="twitter:url" content="{{ CANONICAL_URL }}">
-            <meta name="twitter:image" content="{% block og_image_twitter_content %}{% static 'images/logo_icon.png' %}{% endblock og_image_twitter_content %}" />
-            <meta name="twitter:description" content="{% block og_twitter_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_twitter_description %}">
-            <meta name="twitter:image:alt" content="{{ SITE_TITLE }}">
-            <link rel="shortcut icon" href="{%  static 'images/logo_icon.svg' %}">
-            <meta property="og:image" content="{% block og_image %}{% static 'images/logo_icon.png' %}{% endblock og_image %}">
-            <meta property="og:title" content="{% block og_title %}{% trans 'Where Do I Vote?' %}{% endblock og_title %}">
-            <meta property="og:description" content="{% block og_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_description %}">
-            {% if noindex %}
-                <meta name="robots" content="noindex">
-            {% endif %}
-            {% block page_meta %}{% endblock page_meta %}
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-        {% endblock site_meta %}
+    {% block twitter_tags %}
+        <meta name="twitter:title" content="{{ SITE_TITLE }}">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@democlub">
+        <meta name="twitter:url" content="{{ CANONICAL_URL }}">
+        <meta name="twitter:image" content="{% block og_image_twitter_content %}{% static 'images/logo_icon.png' %}{% endblock og_image_twitter_content %}" />
+        <meta name="twitter:description" content="{% block og_twitter_description %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans with election_date=NEXT_CHARISMATIC_ELECTION_DATE|date:'F j Y' %}Find out where to vote on {{ election_date }}{% endblocktrans %}{% else %}{% trans "Find out where to vote" %}{% endif %}{% endblock og_twitter_description %}">
+        <meta name="twitter:image:alt" content="Democracy Club logo">
+    {% endblock twitter_tags %}
 
-    </head>
+    {% if noindex %}
+        <meta name="robots" content="noindex">
+    {% endif %}
 
+{% endblock site_meta %}
+
+{% block body_base %}
     <body {% block body_attrs %}class="ds-width-full"{% endblock body_attrs %}>
         <div class="ds-page">
             {% block header %}
-                <a class="ds-skip-link" href="#main">skip to content</a>
-                <form action="{% url 'set_language' %}" id="language-menu" method="post">
-                    <aside class="ds-language" aria-labelledby="language-label">
-                        {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                        <ul>
-                            <li id="language-label" aria-hidden="true">{% trans "Language:" %}</li>
-                            {% get_current_language as LANGUAGE_CODE %}
-                            {% get_available_languages as LANGUAGES %}
-                            {% get_language_info_list for LANGUAGES as languages %}
-                            {% for language in languages %}
-                                <li>
-                                    <button name="language" value="{{ language.code }}" lang="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} aria-current="true"{% endif %}>
-                                        {{ language.name_local }}
-                                    </button>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </aside>
-                </form>
-                <header class="ds-header">
-                    <a class="ds-logo" href="/">
-                        <img src="{% static "images/logo_icon.svg" %}" alt="" />
-                        <span>
-                            Where Do I Vote?<br>
-                            {% get_current_language as LANGUAGE_CODE %}
-                            {% if LANGUAGE_CODE != "en" %}
-                                <em lang="cy">{% language "cy" %}{% trans "Where Do I Vote?" %}{% endlanguage %}</em>
-                            {% endif %}
-                        </span>
-                    </a>
-                </header>
+                {% block site_menu %}
+                    <form action="{% url 'set_language' %}" id="language-menu" method="post">
+                        <aside class="ds-language" aria-labelledby="language-label">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                            <ul>
+                                <li id="language-label" aria-hidden="true">{% trans "Language:" %}</li>
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {% for language in languages %}
+                                    <li>
+                                        <button name="language" value="{{ language.code }}" lang="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} aria-current="true"{% endif %}>
+                                            {{ language.name_local }}
+                                        </button>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </aside>
+                    </form>
+                    <header class="ds-header">
+                        <a class="ds-logo" href="/">
+                            <img src="{% static "images/logo_icon.svg" %}" alt="" />
+                            <span>
+                                Where Do I Vote?<br>
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% if LANGUAGE_CODE != "en" %}
+                                    <em lang="cy">{% language "cy" %}{% trans "Where Do I Vote?" %}{% endlanguage %}</em>
+                                {% endif %}
+                            </span>
+                        </a>
+                    </header>
+                {% endblock site_menu %}
             {% endblock header %}
             <main id="main" tabindex="-1" class="ds-stack">
-                {% if messages %}
-                    <aside class="ds-status" aria-label="Status">
-                        <ul class="ds-stack">
-                            {% for message in messages %}
-                                <li {% if message.tags %}class=" {{ message.tags }} ds-status-message ds-status-{{ message.level_tag }} " {% endif %}> {{ message }} </li>
-                            {% endfor %}
-                        </ul>
-                    </aside>
-                {% endif %}
+                {% block messages %}
+                    {% if messages %}
+                        <aside class="ds-status" aria-label="Status">
+                            <ul class="ds-stack">
+                                {% for message in messages %}
+                                    <li {% if message.tags %}class=" {{ message.tags }} ds-status-message ds-status-{{ message.level_tag }} " {% endif %}> {{ message }} </li>
+                                {% endfor %}
+                            </ul>
+                        </aside>
+                    {% endif %}
+                {% endblock messages %}
+
                 {% block content %}
+                    {% block page_content %}
+                    {% endblock page_content %}
                 {% endblock content %}
             </main>
             {% block site_footer %}
@@ -163,34 +177,10 @@
                 </footer>
             {% endblock site_footer %}
         </div>
-
-
-        {% block ga_tracking_code %}
-            {% if not debug and not disable_ga %}
-                <script type="text/javascript">
-                    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || "0";
-                    if (dnt != "1" && dnt != "yes") {
-                        (function(i, s, o, g, r, a, m) {
-                            i['GoogleAnalyticsObject'] = r;
-                            i[r] = i[r] || function() {
-                                (i[r].q = i[r].q || []).push(arguments)
-                            }, i[r].l = 1 * new Date();
-                            a = s.createElement(o),
-                            m = s.getElementsByTagName(o)[0];
-                            a.async = 1;
-                            a.src = g;
-                            m.parentNode.insertBefore(a, m)
-                        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-                        ga('create', 'UA-61638489-1', 'auto');
-                        ga('send', 'pageview');
-                    }
-                </script>
-            {% endif %}
-        {% endblock ga_tracking_code %}
-
     </body>
+{% endblock body_base %}
 
+{% block extra_site_js %}
     {% block extra_javascript %}
 
         {% if RAVEN_CONFIG %}
@@ -201,10 +191,32 @@
             </script>
         {% endif %}
         {% javascript 'scripts' %}
-
     {% endblock extra_javascript %}
+{% endblock extra_site_js %}
 
-    {% block in_page_javascript %}
-    {% endblock in_page_javascript %}
+{% block in_page_javascript %}
+{% endblock in_page_javascript %}
 
-</html>
+{% block ga_tracking_code %}
+    {% if not debug and not disable_ga %}
+        <script type="text/javascript">
+            var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || "0";
+            if (dnt != "1" && dnt != "yes") {
+                (function(i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function() {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-61638489-1', 'auto');
+                ga('send', 'pageview');
+            }
+        </script>
+    {% endif %}
+{% endblock ga_tracking_code %}
