@@ -1,4 +1,5 @@
 from dc_utils.tests.helpers import validate_html
+from django.test import TestCase
 from django.urls import reverse
 from addressbase.tests.factories import AddressFactory, UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
@@ -78,3 +79,11 @@ class TestHtml:
                 if errors:
                     print(url, errors)
                 assert errors == ""
+
+
+class TestBaseTemplate(TestCase):
+    def test_base_template(self):
+        with self.assertTemplateUsed("dc_base.html"):
+            req = self.client.get("/")
+            assert req.status_code == 200
+            assert "dc_base_naked.html" in (t.name for t in req.templates)
