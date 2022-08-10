@@ -16,3 +16,5 @@ pytest-pep8
 pytest-flakes
 pytest-cov
 pytest-subtests
+pytest-playwright==0.3.0
+playwright==1.24.1
