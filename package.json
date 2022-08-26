@@ -14,7 +14,7 @@
     "dependencies": {
         "@mapbox/polyline": "^1.1.1",
         "font-awesome": "^4.7.0",
-        "jquery": "^3.6.0",
+        "jquery": "^3.6.1",
         "leaflet": "^1.8.0",
         "leaflet-extra-markers": "^1.2.1",
         "leaflet.markercluster": "^1.5.3",
