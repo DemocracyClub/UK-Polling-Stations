@@ -1,0 +1,14 @@
+{
+  "PROJECT_NAME": "polling_stations",
+  "APP_NAME": "polling_stations",
+  "PROJECT_ROOT": "/var/www/polling_stations",
+  "ENV_FILE_PATH": "/var/www/polling_stations/code/.env",
+  "PRIVATE_DATA_PATH": "/tmp/s3mirror",
+  "DJANGO_MEDIA_PATH": "polling_stations",
+  "DJANGO_MEDIA_ROOT": "/var/www/polling_stations-media/media_root",
+  "PROJECT_REPO": "https://github.com/DemocracyClub/UK-Polling-Stations.git",
+  "ADDRESSBASE_FILE_NAME": "ABFLGB_CSV_2022-02-01_cleaned.csv",
+  "ONSPD_URL": "https://ons-cache.s3.amazonaws.com/onspd/ONSPD_FEB_2022_UK.zip",
+  "ALT_BOUNDARIES_URL": "https://ons-cache.s3.amazonaws.com/Local_Authority_Districts_December_2021_UK_BFE.geojson",
+  "CRON_EMAIL": "developers@democracyclub.org.uk"
+}

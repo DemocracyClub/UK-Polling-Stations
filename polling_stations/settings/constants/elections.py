@@ -1,5 +1,6 @@
-EE_BASE = "https://elections.democracyclub.org.uk/"
+import os
 
+EE_BASE = os.environ.get("EE_BASE", "https://elections.democracyclub.org.uk/")
 """
 Every Election settings
 
@@ -16,3 +17,6 @@ EVERY_ELECTION = {"CHECK": True, "HAS_ELECTION": True}
 ELECTION_BLACKLIST = [
     "local.epping-forest.moreton-and-fyfield.by.2018-05-03"  # uncontested
 ]
+
+
+NEXT_CHARISMATIC_ELECTION_DATE = None

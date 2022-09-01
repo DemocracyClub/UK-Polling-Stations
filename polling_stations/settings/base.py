@@ -13,9 +13,13 @@ repo_root = lambda *x: os.path.join(os.path.abspath(here("../..")), *x)
 sys.path.insert(0, root("apps"))
 
 
-DEBUG = True
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
 
-ADMINS = ()
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = os.environ.get("SECRET_KEY", "asdasdasdasdasdasdasd")
+
+ADMINS = (("DC developers", "developers@democracyclub.org.uk"),)
 
 MANAGERS = ADMINS
 
@@ -23,17 +27,18 @@ DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": "polling_stations",
-        "USER": "postgres",
+        "USER": "",
         "PASSWORD": "",
         "HOST": "",  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         "PORT": "",  # Set to empty string for default.
+        "CONN_MAX_AGE": 60,
     }
 }
 
 import dj_database_url
 
-DATABASES["default"] = dj_database_url.config()
-DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
+# DATABASES["default"] = dj_database_url.config()
+# DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -284,22 +289,69 @@ ADDRESS_MODEL = "addressbase.Address"
 ONSUD_MODEL = "addressbase.UprnToCouncil"
 
 EMAIL_SIGNUP_ENDPOINT = "https://democracyclub.org.uk/mailing_list/api_signup/v1/"
-EMAIL_SIGNUP_API_KEY = ""
 DEFAULT_FROM_EMAIL = "Democracy Club <pollingstations@democracyclub.org.uk>"
+EMAIL_SIGNUP_API_KEY = os.environ.get("EMAIL_SIGNUP_API_KEY", "")
 
 # Disable Basic Auth by default
 # We only want to use this on staging deploys
 BASICAUTH_DISABLE = True
-
+# TODO https://github.com/DemocracyClub/polling_deploy/blob/22ce0df9489467d1a2dc088d022b2ec975e32349/webapp_settings/production.py#L134-L143
 
 SHOW_ADVANCE_VOTING_STATIONS = True
-
-# DC Logging Client
-POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)
 
 # settings for load balancer status check
 CHECK_SERVER_CLEAN = True
 CLEAN_SERVER_FILE = "~/clean"
+
+# When we're running on AWS
+if os.environ.get("DC_ENVIRONMENT"):
+
+    DATABASES["logger"] = {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "USER": "postgres",
+        "NAME": os.environ.get("RDS_DB_NAME"),
+        "PASSWORD": os.environ.get("RDS_DB_PASSWORD"),
+        "HOST": os.environ.get("RDS_DB_HOST"),
+        "PORT": "5432",
+    }
+
+    if os.environ.get("IGNORE_ROUTERS"):
+        DATABASE_ROUTERS = []
+    else:
+        DATABASE_ROUTERS = [
+            "polling_stations.db_routers.LoggerRouter",
+        ]
+
+    # Sentry config
+    RAVEN_CONFIG = {
+        "dsn": os.environ.get("SENTRY_DSN"),  # TODO upgrade to sentry_sdk.init(...
+        "environment": os.environ.get("DC_ENVIRONMENT"),
+    }
+
+    # Let's us send emails to users
+    DEFAULT_FROM_EMAIL = "pollingstations@democracyclub.org.uk"
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_PORT = 587
+    EMAIL_HOST = "email-smtp.eu-west-1.amazonaws.com"
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ.get("SMTP_USER")
+    EMAIL_HOST_PASSWORD = os.environ.get("SMTP_PASSWORD")
+
+    # ALLOWED_HOSTS/ip address stuff
+    # TODO https://github.com/DemocracyClub/polling_deploy/blob/22ce0df9489467d1a2dc088d022b2ec975e32349/webapp_settings/production.py#L96-L108
+    # TODO Is this still true? https://github.com/DemocracyClub/polling_deploy/blob/ff83e6eb8fe1d9ee18efad7a39e524eec9fae477/files/conf/nginx.conf#L5
+    ALLOWED_HOSTS = ["*"]  # TODO Make this a parameter store thing
+    USE_X_FORWARDED_HOST = True
+
+    # Logging Client
+    FIREHOSE_ACCOUNT_ARN = os.environ.get("FIREHOSE_ACCOUNT_ARN", None)
+    if FIREHOSE_ACCOUNT_ARN:
+        POSTCODE_LOGGER = DCWidePostcodeLoggingClient(
+            assume_role_arn=FIREHOSE_ACCOUNT_ARN
+        )
+
+    # s3 Uploads buckets
+    # TODO https://github.com/DemocracyClub/polling_deploy/blob/22ce0df9489467d1a2dc088d022b2ec975e32349/webapp_settings/production.py#L128-L131
 
 
 # import application constants
@@ -324,7 +376,7 @@ try:
 except ImportError:
     pass
 
-if DEBUG:
+if not os.environ.get("DC_ENVIRONMENT"):
     INSTALLED_APPS += ("dashboard",)
 
 # importing test settings file if necessary (TODO chould be done better)

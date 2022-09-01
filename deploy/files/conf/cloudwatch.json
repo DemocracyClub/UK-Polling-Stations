@@ -1,0 +1,51 @@
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "logfile": "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log"
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/db_replication/logs.log",
+            "log_group_name": "/db_replication/",
+            "log_stream_name": "db_replication_logs",
+            "timezone": "UTC"
+          },
+          {
+            "file_path": "/var/log/syslog",
+            "log_group_name": "/var/log/syslog",
+            "log_stream_name": "syslog",
+            "timezone": "UTC"
+          },
+          {
+            "file_path": "/opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log",
+            "log_group_name": "/codedeploy/",
+            "log_stream_name": "codedeploy-agent-deployments.log",
+            "timezone": "UTC"
+          },
+          {
+            "file_path": "/var/log/postgresql/postgresql-14-main.log",
+            "log_group_name": "/var/log/postgresql",
+            "log_stream_name": "postgresql-log",
+            "timezone": "UTC"          }
+        ]
+      }
+    },
+    "log_stream_name": "logs",
+    "force_flush_interval": 5
+  },
+  "metrics": {
+    "metrics_collected": {
+      "mem": {
+        "measurement": [
+          "mem_available_percent",
+          "mem_free",
+          "mem_used_percent"
+        ],
+        "metrics_collection_interval": 60
+      }
+    }
+  }
+}
