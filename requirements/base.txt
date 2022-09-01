@@ -47,3 +47,4 @@ aloe==0.2.0
 selenium
 botocore==1.25.7
 Faker==13.3.4
+django-dotenv
