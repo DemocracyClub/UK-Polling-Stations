@@ -1,0 +1,55 @@
+{
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "autoscaling:*",
+                                "codedeploy:*",
+                                "ec2:*",
+                                "elasticloadbalancing:*",
+                                "iam:AddRoleToInstanceProfile",
+                                "iam:AttachRolePolicy",
+                                "iam:CreateInstanceProfile",
+                                "iam:CreateRole",
+                                "iam:DeleteInstanceProfile",
+                                "iam:DeleteRole",
+                                "iam:DeleteRolePolicy",
+                                "iam:GetInstanceProfile",
+                                "iam:GetRole",
+                                "iam:GetRolePolicy",
+                                "iam:ListInstanceProfilesForRole",
+                                "iam:ListRolePolicies",
+                                "iam:ListRoles",
+                                "iam:PassRole",
+                                "iam:PutRolePolicy",
+                                "iam:RemoveRoleFromInstanceProfile",
+                                "s3:*",
+                                "ssm:*"
+                            ],
+                            "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": "iam:CreateServiceLinkedRole",
+                            "Resource": "arn:aws:iam::*:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing*",
+                            "Condition": {
+                                "StringLike": {
+                                    "iam:AWSServiceName": "elasticloadbalancing.amazonaws.com"
+                                }
+                            }
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "iam:AttachRolePolicy",
+                                "iam:PutRolePolicy",
+                                "iam:CreateServiceLinkedRole"
+                            ],
+                            "Resource": [
+                                "arn:aws:iam::*:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing*",
+                                "arn:aws:iam::*:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling*"
+                            ]
+                        }
+                    ]
+                }
