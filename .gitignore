@@ -76,3 +76,6 @@ uprn-to-councils.csv
 
 # PyCharm
 .idea/
+
+# cdk gubbins
+cdk.out/**

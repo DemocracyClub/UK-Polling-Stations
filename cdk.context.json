@@ -1,0 +1,35 @@
+{
+  "vpc-provider:account=356853674636:filter.isDefault=true:region=eu-west-2:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-a8604bc0",
+    "vpcCidrBlock": "172.31.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-43324b39",
+            "cidr": "172.31.16.0/20",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-85f91dee"
+          },
+          {
+            "subnetId": "subnet-7063ef3c",
+            "cidr": "172.31.32.0/20",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-85f91dee"
+          },
+          {
+            "subnetId": "subnet-bf3805d6",
+            "cidr": "172.31.0.0/20",
+            "availabilityZone": "eu-west-2c",
+            "routeTableId": "rtb-85f91dee"
+          }
+        ]
+      }
+    ]
+  },
+  "ami:account=356853674636:filters.image-type.0=machine:filters.name.0=EEImage_ubuntu*:filters.state.0=available:region=eu-west-2": "ami-00ef69a2c68618a4c",
+  "ssm:account=356853674636:parameterName=SSL_CERTIFICATE_ARN:region=eu-west-2": "arn:aws:acm:eu-west-2:356853674636:certificate/92a46f99-e2c4-447a-8aee-c978e00f4393"
+}

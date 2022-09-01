@@ -1,0 +1,76 @@
+{
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "apigateway:DELETE",
+                                "apigateway:GET",
+                                "apigateway:PATCH",
+                                "apigateway:POST",
+                                "apigateway:PUT",
+                                "cloudformation:CreateChangeSet",
+                                "cloudformation:DescribeChangeSet",
+                                "cloudformation:DescribeStackEvents",
+                                "cloudformation:DescribeStacks",
+                                "cloudformation:ExecuteChangeSet",
+                                "cloudformation:GetTemplateSummary",
+                                "events:*",
+                                "lambda:AddPermission",
+                                "lambda:CreateAlias",
+                                "lambda:CreateFunction",
+                                "lambda:DeleteAlias",
+                                "lambda:DeleteFunction",
+                                "lambda:GetFunction",
+                                "lambda:GetFunctionConfiguration",
+                                "lambda:GetLayerVersion",
+                                "lambda:InvokeFunction",
+                                "lambda:ListTags",
+                                "lambda:ListVersionsByFunction",
+                                "lambda:PublishLayerVersion",
+                                "lambda:PublishVersion",
+                                "lambda:RemovePermission",
+                                "lambda:TagResource",
+                                "lambda:UntagResource",
+                                "lambda:UpdateAlias",
+                                "lambda:UpdateFunctionCode",
+                                "lambda:UpdateFunctionConfiguration",
+                                "logs:CreateLogGroup",
+                                "logs:PutRetentionPolicy",
+                                "s3:AbortMultipartUpload",
+                                "s3:GetObject",
+                                "s3:ListBucketMultipartUploads",
+                                "s3:ListMultipartUploadParts",
+                                "s3:PutObject",
+                                "s3:PutObjectAcl",
+                                "s3:PutObjectTagging"
+                            ],
+                            "Resource": [
+                                "arn:aws:apigateway:eu-west-2:*::/restapis",
+                                "arn:aws:apigateway:eu-west-2:*::/restapis/*",
+                                "arn:aws:cloudformation:eu-west-2:*:changeSet/samcli-deploy*/*",
+                                "arn:aws:cloudformation:eu-west-2:*:stack/WCIVFApp*/*",
+                                "arn:aws:cloudformation:eu-west-2:aws:transform/Serverless-2016-10-31",
+                                "arn:aws:events:eu-west-2:*:rule/*",
+                                "arn:aws:lambda:eu-west-2:*:function:WCIVFControllerFunction*",
+                                "arn:aws:lambda:eu-west-2:*:layer:DependenciesLayer",
+                                "arn:aws:lambda:eu-west-2:*:layer:DependenciesLayer:*",
+                                "arn:aws:logs:eu-west-2:*:log-group:/aws/lambda/WCIVFApp*",
+                                "arn:aws:s3:::wcivf-deployment-artifacts-*",
+                                "arn:aws:s3:::wcivf-deployment-artifacts-*/*"
+                            ]
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": "iam:PassRole",
+                            "Resource": [
+                                "arn:aws:iam::*:role/WCIVFLambdaExecutionRole"
+                            ],
+                            "Condition": {
+                                "StringEquals": {
+                                    "iam:PassedToService": "lambda.amazonaws.com"
+                                }
+                            }
+                        }
+                    ]
+                }
