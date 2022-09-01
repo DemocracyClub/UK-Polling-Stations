@@ -1,3 +1,9 @@
+from dc_logging_client import DCWidePostcodeLoggingClient
+
+DEBUG = True
+
+SECRET_KEY = "asdasdasdasdasdasdasd"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -23,3 +29,4 @@ CACHES = {
 # enable the `direct_connection` mode
 # from dc_logging_client import DCWidePostcodeLoggingClient
 # POSTCODE_LOGGER = DCWidePostcodeLoggingClient(direct_connection=True)
+POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)

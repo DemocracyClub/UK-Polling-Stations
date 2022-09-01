@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts the cloudwatch agent with our config file
+Before=${PROJECT_NAME}_db_replication.service
+
+[Service]
+User=root
+ExecStart=/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/root/.cloudwatch.json -s
+
+[Install]
+WantedBy=multi-user.target

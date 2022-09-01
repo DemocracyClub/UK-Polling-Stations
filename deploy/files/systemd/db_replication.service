@@ -1,0 +1,17 @@
+[Unit]
+Description=Manages DB replication subscription
+Before=${PROJECT_NAME}_gunicorn.service
+After=postgresql.service
+
+[Service]
+User=${PROJECT_NAME}
+Type=oneshot
+RemainAfterExit=true
+ExecStart=${PROJECT_ROOT}/setup_db_replication.sh
+ExecStop=${PROJECT_ROOT}/remove_db_replication.sh
+
+StandardOutput=file:/var/log/db_replication/logs.log
+StandardError=file:/var/log/db_replication/logs.log
+
+[Install]
+WantedBy=multi-user.target

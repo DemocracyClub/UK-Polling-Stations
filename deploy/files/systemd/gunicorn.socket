@@ -1,0 +1,8 @@
+[Unit]
+Description=${PROJECT_NAME} gunicorn socket
+
+[Socket]
+ListenStream=/run/${PROJECT_NAME}_gunicorn/socket
+
+[Install]
+WantedBy=sockets.target
