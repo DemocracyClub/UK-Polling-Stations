@@ -3,58 +3,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BPC"
-    addresses_name = "2021-03-15T10:07:53.031696/BCP Democracy_Club__06May2021.tsv"
-    stations_name = "2021-03-15T10:07:53.031696/BCP Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
-    csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # Drax Poole Sea Cadets
-        if record.polling_place_id == "15435":
-            record = record._replace(polling_place_easting="400881")
-            record = record._replace(polling_place_northing="91638")
-
-        # St. Philip`s Church Centre
-        if record.polling_place_id == "15325":
-            record = record._replace(polling_place_easting="406440")
-            record = record._replace(polling_place_northing="95654")
-
-        # St. Johns Church Surrey Road Poole
-        if record.polling_place_id == "15483":
-            record = record._replace(polling_place_easting="406806")
-            record = record._replace(polling_place_northing="92013")
-
-        return super().station_record_to_dict(record)
-
-    def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn in [
-            "100040790272",  # FLAT 5, HAZELDENE, 2 YORK ROAD, BROADSTONE
-            "10094773056",  # 10B NAIRN ROAD, POOLE
-            "10012226208",  # FLAT 2, PRIORY HOUSE, ATHELSTAN ROAD, BOURNEMOUTH
-            "10012226209",  # FLAT 3, PRIORY HOUSE, ATHELSTAN ROAD, BOURNEMOUTH
-            "10012226210",  # FLAT 4, PRIORY HOUSE, ATHELSTAN ROAD, BOURNEMOUTH
-            "10024391215",  # APARTMENT B TUDOR HOUSE 1 WALPOLE ROAD, BOURNEMOUTH
-        ]:
-            return None
-
-        if record.addressline6 in [
-            "BH15 3FG",
-            "BH10 6BA",
-            "BH5 1FG",
-            "BH1 1NF",
-            "BH1 3EB",
-            "BH7 6LL",
-            "BH6 3NH",
-            "BH6 3BJ",
-            "BH10 5JF",
-            "BH6 3LF",
-            "BH12 4EB",
-            "BH5 1DL",
-            "BH14 0RD",
-            "BH23 3JJ",
-        ]:
-            return None
-
-        return super().address_record_to_dict(record)
+    addresses_name = (
+        "2022-10-06/2022-09-13T16:21:27.820706/Democracy_Club__06October2022.CSV"
+    )
+    stations_name = (
+        "2022-10-06/2022-09-13T16:21:27.820706/Democracy_Club__06October2022.CSV"
+    )
+    elections = ["2022-10-06"]
