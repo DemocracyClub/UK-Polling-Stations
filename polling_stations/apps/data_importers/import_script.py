@@ -1,3 +1,6 @@
+import black
+
+
 class ImportScript:
     def __init__(
         self, council_id, ems, addresses_name, stations_name, elections, encoding
@@ -35,7 +38,7 @@ class ImportScript:
 
     @property
     def script(self):
-        return f"""from data_importers.management.commands import {self.importer_class}
+        script_str = f"""from data_importers.management.commands import {self.importer_class}
 
 
 class Command({self.importer_class}):
@@ -44,3 +47,4 @@ class Command({self.importer_class}):
     stations_name = "{self.stations_name}"
     elections = {self.elections}{self.csv_encoding_string}{self.csv_delimiter_string}
 """
+        return black.format_str(script_str, mode=black.FileMode())
