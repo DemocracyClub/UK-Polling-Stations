@@ -1,6 +1,9 @@
 import os
+import re
 
 from django.test import TestCase
+from playwright.sync_api import expect
+
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
@@ -108,3 +111,12 @@ class AdvanceVotingTests(TestCase):
         )
 
         self.assertEqual(assigned_uprns, 2)
+
+
+def test_homepage_has_Playwright_in_title_and_get_started_link_linking_to_the_intro_page(
+    page, live_server
+):
+    page.goto(live_server.url)
+
+    # Expect a title "to contain" a substring.
+    expect(page).to_have_title("Find your polling station | Where Do I Vote?")
