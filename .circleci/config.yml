@@ -78,5 +78,4 @@ jobs:
           command: |
             . .venv/bin/activate
             pytest --cov-report= --cov=polling_stations
-            coverage run --append manage.py harvest
             coveralls
