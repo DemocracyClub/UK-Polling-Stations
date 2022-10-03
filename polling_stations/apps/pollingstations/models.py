@@ -9,7 +9,7 @@ from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import JSONField
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 
 from core.opening_times import OpeningTimes
