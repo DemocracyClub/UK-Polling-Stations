@@ -159,7 +159,7 @@ INSTALLED_APPS = (
     "rest_framework_gis",
     "raven.contrib.django.raven_compat",
     "django_extensions",
-    "markdown_deux",
+    "markdown",
     "corsheaders",
     "pipeline",
     "dc_signup_form",
