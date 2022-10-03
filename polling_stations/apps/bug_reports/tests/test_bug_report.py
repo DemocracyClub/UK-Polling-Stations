@@ -67,7 +67,7 @@ class TestBugReport(TestCase):
         self.assertEqual(200, response.status_code)
         reports = BugReport.objects.all()
         self.assertEqual(0, len(reports))
-        self.assertIn('<div class="error">', str(response.content))
+        self.assertIn('<div class="ds-error">', str(response.content))
 
     def test_no_malicious_redirects_post_body(self):
         c = Client()
