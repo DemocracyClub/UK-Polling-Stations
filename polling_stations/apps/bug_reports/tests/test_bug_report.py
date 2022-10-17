@@ -8,8 +8,8 @@ class TestBugReport(TestCase):
         response = c.get("/report_problem/?source=foo&source_url=barbaz")
         self.assertEqual(200, response.status_code)
         expected_strings = [
-            '<textarea name="description" cols="40" rows="3" class="" required id="id_description">\n</textarea>',
-            '<input type="email" name="email" maxlength="100" class="" id="id_email">',
+            '<textarea name="description" cols="40" rows="3" class required id="id_description">\n</textarea>',
+            '<input type="email" name="email" maxlength="100" class id="id_email">',
             '<button type="submit" class="ds-button">Send Report</button>',
         ]
         for string in expected_strings:
