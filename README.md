@@ -13,10 +13,10 @@ If you are interested in helping out in any way at all, please contact sym@democ
 ## Getting Started
 
 ### Python
-UK-Polling-Stations requires python 3.6
+UK-Polling-Stations requires python 3.8.12
 
 ### Install system dependencies
-UK-Polling-Stations requires Python 3.6, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
+UK-Polling-Stations requires Python 3.8.12, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
 
 On Mac OSX, run:
 ```
