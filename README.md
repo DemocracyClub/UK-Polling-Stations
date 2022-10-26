@@ -49,36 +49,23 @@ pip install -r requirements/base.txt
 npm install
 ```
 
-### Install testing system dependencies
-We have a suite of end-to-end integration tests. We use [ChromeDriver](http://chromedriver.chromium.org/) to drive headless Chrome or Chromuim. This step isn't required to get a dev install running but will be required to run the full test suite.
-
-On ubuntu, run
-
-```
-sudo apt-get install chromium-browser chromium-chromedriver
-```
-
-to install the dependencies. The chromedriver executable needs to be in `PATH`, so either add `/usr/lib/chromium-browser/chromedriver` to `PATH` or create a symlink e.g:
-
-```
-sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
-```
-
-On Mac OSX, run:
-```
-brew tap homebrew/cask
-brew install --cask chromedriver
-```
-
-and if you don't already have Chrome installed:
-```
-brew cask install google-chrome
-```
-
 ### Install testing python dependencies
 ```
 pip install -r requirements/testing.txt
 ```
+
+### Install testing system dependencies
+We have a suite of end-to-end integration tests. We use [Playwright](https://playwright.dev/python/)
+with `pytest` to run these.
+
+To set up playwright, after running `pip install -r requirements/testing.txt`,
+run `playwright install`. This will download the browser biniaries required
+for your system.
+
+The Playwright tests will run in a headless browser as part of a normal `pytest` run.
+You may want to run the Playwright suite in headed mode for debugging purposes. To do that, run the following: 
+
+`pytest polling_stations/apps/data_finder/tests/playwright/ --headed`
 
 ### Create local config
 ```

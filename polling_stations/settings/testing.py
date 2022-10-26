@@ -18,3 +18,7 @@ GOOGLE_API_KEYS = []
 STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 
 RUNNING_TESTS = True
+
+import os
+
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
