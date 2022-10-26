@@ -12,7 +12,10 @@ vcrpy==4.1.1
 
 pytest
 pytest-django
-pytest-pep8
+pytest-pycodestyle
 pytest-flakes
 pytest-cov
 pytest-subtests
+playwright==1.27.1
+pytest-playwright==0.3.0
+
