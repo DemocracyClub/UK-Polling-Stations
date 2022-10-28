@@ -1,0 +1,116 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
+    method: GET
+    uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=walking&origin=51.596012118680264,-2.998065948486328&destination=51.595814835763214,-2.995147704661227
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/82a4XKqRhSA/9+n2OFP/ySpCBi4M52AhhpzY6wxuZk7Nxm6gVV3gmB2F700N52+
+        Q5+ir9FH6ZN0AZOIYIRUrfhDZQ97zmHPdzi7y+MHAIAwQL7tO8ixpjAc+9hjVAAfwdeojR+Ps+85
+        SWJRBlkQiwmdT8LenMjYhTaysBO3NYat03NkfW6wk5F9Nbho9Hqmpzyo42s/dRELxyhRyjvweeeu
+        FekRwO1M6GlvDdaY2A5bP1+4TvNUtL37Qbc6pS1TcR2pPrG97vzvwaVrhO3GdPD5ii61lDKCELOg
+        4xBE6Zyx0fdtfJVA/IChpffzzg88J26dOxs1eD5hQwQpy7ZFzS6MGxTxQNEU9fBQ0ZJjLyvpDSLJ
+        /eqBpsmqLCkpiaf0BQLl1g6nqIhauaaJ6tv6tJqmLuh7/TevWrD9cUjwYJhEntCGY+BABsHff1Ur
+        Yg00fX/gotQ4uGiQuqvJkTXZwTw4PBvlOhQJMPQtdkqoHEhghIWMS5HQBLpB3IWsiYvtT9mb4AQE
+        Mux7q5XWuEqPrlAqKWoBpchzXkORd10Fl4jdBSQEDXcPnKPpmMfUyw9w/ku1sgeuPmV1xz25vv22
+        C4VDECxEhSLKilbAHz5uhKU8yvUBKM3zJX4kPZTzpKpmg3rRg2xcL/MAjXOCNDnyTAEFAnYm9hJB
+        oiaDPsuNoJnoSxxlb/sy059tWRHHGVuiaC5kilwraUqRmJyJprKUWpGlNwxKDatUkzOgrTBryEau
+        xQlmJLAj05JAPUHQATdBpSLZd/EXihNrcubH2Snge2mZOiQE2vfgBLvugijzp5AsdHkCiYseAuyB
+        Y5IWXzYC/NHqhi72VsXWaw0gPKDv4cnd47B7Zn5uHpt9/fasK5S8R8UwnAkXgfFZdBWSK+xiBE6Q
+        a43iQoP7em2cfWqdN/Pcy+1jXQTXakUBrlZ2BmBR3hLAhxVJLBoEYrVSNsXlA9xzo2IkzZuL+iyD
+        JeBDHZYgeSmaI+ihYIJIrJ4FxNunsQ37kdo1Au3fcaB//zbsHnfOLH1rKG86D+8Ky1VVKwqzWtbH
+        zcGcrS9XmPJemDVJKRoFh5okl83o+TAbDPC5FCDRXAvyGRcvIBm8R/HJFLYiXQQcfcOM0805Twl2
+        A4S8H+i7+X41Zd14P0KOtzcddo2m3tRN82t7ZJi23vximI1O68v2eN9w2t4V3iVRKcq7Vrbk3Rzv
+        atk64p28K3z2XjQKaoeSmplbrzDrP/IuEacY72ehh8CFs1uo39sc9V/Hw67ZMJvNTrNndo+MRsdo
+        HbWM9lGHf3p6i394GujCLT7pN5zjd4V8Wa4UJV+UyhbLZdGvLl9GWjRG2xb7Yq1wHGQXJleblc/+
+        Ja+c0+zGy4qZmfci4eYEehT02Lur9VjNGum2ook3GfKJN9TrHb1zdN1ARuvR3OLke7O5e1c4riqF
+        p9+HO1Sxly2Y3kuxWtMqyVE0GGRNLL0UUxTmnDl4ztMaOfGyd+FlsSzNa35Uhw6HefJ90IVGHRun
+        22N4wzl4VxhWqoUfxbtThItlM+a7EX57c+b5klVbNCusWyvCrztXadHkn4MngLLQRT/dCH1+8T7F
+        v6GPlQMNjW6ERPAYUYa9+FaBKZ+lg7t4vT2aAswZwDv6v1MDwjw19J8GXeP86OZme5lhO3m9TIJY
+        PHeb3VDj3fX72LboGCHHQh4jYby9liM6wfDldYZEJiUyp23+YsHnYz3BaGotH8nc7RFHb7u6rV9A
+        /czSjWa93cP1HjVaX8xG+7o71RsPen2q19t8JsYLumNLbzxF1VzyPFgc+tTWOA1GI5j4KTxXqamd
+        8CkkHvbydsOFa+je8ybgYIISKAEkCGCP48DgQSRzRRGwYRCD8s8ff4LLIaYgfmkBjGAYYTPClEad
+        UOygKe+QAp+AMXI4YQRDD4whG9IDYckNfR4DyydOgtHXvNck0m9wfHj68C9kg4NZmiIAAA==
+    headers:
+      Alt-Svc: ['quic=":443"; ma=2592000; v="34,33,32,31,30,29,28,27,26,25"']
+      Alternate-Protocol: ['443:quic']
+      Cache-Control: ['public, max-age=86400']
+      Content-Encoding: [gzip]
+      Content-Length: ['1477']
+      Content-Type: [application/json; charset=UTF-8]
+      Date: ['Sat, 11 Jun 2016 10:31:31 GMT']
+      Expires: ['Sun, 12 Jun 2016 10:31:31 GMT']
+      Server: [mafe]
+      Vary: [Accept-Language]
+      X-Frame-Options: [SAMEORIGIN]
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.7.0 CPython/3.5.2 Linux/4.4.0-67-generic]
+    method: GET
+    uri: https://elections.democracyclub.org.uk/api/elections.json?coords=51.596012118680264,-2.998065948486328&future=1&current=1
+  response:
+    body: {string: '{"count":1,"next":null,"previous":null,"results":[
+      {"election_id":"blablabla.bla", "group_type":null, "cancelled":false, "poll_open_date":"2099-12-31"}
+    ]}'}
+    headers:
+      Allow: ['GET, OPTIONS']
+      Connection: [keep-alive]
+      Content-Type: [application/json]
+      Date: ['Fri, 17 Mar 2017 16:28:15 GMT']
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=15768000]
+      Vary: ['Accept, Cookie']
+      X-Frame-Options: [SAMEORIGIN]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
+    method: GET
+    uri: https://api.mapbox.com/directions/v5/mapbox/walking/-2.998065948486328,51.596012118680264;-2.995147704661227,51.595814835763214?&alternatives=false&geometries=polyline&steps=false&access_token=
+  response:
+    body:
+      string: '{"message": "Not Authorized - Invalid Token",  "error_detail": "No
+        valid token prefix found in access_token parameter"}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '119'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 28 Oct 2022 15:05:30 GMT
+      Server:
+      - awselb/2.0
+      Via:
+      - 1.1 941ea2ea996fa7a883fc56177714a71c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - JWcT5nxsIo1N4pMIdMWsNW-ovxErY-FLdHEahkjwGdHfj04epmp3Ig==
+      X-Amz-Cf-Pop:
+      - LHR62-C3
+      X-Cache:
+      - Error from cloudfront
+    status:
+      code: 401
+      message: Unauthorized
+version: 1

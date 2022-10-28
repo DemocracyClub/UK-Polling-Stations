@@ -3,7 +3,7 @@ from playwright.sync_api import expect
 from django.core.management import call_command
 import os
 from polling_stations.apps.councils.tests.factories import CouncilFactory
-
+from pytest_vcr import vcr
 
 @pytest.fixture
 def setup_data():
@@ -62,13 +62,13 @@ def setup_data():
     yield
 
 
+@pytest.mark.vcr()
 def test_valid_station_id(
         page, live_server, setup_data
 ):
     page.goto(live_server.url)
     expect(page).to_have_title("Find your polling station | Where Do I Vote?")
     expect(page.locator("h1")).to_have_text("Find your polling station")
-    # TODO: Find a better way of checking if element present so we don't have to repeat this code constantly
     expect(page.locator("#id_postcode")).to_have_count(1)
     page.query_selector("#id_postcode").fill("BB11BB")
     with page.expect_navigation():
@@ -102,6 +102,7 @@ def test_invalid_station_id(page, live_server, setup_data):
     expect(page.locator("text=Contact Foo Council")).not_to_be_empty()
 
 
+@pytest.mark.vcr()
 def test_postcode_without_address_picker(
         page, live_server, setup_data
 ):
@@ -144,6 +145,7 @@ def test_invalid_postcode(page, live_server, setup_data):
     ).not_to_be_empty()
 
 
+@pytest.mark.vcr()
 def test_northern_ireland(page, live_server, setup_data):
     page.goto(live_server.url)
     expect(page).to_have_title("Find your polling station | Where Do I Vote?")
