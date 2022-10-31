@@ -49,6 +49,7 @@ jobs:
           paths:
             - ./.venv
             - ./node_modules
+            - ./home/circleci/.cache
           key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - run:
