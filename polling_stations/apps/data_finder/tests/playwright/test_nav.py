@@ -8,7 +8,7 @@ def test_api(page, live_server):
 
 def test_api_beta(page, live_server):
     page.goto(f"{live_server.url}/api/beta")
-    expect(page.locator("text=Api Root")).not_to_be_empty()
+    expect(page.locator("h1")).to_have_text("Api Root")
 
 
 def test_email_mailing_list(page, live_server):

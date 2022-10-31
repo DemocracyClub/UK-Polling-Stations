@@ -43,6 +43,7 @@ jobs:
             pip install wheel
             pip install coveralls
             pip install -r requirements/testing.txt
+            playwright install
 
       - save_cache:
           paths:

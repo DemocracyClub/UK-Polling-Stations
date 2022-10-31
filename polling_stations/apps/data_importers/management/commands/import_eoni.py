@@ -1,5 +1,4 @@
 import csv
-import subprocess
 from pathlib import Path
 
 from django.contrib.gis.geos import Point
