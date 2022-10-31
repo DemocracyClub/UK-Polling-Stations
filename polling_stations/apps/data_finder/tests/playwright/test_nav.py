@@ -12,8 +12,13 @@ def test_api_beta(page, live_server):
 
 
 def test_email_mailing_list(page, live_server):
+    errors = []
+    page.on(
+        "console", lambda msg: errors.append(msg.text) if msg.type == "error" else None
+    )
     page.goto(f"{live_server.url}/email/mailing_list")
     expect(page.locator("h3")).to_have_text("Join our mailing list")
+    assert len(errors) == 0
 
 
 def test_feedback(page, live_server):

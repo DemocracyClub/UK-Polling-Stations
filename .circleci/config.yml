@@ -76,6 +76,7 @@ jobs:
           name: Pytest
           command: |
             . .venv/bin/activate
+            python manage.py collectstatic --no-input
             pytest --flakes --cov-report= --cov=polling_stations
 
       - run:
