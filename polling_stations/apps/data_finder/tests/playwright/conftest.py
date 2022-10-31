@@ -4,7 +4,7 @@ from django.core.management import call_command
 from polling_stations.apps.councils.tests.factories import CouncilFactory
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def setup_data():
     CouncilFactory(
         **{
