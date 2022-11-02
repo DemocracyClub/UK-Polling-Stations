@@ -1,8 +1,7 @@
 import datetime
+from collections import OrderedDict
 from datetime import date, time
 from typing import Dict, List
-
-from typing_extensions import OrderedDict
 
 
 class OpeningTimes:

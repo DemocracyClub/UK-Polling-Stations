@@ -13,10 +13,10 @@ If you are interested in helping out in any way at all, please contact sym@democ
 ## Getting Started
 
 ### Python
-UK-Polling-Stations requires python 3.8.12
+UK-Polling-Stations requires python 3.10
 
 ### Install system dependencies
-UK-Polling-Stations requires Python 3.8.12, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
+UK-Polling-Stations requires Python 3.10, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
 
 On Mac OSX, run:
 ```
@@ -27,9 +27,9 @@ brew install gdal
 brew install node
 ```
 
-From a clean install of Ubuntu 18.04 (Bionic):
+From a clean install of Ubuntu 22.04 (Bionic):
 ```
-sudo apt-get install postgresql-10 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-10-postgis-2.4 libxml2-dev libxslt1-dev nodejs npm
+sudo apt-get install postgresql-14 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-14-postgis-3 libxml2-dev libxslt1-dev nodejs npm
 
 sudo npm install -g npm@latest-6
 ```
