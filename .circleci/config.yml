@@ -2,13 +2,12 @@
 version: 2.1
 
 orbs:
-  browser-tools: circleci/browser-tools@1.1.1
   node: circleci/node@5.0.2
 
 jobs:
   build:
     docker:
-      - image: cimg/python:3.8.12
+      - image: cimg/python:3.10.8-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -23,31 +22,25 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
-
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-
-      - run:
-          name: Check chromedriver install
-          command: |
-            google-chrome --version
-            chromedriver --version
+          key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - node/install:
           node-version: '10.19.0'
 
-      - node/install-packages:
+      - run:
+          name: Install node node_modules
+          command: npm install
           cache-path: ~/repo/node_modules
           override-ci-command: npm install
 
       - run:
           name: install dependencies
           command: |
-            sudo apt update && sudo apt install -y python3-venv gdal-bin python3-gdal
-            python3 -m venv .venv
+            sudo apt update && sudo apt install -y gdal-bin
+            python -m venv .venv
             . .venv/bin/activate
             pip install --upgrade pip
+            pip install wheel
             pip install coveralls
             pip install -r requirements/testing.txt
 
@@ -55,7 +48,7 @@ jobs:
           paths:
             - ./.venv
             - ./node_modules
-          key: polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+          key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - run:
           name: Install HTML Tidy
