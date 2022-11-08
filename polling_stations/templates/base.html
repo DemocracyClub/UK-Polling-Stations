@@ -43,26 +43,22 @@
     </form>
 {% endblock base_language_menu %}
 
-{% block main_base %}
-    <main id="main" tabindex="-1" class="ds-stack">
-        {% block messages %}
-            {% if messages %}
-                <aside class="ds-status" aria-label="Status">
-                    <ul class="ds-stack">
-                        {% for message in messages %}
-                            <li {% if message.tags %}class=" {{ message.tags }} ds-status-message ds-status-{{ message.level_tag }} " {% endif %}> {{ message }} </li>
-                        {% endfor %}
-                    </ul>
-                </aside>
-            {% endif %}
-        {% endblock messages %}
+{% block messages %}
+    {% if messages %}
+        <aside class="ds-status" aria-label="Status">
+            <ul class="ds-stack">
+                {% for message in messages %}
+                    <li {% if message.tags %}class=" {{ message.tags }} ds-status-message ds-status-{{ message.level_tag }} " {% endif %}> {{ message }} </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
+{% endblock messages %}
 
-        {% block content %}
-            {% block page_content %}
-            {% endblock page_content %}
-        {% endblock content %}
-    </main>
-{% endblock main_base %}
+{% block content %}
+    {% block page_content %}
+    {% endblock page_content %}
+{% endblock content %}
 
 {% block footer_base %}
     <footer class="ds-footer">
@@ -123,7 +119,6 @@
         </div>
     </footer>
 {% endblock footer_base %}
-
 
 {% block extra_site_js %}
     {% block extra_javascript %}
