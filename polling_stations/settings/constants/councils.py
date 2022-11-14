@@ -2,8 +2,8 @@
 
 EC_COUNCIL_CONTACT_EMAIL = "digitalcommunications@electoralcommission.org.uk"
 
-BOUNDARIES_URL = "https://ons-cache.s3.amazonaws.com/Local_Authority_Districts_(December_2021)_UK_BFE.geojson"
-COUNCIL_ID_FIELD = "LAD21CD"
+BOUNDARIES_URL = "https://ons-cache.s3.amazonaws.com/Local_Authority_Districts_May_2022_UK_BFE_V3.geojson"
+COUNCIL_ID_FIELD = "LAD22CD"
 EC_COUNCIL_CONTACT_DETAILS_API_URL = (
     "https://electoralcommission.org.uk/api/v1/data/local-authorities.json"
 )
