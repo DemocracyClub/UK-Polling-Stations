@@ -1,7 +1,6 @@
 from dc_utils.settings.pipeline import (  # noqa
     get_pipeline_settings,
     STATICFILES_FINDERS,
-    STATICFILES_STORAGE,
 )
 
 PIPELINE = get_pipeline_settings(

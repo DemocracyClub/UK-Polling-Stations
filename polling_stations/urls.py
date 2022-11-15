@@ -92,11 +92,7 @@ PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:
     extra_patterns += [re_path(r"^%s/" % EMBED, include("whitelabel.urls"))]
 
-urlpatterns = (
-    extra_patterns
-    + core_patterns
-    + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-)
+urlpatterns = extra_patterns + core_patterns
 
 handler500 = "dc_utils.urls.dc_server_error"
 
