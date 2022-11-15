@@ -1,4 +1,4 @@
-commitment<3.0.0
+commitment<4.0.0
 dj-database-url==1.0.0
 django-apiblueprint-view
 django-basicauth==0.5.3
