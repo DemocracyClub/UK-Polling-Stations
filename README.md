@@ -63,7 +63,7 @@ run `playwright install`. This will download the browser biniaries required
 for your system.
 
 The Playwright tests will run in a headless browser as part of a normal `pytest` run.
-You may want to run the Playwright suite in headed mode for debugging purposes. To do that, run the following: 
+You may want to run the Playwright suite in headed mode for debugging purposes. To do that, run the following:
 
 `pytest polling_stations/apps/data_finder/tests/playwright/ --headed`
 
