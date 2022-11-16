@@ -74,4 +74,43 @@ interactions:
       Vary: ['Accept, Cookie']
       X-Frame-Options: [SAMEORIGIN]
     status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.27.1
+    method: GET
+    uri: https://api.mapbox.com/directions/v5/mapbox/walking/-2.998065948486328,51.596012118680264;-2.995147704661227,51.595814835763214?&alternatives=false&geometries=polyline&steps=false&access_token=
+  response:
+    body:
+      string: '{"message": "Not Authorized - Invalid Token",  "error_detail": "No
+        valid token prefix found in access_token parameter"}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '119'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Fri, 28 Oct 2022 15:05:30 GMT
+      Server:
+      - awselb/2.0
+      Via:
+      - 1.1 941ea2ea996fa7a883fc56177714a71c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - JWcT5nxsIo1N4pMIdMWsNW-ovxErY-FLdHEahkjwGdHfj04epmp3Ig==
+      X-Amz-Cf-Pop:
+      - LHR62-C3
+      X-Cache:
+      - Error from cloudfront
+    status:
+      code: 401
+      message: Unauthorized
 version: 1

@@ -1,5 +1,4 @@
 from data_importers.ems_importers import BaseXpressDCCsvInconsistentPostcodesImporter
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):

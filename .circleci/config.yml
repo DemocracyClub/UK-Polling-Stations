@@ -43,11 +43,13 @@ jobs:
             pip install wheel
             pip install coveralls
             pip install -r requirements/testing.txt
+            playwright install
 
       - save_cache:
           paths:
             - ./.venv
             - ./node_modules
+            - ./home/circleci/.cache
           key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - run:
@@ -55,20 +57,30 @@ jobs:
           command: wget https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i tidy-5.8.0-Linux-64bit.deb
 
       - run:
-          name: Tests
+          name: Print versions
           command: |
             . .venv/bin/activate
-            pip check
             python --version
             python manage.py --version
-            python manage.py check
-            pytest --flakes
+
+      - run:
+          name: Pre-test checks
+          command: |
+            . .venv/bin/activate
             black --check .
+            pip check
+            python manage.py check
             python manage.py makemigrations --check
 
       - run:
-          name: Coverage
+          name: Pytest
           command: |
             . .venv/bin/activate
-            pytest --cov-report= --cov=polling_stations
+            python manage.py collectstatic --no-input
+            pytest --flakes --cov-report= --cov=polling_stations
+
+      - run:
+          name: Submit coverage
+          command: |
+            . .venv/bin/activate
             coveralls

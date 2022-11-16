@@ -1,5 +1,3 @@
-from datetime import date
-
 from django.conf import settings
 from django.utils.datetime_safe import datetime
 

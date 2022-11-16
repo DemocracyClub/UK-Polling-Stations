@@ -1,9 +1,6 @@
 -r base.txt
 
 mock
-aloe
-aloe_django
-aloe_webdriver
 factory_boy
 
 black
@@ -12,7 +9,10 @@ vcrpy==4.1.1
 
 pytest
 pytest-django
-pytest-pep8
+pytest-pycodestyle
 pytest-flakes
 pytest-cov
 pytest-subtests
+playwright==1.27.1
+pytest-playwright==0.3.0
+pytest-vcr==1.0.2

@@ -73,3 +73,6 @@ node_modules/
 
 # Address import artifact
 uprn-to-councils.csv
+
+# PyCharm
+.idea/
