@@ -14,7 +14,7 @@ django-cors-headers==3.10.0
 django-sesame==3.1
 fastkml==0.12
 
-rapidfuzz==2.11.1
+rapidfuzz==2.13.2
 lxml==4.9.1
 marshmallow==3.14.1
 psycopg2-binary==2.9.3
