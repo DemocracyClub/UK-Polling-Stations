@@ -3,7 +3,7 @@
 mock
 factory_boy
 
-vcrpy==4.1.1
+vcrpy==4.2.1
 
 pytest
 pytest-django
