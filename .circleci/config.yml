@@ -1,6 +1,8 @@
 
 version: 2.1
 
+
+
 orbs:
   node: circleci/node@5.0.2
 
@@ -22,7 +24,10 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+          keys:
+            - v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+            - v2-polling_stations-dependencies-{{ checksum "package-lock.json" }}
+            - polling_stations-dependencies-tidy-5.8.0
 
       - node/install:
           node-version: '10.19.0'
@@ -45,16 +50,28 @@ jobs:
             pip install -r requirements/testing.txt
             playwright install
 
+      - run:
+          name: Install HTML Tidy
+          command: |
+            mkdir -p ~/tidy
+            wget --directory-prefix /home/circleci/tidy https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i /home/circleci/tidy/tidy-5.8.0-Linux-64bit.deb
+
       - save_cache:
           paths:
             - ./.venv
-            - ./node_modules
-            - ./home/circleci/.cache
+            - /home/circleci/.cache/ms-playwright
           key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
-      - run:
-          name: Install HTML Tidy
-          command: wget https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i tidy-5.8.0-Linux-64bit.deb
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v2-polling_stations-dependencies-{{ checksum "package-lock.json" }}
+
+      - save_cache:
+          paths:
+            - ./home/circleci/tidy
+          key: polling_stations-dependencies-tidy-5.8.0
+
 
       - run:
           name: Print versions
