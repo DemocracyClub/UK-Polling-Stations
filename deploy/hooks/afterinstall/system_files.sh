@@ -3,6 +3,7 @@ set -xeE
 
 set -a
 source /var/www/polling_stations/code/.env
+INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
 set +a
 
 SYSTEMD_SRC="${PROJECT_ROOT}/code/deploy/files/systemd"
@@ -16,7 +17,7 @@ mkdir -p /tmp/cloudwatch-logs
 cd /tmp/cloudwatch-logs
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
 dpkg -i -E ./amazon-cloudwatch-agent.deb
-envsubst '$PROJECT_NAME' < "$CONF_SRC"/cloudwatch.json > /root/.cloudwatch.json
+envsubst '$INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)' < "$CONF_SRC"/cloudwatch.json > /root/.cloudwatch.json
 envsubst  '$PROJECT_NAME $PROJECT_ROOT $APP_NAME' < "$SYSTEMD_SRC"/cloudwatch.service > ${SYSTEMD_DST}/"$PROJECT_NAME"_cloudwatch.service
 chmod 0644 /root/.cloudwatch.json
 systemctl enable "$PROJECT_NAME"_cloudwatch.service

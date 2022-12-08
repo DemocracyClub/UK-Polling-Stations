@@ -10,25 +10,25 @@
           {
             "file_path": "/var/log/db_replication/logs.log",
             "log_group_name": "/db_replication/",
-            "log_stream_name": "db_replication_logs",
+            "log_stream_name": "$INSTANCE_ID",
             "timezone": "UTC"
           },
           {
             "file_path": "/var/log/syslog",
             "log_group_name": "/var/log/syslog",
-            "log_stream_name": "syslog",
+            "log_stream_name": "$INSTANCE_ID",
             "timezone": "UTC"
           },
           {
             "file_path": "/opt/codedeploy-agent/deployment-root/deployment-logs/codedeploy-agent-deployments.log",
             "log_group_name": "/codedeploy/",
-            "log_stream_name": "codedeploy-agent-deployments.log",
+            "log_stream_name": "$INSTANCE_ID",
             "timezone": "UTC"
           },
           {
             "file_path": "/var/log/postgresql/postgresql-14-main.log",
             "log_group_name": "/var/log/postgresql",
-            "log_stream_name": "postgresql-log",
+            "log_stream_name": "$INSTANCE_ID",
             "timezone": "UTC"          }
         ]
       }
