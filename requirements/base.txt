@@ -1,6 +1,6 @@
 black==22.10.0
 commitment<4.0.0
-dj-database-url==1.0.0
+dj-database-url==1.2.0
 django-apiblueprint-view
 django-basicauth==0.5.3
 django-extensions==3.2.1
