@@ -3,7 +3,7 @@ import boto3
 from botocore.exceptions import ClientError
 import time
 
-session = boto3.Session()
+session = boto3.Session(region_name=os.environ.get("AWS_REGION"))
 
 # hardcoded to name in wdiv_stack.py
 TARGET_GROUP_NAME = "wdiv-alb-tg"

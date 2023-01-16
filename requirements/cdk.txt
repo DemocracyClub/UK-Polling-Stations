@@ -1,0 +1,7 @@
+-r base.txt
+
+aws_cdk.core
+aws-cdk.cx-api
+aws_cdk.aws_ec2
+aws_cdk.aws_autoscaling
+aws_cdk.aws_codedeploy
