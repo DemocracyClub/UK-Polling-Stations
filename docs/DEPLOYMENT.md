@@ -14,7 +14,12 @@ and installing the application on it.
 
 
 ## AWS Resources
+[AWS Resources diagram](./aws-resources.png)
 
+## SSO cli
+```shell
+aws sso login --profile dev-wdiv-dc
+```
 
 ## Working with CodeDeploy
 
@@ -28,7 +33,9 @@ AWS_PROFILE=dev-wdiv-dc COMMIT_SHA=`git rev-parse HEAD` python deploy/create_dep
 ```
 
 ### [codedeploy-local](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-local.html)
-When modifying `appspec.yml` and it's various scripts you can get a fairly tight cycle with the following workflow:
+When modifying `appspec.yml` and it's various scripts you can get a fairly tight cycle with `codedeploy-local`.
+This involves running a deploy against the machine you're on. This is best done on an EC2 instance, the call to `codedeploy-local` will then modify that instance, allowing one to debug it when there are failures.
+The following steps outline the general workflow:
 
 - Launch an EC2 instance from your `LaunchTemplate` (this should have CodeDeployAgent already installed).
 - Connect to the instance (eg `mssh --profile dev-wdiv-dc -r eu-west-2 -X "ubuntu@i-12345a67b8cd9ef0"`)
@@ -53,3 +60,8 @@ sudo /opt/codedeploy-agent/bin/codedeploy-local \
   --type directory
   --events AfterInstall
 ```
+
+# Setting up a new environment
+
+## Create a deployment group
+AWS_PROFILE=dev-wdiv-dc DC_ENVIRONMENT=development python deploy/create_deployment_group.py

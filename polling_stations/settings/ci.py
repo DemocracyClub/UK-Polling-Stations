@@ -1,3 +1,5 @@
+from dc_logging_client import DCWidePostcodeLoggingClient
+
 STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 
 DATABASES = {
@@ -10,3 +12,5 @@ DATABASES = {
         "PORT": "",
     }
 }
+
+POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)

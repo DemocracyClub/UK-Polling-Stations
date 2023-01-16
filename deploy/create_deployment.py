@@ -2,7 +2,7 @@ import os
 import boto3
 import time
 
-session = boto3.Session()
+session = boto3.Session(region_name=os.environ.get("AWS_REGION"))
 
 
 def create_deployment():
