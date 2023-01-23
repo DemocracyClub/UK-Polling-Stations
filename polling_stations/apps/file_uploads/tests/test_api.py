@@ -1,6 +1,7 @@
+from django.core import mail
 from django.core.management import call_command
 from rest_framework.test import APITestCase
-
+from django.conf import settings
 from councils.tests.factories import CouncilFactory
 from file_uploads.models import File, Upload
 
@@ -53,6 +54,7 @@ class AddressTest(APITestCase):
             self.assertEqual(400, resp.status_code)  # Bad Request
             self.assertEqual(0, len(Upload.objects.all()))
             self.assertEqual(0, len(File.objects.all()))
+            self.assertEqual(0, len(mail.outbox))
 
     def test_get_request(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -72,6 +74,7 @@ class AddressTest(APITestCase):
         self.assertEqual(401, resp.status_code)  # Unauthorized
         self.assertEqual(0, len(Upload.objects.all()))
         self.assertEqual(0, len(File.objects.all()))
+        self.assertEqual(0, len(mail.outbox))
 
     def test_valid_payload_bad_credentials(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token normaluser-key")
@@ -85,6 +88,7 @@ class AddressTest(APITestCase):
         self.assertEqual(403, resp.status_code)  # Forbidden
         self.assertEqual(0, len(Upload.objects.all()))
         self.assertEqual(0, len(File.objects.all()))
+        self.assertEqual(0, len(mail.outbox))
 
     def test_valid_payload_zero_files(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -98,7 +102,15 @@ class AddressTest(APITestCase):
         resp = self.client.post("/api/beta/uploads/", payload, format="json")
         self.assertEqual(201, resp.status_code)
         self.assertEqual(1, len(Upload.objects.all()))
+        upload = Upload.objects.all()[0]
         self.assertEqual(0, len(File.objects.all()))
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(mail.outbox[0].to, [settings.DEFAULT_FROM_EMAIL])
+        self.assertEqual(mail.outbox[0].subject, "File upload failed")
+        self.assertEqual(
+            mail.outbox[0].body,
+            f"File upload failure: {upload.__str__}. Please investigate further.",
+        )
 
     def test_valid_payload_one_file(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -122,6 +134,10 @@ class AddressTest(APITestCase):
         self.assertEqual(201, resp.status_code)
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(1, len(File.objects.all()))
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(mail.outbox[0].to, ["example@example.com"])
+        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
+        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
 
     def test_valid_payload_two_files(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -153,6 +169,10 @@ class AddressTest(APITestCase):
         self.assertEqual(201, resp.status_code)
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(2, len(File.objects.all()))
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(mail.outbox[0].to, ["example@example.com"])
+        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
+        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
 
     def test_multiple_files_out_of_order_delivery(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -192,6 +212,10 @@ class AddressTest(APITestCase):
             key="E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv"
         )
         self.assertEqual("", stations_file.errors)
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(mail.outbox[0].to, ["example@example.com"])
+        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
+        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
 
         # The second payload we receive only contains one of the files
         # that was in the first payload.
@@ -261,3 +285,10 @@ class AddressTest(APITestCase):
         self.assertEqual(1, len(Upload.objects.all()))
         # now we should have 3 file objects
         self.assertEqual(3, len(File.objects.all()))
+        self.assertEqual(2, len(mail.outbox))
+        self.assertEqual(mail.outbox[0].to, ["example@example.com"])
+        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
+        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
+        self.assertEqual(mail.outbox[1].to, ["example@example.com"])
+        self.assertEqual(mail.outbox[1].bcc, [settings.DEFAULT_FROM_EMAIL])
+        self.assertEqual(mail.outbox[1].subject, "Your file upload was successful")
