@@ -285,7 +285,7 @@ ONSUD_MODEL = "addressbase.UprnToCouncil"
 
 EMAIL_SIGNUP_ENDPOINT = "https://democracyclub.org.uk/mailing_list/api_signup/v1/"
 EMAIL_SIGNUP_API_KEY = ""
-
+DEFAULT_FROM_EMAIL = "Democracy Club <pollingstations@democracyclub.org.uk>"
 
 # Disable Basic Auth by default
 # We only want to use this on staging deploys

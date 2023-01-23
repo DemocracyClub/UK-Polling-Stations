@@ -1,0 +1,1 @@
+File upload for council {self.gss} failed. Please try again with a new export or contact {settings.DEFAULT_FROM_EMAIL} for assistance.

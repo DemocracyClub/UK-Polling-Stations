@@ -1,7 +1,11 @@
 from commitment import GitHubCredentials, GitHubClient
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.utils.timezone import now
+from django.utils.timezone import utc as now
+from django.core.mail import EmailMessage
+
+
+from django.template.loader import render_to_string
 
 from requests import HTTPError
 
@@ -130,6 +134,45 @@ class Upload(models.Model):
             return f"**NB triggered from staging instance**\n{message}"
         else:
             return f"**NB triggered from local machine**\n{message}"
+
+    def send_confirmation_email(self, user):
+        if user.email:
+            to = user.email
+        else:
+            to = settings.DEFAULT_FROM_EMAIL
+        subject = "Your file upload was successful"
+        message = render_to_string(
+            template_name="file_uploads/email/upload_confirmation.txt",
+            context={
+                "subject": subject,
+            },
+        )
+
+        email = EmailMessage(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [to],
+            [settings.DEFAULT_FROM_EMAIL],
+            reply_to=[settings.DEFAULT_FROM_EMAIL],
+            headers={"Message-ID": subject},
+        )
+
+        return email.send()
+
+    def send_error_email(self):
+        subject = "File upload failed"
+        message = f"File upload failure: {self.__str__}. Please investigate further."
+        email = EmailMessage(
+            subject,
+            message,
+            [settings.DEFAULT_FROM_EMAIL],
+            [settings.DEFAULT_FROM_EMAIL],
+            reply_to=[settings.DEFAULT_FROM_EMAIL],
+            headers={"Message-ID": subject},
+        )
+
+        return email.send()
 
     def make_pull_request(self):
         print("creating pull request")

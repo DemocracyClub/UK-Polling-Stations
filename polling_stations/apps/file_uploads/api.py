@@ -1,6 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers, viewsets
 from rest_framework.exceptions import PermissionDenied
+
 from .models import File, Upload
 
 
@@ -58,8 +59,12 @@ class UploadSerializer(serializers.ModelSerializer):
             if (
                 file_set.first().ems == "Democracy Counts" and file_set.count() == 2
             ) or file_set.first().ems != "Democracy Counts":
-                upload.make_pull_request()
 
+                user = self.context["request"].user
+                upload.make_pull_request()
+                upload.send_confirmation_email(user=user)
+        else:
+            upload.send_error_email()
         return upload
 
 
