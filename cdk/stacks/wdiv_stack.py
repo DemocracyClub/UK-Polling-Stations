@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import typing
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_iam as iam,
@@ -9,12 +10,14 @@ from aws_cdk import (
     aws_codedeploy as codedeploy,
     aws_ssm as ssm,
 )
-from aws_cdk.core import Stack, Duration
+from aws_cdk.core import Stack, Duration, Environment
 from constructs import Construct
 
 # import sys
 #
 # sys.path.append("..")
+
+MONITORING_ACCOUNTS = {"development": "985364114241"}
 
 
 class WDIVStack(Stack):
@@ -24,8 +27,19 @@ class WDIVStack(Stack):
     #   - Deploy trigger
     #   - widget?
 
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
+    def __init__(
+        self,
+        scope: Construct,
+        id: str,
+        env: typing.Union[Environment, typing.Dict[str, typing.Any]],
+        **kwargs,
+    ) -> None:
+        super().__init__(scope, id=id, env=env, **kwargs)
+
+        self.dc_environment = self.node.try_get_context("dc-environment")
+        self.account_id = env.account
+        self.monitoring_account_id = MONITORING_ACCOUNTS[self.dc_environment]
+
         self.default_vpc = ec2.Vpc.from_lookup(
             scope=self, id="default-vpc-id", is_default=True
         )
@@ -257,17 +271,27 @@ class WDIVStack(Stack):
                 policy_name=name,
             )
 
+        codedeploy_ec2_permissions_policy = create_policy(
+            "codedeploy-ec2-permissions-id",
+            "CodeDeploy-EC2-Permissions",
+            Path("./policies/codedeploy_ec2_permissions.json"),
+        )
+        logging_assume_role_statement = iam.PolicyStatement.from_json(
+            {
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": f"arn:aws:iam::{self.monitoring_account_id}:role/put-record-from-{self.account_id}",
+            }
+        )
+        codedeploy_ec2_permissions_policy.add_statements(logging_assume_role_statement)
+
         return {
             "codedeploy-launch-template-permissions": create_policy(
                 "codedeploy-launch-template-permissions-id",
                 "CodeDeployLaunchTemplatePermissions",
                 Path("policies/codedeploy_launch_template.json"),
             ),
-            "codedeploy-ec2-permissions": create_policy(
-                "codedeploy-ec2-permissions-id",
-                "CodeDeploy-EC2-Permissions",
-                Path("./policies/codedeploy_ec2_permissions.json"),
-            ),
+            "codedeploy-ec2-permissions": codedeploy_ec2_permissions_policy,
             "codedeploy-and-related-services": create_policy(
                 "codedeploy-and-related-services-id",
                 "CodeDeployAndRelatedServices",
