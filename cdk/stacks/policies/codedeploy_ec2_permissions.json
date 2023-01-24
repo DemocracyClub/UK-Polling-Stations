@@ -6,5 +6,6 @@
                             "Effect": "Allow",
                             "Resource": "arn:aws:s3:::aws-codedeploy-eu-west-2/*"
                         }
+
                     ]
                 }

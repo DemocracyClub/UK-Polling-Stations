@@ -21,6 +21,12 @@ and installing the application on it.
 aws sso login --profile dev-wdiv-dc
 ```
 
+## Working with CDK
+
+```Shell
+cdk deploy --all --context dc-environment=development --profile dev-wdiv-dc
+```
+
 ## Working with CodeDeploy
 
 ### Kicking off deploys from local machine
