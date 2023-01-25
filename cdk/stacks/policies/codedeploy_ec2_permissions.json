@@ -5,6 +5,11 @@
                             "Action": ["s3:Get*", "s3:List*"],
                             "Effect": "Allow",
                             "Resource": "arn:aws:s3:::aws-codedeploy-eu-west-2/*"
+                        },
+                        {
+                            "Action": ["dynamodb:**"],
+                            "Effect": "Allow",
+                            "Resource": "*"
                         }
 
                     ]
