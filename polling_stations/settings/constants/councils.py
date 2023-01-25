@@ -2,6 +2,7 @@
 
 EC_COUNCIL_CONTACT_EMAIL = "digitalcommunications@electoralcommission.org.uk"
 
+# TODO Change me
 BOUNDARIES_URL = "https://ons-cache.s3.amazonaws.com/Local_Authority_Districts_May_2022_UK_BFE_V3.geojson"
 COUNCIL_ID_FIELD = "LAD22CD"
 EC_COUNCIL_CONTACT_DETAILS_API_URL = (

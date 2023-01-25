@@ -5,12 +5,13 @@ import typing
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_iam as iam,
+    aws_s3 as s3,
     aws_autoscaling as autoscaling,
     aws_elasticloadbalancingv2 as elbv2,
     aws_codedeploy as codedeploy,
     aws_ssm as ssm,
 )
-from aws_cdk.core import Stack, Duration, Environment
+from aws_cdk.core import Stack, Duration, Environment, RemovalPolicy
 from constructs import Construct
 
 # import sys
@@ -51,11 +52,11 @@ class WDIVStack(Stack):
             name="EEImage_ubuntu*"
         )
 
+        self.create_parameters()
+
         self.policies = self.create_policies()
 
         self.roles = self.create_roles()
-
-        self.create_parameters()
 
         # self.security_group = self.setup_security_group()
         self.alb_security_group = self.create_alb_security_group()
