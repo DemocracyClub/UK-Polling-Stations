@@ -677,10 +677,6 @@ msgstr ""
 msgid "You will need photographic identification"
 msgstr ""
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:30
-msgid "You don't need any other form of ID."
-msgstr ""
-
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:37
 msgid "Read more about voting in Northern Ireland"
 msgstr ""
@@ -714,8 +710,7 @@ msgstr ""
 
 #: polling_stations/templates/home.html:51
 msgid ""
-"In England, Wales and Scotland, you don't need any form of ID. In Northern "
-"Ireland, you must bring photo ID."
+"In Northern Ireland, you must bring photo ID."
 msgstr ""
 
 #: polling_stations/templates/multiple_councils.html:6
