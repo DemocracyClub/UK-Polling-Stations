@@ -11,5 +11,11 @@ See: http://boto.cloudhackers.com/en/latest/boto_config_tut.html
 
 We can change the section name using the BOTO_SECTION setting
 """
+import os
+
 BOTO_SECTION = "wheredoivote"
-S3_DATA_BUCKET = "pollingstations-data"
+
+if SERVER_ENVIRONMENT := os.environ.get("DC_ENVIRONMENT"):
+    S3_DATA_BUCKET = f"pollingstations.elections.{SERVER_ENVIRONMENT}"
+else:
+    S3_DATA_BUCKET = "pollingstations.elections.development"
