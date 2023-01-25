@@ -353,6 +353,15 @@ if os.environ.get("DC_ENVIRONMENT"):
     # s3 Uploads buckets
     # TODO https://github.com/DemocracyClub/polling_deploy/blob/22ce0df9489467d1a2dc088d022b2ec975e32349/webapp_settings/production.py#L128-L131
 
+    INSTALLED_APPS += ("django_dynamodb_cache",)
+    CACHES = {
+        "default": {
+            "BACKEND": "django_dynamodb_cache.backend.DjangoCacheBackend",
+            "LOCATION": "wdiv_cache",
+            "OPTIONS": {"aws_region_name": "eu-west-2"},
+        }
+    }
+
 
 # import application constants
 from .constants.councils import *  # noqa
