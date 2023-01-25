@@ -571,10 +571,6 @@ msgstr "Os ydych chi wedi cofrestru i bleidleisio ond nad oes gennych chi eich c
 msgid "You will need photographic identification"
 msgstr "Bydd angen dogfen adnabod â llun arnoch chi"
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:27
-msgid "You don't need any other form of ID."
-msgstr "Nid oes angen unrhyw fath arall o ID arnoch chi."
-
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:34
 msgid "Read more about voting in Northern Ireland"
 msgstr "Darllen mwy am bleidleiso yng Ngogledd Iwerddon"
@@ -608,9 +604,8 @@ msgstr "Nid oes angen eich cerdyn pleidleisio arnoch i bleidleisio."
 
 #: polling_stations/templates/home.html:53
 msgid ""
-"In England, Wales and Scotland, you don't need any form of ID. In Northern "
-"Ireland, you must bring photo ID."
-msgstr "Yng Nghymru, Lloegr a'r Alban nid oes angen unrhyw fath o ID arnoch chi. Yng Ngogledd Iwerddon, rhaid i chi ddod â dogfen adnabod â llun."
+"In Northern Ireland, you must bring photo ID."
+msgstr "Yng Ngogledd Iwerddon, rhaid i chi ddod â dogfen adnabod â llun."
 
 #: polling_stations/templates/multiple_councils.html:6
 #: polling_stations/templates/postcode_view.html:33
