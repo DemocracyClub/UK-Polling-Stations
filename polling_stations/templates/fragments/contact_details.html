@@ -26,6 +26,9 @@
             {% endfor %}
             <abbr title="{% trans "Email" context "abbr title attribute" %}">{% trans "E:" context "Short for Email:" %}</abbr>
             <a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a>
+            <br>
+            <abbr title="{% trans "Website" context "abbr title attribute" %}">{% trans "W:" context "Short for Website:" %}</abbr>
+            <a href="{{ council.electoral_services_website}}">{{ council.electoral_services_website}}</a>
         </address>
     </div>
 </div>
