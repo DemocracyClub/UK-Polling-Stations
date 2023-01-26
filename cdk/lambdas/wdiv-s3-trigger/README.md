@@ -1,5 +1,21 @@
 # wdiv-s3-trigger
 
+
+# TODO: UPDATE ALL OF THIS
+
+For now deps are managed with pip-tools:
+```
+pip install pip-tools
+python -m piptools compile --resolver backtracking -o cdk/lambdas/wdiv-s3-trigger/requirements.txt cdk/lambdas/wdiv-s3-trigger/requirements.in
+```
+
+Deploy with:
+```
+cdk  --profile dev-wdiv-dc --context dc-environment=development deploy WDIVS3TriggerStack
+```
+
+
+
 [![Build Status](https://travis-ci.org/DemocracyClub/wdiv-s3-trigger.svg?branch=master)](https://travis-ci.org/DemocracyClub/wdiv-s3-trigger)
 [![Coverage Status](https://coveralls.io/repos/github/DemocracyClub/wdiv-s3-trigger/badge.svg?branch=master)](https://coveralls.io/github/DemocracyClub/wdiv-s3-trigger?branch=master)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)

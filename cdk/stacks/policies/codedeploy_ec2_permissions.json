@@ -1,16 +1,19 @@
-                {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Action": ["s3:Get*", "s3:List*"],
-                            "Effect": "Allow",
-                            "Resource": "arn:aws:s3:::aws-codedeploy-eu-west-2/*"
-                        },
-                        {
-                            "Action": ["dynamodb:**"],
-                            "Effect": "Allow",
-                            "Resource": "*"
-                        }
-
-                    ]
-                }
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "dynamodb:**"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
