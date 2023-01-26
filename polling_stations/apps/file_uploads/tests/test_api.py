@@ -109,7 +109,7 @@ class AddressTest(APITestCase):
         self.assertEqual(mail.outbox[0].subject, "File upload failed")
         self.assertEqual(
             mail.outbox[0].body,
-            f"File upload failure: {upload.__str__}. Please investigate further.",
+            f"File upload failure: {upload}. Please investigate further.",
         )
 
     def test_valid_payload_one_file(self):
