@@ -1,8 +1,10 @@
+from datetime import timedelta
 from commitment import GitHubCredentials, GitHubClient
 from django.conf import settings
-from django.contrib.gis.db import models
-from django.utils.timezone import utc as now
+from django.db import transaction
 from django.core.mail import EmailMessage
+from django.contrib.gis.db import models
+from django.utils.timezone import now
 
 
 from django.template.loader import render_to_string
@@ -29,6 +31,13 @@ class UploadQuerySet(models.QuerySet):
     def future(self):
         return self.filter(election_date__gte=now())
 
+    def pending_upload_qs(self):
+        from_time = now() - timedelta(minutes=20)
+        qs = Upload.objects.filter(
+            timestamp__lte=from_time, warning_about_pending_sent=False
+        )
+        return qs
+
 
 class Upload(models.Model):
     gss = models.ForeignKey(
@@ -42,6 +51,7 @@ class Upload(models.Model):
     github_issue = models.CharField(blank=True, max_length=100)
 
     objects = UploadQuerySet.as_manager()
+    warning_about_pending_sent = models.BooleanField(default=False)
 
     class Meta:
         get_latest_by = "timestamp"
@@ -160,9 +170,10 @@ class Upload(models.Model):
 
         return email.send()
 
+    @transaction.atomic
     def send_error_email(self):
         subject = "File upload failed"
-        message = f"File upload failure: {self.__str__}. Please investigate further."
+        message = f"File upload failure: {self}. Please investigate further."
         email = EmailMessage(
             subject,
             message,
@@ -172,7 +183,9 @@ class Upload(models.Model):
             headers={"Message-ID": subject},
         )
 
-        return email.send()
+        email.send()
+        self.warning_about_pending_sent = True
+        self.save()
 
     def make_pull_request(self):
         print("creating pull request")
