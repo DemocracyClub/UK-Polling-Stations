@@ -178,7 +178,7 @@ def main(event, context):
             CONSTANTS["GITHUB_API_KEY"], CONSTANTS["GITHUB_REPO"], report
         )
         # Remove any "#issuecomment-[...]" fragment
-        report["github_issue"] = issue.split('#')[0]
+        report["github_issue"] = issue.split("#")[0]
 
         sync_report_to_s3(s3, CONSTANTS["FINAL_BUCKET_NAME"], prefix, report)
         print("success")
