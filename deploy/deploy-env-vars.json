@@ -10,5 +10,6 @@
   "ADDRESSBASE_FILE_NAME": "ABFLGB_CSV_2022-02-01_cleaned.csv",
   "ONSPD_URL": "https://ons-cache.s3.amazonaws.com/onspd/ONSPD_FEB_2022_UK.zip",
   "ALT_BOUNDARIES_URL": "https://ons-cache.s3.amazonaws.com/Local_Authority_Districts_December_2021_UK_BFE.geojson",
-  "CRON_EMAIL": "developers@democracyclub.org.uk"
+  "CRON_EMAIL": "developers@democracyclub.org.uk",
+  "AWS_DEFAULT_REGION": "eu-west-2"
 }

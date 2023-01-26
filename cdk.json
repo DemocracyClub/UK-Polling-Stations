@@ -12,7 +12,8 @@
       "**/__init__.py",
       "python/__pycache__",
       "tests",
-      "test_data"
+      "test_data",
+      "cdk/lambdas/wdiv-s3-trigger/tests/*"
     ]
   },
   "context": {

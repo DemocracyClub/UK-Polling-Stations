@@ -5,3 +5,7 @@ aws-cdk.cx-api
 aws_cdk.aws_ec2
 aws_cdk.aws_autoscaling
 aws_cdk.aws_codedeploy
+aws_cdk.aws_lambda_python
+aws_cdk.aws_lambda
+aws_cdk.aws_s3_notifications
+aws_cdk.aws_s3

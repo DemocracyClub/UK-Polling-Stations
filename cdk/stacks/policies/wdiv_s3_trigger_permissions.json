@@ -1,0 +1,38 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::pollingstations.uploads.*",
+        "arn:aws:s3:::pollingstations.uploads.*/*",
+        "arn:aws:s3:::pollingstations.elections.*",
+        "arn:aws:s3:::pollingstations.elections.*/*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail"
+      ],
+      "Resource": [
+        "arn:aws:ses:eu-west-2:{{ACCOUNT_ID}}:*"
+      ],
+      "Effect": "Allow"
+    }
+  ]
+}

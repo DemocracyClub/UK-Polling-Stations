@@ -27,6 +27,24 @@ aws sso login --profile dev-wdiv-dc
 cdk deploy --all --context dc-environment=development --profile dev-wdiv-dc
 ```
 
+
+## WDIV-s3-trigger
+
+```
+cdk  --profile dev-wdiv-dc --context dc-environment=development deploy WDIVS3TriggerStack
+```
+
+When setting up a new circleci environment, make sure to provide the following environment variables as part of a context:
+
+  - `FINAL_BUCKET_NAME`
+  - `SENTRY_DSN`
+  - `GITHUB_REPO`
+  - `GITHUB_API_KEY`
+  - `WDIV_API_KEY`
+  - `ERROR_REPORT_EMAIL`
+  - `WDIV_WEBHOOK_URL`
+
+
 ## Working with CodeDeploy
 
 ### Kicking off deploys from local machine
