@@ -708,11 +708,6 @@ msgstr ""
 msgid "You don't need your poll card to vote."
 msgstr ""
 
-#: polling_stations/templates/home.html:51
-msgid ""
-"In Northern Ireland, you must bring photo ID."
-msgstr ""
-
 #: polling_stations/templates/multiple_councils.html:6
 #: polling_stations/templates/postcode_view.html:35
 msgid "Your Polling Station"

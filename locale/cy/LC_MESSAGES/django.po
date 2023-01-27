@@ -602,11 +602,6 @@ msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar <strong>%(day_of_week
 msgid "You don't need your poll card to vote."
 msgstr "Nid oes angen eich cerdyn pleidleisio arnoch i bleidleisio."
 
-#: polling_stations/templates/home.html:53
-msgid ""
-"In Northern Ireland, you must bring photo ID."
-msgstr "Yng Ngogledd Iwerddon, rhaid i chi ddod â dogfen adnabod â llun."
-
 #: polling_stations/templates/multiple_councils.html:6
 #: polling_stations/templates/postcode_view.html:33
 msgid "Your Polling Station"
