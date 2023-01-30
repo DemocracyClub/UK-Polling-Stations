@@ -1,4 +1,5 @@
 from django.core import mail
+from freezegun import freeze_time
 from django.core.management import call_command
 from rest_framework.test import APITestCase
 from django.conf import settings
@@ -292,3 +293,61 @@ class AddressTest(APITestCase):
         self.assertEqual(mail.outbox[1].to, ["example@example.com"])
         self.assertEqual(mail.outbox[1].bcc, [settings.DEFAULT_FROM_EMAIL])
         self.assertEqual(mail.outbox[1].subject, "Your file upload was successful")
+
+    # When the file EMS == Democracy Counts (which requires two files),
+    # we want to measure the time it takes for the second file to arrive
+    # and update the upload status accordingly.
+
+    @freeze_time("2020-01-10 13:26:10")
+    # If the first file is uploaded, but it takes the second file
+    # less than 180 seconds to upload, set the upload status to "Waiting".
+    def test_waiting_file_status(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        payload = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:24:10Z",
+            "election_date": "2020-05-07",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": False,
+                    "csv_rows": 86109,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "Expected 2 files, found 1",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
+                },
+            ],
+        }
+        resp = self.client.post("/api/beta/uploads/", payload, format="json")
+        self.assertEqual(201, resp.status_code)
+        self.assertEqual(1, len(Upload.objects.all()))
+        self.assertEqual(1, len(File.objects.all()))
+        self.assertEqual(Upload.objects.all()[0].status, "Waiting")
+
+    @freeze_time("2020-01-10 15:26:55")
+    # If the first file is uploaded, but it takes the second file
+    # longer than 180 seconds to upload, set the upload status to "Error One File".
+    def test_file_status_with_error(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        payload = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:24:10Z",
+            "election_date": "2020-05-07",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": False,
+                    "csv_rows": 86109,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "Expected 2 files, found 1",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
+                },
+            ],
+        }
+        resp = self.client.post("/api/beta/uploads/", payload, format="json")
+        self.assertEqual(201, resp.status_code)
+        self.assertEqual(1, len(Upload.objects.all()))
+        self.assertEqual(1, len(File.objects.all()))
+        self.assertEqual(Upload.objects.all()[0].status, "Error One File")
