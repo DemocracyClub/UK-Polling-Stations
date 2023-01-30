@@ -16,7 +16,9 @@ from data_importers.import_script import ImportScript
 
 status_map = {
     "Pending": "⌛",
+    "Waiting": "⌛ waiting for second file",
     "Error": "❌",
+    "Error One File": "❌ only one file uploaded",
     "OK": "✔️",
 }
 
@@ -64,6 +66,15 @@ class Upload(models.Model):
         if not self.file_set.all():
             return "Pending"
         for f in self.file_set.all():
+            if ("Expected 2 files, found 1" in f.errors) and (
+                self.timestamp + timedelta(seconds=180) > now()
+            ):
+                return "Waiting"
+            elif ("Expected 2 files, found 1" in f.errors) and (
+                self.timestamp + timedelta(seconds=180) < now()
+            ):
+                return "Error One File"
+
             if not f.csv_valid:
                 return "Error"
         return "OK"
