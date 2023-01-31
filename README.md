@@ -156,3 +156,9 @@ If you are interested in helping the project by writing an import script, see th
 ## Install git hooks
 
 If you like you can use the commit hooks defined in `.pre-commit-config.yaml`. Run `pre-commit install && pre-commit install -t pre-push`.
+
+## Custom council domains
+If a user requests access to the council uploader using a custom domain, the domain should be added to the [`CUSTOM_DOMAINS` setting](https://github.com/DemocracyClub/UK-Polling-Stations/blob/master/polling_stations/settings/constants/uploads.py).
+To remove a custom domain, follow these steps:
+1) Delete the entry from the CUSTOM_DOMAIN list in `polling_stations/settings/constants/uploads.py`
+2) In the admin panel, delete the UserCouncil object from the bottom of the Council profile page
