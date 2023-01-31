@@ -19,6 +19,7 @@ Persistent=false
 EOF
 
 # Install apt packages
+apt-get update
 apt-get install --yes nginx nodejs npm gettext
 
 # Restart apt update timer
