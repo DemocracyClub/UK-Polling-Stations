@@ -1,10 +1,10 @@
 from datetime import timedelta
 from commitment import GitHubCredentials, GitHubClient
 from django.conf import settings
-from django.db import transaction
-from django.core.mail import EmailMessage
 from django.contrib.gis.db import models
 from django.utils.timezone import now
+from django.db import transaction
+from django.core.mail import EmailMessage
 
 
 from django.template.loader import render_to_string
