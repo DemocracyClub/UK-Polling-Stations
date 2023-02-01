@@ -21,7 +21,7 @@ postgres=> create database polling_stations;
 
 Install an extension
 ```shell
-// Connects to 'polling_stations' db - note .../polling_stations on end of connection string
+// Connects to 'polling_stations' db - note '/polling_stations' on end of connection string
 you@local-machine:$ psql postgresql://postgres@wdiv-test.cl0ejuxihujo.eu-west-2.rds.amazonaws.com:5432/polling_stations
 
 // create an extension

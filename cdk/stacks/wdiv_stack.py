@@ -5,20 +5,25 @@ import typing
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_iam as iam,
-    aws_s3 as s3,
+    aws_certificatemanager as acm,
     aws_autoscaling as autoscaling,
     aws_elasticloadbalancingv2 as elbv2,
     aws_codedeploy as codedeploy,
     aws_ssm as ssm,
+    aws_route53 as route_53,
 )
-from aws_cdk.core import Stack, Duration, Environment, RemovalPolicy
+import aws_cdk.aws_cloudfront as cloudfront
+import aws_cdk.aws_cloudfront_origins as origins
+import aws_cdk.aws_route53_targets as route_53_target
+
+from aws_cdk.core import Stack, Duration, Environment
 from constructs import Construct
 
 # import sys
 #
 # sys.path.append("..")
 
-MONITORING_ACCOUNTS = {"development": "985364114241"}
+MONITORING_ACCOUNTS = {"development": "985364114241", "staging": "985364114241"}
 
 
 class WDIVStack(Stack):
@@ -67,11 +72,13 @@ class WDIVStack(Stack):
 
         self.launch_template = self.create_launch_template()
 
-        self.alb = self.create_alb(self.subnets, self.wdiv_alb_tg, https=True)
+        self.alb = self.create_alb(self.subnets, self.wdiv_alb_tg)
 
         codedeploy.ServerApplication(
             self, "CodeDeployApplicationID", application_name="WDIVCodeDeploy"
         )
+
+        self.create_cloudfront(self.alb)
 
     def create_wdiv_alb_tg(self) -> elbv2.ApplicationTargetGroup:
         wdiv_alb_tg = elbv2.ApplicationTargetGroup(
@@ -189,7 +196,6 @@ class WDIVStack(Stack):
         self,
         subnets: ec2.SubnetSelection,
         target_group: elbv2.ApplicationTargetGroup,
-        https: bool = True,
     ) -> elbv2.ApplicationLoadBalancer:
         alb = elbv2.ApplicationLoadBalancer(
             self,
@@ -206,49 +212,11 @@ class WDIVStack(Stack):
             "http-listener-id", port=80, protocol=elbv2.ApplicationProtocol.HTTP
         )
 
-        if https:
-            self.add_https_listener(alb, target_group)
-            http_listener.add_action(
-                "redirect-http-to-https-id",
-                action=elbv2.ListenerAction.redirect(
-                    port="443", protocol="HTTPS", permanent=True
-                ),
-            )
-        else:
-            http_listener.add_target_groups(
-                "http-target-groups-id", target_groups=[target_group]
-            )
+        http_listener.add_target_groups(
+            "http-target-groups-id", target_groups=[target_group]
+        )
 
         return alb
-
-    def add_https_listener(
-        self,
-        alb: elbv2.ApplicationLoadBalancer,
-        target_group: elbv2.ApplicationTargetGroup,
-    ) -> None:
-        https_listener = alb.add_listener(
-            "https-listener-id",
-            certificates=[
-                elbv2.ListenerCertificate.from_arn(
-                    ssm.StringParameter.value_from_lookup(
-                        self,
-                        "SSL_CERTIFICATE_ARN",
-                    )
-                )
-            ],
-            port=443,
-            protocol=elbv2.ApplicationProtocol.HTTPS,
-            default_action=elbv2.ListenerAction.forward([target_group]),
-        )
-
-        https_listener.add_certificates(
-            "https-listener-certificates-id",
-            [
-                elbv2.ListenerCertificate.from_arn(
-                    "arn:aws:acm:eu-west-2:356853674636:certificate/92a46f99-e2c4-447a-8aee-c978e00f4393"
-                ),
-            ],
-        )
 
     def create_parameters(self) -> None:
         """If you change any of these calls then the value will be reset
@@ -256,7 +224,7 @@ class WDIVStack(Stack):
         ssm.StringParameter(
             self,
             "app-dc-environment-id",
-            string_value="development",
+            string_value=self.dc_environment,
             parameter_name="DC_ENVIRONMENT",
             description="The DC_ENVIRONMENT environment variable passed to the app.",
             allowed_pattern="^(env-init|development|staging|production)$",
@@ -351,3 +319,91 @@ class WDIVStack(Stack):
         )
 
         return roles
+
+    def create_cloudfront(self, alb: elbv2.ApplicationLoadBalancer):
+
+        # Hard code the ARN due to a bug with CDK that means we can't run synth
+        # with the placeholder values the SSM interface produces :(
+        cert_arns = {
+            "development": "arn:aws:acm:us-east-1:356853674636:certificate/587f4682-6350-43d1-9a79-7380d351e1ed",
+            "staging": "arn:aws:acm:us-east-1:047316047231:certificate/622bd46c-30ec-45ca-8860-5af5b7d7f9c5",
+            "production": "",
+        }
+        cert = acm.Certificate.from_certificate_arn(
+            self,
+            "CertArn",
+            certificate_arn=cert_arns.get(self.dc_environment),
+        )
+
+        fqdn = ssm.StringParameter.value_from_lookup(
+            self,
+            "FQDN",
+        )
+
+        cloudfront_dist = cloudfront.Distribution(
+            self,
+            "WDIVCloudFront_id",
+            default_behavior=cloudfront.BehaviorOptions(
+                origin=origins.LoadBalancerV2Origin(
+                    alb,
+                    http_port=80,
+                    protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+                    custom_headers={
+                        "X-Forwarded-Host": fqdn,
+                        "X-Forwarded-Proto": "https",
+                    },
+                ),
+                allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                cache_policy=cloudfront.CachePolicy(
+                    self,
+                    "short_cache_not_authenticated_id",
+                    default_ttl=Duration.minutes(10),
+                    min_ttl=Duration.minutes(0),
+                    max_ttl=Duration.minutes(120),
+                    enable_accept_encoding_brotli=True,
+                    enable_accept_encoding_gzip=True,
+                    cookie_behavior=cloudfront.CacheCookieBehavior.all(),
+                    query_string_behavior=cloudfront.CacheQueryStringBehavior.all(),
+                    header_behavior=cloudfront.CacheHeaderBehavior.allow_list(
+                        "x-csrfmiddlewaretoken",
+                        "Accept",
+                        "Accept-Language",
+                        "Cache-Control",
+                        "Referer",
+                    ),
+                ),
+            ),
+            additional_behaviors={
+                "/static/*": cloudfront.BehaviorOptions(
+                    origin=origins.LoadBalancerV2Origin(
+                        alb,
+                        http_port=80,
+                        protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+                    ),
+                    cache_policy=cloudfront.CachePolicy(
+                        self,
+                        "long_cache_static_id",
+                        default_ttl=Duration.days(2000),
+                        min_ttl=Duration.minutes(1),
+                        max_ttl=Duration.days(2000),
+                        enable_accept_encoding_brotli=True,
+                        enable_accept_encoding_gzip=True,
+                    ),
+                )
+            },
+            certificate=cert,
+            domain_names=[fqdn],
+            price_class=cloudfront.PriceClass.PRICE_CLASS_100,
+        )
+
+        hosted_zone = route_53.HostedZone.from_lookup(
+            self, "WDIVDomain_id", domain_name=fqdn, private_zone=False
+        )
+        route_53.ARecord(
+            self,
+            "FQDN_A_RECORD_TO_CF",
+            zone=hosted_zone,
+            target=route_53.RecordTarget.from_alias(
+                route_53_target.CloudFrontTarget(cloudfront_dist)
+            ),
+        )
