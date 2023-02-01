@@ -198,3 +198,17 @@ workflows:
         - "Development: CDK Deploy"
         context: [deployment-development-wdiv]
         dc-environment: development
+    - cdk_deploy:
+        name: "Staging: CDK Deploy"
+        requires:
+        - "CDK Synth"
+        context: [deployment-staging-wdiv]
+        filters: { branches: { only: [ main, master, cdk ] } }
+        dc-environment: staging
+    - code_deploy:
+        name: "Staging: AWS CodeDeploy"
+        requires:
+        - "Staging: CDK Deploy"
+        context: [deployment-staging-wdiv]
+        filters: { branches: { only: [ main, master, cdk ] } }
+        dc-environment: staging

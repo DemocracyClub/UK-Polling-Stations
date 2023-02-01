@@ -9,3 +9,6 @@ aws_cdk.aws_lambda_python
 aws_cdk.aws_lambda
 aws_cdk.aws_s3_notifications
 aws_cdk.aws_s3
+aws_cdk.aws_cloudfront
+aws_cdk.aws_cloudfront_origins
+aws_cdk.aws_route53_targets

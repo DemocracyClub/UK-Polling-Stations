@@ -39,8 +39,7 @@ WDIVStack(
 
 WDIVS3TriggerStack(app, "WDIVS3TriggerStack", env=env)
 
-Tags.of(app).add("dc-product", "ee")
+Tags.of(app).add("dc-product", "wdiv")
 Tags.of(app).add("dc-environment", dc_environment)
-
 
 app.synth()

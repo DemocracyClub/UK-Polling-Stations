@@ -87,5 +87,55 @@ sudo /opt/codedeploy-agent/bin/codedeploy-local \
 
 # Setting up a new environment
 
+
+Assuming you can authenticate against the account locally. If you're using
+AWS SSO then this means passing `--profile [env]-ee-dc` to CDK and other AWS CLI commands.
+
+### 1 AWS Deployment user
+
+We need a user that can deploy the application.
+
+Because CDK uses CloudFormation to do a lot, it's recommended that the deployment user has administrative
+access. This is typically a bad idea, but it's very hard to get CloudFormation working without it.
+
+1. Create an IAM user called `CircleCIDeployer` in the AWS console
+2. Select `Programmatic access`
+3. Attach the existing `AdministratorAccess` policy
+4. Continue and download the CSV with the access keys
+
+### 2 Domain name and TLS certificate
+
+#### DNS
+1. Make a new hosted zone in the target account
+2. Delegate the NS of the intended domain to the hosted zone's name servers
+
+#### Cert
+Once the Domain nam is set up, use AWS Certificate Manager to create a cert.
+
+NOTE: This MUST be in the `us-east-1` account to work with CloudFront. You will have to delete and re-create
+the cert if you make it in the wrong region.
+
+### 3 Create an RDS instance
+
+### 3 AWS Parameter Store
+
+The CDK Stack requires some parameters that are taken from the SSM Parameter Store:
+
+* `FQDN`: the domain name you assigned above that you want to app to be serverd from
+* `SSL_CERTIFICATE_ARN`: the ARN of the ACM cert you made above
+* `OrganisationID` the ID of the AWS organisation this is sitting in. Used for Image Builder to share AMIs
+
+### 4 Bootstrap CDK
+
+```shell
+
+cdk bootstrap --profile=[dev|stage|prod]-wdiv-dc --context dc-environment=[development|staging|production]
+```
+
+CDK will create various AWS resources that are needed to deploy the stacks. This includes
+an S3 bucket and some IAM roles.
+
+See [CDK bootstrapping](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) for more.
+
 ## Create a deployment group
 AWS_PROFILE=dev-wdiv-dc DC_ENVIRONMENT=development python deploy/create_deployment_group.py
