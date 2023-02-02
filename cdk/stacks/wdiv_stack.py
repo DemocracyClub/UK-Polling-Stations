@@ -112,7 +112,6 @@ class WDIVStack(Stack):
             launch_template_name="wdiv",
             role=self.roles["codedeploy-ec2-instance-profile"],
             security_group=self.instance_security_group,
-            key_name="wdiv-dev",
             block_devices=[
                 ec2.BlockDevice(
                     device_name="/dev/sda1",
