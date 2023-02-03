@@ -23,7 +23,11 @@ from constructs import Construct
 #
 # sys.path.append("..")
 
-MONITORING_ACCOUNTS = {"development": "985364114241", "staging": "985364114241"}
+MONITORING_ACCOUNTS = {
+    "development": "985364114241",
+    "staging": "985364114241",
+    "production": "488745607445",
+}
 
 
 class WDIVStack(Stack):
@@ -326,7 +330,7 @@ class WDIVStack(Stack):
         cert_arns = {
             "development": "arn:aws:acm:us-east-1:356853674636:certificate/587f4682-6350-43d1-9a79-7380d351e1ed",
             "staging": "arn:aws:acm:us-east-1:047316047231:certificate/622bd46c-30ec-45ca-8860-5af5b7d7f9c5",
-            "production": "",
+            "production": "arn:aws:acm:us-east-1:864930021230:certificate/0410b66f-b700-4d37-a010-c31db40828ab",
         }
         cert = acm.Certificate.from_certificate_arn(
             self,

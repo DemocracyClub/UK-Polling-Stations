@@ -91,6 +91,53 @@ sudo /opt/codedeploy-agent/bin/codedeploy-local \
 Assuming you can authenticate against the account locally. If you're using
 AWS SSO then this means passing `--profile [env]-ee-dc` to CDK and other AWS CLI commands.
 
+### Create an RDS Instance
+Create a security group called `rds-public-access`. Set a single inbound rule of type `PostgreSQL` and excepting traffic from anywhere.
+Do this in the console. Make sure the Postgres version you select matches the version used in the base image. eg pg14.4 is default available on 22.04 at time of writing
+Assign the security group.
+
+Create a db
+```
+$ psql postgresql://postgres@pollingstations.chxtxn9vr5tl.eu-west-2.rds.amazonaws.com
+postgres=> create database polling_stations;
+postgres=> \q
+```
+
+Create postgis extension
+```
+$ psql postgresql://postgres@pollingstations.chxtxn9vr5tl.eu-west-2.rds.amazonaws.com/polling_stations
+polling_stations=> create extension postgis;
+polling_stations=> \q
+```
+
+Do a restore of db schema only
+
+```
+$ pg_restore \
+    -U postgres \
+    -h  pollingstations.chxtxn9vr5tl.eu-west-2.rds.amazonaws.com \
+    -p 5432 \
+    -c \
+    -j 2 \
+    --if-exists \
+    --no-owner \
+    --no-privileges \
+    --role=postgres \
+    -d polling_stations \
+    ~/Downloads/polling_stations_schema.dump
+
+```
+
+Set up Replication
+
+```
+polling_stations=> CREATE PUBLICATION alltables FOR ALL TABLES;
+```
+
+Create Parameter group and apply it. Use `cdk/scripts/create_logical_parameter_group.py`
+eg
+`AWS_PROFILE=prod-wdiv-dc DB_IDENTIFIER=pollingstations python cdk/scripts/create_logical_parameter_group.py`
+
 ### 1 AWS Deployment user
 
 We need a user that can deploy the application.
@@ -102,6 +149,8 @@ access. This is typically a bad idea, but it's very hard to get CloudFormation w
 2. Select `Programmatic access`
 3. Attach the existing `AdministratorAccess` policy
 4. Continue and download the CSV with the access keys
+
+Create a circleCI context with the appropriate values.
 
 ### 2 Domain name and TLS certificate
 
@@ -136,6 +185,29 @@ CDK will create various AWS resources that are needed to deploy the stacks. This
 an S3 bucket and some IAM roles.
 
 See [CDK bootstrapping](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html) for more.
+
+
+### CDK Deploy
+
+### Code deploy
+
+Create a deployment group
+```
+AWS_PROFILE=prod-wdiv-dc DC_ENVIRONMENT=production python deploy/create_deployment_group.py
+```
+
+create a deployment
+```
+AWS_PROFILE=prod-wdiv-dc DC_ENVIRONMENT=production COMMIT_SHA=`git rev-parse HEAD`  python deploy/create_deployment.py
+```
+That will spin up an instance, grab it's id and SH in and kick off a deploy
+```
+local$ mssh --profile prod-wdiv-dc -r eu-west-2 -X "ubuntu@i-024f88a726d07383f"
+
+instance$ sudo /opt/codedeploy-agent/bin/codedeploy-local \
+  --bundle-location https://api.github.com/repos/DemocracyClub/UK-Polling-Stations/tarball/cdk \
+  --type tar
+```
 
 ## Create a deployment group
 AWS_PROFILE=dev-wdiv-dc DC_ENVIRONMENT=development python deploy/create_deployment_group.py

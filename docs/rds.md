@@ -50,3 +50,10 @@ pg_restore \
     -d polling_stations \
     polling_stations.dump
 ```
+
+Set up Replication
+
+```shell
+// create an extension on the RDS
+polling_stations=> CREATE PUBLICATION alltables FOR ALL TABLES;
+```
