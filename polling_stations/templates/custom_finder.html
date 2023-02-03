@@ -11,7 +11,7 @@
 {% if custom.base_url %}
     {% if council.electoral_services_phone_numbers %}
         <p>
-            {% with council_phone=council.council.electoral_services_phone_numbers.0 %}
+            {% with council_phone=council.electoral_services_phone_numbers.0 %}
                 {% if territory == 'NI' %}
                     {% trans "Alternatively, contact The Electoral Office for Northern Ireland on" context "phone number link follows" %}
                 {% else %}
