@@ -369,6 +369,7 @@ class WDIVStack(Stack):
                     query_string_behavior=cloudfront.CacheQueryStringBehavior.all(),
                     header_behavior=cloudfront.CacheHeaderBehavior.allow_list(
                         "x-csrfmiddlewaretoken",
+                        "X-CSRFToken",
                         "Accept",
                         "Accept-Language",
                         "Cache-Control",
