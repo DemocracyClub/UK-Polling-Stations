@@ -103,5 +103,42 @@
   "hosted-zone:account=356853674636:domainName=dev.wdiv.club:privateZone=false:region=eu-west-2": {
     "Id": "/hostedzone/Z03856981YLX10KCHENOZ",
     "Name": "dev.wdiv.club."
+  },
+  "vpc-provider:account=864930021230:filter.isDefault=true:region=eu-west-2:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0917989fb65e57a48",
+    "vpcCidrBlock": "172.31.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0413e47d824eb5cab",
+            "cidr": "172.31.16.0/20",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-08c27981703f2e06a"
+          },
+          {
+            "subnetId": "subnet-0791be45179ee2b3c",
+            "cidr": "172.31.32.0/20",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-08c27981703f2e06a"
+          },
+          {
+            "subnetId": "subnet-002399f2a35ebcf9b",
+            "cidr": "172.31.0.0/20",
+            "availabilityZone": "eu-west-2c",
+            "routeTableId": "rtb-08c27981703f2e06a"
+          }
+        ]
+      }
+    ]
+  },
+  "ami:account=864930021230:filters.image-type.0=machine:filters.name.0=EEImage_ubuntu*:filters.state.0=available:region=eu-west-2": "ami-0534ad401ad2fb31b",
+  "ssm:account=864930021230:parameterName=FQDN:region=eu-west-2": "prod.wdiv.club",
+  "hosted-zone:account=864930021230:domainName=prod.wdiv.club:privateZone=false:region=eu-west-2": {
+    "Id": "/hostedzone/Z00885603K11BUZON65XN",
+    "Name": "prod.wdiv.club."
   }
 }
