@@ -6,6 +6,7 @@ from rich.table import Table
 from rich.text import Text
 
 from councils.models import Council
+from polling_stations.apps.file_uploads.models import File
 from pollingstations.models import PollingStation, PollingDistrict
 from addressbase.models import UprnToCouncil
 
@@ -254,6 +255,9 @@ class AddressReport:
             .exclude(polling_station_id="")
             .count()
         )
+
+    def get_file_set(self):
+        return File.objects.filter(council_id__in=self.councils)
 
     def get_addresses_without_station_id(self):
         return UprnToCouncil.objects.filter(
