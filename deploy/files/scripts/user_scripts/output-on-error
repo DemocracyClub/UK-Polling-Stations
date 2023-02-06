@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# This useful wrapper will call the command you pass it, but suppress
+# any output to STDERR or STDOUT unless (a) the command exits in error
+# (with a non-zero value) or (b) one of the signals SIGHUP, SIGINT,
+# SIGQUIT or SIGTERM were sent.  This is particularly useful for
+# wrapping commands invoked by cron, which will send an email if there
+# is any output, whereas generally I only want to get an email if the
+# command exited in error.
+
+if [ "$#" -lt 1 ]
+then
+    cat >&2 <<EOF
+Usage: $0 COMMAND [ARGUMENTS]...
+EOF
+    exit 1
+fi
+
+# Safely create a temporary file to store the output in:
+OUTPUT="$(mktemp)"
+
+# Make sure that RESULT is initiallyset to an non-zero value so that
+# if we get a signal, we can just call exit with $RESULT:
+RESULT=1
+
+# Suggested here: http://stackoverflow.com/a/2183063/223092
+# Call trap for each signal we want to handle, passing in the signal
+# as an argument:
+trap_with_argument() {
+    REAL_FUNCTION="$1"
+    shift
+    for SIGNAL
+    do
+	trap "$REAL_FUNCTION $SIGNAL" "$SIGNAL"
+    done
+}
+
+on_signal() {
+    echo "Error: exiting on receiving the signal $1"
+    on_error
+}
+
+on_error() {
+    cat "$OUTPUT"
+    rm -f "$OUTPUT"
+    exit "$RESULT"
+}
+
+trap_with_argument on_signal HUP INT QUIT TERM
+
+"$@" > "$OUTPUT" 2>&1
+
+RESULT="$?"
+
+if [ x"$RESULT" != x0 ]
+then
+    on_error
+fi
+
+rm -f "$OUTPUT"
+
+exit "$RESULT"

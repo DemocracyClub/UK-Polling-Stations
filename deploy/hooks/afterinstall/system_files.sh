@@ -34,6 +34,13 @@ for script in "$PROJECT_ROOT"/code/deploy/files/scripts/*.sh; do
   chmod 755 "$PROJECT_ROOT"/"$script_name"
 done
 
+for script in "$PROJECT_ROOT"/code/deploy/files/scripts/user_scripts/*; do
+  script_name=$(basename "$script")
+  # shellcheck disable=SC2016
+  envsubst '$PROJECT_NAME' < "$script" > /usr/bin/"$script_name"
+  chmod 755 /usr/bin/"$script_name"
+done
+
 # -------------
 # Service files
 # -------------
