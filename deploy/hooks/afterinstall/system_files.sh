@@ -77,7 +77,6 @@ touch /var/log/db_replication/logs.log && chmod 0777 /var/log/db_replication/log
 # -----
 # nginx
 # -----
-apt install --yes nginx
 rm -f /etc/nginx/sites-enabled/default
 # shellcheck disable=SC2016
 envsubst '$PROJECT_NAME $PROJECT_ROOT $APP_NAME' < "$CONF_SRC"/nginx.conf > /etc/nginx/sites-enabled/"$PROJECT_NAME"
