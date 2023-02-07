@@ -12,7 +12,7 @@ def status_check(request):
             return HttpResponse("service unavailable", status=503)
 
     # check we can connect to all our DBs
-    # (default + logger)
+    # (default + principal)
     for conn in connections:
         try:
             connections[conn].cursor()

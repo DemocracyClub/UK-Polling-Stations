@@ -1,9 +1,6 @@
 from django.contrib import admin
 
 from councils.models import Council
-from polling_stations.db_routers import get_logger_db_name
-
-LOGGER_DB_NAME = get_logger_db_name()
 
 
 class ReadOnlyModelAdminMixin:
@@ -34,35 +31,12 @@ class ReadOnlyModelAdminMixin:
         pass
 
 
-class LoggerDBModelAdmin(admin.ModelAdmin):
-
-    using = LOGGER_DB_NAME
-
-    def get_queryset(self, request):
-        # Tell Django to look for objects on the 'other' database.
-        return super().get_queryset(request).using(self.using)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        # Tell Django to populate ForeignKey widgets using a query
-        # on the 'other' database.
-        return super().formfield_for_foreignkey(
-            db_field, request, using=self.using, **kwargs
-        )
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        # Tell Django to populate ManyToMany widgets using a query
-        # on the 'other' database.
-        return super().formfield_for_manytomany(
-            db_field, request, using=self.using, **kwargs
-        )
-
-
 class CouncilUserInline(admin.StackedInline):
     model = Council.users.through
     extra = 0
 
 
-class CouncilAdmin(ReadOnlyModelAdminMixin, LoggerDBModelAdmin):
+class CouncilAdmin(ReadOnlyModelAdminMixin, admin.ModelAdmin):
     inlines = [CouncilUserInline]
     search_fields = ["council_id", "name", "identifiers"]
 

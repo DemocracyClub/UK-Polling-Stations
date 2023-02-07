@@ -20,11 +20,9 @@ from sesame.utils import get_query_string, get_user
 
 from addressbase.models import UprnToCouncil
 from data_finder.helpers import EveryElectionWrapper
-from polling_stations.db_routers import get_logger_db_name
 from .utils import get_domain, assign_councils_to_user
 
 User = get_user_model()
-LOGGER_DB_NAME = get_logger_db_name()
 
 import boto3
 from boto.pyami.config import Config
@@ -91,8 +89,7 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
 
     def get_context_data(self, **context):
         context["council"] = (
-            Council.objects.using(LOGGER_DB_NAME)
-            .all()
+            Council.objects.all()
             .exclude(council_id__startswith="N09")
             .get(council_id=self.kwargs["gss"])
         )
@@ -138,9 +135,7 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
         try:
             self.validate_body(body)
             try:
-                council = Council.objects.using(LOGGER_DB_NAME).get(
-                    pk=self.kwargs["gss"]
-                )
+                council = Council.objects.get(pk=self.kwargs["gss"])
             except Council.DoesNotExist as e:
                 raise DjangoValidationError(str(e))
         except DjangoValidationError as e:
@@ -184,8 +179,7 @@ class CouncilView:
     def get_queryset(self):
         uploads = Upload.objects.all().order_by("-timestamp")
         qs = (
-            Council.objects.using(LOGGER_DB_NAME)
-            .all()
+            Council.objects.all()
             .exclude(council_id__startswith="N09")
             .order_by("name")
             .prefetch_related(Prefetch("upload_set", uploads))
@@ -236,9 +230,9 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["EC_COUNCIL_CONTACT_EMAIL"] = settings.EC_COUNCIL_CONTACT_EMAIL
-        council_from_logger_db = context["council"]
+        council = context["council"]
         council_from_default_db = Council.objects.using(DEFAULT_DB_ALIAS).get(
-            council_id=council_from_logger_db.council_id
+            council_id=council.council_id
         )
         context["STATIONS"] = []
         example_uprn_map = dict(
