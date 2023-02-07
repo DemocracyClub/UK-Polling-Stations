@@ -1,1 +1,2 @@
-LOGGER_DB_NAME = "logger"
+# Name of RDS DB from which local is replicated
+PRINCIPAL_DB_NAME = "principal"

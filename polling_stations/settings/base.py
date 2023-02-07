@@ -306,7 +306,7 @@ CLEAN_SERVER_FILE = "~/clean"
 # When we're running on AWS
 if os.environ.get("DC_ENVIRONMENT"):
 
-    DATABASES["logger"] = {
+    DATABASES["principal"] = {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
         "USER": "postgres",
         "NAME": os.environ.get("RDS_DB_NAME"),
@@ -315,12 +315,9 @@ if os.environ.get("DC_ENVIRONMENT"):
         "PORT": "5432",
     }
 
-    if os.environ.get("IGNORE_ROUTERS"):
-        DATABASE_ROUTERS = []
-    else:
-        DATABASE_ROUTERS = [
-            "polling_stations.db_routers.LoggerRouter",
-        ]
+    DATABASE_ROUTERS = [
+        "polling_stations.db_routers.ReplicationRouter",
+    ]
 
     # Sentry config
     RAVEN_CONFIG = {
