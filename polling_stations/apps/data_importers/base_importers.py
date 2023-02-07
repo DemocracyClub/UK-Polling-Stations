@@ -178,20 +178,6 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         record[0].num_addresses = address_report.get_addresses_with_station_id()
         record[0].station_data_file = station_report.get_file_set()
         record[0].report = report.generate_string_report()
-
-        # 2. `data_quality.file.upload`
-        # get the key from the file_set by getting the file_set_id from the data_quality record
-        # get the file_set_id from the data_quality record
-        #
-
-        # record[0].address_file =
-        # record[0].station_file =
-        # change method in teardown
-
-        # in the view check to see if there is a data quality report for the council
-        # see if the stations file and address file are linked to the data quality report
-
-        # check the template, if there is a tick
         record[0].save()
 
     @property
