@@ -1,71 +1,73 @@
+from django.contrib.gis.geos import Point
+
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STE"
-    addresses_name = "2021-03-10T15:09:53.140416/Democracy_Club__06May2021.tsv"
-    stations_name = "2021-03-10T15:09:53.140416/Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2023-05-04/2023-02-09T14:44:06.144885/Democracy_Club__04May2023.tsv"
+    )
+    stations_name = (
+        "2023-05-04/2023-02-09T14:44:06.144885/Democracy_Club__04May2023.tsv"
+    )
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
+            "3455091778",  # 182 STAR & GARTER ROAD, STOKE-ON-TRENT
+            "3455043112",  # 184 STAR & GARTER ROAD, STOKE-ON-TRENT
+            "3455091782",  # 188 STAR & GARTER ROAD, STOKE-ON-TRENT
+            "3455091779",  # 190 STAR & GARTER ROAD, STOKE-ON-TRENT
+            "3455040966",  # 192 STAR & GARTER ROAD, STOKE-ON-TRENT
+            "3455091781",  # 198 STAR & GARTER ROAD, STOKE-ON-TRENT
+            "3455130597",  # 3 BETHESDA MEWS, BETHESDA STREET, STOKE-ON-TRENT
             "3455144295",  # 2A EGERTON ROAD, HARTSHILL, STOKE-ON-TRENT
             "3455154988",  # RAILWAY COTTAGE, WEDGWOOD DRIVE, BARLASTON, STOKE-ON-TRENT
-            "3455121928",  # BYCARS HOUSE, BYCARS ROAD, STOKE-ON-TRENT
-            "3455043112",  # 184 STAR & GARTER ROAD, STOKE-ON-TRENT
-            "3455091787",  # 2A HEATHCOTE ROAD, STOKE-ON-TRENT
-            "3455091783",  # 3 SPRING GARDEN ROAD, STOKE-ON-TRENT
-            "3455091782",  # 188 STAR & GARTER ROAD, STOKE-ON-TRENT
-            "3455091781",  # 198 STAR & GARTER ROAD, STOKE-ON-TRENT
-            "3455091779",  # 190 STAR & GARTER ROAD, STOKE-ON-TRENT
-            "3455091778",  # 182 STAR & GARTER ROAD, STOKE-ON-TRENT
-            "3455144033",  # 3 GRAVELLY BANK, STOKE-ON-TRENT
-            "3455112142",  # 1 GRAVELLY BANK, STOKE-ON-TRENT
-            "3455040966",  # 192 STAR & GARTER ROAD, STOKE-ON-TRENT
-            "3455144383",  # 28A COBRIDGE ROAD, STOKE-ON-TRENT
-            "3455154307",  # HOLLY LODGE RESIDENTIAL HOME, GASKELL ROAD, STOKE-ON-TRENT
-            "3455130597",  # 3 BETHESDA MEWS, BETHESDA STREET, STOKE-ON-TRENT
-            "3455017354",  # FLAT ABOVE 59 LICHFIELD STREET, HANLEY, STOKE-ON-TRENT
-            "3455122809",  # FLAT FIRST FLOOR 342 HARTSHILL ROAD, HARTSHILL, STOKE-ON-TRENT
+            "3455107917",  # IVY COTTAGE, WOODPARK LANE, STOKE-ON-TRENT
+            "3455010479",  # ABBEY FARM, BIRCHES HEAD ROAD, STOKE-ON-TRENT
+            "3455031193",  # 602 DIVIDY ROAD, STOKE-ON-TRENT
+            "3455069351",  # 152 MOORLAND ROAD, STOKE-ON-TRENT
+            "3455097202",  # 676 TRENTHAM ROAD, STOKE-ON-TRENT
+            "3455097203",  # 678 TRENTHAM ROAD, STOKE-ON-TRENT
+            "3455082463",  # THE BUNGALOW, ST. JOSEPHS PLAYING FIELDS, HANFORD, STOKE-ON-TRENT
+            "3455121942",  # BURSLEM GOLF CLUB, HIGH LANE, STOKE-ON-TRENT
         ]:
             return None
 
         if record.addressline6 in [
-            "ST4 2LE",
-            "ST3 5HU",
-            "ST3 4DH",
-            "ST3 4HU",
-            "ST3 7RX",
-            "ST4 8NU",
-            "ST3 7HQ",
             "ST3 5BN",
+            "ST4 2JY",
+            "ST3 7RX",
+            "ST4 2LE",
+            "ST3 4DH",
+            "ST4 8ND",
+            "ST6 3BF",
+            "ST4 3HH",
+            "ST3 5HU",
+            "ST3 2QX",
+            "ST3 6DU",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Boothen Neighbourhood Centre Summer Street Off London Road Boothen Stoke-on-Trent ST4 4DW
-        if record.polling_place_id == "14371":
-            record = record._replace(polling_place_postcode="ST4 4DH")
+        rec = super().station_record_to_dict(record)
 
-        # Penkhull Village Hall Trent Valley Road Penkhull Stoke-on-Trent ST4 7LG
-        if record.polling_place_id == "14352":
-            record = record._replace(polling_place_postcode="ST4 5JB")
+        # more accurate point for Penkhull Village Hall Trent Valley Road Penkhull
+        if rec["internal_council_id"] == "15895":
+            rec["location"] = Point(-2.196169889738293, 52.99999106909939, srid=4326)
 
-        # Civic Centre Glebe Street Stoke-on-Trent ST4 6RG
-        if record.polling_place_id == "14342":
-            record = record._replace(polling_place_postcode="ST4 1HH")
+        # more accurate point for St John`s Community Church Baptist Street Burslem
+        if rec["internal_council_id"] == "15835":
+            rec["location"] = Point(-2.1961361615970434, 53.042620057048076, srid=4326)
 
-        # Park Evangelical Church Boughey Road Shelton Stoke-on-Trent ST4 2EB
-        if record.polling_place_id == "14317":
-            record = record._replace(polling_place_postcode="ST4 2BZ")
+        # more accurate point for The Cuckoo Barleston Road Stoke On Trent
+        if rec["internal_council_id"] == "15958":
+            rec["location"] = Point(-2.150279116250707, 52.96530717578672, srid=4326)
 
-        # St John`s Community Church Baptist Street Burslem Stoke-on-Trent
-        if record.polling_place_id == "14434":
-            record = record._replace(polling_place_postcode="ST6 3BS")
-
-        return super().station_record_to_dict(record)
+        return rec
