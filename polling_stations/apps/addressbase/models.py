@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.postgres.indexes import BTreeIndex, GistIndex
 from uk_geo_utils.models import (
     AbstractAddress,
     AbstractOnsudManager,
@@ -9,6 +10,22 @@ from pollingstations.models import PollingStation
 
 
 class Address(AbstractAddress):
+    class Meta:
+        indexes = [
+            BTreeIndex(
+                fields=["uprn"],
+                name="address_uprn_like_idx",
+                opclasses=["varchar_pattern_ops"],
+            ),
+            BTreeIndex(fields=["postcode"], name="address_postcode_idx"),
+            BTreeIndex(
+                fields=["postcode"],
+                name="address_postcode_like_idx",
+                opclasses=["varchar_pattern_ops"],
+            ),
+            GistIndex(fields=["location"], name="address_location_gist"),
+        ]
+
     def get_council_from_others_in_postcode(self):
         others = (
             Address.objects.filter(postcode=self.postcode)
@@ -52,12 +69,16 @@ class Address(AbstractAddress):
 class UprnToCouncil(models.Model):
     class Meta:
         indexes = [
-            models.Index(
-                fields=[
-                    "lad",
-                ],
-                name="lookup_lad_idx",
-            )
+            BTreeIndex(fields=["lad"], name="uprntocouncil_lad_idx"),
+            BTreeIndex(
+                fields=["uprn"],
+                name="uprntocouncil_uprn_like_idx",
+                opclasses=["varchar_pattern_ops"],
+            ),
+            BTreeIndex(
+                fields=["advance_voting_station"],
+                name="uprntocouncil_adv_v_station_idx",
+            ),
         ]
 
     objects = AbstractOnsudManager()
