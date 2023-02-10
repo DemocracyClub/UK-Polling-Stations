@@ -85,9 +85,6 @@ hooks:
     - location: deploy/hooks/afterinstall/install_frontend_deps.sh
       timeout: 300
       runas: polling_stations
-#     - location: deploy/afterinstall/migrate_logger.sh
-#       timeout: 300
-#       runas: polling_stations
     - location: deploy/hooks/afterinstall/collectstatic.sh
       timeout: 300
       runas: polling_stations
@@ -97,9 +94,12 @@ hooks:
     - location: deploy/hooks/afterinstall/createcachetable.sh
       timeout: 300
       runas: polling_stations
-#     - location: deploy/afterinstall/ee_init_db.sh
+#     - location: deploy/hooks/afterinstall/ee_init_db.sh
 #       timeout: 300
 #       runas: polling_stations
+    - location: deploy/hooks/afterinstall/migrate_rds.sh
+      timeout: 10800
+      runas: polling_stations
 # During the ApplicationStart deployment lifecycle event, run the commands
 #   in the script specified in "location".
   ApplicationStart:
