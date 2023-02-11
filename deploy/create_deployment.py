@@ -1,4 +1,6 @@
 import os
+import sys
+
 import boto3
 import time
 
@@ -38,7 +40,7 @@ def delete_asg(asg_name):
 
 def check_deployment(deployment_id):
     """
-    Checks the status of the deploy every 5 seconds,
+    Checks the status of the deployment every 60 seconds,
     returns a success or error code
     """
     client = session.client("codedeploy")
@@ -51,13 +53,53 @@ def check_deployment(deployment_id):
     if deployment["status"] in ["Failed", "Stopped"]:
         print("FAIL")
         print(deployment["errorInformation"])
+        try:
+            summarise_failure(client, deployment_id)
+
+        except Exception:
+            # This is some optional logging, so no sweat if it fails
+            pass
+
         # delete the ASG that was created during the failed deployment
         delete_asg(asg_name=deployment["targetInstances"]["autoScalingGroups"][0])
         exit(1)
 
     print(deployment["status"])
-    time.sleep(10)
+    time.sleep(60)
     check_deployment(deployment_id=deployment_id)
+
+
+def summarise_failure(deploy_client, deployment_id):
+    """
+    Get the failure reasons for failed deployments
+    """
+    failed_target_info = get_failed_target_info(deploy_client, deployment_id)
+    failed_event = [
+        lce
+        for lce in failed_target_info["instanceTarget"]["lifecycleEvents"]
+        if lce["status"] == "Failed"
+    ][0]
+    sys.stdout.write(f"Failed Event: {failed_event['lifecycleEventName']}")
+    sys.stdout.write(
+        f"Duration {(failed_event['endTime'] - failed_event['startTime']).total_seconds()}"
+    )
+    sys.stdout.write(f"Diagnostics: {failed_event['diagnostics']}")
+
+
+def get_failed_target_info(deploy_client, deploy_id):
+    """
+    returns target_info for a single failed target
+    """
+    targets = deploy_client.list_deployment_targets(deploymentId=deploy_id)
+    target_infos = deploy_client.batch_get_deployment_targets(
+        deploymentId=deploy_id, targetIds=targets["targetIds"]
+    )
+    failed_targets = [
+        t
+        for t in target_infos["deploymentTargets"]
+        if t["instanceTarget"]["status"] == "Failed"
+    ]
+    return failed_targets[0]
 
 
 def main():
