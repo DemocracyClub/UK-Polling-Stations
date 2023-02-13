@@ -23,7 +23,7 @@ psql "$DB" -U "$USER" -c 'create extension postgis;'
 source /var/www/polling_stations/code/venv/bin/activate
 
 # Migrate db - this builds the schema before syncing
-IGNORE_ROUTERS=True /var/www/polling_stations/code/manage.py migrate
+IGNORE_ROUTERS=True /var/www/polling_stations/code/manage.py migrate --database=local
 
 # Truncate some tables that are populated by the above steps
 psql "$DB" -U "$USER" -c 'TRUNCATE "spatial_ref_sys", "auth_permission", "django_migrations", "django_content_type", "django_site", "pollingstations_customfinder" RESTART IDENTITY CASCADE;'
@@ -46,6 +46,7 @@ do
 done
 echo "initial db sync complete"
 
+echo "Rebuilding indexes..."
 # Rebuild constraints
 psql "$DB" -U "$USER" -c 'ALTER TABLE addressbase_address ADD PRIMARY KEY (uprn);'
 psql "$DB" -U "$USER" -c 'ALTER TABLE addressbase_uprntocouncil ADD PRIMARY KEY (uprn);'
@@ -60,4 +61,6 @@ psql "$DB" -U "$USER" -c 'CREATE INDEX uprntocouncil_adv_v_station_idx ON public
 psql "$DB" -U "$USER" -c 'CREATE INDEX uprntocouncil_uprn_like_idx ON public.addressbase_uprntocouncil USING btree (uprn varchar_pattern_ops);'
 psql "$DB" -U "$USER" -c 'CREATE INDEX uprntocouncil_lad_idx ON public.addressbase_uprntocouncil USING btree (lad);'
 
-touch ~/clean
+echo "...indexes rebuilt."
+
+touch ~/db_replication_complete
