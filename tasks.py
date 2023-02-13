@@ -1,5 +1,6 @@
 import os
 import subprocess
+import sys
 
 from invoke import task
 import boto3
@@ -45,7 +46,9 @@ def git_revision():
         "profile": "Required. Name of AWS profile to be called with",
     }
 )
-def rds_psql(ctx, profile, user="postgres", db_name=None, host=None, password=None):
+def rds_psql(
+    ctx, profile, user="postgres", db_name=None, host=None, password=None, print=False
+):
     """
     Start psql client to rds associate with <profile> account.
     NB This does not mean the rds is in that account.
@@ -54,7 +57,29 @@ def rds_psql(ctx, profile, user="postgres", db_name=None, host=None, password=No
     conn_string = get_rds_connection_string(
         profile, user=user, db_name=db_name, host=host, password=password
     )
+    if print:
+        sys.stdout.write(f"\npsql {conn_string}\n\n")
+        return
     ctx.run(f"psql {conn_string}")
+
+
+@task(
+    help={
+        "profile": "Required. Name of AWS profile to be called with",
+    }
+)
+def list_rds_dbs(
+    ctx,
+    profile,
+    user="postgres",
+    db_name=None,
+    host=None,
+    password=None,
+):
+    conn_string = get_rds_connection_string(
+        profile, user=user, db_name=db_name, host=host, password=password
+    )
+    ctx.run(f'psql {conn_string} -c "\l"')
 
 
 @task(

@@ -211,3 +211,8 @@ instance$ sudo /opt/codedeploy-agent/bin/codedeploy-local \
 
 ## Create a deployment group
 AWS_PROFILE=dev-wdiv-dc DC_ENVIRONMENT=development python deploy/create_deployment_group.py
+
+#### Trouble shooting
+
+* "The deployment failed because no instances were found in your blue fleet"
+  * Edit `Environment configuration` in the deployment Group, select the asg which contains instancs you wish to replace.
