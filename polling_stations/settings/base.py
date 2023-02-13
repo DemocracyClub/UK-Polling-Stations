@@ -1,4 +1,5 @@
 import os, sys
+from pathlib import Path
 
 from dc_logging_client import DCWidePostcodeLoggingClient
 from django.utils.translation import gettext_lazy as _
@@ -305,6 +306,25 @@ CLEAN_SERVER_FILE = "~/clean"
 
 # When we're running on AWS
 if os.environ.get("DC_ENVIRONMENT"):
+
+    if not Path("~/db_replication_complete").exists():
+        DATABASES["local"] = {
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
+            "NAME": "polling_stations",
+            "USER": "",
+            "PASSWORD": "",
+            "HOST": "",  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+            "PORT": "",  # Set to empty string for default.
+            "CONN_MAX_AGE": 60,
+        }
+        DATABASES["default"] = {
+            "ENGINE": "django.contrib.gis.db.backends.postgis",
+            "USER": "postgres",
+            "NAME": os.environ.get("RDS_DB_NAME"),
+            "PASSWORD": os.environ.get("RDS_DB_PASSWORD"),
+            "HOST": os.environ.get("RDS_DB_HOST"),
+            "PORT": "5432",
+        }
 
     DATABASES["principal"] = {
         "ENGINE": "django.contrib.gis.db.backends.postgis",

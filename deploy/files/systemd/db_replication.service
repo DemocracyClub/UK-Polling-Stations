@@ -1,14 +1,13 @@
 [Unit]
 Description=Manages DB replication subscription
-Before=${PROJECT_NAME}_gunicorn.service
-After=postgresql.service
+After=postgresql.service ${PROJECT_ROOT}_gunicorn.service
 
 [Service]
-User=${PROJECT_NAME}
-Type=oneshot
-RemainAfterExit=true
-ExecStart=${PROJECT_ROOT}/setup_db_replication.sh
-ExecStop=${PROJECT_ROOT}/remove_db_replication.sh
+User=root
+Type=exec
+RemainAfterExit=yes
+ExecStart=${PROJECT_ROOT}/db_replication_runner.sh
+ExecStop=sudo su -c "${PROJECT_ROOT}/remove_db_replication.sh" - polling_stations
 
 StandardOutput=file:/var/log/db_replication/logs.log
 StandardError=file:/var/log/db_replication/logs.log
