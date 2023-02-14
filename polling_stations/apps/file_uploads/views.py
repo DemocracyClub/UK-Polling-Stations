@@ -46,9 +46,6 @@ class FileSchema(Schema):
     )
     size = fields.Integer(
         required=True,
-        validate=validate.Range(
-            min=0, max=settings.MAX_FILE_SIZE, error="File too big"
-        ),
     )
     type = fields.String(required=False)
 
