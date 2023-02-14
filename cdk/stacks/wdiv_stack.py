@@ -32,9 +32,6 @@ MONITORING_ACCOUNTS = {
 
 class WDIVStack(Stack):
     # TODO
-    #   - Uploads buckets
-    #   - Data hosting
-    #   - Deploy trigger
     #   - widget?
 
     def __init__(
@@ -191,9 +188,9 @@ class WDIVStack(Stack):
             "asg-id",
             vpc=self.default_vpc,
             launch_template=self.launch_template,
-            desired_capacity=1,
+            desired_capacity=20,
             min_capacity=1,
-            max_capacity=10,
+            max_capacity=25,
         )
 
     def create_alb(
