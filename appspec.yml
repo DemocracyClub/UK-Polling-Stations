@@ -107,7 +107,7 @@ hooks:
 #   in the script specified in "location".
   ApplicationStart:
     - location: deploy/hooks/start_application.sh
-      timeout: 3600
+      timeout: 300
       runas: root
 # During the ValidateService deployment lifecycle event, run the commands
 #   in the script specified in "location".
