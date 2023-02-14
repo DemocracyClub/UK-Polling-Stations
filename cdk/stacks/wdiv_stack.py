@@ -104,6 +104,7 @@ class WDIVStack(Stack):
             target_group_name="wdiv-alb-tg",
             target_type=elbv2.TargetType.INSTANCE,
             vpc=self.default_vpc,
+            deregistration_delay=Duration.seconds(60),
         )
         return wdiv_alb_tg
 
