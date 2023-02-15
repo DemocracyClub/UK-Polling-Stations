@@ -79,3 +79,4 @@ uprn-to-councils.csv
 
 # cdk gubbins
 cdk.out/**
+cdk.context.json
