@@ -18,6 +18,14 @@ cat > /etc/systemd/system/apt-daily.timer.d/apt-daily.timer.conf <<- EOF
 Persistent=false
 EOF
 
+# Let Apt do it's thing
+while ps awx | grep "apt[ -]" | grep -v grep
+do
+  echo "Waiting for existing apt process to finish"
+  sleep 5
+done
+echo "Apt finished, continuing"
+
 # Install apt packages
 apt-get update
 apt-get install --yes nginx nodejs npm gettext
