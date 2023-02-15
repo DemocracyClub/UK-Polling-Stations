@@ -154,11 +154,20 @@ jobs:
           PGHOST: 127.0.0.1
     working_directory: ~/repo
     parameters:
+      min-size:
+        type: integer
+      max-size:
+        type: integer
+      desired-capacity:
+        type: integer
       dc-environment:
         type: enum
         enum: [ development, staging, production ]
     environment:
       DC_ENVIRONMENT: "<<parameters.dc-environment>>"
+      MIN_SIZE: "<<parameters.min-size>>"
+      MAX_SIZE: "<<parameters.max-size>>"
+      DESIRED_CAPACITY: "<<parameters.desired-capacity>>"
 
     steps:
     - checkout
@@ -175,6 +184,14 @@ jobs:
         command: |
           . .venv/bin/activate
           COMMIT_SHA=$CIRCLE_SHA1 python deploy/create_deployment.py
+    - run:
+        name: Update auto scaling group
+        command: |
+          . .venv/bin/activate
+          python deploy/update_autoscaling_group.py
+        no_output_timeout: 15m # TODO reduce/discuss what is suitable?
+
+
 workflows:
   version: 2
   test_build_deploy:
@@ -198,6 +215,9 @@ workflows:
         - "Development: CDK Deploy"
         context: [deployment-development-wdiv]
         dc-environment: development
+        min-size: 1
+        max-size: 2
+        desired-capacity: 1
     - cdk_deploy:
         name: "Staging: CDK Deploy"
         requires:
@@ -212,6 +232,9 @@ workflows:
         context: [deployment-staging-wdiv]
         filters: { branches: { only: [ main, master, cdk ] } }
         dc-environment: staging
+        min-size: 1
+        max-size: 2
+        desired-capacity: 1
     - cdk_deploy:
         name: "Production: CDK Deploy"
         requires:
@@ -227,3 +250,6 @@ workflows:
         context: [deployment-production-wdiv]
         filters: { branches: { only: [ main, master, cdk ] } }
         dc-environment: production
+        min-size: 1
+        max-size: 2
+        desired-capacity: 1
