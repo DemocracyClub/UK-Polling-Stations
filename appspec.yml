@@ -94,6 +94,9 @@ hooks:
     - location: deploy/hooks/afterinstall/createcachetable.sh
       timeout: 300
       runas: polling_stations
+    - location: deploy/hooks/afterinstall/install_crontab.sh
+      timeout: 300
+      runas: root
 #     - location: deploy/hooks/afterinstall/ee_init_db.sh
 #       timeout: 300
 #       runas: polling_stations
