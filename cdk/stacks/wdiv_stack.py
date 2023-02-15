@@ -23,6 +23,7 @@ from constructs import Construct
 #
 # sys.path.append("..")
 
+EE_IMAGE = "ami-0534ad401ad2fb31b"
 MONITORING_ACCOUNTS = {
     "development": "985364114241",
     "staging": "985364114241",
@@ -53,9 +54,8 @@ class WDIVStack(Stack):
         self.subnets = ec2.SubnetSelection(
             availability_zones=["eu-west-2a", "eu-west-2b", "eu-west-2c"]
         )
-        self.latest_ami = ec2.MachineImage.lookup(
-            # name="ukpollingstations 2022-08-24T14-45-46Z",
-            name="EEImage_ubuntu*"
+        self.latest_ami = ec2.MachineImage.generic_linux(
+            ami_map={"eu-west-2": EE_IMAGE}
         )
 
         self.create_parameters()
