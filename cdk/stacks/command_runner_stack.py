@@ -45,11 +45,11 @@ class EEOncePerTagCommandRunner(Stack):
         # Environment conditionals
         dc_environment = self.node.try_get_context("dc-environment") or "development"
 
-        if dc_environment in ["development", "production"]:
+        if dc_environment in ["development", "staging", "production"]:
             self.add_job(
-                "import_councils_from_ec_on_logger",
+                "import_councils_from_ec_on_principal",
                 "cron(1 * * * ? *)",
-                "/usr/bin/manage-py-command import_councils --only-contact-details --database logger",
+                "/usr/bin/manage-py-command import_councils --only-contact-details --database principal",
             )
 
     def add_job(

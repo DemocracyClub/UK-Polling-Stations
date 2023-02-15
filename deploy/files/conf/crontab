@@ -1,0 +1,6 @@
+# WARNING: Commands in this file will run on *every* instance in *every* environment
+# HOWEVER: these commands will NOT run on instances booted from the EE AMI
+# If you want to have a command run only once per env / once globally, use SSM Run Command
+MAILTO=developers@democracyclub.org.uk
+# Import councils from EC hourly
+1 * * * * /usr/bin/manage-py-command import_councils --only-contact-details --database default
