@@ -231,7 +231,7 @@ input[type="radio"] {
   font-family: Montserrat, sans-serif;
 }
 
-.ds-error {
+#find-polling-station-form > div.ds-error {
 //  centers the error for the postcode lookup
     margin: 1rem auto;
 }
