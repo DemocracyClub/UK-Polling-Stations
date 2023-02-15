@@ -30,12 +30,6 @@ echo "Apt finished, continuing"
 apt-get update
 apt-get install --yes nginx nodejs npm gettext
 
-# Install cloudwatch
-mkdir -p /tmp/cloudwatch-logs
-cd /tmp/cloudwatch-logs
-wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
-dpkg -i -E ./amazon-cloudwatch-agent.deb
-
 # Restart apt update timer
 systemctl start apt-daily.timer
 systemctl daemon-reload
