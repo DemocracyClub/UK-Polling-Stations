@@ -1,15 +1,16 @@
 -r base.txt
 
-aws_cdk.core
-aws-cdk.cx-api
-aws_cdk.aws_ec2
-aws_cdk.aws_autoscaling
-aws_cdk.aws_codedeploy
-aws_cdk.aws_lambda_python
-aws_cdk.aws_lambda
-aws_cdk.aws_s3_notifications
-aws_cdk.aws_s3
-aws_cdk.aws_cloudfront
-aws_cdk.aws_cloudfront_origins
-aws_cdk.aws_route53_targets
-aws_cdk.aws_events_targets
+aws_cdk.core == 1.181.0
+aws-cdk.cx-api == 1.181.0
+aws_cdk.aws_ec2 == 1.181.0
+aws_cdk.aws_autoscaling == 1.181.0
+aws_cdk.aws_codedeploy == 1.181.0
+aws_cdk.aws_lambda_python == 1.181.0
+aws_cdk.aws_lambda == 1.181.0
+aws_cdk.aws_s3_notifications == 1.181.0
+aws_cdk.aws_s3 == 1.181.0
+aws_cdk.aws_cloudfront == 1.181.0
+aws_cdk.aws_cloudfront_origins == 1.181.0
+aws_cdk.aws_route53_targets == 1.181.0
+aws_cdk.aws_events_targets == 1.181.0
+constructs == 3.4.162

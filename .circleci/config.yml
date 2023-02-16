@@ -141,10 +141,6 @@ jobs:
           pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
           . .venv/bin/activate
           npx cdk deploy --all --require-approval never --concurrency 3
-    - save_cache:
-        paths:
-        - .cdk.out
-        key: v1-machine-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
 
   code_deploy:
     docker:
