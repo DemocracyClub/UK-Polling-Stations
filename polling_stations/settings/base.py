@@ -95,7 +95,7 @@ MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "data_finder.middleware.UTMTrackerMiddleware",
@@ -359,6 +359,11 @@ if os.environ.get("DC_ENVIRONMENT"):
     # TODO Is this still true? https://github.com/DemocracyClub/polling_deploy/blob/ff83e6eb8fe1d9ee18efad7a39e524eec9fae477/files/conf/nginx.conf#L5
     ALLOWED_HOSTS = ["*"]  # TODO Make this a parameter store thing
     USE_X_FORWARDED_HOST = True
+
+    if fqdn := os.environ.get("FQDN"):
+        CSRF_TRUSTED_ORIGINS = [
+            f"https://{fqdn}",
+        ]
 
     # Logging Client
     FIREHOSE_ACCOUNT_ARN = os.environ.get("FIREHOSE_ACCOUNT_ARN", None)
