@@ -8,6 +8,8 @@ updates:
   ignore:
   - dependency-name: boto3
     update-types: ["version-update:semver-patch"]
+  - dependency-name: botocore
+    update-types: ["version-update:semver-patch"]
 - package-ecosystem: npm
   directory: "/"
   schedule:
