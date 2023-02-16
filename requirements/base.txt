@@ -1,12 +1,6 @@
 black==22.10.0
 commitment<4.0.0
 dj-database-url==1.2.0
-django-apiblueprint-view
-aws_cdk.core
-aws-cdk.cx-api
-aws_cdk.aws_ec2
-aws_cdk.aws_autoscaling
-aws_cdk.aws_codedeploy
 django-apiblueprint-view==2.4.0
 django-basicauth==0.5.3
 django-extensions==3.2.1
@@ -40,7 +34,6 @@ git+https://github.com/DemocracyClub/design-system.git@0.2.3
 git+https://github.com/DemocracyClub/dc_django_utils.git@2.0.4
 git+https://github.com/DemocracyClub/dc_logging.git@0.0.9
 
-constructs
 pytest==7.0.1
 mock==4.0.3
 aloe==0.2.0
