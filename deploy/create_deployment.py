@@ -80,7 +80,7 @@ def check_deployment(deployment_id):
         exit(1)
 
     print(deployment["status"])
-    time.sleep(60)
+    time.sleep(20)
     check_deployment(deployment_id=deployment_id)
 
 
