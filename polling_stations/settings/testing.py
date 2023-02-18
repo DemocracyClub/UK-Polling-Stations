@@ -11,6 +11,8 @@ INSTALLED_APPS = list(INSTALLED_APPS)  # noqa
 
 MAPZEN_API_KEY = ""
 GOOGLE_API_KEYS = []
+MAPBOX_API_KEY = ""
+
 
 STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 
