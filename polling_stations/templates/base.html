@@ -123,13 +123,6 @@
 {% block extra_site_js %}
     {% block extra_javascript %}
 
-        {% if RAVEN_CONFIG %}
-            {% load raven %}
-            <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js"></script>
-            <script>
-                Raven.config('{% sentry_public_dsn %}').install()
-            </script>
-        {% endif %}
         {% javascript 'scripts' %}
     {% endblock extra_javascript %}
 {% endblock extra_site_js %}

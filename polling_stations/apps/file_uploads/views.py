@@ -16,6 +16,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, TemplateView, FormView
+from sentry_sdk import capture_message
 from sesame.utils import get_query_string, get_user
 
 from addressbase.models import UprnToCouncil
@@ -120,7 +121,7 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
         except MarshmallowValidationError as e:
             # for now, log the error and body to sentry
             # so we've got visibility on errors
-            logger.error(f"{e}\n{body}")
+            capture_message(f"{e}\n{body}", level="error")
 
             raise DjangoValidationError("Request body did not match schema")
 
