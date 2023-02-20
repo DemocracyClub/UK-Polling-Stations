@@ -162,7 +162,6 @@ INSTALLED_APPS = (
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_gis",
-    "raven.contrib.django.raven_compat",
     "django_extensions",
     "markdown",
     "corsheaders",
@@ -215,20 +214,11 @@ LOGGING = {
             "class": "django.utils.log.AdminEmailHandler",
         },
         "null": {"class": "logging.NullHandler"},
-        "sentry": {
-            "level": "ERROR",
-            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
-        },
     },
     "loggers": {
         # Silence DisallowedHost exception by setting null error handler - see
         # https://docs.djangoproject.com/en/1.8/topics/logging/#django-security
         "django.security.DisallowedHost": {"handlers": ["null"], "propagate": False},
-        "file_uploads.views": {
-            "handlers": ["sentry"],
-            "level": "ERROR",
-            "propagate": True,
-        },
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",
@@ -340,10 +330,18 @@ if os.environ.get("DC_ENVIRONMENT"):
     ]
 
     # Sentry config
-    RAVEN_CONFIG = {
-        "dsn": os.environ.get("SENTRY_DSN"),  # TODO upgrade to sentry_sdk.init(...
-        "environment": os.environ.get("DC_ENVIRONMENT"),
-    }
+
+    import sentry_sdk
+    from sentry_sdk.integrations import django
+
+    sentry_sdk.init(
+        dsn=os.environ.get("SENTRY_DSN"),
+        integrations=[
+            django.DjangoIntegration(),
+        ],
+        environment=os.environ.get("DC_ENVIRONMENT"),
+        traces_sample_rate=0,
+    )
 
     # Let's us send emails to users
     DEFAULT_FROM_EMAIL = "pollingstations@democracyclub.org.uk"

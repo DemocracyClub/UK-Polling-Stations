@@ -186,6 +186,13 @@ jobs:
           . .venv/bin/activate
           python deploy/update_autoscaling_group.py
         no_output_timeout: 15m # TODO reduce/discuss what is suitable?
+    - run:
+        name: "Publish a new Sentry Release"
+        command: |
+          curl -sL https://sentry.io/get-cli/ | bash
+          sentry-cli releases --org democracy-club-gp new $CIRCLE_SHA1 --project wdiv
+          sentry-cli releases --org democracy-club-gp set-commits --auto $CIRCLE_SHA1 --ignore-missing
+          sentry-cli releases --org democracy-club-gp finalize $CIRCLE_SHA1
 
 
 workflows:
