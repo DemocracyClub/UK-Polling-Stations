@@ -49,6 +49,7 @@ class WDIVS3TriggerStack(Stack):
             timeout=Duration.minutes(10),
             role=role,
             environment=lambda_env_vars,
+            memory_size=1024,
         )
 
         uploads_bucket.add_event_notification(
