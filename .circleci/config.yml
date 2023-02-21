@@ -226,14 +226,14 @@ workflows:
         requires:
         - "CDK Synth"
         context: [deployment-staging-wdiv]
-        filters: { branches: { only: [ main, master, cdk ] } }
+        filters: { branches: { only: [ main, master ] } }
         dc-environment: staging
     - code_deploy:
         name: "Staging: AWS CodeDeploy"
         requires:
         - "Staging: CDK Deploy"
         context: [deployment-staging-wdiv]
-        filters: { branches: { only: [ main, master, cdk ] } }
+        filters: { branches: { only: [ main, master ] } }
         dc-environment: staging
         min-size: 1
         max-size: 2
@@ -244,14 +244,14 @@ workflows:
         - "CDK Synth"
         - "Staging: AWS CodeDeploy"
         context: [deployment-production-wdiv]
-        filters: { branches: { only: [ main, master, cdk ] } }
+        filters: { branches: { only: [ main, master ] } }
         dc-environment: production
     - code_deploy:
         name: "Production: AWS CodeDeploy"
         requires:
         - "Production: CDK Deploy"
         context: [deployment-production-wdiv]
-        filters: { branches: { only: [ main, master, cdk ] } }
+        filters: { branches: { only: [ main, master ] } }
         dc-environment: production
         min-size: 1
         max-size: 2
