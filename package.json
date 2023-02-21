@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@mapbox/polyline": "^1.1.1",
-        "aws-cdk": "^2.13.0",
+        "aws-cdk": "^2.65.0",
         "cdk": "^2.33.0",
         "font-awesome": "^4.7.0",
         "jquery": "^3.6.1",
