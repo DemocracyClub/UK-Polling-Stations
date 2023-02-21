@@ -378,6 +378,7 @@ if os.environ.get("DC_ENVIRONMENT"):
         "default": {
             "BACKEND": "django_dynamodb_cache.backend.DjangoCacheBackend",
             "LOCATION": "wdiv_cache",
+            "KEY_FUNCTION": "core.cache.key_function",
             "OPTIONS": {"aws_region_name": "eu-west-2"},
         }
     }
