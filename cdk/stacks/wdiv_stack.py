@@ -182,7 +182,6 @@ class WDIVStack(Stack):
         return security_group
 
     def create_asg(self) -> autoscaling.AutoScalingGroup:
-
         return autoscaling.AutoScalingGroup(
             self,
             "asg-id",
@@ -221,7 +220,8 @@ class WDIVStack(Stack):
 
     def create_parameters(self) -> None:
         """If you change any of these calls then the value will be reset
-        to whatever the initial value is here and you'll have to go reset it in the console"""
+        to whatever the initial value is here and you'll have to go reset it in the console
+        """
         ssm.StringParameter(
             self,
             "app-dc-environment-id",
@@ -322,7 +322,6 @@ class WDIVStack(Stack):
         return roles
 
     def create_cloudfront(self, alb: elbv2.ApplicationLoadBalancer):
-
         # Hard code the ARN due to a bug with CDK that means we can't run synth
         # with the placeholder values the SSM interface produces :(
         cert_arns = {

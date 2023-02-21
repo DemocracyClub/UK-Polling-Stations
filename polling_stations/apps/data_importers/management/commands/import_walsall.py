@@ -45,7 +45,6 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         rec = super().station_record_to_dict(record)
 
         # ST. MICHAELS CHURCH HALL HALL LANE PELSALL WALSALL

@@ -6,7 +6,6 @@ from councils.tests.factories import CouncilFactory
 
 class LogTestMixin:
     def test_dc_logging(self):
-
         with self.assertLogs(level="DEBUG") as captured:
             self.client.get(
                 f"/postcode/{self.test_dc_logging_postcode}/",

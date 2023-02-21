@@ -23,7 +23,6 @@ def remove_custom_finders(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("pollingstations", "0012_auto_20170211_1443")]
 
     operations = [migrations.RunPython(create_custom_finders, remove_custom_finders)]

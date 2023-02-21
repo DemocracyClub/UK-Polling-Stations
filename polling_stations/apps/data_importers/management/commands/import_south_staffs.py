@@ -40,7 +40,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Bede Hall, Wombourne Parish Offices, Giggetty Lane, Wombourne, WV5 9EZ => WV5 9ED
         if record.polling_place_id == "4059":
             record = record._replace(polling_place_postcode="WV5 9ED")

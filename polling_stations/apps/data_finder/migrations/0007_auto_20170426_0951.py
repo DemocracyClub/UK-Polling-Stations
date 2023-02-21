@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("data_finder", "0006_loggedpostcode_api_user")]
 
     operations = [

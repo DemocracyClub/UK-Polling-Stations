@@ -22,7 +22,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # All Saints Church Hall All Saints Avenue Margate Kent CT9 5LQ
         if record.polling_place_id == "6427":
             record = record._replace(polling_place_postcode="CT9 5QL")

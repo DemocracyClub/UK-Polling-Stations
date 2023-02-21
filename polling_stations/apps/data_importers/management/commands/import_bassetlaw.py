@@ -17,7 +17,6 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-
         if record.property_urn == "10013978026":
             record = record._replace(addressline6="NG22 0GW")
         if record.property_urn == "10093191105":

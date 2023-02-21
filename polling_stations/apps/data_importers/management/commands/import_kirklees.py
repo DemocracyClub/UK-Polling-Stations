@@ -28,7 +28,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "HD9 7EH",
             "HD7 5XB",

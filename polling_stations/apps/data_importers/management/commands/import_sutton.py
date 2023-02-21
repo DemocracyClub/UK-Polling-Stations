@@ -12,7 +12,6 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # bug report #6
         # Holy Trinity Church Centre
         if record.stationcode in ["RB/1", "RB/2"]:

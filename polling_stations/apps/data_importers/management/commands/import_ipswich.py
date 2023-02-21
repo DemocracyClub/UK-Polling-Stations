@@ -12,7 +12,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # Sikh Temple, Guru Nanak Gurdwara
         if record.polling_place_id == "7914":
             record = record._replace(polling_place_uprn="10035058265")

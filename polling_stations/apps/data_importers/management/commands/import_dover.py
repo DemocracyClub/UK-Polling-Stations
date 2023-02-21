@@ -3,7 +3,6 @@ from data_importers.github_importer import BaseGitHubImporter
 
 
 class Command(BaseGitHubImporter):
-
     srid = 4326
     districts_srid = 4326
     council_id = "DOV"

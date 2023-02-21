@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         if record.polling_place_id in [
             "4167",  # Millennium Hall
             "4223",  # Goosnargh Village Hall

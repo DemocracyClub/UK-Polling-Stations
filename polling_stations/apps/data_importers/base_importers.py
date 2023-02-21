@@ -84,7 +84,6 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
             self.stdout.write(message)
 
     def add_arguments(self, parser):
-
         parser.add_argument(
             "--nochecks",
             help="<Optional> Do not perform validation checks or display context information",
@@ -236,7 +235,6 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
 
 
 class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
-
     stations = None
 
     @property
@@ -405,7 +403,6 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 station_records = [station_info]
 
             for station_record in station_records:
-
                 """
                 station_record_to_dict() may optionally return None
                 if we want to exclude a particular station record
@@ -583,7 +580,6 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
 
 class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
-
     addresses = None
 
     @property
@@ -658,7 +654,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.write_info("----------------------------------")  #
 
     def add_residential_address(self, address_info):
-
         if "council" not in address_info:
             address_info["council"] = self.council
 
@@ -756,7 +751,6 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
             return False
 
     def import_data(self):
-
         # Optional step for pre import tasks
         try:
             self.pre_import()
@@ -777,7 +771,6 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
         raise NotImplementedError
 
     def import_data(self):
-
         # Optional step for pre import tasks
         try:
             self.pre_import()
@@ -951,7 +944,6 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
     local_files = False
 
     def import_data(self):
-
         # Optional step for pre import tasks
         try:
             self.pre_import()

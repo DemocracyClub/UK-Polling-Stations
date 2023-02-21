@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Coldhurst Lifelong Learning Centre Rochdale Road Oldham OL1 2JD
         if record.polling_place_id == "8903":
             record = record._replace(polling_place_postcode="OL1 2HR")

@@ -48,7 +48,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # discard records in South Oxfordshire
         if record.polling_place_district_reference.startswith(
             "L"

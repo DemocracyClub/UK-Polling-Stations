@@ -9,7 +9,6 @@ class LargeResultsSetPagination(LimitOffsetPagination):
 
 
 class PollingEntityMixin:
-
     pagination_class = LargeResultsSetPagination
 
     def validate_request(self):

@@ -34,7 +34,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Lakenheath Peace Memorial Hall, High Street, Lakenheath, Suffolk, IP27 9WE
         if record.polling_place_id == "15966":
             record = record._replace(

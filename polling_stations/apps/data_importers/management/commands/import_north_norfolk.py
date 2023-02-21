@@ -28,7 +28,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         if record.polling_place_id in [
             "17025",  # Walsingham Village Hall Wells Road Walsingham NR23 1RX
             "17003",  # Great Snoring Social Club Walsingham Road Great Snoring Fakenham NR21 0AP

@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("addressbase", "0009_onsud_ced")]
 
     operations = [migrations.RemoveField(model_name="onsud", name="ctry_flag")]

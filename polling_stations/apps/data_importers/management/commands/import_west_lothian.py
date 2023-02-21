@@ -89,7 +89,6 @@ class Command(BaseHalaroseCsvImporter):
         return location
 
     def station_record_to_dict(self, record):
-
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
 

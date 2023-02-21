@@ -10,7 +10,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Peasemore Village Hall Peasemore RG20 7JE
         if record.polling_place_id == "6161":
             record = record._replace(

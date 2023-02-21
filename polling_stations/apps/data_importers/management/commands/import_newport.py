@@ -30,7 +30,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # East Hub 282 Ringland Circle Newport
         if record.polling_place_id == "12591":
             record = record._replace(polling_place_postcode="NP19 9PS")

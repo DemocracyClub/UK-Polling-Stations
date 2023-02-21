@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Council fix Madeley House -> All Saints Church Hall
         if record.polling_place_id == "9228":
             record = record._replace(

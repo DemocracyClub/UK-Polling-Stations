@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("addressbase", "0007_delete_onsud")]
 
     operations = [

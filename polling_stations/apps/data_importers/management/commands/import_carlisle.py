@@ -12,7 +12,6 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "CA6 4FB",
             "CA2 7LS",

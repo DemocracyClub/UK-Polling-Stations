@@ -9,7 +9,6 @@ class Command(BaseXpressWebLookupCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-
         if record.postcode in [
             "WN7 2BL",
             "WN6 7NZ",
@@ -21,7 +20,6 @@ class Command(BaseXpressWebLookupCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         if record.pollingplaceid in [
             "7863",  # Standish Community Centre Moody Street Off Church Street Standish WN6 0JY
             "7848",  # Shevington Youth Club, Highfield Avenue

@@ -59,7 +59,6 @@ class UploadSerializer(serializers.ModelSerializer):
             if (
                 file_set.first().ems == "Democracy Counts" and file_set.count() == 2
             ) or file_set.first().ems != "Democracy Counts":
-
                 user = self.context["request"].user
                 upload.make_pull_request()
                 upload.send_confirmation_email(user=user)
@@ -74,7 +73,6 @@ class UploadViewSet(viewsets.ModelViewSet):
     http_method_names = ["post"]
 
     def create(self, request):
-
         # only users authenticated with a token associated
         # with a superuser account may perform this action
         if not request.user.is_superuser:

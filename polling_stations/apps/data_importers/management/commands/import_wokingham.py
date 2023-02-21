@@ -32,7 +32,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Civic Offices Shute End Wokingham Berkshire RG40 1WH
         if record.polling_place_id == "2891":
             record = record._replace(polling_place_postcode="")

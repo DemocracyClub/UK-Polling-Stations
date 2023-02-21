@@ -30,7 +30,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # St Thomas Church Hall London Road Boston PE21 8AG
         if record.polling_place_id == "4024":
             record = record._replace(polling_place_postcode="")

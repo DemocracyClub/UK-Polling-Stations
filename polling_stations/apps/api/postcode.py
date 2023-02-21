@@ -18,7 +18,6 @@ from .address import PostcodeResponseSerializer, get_bug_report_url
 
 
 class PostcodeViewSet(ViewSet, LogLookUpMixin):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ["get", "post", "head", "options"]
     lookup_field = "postcode"

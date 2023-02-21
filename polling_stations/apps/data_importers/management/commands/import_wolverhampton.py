@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # St Joseph`s Church Hall, Coalway Road, Wolverhampton
         if record.polling_place_id == "29400":
             record = record._replace(polling_place_postcode="")

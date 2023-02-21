@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Walter G Pomeroy Hall, Royal Lane, Hillingdon
         if record.polling_place_id == "11594":
             record = record._replace(polling_place_easting="506536")

@@ -28,7 +28,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return rec
 
     def station_record_to_dict(self, record):
-
         if (
             record.polling_place_id == "7919"
         ):  # Stanion Village Hall, Brigstock Road, Stanion, Kettering

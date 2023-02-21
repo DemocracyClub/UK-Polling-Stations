@@ -9,7 +9,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
-
         if record.polling_place_id == "1504":
             record = record._replace(polling_place_easting="507211")
             record = record._replace(polling_place_northing="204366")

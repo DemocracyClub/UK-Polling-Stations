@@ -14,7 +14,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Moston Methodist Church corner of Ilkley Street and Moston Lane Moston Manchester
         if record.polling_place_id == "9372":
             record = record._replace(
@@ -27,7 +26,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "M8 9AE",
             "M1 2PE",

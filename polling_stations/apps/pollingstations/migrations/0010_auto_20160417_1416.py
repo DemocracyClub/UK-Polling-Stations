@@ -5,7 +5,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("pollingstations", "0009_customfinder")]
 
     operations = [

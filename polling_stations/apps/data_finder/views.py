@@ -29,7 +29,6 @@ from .helpers import (
 
 class LogLookUpMixin(object):
     def log_postcode(self, postcode, context, view_used):
-
         if view_used != "api":
             # Log to firehose
             entry = settings.POSTCODE_LOGGER.entry_class(
@@ -137,7 +136,6 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
 class BasePollingStationView(
     TemplateView, LogLookUpMixin, LanguageMixin, metaclass=abc.ABCMeta
 ):
-
     template_name = "postcode_view.html"
 
     @abc.abstractmethod

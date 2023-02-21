@@ -8,7 +8,6 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # FAIRFIELDS PRIMARY  SCHOOL, (LITTLE FIELDS PRE SCHOOL)
         if record.stationcode == "23":
             record = record._replace(xordinate="534213")

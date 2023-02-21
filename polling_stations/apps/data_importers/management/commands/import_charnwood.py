@@ -9,7 +9,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # St Gregory's Social Centre
         if record.polling_place_id == "8532":
             record = record._replace(polling_place_postcode="")
@@ -17,7 +16,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         uprn = record.property_urn.strip().lstrip("0")
         if uprn in ["10070073939"]:
             return None

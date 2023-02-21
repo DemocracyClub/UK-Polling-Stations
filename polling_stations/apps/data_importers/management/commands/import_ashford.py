@@ -24,7 +24,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Rainbow Room, Tenterden Leisure Centre, Recreation Ground Road, Tenterden, Ashford, Kent, TN30 6RA - postocde was in address line 4 so reorganised data
         if record.polling_place_id == "8050":
             record = record._replace(

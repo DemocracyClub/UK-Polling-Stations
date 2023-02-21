@@ -10,7 +10,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
-
         # St Paul and St Stephen Church Stroud Road Gloucester GL1 5AL
         if record.polling_place_id == "3508":
             rec = super().station_record_to_dict(record)

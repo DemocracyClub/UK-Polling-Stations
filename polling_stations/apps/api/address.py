@@ -83,7 +83,6 @@ class PostcodeResponseSerializer(serializers.Serializer):
 
 
 class AddressViewSet(ViewSet, LogLookUpMixin):
-
     permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ["get", "post", "head", "options"]
     lookup_field = "uprn"

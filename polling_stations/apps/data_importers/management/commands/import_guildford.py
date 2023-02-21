@@ -2,7 +2,6 @@ from data_importers.ems_importers import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
-
     council_id = "GRT"
     addresses_name = "2021-03-05T15:09:15.797593/polling_station_export-2021-03-05.csv"
     stations_name = "2021-03-05T15:09:15.797593/polling_station_export-2021-03-05.csv"

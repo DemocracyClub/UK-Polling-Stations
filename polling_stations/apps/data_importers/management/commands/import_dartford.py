@@ -24,7 +24,6 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # 8th Dartford Scout Hall (PRI5) Oakfield Lane Dartford Kent DA1 2EU and
         # 8th Dartford Scout Hall (WSH5) Oakfield Lane Dartford Kent DA1 2EU
         if "8th Dartford Scout Hall" in record.pollingstationname:

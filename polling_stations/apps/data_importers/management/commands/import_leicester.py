@@ -22,7 +22,6 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     station_address_fields = ["polling_place_name", "polling_place_address_1"]
 
     def station_record_to_dict(self, record):
-
         # Evington Community Centre Kedleston Road
         if record.polling_place_id == "8567":
             record = record._replace(

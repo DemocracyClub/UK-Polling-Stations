@@ -11,7 +11,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-
         # Central Garage Showroom Milton Street Brixham TQ5 OBY
         if record.polling_place_id == "8248":
             record = record._replace(polling_place_postcode="TQ5 0BX")

@@ -31,7 +31,6 @@ def get_rds_connection_string(
 
 
 def git_revision():
-
     try:
         out = subprocess.check_output(["git", "rev-parse", "HEAD"])
         revision = out.strip().decode("ascii")

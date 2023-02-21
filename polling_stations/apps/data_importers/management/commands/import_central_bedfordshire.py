@@ -2,7 +2,6 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
-
     council_id = "CBF"
     addresses_name = "2021-03-16T16:10:23.712198/Democracy_Club__06May2021.CSV"
     stations_name = "2021-03-16T16:10:23.712198/Democracy_Club__06May2021.CSV"

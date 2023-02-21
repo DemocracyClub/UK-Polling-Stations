@@ -10,7 +10,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-
         # Amendments from previous elections:
 
         # Methodist Sunday School Room Canworthy Water Launceston PL15 8UW

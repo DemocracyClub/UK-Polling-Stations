@@ -32,7 +32,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # South Shore Lawn Tennis Club Midgeland Road Blackpool FY4 4HZ
         if record.polling_place_id == "5789":
             record = record._replace(polling_place_postcode="")

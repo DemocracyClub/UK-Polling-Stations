@@ -10,7 +10,6 @@ kml uses srid 4326, csv uses srid 27700
 
 
 class Command(BaseStubCsvStationsKmlDistrictsImporter):
-
     srid = 27700
     districts_srid = 4326
     districts_name = "test.kml"

@@ -34,7 +34,6 @@ class PollingStationSerializer:
 class PollingStationDataSerializer(
     PollingStationSerializer, HyperlinkedModelSerializer
 ):
-
     station_id = CharField(source="internal_council_id", read_only=True)
     urls = SerializerMethodField("generate_urls")
 
@@ -44,7 +43,6 @@ class PollingStationDataSerializer(
 
 
 class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSerializer):
-
     station_id = CharField(source="internal_council_id", read_only=True)
     id = SerializerMethodField("generate_id")
     urls = SerializerMethodField("generate_urls")

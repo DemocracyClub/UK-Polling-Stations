@@ -5,7 +5,6 @@ from data_importers.management.commands import BaseCsvStationsJsonDistrictsImpor
 
 
 class BaseStubCsvStationsJsonDistrictsImporter(BaseCsvStationsJsonDistrictsImporter):
-
     council_id = "AAA"
 
     def district_record_to_dict(self, record):
@@ -28,7 +27,6 @@ class BaseStubCsvStationsJsonDistrictsImporter(BaseCsvStationsJsonDistrictsImpor
 
 
 class BaseStubCsvStationsKmlDistrictsImporter(BaseCsvStationsKmlDistrictsImporter):
-
     council_id = "AAA"
 
     def district_record_to_dict(self, record):

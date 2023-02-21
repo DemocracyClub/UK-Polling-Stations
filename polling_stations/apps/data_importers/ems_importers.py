@@ -125,7 +125,6 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
             and getattr(record, self.northing_field) != "0"
             and getattr(record, self.northing_field) != ""
         ):
-
             # if we've got points, use them
             location = Point(
                 float(getattr(record, self.easting_field)),
@@ -148,7 +147,7 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
                     "using UPRN for station %s",
                     getattr(record, self.station_id_field),
                 )
-            except (ObjectDoesNotExist):
+            except ObjectDoesNotExist:
                 # if that fails, fall back to postcode
                 location = self.geocode_from_postcode(record)
                 self.logger.log_message(
@@ -277,7 +276,6 @@ column and we need to work around that
 class BaseXpressDCCsvInconsistentPostcodesImporter(
     BaseXpressDemocracyClubCsvImporter, metaclass=abc.ABCMeta
 ):
-
     # concat all the address columns together into address
     # don't bother trying to split into address/postcode
     station_address_fields = [
@@ -378,7 +376,6 @@ class BaseHalaroseCsvImporter(
         return location
 
     def station_record_to_dict(self, record):
-
         if record.pollingstationnumber.strip() == "n/a":
             return None
 
@@ -466,7 +463,6 @@ but we can override them if necessary
 class BaseDemocracyCountsCsvImporter(
     BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta
 ):
-
     csv_delimiter = ","
     station_name_field = "placename"
     address_fields = ["add1", "add2", "add3", "add4", "add5", "add6"]
@@ -475,7 +471,6 @@ class BaseDemocracyCountsCsvImporter(
     residential_uprn_field = "uprn"
 
     def address_record_to_dict(self, record):
-
         if getattr(record, self.postcode_field).strip() == "A1 1AA":
             # this is a dummy record
             return None
@@ -526,7 +521,6 @@ class BaseDemocracyCountsCsvImporter(
         return location
 
     def station_record_to_dict(self, record):
-
         address = format_polling_station_address(
             [getattr(record, self.station_name_field)]
             + [getattr(record, field) for field in self.address_fields]

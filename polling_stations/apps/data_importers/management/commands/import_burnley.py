@@ -12,7 +12,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # Rosewood Primary School Moorland Road Entrance Burnley
         if record.polling_place_id == "5161":
             record = record._replace(polling_place_postcode="BB11 2PH")
@@ -46,7 +45,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "BB10 3BD",
             "BB10 3PF",

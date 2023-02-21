@@ -12,7 +12,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # Thomas Street Bowling Pavilion, Percy Street, Nelson BB9 9AY
         if record.polling_place_id == "4317":
             record = record._replace(
@@ -23,7 +22,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "BB9 0RQ",
             "BB9 7YS",

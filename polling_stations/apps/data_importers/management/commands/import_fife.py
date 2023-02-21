@@ -12,7 +12,6 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         if record.stationcode in [
             "176",  # MARKINCH TOWN HALL
             "177",  # MARKINCH TOWN HALL

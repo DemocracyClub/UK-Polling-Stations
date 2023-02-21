@@ -9,7 +9,6 @@ csv and geojson both use srid 4326
 
 
 class Command(BaseStubCsvStationsJsonDistrictsImporter):
-
     srid = 4326
     districts_name = "test.geojson"
     stations_name = "test_4326.csv"

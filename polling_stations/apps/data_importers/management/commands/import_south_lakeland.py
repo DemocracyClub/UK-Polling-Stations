@@ -14,7 +14,6 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         rec = super().station_record_to_dict(record)
 
         if rec["internal_council_id"] == "109-selside-memorial-hall":
@@ -23,7 +22,6 @@ class Command(BaseHalaroseCsvImporter):
         return rec
 
     def address_record_to_dict(self, record):
-
         if record.housepostcode in [
             "LA6 2NA",
             "LA12 7JS",

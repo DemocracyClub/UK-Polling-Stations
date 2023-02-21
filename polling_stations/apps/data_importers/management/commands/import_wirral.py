@@ -14,7 +14,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # Marlowe Road URC Hall
         if record.polling_place_id in ["8093", "8089"]:
             rec = super().station_record_to_dict(record)

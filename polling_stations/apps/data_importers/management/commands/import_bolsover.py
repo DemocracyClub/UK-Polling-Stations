@@ -9,7 +9,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Bolsover Parish Rooms, Hornscroft Road, Bolsover, Chesterfield
         if record.polling_place_id == "4511":
             record = record._replace(polling_place_postcode="S44 6HG")

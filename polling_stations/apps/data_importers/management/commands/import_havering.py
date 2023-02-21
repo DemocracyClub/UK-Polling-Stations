@@ -19,7 +19,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Name change from council - don't carry forward
         # https://trello.com/c/Ig6nZ8NZ
         if record.polling_place_id == "9417":

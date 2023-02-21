@@ -370,7 +370,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_uprn="100041099964")
 
         if record.polling_place_id in ["40050", "39302"]:
-
             record = record._replace(polling_place_address_3="")
 
         rec = super().station_record_to_dict(record)

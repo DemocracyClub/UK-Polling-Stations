@@ -3,7 +3,6 @@ import pprint
 
 
 class LogHelper:
-
     logger = None
 
     def __init__(self, verbosity):

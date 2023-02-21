@@ -2,7 +2,6 @@ from data_importers.github_importer import BaseGitHubImporter
 
 
 class Command(BaseGitHubImporter):
-
     srid = 27700
     districts_srid = 27700
     council_id = "EPS"

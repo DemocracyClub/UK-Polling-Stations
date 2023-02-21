@@ -12,7 +12,6 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # Danubius Hotel
         if record.pollingstationnumber == "74":
             rec = super().station_record_to_dict(record)
@@ -32,7 +31,6 @@ class Command(BaseHalaroseCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         rec = super().address_record_to_dict(record)
         uprn = record.uprn.strip().lstrip("0")
 

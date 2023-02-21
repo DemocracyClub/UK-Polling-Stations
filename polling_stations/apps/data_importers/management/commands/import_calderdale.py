@@ -16,6 +16,5 @@ class Command(BaseDemocracyCountsCsvImporter):
             "200001691811",
             "200001826572",
         ]:
-
             return None
         return super().address_record_to_dict(record)

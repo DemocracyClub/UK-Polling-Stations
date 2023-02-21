@@ -5,7 +5,6 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("data_finder", "0003_loggedpostcode_language")]
 
     operations = [
