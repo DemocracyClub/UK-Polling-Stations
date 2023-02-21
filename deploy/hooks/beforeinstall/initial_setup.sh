@@ -26,8 +26,17 @@ do
 done
 echo "Apt finished, continuing"
 
-# Install apt packages
+# Apt update
 apt-get update
+
+while ps awx | grep "apt[ -]" | grep -v grep
+do
+  echo "Waiting for existing apt process to finish"
+  sleep 5
+done
+echo "Apt update finished, continuing"
+
+# Install apt packages
 apt-get install --yes nginx nodejs npm gettext
 
 # Restart apt update timer
