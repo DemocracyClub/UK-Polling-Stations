@@ -8,7 +8,6 @@ def mapquest_sdk_check(app_configs, **kwargs):
     errors = []
 
     if app_configs is None or apps.get_app_config("data_finder") in app_configs:
-
         if settings.TILE_LAYER == "MapQuestSDK" and settings.MQ_KEY is None:
             errors.append(
                 Error(
@@ -26,7 +25,6 @@ def google_api_check(app_configs, **kwargs):
     errors = []
 
     if app_configs is None or apps.get_app_config("data_finder") in app_configs:
-
         if not settings.GOOGLE_API_KEYS:
             errors.append(
                 Info(

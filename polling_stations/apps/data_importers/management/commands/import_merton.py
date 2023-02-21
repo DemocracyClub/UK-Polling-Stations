@@ -12,7 +12,6 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
-
         if record.housepostcode in [
             "CR4 2JR",
             "KT3 6LZ",

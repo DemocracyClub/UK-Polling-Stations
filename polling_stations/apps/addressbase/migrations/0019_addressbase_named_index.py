@@ -5,7 +5,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("addressbase", "0018_alter_uprntocouncil_advance_voting_station"),
     ]

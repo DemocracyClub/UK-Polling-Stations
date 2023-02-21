@@ -8,7 +8,6 @@ from uk_geo_utils.geocoders import (
 
 
 class AddressBaseGeocoderAdapterTest(TestCase):
-
     fixtures = ["test_addressbase.json"]
 
     def test_no_records(self):

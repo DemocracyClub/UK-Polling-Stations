@@ -67,7 +67,6 @@ class DirectionsClient(metaclass=abc.ABCMeta):
 
 
 class GoogleDirectionsClient(DirectionsClient):
-
     precision = 5
 
     def get_base_url(self):
@@ -167,14 +166,12 @@ class MapboxDirectionsClient(DirectionsClient):
 class DirectionsHelper:
     def get_directions(self, **kwargs):
         if kwargs["start_location"] and kwargs["end_location"]:
-
             clients = (
                 MapboxDirectionsClient(),
                 GoogleDirectionsClient(),
             )
             for client in clients:
                 try:
-
                     return client.get_route(
                         kwargs["start_location"], kwargs["end_location"]
                     )

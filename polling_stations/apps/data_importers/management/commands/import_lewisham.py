@@ -15,7 +15,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Sir Francis Drake Primary School
         if record.polling_place_id == "19929":
             rec = super().station_record_to_dict(record)

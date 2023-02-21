@@ -12,7 +12,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "NE9 5XP",
             "NE9 6JR",

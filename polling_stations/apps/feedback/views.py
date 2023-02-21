@@ -19,7 +19,6 @@ class FeedbackFormView(UpdateView):
             return Feedback(token=token)
 
     def get_success_url(self):
-
         messages.success(self.request, "Thank you for your feedback!")
 
         if (

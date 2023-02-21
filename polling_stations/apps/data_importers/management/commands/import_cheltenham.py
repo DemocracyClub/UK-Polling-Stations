@@ -12,7 +12,6 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2022-05-05"]
 
     def address_record_to_dict(self, record):
-
         if record.housepostcode in [
             "GL50 2RF",
             "GL52 6RN",
@@ -27,7 +26,6 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # ST. PHILIP & ST. JAMES PARISH CHURCH CENTRE
         # name duplicated
         if record.pollingstationnumber == "191":

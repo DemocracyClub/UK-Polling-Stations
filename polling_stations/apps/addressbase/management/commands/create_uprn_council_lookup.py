@@ -15,7 +15,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-
         self.cursor = connection.cursor()
         # Set where we'll write the join query to.
         if kwargs["destination"]:

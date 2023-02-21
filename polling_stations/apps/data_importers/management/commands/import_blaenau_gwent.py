@@ -24,7 +24,6 @@ class Command(BaseHalaroseCsvImporter, AdvanceVotingMixin):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         if record.housepostcode in [
             "NP23 5DH",
             "NP13 3JU",

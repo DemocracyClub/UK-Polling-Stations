@@ -27,7 +27,6 @@ def mock_geocode(self, uprn=None):
 
 
 class GeocodeTest(TestCase):
-
     fixtures = ["test_addressbase.json"]
 
     @mock.patch(
@@ -80,7 +79,6 @@ class GeocodeTest(TestCase):
 
 
 class GeocodePointOnlyTest(TestCase):
-
     fixtures = ["test_addressbase.json"]
 
     @mock.patch(

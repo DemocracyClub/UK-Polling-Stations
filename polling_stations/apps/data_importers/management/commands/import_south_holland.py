@@ -44,7 +44,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Scout & Guide Headquarters Park Lane Long Sutton Spalding PE12 9DH
         if record.polling_place_id == "3793":
             record = record._replace(polling_place_postcode="")

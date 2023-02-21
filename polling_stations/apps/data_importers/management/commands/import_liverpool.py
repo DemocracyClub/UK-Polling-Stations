@@ -23,7 +23,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         if record.polling_place_id in [
             "8365",  # St.Mary`s Church Parish Hall, St Mary`s Road, Liverpool L19 0PW
             "8485",  # Temporary Polling Station, Opposite 2 Lingfield Road, Near Its Junction With, Thomas Drive, Liverpool L14

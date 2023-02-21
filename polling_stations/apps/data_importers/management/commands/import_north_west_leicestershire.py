@@ -31,7 +31,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Hall Lane Methodist Church Hall Lane Whitwick LE67 5FD
         if record.polling_place_id == "4013":
             record = record._replace(polling_place_postcode="")

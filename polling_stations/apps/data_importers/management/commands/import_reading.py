@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-
         if record.property_urn.strip().lstrip("0") == "310088234":
             record = record._replace(addressline6="RG1 1SN")
 

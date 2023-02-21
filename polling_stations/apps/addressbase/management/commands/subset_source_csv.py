@@ -18,7 +18,6 @@ class Command(BaseCommand):
         parser.add_argument("destination", help="Path to write csv to", default=None)
 
     def handle(self, *args, **kwargs):
-
         self.source_path = Path(kwargs["source"])
         if not self.source_path.exists():
             raise FileNotFoundError(f"No csv found at {kwargs['path']}")

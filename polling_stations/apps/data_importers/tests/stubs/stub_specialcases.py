@@ -11,7 +11,6 @@ station_record_to_dict() may return None or a list
 
 
 class Command(BaseCsvStationsJsonDistrictsImporter):
-
     srid = 4326
     council_id = "AAA"
     districts_name = "test.geojson"
@@ -21,7 +20,6 @@ class Command(BaseCsvStationsJsonDistrictsImporter):
     )
 
     def district_record_to_dict(self, record):
-
         properties = record["properties"]
 
         if properties["id"] == "invalid":
@@ -34,7 +32,6 @@ class Command(BaseCsvStationsJsonDistrictsImporter):
         }
 
     def station_record_to_dict(self, record):
-
         if record.districts == "invalid":
             return None
 

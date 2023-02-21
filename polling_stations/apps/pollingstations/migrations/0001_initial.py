@@ -6,7 +6,6 @@ import django.contrib.gis.db.models.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("councils", "0001_initial")]
 
     operations = [

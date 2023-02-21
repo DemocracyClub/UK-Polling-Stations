@@ -40,7 +40,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Goodwill Hall Wrexham Road Faddiley Nantwich CW5 8HX
         if record.polling_place_id == "1785":
             record = record._replace(polling_place_postcode="")

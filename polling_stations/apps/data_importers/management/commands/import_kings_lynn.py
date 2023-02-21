@@ -9,7 +9,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
-
         # Lakes End Village Hall Main Road Lakes End WISBECH PE14 9QL
         if record.polling_place_id == "20394":
             record = record._replace(polling_place_postcode="PE14 9QH")
@@ -17,7 +16,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "PE30 4XW",
             "PE30 4XW",

@@ -9,7 +9,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
-
         # St Marys Church Church Lane Fotherby Louth
         if record.polling_place_id == "9064":
             record = record._replace(polling_place_easting="531703")

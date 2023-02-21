@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # Brize Norton Elder Bank Hall
         if record.polling_place_id == "7807":
             record = record._replace(polling_place_postcode="OX18 3PU")

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("feedback", "0003_time_stamped_model_operation_change"),
     ]

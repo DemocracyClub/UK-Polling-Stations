@@ -12,7 +12,6 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # Swinton Reading Rooms, Swinton, Malton North YO17 6SG
         if record.pollingstationnumber == "4":
             record = record._replace(pollingstationpostcode="YO17 6SL")

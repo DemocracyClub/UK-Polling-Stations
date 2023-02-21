@@ -8,7 +8,6 @@ from data_importers.base_importers import BaseGenericApiImporter
 
 
 class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
-
     base_url = "https://raw.githubusercontent.com/wdiv-scrapers/data/master/%s/%s.%s"
     stations_query = "stations"
     districts_query = "districts"

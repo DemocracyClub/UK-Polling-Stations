@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("file_uploads", "0003_store_csv_file_encoding"),
     ]

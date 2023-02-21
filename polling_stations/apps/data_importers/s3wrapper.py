@@ -44,7 +44,6 @@ class S3Wrapper:
         keys = self.bucket.list(prefix=prefix)
         count = 0
         for key in keys:
-
             # ignore directories
             if key.key[-8:] == "$folder$" or key.key[-1] == "/":
                 continue

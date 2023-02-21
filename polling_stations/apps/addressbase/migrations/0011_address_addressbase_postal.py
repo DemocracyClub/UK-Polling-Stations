@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("addressbase", "0010_remove_onsud_ctry_flag"),
     ]

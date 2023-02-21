@@ -244,7 +244,6 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
         )
 
         for station in council_from_default_db.pollingstation_set.all():
-
             context["STATIONS"].append(
                 {
                     "address": station.address,

@@ -31,7 +31,6 @@ class Command(BaseHalaroseCsvImporter):
             "10090855892",  # PUT HOUSE, FIDDINGTON, BRIDGWATER, TA51JW
             "100040899479",  # 135A TAUNTON ROAD, BRIDGWATER, TA6 6BD
         ]:
-
             return None
 
         return super().address_record_to_dict(record)

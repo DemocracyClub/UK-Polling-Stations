@@ -7,7 +7,6 @@ from addressbase.models import UprnToCouncil, Address
 
 
 class XpressDemocracyClubImportTests(TestCase):
-
     opts = {"nochecks": True, "verbosity": 3}
     uprns = ["1", "2", "3", "4", "5"]
     addressbase = [
@@ -96,7 +95,6 @@ class XpressDemocracyClubImportTests(TestCase):
 
 
 class XpressWebLookupImportTests(TestCase):
-
     opts = {"nochecks": True, "verbosity": 0}
     uprns = ["1", "3", "4", "6"]
     addressbase = [

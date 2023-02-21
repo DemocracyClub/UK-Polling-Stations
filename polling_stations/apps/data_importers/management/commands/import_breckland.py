@@ -10,7 +10,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-
         if record.polling_place_id in [
             "10265",  # Rocklands Village Hall The Street Rocklands
             "10216",  # Ovington Village Hall Church Road Ovington

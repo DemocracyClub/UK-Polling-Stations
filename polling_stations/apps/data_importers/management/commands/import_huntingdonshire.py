@@ -29,7 +29,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Berkley Street Methodist Church, Berkley Street, Eynesbury, St. Neots, PE19 2HD
         if record.polling_place_id == "8397":
             record = record._replace(polling_place_postcode="PE19 2NB")

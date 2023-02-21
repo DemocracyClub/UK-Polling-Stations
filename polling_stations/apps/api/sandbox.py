@@ -7,7 +7,6 @@ from django.views import View
 
 class SandboxView(View):
     def get(self, request, *args, **kwargs):
-
         base_path = os.path.dirname(__file__)
         get_fixture = lambda filename: open(
             os.path.join(base_path, "sandbox-responses", filename + ".json")

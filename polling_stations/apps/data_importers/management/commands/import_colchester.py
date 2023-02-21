@@ -12,7 +12,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # 'Queen Elizabeth Hall Annexe, New Cut, Layer-de-la-Haye, Colchester, CO2 0EH' (id: 11290)
         if record.polling_place_id == "11290":
             record = record._replace(polling_place_postcode="CO2 0EG")
@@ -32,7 +31,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [

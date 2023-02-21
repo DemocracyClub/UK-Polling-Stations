@@ -299,7 +299,6 @@ INITIAL_REPLICATION_COMPLETE_FILE = (
 
 # When we're running on AWS
 if os.environ.get("DC_ENVIRONMENT"):
-
     if not Path(INITIAL_REPLICATION_COMPLETE_FILE).exists():
         DATABASES["local"] = {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
@@ -395,7 +394,6 @@ from .constants.uploads import *  # noqa
 
 # Import .local.py last - settings in local.py override everything else
 try:
-
     from .local import *  # noqa
 
     try:

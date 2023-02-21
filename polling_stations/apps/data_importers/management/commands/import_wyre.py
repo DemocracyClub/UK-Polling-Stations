@@ -10,7 +10,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-
         if record.polling_place_id == "4304":  # Charles Saer Community Primary School
             record = record._replace(polling_place_postcode="FY7 8DD")
 

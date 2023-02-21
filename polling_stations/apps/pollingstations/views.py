@@ -6,7 +6,6 @@ from django.http import HttpResponse
 
 
 def status_check(request):
-
     if settings.CHECK_SERVER_CLEAN:
         if not os.path.exists(os.path.expanduser(settings.CLEAN_SERVER_FILE)):
             return HttpResponse("service unavailable", status=503)

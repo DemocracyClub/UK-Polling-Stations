@@ -5,7 +5,6 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("councils", "0002_auto_20160121_1522"),
         ("pollingstations", "0006_residentialaddress_slug"),

@@ -8,7 +8,6 @@ from pollingstations.models import PollingStation
 
 
 class HalaroseImportTests(TestCase):
-
     opts = {"nochecks": True, "verbosity": 0}
     uprns = [
         "1",

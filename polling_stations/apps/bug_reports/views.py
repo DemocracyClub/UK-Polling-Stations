@@ -19,7 +19,6 @@ class BugReportFormView(CreateView):
             )
             and "report_problem" not in self.object.source_url
         ):
-
             return self.object.source_url
         else:
             return "/"

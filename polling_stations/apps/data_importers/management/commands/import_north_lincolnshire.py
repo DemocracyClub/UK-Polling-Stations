@@ -52,7 +52,6 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Wootton Village Hall Swallow Lane Wootton DN39 6SY
         if (
             record.pollingstationnumber == "114"

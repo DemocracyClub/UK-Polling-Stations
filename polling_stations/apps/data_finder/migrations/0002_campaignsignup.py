@@ -6,7 +6,6 @@ import django_extensions.db.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("data_finder", "0001_initial")]
 
     operations = [

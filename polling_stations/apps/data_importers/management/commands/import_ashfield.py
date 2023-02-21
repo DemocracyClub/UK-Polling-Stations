@@ -9,7 +9,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
-
         # The Summit Centre Room 2 Pavilion Road Kirkby in Ashfield Nottingham NG17 7LL
         # changing to the same as The Summit Centre Room 1 Pavilion Road Kirkby In Ashfield Nottingham NG17 7LL
         if record.polling_place_id == "3638":

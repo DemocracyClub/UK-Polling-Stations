@@ -14,7 +14,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = ","
 
     def station_record_to_dict(self, record):
-
         rec = super().station_record_to_dict(record)
         # From: 972106:polling_stations/apps/data_importers/management/commands/misc_fixes.py-245-
         if rec["internal_council_id"] == "2622":  # Heatherside Community Centre

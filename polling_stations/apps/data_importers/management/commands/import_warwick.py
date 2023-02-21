@@ -50,7 +50,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Lapworth Village Hall (Main Hall) Old Warwick Road Lapworth B95 6LD
         if record.polling_place_id == "10734":
             record = record._replace(polling_place_postcode="")

@@ -10,7 +10,6 @@ goejosn uses srid 4326, csv uses srid 27700
 
 
 class Command(BaseStubCsvStationsJsonDistrictsImporter):
-
     srid = 27700
     districts_srid = 4326
     districts_name = "test.geojson"

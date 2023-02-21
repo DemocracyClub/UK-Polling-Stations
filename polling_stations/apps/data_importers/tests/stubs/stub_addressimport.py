@@ -8,7 +8,6 @@ Define a stub implementation of address importer we can run tests against
 
 
 class Command(BaseCsvStationsCsvAddressesImporter):
-
     srid = 4326
     council_id = "ABC"
     addresses_name = "addresses.csv"

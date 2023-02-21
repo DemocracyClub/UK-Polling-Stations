@@ -12,7 +12,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2022-05-05"]
 
     def station_record_to_dict(self, record):
-
         # Enfield Highway Community Centre, 117 Hertford Road, Enfield
         if record.polling_place_id == "8115":
             record = record._replace(polling_place_easting="535189")

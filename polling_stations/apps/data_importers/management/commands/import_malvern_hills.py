@@ -16,7 +16,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Council not using Welland Village Hall instead of
         # Castlemorton Village Hall Castlemorton Malvern
         if record.polling_place_id == "11382":
-
             record = record._replace(
                 polling_place_name="Welland Village Hall",
                 polling_place_address_1="Welland",

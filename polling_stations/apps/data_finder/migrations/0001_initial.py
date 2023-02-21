@@ -7,7 +7,6 @@ import django_extensions.db.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("councils", "0002_auto_20160121_1522")]
 
     operations = [

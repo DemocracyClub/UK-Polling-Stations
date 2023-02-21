@@ -6,7 +6,6 @@ import django_extensions.db.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("data_finder", "0004_loggedpostcode_view_used")]
 
     operations = [

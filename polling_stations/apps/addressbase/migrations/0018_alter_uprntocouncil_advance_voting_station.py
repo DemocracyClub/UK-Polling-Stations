@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("pollingstations", "0018_advancevotingstation_council"),
         ("addressbase", "0017_uprntocouncil_advance_voting_station"),

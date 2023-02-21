@@ -6,7 +6,6 @@ from councils.tests.factories import CouncilFactory
 
 class CouncilTest(TestCase):
     def setUp(self):
-
         CouncilFactory(
             **{
                 "council_id": "NWP",

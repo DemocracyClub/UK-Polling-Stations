@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "SO24 9HZ",
             "SO32 1HP",

@@ -89,7 +89,6 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
 
 class DistrictSet(CustomSet, AssignPollingStationsMixin):
     def build_namedtuple(self, element):
-
         # MultiPolygon is mutable, so we must serialize it to store in a tuple
         area = element["area"].ewkb  # use ewkb so it encodes srid
 
@@ -204,7 +203,6 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
 
 class StationSet(CustomSet):
     def build_namedtuple(self, element):
-
         # Point is mutable, so we must serialize it to store in a tuple
         if "location" in element and element["location"]:
             location = element["location"].ewkb  # use ewkb so it encodes srid
@@ -250,7 +248,6 @@ class AddressList(AssignPollingStationsMixin):
         self.logger = logger
 
     def append(self, address):
-
         if (
             not address["address"]
             or not address["postcode"]

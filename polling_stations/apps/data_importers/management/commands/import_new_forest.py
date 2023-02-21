@@ -10,7 +10,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-
         # corrections from council
         if (
             record.polling_place_id == "8374"

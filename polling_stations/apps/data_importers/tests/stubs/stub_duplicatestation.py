@@ -10,7 +10,6 @@ uses data that will return a duplicate station on
 
 
 class Command(BaseStubCsvStationsJsonDistrictsImporter):
-
     srid = 4326
     districts_name = "test.geojson"
     stations_name = "test.csv"

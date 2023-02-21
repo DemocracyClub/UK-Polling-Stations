@@ -13,7 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-
         # St John`s Church South Street Keighley BD22 7BU
         if record.polling_place_id == "28550":
             record = record._replace(polling_place_easting="405613")

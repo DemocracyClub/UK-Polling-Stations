@@ -12,7 +12,6 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2021-05-06"]
 
     def station_record_to_dict(self, record):
-
         if record.stationcode == "LE1":
             # KENNETT PAVILION
             record = record._replace(postcode="CB8 7QF")

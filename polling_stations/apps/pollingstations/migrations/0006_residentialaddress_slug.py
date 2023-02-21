@@ -7,7 +7,6 @@ from django.utils.timezone import utc
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("pollingstations", "0005_pollingstation_polling_district_id")]
 
     operations = [

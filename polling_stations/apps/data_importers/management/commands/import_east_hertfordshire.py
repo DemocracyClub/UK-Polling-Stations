@@ -10,7 +10,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-
         if record.addressline6 in [
             "CM23 3QY",
             "CM21 0BD",
@@ -25,7 +24,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-
         # Albury Village Hall
         if record.polling_place_id == "3908":
             rec = super().station_record_to_dict(record)
