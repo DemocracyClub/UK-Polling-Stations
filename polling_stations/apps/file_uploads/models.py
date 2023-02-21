@@ -86,6 +86,7 @@ class Upload(models.Model):
             import_script = ImportScript(
                 **{
                     "council_id": council_id,
+                    "council_id": council_id,
                     "ems": file.ems,
                     "addresses_name": path,
                     "stations_name": path,
@@ -127,7 +128,7 @@ class Upload(models.Model):
     def pr_title(self):
         title = f"Import script for {self.gss.short_name} ({self.election_date}) (closes #{self.gh_issue_number})"
         server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
-        if server_env == "prod":
+        if server_env == "production":
             return title
         elif server_env == "test":
             return f"TEST/{title}"
