@@ -27,7 +27,7 @@ sentry_sdk==1.15.0
 boto==2.49.0
 boto3==1.26.17
 uk-geo-utils==0.11.0
-freezegun==1.1.0
+freezegun==1.2.2
 
 git+https://github.com/DemocracyClub/dc_signup_form.git@2.1.3
 git+https://github.com/DemocracyClub/design-system.git@0.2.4
