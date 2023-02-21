@@ -293,11 +293,14 @@ SHOW_ADVANCE_VOTING_STATIONS = True
 # settings for load balancer status check
 CHECK_SERVER_CLEAN = True
 CLEAN_SERVER_FILE = "~/clean"
+INITIAL_REPLICATION_COMPLETE_FILE = (
+    "/var/www/polling_stations/home/db_replication_complete"
+)
 
 # When we're running on AWS
 if os.environ.get("DC_ENVIRONMENT"):
 
-    if not Path("~/db_replication_complete").exists():
+    if not Path(INITIAL_REPLICATION_COMPLETE_FILE).exists():
         DATABASES["local"] = {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
             "NAME": "polling_stations",
