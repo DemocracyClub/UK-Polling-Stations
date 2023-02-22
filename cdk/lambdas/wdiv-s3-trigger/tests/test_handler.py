@@ -149,7 +149,8 @@ class HandlerTests(TestCase):
         )
         if not mimetype:
             mimetype = guess_content_type(filename)
-        fixture = open(f"tests/fixtures/{filename}", "rb").read()
+        fixture_path = Path(__file__).parent / "fixtures" / filename
+        fixture = fixture_path.open().read()
         self.conn.put_object(
             Bucket=self.upload_bucket,
             Key=f"X01000000/2019-12-12/2019-09-30T17:00:02.396833/{key}",
