@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase
 from django.conf import settings
 from councils.tests.factories import CouncilFactory
 from file_uploads.models import File, Upload
+from file_uploads.trigger_models import Report
 
 
 class AddressTest(APITestCase):
@@ -65,12 +66,15 @@ class AddressTest(APITestCase):
         self.assertEqual(0, len(File.objects.all()))
 
     def test_valid_payload_no_auth(self):
-        payload = {
-            "gss": "X01000001",
-            "timestamp": "2020-01-10T13:26:05Z",
-            "github_issue": "",
-            "file_set": [],
-        }
+        report_model = Report.parse_obj(
+            {
+                "gss": "X01000001",
+                "timestamp": "2020-01-10T13:26:05Z",
+                "github_issue": "",
+                "file_set": [],
+            }
+        )
+        payload = report_model.dict()
         resp = self.client.post("/api/beta/uploads/", payload, format="json")
         self.assertEqual(401, resp.status_code)  # Unauthorized
         self.assertEqual(0, len(Upload.objects.all()))
