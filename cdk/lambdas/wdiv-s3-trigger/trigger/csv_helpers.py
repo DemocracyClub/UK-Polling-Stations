@@ -1,4 +1,5 @@
 import csv
+from csv import excel
 
 
 def detect_ems(header):
@@ -25,17 +26,17 @@ def attempt_decode(body):
     raise last_exception
 
 
-def get_delimiter(sample, key):
+def get_dialect(sample, key):
     # sometimes we get CSVs with a TSV extension or TSVs with a CSV extension,
     # so we'll try and use csv.Sniffer to work it out for us.
     try:
         dialect = csv.Sniffer().sniff(sample, [",", "\t"])
-        return dialect.delimiter
-    except csv.Error:
+        return dialect
+    except csv.Error as e:
         # if that fails, make an assumption based on the file extension
         if key.lower().endswith(".tsv"):
             return "\t"
-        return ","
+        return excel
 
 
 def get_csv_report(response, key):
@@ -58,11 +59,14 @@ def get_csv_report(response, key):
         report["errors"].append("Failed to decode body using any expected encoding")
         return report
 
-    delimiter = get_delimiter(decoded[0:10000], key)
+    dialect = get_dialect(decoded.splitlines()[0], key)
 
     try:
         records = csv.reader(
-            decoded.splitlines(True), delimiter=delimiter, quotechar='"'
+            decoded.splitlines(True),
+            dialect=dialect,
+            delimiter=dialect.delimiter,
+            quotechar=dialect.quotechar,
         )
         header = next(records)
         expected_row_length = len(header)
