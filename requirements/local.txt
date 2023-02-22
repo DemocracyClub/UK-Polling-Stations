@@ -5,3 +5,5 @@ django-debug-toolbar
 pre-commit
 djhtml
 invoke
+
+-r ../cdk/lambdas/wdiv-s3-trigger/dev-requirements.txt
