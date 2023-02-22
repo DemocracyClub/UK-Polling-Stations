@@ -119,7 +119,7 @@ class CsvHelperTests(TestCase):
         # this file is just a single line break
         self.assertFalse(report["csv_valid"])
         self.assertEqual(
-            "File has only 0 columns. We might have failed to detect the delimiter",
+            "File is empty",
             report["errors"][0],
         )
 
