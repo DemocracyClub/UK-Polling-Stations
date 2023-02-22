@@ -2,13 +2,14 @@ import io
 import json
 import os
 import sys
+from pathlib import Path
 from unittest import TestCase
 
 import boto3
 import responses
 from botocore.exceptions import ClientError
 from moto import mock_s3, mock_ses
-from moto.ses import ses_backend
+from moto.ses import ses_backends
 
 from trigger.handler import main
 
@@ -193,7 +194,7 @@ class HandlerTests(TestCase):
             Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
         )
         self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
-        self.assertEqual(0, len(ses_backend.sent_messages))
+        self.assertEqual(0, len(ses_backends["global"].sent_messages))
 
     def test_valid_democracy_counts(self):
         self.load_fixture("ems-dcounts-stations.csv", "ems-dcounts-stations.csv")
@@ -241,7 +242,7 @@ class HandlerTests(TestCase):
             Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
         )
         self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
-        self.assertEqual(0, len(ses_backend.sent_messages))
+        self.assertEqual(0, len(ses_backends["global"].sent_messages))
 
     def test_democracy_counts_only_one_file(self):
         self.load_fixture("ems-dcounts-stations.csv", "ems-dcounts-stations.csv")
@@ -276,7 +277,7 @@ class HandlerTests(TestCase):
                 Bucket=self.final_bucket,
                 Key="X01000000/2019-09-30T17:00:02.396833/report.json",
             )
-        self.assertEqual(0, len(ses_backend.sent_messages))
+        self.assertEqual(0, len(ses_backends["global"].sent_messages))
 
     def test_invalid_one_file(self):
         self.load_fixture("incomplete-file.CSV")
@@ -311,10 +312,10 @@ class HandlerTests(TestCase):
                 Bucket=self.final_bucket,
                 Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
             )
-        self.assertEqual(1, len(ses_backend.sent_messages))
+        self.assertEqual(1, len(ses_backends["global"].sent_messages))
         self.assertEqual(
             "Error with data for council X01000000-Piddleton Parish Council",
-            ses_backend.sent_messages[0].subject,
+            ses_backends["global"].sent_messages[0].subject,
         )
 
     def test_valid_excel_mimetype(self):
@@ -354,4 +355,4 @@ class HandlerTests(TestCase):
             Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
         )
         self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
-        self.assertEqual(0, len(ses_backend.sent_messages))
+        self.assertEqual(0, len(ses_backends["global"].sent_messages))
