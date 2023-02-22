@@ -1,12 +1,16 @@
+from pathlib import Path
 from unittest import TestCase
 
 from trigger.csv_helpers import get_csv_report
 
+FIXTURES_PATH = Path(__file__).parent / "fixtures"
+
 
 def get_fixture(filename, content_type):
+    fixture = FIXTURES_PATH / filename
     return {
         "ContentType": content_type,
-        "Body": open(f"tests/fixtures/{filename}", "rb"),
+        "Body": fixture.open("rb"),
     }
 
 
