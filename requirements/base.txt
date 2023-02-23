@@ -39,5 +39,5 @@ mock==5.0.1
 aloe==0.2.0
 selenium
 botocore==1.29.19
-Faker==13.3.4
+Faker==17.0.0
 django-dotenv
