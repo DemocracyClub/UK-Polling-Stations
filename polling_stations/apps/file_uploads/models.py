@@ -178,7 +178,7 @@ class Upload(models.Model):
         email = EmailMessage(
             subject,
             message,
-            [settings.DEFAULT_FROM_EMAIL],
+            settings.DEFAULT_FROM_EMAIL,
             [settings.DEFAULT_FROM_EMAIL],
             reply_to=[settings.DEFAULT_FROM_EMAIL],
             headers={"Message-ID": subject},
