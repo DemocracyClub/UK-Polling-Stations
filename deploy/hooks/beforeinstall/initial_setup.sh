@@ -10,7 +10,11 @@ PROJECT_NAME=polling_stations
 # --------
 
 # Disable apt update timer
-systemctl disable apt-daily.timer
+# Based on https://stackoverflow.com/questions/45269225/ansible-playbook-fails-to-lock-apt/51919678#51919678
+# And https://unix.stackexchange.com/questions/463498/terminate-and-disable-remove-unattended-upgrade-before-command-returns
+systemctl disable --now apt-daily.timer
+systemctl disable --now apt-daily-upgrade.timer
+
 rm -rf /var/lib/apt/lists/partial/*
 mkdir -p /etc/systemd/system/apt-daily.timer.d
 cat > /etc/systemd/system/apt-daily.timer.d/apt-daily.timer.conf <<- EOF
@@ -18,26 +22,29 @@ cat > /etc/systemd/system/apt-daily.timer.d/apt-daily.timer.conf <<- EOF
 Persistent=false
 EOF
 
+# Wait for other upgrades to finish
+systemd-run --property="After=apt-daily.service apt-daily-upgrade.service" --wait /bin/true
+
+# Remove unattended upgrades
+apt-get purge --yes unattended-upgrades
+
+# Apt update
+apt-get update --yes
+
 # Let Apt do it's thing
-while ps awx | grep "apt[ -]" | grep -v grep
+while ps awx | grep --extended-regex 'apt[ -]' | grep -v grep
 do
   echo "Waiting for existing apt process to finish"
   sleep 5
 done
 echo "Apt finished, continuing"
 
-# Apt update
-apt-get update
-
-while ps awx | grep "apt[ -]" | grep -v grep
-do
-  echo "Waiting for existing apt process to finish"
-  sleep 5
-done
-echo "Apt update finished, continuing"
 
 # Install apt packages
 apt-get install --yes nginx nodejs npm gettext
+
+# Reinstall unattended-upgrades
+apt-get install --yes unattended-upgrades
 
 # Restart apt update timer
 systemctl start apt-daily.timer
