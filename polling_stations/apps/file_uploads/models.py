@@ -130,7 +130,7 @@ class Upload(models.Model):
         server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
         if server_env == "production":
             return title
-        elif server_env == "test":
+        elif server_env in ["staging", "development", "test"]:
             return f"TEST/{title}"
         else:
             return f"LOCALTEST/{title}"
@@ -139,10 +139,10 @@ class Upload(models.Model):
     def pr_body(self):
         message = f"PR triggered by upload at {self.github_issue}"
         server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
-        if server_env == "prod":
+        if server_env == "production":
             return message
-        elif server_env == "test":
-            return f"**NB triggered from staging instance**\n{message}"
+        elif server_env in ["staging", "development", "test"]:
+            return f"**NB triggered from {server_env} instance**\n{message}"
         else:
             return f"**NB triggered from local machine**\n{message}"
 
