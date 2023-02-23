@@ -13,4 +13,4 @@ aws_cdk.aws_cloudfront == 1.194.0
 aws_cdk.aws_cloudfront_origins == 1.194.0
 aws_cdk.aws_route53_targets == 1.194.0
 aws_cdk.aws_events_targets == 1.194.0
-constructs < 4.0.0
+constructs < 11.0.0
