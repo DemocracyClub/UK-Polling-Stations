@@ -8,7 +8,8 @@
 
 {% block extra_site_css %}
     {% stylesheet 'styles' %}
-    {% stylesheet 'map' %}
+    {%  block extra_page_css %}
+    {%  endblock extra_page_css %}
 {% endblock extra_site_css %}
 
 {% block top_banner %}
