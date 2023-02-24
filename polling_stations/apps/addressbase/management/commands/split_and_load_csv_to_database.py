@@ -4,13 +4,12 @@ import subprocess
 import tempfile
 import time
 from pathlib import Path
-from random import randrange
-from tempfile import tempdir
 
 import boto3
 from django.core.management import BaseCommand
 from django.db import connections, DEFAULT_DB_ALIAS
 from django.conf import settings
+
 
 APPROX_ADDRESS_BASE_BYTES = 3_300_000_000
 
@@ -19,7 +18,7 @@ def import_single_file(file_name, table_name, database):
     file_sql_template = f"""
         BEGIN;
         SET LOCAL synchronous_commit TO OFF;
-        COPY addressbase_address FROM STDIN CSV;
+        COPY {table_name} FROM STDIN CSV;
         COMMIT;
     """
     host = settings.DATABASES[database]["HOST"]
@@ -90,6 +89,8 @@ class Command(BaseCommand):
             self.cursor.execute(
                 f"ALTER TABLE {self.table_name} SET (autovacuum_enabled = false);"
             )
+            self.stdout.write("clearing existing data..")
+            cursor.execute(f"TRUNCATE TABLE {self.table_name} CASCADE;")
             self.run_processes()
             self.cursor.execute(
                 f"ALTER TABLE {self.table_name} SET (autovacuum_enabled = true);"
