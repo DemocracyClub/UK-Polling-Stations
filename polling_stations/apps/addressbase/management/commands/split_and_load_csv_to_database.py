@@ -35,6 +35,21 @@ def import_single_file(file_name, table_name, database):
     return True
 
 
+def import_using_copy_from(file_name, table_name, database):
+    with Path(file_name).open("r") as f:
+        with connections[database].cursor() as cursor:
+            process = multiprocessing.Process(
+                target=cursor.copy_from,
+                args=[
+                    f,
+                    table_name,
+                ],
+                kwargs={"sep": ","},
+            )
+            process.start()
+    return True
+
+
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
@@ -74,8 +89,10 @@ class Command(BaseCommand):
         )
         if self.import_type == "addressbase":
             self.table_name = "addressbase_address"
-        else:
+            self.import_func = import_single_file
+        elif self.import_type == "uprntocouncil":
             self.table_name = "addressbase_uprntocouncil"
+            self.import_func = import_using_copy_from
 
         if not self.local_file_path:
             # Download the file to the tempdir
@@ -91,6 +108,7 @@ class Command(BaseCommand):
             )
             self.stdout.write("clearing existing data..")
             cursor.execute(f"TRUNCATE TABLE {self.table_name} CASCADE;")
+            self.stdout.write("beginning imports...")
             self.run_processes()
             self.cursor.execute(
                 f"ALTER TABLE {self.table_name} SET (autovacuum_enabled = true);"
@@ -121,8 +139,9 @@ class Command(BaseCommand):
         pool = multiprocessing.Pool(self.processes)
         results = []
         for file_name in self.split_files:
+            self.stdout.write(f"Adding {file_name} to results pool")
             result = pool.apply_async(
-                import_single_file, (file_name, self.table_name, self.database)
+                self.import_func(file_name, self.table_name, self.database)
             )
             results.append(result)
         pool.close()
@@ -132,6 +151,7 @@ class Command(BaseCommand):
             self.cursor.execute(
                 f"select SUM(bytes_processed) / {APPROX_ADDRESS_BASE_BYTES} from pg_stat_progress_copy;"
             )
+            self.stdout.write(f"Rough % done: {self.cursor.fetchone()}")
             self.stdout.write(f"Rough % done: {self.cursor.fetchone()}")
             ready = [result.ready() for result in results]
             successful = [result.successful() for result in results if result.ready()]
