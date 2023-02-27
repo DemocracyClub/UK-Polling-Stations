@@ -26,7 +26,7 @@ jobs:
           key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
 
       - node/install:
-          node-version: '10.19.0'
+          node-version: '16.13.0'
 
       - run:
           name: Install node node_modules
