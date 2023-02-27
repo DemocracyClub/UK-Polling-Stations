@@ -5,10 +5,8 @@ from pathlib import PurePath
 
 import boto3
 import botocore
-import sentry_sdk
-
-from polling_stations.settings.constants.uploads import SERVER_ENVIRONMENT
 from django.conf import settings
+import sentry_sdk
 
 from .csv_helpers import get_csv_report, get_object_report
 from .github_helpers import raise_github_issue
@@ -94,42 +92,40 @@ def get_email_text(report):
 def send_error_email(ses, report, email_address):
     reasons = get_email_text(report)
     council = f"{report['gss']}-{report['council_name']}"
-    if SERVER_ENVIRONMENT == "production":
-        ses.send_email(
-            Source="pollingstations@democracyclub.org.uk",
-            Destination={"ToAddresses": [email_address]},
-            Message={
-                "Subject": {
-                    "Data": f"Error with data for council {council}",
-                    "Charset": "utf-8",
-                },
-                "Body": {
-                    "Text": {
-                        "Data": f"Data for council {council} "
-                        f"failed because:\n{reasons}\n\nPlease follow up.",
-                        "Charset": "utf-8",
-                    }
-                },
+    source = "pollingstations@democracyclub.org.uk"
+    server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
+    message = (
+        {
+            "Subject": {
+                "Data": f"Error with data for council {council}",
+                "Charset": "utf-8",
             },
+            "Body": {
+                "Text": {
+                    "Data": f"Data for council {council} "
+                    f"failed because:\n{reasons}\n\nPlease follow up.",
+                    "Charset": "utf-8",
+                }
+            },
+        },
+    )
+    if server_env == "production":
+        ses.send_email(
+            Source=source, Destination={"ToAddresses": [email_address]}, Message=message
+        )
+    elif server_env in ["staging", "development", "test"]:
+        ses.send_email(
+            Source=source,
+            Destination={"ToAddresses": [email_address]},
+            Message=message,
+            Subject=f"**NB triggered from {server_env} instance**\n{message}",
         )
     else:
-        # send a message clarifying that this is a test email
         ses.send_email(
-            Source="pollingstations@democracyclub.org.uk",
+            Source=source,
             Destination={"ToAddresses": [email_address]},
-            Message={
-                "Subject": {
-                    "Data": f"TEST EMAIL: Error with data for council {council}",
-                    "Charset": "utf-8",
-                },
-                "Body": {
-                    "Text": {
-                        "Data": f"Data for council {council} "
-                        f"failed because:\n{reasons}\n\nPlease follow up.",
-                        "Charset": "utf-8",
-                    }
-                },
-            },
+            Message=message,
+            Subject=f"**NB triggered from local machine**\n{message}",
         )
 
 
