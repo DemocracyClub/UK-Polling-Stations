@@ -7,6 +7,9 @@ import boto3
 import botocore
 import sentry_sdk
 
+from polling_stations.settings.constants.uploads import SERVER_ENVIRONMENT
+from django.conf import settings
+
 from .csv_helpers import get_csv_report, get_object_report
 from .github_helpers import raise_github_issue
 from .wdiv_helpers import gss_to_council, submit_report
@@ -91,23 +94,43 @@ def get_email_text(report):
 def send_error_email(ses, report, email_address):
     reasons = get_email_text(report)
     council = f"{report['gss']}-{report['council_name']}"
-    ses.send_email(
-        Source="pollingstations@democracyclub.org.uk",
-        Destination={"ToAddresses": [email_address]},
-        Message={
-            "Subject": {
-                "Data": f"Error with data for council {council}",
-                "Charset": "utf-8",
-            },
-            "Body": {
-                "Text": {
-                    "Data": f"Data for council {council} "
-                    f"failed because:\n{reasons}\n\nPlease follow up.",
+    if SERVER_ENVIRONMENT == "production":
+        ses.send_email(
+            Source="pollingstations@democracyclub.org.uk",
+            Destination={"ToAddresses": [email_address]},
+            Message={
+                "Subject": {
+                    "Data": f"Error with data for council {council}",
                     "Charset": "utf-8",
-                }
+                },
+                "Body": {
+                    "Text": {
+                        "Data": f"Data for council {council} "
+                        f"failed because:\n{reasons}\n\nPlease follow up.",
+                        "Charset": "utf-8",
+                    }
+                },
             },
-        },
-    )
+        )
+    else:
+        # send a message clarifying that this is a test email
+        ses.send_email(
+            Source="pollingstations@democracyclub.org.uk",
+            Destination={"ToAddresses": [email_address]},
+            Message={
+                "Subject": {
+                    "Data": f"TEST EMAIL: Error with data for council {council}",
+                    "Charset": "utf-8",
+                },
+                "Body": {
+                    "Text": {
+                        "Data": f"Data for council {council} "
+                        f"failed because:\n{reasons}\n\nPlease follow up.",
+                        "Charset": "utf-8",
+                    }
+                },
+            },
+        )
 
 
 def sync_report_to_s3(s3, bucket, prefix, report):
