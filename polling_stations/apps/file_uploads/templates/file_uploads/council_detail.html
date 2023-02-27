@@ -46,14 +46,14 @@
                             {% endif %}
                         </td>
                         <td>
-                            {{ upload.status }}
-                            {% if upload.status == "Pending" %}
+                            {{ upload.status_emoji }}
+                            {% if upload.status == "Pending" or upload.status == "Waiting" %}
                                 <br><small>(Refresh page to update)</small>
                             {% endif %}
                         </td>
                         <td>
                             {% if upload.status != "Pending" %}
-                                {% if STATIONS  %}✔{% else %}❌{% endif %}
+                                {% if STATIONS %}✔{% else %}❌{% endif %}
                             {% endif %}
                         </td>
                     </tr>
