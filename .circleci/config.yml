@@ -3,6 +3,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.2
+  slack: circleci/slack@4.1
 
 jobs:
   build_and_test:
@@ -92,7 +93,6 @@ jobs:
             . .venv/bin/activate
             coveralls
 
-
   cdk_synth:
     machine:
       image: ubuntu-2204:2022.10.2
@@ -141,6 +141,11 @@ jobs:
           pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
           . .venv/bin/activate
           npx cdk deploy --all --require-approval never --concurrency 3
+    # In the event the deployment has failed, alert the dev team
+    - slack/notify:
+        event: fail
+        template: basic_fail_1
+        channel: $SLACK_DEFAULT_CHANNEL
 
   code_deploy:
     docker:
@@ -193,6 +198,11 @@ jobs:
           sentry-cli releases --org democracy-club-gp new $CIRCLE_SHA1 --project wdiv
           sentry-cli releases --org democracy-club-gp set-commits --auto $CIRCLE_SHA1 --ignore-missing
           sentry-cli releases --org democracy-club-gp finalize $CIRCLE_SHA1
+  # In the event the deployment has failed, alert the dev team
+    - slack/notify:
+        event: fail
+        template: basic_fail_1
+        channel: $SLACK_DEFAULT_CHANNEL
 
 
 workflows:
@@ -204,19 +214,19 @@ workflows:
         name: "CDK Synth"
         requires:
         - build_and_test
-        context: [deployment-development-wdiv]
+        context: [deployment-development-wdiv, slack-secrets]
         dc-environment: development
     - cdk_deploy:
         name: "Development: CDK Deploy"
         requires:
         - "CDK Synth"
-        context: [deployment-development-wdiv]
+        context: [deployment-development-wdiv, slack-secrets]
         dc-environment: development
     - code_deploy:
         name: "Development: AWS CodeDeploy"
         requires:
         - "Development: CDK Deploy"
-        context: [deployment-development-wdiv]
+        context: [deployment-development-wdiv, slack-secrets]
         dc-environment: development
         min-size: 1
         max-size: 2
@@ -225,14 +235,14 @@ workflows:
         name: "Staging: CDK Deploy"
         requires:
         - "CDK Synth"
-        context: [deployment-staging-wdiv]
+        context: [deployment-staging-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
         dc-environment: staging
     - code_deploy:
         name: "Staging: AWS CodeDeploy"
         requires:
         - "Staging: CDK Deploy"
-        context: [deployment-staging-wdiv]
+        context: [deployment-staging-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
         dc-environment: staging
         min-size: 1
@@ -243,14 +253,14 @@ workflows:
         requires:
         - "CDK Synth"
         - "Staging: AWS CodeDeploy"
-        context: [deployment-production-wdiv]
+        context: [deployment-production-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
         dc-environment: production
     - code_deploy:
         name: "Production: AWS CodeDeploy"
         requires:
         - "Production: CDK Deploy"
-        context: [deployment-production-wdiv]
+        context: [deployment-production-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
         dc-environment: production
         min-size: 1
