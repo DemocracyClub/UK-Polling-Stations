@@ -11,6 +11,6 @@ pytest-pycodestyle
 pytest-flakes
 pytest-cov
 pytest-subtests
-playwright==1.31.0
+playwright==1.31.1
 pytest-playwright==0.3.0
 pytest-vcr==1.0.2
