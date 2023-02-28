@@ -1,41 +1,50 @@
+from django.contrib.gis.geos import Point
+
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WLV"
     addresses_name = (
-        "2022-05-05/2022-03-24T13:26:30.475155/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-02-28T09:51:32.288722/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-24T13:26:30.475155/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-02-28T09:51:32.288722/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # St Joseph`s Church Hall, Coalway Road, Wolverhampton
-        if record.polling_place_id == "29400":
-            record = record._replace(polling_place_postcode="")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100071373072",
-            "10007123304",
-            "10093323695",
-            "10093323696",
-            "10093325431",
-            "10090013969",
-            "10090642339",
-            "10090643975",
-            "100071556719",
+            "10093325431",  # 2A RAYNOR ROAD, WOLVERHAMPTON
+            "10090643975",  # 11 KIRKWALL CRESCENT, WOLVERHAMPTON
+            "10093326250",  # FLAT 1, SMART BUILDING, VULCAN ROAD, BILSTON
+            "10007124221",  # MOSELEY COURT LODGE, BRIDAL WAY, NORTHYCOTE LANE, WOLVERHAMPTON
+            "10090641653",  # 1 HENRY FOWLER DRIVE, WOLVERHAMPTON
+            "10090641654",  # 3 HENRY FOWLER DRIVE, WOLVERHAMPTON
+            "10090641655",  # 4 HENRY FOWLER DRIVE, WOLVERHAMPTON
+            "10090641656",  # 5 HENRY FOWLER DRIVE, WOLVERHAMPTON
+            "10090641657",  # 6 HENRY FOWLER DRIVE, WOLVERHAMPTON
+            "100071556719",  # THE CHIP INN, 32 THORNEYCROFT LANE, WOLVERHAMPTON
         ]:
             return None
 
-        if record.addressline6 in []:
+        if record.addressline6 in ["WV13 3RG"]:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
+
+        # [WRONG LOC] St Joseph`s Church Hall, Coalway Road,  Wolverhampton
+        if rec["internal_council_id"] == "30057":
+            rec["location"] = Point(-2.170664443278646, 52.57076293329278, srid=4326)
+
+        # [WRONG LOC] Moathouse Community Centre, 52 Moathouse Lane East, Wednesfield
+        if rec["internal_council_id"] == "30219":
+            rec["location"] = Point(-2.0731047162921405, 52.608227577664984, srid=4326)
+
+        return rec
