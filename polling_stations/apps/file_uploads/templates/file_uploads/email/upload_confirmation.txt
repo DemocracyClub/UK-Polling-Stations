@@ -1,1 +1,10 @@
-Your file was successfully uploaded to Democracy Club’s polling station data uploader.
+Thank you for providing polling station data to Democracy Club's polling station finder: https://wheredoivote.co.uk/uploads/login.
+
+We aim to have all data added to the finder within two weeks of it being supplied, but please be aware that this only an estimate and is dependant on demand.
+
+We will be in touch if we have any questions about your data, and will email to let you know when it is live.
+
+In the event that a station location changes after this date, please alert us by contacting pollingstations@democracyclub.org.uk.
+
+Kind Regards
+The Democracy Club Team
