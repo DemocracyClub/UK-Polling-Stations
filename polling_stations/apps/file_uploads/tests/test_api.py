@@ -1,10 +1,13 @@
-from django.core import mail
-from freezegun import freeze_time
-from django.core.management import call_command
-from rest_framework.test import APITestCase
-from django.conf import settings
+import os
+
 from councils.tests.factories import CouncilFactory
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core import mail
+from django.core.management import call_command
 from file_uploads.models import File, Upload
+from freezegun import freeze_time
+from rest_framework.test import APITestCase
 
 
 class AddressTest(APITestCase):
@@ -115,6 +118,17 @@ class AddressTest(APITestCase):
 
     def test_valid_payload_one_file(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        os.environ["SERVER_ENVIRONMENT"] = "production"
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:26:05Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
@@ -137,11 +151,24 @@ class AddressTest(APITestCase):
         self.assertEqual(1, len(File.objects.all()))
         self.assertEqual(1, len(mail.outbox))
         self.assertEqual(mail.outbox[0].to, ["example@example.com"])
-        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
-        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Your file upload for Piddleton Parish (2020-05-07) was successful",
+        )
 
     def test_valid_payload_two_files(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        os.environ["SERVER_ENVIRONMENT"] = "production"
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:26:05Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
@@ -172,12 +199,24 @@ class AddressTest(APITestCase):
         self.assertEqual(2, len(File.objects.all()))
         self.assertEqual(1, len(mail.outbox))
         self.assertEqual(mail.outbox[0].to, ["example@example.com"])
-        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
-        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Your file upload for Piddleton Parish (2020-05-07) was successful",
+        )
 
     def test_multiple_files_out_of_order_delivery(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
-
+        os.environ["SERVER_ENVIRONMENT"] = "production"
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:26:05Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create_user(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
         # The first payload we receive for this upload contains 2 files
         payload1 = {
             "gss": "X01000001",
@@ -215,8 +254,10 @@ class AddressTest(APITestCase):
         self.assertEqual("", stations_file.errors)
         self.assertEqual(1, len(mail.outbox))
         self.assertEqual(mail.outbox[0].to, ["example@example.com"])
-        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
-        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Your file upload for Piddleton Parish (2020-05-07) was successful",
+        )
 
         # The second payload we receive only contains one of the files
         # that was in the first payload.
@@ -288,11 +329,15 @@ class AddressTest(APITestCase):
         self.assertEqual(3, len(File.objects.all()))
         self.assertEqual(2, len(mail.outbox))
         self.assertEqual(mail.outbox[0].to, ["example@example.com"])
-        self.assertEqual(mail.outbox[0].bcc, [settings.DEFAULT_FROM_EMAIL])
-        self.assertEqual(mail.outbox[0].subject, "Your file upload was successful")
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Your file upload for Piddleton Parish (2020-05-07) was successful",
+        )
         self.assertEqual(mail.outbox[1].to, ["example@example.com"])
-        self.assertEqual(mail.outbox[1].bcc, [settings.DEFAULT_FROM_EMAIL])
-        self.assertEqual(mail.outbox[1].subject, "Your file upload was successful")
+        self.assertEqual(
+            mail.outbox[1].subject,
+            "Your file upload for Piddleton Parish (2020-05-07) was successful",
+        )
 
     # When the file EMS == Democracy Counts (which requires two files),
     # we want to measure the time it takes for the second file to arrive
@@ -351,3 +396,53 @@ class AddressTest(APITestCase):
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(1, len(File.objects.all()))
         self.assertEqual(Upload.objects.all()[0].status, "Error One File")
+
+    def test_deleted_upload_user(self):
+        self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        settings.SERVER_ENVIRONMENT = "production"
+        upload = Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:26:05Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create_user(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
+
+        upload_user = upload.upload_user
+
+        upload_user.delete()
+        upload.refresh_from_db()
+        payload1 = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
+            "election_date": "2020-05-07",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": True,
+                    "csv_rows": 86109,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
+                },
+                {
+                    "csv_valid": True,
+                    "csv_rows": 69,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
+                },
+            ],
+        }
+
+        resp = self.client.post("/api/beta/uploads/", payload1, format="json")
+        self.assertEqual(201, resp.status_code)
+        self.assertEqual(1, len(Upload.objects.all()))
+        self.assertEqual(2, len(File.objects.all()))
+        self.assertEqual(0, len(mail.outbox))

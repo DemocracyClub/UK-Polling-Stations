@@ -1,5 +1,6 @@
 import io
 import json
+import os
 import sys
 from unittest import TestCase, mock
 
@@ -40,6 +41,7 @@ class GitHubHelperTests(TestCase):
     def test_raise_new_issue_with_key(self):
         repo = "chris48s/does-not-exist"
         key = "f00b42"
+        os.environ["SERVER_ENVIRONMENT"] = "production"
         responses.add(
             responses.GET,
             f"https://api.github.com/repos/{repo}/issues?state=open&labels=Data%20Import",
