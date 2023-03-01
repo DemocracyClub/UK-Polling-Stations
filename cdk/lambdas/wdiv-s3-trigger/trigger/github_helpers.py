@@ -1,3 +1,4 @@
+import os
 import requests
 from requests.exceptions import HTTPError
 from requests_paginator import RequestsPaginator
@@ -83,9 +84,11 @@ class GitHubIssue:
 
 
 def raise_github_issue(api_key, repo, report):
-    title = (
-        f"Import {report['gss']}-{report['council_name']} for {report['election_date']}"
-    )
+    server_env = os.environ.get("SERVER_ENVIRONMENT", None)
+    if server_env in ["staging", "development", "test"]:
+        title = f"TEST Import {report['gss']}-{report['council_name']} for {report['election_date']}"
+    else:
+        title = f"Import {report['gss']}-{report['council_name']} for {report['election_date']}"
     try:
         body = f"EMS: {report['file_set'][0]['ems']}\nFiles:"
         for f in report["file_set"]:

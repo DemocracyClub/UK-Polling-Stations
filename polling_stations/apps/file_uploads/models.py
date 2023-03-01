@@ -6,9 +6,7 @@ from django.utils.timezone import now
 from django.db import transaction
 from django.core.mail import EmailMessage
 
-
 from django.template.loader import render_to_string
-
 from requests import HTTPError
 
 from councils.models import Council
@@ -157,30 +155,35 @@ class Upload(models.Model):
         else:
             return f"**NB triggered from local machine**\n{message}"
 
-    def send_confirmation_email(self, user):
-        if user.email:
-            to = user.email
+    def send_confirmation_email(self):
+        server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
+        # If we're in production, and the user has been deleted, return early.
+        # We don't want to send an email to a non-existent user and we already
+        # have github issues to track successful uploads
+        if server_env == "production" and self.upload_user == None:
+            return
+        # if we're in production, and the upload user exists, send them an email
+        elif server_env == "production" and self.upload_user != None:
+            to = self.upload_user.email
+            subject = f"Your file upload for {self.gss.short_name} ({self.election_date}) was successful"
+        # for all other environments, send the email to the default
+        # from email with a subject line that makes it clear
+        # we are not in production and testing is taking place
         else:
             to = settings.DEFAULT_FROM_EMAIL
-        subject = "Your file upload was successful"
-        message = render_to_string(
-            template_name="file_uploads/email/upload_confirmation.txt",
-            context={
-                "subject": subject,
-            },
-        )
+            subject = f"**NB triggered from {server_env} instance** Your file upload for {self.gss.short_name} ({self.election_date}) was successful"
 
         email = EmailMessage(
             subject,
-            message,
+            render_to_string(
+                template_name="file_uploads/email/upload_confirmation.txt"
+            ),
             settings.DEFAULT_FROM_EMAIL,
             [to],
-            [settings.DEFAULT_FROM_EMAIL],
             reply_to=[settings.DEFAULT_FROM_EMAIL],
             headers={"Message-ID": subject},
         )
-
-        return email.send()
+        email.send()
 
     @transaction.atomic
     def send_error_email(self):
