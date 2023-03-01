@@ -82,6 +82,7 @@ class WDIVS3TriggerStack(Stack):
             "WDIV_WEBHOOK_URL": ssm.StringParameter.value_for_string_parameter(
                 self, "/wdiv_s3_trigger/WDIV_WEBHOOK_URL"
             ),
+            "SERVER_ENVIRONMENT": self.dc_environment,
         }
 
     def get_policy_json(self):
