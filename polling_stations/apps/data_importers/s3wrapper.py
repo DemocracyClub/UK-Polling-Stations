@@ -2,7 +2,8 @@ import glob
 import os
 import shutil
 from boto.pyami.config import Config
-from boto.s3.connection import S3Connection
+from boto.s3.connection import OrdinaryCallingFormat
+from boto.s3 import connect_to_region
 from django.conf import settings
 
 
@@ -13,7 +14,12 @@ class S3Wrapper:
         secret_key = config.get_value(settings.BOTO_SECTION, "aws_secret_access_key")
 
         # connect to S3 + get ref to our data bucket
-        conn = S3Connection(access_key, secret_key)
+        conn = connect_to_region(
+            os.environ.get("AWS_REGION", "eu-west-2"),
+            aws_access_key_id=access_key,
+            aws_secret_access_key=secret_key,
+            calling_format=OrdinaryCallingFormat(),
+        )
         self.bucket = conn.get_bucket(settings.S3_DATA_BUCKET)
 
         # this is where our local data will live
