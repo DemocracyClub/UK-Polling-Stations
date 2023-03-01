@@ -5,7 +5,6 @@ from pathlib import PurePath
 
 import boto3
 import botocore
-from django.conf import settings
 import sentry_sdk
 
 from .csv_helpers import get_csv_report, get_object_report
@@ -93,7 +92,7 @@ def send_error_email(ses, report, email_address):
     reasons = get_email_text(report)
     council = f"{report['gss']}-{report['council_name']}"
     source = "pollingstations@democracyclub.org.uk"
-    server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
+    server_env = os.environ.get("SERVER_ENVIRONMENT", None)
     message = (
         {
             "Subject": {
