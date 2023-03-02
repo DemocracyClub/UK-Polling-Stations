@@ -4,7 +4,7 @@ aws_cdk.core == 1.194.0
 aws-cdk.cx-api == 1.194.0
 aws_cdk.aws_ec2 == 1.194.0
 aws_cdk.aws_autoscaling == 1.194.0
-aws_cdk.aws_codedeploy == 1.194.0
+aws_cdk.aws_codedeploy == 1.195.0
 aws_cdk.aws_lambda_python == 1.194.0
 aws_cdk.aws_lambda == 1.194.0
 aws_cdk.aws_s3_notifications == 1.194.0
