@@ -6,10 +6,12 @@ from pathlib import Path
 from unittest import TestCase
 
 import boto3
+import moto
 import responses
 from botocore.exceptions import ClientError
 from moto import mock_s3, mock_ses
 from moto.ses import ses_backends
+from moto.s3 import responses as moto_s3_responses
 
 from trigger.handler import main
 
@@ -53,6 +55,8 @@ trigger_payload = json.loads(
   ]
 }"""
 )
+
+os.environ["AWS_DEFAULT_REGION"] = moto_s3_responses.DEFAULT_REGION_NAME = "eu-west-1"
 
 
 class HandlerTests(TestCase):
