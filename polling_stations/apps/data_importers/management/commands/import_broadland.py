@@ -1,33 +1,32 @@
-from data_importers.ems_importers import BaseDemocracyCountsCsvImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BRO"
-    addresses_name = "2021-03-05T09:13:07.744121/Broadland Democracy Club - Polling Districts- Election ID 5 County Council.csv"
-    stations_name = "2021-03-05T09:13:07.744121/Broadland Democracy Club - Polling Stations- Election ID 5 County Council.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2023-05-04/2023-03-02T16:21:01.206095/DemocracyClub-PollingDistricts-May2023-1.csv"
+    stations_name = "2023-05-04/2023-03-02T16:21:01.206095/DemocracyClub-PollingStations-May2023-1.csv"
+    elections = ["2023-05-04"]
 
     def station_record_to_dict(self, record):
-        if record.placename == "SPROWSTON W CRICKET CLUB":
-            record = record._replace(placename="SPROWSTON CRICKET CLUB")
-
+        if record.stationcode.startswith("S"):
+            return None
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
-        if record.postcode in ["NR13 3BH"]:  # split
+        if record.stationcode.startswith("S"):
             return None
 
-        if record.postcode in ["NR10 4DA"]:
-            # coincident with another property at different polling place; wide postcode
+        if record.postcode in [
+            "NR7 0RY",
+            "NR13 3NQ",
+        ]:  # split
             return None
 
         uprn = record.uprn.lstrip("0").strip()
 
-        if uprn == "200004453970":
-            # errant; multiple addresses, so they'll be told to check
+        if uprn in [
+            "10009923018",  # THE BUNGALOW, THE HEATH, HEVINGHAM, NORWICH
+        ]:
             return None
-
-        if uprn == "100090794910":
-            record = record._replace(postcode="NR7 8XA")
 
         return super().address_record_to_dict(record)
