@@ -8,7 +8,7 @@ aws_cdk.aws_codedeploy == 1.194.0
 aws_cdk.aws_lambda_python == 1.194.0
 aws_cdk.aws_lambda == 1.194.0
 aws_cdk.aws_s3_notifications == 1.194.0
-aws_cdk.aws_s3 == 1.194.0
+aws_cdk.aws_s3 == 1.195.0
 aws_cdk.aws_cloudfront == 1.194.0
 aws_cdk.aws_cloudfront_origins == 1.194.0
 aws_cdk.aws_route53_targets == 1.194.0
