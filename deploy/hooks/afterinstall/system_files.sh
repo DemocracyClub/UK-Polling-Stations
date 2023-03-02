@@ -26,7 +26,7 @@ systemctl start "$PROJECT_NAME"_cloudwatch.service
 for script in "$PROJECT_ROOT"/code/deploy/files/scripts/*.sh; do
   script_name=$(basename "$script")
   # shellcheck disable=SC2016
-  envsubst '$PROJECT_NAME $PROJECT_ROOT' < "$script" > "$PROJECT_ROOT"/"$script_name"
+  envsubst '$PROJECT_NAME $PROJECT_ROOT $DC_ENVIRONMENT' < "$script" > "$PROJECT_ROOT"/"$script_name"
   chmod 755 "$PROJECT_ROOT"/"$script_name"
 done
 
