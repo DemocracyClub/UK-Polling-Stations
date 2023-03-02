@@ -2,9 +2,10 @@ import csv
 from pathlib import Path
 
 from django.contrib.gis.geos import Point
-from django.db import connection
+from django.db import connections
 
 from addressbase.models import UprnToCouncil, Address
+from polling_stations.db_routers import get_principal_db_name
 from polling_stations.settings.constants.councils import NIR_IDS
 from councils.models import Council
 from data_importers.base_importers import BaseStationsImporter, CsvMixin
@@ -24,6 +25,8 @@ STATION_FIELDS = [
 
 UPRN_TO_COUNCIL_CACHE = {}
 
+DB_NAME = get_principal_db_name()
+
 
 class Command(BaseStationsImporter, CsvMixin):
     council_id = "ANN"  # This is a hack to make the command initialise
@@ -32,6 +35,7 @@ class Command(BaseStationsImporter, CsvMixin):
     csv_encoding = "utf-8"
     eoni_csv_encoding = "latin-1"
     additional_report_councils = NIR_IDS
+    elections = ["2023-05-18"]
 
     def add_arguments(self, parser):
         parser.add_argument("eoni_csv", help="The path to the EONI export csv")
@@ -71,8 +75,8 @@ class Command(BaseStationsImporter, CsvMixin):
         # Only remove old polling stations, as the UPRN to Council table
         # is populated by this command previously, so deleting data form it
         # isn't useful.
-        CustomFinder.objects.filter(area_code="N07000001").delete()
-        PollingStation.objects.filter(council_id__in=NIR_IDS).delete()
+        CustomFinder.objects.using(DB_NAME).filter(area_code="N07000001").delete()
+        PollingStation.objects.using(DB_NAME).filter(council_id__in=NIR_IDS).delete()
 
     def get_base_folder_path(self):
         return str(self.eoni_data_root)
@@ -156,23 +160,25 @@ class Command(BaseStationsImporter, CsvMixin):
 
     def clear_old_data(self):
         # Polling stations use reg codes
-        PollingStation.objects.filter(council_id__in=NIR_IDS).delete()
+        PollingStation.objects.using(DB_NAME).filter(council_id__in=NIR_IDS).delete()
 
         if not self.stations_only:
             # UprnToCouncil uses GSS codes
             NIR_AND_EONI = [
                 c.geography.gss
-                for c in Council.objects.filter(council_id__in=NIR_IDS).select_related(
-                    "geography"
-                )
+                for c in Council.objects.using(DB_NAME)
+                .filter(council_id__in=NIR_IDS)
+                .select_related("geography")
             ]
             NIR_AND_EONI.append("EONI")  # Include fake 'EONI' gss just in case
-            Address.objects.filter(uprntocouncil__lad__in=NIR_AND_EONI).delete()
-            UprnToCouncil.objects.filter(lad__in=NIR_AND_EONI).delete()
+            Address.objects.using(DB_NAME).filter(
+                uprntocouncil__lad__in=NIR_AND_EONI
+            ).delete()
+            UprnToCouncil.objects.using(DB_NAME).filter(lad__in=NIR_AND_EONI).delete()
 
     def copy_data(self):
         if not self.stations_only:
-            cursor = connection.cursor()
+            cursor = connections[DB_NAME].cursor()
             cursor.copy_expert(
                 "COPY addressbase_address FROM STDIN CSV HEADER",
                 open(self.paths["addresses"]),
@@ -183,20 +189,28 @@ class Command(BaseStationsImporter, CsvMixin):
             )
 
     def assign_uprn_to_councils(self):
-        ni_councils = Council.objects.filter(council_id__in=NIR_IDS).select_related(
-            "geography"
+        ni_councils = (
+            Council.objects.using(DB_NAME)
+            .filter(council_id__in=NIR_IDS)
+            .select_related("geography")
         )
         for council in ni_councils:
-            uprns_in_council = UprnToCouncil.objects.filter(lad="EONI").filter(
-                uprn__location__within=council.geography.geography
+            uprns_in_council = (
+                UprnToCouncil.objects.using(DB_NAME)
+                .filter(lad="EONI")
+                .filter(uprn__location__within=council.geography.geography)
             )
             uprns_in_council.update(lad=council.geography.gss)
 
     def station_record_to_dict(self, record):
         if not record.sample_uprn in UPRN_TO_COUNCIL_CACHE:
-            UPRN_TO_COUNCIL_CACHE[record.sample_uprn] = Council.objects.get(
+            UPRN_TO_COUNCIL_CACHE[record.sample_uprn] = Council.objects.using(
+                DB_NAME
+            ).get(
                 identifiers__contains=[
-                    UprnToCouncil.objects.get(uprn=record.sample_uprn).lad
+                    UprnToCouncil.objects.using(DB_NAME)
+                    .get(uprn=record.sample_uprn)
+                    .lad
                 ]
             )
         station_council = UPRN_TO_COUNCIL_CACHE[record.sample_uprn]
@@ -211,7 +225,7 @@ class Command(BaseStationsImporter, CsvMixin):
     def import_data(self):
         # We only need to import stations as addresses and UPRN to Council
         # is added using COPY
-        ni_councils = Council.objects.filter(council_id__in=NIR_IDS)
+        ni_councils = Council.objects.using(DB_NAME).filter(council_id__in=NIR_IDS)
         for council in ni_councils:
             self.council = council
             self.council_id = council.council_id
