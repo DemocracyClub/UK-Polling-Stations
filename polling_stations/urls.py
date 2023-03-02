@@ -81,6 +81,12 @@ extra_patterns = [
         name="about",
     ),
     re_path(r"^email/", include("dc_signup_form.urls")),
+    re_path(
+        r"^/$",
+        RedirectView.as_view(
+            url="https://wheredoivote.co.uk/", permanent=True, query_string=True
+        ),
+    ),
 ]
 
 if "dashboard" in settings.INSTALLED_APPS:
