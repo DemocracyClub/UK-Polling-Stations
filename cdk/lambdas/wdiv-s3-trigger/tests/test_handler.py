@@ -112,7 +112,7 @@ class HandlerTests(TestCase):
         responses.start()
         responses.add(
             responses.GET,
-            f"https://wheredoivote.co.uk/api/beta/councils/X01000000.json",
+            "https://wheredoivote.co.uk/api/beta/councils/X01000000.json",
             status=200,
             body=json.dumps({"name": "Piddleton Parish Council"}),
         )
