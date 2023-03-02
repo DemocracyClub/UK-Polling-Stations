@@ -11,6 +11,7 @@ from moto import mock_s3, mock_ses
 from moto.ses import ses_backend
 
 from trigger.handler import main
+from file_uploads.trigger_models import Report
 
 trigger_payload = json.loads(
     """{
@@ -331,27 +332,33 @@ class HandlerTests(TestCase):
             "https://wheredoivote.co.uk/api/beta/uploads/",
             responses.calls[3].request.url,
         )
-        expected_dict = {
-            "github_issue": f"https://github.com/{self.repo}/issues/1",
-            "gss": "X01000000",
-            "council_name": "Piddleton Parish Council",
-            "election_date": "2019-12-12",
-            "timestamp": "2019-09-30T17:00:02.396833",
-            "file_set": [
-                {
-                    "key": "X01000000/2019-12-12/2019-09-30T17:00:02.396833/data.csv",
-                    "csv_valid": True,
-                    "csv_rows": 10,
-                    "csv_encoding": "utf-8",
-                    "ems": "Idox Eros (Halarose)",
-                    "errors": "",
-                }
-            ],
-        }
-        self.assertDictEqual(expected_dict, json.loads(responses.calls[3].request.body))
+        expected_model = Report.parse_obj(
+            {
+                "github_issue": f"https://github.com/{self.repo}/issues/1",
+                "gss": "X01000000",
+                "council_name": "Piddleton Parish Council",
+                "election_date": "2019-12-12",
+                "timestamp": "2019-09-30T17:00:02.396833",
+                "file_set": [
+                    {
+                        "key": "X01000000/2019-12-12/2019-09-30T17:00:02.396833/data.csv",
+                        "csv_valid": True,
+                        "csv_rows": 10,
+                        "csv_encoding": "utf-8",
+                        "ems": "Idox Eros (Halarose)",
+                        "errors": "",
+                    }
+                ],
+            }
+        )
+
+        response_model = Report.parse_raw(responses.calls[3].request.body)
+
+        self.assertDictEqual(expected_model.dict(), response_model.dict())
         resp = self.conn.get_object(
             Bucket=self.final_bucket,
             Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
         )
-        self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
-        self.assertEqual(0, len(ses_backend.sent_messages))
+
+        self.assertEqual(expected_model.dict(), Report.parse_raw(resp["Body"].read()))
+        self.assertEqual(0, len(ses_backends["global"].sent_messages))
