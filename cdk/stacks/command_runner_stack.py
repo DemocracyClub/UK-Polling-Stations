@@ -52,6 +52,13 @@ class WDIVOncePerTagCommandRunner(Stack):
                 "/usr/bin/manage-py-command import_councils --only-contact-details --database principal",
             )
 
+        if dc_environment in ["development", "staging", "production"]:
+            self.add_job(
+                "import_eoni_data_from_s3",
+                "cron(30 1 * * ? *)",
+                "runuser -l polling_stations -c '/var/www/polling_stations/import_eoni_from_s3.sh'",
+            )
+
     def add_job(
         self,
         command_name,
