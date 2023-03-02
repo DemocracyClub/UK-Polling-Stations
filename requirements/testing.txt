@@ -1,4 +1,5 @@
 -r base.txt
+-r ../cdk/lambdas/wdiv-s3-trigger/test-requirements.txt
 
 mock
 factory_boy
