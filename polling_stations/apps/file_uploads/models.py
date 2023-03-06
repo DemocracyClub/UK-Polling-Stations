@@ -11,6 +11,7 @@ from requests import HTTPError
 
 from councils.models import Council
 from data_importers.import_script import ImportScript
+from django.contrib.auth.models import User
 
 status_map = {
     "Pending": "⌛",
@@ -52,6 +53,7 @@ class Upload(models.Model):
 
     objects = UploadQuerySet.as_manager()
     warning_about_pending_sent = models.BooleanField(default=False)
+    upload_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         get_latest_by = "timestamp"

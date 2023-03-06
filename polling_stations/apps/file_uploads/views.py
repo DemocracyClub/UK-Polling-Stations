@@ -167,7 +167,10 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
                     )
                 )
                 Upload.objects.get_or_create(
-                    gss=council, election_date=election_date, timestamp=now
+                    gss=council,
+                    election_date=election_date,
+                    timestamp=now,
+                    upload_user=request.user,
                 )
             except ClientError:
                 return JsonResponse(
