@@ -13,7 +13,7 @@ from rest_framework.test import APITestCase
 class AddressTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
-        CouncilFactory(
+        cls.council = CouncilFactory(
             council_id="X01000001",
             name="Piddleton Parish Council",
             identifiers=["X01000001"],
