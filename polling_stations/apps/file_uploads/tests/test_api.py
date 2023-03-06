@@ -96,6 +96,16 @@ class AddressTest(APITestCase):
 
     def test_valid_payload_zero_files(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:26:05Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
@@ -348,6 +358,17 @@ class AddressTest(APITestCase):
     # less than 180 seconds to upload, set the upload status to "Waiting".
     def test_waiting_file_status(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:24:10Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
+
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:24:10Z",
@@ -375,6 +396,16 @@ class AddressTest(APITestCase):
     # longer than 180 seconds to upload, set the upload status to "Error One File".
     def test_file_status_with_error(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:24:10Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:24:10Z",
