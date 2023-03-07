@@ -99,7 +99,9 @@ class AdvanceVotingTests(TestCase):
                         polling_station_id=station.internal_council_id
                     ).update(advance_voting_station=avs)
 
-        AdvanceVotingImporter().handle(self.council.pk, verbosity=3)
+        AdvanceVotingImporter().handle(
+            self.council.pk, verbosity=3, include_past_elections=True
+        )
         self.assertTrue(AdvanceVotingStation.objects.all().exists())
         assigned_uprns = (
             UprnToCouncil.objects.filter(advance_voting_station_id=1)

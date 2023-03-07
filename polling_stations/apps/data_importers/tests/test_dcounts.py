@@ -7,7 +7,7 @@ from pollingstations.models import PollingStation
 
 
 class DemocracyCountsImportTests(TestCase):
-    opts = {"nochecks": True, "verbosity": 0}
+    opts = {"nochecks": True, "verbosity": 0, "include_past_elections": True}
     uprns = ["1", "2", "3", "5", "6"]
     addressbase = [
         {

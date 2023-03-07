@@ -7,7 +7,7 @@ from data_importers.tests.stubs import stub_addressimport
 
 # High-level functional tests for import scripts
 class ImporterTest(TestCase):
-    opts = {"nochecks": True, "verbosity": 0}
+    opts = {"nochecks": True, "verbosity": 0, "include_past_elections": True}
 
     def set_up(self, addressbase, uprns, addresses_name):
         for address in addressbase:

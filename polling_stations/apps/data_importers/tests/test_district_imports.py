@@ -16,7 +16,12 @@ from pollingstations.models import PollingDistrict, PollingStation
 
 
 class ImporterTest(TestCase):
-    opts = {"noclean": False, "nochecks": True, "verbosity": 0}
+    opts = {
+        "noclean": False,
+        "nochecks": True,
+        "verbosity": 0,
+        "include_past_elections": True,
+    }
 
     # create a dummy council which we're going to import data for
     def create_dummy_council(self):

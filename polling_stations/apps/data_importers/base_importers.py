@@ -2,6 +2,7 @@
 Defines the base importer classes to implement
 """
 import abc
+import datetime
 import json
 import glob
 import logging
@@ -13,7 +14,7 @@ from typing import List, Callable
 import rtree
 from django.apps import apps
 from django.contrib.gis import geos
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from django.contrib.gis.geos import Point, GEOSGeometry, GEOSException
 
@@ -96,6 +97,15 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
             "-p",
             "--use-postcode-centroids",
             help="<optional> Use postcode centroids to derive a location for polling stations",
+            action="store_true",
+            required=False,
+            default=False,
+        )
+
+        parser.add_argument(
+            "-i",
+            "--include-past-elections",
+            help="<optional> Import data even if 'elections' property is missing or in the past",
             action="store_true",
             required=False,
             default=False,
@@ -194,6 +204,27 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
                 return glob.glob(path)[0]
         return self.base_folder_path
 
+    def covers_current_elections(self):
+        """
+        Checks whether the import script is covering future elections
+        depends on setting the 'elections' attribute
+        If 'elections' attribute is unset returns False
+        """
+        if not hasattr(self, "elections"):
+            return False
+        for date_str in self.elections:
+            try:
+                election_date = datetime.date.fromisoformat(date_str)
+                if election_date >= datetime.date.today():
+                    return True
+            except ValueError:
+                self.logger.log_message(
+                    logging.WARNING,
+                    f"{date_str} can't be interpreted as an ISO date format."
+                    f"Can't tell if it covers current election",
+                )
+        return False
+
     def handle(self, *args, **kwargs):
         """
         Manually run system checks for the
@@ -217,6 +248,22 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
             self.council_id = args[0]
 
         self.council = self.get_council(self.council_id)
+
+        if (
+            not kwargs.get("include_past_elections")
+            and not self.covers_current_elections()
+        ):
+            if hasattr(self, "elections"):
+                raise CommandError(
+                    f"'elections' attribute in the import script for {self.council.name} only has dates in the past\n"
+                    f"{self.elections=}"
+                    "Consider passing the '--include-past-elections' flag"
+                )
+
+            raise CommandError(
+                f"Import script for {self.council.name} does not have an elections attribute"
+            )
+
         self.write_info("Importing data for %s..." % self.council.name)
 
         # Delete old data for this council
