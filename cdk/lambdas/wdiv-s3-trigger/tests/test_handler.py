@@ -10,9 +10,8 @@ import moto
 import responses
 from botocore.exceptions import ClientError
 from moto import mock_s3, mock_ses
-from moto.ses import ses_backends
 from moto.s3 import responses as moto_s3_responses
-
+from moto.ses import ses_backends
 from trigger.handler import main
 
 trigger_payload = json.loads(
@@ -285,6 +284,7 @@ class HandlerTests(TestCase):
         self.assertEqual(0, len(ses_backends["global"].sent_messages))
 
     def test_invalid_one_file(self):
+        os.environ["SERVER_ENVIRONMENT"] = "production"
         self.load_fixture("incomplete-file.CSV")
 
         main(trigger_payload, None)
