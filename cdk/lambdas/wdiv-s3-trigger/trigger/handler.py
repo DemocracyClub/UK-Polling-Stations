@@ -93,10 +93,16 @@ def send_error_email(ses, report, email_address):
     council = f"{report['gss']}-{report['council_name']}"
     source = "pollingstations@democracyclub.org.uk"
     server_env = os.environ.get("SERVER_ENVIRONMENT", None)
-    message = (
-        {
+    subject_str = f"Error with data for council {council}"
+
+    if server_env in ["staging", "development", "test"]:
+        subject_str = f"**NB triggered from {server_env} instance**{subject_str}"
+    else:
+        subject_str = f"{subject_str}"
+
+        message = {
             "Subject": {
-                "Data": f"Error with data for council {council}",
+                "Data": subject_str,
                 "Charset": "utf-8",
             },
             "Body": {
@@ -106,26 +112,10 @@ def send_error_email(ses, report, email_address):
                     "Charset": "utf-8",
                 }
             },
-        },
+        }
+    ses.send_email(
+        Source=source, Destination={"ToAddresses": [email_address]}, Message=message
     )
-    if server_env == "production":
-        ses.send_email(
-            Source=source, Destination={"ToAddresses": [email_address]}, Message=message
-        )
-    elif server_env in ["staging", "development", "test"]:
-        ses.send_email(
-            Source=source,
-            Destination={"ToAddresses": [email_address]},
-            Message=message,
-            Subject=f"**NB triggered from {server_env} instance**\n{message}",
-        )
-    else:
-        ses.send_email(
-            Source=source,
-            Destination={"ToAddresses": [email_address]},
-            Message=message,
-            Subject=f"**NB triggered from local machine**\n{message}",
-        )
 
 
 def sync_report_to_s3(s3, bucket, prefix, report):
