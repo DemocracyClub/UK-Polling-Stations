@@ -1,5 +1,7 @@
+import datetime
 from unittest.mock import patch
 
+from django.core.management import CommandError
 from django.test import TestCase
 
 from addressbase.models import UprnToCouncil
@@ -23,6 +25,20 @@ class BaseImporterTest(TestCase):
     @patch("data_importers.base_importers.BaseImporter.__abstractmethods__", set())
     def setUp(self):
         self.base_importer = BaseImporter()
+        self.base_importer_past_election = BaseImporter()
+        self.base_importer_past_election.elections = ["2000-01-01"]
+        self.base_importer_today_election = BaseImporter()
+        self.base_importer_today_election.elections = [str(datetime.date.today())]
+        self.base_importer_multi_election = BaseImporter()
+        self.base_importer_multi_election.elections = [
+            "2000-01-01",
+            str(datetime.date.today()),
+        ]
+        self.base_importer_tomorrow_election = BaseImporter()
+        self.base_importer_tomorrow_election.elections = [
+            str(datetime.date.today() + datetime.timedelta(days=1))
+        ]
+        self.opts = {"nochecks": True, "verbosity": 0}
 
     def tearDown(self):
         pass
@@ -64,3 +80,31 @@ class BaseImporterTest(TestCase):
             self.base_importer.get_council,
             council_id=self.council.identifiers[0],
         )
+
+    def test_no_election_attribute(self):
+        self.assertRaisesRegex(
+            CommandError,
+            r"Import script for .* does not have an elections attribute",
+            self.base_importer.handle,
+            self.council.council_id,
+            **self.opts,
+        )
+
+    def test_election_in_past(self):
+        self.assertRaisesRegex(
+            CommandError,
+            (
+                r"'elections' attribute in the import script for .* only has dates in the past\n"
+                r"self.elections=\['2000-01-01'\]Consider passing the '--include-past-elections' flag"
+            ),
+            self.base_importer_past_election.handle,
+            self.council.council_id,
+            **self.opts,
+        )
+
+    def test_covers_current_elections(self):
+        self.assertFalse(self.base_importer.covers_current_elections())
+        self.assertFalse(self.base_importer_past_election.covers_current_elections())
+        self.assertTrue(self.base_importer_today_election.covers_current_elections())
+        self.assertTrue(self.base_importer_multi_election.covers_current_elections())
+        self.assertTrue(self.base_importer_tomorrow_election.covers_current_elections())

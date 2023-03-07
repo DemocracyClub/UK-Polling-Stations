@@ -89,6 +89,17 @@ class Command(BaseCommand):
             default=False,
         )
 
+        parser.add_argument(
+            "-i",
+            "--include-past-elections",
+            help(
+                "<optional> Include scripts that don't have current (i.e. future) elections"
+            ),
+            action="store_false",
+            required=False,
+            default=False,
+        )
+
     def importer_covers_these_elections(
         self, args_elections, importer_elections, regex
     ):
@@ -149,12 +160,10 @@ class Command(BaseCommand):
             "use_postcode_centroids": False,
         }
         if kwargs["multiprocessing"]:
-            opts = {
-                "noclean": False,
-                "nochecks": True,
-                "verbosity": 0,
-                "use_postcode_centroids": False,
-            }
+            opts["verbosity"] = 0
+
+        if kwargs["include_past_elections"]:
+            opts["include_past_elections"] = opts["include_past_elections"]
 
         # loop over all the import scripts
         # and build up a list of management commands to run
