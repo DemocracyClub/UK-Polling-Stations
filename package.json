@@ -16,7 +16,7 @@
         "aws-cdk": "^2.66.0",
         "cdk": "^2.66.0",
         "font-awesome": "^4.7.0",
-        "jquery": "^3.6.3",
+        "jquery": "^3.6.4",
         "leaflet": "^1.9.3",
         "leaflet-extra-markers": "^1.2.1",
         "leaflet.markercluster": "^1.5.3",
