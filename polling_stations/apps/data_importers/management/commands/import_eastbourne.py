@@ -3,20 +3,21 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "EAS"
-    addresses_name = "2021-03-04T10:47:15.541961/Eastbourne Borough polling_station_export-2021-03-04.csv"
-    stations_name = "2021-03-04T10:47:15.541961/Eastbourne Borough polling_station_export-2021-03-04.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2023-05-04/2023-03-08T12:16:19.775860/Eros_SQL_Output001.csv"
+    stations_name = "2023-05-04/2023-03-08T12:16:19.775860/Eros_SQL_Output001.csv"
+    elections = ["2023-05-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
-        if record.housepostcode in ["BN22 7HL", "BN20 8EJ", "BN20 7AU", "BN20 8TL"]:
+        if record.housepostcode in [
+            "BN20 7AU",
+            "BN23 8JH",  # split
+        ]:
             return None
 
         if uprn in [
-            "10010662297",
-            "10024142453",
-            "10093961546",
+            "10010662297",  # 10010662297
         ]:
             return None
 
