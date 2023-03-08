@@ -4,22 +4,23 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WOC"
     addresses_name = (
-        "2022-05-05/2022-03-23T15:20:31.665075/Democracy_Club__05May2022.CSV"
+        "2023-05-04/2023-03-08T12:22:56.608272/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-23T15:20:31.665075/Democracy_Club__05May2022.CSV"
+        "2023-05-04/2023-03-08T12:22:56.608272/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
+    csv_encoding = "windows-1252"
+    csv_delimiter = "\t"
 
-    def station_record_to_dict(self, record):
-        # Polling Station G1, Medway Community Centre, 16 Medway Road, Worcester
-        # first digit of easting typoed (2... -> 3...)
-        if record.polling_place_id == "6146":
-            record = record._replace(polling_place_easting="386430")
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-        # Polling Station 3 Main Hall, Woodgreen Church, Hastings Drive, Worcester
-        # first digit of easting typoed (2... -> 3...)
-        if record.polling_place_id == "6262":
-            record = record._replace(polling_place_easting="388009")
+        if uprn in [
+            "10090440987",  # FLAT AT THE BEDWARDINE 128 BROMYARD ROAD, WORCESTER
+            "100120648786",  # 145A COLUMBIA DRIVE, WORCESTER
+            "100120671753",  # 3 TROTSHILL LANE EAST, WORCESTER
+        ]:
+            return None
 
-        return super().station_record_to_dict(record)
+        return super().address_record_to_dict(record)
