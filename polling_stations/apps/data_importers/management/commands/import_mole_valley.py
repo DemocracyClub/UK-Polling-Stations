@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MOL"
     addresses_name = (
-        "2022-05-05/2022-03-18T10:50:42.011286/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-09T15:06:43.238353/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-18T10:50:42.011286/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-09T15:06:43.238353/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -17,17 +17,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10010534294",
-            "10010537566",
-            "10010536978",
-            "10010536968",
+            "200000162928",  # 2 BLACKBROOK FARM COTTAGES, BLACKBROOK ROAD, DORKING
+            "200000162927",  # 1 BLACKBROOK FARM COTTAGES, BLACKBROOK ROAD, DORKING
+            "100061426266",  # 5 RIDGEWAY CLOSE, DORKING
+            "10000829965",  # 2 STABLE COTTAGE RUSPER ROAD, CAPEL
+            "10000829964",  # 1 STABLE COTTAGE RUSPER ROAD, CAPEL
+            "10000828494",  # ARNWOOD FARM COTTAGE RUSPER ROAD, NEWDIGATE
         ]:
             return None
 
-        if record.addressline6 in ["KT21 2HL", "KT22 9QD"]:
+        if record.addressline6 in ["RH5 4QY", "KT21 2LY"]:  # splits
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        return super().station_record_to_dict(record)
