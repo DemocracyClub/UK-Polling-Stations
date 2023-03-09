@@ -1,0 +1,393 @@
+
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+  slack: circleci/slack@4.1
+  aws-cli: circleci/aws-cli@3.1
+
+
+# the default pipeline parameters, which will be updated according to
+# the results of the path-filtering orb
+parameters:
+  imports-changed:
+    type: boolean
+    default: false
+  application-changed:
+    type: boolean
+    default: false
+
+
+jobs:
+  build_and_test:
+    docker:
+      - image: cimg/python:3.10.8-browsers
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+      - image: cimg/postgres:14.5-postgis
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: polling_stations
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+
+      - node/install:
+          node-version: '16.13.0'
+
+      - run:
+          name: Install node node_modules
+          command: npm install
+          cache-path: ~/repo/node_modules
+          override-ci-command: npm install
+
+      - run:
+          name: install app dependencies
+          command: |
+            sudo apt update && sudo apt install -y gdal-bin
+            pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+            python -m venv .venv
+            . .venv/bin/activate
+            python -m pip install --upgrade pip
+            python -m pip install wheel
+            python -m pip install coveralls
+            python -m pip install -r requirements/testing.txt
+            playwright install
+
+      - run:
+          name: install CDK Python dependencies
+          command: |
+            . .venv/bin/activate
+            pip install -r requirements/cdk.txt
+
+      - save_cache:
+          paths:
+            - ./.venv
+            - ./node_modules
+            - ./home/circleci/.cache
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+
+      - run:
+          name: Install HTML Tidy
+          command: wget https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i tidy-5.8.0-Linux-64bit.deb
+
+      - run:
+          name: Print versions
+          command: |
+            . .venv/bin/activate
+            python --version
+            python manage.py --version
+
+      - run:
+          name: Pre-test checks
+          command: |
+            . .venv/bin/activate
+            black --check .
+            python -m pip check
+            python manage.py check
+            python manage.py makemigrations --check
+
+      - run:
+          name: Pytest
+          command: |
+            . .venv/bin/activate
+            python manage.py collectstatic --no-input
+            pytest --flakes --cov-report= --cov=polling_stations
+
+      - run:
+          name: Submit coverage
+          command: |
+            . .venv/bin/activate
+            coveralls
+
+  run_new_imports:
+    docker:
+      - image: cimg/python:3.10.8-browsers
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+      - aws-cli/setup
+      - run:
+          name: Check and run new import scripts.
+          command: |
+            sudo apt update && sudo apt install -y gdal-bin
+            pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+            . .venv/bin/activate
+            export CI_DB_PASSWORD=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_PASSWORD' --output text`
+            export CI_DB_NAME=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_NAME' --output text`
+            export CI_DB_HOST=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_HOST' --output text`
+            export S3_DATA_BUCKET=pollingstations.elections.production
+            python manage.py run_new_imports
+
+  cdk_synth:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    working_directory: ~/repo
+    parameters:
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
+    environment:
+      DC_ENVIRONMENT: "<<parameters.dc-environment>>"
+
+    steps:
+    - checkout
+    - restore_cache:
+        key: v1-machine-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+    - run:
+        name: Install CDK Python dependencies
+        command: |
+          pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install -r requirements/cdk.txt
+    - save_cache:
+        paths:
+          - ./.venv
+          - ./node_modules
+        key: v1-machine-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+
+  cdk_deploy:
+    machine:
+      image: ubuntu-2204:2022.10.2
+    working_directory: ~/repo
+    parameters:
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
+    environment:
+      DC_ENVIRONMENT: "<<parameters.dc-environment>>"
+    steps:
+    - checkout
+    - restore_cache:
+        key: v1-machine-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+    - run:
+        name: CDK deploy
+        command: |
+          pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+          . .venv/bin/activate
+          npx cdk deploy --all --require-approval never --concurrency 3
+    # In the event the deployment has failed, alert the dev team
+    - slack/notify:
+        event: fail
+        template: basic_fail_1
+        channel: $SLACK_DEFAULT_CHANNEL
+
+  code_deploy:
+    docker:
+      - image: cimg/python:3.10.8-node
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+    working_directory: ~/repo
+    parameters:
+      min-size:
+        type: integer
+      max-size:
+        type: integer
+      desired-capacity:
+        type: integer
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
+    environment:
+      DC_ENVIRONMENT: "<<parameters.dc-environment>>"
+      MIN_SIZE: "<<parameters.min-size>>"
+      MAX_SIZE: "<<parameters.max-size>>"
+      DESIRED_CAPACITY: "<<parameters.desired-capacity>>"
+
+    steps:
+    - checkout
+    - restore_cache:
+        key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+    - run:
+        name: "Code Deploy: Create deployment group"
+        command: |
+          pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+          . .venv/bin/activate
+          python deploy/create_deployment_group.py
+    - run:
+        name: "Code Deploy: Create deployment"
+        command: |
+          . .venv/bin/activate
+          COMMIT_SHA=$CIRCLE_SHA1 python deploy/create_deployment.py
+    - run:
+        name: Update auto scaling group
+        command: |
+          . .venv/bin/activate
+          python deploy/update_autoscaling_group.py
+        no_output_timeout: 15m # TODO reduce/discuss what is suitable?
+    - run:
+        name: "Publish a new Sentry Release"
+        command: |
+          curl -sL https://sentry.io/get-cli/ | bash
+          sentry-cli releases --org democracy-club-gp new $CIRCLE_SHA1 --project wdiv
+          sentry-cli releases --org democracy-club-gp set-commits --auto $CIRCLE_SHA1 --ignore-missing
+          sentry-cli releases --org democracy-club-gp finalize $CIRCLE_SHA1
+    # In the event the deployment has failed, alert the dev team
+    - slack/notify:
+        event: fail
+        template: basic_fail_1
+        channel: $SLACK_DEFAULT_CHANNEL
+
+  run_new_imports_post_deploy:
+    docker:
+      - image: cimg/python:3.10.8-browsers
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+      - aws-cli/setup
+      - run:
+          name: Check and run new import scripts after a deploy.
+          command: |
+            pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+            . .venv/bin/activate
+            export CI_DB_PASSWORD=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_PASSWORD' --output text`
+            export CI_DB_NAME=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_NAME' --output text`
+            export CI_DB_HOST=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_HOST' --output text`
+            python manage.py run_new_imports --post-deploy
+
+
+
+workflows:
+  version: 2
+  test_and_run_importers:
+    # NB the script called by run_new_imports will bail early if there are also application changes present
+    when: << pipeline.parameters.imports-changed >>
+    jobs:
+    - build_and_test
+    ###############
+    # DEVELOPMENT #
+    ###############
+    - run_new_imports:
+        name: "Development: Run New Imports"
+        requires: [build_and_test]
+        context: [deployment-development-wdiv]
+        filters: { branches: { only: [ development ] } }
+    ###########
+    # STAGING #
+    ###########
+    - run_new_imports:
+        name: "Staging: Run New Imports"
+        requires: [build_and_test]
+        context: [deployment-staging-wdiv]
+        filters: { branches: { only: [ main, master ] } }
+    ##############
+    # PRODUCTION #
+    ##############
+    - run_new_imports:
+        name: "Production: Run New Imports"
+        requires: [build_and_test, "Staging: Run New Imports"]
+        context: [production-staging-wdiv]
+        filters: { branches: { only: [ main, master ] } }
+
+
+  test_build_deploy_and_run_importers:
+    when: << pipeline.parameters.application-changed >>
+    jobs:
+    - build_and_test
+    ###############
+    # DEVELOPMENT #
+    ###############
+    - cdk_synth:
+        name: "CDK Synth"
+        requires:
+        - build_and_test
+        context: [deployment-development-wdiv, slack-secrets]
+        dc-environment: development
+    - cdk_deploy:
+        name: "Development: CDK Deploy"
+        requires:
+        - "CDK Synth"
+        context: [deployment-development-wdiv, slack-secrets]
+        filters: { branches: { only: [ development ] } }
+        dc-environment: development
+    - code_deploy:
+        name: "Development: AWS CodeDeploy"
+        requires:
+        - "Development: CDK Deploy"
+        context: [deployment-development-wdiv, slack-secrets]
+        filters: { branches: { only: [ development ] } }
+        dc-environment: development
+        min-size: 1
+        max-size: 2
+        desired-capacity: 1
+    - run_new_imports_post_deploy:
+        # NB if no imports have changed this is a no-op
+        name: "Development: Run New Imports Post Deploy"
+        requires: ["Development: AWS CodeDeploy"]
+        context: [deployment-development-wdiv]
+        filters: { branches: { only: [ development ] } }
+
+    ###########
+    # STAGING #
+    ###########
+    - cdk_deploy:
+        name: "Staging: CDK Deploy"
+        requires:
+        - "CDK Synth"
+        context: [deployment-staging-wdiv, slack-secrets]
+        filters: { branches: { only: [ main, master ] } }
+        dc-environment: staging
+    - code_deploy:
+        name: "Staging: AWS CodeDeploy"
+        requires:
+        - "Staging: CDK Deploy"
+        context: [deployment-staging-wdiv, slack-secrets]
+        filters: { branches: { only: [ main, master ] } }
+        dc-environment: staging
+        min-size: 1
+        max-size: 2
+        desired-capacity: 1
+    - run_new_imports_post_deploy:
+        # NB if no imports have changed this is a no-op
+        name: "Staging: Run New Imports Post Deploy"
+        requires: ["Staging: AWS CodeDeploy"]
+        context: [deployment-staging-wdiv]
+        filters: { branches: { only: [ main, master ] } }
+
+    ##############
+    # PRODUCTION #
+    ##############
+    - cdk_deploy:
+        name: "Production: CDK Deploy"
+        requires:
+        - "CDK Synth"
+        - "Staging: AWS CodeDeploy"
+        context: [deployment-production-wdiv, slack-secrets]
+        filters: { branches: { only: [ main, master ] } }
+        dc-environment: production
+    - code_deploy:
+        name: "Production: AWS CodeDeploy"
+        requires:
+        - "Production: CDK Deploy"
+        context: [deployment-production-wdiv, slack-secrets]
+        filters: { branches: { only: [ main, master ] } }
+        dc-environment: production
+        min-size: 1
+        max-size: 2
+        desired-capacity: 1
+    - run_new_imports_post_deploy:
+        # NB if no imports have changed this is a no-op
+        name: "Production: Run New Imports Post Deploy"
+        requires: ["Production: AWS CodeDeploy"]
+        context: [deployment-production-wdiv]
+        filters: { branches: { only: [ main, master ] } }

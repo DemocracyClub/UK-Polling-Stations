@@ -1,3 +1,5 @@
+import os
+
 from dc_logging_client import DCWidePostcodeLoggingClient
 
 STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
@@ -5,11 +7,11 @@ STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": "polling_stations",
-        "USER": "postgres",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
+        "USER": os.environ.get("CI_DB_USER", "postgres"),
+        "NAME": os.environ.get("CI_DB_NAME", "polling_stations"),
+        "PASSWORD": os.environ.get("CI_DB_PASSWORD", "postgres"),
+        "HOST": os.environ.get("CI_DB_HOST", ""),
+        "PORT": "5432",
     }
 }
 
