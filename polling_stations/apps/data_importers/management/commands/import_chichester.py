@@ -3,43 +3,41 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHI"
-
     addresses_name = (
-        "2021-03-08T20:23:52.964809/Chichester Democracy_Club__06May2021.tsv"
+        "2023-05-04/2023-03-09T13:52:01.572585/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2021-03-08T20:23:52.964809/Chichester Democracy_Club__06May2021.tsv"
+        "2023-05-04/2023-03-09T13:52:01.572585/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2021-05-06"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10093115403",  # 1 BLOMFIELD DRIVE, CHICHESTER
             "100062411430",  # CONNOLLY HOUSE, CONNOLLY WAY, CHICHESTER
-            "100062410959",  # MUCHOS NACHOS, 140 WHYKE ROAD, CHICHESTER
             "10090340673",  # FLAT, CO-OPERATIVE RETAIL SERVICES LTD, OLIVER WHITBY ROAD, CHICHESTER
             "10008884574",  # PADDOCK HOUSE, PLAISTOW ROAD, LOXWOOD, BILLINGSHURST
             "10002469404",  # NEWLANDS COTTAGE, LINCHMERE, HASLEMERE
-            "200001740959",  # BADGERS, BORDER CLOSE, HILL BROW, LISS
-            "10002470928",  # THE FORGE, HENLEY HILL, HENLEY, HASLEMERE
             "10008887597",  # THE GRANARY UPWALTHAM HOUSE FARM CHURCH FARM LANE, UPWALTHAM
         ]:
             return None
 
         if record.addressline6 in [
-            "PO19 7QL",
-            "RH20 1PW",
-            "GU28 0LD",
-            "GU29 9QT",
-            "GU28 9LY",
+            # split
             "PO20 9AD",
+            "RH20 1PW",
+            "PO19 3PX",
             "PO18 0PR",
-            "PO19 8FT",
+            "PO18 8QG",
+            "PO19 7QL",
+            "GU28 9LY",
+            "GU29 9QT",
+            "GU28 0LD",
+            # wrong
             "PO18 9AE",
-            "RH14 0JY",
+            "PO18 9AF",
         ]:
             return None
 
