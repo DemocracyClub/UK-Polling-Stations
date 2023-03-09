@@ -1,4 +1,3 @@
-import shutil
 from pathlib import Path
 
 import boto3
@@ -41,12 +40,6 @@ def any_import_scripts(changed):
 
 def any_non_import_scripts(changed):
     return any(not is_import_script(path) for path in changed)
-
-
-def stop_job(stdout):
-    stdout.write("Using CircleCI Agent to stop jobs")
-    args = ["circleci-agent", "step", "halt"]
-    subprocess.check_output(args)
 
 
 def get_last_import_sha_from_ssm():
