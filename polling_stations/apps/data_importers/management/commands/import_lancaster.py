@@ -1,42 +1,20 @@
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.base_importers import BaseShpStationsShpDistrictsImporter
 
 
-class Command(BaseGitHubImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     council_id = "LAC"
-    elections = ["2021-05-06"]
-    geom_type = "geojson"
+    elections = ["2023-05-04"]
     srid = 27700
-    districts_srid = 27700
-    seen_stations = set()
+    districts_name = "2023-05-04/2023-03-29T14:36:00/PollingDistandStat.shp"
+    stations_name = "2023-05-04/2023-03-29T14:36:00/LancasterPollingStations2023.shp"
 
     def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        return {
-            "internal_council_id": record["PD_REF"],
-            "name": record["PD_NAME"],
-            "area": poly,
-            "polling_station_id": record["PD_REF"],
-        }
+        return {"internal_council_id": record[0], "name": f"{record[2]} - {record[0]}"}
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        stations = []
-        codes = record["DISTRICT"].split(" ")
-
-        for code in codes:
-            if (code, record["POLLING_PL"]) in self.seen_stations:
-                stations.append(None)
-            else:
-                self.seen_stations.add((code, record["POLLING_PL"]))
-                stations.append(
-                    {
-                        "internal_council_id": code,
-                        "postcode": "",
-                        "address": record["POLLING_PL"],
-                        "location": location,
-                    }
-                )
-
-        return stations
+        return {
+            "internal_council_id": record[0],
+            "address": record[1],
+            "postcode": "",
+            "polling_district_id": record[0],
+        }
