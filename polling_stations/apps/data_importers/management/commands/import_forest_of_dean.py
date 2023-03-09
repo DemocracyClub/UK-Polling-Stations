@@ -1,23 +1,23 @@
-from data_importers.ems_importers import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "FOE"
     addresses_name = (
-        "2021-03-23T12:16:24.762200/Forest of Dean Democracy_Club__06May2021 (1).TSV"
+        "2023-05-04/2023-03-09T18:08:54.956552/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2021-03-23T12:16:24.762200/Forest of Dean Democracy_Club__06May2021 (1).TSV"
+        "2023-05-04/2023-03-09T18:08:54.956552/Democracy_Club__04May2023.tsv"
     )
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
-    elections = ["2021-05-06"]
 
     def station_record_to_dict(self, record):
         if record.polling_place_name == "Rudford & Highleadon Village Hall":
             record = record._replace(
                 polling_place_easting="377237",  # was 3777237
             )
-        elif record.polling_place_name == "Primrose Hill Church Hall":
+        elif record.polling_place_id == "1685":
             record = record._replace(
                 # Mistyped, but not going to work out what the right answer is.
                 polling_place_easting="",
@@ -32,24 +32,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
+        if record.property_urn in [
+            "10090651915",
+            "10014327870",
+        ]:
+            return None
+
         if record.addressline6 in [
-            "GL15 6BP",
-            "GL14 2PP",
-            "GL14 2BB",
-            "GL16 8QD",
-            "GL17 9BE",
-            "GL17 9JS",
-            "GL17 9AL",
-            "GL17 9QU",
             "GL15 4QH",
-            "GL18 1AF",
+            "GL14 2BB",
+            "GL14 2HQ",
+            "GL17 9JS",
+            "GL17 9QU",
+            "GL14 2PP",
             "GL15 4AN",
             "GL18 1LN",
-            "GL18 1HJ",
-            "GL16 8LN",
-            "GL16 8JW",
-            "GL15 4PU",
-            "GL15 4RX",
         ]:
             return None  # split
 
