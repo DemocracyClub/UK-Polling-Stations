@@ -4,16 +4,16 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PEN"
     addresses_name = (
-        "2022-05-05/2022-03-07T13:15:49.169874/Democracy_Club__05May2022.CSV"
+        "2023-05-04/2023-03-09T12:04:45.963515/Democracy_Club__04May2023.CSV"
     )
     stations_name = (
-        "2022-05-05/2022-03-07T13:15:49.169874/Democracy_Club__05May2022.CSV"
+        "2023-05-04/2023-03-09T12:04:45.963515/Democracy_Club__04May2023.CSV"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
 
     def station_record_to_dict(self, record):
         # Thomas Street Bowling Pavilion, Percy Street, Nelson BB9 9AY
-        if record.polling_place_id == "4317":
+        if record.polling_place_id == "4554":
             record = record._replace(
                 polling_place_northing=437261,
                 polling_place_easting=386085,
