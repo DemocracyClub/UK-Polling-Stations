@@ -4,23 +4,22 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RCH"
     addresses_name = (
-        "2022-05-05/2022-03-29T14:33:18.331708/Democracy_Club1__05May2022.tsv"
+        "2023-05-04/2023-03-09T13:27:25.433057/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-29T14:33:18.331708/Democracy_Club1__05May2022.tsv"
+        "2023-05-04/2023-03-09T13:27:25.433057/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # Bangladesh Association And Community Project, 108 Ramsay Street, Rochdale
-        if record.polling_place_id == "4456":
-            # source: https://www.ourrochdale.org.uk/kb5/rochdale/directory/service.page?id=I9fU13_4zqc
-            record = record._replace(polling_place_postcode="OL16 2EZ")  # was 'OL16 2E'
+        # Polling station Room At Rear of St James Church -> Checked & OK
 
-        # Falinge Park Bowling Club, Falinge Park, Heights Lane, Rochdale
-        if record.polling_place_id == "4253":
-            # 700m too far South; might be the wrong postcode
+        if record.polling_place_id in [
+            "4660",  # Mobile Unit at The Black Dog Pub
+            "4728",  # Mobile Unit at The Black Dog Pub
+            "4585",  # Falinge Park Bowling Club
+        ]:
             record = record._replace(polling_place_postcode="")
 
         return super().station_record_to_dict(record)
@@ -32,29 +31,28 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "23050342",  # 2 CHADWICK STREET, FIRGROVE, ROCHDALE
             "10023363964",  # 6 BELFIELD LANE, ROCHDALE
             "23040672",  # NADEN HOUSE, WOODHOUSE LANE, ROCHDALE
-            "23099722",  # 12B MANCHESTER ROAD, HEYWOOD
+            "10094362349",  # 10 FRANCIS CLOSE, MIDDLETON, MANCHESTER
         ]:
             return None
 
         if record.addressline6 in [
-            "OL11 3AE",
-            "OL16 2SD",
-            "M24 4FJ",
-            "OL15 0JH",
-            "OL11 5TR",
-            "M24 2PR",
+            "OL10 1FH",
+            "OL10 3BJ",
             "OL15 9LY",
+            "OL15 0JH",
+            "OL11 3AE",
+            "M24 4FJ",
+            "M24 2PR",
+            "OL16 4XF",
+            "OL16 2SD",
+            "OL10 4DG",
+            "OL16 4RF",
+            "M24 6UE",
+            "M24 6DW",
+            "OL16 1FD",
             "OL10 2JP",
             "M24 1LG",
-            "OL10 3BJ",
-            "OL16 1FD",
-            "OL10 1FH",
             "OL10 3LW",
-            "OL16 4XF",
-            "M24 6DW",
-            "OL10 4DG",
-            "M24 6UE",
-            "OL16 4RF",
         ]:
             return None  # split
 
