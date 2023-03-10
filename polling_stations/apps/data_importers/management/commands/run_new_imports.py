@@ -27,7 +27,7 @@ def get_changed_scripts(changed):
 
 def is_import_script(path):
     if re.search(
-        r"polling_stations/apps/data_importers/management/commands/import_[^eoni].+\.py",
+        r"polling_stations/apps/data_importers/management/commands/import_(?!eoni).+\.py",
         path,
     ):
         return True
