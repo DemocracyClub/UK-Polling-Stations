@@ -263,6 +263,7 @@ jobs:
             export CI_DB_PASSWORD=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_PASSWORD' --output text`
             export CI_DB_NAME=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_NAME' --output text`
             export CI_DB_HOST=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_HOST' --output text`
+            export S3_DATA_BUCKET=pollingstations.elections.production
             python manage.py run_new_imports --post-deploy
 
 
