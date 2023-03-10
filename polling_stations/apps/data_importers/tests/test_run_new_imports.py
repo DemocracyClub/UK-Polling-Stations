@@ -73,6 +73,9 @@ def test_is_import_script():
     assert is_import_script(
         "polling_stations/apps/data_importers/management/commands/import_barrow_in_furness.py"
     )
+    assert is_import_script(
+        "polling_stations/apps/data_importers/management/commands/import_north_warwickshire.py"
+    )
     assert not is_import_script(
         "polling_stations/apps/councils/management/commands/import_councils.py"
     )
@@ -218,6 +221,7 @@ class test_run_new_imports(TestCase):
         self.run_scripts_mock.assert_called_with(
             [
                 "polling_stations/apps/data_importers/management/commands/import_birmingham.py",
+                "polling_stations/apps/data_importers/management/commands/import_ealing.py",
                 "polling_stations/apps/data_importers/management/commands/import_hackney.py",
                 "polling_stations/apps/data_importers/management/commands/import_hambleton.py",
                 "polling_stations/apps/data_importers/management/commands/import_merthyr.py",
