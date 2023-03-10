@@ -40,6 +40,18 @@ def git_revision():
     return revision
 
 
+@task
+def describe_parameters(ctx, profile=os.environ.get("AWS_PROFILE", None)):
+    session = boto3.session.Session(profile_name=profile)
+    ssm_client = session.client("ssm")
+    for parameter in ssm_client.describe_parameters()["Parameters"]:
+        print(
+            f"{parameter['Name']} => {get_ssm_parameter_value(ssm_client,parameter['Name'])}"
+        )
+        print(f"{parameter.get('Description')}")
+        print()
+
+
 @task(
     help={
         "profile": "Required. Name of AWS profile to be called with",
