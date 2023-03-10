@@ -16,6 +16,9 @@ parameters:
   application-changed:
     type: boolean
     default: false
+  eoni-changed:
+    type: boolean
+    default: false
 
 
 jobs:
@@ -302,7 +305,8 @@ workflows:
 
 
   test_build_deploy_and_run_importers:
-    when: << pipeline.parameters.application-changed >>
+    when:
+      or: [ << pipeline.parameters.application-changed >>, << pipeline.parameters.eoni-changed >> ]
     jobs:
     - build_and_test
     ###############
