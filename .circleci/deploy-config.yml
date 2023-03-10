@@ -261,6 +261,7 @@ jobs:
       - run:
           name: Check and run new import scripts after a deploy.
           command: |
+            sudo apt update && sudo apt install -y gdal-bin
             pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
             . .venv/bin/activate
             export CI_DB_PASSWORD=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_PASSWORD' --output text`
