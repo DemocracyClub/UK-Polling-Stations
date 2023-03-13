@@ -3,34 +3,37 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KIN"
-    addresses_name = "2021-07-13T09:32:08.917883197/KIN-Democracy Club Data.csv"
-    stations_name = "2021-07-13T09:32:08.917883197/KIN-Democracy Club Data.csv"
-    elections = ["2021-07-29"]
-    csv_delimiter = ","
+    addresses_name = (
+        "2023-05-04/2023-03-13T16:05:14.621201/Democracy_Club__04May2023.tsv"
+    )
+    stations_name = (
+        "2023-05-04/2023-03-13T16:05:14.621201/Democracy_Club__04May2023.tsv"
+    )
+    elections = ["2023-05-04"]
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # Lakes End Village Hall Main Road Lakes End WISBECH PE14 9QL
-        if record.polling_place_id == "20394":
-            record = record._replace(polling_place_postcode="PE14 9QH")
+        # Family Entertainment Centre, Blue Bull Cafe Bar
+        if record.polling_place_id == "23301":
+            record = record._replace(
+                polling_place_easting="", polling_place_northing=""
+            )
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10000033946",  # 81B HIGH STREET, KING'S LYNN
+        ]:
+            return None
         if record.addressline6 in [
-            "PE30 4XW",
-            "PE30 4XW",
-            "PE31 6HJ",
-            "PE38 9QZ",
-            "PE14 7QT",
-            "PE14 8JN",
-            "PE34 4RD",
+            # split
             "PE34 3BJ",
-            "PE34 4EX",
-            "PE30 3LE",
-            "PE33 9PN",
-            "PE30 3BG",
-            "PE14 7LB",
-            "PE14 7EU",
+            "PE31 6HJ",
+            # look wrong
+            "PE30 1JG",
         ]:
             return None
 
