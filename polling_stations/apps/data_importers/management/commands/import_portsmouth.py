@@ -1,45 +1,47 @@
-from django.contrib.gis.geos import Point
-
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "POR"
     addresses_name = (
-        "2022-05-05/2022-03-07T11:47:50.740409/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-13T12:41:54.727276/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-07T11:47:50.740409/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-13T12:41:54.727276/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
-    def station_record_to_dict(self, record):
-        # Council thinks postcodes are correct as is for:
-        # Portsmouth Methodist Church (Eastney), Highland Road, Southsea, PO4 9NJ
-        # Moorings Way Infant School, Moorings Way, Southsea, PO4 8YJ
-        # Christ Church, London Road, Widley, Portsmouth, PO6 3NA
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-        # 'Cathedral House (Becket Hall), St Thomas`s Street, Portsmouth, PO1 2HH' (id: 5282)
-        if record.polling_place_id == "5282":
-            record = record._replace(polling_place_postcode="PO1 2EZ")
-        # 'King's Church, Somers Road, Southsea, PO5 1EE' (id: 5294)
-        if record.polling_place_id == "5294":
-            record = record._replace(polling_place_postcode="PO5 4QA")
-        # 'Francis Lodge, Fernhurst Junior School, Heidelberg Road, Southsea, PO4 0AG' (id: 5314)
-        if record.polling_place_id == "5314":
-            record = record._replace(polling_place_postcode="PO4 0AP")
-        # 'St Margaret's Parish Centre, Highland Road, Southsea, PO4 8AY' (id: 5322)
-        if record.polling_place_id == "5322":
-            record = record._replace(polling_place_postcode="PO4 9DD")
-        # 'Hillside and Wymering Centre, Cheltenham Road, Portsmouth, PO6 3QY' (id: 5466)
-        if record.polling_place_id == "5466":
-            record = record._replace(polling_place_postcode="PO6 3PY")
+        if uprn in [
+            "1775074578",  # FLAT 1 SOUTHAMPTON ROAD, PORTSMOUTH
+            "1775023088",  # FLAT GREAT SALTERNS MANSION EASTERN ROAD, PORTSMOUTH
+            "1775078355",  # 264 TANGIER ROAD, PORTSMOUTH
+            "1775097409",  # FLAT LAWNSWOOD 245 FRATTON ROAD, PORTSMOUTH
+            "1775064482",  # 40 PERONNE ROAD, PORTSMOUTH
+            "1775081845",  # 115 VICTORIA ROAD SOUTH, SOUTHSEA
+            "1775129057",  # ADMIRAL JELLICOE HOUSE, LOCKSWAY ROAD, SOUTHSEA
+        ]:
+            return None
+
+        if record.addressline6 in [
+            "PO6 4SB",  # SOUTHAMPTON ROAD, PORTSMOUTH
+            "PO6 3LX",  # POLICE RESIDENCES, SOUTHWICK ROAD, COSHAM, PORTSMOUTH
+            "PO3 5NB",  # FLAT 1-3, BUILDBASE, BURRFIELDS ROAD, PORTSMOUTH
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Import warnings, but no correction needed:
+
+        # Church of the Ascension, Stubbington Avenue, Portsmouth, PO2 0JG
+        # Howard Road Community Centre, Howard Road, Portsmouth, PO2 9PS
+        # Portacabin on north side of green, Fairfield Square/Hythe Road, Portsmouth, PO6 3JS
+        # St Peter & St Paul Hall, Old Wymering Lane, Wymering, PO6 3NH
 
         rec = super().station_record_to_dict(record)
-
-        # St Margaret's Parish Centre
-        if rec["internal_council_id"] == "5322":
-            rec["location"] = Point(-1.067090, 50.786643, srid=4326)
-
         return rec
