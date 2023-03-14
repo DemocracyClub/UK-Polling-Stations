@@ -162,17 +162,19 @@ class Upload(models.Model):
         # If we're in production, and the user has been deleted, return early.
         # We don't want to send an email to a non-existent user and we already
         # have github issues to track successful uploads
-        if server_env == "production" and self.upload_user == None:
+        if server_env == "production" and self.upload_user is None:
             return
         # if we're in production, and the upload user exists, send them an email
-        elif server_env == "production" and self.upload_user != None:
+        elif server_env == "production" and self.upload_user.email:
             to = self.upload_user.email
-            subject = f"Your file upload for {self.gss.short_name} ({self.election_date}) was successful"
         # for all other environments, send the email to the default
         # from email with a subject line that makes it clear
         # we are not in production and testing is taking place
         else:
             to = settings.DEFAULT_FROM_EMAIL
+        if server_env == "production":
+            subject = f"Your file upload for {self.gss.short_name} ({self.election_date}) was successful"
+        else:
             subject = f"**NB triggered from {server_env} instance** Your file upload for {self.gss.short_name} ({self.election_date}) was successful"
 
         email = EmailMessage(
