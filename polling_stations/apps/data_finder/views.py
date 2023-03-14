@@ -158,8 +158,8 @@ class BasePollingStationView(
         context["multiple_elections"] = ee.multiple_elections
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()
-        context["voter_id_pilot"] = ee.get_id_pilot_info()
         context["advance_voting_station"] = self.get_advance_voting_station()
+        context["requires_voter_id"] = ee.get_voter_id_status()
 
         context["postcode"] = self.postcode.with_space
         context["location"] = self.location
