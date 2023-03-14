@@ -477,3 +477,52 @@ class AddressTest(APITestCase):
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(2, len(File.objects.all()))
         self.assertEqual(0, len(mail.outbox))
+
+    def test_empty_upload_user_email_address(self):
+        # Test the email content when the upload user has no email address
+        self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        settings.SERVER_ENVIRONMENT = "production"
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:26:05Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create_user(username="test_user", email=""),
+            }
+        )
+
+        payload1 = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
+            "election_date": "2020-05-07",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": True,
+                    "csv_rows": 86109,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Districts.csv",
+                },
+                {
+                    "csv_valid": True,
+                    "csv_rows": 69,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:21.962203/luton-DC - Polling Stations.csv",
+                },
+            ],
+        }
+
+        resp = self.client.post("/api/beta/uploads/", payload1, format="json")
+        self.assertEqual(201, resp.status_code)
+        self.assertEqual(1, len(Upload.objects.all()))
+        self.assertEqual(2, len(File.objects.all()))
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(
+            "Democracy Club <pollingstations@democracyclub.org.uk>",
+            mail.outbox[0].to[0],
+        )
