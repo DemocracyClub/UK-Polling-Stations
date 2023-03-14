@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 import requests
 from django.conf import settings
 from django.core.cache import cache
@@ -211,13 +212,6 @@ class EveryElectionWrapper:
         if cancelled["cancelled"]:
             return {"cancelled_election": cancelled["metadata"]}
 
-        # merge Voter id pilot in England and
-        # Standard Northern Ireland ID requirement
-        # in the API outputs
-        voter_id = self.get_id_pilot_info() or self.get_metadata_by_key("ni-voter-id")
-        if voter_id:
-            return {"voter_id": voter_id}
-
         return None
 
     def get_metadata_by_key(self, key):
@@ -229,8 +223,21 @@ class EveryElectionWrapper:
                 return b["metadata"][key]
         return None
 
-    def get_id_pilot_info(self):
-        return self.get_metadata_by_key("2019-05-02-id-pilot")
+    def get_voter_id_status(self) -> Optional[str]:
+        """
+        For a given election, determine whether any ballots require photo ID
+        If yes, return the stub value (e.g. EA-2022)
+        If no, return None
+        """
+        ballot_with_id = next(
+            (
+                ballot
+                for ballot in self.get_all_ballots()
+                if ballot.get("requires_voter_id") and not ballot.get("cancelled")
+            ),
+            {},
+        )
+        return ballot_with_id.get("requires_voter_id")
 
     @property
     def multiple_elections(self):
