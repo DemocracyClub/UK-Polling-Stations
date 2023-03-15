@@ -3,25 +3,35 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ROH"
-    addresses_name = "2021-04-16T13:52:31.124456/Rother Democracy_Club__06May2021.tsv"
-    stations_name = "2021-04-16T13:52:31.124456/Rother Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
+    addresses_name = (
+        "2023-05-04/2023-03-15T15:43:21.335525/Democracy_Club__04May2023.tsv"
+    )
+    stations_name = (
+        "2023-05-04/2023-03-15T15:43:21.335525/Democracy_Club__04May2023.tsv"
+    )
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in []:
+        if uprn in [
+            "10002667898",  # MEAD COTTAGE, CROWHURST ROAD, CATSFIELD, BATTLE
+            "10002656457",  # THE CARAVAN, THREE GATES FARM, PASHLEY ROAD, TICEHURST, WADHURST
+            "10002651849",  # THREE GATES FARM, PASHLEY ROAD, TICEHURST, WADHURST
+            "10002668563",  # HOME FARM BARN, ETCHINGHAM
+            "10002660230",  # THE PUMP HOUSE, BREADSELL LANE, ST. LEONARDS-ON-SEA
+            "100060097122",  # BOARZWOOD, LONDON ROAD, HURST GREEN, ETCHINGHAM
+            "100062553811",  # BOARSDEN, LONDON ROAD, HURST GREEN, ETCHINGHAM
+            "100061937222",  # BOUNDARY FARM, LONDON ROAD, HURST GREEN, ETCHINGHAM
+            "10002651836",  # LUDPIT COTTAGE, LUDPIT LANE, ETCHINGHAM
+            "100062569487",  # KEEPERS COTTAGE, BRIGHTLING ROAD, ROBERTSBRIDGE
+        ]:
             return None
 
-        if record.addressline6 in ["TN31 6BG"]:
+        if record.addressline6 in [
+            "TN32 5RA",  # BODIAM, ROBERTSBRIDGE
+        ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # St Georges Church Parish Room, Crowhurst
-        if record.polling_place_id == "1416":
-            record = record._replace(polling_place_postcode="")
-
-        return super().station_record_to_dict(record)
