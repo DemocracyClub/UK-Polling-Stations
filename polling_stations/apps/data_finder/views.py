@@ -12,7 +12,6 @@ from uk_geo_utils.geocoders import MultipleCodesException
 
 from addressbase.models import Address
 from councils.models import Council
-from data_finder.models import LoggedPostcode
 from pollingstations.models import PollingStation, CustomFinder
 from uk_geo_utils.helpers import AddressSorter, Postcode
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
@@ -37,41 +36,6 @@ class LogLookUpMixin(object):
                 **self.request.session.get("utm_data"),
             )
             settings.POSTCODE_LOGGER.log(entry)
-
-        if "language" in context:
-            language = context["language"]
-        else:
-            language = self.get_language()
-
-        if "brand" in context:
-            brand = context["brand"]
-        else:
-            brand = self.request.brand
-
-        if "has_election" in context:
-            has_election = context["has_election"]
-        else:
-            has_election = None
-
-        referer = self.request.headers.get("referer")
-
-        kwargs = {
-            "postcode": postcode.without_space,
-            "had_data": bool(context["we_know_where_you_should_vote"]),
-            "location": context["location"],
-            "council": context["council"],
-            "brand": brand,
-            "language": language,
-            "view_used": view_used,
-            "has_election": has_election,
-            "referer": referer,
-        }
-        if "api_user" in context:
-            kwargs["api_user"] = context["api_user"]
-        kwargs.update(
-            {k: v[0:100] for k, v in self.request.session["utm_data"].items()}
-        )
-        LoggedPostcode.objects.create(**kwargs)
 
 
 class LanguageMixin(object):
