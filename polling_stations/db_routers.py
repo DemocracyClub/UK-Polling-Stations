@@ -6,6 +6,8 @@ from django.db import DEFAULT_DB_ALIAS
 
 class ReplicationRouter(object):
     def db_for_read(self, model, **hints):
+        if model in ("Upload", "File") and not os.environ.get("CIRCLECI"):
+            return settings.PRINCIPAL_DB_NAME
         return DEFAULT_DB_ALIAS
 
     def db_for_write(self, model, **hints):
