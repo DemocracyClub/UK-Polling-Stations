@@ -151,7 +151,10 @@ We make a Django `manage.py` command in the data_importers app for each council 
 If you are interested in helping the project by writing an import script, see the issues tagged [recommended for beginners](https://github.com/DemocracyClub/UK-Polling-Stations/issues?q=is%3Aissue+is%3Aopen+label%3A%22recommended+for+beginners%22) for more info.
 
 ## Welsh Language translations
-`./manage.py compilemessages`
+```
+django-admin makemessages -l cy --ignore='env*'
+./manage.py compilemessages
+```
 
 ## Install git hooks
 
