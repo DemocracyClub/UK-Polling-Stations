@@ -165,3 +165,7 @@ If a user requests access to the council uploader using a custom domain, the dom
 To remove a custom domain, follow these steps:
 1) Delete the entry from the CUSTOM_DOMAIN list in `polling_stations/settings/constants/uploads.py`
 2) In the admin panel, delete the UserCouncil object from the bottom of the Council profile page
+
+## Election season
+As part of preparations for upcoming elections, `NEXT_CHARISMATIC_ELECTION_DATE` will need to be updated in 
+`settings/constants/elections.py`. This var takes a "YYYY-MM-DD" format. 
