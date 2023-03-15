@@ -100,19 +100,19 @@ def send_error_email(ses, report, email_address):
     else:
         subject_str = f"{subject_str}"
 
-        message = {
-            "Subject": {
-                "Data": subject_str,
+    message = {
+        "Subject": {
+            "Data": subject_str,
+            "Charset": "utf-8",
+        },
+        "Body": {
+            "Text": {
+                "Data": f"Data for council {council} "
+                f"failed because:\n{reasons}\n\nPlease follow up.",
                 "Charset": "utf-8",
-            },
-            "Body": {
-                "Text": {
-                    "Data": f"Data for council {council} "
-                    f"failed because:\n{reasons}\n\nPlease follow up.",
-                    "Charset": "utf-8",
-                }
-            },
-        }
+            }
+        },
+    }
     ses.send_email(
         Source=source, Destination={"ToAddresses": [email_address]}, Message=message
     )
