@@ -1,30 +1,13 @@
-from data_importers.management.commands import BaseDemocracyCountsCsvImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseDemocracyCountsCsvImporter):
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BNS"
     addresses_name = (
-        "2022-05-05/2022-03-25T09:18:02.587996/Democracy Club Polling Districts.csv"
+        "2023-05-04/2023-03-15T14:08:01.517673/Democracy_Club__04May2023(1).tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-25T09:18:02.587996/Democracy Club Polling Stations.csv"
+        "2023-05-04/2023-03-15T14:08:01.517673/Democracy_Club__04May2023(1).tsv"
     )
-    elections = ["2022-05-05"]
-
-    def station_record_to_dict(self, record):
-        # TEMPORARY BUILDING AT GRASMERE CRESCENT
-        if record.stationcode == "24":
-            record = record._replace(xordinate="", yordinate="")
-
-        return super().station_record_to_dict(record)
-
-    def address_record_to_dict(self, record):
-        uprn = record.uprn.strip().lstrip("0")
-
-        if uprn in [
-            "2007020712",
-            "2007021402",
-        ]:
-            return None
-
-        return super().address_record_to_dict(record)
+    elections = ["2023-05-04"]
+    csv_delimiter = "\t"
