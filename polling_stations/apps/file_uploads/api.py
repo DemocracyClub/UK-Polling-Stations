@@ -54,6 +54,8 @@ class UploadSerializer(serializers.ModelSerializer):
             if (
                 file_set.first().ems == "Democracy Counts" and file_set.count() == 2
             ) or file_set.first().ems != "Democracy Counts":
+                upload.github_issue = validated_data["github_issue"]
+                upload.save()
                 upload.make_pull_request()
                 upload.send_confirmation_email()
         else:
