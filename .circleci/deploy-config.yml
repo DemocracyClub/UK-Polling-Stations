@@ -109,6 +109,12 @@ jobs:
             . .venv/bin/activate
             coveralls
 
+      # In the event the build has failed, alert the dev team
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+          channel: $SLACK_DEFAULT_CHANNEL
+
   run_new_imports:
     docker:
       - image: cimg/python:3.10.8-browsers
@@ -132,6 +138,11 @@ jobs:
             export CI_DB_HOST=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_HOST' --output text`
             export S3_DATA_BUCKET=pollingstations.elections.production
             python manage.py run_new_imports
+      # In the event the imports have failed, alert the dev team
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+          channel: $SLACK_DEFAULT_CHANNEL
 
   cdk_synth:
     machine:
@@ -270,6 +281,11 @@ jobs:
             export S3_DATA_BUCKET=pollingstations.elections.production
             python manage.py run_new_imports --post-deploy
 
+      # In the event the deployment has failed, alert the dev team
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+          channel: $SLACK_DEFAULT_CHANNEL
 
 
 workflows:
@@ -278,14 +294,15 @@ workflows:
     # NB the script called by run_new_imports will bail early if there are also application changes present
     when: << pipeline.parameters.imports-changed >>
     jobs:
-    - build_and_test
+    - build_and_test:
+        context: [slack-secrets]
     ###############
     # DEVELOPMENT #
     ###############
     - run_new_imports:
         name: "Development: Run New Imports"
         requires: [build_and_test]
-        context: [deployment-development-wdiv]
+        context: [deployment-development-wdiv, slack-secrets]
         filters: { branches: { only: [ development ] } }
     ###########
     # STAGING #
@@ -293,7 +310,7 @@ workflows:
     - run_new_imports:
         name: "Staging: Run New Imports"
         requires: [build_and_test]
-        context: [deployment-staging-wdiv]
+        context: [deployment-staging-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
     ##############
     # PRODUCTION #
@@ -301,7 +318,7 @@ workflows:
     - run_new_imports:
         name: "Production: Run New Imports"
         requires: [build_and_test, "Staging: Run New Imports"]
-        context: [deployment-production-wdiv]
+        context: [deployment-production-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
 
 
@@ -309,7 +326,8 @@ workflows:
     when:
       or: [ << pipeline.parameters.application-changed >>, << pipeline.parameters.eoni-changed >> ]
     jobs:
-    - build_and_test
+    - build_and_test:
+        context: [slack-secrets]
     ###############
     # DEVELOPMENT #
     ###############
@@ -340,7 +358,7 @@ workflows:
         # NB if no imports have changed this is a no-op
         name: "Development: Run New Imports Post Deploy"
         requires: ["Development: AWS CodeDeploy"]
-        context: [deployment-development-wdiv]
+        context: [deployment-development-wdiv, slack-secrets]
         filters: { branches: { only: [ development ] } }
 
     ###########
@@ -367,7 +385,7 @@ workflows:
         # NB if no imports have changed this is a no-op
         name: "Staging: Run New Imports Post Deploy"
         requires: ["Staging: AWS CodeDeploy"]
-        context: [deployment-staging-wdiv]
+        context: [deployment-staging-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
 
     ##############
@@ -395,5 +413,5 @@ workflows:
         # NB if no imports have changed this is a no-op
         name: "Production: Run New Imports Post Deploy"
         requires: ["Production: AWS CodeDeploy"]
-        context: [deployment-production-wdiv]
+        context: [deployment-production-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
