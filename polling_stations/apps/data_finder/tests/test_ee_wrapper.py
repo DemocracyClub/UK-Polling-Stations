@@ -52,6 +52,39 @@ def get_data_group_and_ballot(self, query_url):
     ]
 
 
+def get_data_all_ballots_have_id_requirements(self, query_url):
+    return [
+        {
+            "election_id": f"foo.bar.baz.{(datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')}",
+            "election_title": "some election",
+            "group_type": None,
+            "cancelled": False,
+            "poll_open_date": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d"),
+            "requires_voter_id": "EA-2022",
+        }
+    ]
+
+
+def get_data_cancelled_ballot_has_id_requirements(self, query_url):
+    return [
+        {
+            "election_id": f"foo.bar.baz.{(datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')}",
+            "election_title": "some election",
+            "group_type": None,
+            "cancelled": True,
+            "poll_open_date": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d"),
+            "requires_voter_id": "EA-2022",
+        }
+    ]
+
+
+def get_data_some_ballots_have_id_requirements(self, query_url):
+    ballots = get_data_all_ballots_have_id_requirements(
+        self, query_url
+    ) + get_data_group_and_ballot(self, query_url)
+    return ballots
+
+
 def get_data_with_elections(self, query_url):
     return [
         {
@@ -76,9 +109,6 @@ def get_data_with_elections(self, query_url):
             "election_title": "some election",
             "group_type": None,
             "explanation": "some text",  # explanation key contains text
-            "metadata": {
-                "2019-05-02-id-pilot": {"this election": "has an ID pilot"}
-            },  # metadata key is an object
             "cancelled": False,
             "poll_open_date": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d"),
         },
@@ -99,7 +129,6 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
-        self.assertEqual(None, ee.get_id_pilot_info())
         self.assertFalse(ee.multiple_elections)
 
     @override_settings(
@@ -117,7 +146,6 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
-        self.assertEqual(None, ee.get_id_pilot_info())
         self.assertFalse(ee.multiple_elections)
 
     @override_settings(
@@ -137,10 +165,6 @@ class EveryElectionWrapperTests(TestCase):
         )
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
-        self.assertEqual(
-            {"voter_id": {"this election": "has an ID pilot"}}, ee.get_metadata()
-        )
-        self.assertEqual({"this election": "has an ID pilot"}, ee.get_id_pilot_info())
         self.assertTrue(ee.multiple_elections)
 
     @override_settings(
@@ -162,7 +186,6 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
-        self.assertEqual(None, ee.get_id_pilot_info())
         self.assertFalse(ee.multiple_elections)
 
     @override_settings(
@@ -180,7 +203,6 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
-        self.assertEqual(None, ee.get_id_pilot_info())
         self.assertFalse(ee.multiple_elections)
 
     @override_settings(
@@ -198,7 +220,6 @@ class EveryElectionWrapperTests(TestCase):
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(None, ee.get_metadata())
-        self.assertEqual(None, ee.get_id_pilot_info())
         self.assertFalse(ee.multiple_elections)
 
     @override_settings(
@@ -260,6 +281,41 @@ class EveryElectionWrapperTests(TestCase):
         self.assertTrue(ee.request_success)
         self.assertFalse(ee.has_election())
         self.assertFalse(ee.multiple_elections)
+
+    @mock.patch(
+        "data_finder.helpers.EveryElectionWrapper.get_data",
+        get_data_all_ballots_have_id_requirements,
+    )
+    def test_get_voter_id_status_all_ballots_need_id(self):
+        ee = EveryElectionWrapper(postcode="AA11AA")
+        status = ee.get_voter_id_status()
+        self.assertEqual(status, "EA-2022")
+
+    @mock.patch(
+        "data_finder.helpers.EveryElectionWrapper.get_data",
+        get_data_some_ballots_have_id_requirements,
+    )
+    def test_get_voter_id_status_not_all_ballots_need_id(self):
+        ee = EveryElectionWrapper(postcode="AA11AA")
+        status = ee.get_voter_id_status()
+        self.assertEqual(status, "EA-2022")
+
+    @mock.patch(
+        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot
+    )
+    def test_get_voter_id_status_no_ballots_need_id(self):
+        ee = EveryElectionWrapper(postcode="AA11AA")
+        status = ee.get_voter_id_status()
+        self.assertEqual(status, None)
+
+    @mock.patch(
+        "data_finder.helpers.EveryElectionWrapper.get_data",
+        get_data_cancelled_ballot_has_id_requirements,
+    )
+    def test_get_voter_id_status_cancelled_ballot(self):
+        ee = EveryElectionWrapper(postcode="AA11AA")
+        status = ee.get_voter_id_status()
+        self.assertEqual(status, None)
 
 
 def get_data_two_ballots_one_cancelled(self, query_url):
