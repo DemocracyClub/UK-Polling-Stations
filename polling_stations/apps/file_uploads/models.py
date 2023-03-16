@@ -149,7 +149,7 @@ class Upload(models.Model):
     @property
     def pr_body(self):
         message = f"PR triggered by upload at {self.github_issue}"
-        server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
+        server_env = getattr(settings, "SERVER_ENVIRONMENT", "unknown_env")
         if server_env == "production":
             return message
         elif server_env in ["staging", "development", "test"]:
@@ -158,7 +158,7 @@ class Upload(models.Model):
             return f"**NB triggered from local machine**\n{message}"
 
     def send_confirmation_email(self):
-        server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
+        server_env = getattr(settings, "SERVER_ENVIRONMENT", "unknown_env")
         # If we're in production, and the user has been deleted, return early.
         # We don't want to send an email to a non-existent user and we already
         # have github issues to track successful uploads
