@@ -110,5 +110,7 @@ def test_northern_ireland(page, live_server):
             page.locator("text=The Electoral Office for Northern Ireland")
         ).not_to_be_empty()
         expect(
-            page.locator("text=You will need photographic identification")
-        ).not_to_be_empty()
+            page.locator(
+                "text=You will need to take photo ID to vote at a polling station in this election"
+            )
+        )
