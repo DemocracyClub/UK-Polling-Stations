@@ -9,14 +9,16 @@ class Command(BaseXpressWebLookupCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
             "10013683413",  # 47 WELLESLEY COURT, DARNEL ROAD, WATERLOOVILLE
         ]:
             return None
-        if record.addressline6 in [
+        if record.postcode in [
             "PO11 9LA",
+            "PO8 9UB",
+            "PO10 7HN",
         ]:
             return None
 
