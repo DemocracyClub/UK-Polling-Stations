@@ -5,6 +5,7 @@ set -xeEo pipefail
 # Optimise DB for replication
 su -c "/var/www/polling_stations/postgres_writes_config.sh" - polling_stations
 echo "fsync = off" | sudo tee -a /etc/postgresql/14/main/postgresql.conf
+echo "wal_receiver_timeout = 1200000" | sudo tee -a /etc/postgresql/14/main/postgresql.conf
 sudo service postgresql restart
 
 # Do the replication
