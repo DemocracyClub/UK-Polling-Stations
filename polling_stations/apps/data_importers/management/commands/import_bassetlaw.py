@@ -1,62 +1,47 @@
 from django.contrib.gis.geos import Point
-from data_importers.management.commands import (
-    BaseXpressDCCsvInconsistentPostcodesImporter,
-)
+
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
-    council_id = "E07000171"
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = "BAE"
     addresses_name = (
-        "parl.2019-12-12/Version 2/RevisedDemocracy_Club__12December2019.tsv"
+        "2023-05-04/2023-03-17T15:33:20.577893/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "parl.2019-12-12/Version 2/RevisedDemocracy_Club__12December2019.tsv"
+        "2023-05-04/2023-03-17T15:33:20.577893/Democracy_Club__04May2023.tsv"
     )
-    elections = ["parl.2019-12-12"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
-    allow_station_point_from_postcode = False
 
     def address_record_to_dict(self, record):
-        if record.property_urn == "10013978026":
-            record = record._replace(addressline6="NG22 0GW")
-        if record.property_urn == "10093191105":
-            record = record._replace(addressline6="S81 7SN")
-        if record.property_urn == "100031282735":
-            record = record._replace(addressline6="S80 3NL")
-
-        # As with Euros I think UPRN data for Bassetlaw was introducing more
-        # problems than it was solving. Still safer to ignore.
-        record = record._replace(property_urn="")
-        rec = super().address_record_to_dict(record)
-
         if record.addressline6 in [
+            "S80 2DS",
+            "S81 7HT",
             "DN22 8AH",
+            "S80 1QU",
         ]:
             return None
 
-        return rec
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id == "9674":  # Lound Village Hall
+        if record.polling_place_id == "12602":  # Carlton Youth Centre
+            record = record._replace(polling_place_postcode="")
+        if record.polling_place_id == "12331":  # Lound Village Hall
             record = record._replace(polling_place_postcode="DN22 8RX")
-        if record.polling_place_id == "9670":  # Barnby Moor Village Hall
+        if record.polling_place_id == "12328":  # Barnby Moor Village Hall
             record = record._replace(polling_place_postcode="DN22 8QU")
-        if record.polling_place_id == "9897":  # End-Gilbert Avenue
-            record = record._replace(polling_place_postcode="NG22 0JB")
-        if record.polling_place_id == "9632":  # Community Room - Westmorland House
-            record = record._replace(polling_place_postcode="DN11 8BY")
-        if record.polling_place_id == "9752":  # Kingfisher Walk
-            record = record._replace(polling_place_postcode="S81 8TQ")
-        if record.polling_place_id == "9832":  # The Butter Market
+        if record.polling_place_id == "12560":  # The Butter Market
             record = record._replace(polling_place_postcode="DN22 6DB")
-        if record.polling_place_id == "9636":  # Langold Village Hall - Committee Room
+        if record.polling_place_id == "12527":  # Langold Village Hall - Committee Room
             record = record._replace(polling_place_postcode="S81 9SW")
-        if record.polling_place_id == "9624":  # Harworth & Bircotes Town Hall
+        if record.polling_place_id == "12392":  # Harworth & Bircotes Town Hall
             record = record._replace(polling_place_postcode="DN11 8JP")
 
         rec = super().station_record_to_dict(record)
         # Manton Parish Hall - correction brought forward from locals.
-        if record.polling_place_id == "9777":
+        if record.polling_place_id == "12284":
             rec["location"] = Point(-1.1105063, 53.2957291, srid=4326)
 
         return rec
