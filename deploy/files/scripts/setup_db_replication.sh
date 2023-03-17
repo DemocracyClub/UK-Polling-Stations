@@ -34,7 +34,7 @@ psql "$DB" -U "$DB_USER" -c 'alter table addressbase_uprntocouncil drop constrai
 psql "$DB" -U "$DB_USER" -c 'DROP INDEX address_location_gist, address_postcode_idx, address_postcode_like_idx, address_uprn_like_idx, uprntocouncil_adv_v_station_idx, uprntocouncil_uprn_like_idx, uprntocouncil_lad_idx;'
 
 # Set up subscription
-psql "$DB" -U "$DB_USER" -c "CREATE SUBSCRIPTION $SUBSCRIPTION CONNECTION 'dbname=$RDS_DB_NAME host=$RDS_DB_HOST user=postgres password=$RDS_DB_PASSWORD' PUBLICATION alltables;"
+psql "$DB" -U "$DB_USER" -c "CREATE SUBSCRIPTION $SUBSCRIPTION CONNECTION 'dbname=$RDS_DB_NAME host=$RDS_DB_HOST user=postgres password=$RDS_DB_PASSWORD' PUBLICATION alltables with (streaming=true, binary=true);"
 
 # Wait for all tables to finish initial sync
 echo "starting initial db sync"
