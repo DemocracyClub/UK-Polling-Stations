@@ -12,11 +12,9 @@ class FileInline(admin.StackedInline):
 class UploadAdmin(ReadOnlyModelAdminMixin, admin.ModelAdmin):
     inlines = [FileInline]
     search_fields = [
-        "gss",
         "election_date",
         "github_issue",
         "timestamp",
-        "uploaded_user",
     ]
 
 
