@@ -4,36 +4,30 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WOK"
     addresses_name = (
-        "2022-05-05/2022-03-16T15:20:21.336512/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-20T16:45:40.415434/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-16T15:20:21.336512/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-20T16:45:40.415434/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
-    csv_encoding = "windows-1252"
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "14008163",  # LOWER COTTAGE, WHITE HORSE LANE, FINCHAMPSTEAD, WOKINGHAM
+            "14013638",  # 116 ELM ROAD, EARLEY, READING
+            "14013639",  # 118 ELM ROAD, EARLEY, READING
+            "10024046704",  # 43 BROAD STREET, WOKINGHAM
         ]:
             return None
 
         if record.addressline6 in [
+            "RG2 9LG",
             "RG6 4AG",
             "RG7 1NL",
-            "RG10 9HN",
-            "RG7 1TB",
+            "RG7 1PS",  # BASINGSTOKE ROAD, SPENCERS WOOD, READING
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Civic Offices Shute End Wokingham Berkshire RG40 1WH
-        if record.polling_place_id == "2891":
-            record = record._replace(polling_place_postcode="")
-
-        return super().station_record_to_dict(record)
