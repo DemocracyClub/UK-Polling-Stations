@@ -1,65 +1,11 @@
-from django.contrib.gis.geos import Point
-
 from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SHF"
-    addresses_name = (
-        "2022-05-05/2022-03-28T12:49:20.231925/polling_station_export-2022-03-28.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-03-28T12:49:20.231925/polling_station_export-2022-03-28.csv"
-    )
-    elections = ["2022-05-05"]
-
-    def apply_council_station_corrections(self, record):
-        # Has to be applied in both station and address methods, so that the generated station ID
-        # is consistent.
-
-        # Corrections from council: https://trello.com/c/Od6Ski5i
-        if record.pollingstationnumber in ("62"):
-            record = record._replace(
-                pollingstationname="Cabin on land adjacent to 4 Handsworth Avenue",
-                pollingstationaddress_1="",
-                pollingstationaddress_2="Sheffield",
-                pollingstationpostcode="S9 4BT",
-            )
-
-        if record.pollingstationnumber in ("3"):
-            record = record._replace(
-                pollingstationname="Cabin on land at Chancet Wood Drive ",
-                pollingstationaddress_1="(opposite the junction with Chancet Wood Close)",
-                pollingstationaddress_2="Sheffield",
-                pollingstationpostcode="S8 7TR",
-            )
-        return record
-
-    def station_record_to_dict(self, record):
-        record = self.apply_council_station_corrections(record)
-
-        # Laycock's Sports Club, Archer Road, Sheffield
-        if record.pollingstationnumber == "109":
-            record = record._replace(pollingstationpostcode="S8 0JZ")  # was S8 0JY
-
-        rec = super().station_record_to_dict(record)
-
-        locations = {
-            "117-hillsborough-trinity-methodist-church-lennox-rd-entrance": Point(
-                -1.504240, 53.408718, srid=4326
-            ),  # user issue report #82; wrong location is that of another station
-            "62-cabin-on-land-adjacent-to-4-handsworth-avenue": Point(
-                -1.402476, 53.382645, srid=4326
-            ),  # Council fix - https://trello.com/c/Od6Ski5i
-            "3-cabin-on-land-at-chancet-wood-drive": Point(
-                -1.482287, 53.332078, srid=4326
-            ),  # Council fix - https://trello.com/c/Od6Ski5i
-        }
-
-        if rec and rec["internal_council_id"] in locations:
-            rec["location"] = locations[rec["internal_council_id"]]
-
-        return rec
+    addresses_name = "2023-05-04/2023-03-20T15:52:31.211109/Eros_SQL_Output009.csv"
+    stations_name = "2023-05-04/2023-03-20T15:52:31.211109/Eros_SQL_Output009.csv"
+    elections = ["2023-05-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -85,11 +31,13 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         if record.housepostcode in [
-            "S1 4TA",
-            "S35 9XS",
+            # split
             "S8 0PL",
             "S10 3GW",
+            "S36 2QF",
+            "S1 4TA",
             "S10 3LG",
+            "S35 9XS",
         ]:
             return None
 
