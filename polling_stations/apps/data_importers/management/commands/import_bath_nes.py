@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "BAS"
-    addresses_name = "2021-03-05T10:59:45.248759/polling_station_export-2021-03-04.csv"
-    stations_name = "2021-03-05T10:59:45.248759/polling_station_export-2021-03-04.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2023-05-04/2023-03-20T14:03:01.811295/Eros_SQL_Output001.csv"
+    stations_name = "2023-05-04/2023-03-20T14:03:01.811295/Eros_SQL_Output001.csv"
+    elections = ["2023-05-04"]
 
     # Note: these warning has been checked and all looks fine.
     # > WARNING: Polling stations 'Welton Vale Community Room 9 Welton Vale' and
@@ -13,23 +13,18 @@ class Command(BaseHalaroseCsvImporter):
     # > location
     #
     # The centroid is outside, but the polling place is within.
-    # > WARNING: Polling station 85-prattens-westfield-amateur-sports-club is in Mendip
+    # > WARNING: Polling station Prattens Westfield Amateur Sports Club is in Mendip
     # > District Council (MEN) but target council is Bath & North East Somerset Council
     # > (BAS) - manual check recommended
 
     def address_record_to_dict(self, record):
-        uprn = record.uprn.strip().lstrip("0")
-
-        if record.housepostcode in ["BS31 1AJ", "BA2 2RZ", "BA3 4GA", "BS31 1GB"]:
-            return None  # split
-
-        if record.pollingstationnumber == "n/a":
+        if record.housepostcode in [
+            # split
+            "BA2 2RZ",
+            "BA2 6DR",
+            "BA2 5AD",
+            "BS31 2GF",
+        ]:
             return None
-
-        if uprn == "10093715348":  # 'O' -> '0'
-            record = record._replace(housepostcode="BS14 0FR")
-
-        if record.houseid.strip() == "9002893":  # 'O' -> '0'
-            record = record._replace(housepostcode="BA2 0LH")
 
         return super().address_record_to_dict(record)
