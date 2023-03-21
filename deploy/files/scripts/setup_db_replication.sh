@@ -38,11 +38,15 @@ psql "$DB" -U "$DB_USER" -c "CREATE SUBSCRIPTION $SUBSCRIPTION CONNECTION 'dbnam
 
 # Wait for all tables to finish initial sync
 echo "starting initial db sync"
-WORKER_STATS=("not-set")
-while [ "${WORKER_STATS[0]}" !=  "r" ]
+WORKER_STATS=""
+while [ "$WORKER_STATS" != "r" ]
 do
-    WORKER_STATS=$(psql polling_stations -U polling_stations -AXqtc "select distinct srsubstate from pg_subscription_rel;")
+    WORKER_STATS=$(psql polling_stations -U polling_stations -AXqtc "select string_agg(distinct srsubstate, '' order by srsubstate) from pg_subscription_rel;")
     sleep 15
+    if [ "$WORKER_STATS" = "fr" ]; then
+      psql "$DB" -U "$DB_USER" -c "DROP SUBSCRIPTION $SUBSCRIPTION;"
+      psql "$DB" -U "$DB_USER" -c "CREATE SUBSCRIPTION $SUBSCRIPTION CONNECTION 'dbname=$RDS_DB_NAME host=$RDS_DB_HOST user=postgres password=$RDS_DB_PASSWORD' PUBLICATION alltables with (streaming=true, binary=true, copy_data=false);"
+    fi
 done
 echo "initial db sync complete"
 
