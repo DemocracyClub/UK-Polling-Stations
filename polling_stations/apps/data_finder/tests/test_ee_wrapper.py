@@ -399,11 +399,13 @@ def get_data_one_cancelled_ballot_with_replacement(self, query_url):
         "replaced_by": None,
         "metadata": None,
     }
-    if query_url.endswith("/api/elections.json?postcode=AA1 1AA&future=1&current=1"):
+    if query_url.endswith(
+        "/api/elections.json?postcode=AA1 1AA&future=1&current=1&identifier_type=ballot"
+    ):
         return [this_election, that_election]
     if query_url.endswith("/api/elections/local.foo.thatdate.json"):
         return that_election
-    raise Exception("no fixture match for query_url")
+    raise Exception(f"no fixture match for {query_url=}")
 
 
 def get_data_one_cancelled_ballot_with_metadata(self, query_url):
