@@ -46,7 +46,7 @@ class RoutingHelper:
         council_map = {
             v[0]: v
             for v in CouncilGeography.objects.filter(
-                gss__in=gss_codes.values()
+                gss__in=set(gss_codes.values())
             ).values_list("gss", "council_id", "council__name")
         }
         """
