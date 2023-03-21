@@ -65,6 +65,10 @@ psql "$DB" -U "$DB_USER" -c 'CREATE INDEX uprntocouncil_adv_v_station_idx ON pub
 psql "$DB" -U "$DB_USER" -c 'CREATE INDEX uprntocouncil_uprn_like_idx ON public.addressbase_uprntocouncil USING btree (uprn varchar_pattern_ops);'
 psql "$DB" -U "$DB_USER" -c 'CREATE INDEX uprntocouncil_lad_idx ON public.addressbase_uprntocouncil USING btree (lad);'
 
-echo "...indexes rebuilt."
+echo "...indexes rebuilt. Analyzing..."
+
+psql "$DB" -U "$DB_USER" -c 'ANALYZE;'
+
+echo "...ANALYZE complete, DB ready for reads."
 
 touch ~/db_replication_complete
