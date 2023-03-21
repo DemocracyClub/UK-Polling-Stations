@@ -84,7 +84,7 @@ class RoutingHelper:
         else:
             return False
 
-    @property
+    @cached_property
     def route_type(self):
         if not self.has_addresses:
             # Postcode is not in addressbase
