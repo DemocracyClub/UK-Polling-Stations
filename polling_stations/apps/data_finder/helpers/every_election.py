@@ -33,23 +33,29 @@ class EveryElectionWrapper:
             self.request_success = False
 
     def get_data_by_postcode(self, postcode):
-        query_url = "%sapi/elections.json?postcode=%s&future=1&current=1" % (
-            settings.EE_BASE,
-            postcode,
+        query_url = (
+            "%sapi/elections.json?postcode=%s&future=1&current=1&identifier_type=ballot"
+            % (
+                settings.EE_BASE,
+                postcode,
+            )
         )
         return self.get_data(query_url)
 
     def get_data_by_point(self, point):
-        query_url = "%sapi/elections.json?coords=%s,%s&future=1&current=1" % (
-            settings.EE_BASE,
-            point.y,
-            point.x,
+        query_url = (
+            "%sapi/elections.json?coords=%s,%s&future=1&current=1&identifier_type=ballot"
+            % (
+                settings.EE_BASE,
+                point.y,
+                point.x,
+            )
         )
         return self.get_data(query_url)
 
     def get_election_intersecting_local_authority(self, council_id):
         query_url = (
-            "%sapi/elections.json?election_intersects_local_authority=%s&future=1"
+            "%sapi/elections.json?election_intersects_local_authority=%s&future=1&identifier_type=ballot"
             % (
                 settings.EE_BASE,
                 council_id,
