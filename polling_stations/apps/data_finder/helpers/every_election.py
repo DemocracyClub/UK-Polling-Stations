@@ -5,6 +5,8 @@ from django.conf import settings
 from django.core.cache import cache
 from uk_geo_utils.helpers import Postcode
 
+session = requests.session()
+
 
 class EveryElectionWrapper:
     def __init__(self, postcode=None, point=None, council_id=None):
@@ -63,7 +65,7 @@ class EveryElectionWrapper:
             if hasattr(settings, "CUSTOM_UA"):
                 headers["User-Agent"] = settings.CUSTOM_UA
 
-            res = requests.get(query_url, timeout=10, headers=headers)
+            res = session.get(query_url, timeout=10, headers=headers)
 
             if res.status_code != 200:
                 res.raise_for_status()
