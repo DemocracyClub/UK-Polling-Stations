@@ -64,8 +64,10 @@ class EveryElectionWrapper:
         # Only used by council users atm so seems safe to cache for a whole day
         return self.get_data(query_url, cache_hours=24)
 
-    def get_data(self, query_url, cache_hours=0.5):
-        res_json = cache.get(query_url)
+    def get_data(self, query_url, cache_hours=0):
+        res_json = None
+        if cache_hours:
+            res_json = cache.get(query_url)
         if not res_json:
             headers = {}
             if hasattr(settings, "CUSTOM_UA"):
@@ -77,7 +79,8 @@ class EveryElectionWrapper:
                 res.raise_for_status()
 
             res_json = res.json()
-            cache.set(query_url, res_json, 60 * 60 * cache_hours)
+            if cache_hours:
+                cache.set(query_url, res_json, 60 * 60 * cache_hours)
 
         if "results" in res_json:
             return res_json["results"]
