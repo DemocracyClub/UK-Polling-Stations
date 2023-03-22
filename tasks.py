@@ -5,6 +5,10 @@ import sys
 from invoke import task
 import boto3
 
+from cdk.lambdas.ssm_run_command_once.command_runner import (
+    RunOncePerTagRunCommandClient,
+)
+
 
 def get_ssm_parameter_value(client, key):
     response = client.get_parameter(Name=key)
@@ -38,6 +42,19 @@ def git_revision():
         revision = "Unknown"
 
     return revision
+
+
+@task
+def teardown_council(ctx, environment, reg_code):
+    """
+    AWS_PROFILE=dev-wdiv-dc inv teardown-council development BRO
+    """
+    tag_name = "dc-environment"
+    tag_value = environment
+    command = f"/usr/bin/manage-py-command teardown --council {reg_code}"
+    runner = RunOncePerTagRunCommandClient(tag_name=tag_name, tag_value=tag_value)
+    runner.run_command_on_single_instance(command)
+    print(runner.command_invocation)
 
 
 @task
