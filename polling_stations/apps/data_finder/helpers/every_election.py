@@ -281,3 +281,7 @@ class EmptyEveryElectionWrapper:
     @staticmethod
     def get_ballots_for_next_date() -> List:
         return []
+
+    @staticmethod
+    def get_all_ballots() -> List:
+        return []
