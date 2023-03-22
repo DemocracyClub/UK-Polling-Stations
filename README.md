@@ -167,5 +167,5 @@ To remove a custom domain, follow these steps:
 2) In the admin panel, delete the UserCouncil object from the bottom of the Council profile page
 
 ## Election season
-As part of preparations for upcoming elections, `NEXT_CHARISMATIC_ELECTION_DATE` will need to be updated in 
-`settings/constants/elections.py`. This var takes a "YYYY-MM-DD" format. 
+As part of preparations for upcoming elections, `NEXT_CHARISMATIC_ELECTION_DATE` will need to be updated in
+`settings/constants/elections.py`. This var takes a "YYYY-MM-DD" format.
