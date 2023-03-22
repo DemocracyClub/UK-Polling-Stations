@@ -4,6 +4,7 @@ from rest_framework.viewsets import ViewSet
 from django.core.exceptions import ObjectDoesNotExist
 from uk_geo_utils.geocoders import MultipleCodesException
 
+from data_finder.helpers.every_election import EmptyEveryElectionWrapper
 from data_finder.views import LogLookUpMixin
 from data_finder.helpers import (
     EveryElectionWrapper,
@@ -53,7 +54,9 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return routing_helper.addresses[0].uprntocouncil.advance_voting_station
         return None
 
-    def get_ee_wrapper(self, postcode):
+    def get_ee_wrapper(self, postcode, rh):
+        if rh.route_type == "multiple_addresses":
+            return EmptyEveryElectionWrapper()
         return EveryElectionWrapper(postcode)
 
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
@@ -87,7 +90,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         ret["polling_station_known"] = False
         ret["polling_station"] = None
 
-        ee = self.get_ee_wrapper(postcode)
+        ee = self.get_ee_wrapper(postcode, rh)
         has_election = ee.has_election()
         if has_election:
             # get polling station if there is an election in this area

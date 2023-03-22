@@ -24,6 +24,7 @@ from .helpers import (
     PostcodeError,
     RoutingHelper,
 )
+from .helpers.every_election import EmptyEveryElectionWrapper
 
 
 class LogLookUpMixin(object):
@@ -120,8 +121,12 @@ class BasePollingStationView(
         if hasattr(self, "address"):
             return self.address.uprntocouncil.advance_voting_station
 
-    def get_ee_wrapper(self):
-        return EveryElectionWrapper(postcode=self.postcode)
+    def get_ee_wrapper(self, rh):
+        if rh and rh.route_type == "multiple_addresses":
+            return EmptyEveryElectionWrapper()
+        if not self.location or self.location.tuple == (0.0, 0.0):
+            return EveryElectionWrapper(postcode=self.postcode)
+        return EveryElectionWrapper(point=self.location)
 
     def get_directions(self):
         if self.location and self.station and self.station.location:
@@ -153,7 +158,7 @@ class BasePollingStationView(
         self.station = self.get_station()
         self.directions = self.get_directions()
 
-        ee = self.get_ee_wrapper()
+        ee = self.get_ee_wrapper(context.get("rh"))
         context["has_election"] = ee.has_election()
         context["multiple_elections"] = ee.multiple_elections
         context["election_explainers"] = ee.get_explanations()
@@ -194,6 +199,7 @@ class PostcodeView(BasePollingStationView):
             return HttpResponseRedirect(reverse("home"))
 
         rh = RoutingHelper(self.kwargs["postcode"])
+        kwargs["rh"] = rh
 
         if rh.view != "postcode_view":
             return HttpResponseRedirect(rh.get_canonical_url(request))
@@ -237,7 +243,7 @@ class AddressView(BasePollingStationView):
     def get_station(self):
         return self.address.polling_station
 
-    def get_ee_wrapper(self):
+    def get_ee_wrapper(self, rh=None):
         return EveryElectionWrapper(point=self.address.location)
 
 

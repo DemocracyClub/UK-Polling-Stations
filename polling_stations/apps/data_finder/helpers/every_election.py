@@ -1,5 +1,7 @@
 from datetime import datetime
 from typing import Optional
+from typing import List
+
 import requests
 from django.conf import settings
 from django.core.cache import cache
@@ -257,3 +259,25 @@ class EveryElectionWrapper:
             return len(uncancelled_ballots) > 1
         else:
             return False
+
+
+class EmptyEveryElectionWrapper:
+    """
+    There are times when we know that we don't want to query EE, for example
+    when we are going to show an address picker.
+
+    This class allows us to swap out the EveryElectionWrapper while keeping
+    exisitng code the same.
+    """
+
+    @staticmethod
+    def has_election() -> bool:
+        return False
+
+    @staticmethod
+    def get_metadata() -> None:
+        return None
+
+    @staticmethod
+    def get_ballots_for_next_date() -> List:
+        return []

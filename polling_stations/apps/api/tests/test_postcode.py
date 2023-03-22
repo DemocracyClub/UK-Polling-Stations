@@ -81,7 +81,7 @@ class PostcodeTest(APITestCase):
         self.request.user = AnonymousUser()
         self.request = APIView().initialize_request(self.request)
         self.endpoint = PostcodeViewSet()
-        self.endpoint.get_ee_wrapper = lambda x: EEMockWithElection()
+        self.endpoint.get_ee_wrapper = lambda x, rh: EEMockWithElection()
 
     def test_address_list(self):
         response = self.endpoint.retrieve(
@@ -130,7 +130,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual(1, len(response.data["ballots"]))
 
     def test_station_found_but_no_election(self):
-        self.endpoint.get_ee_wrapper = lambda x: EEMockWithoutElection()
+        self.endpoint.get_ee_wrapper = lambda x, rh: EEMockWithoutElection()
         response = self.endpoint.retrieve(
             self.request, "CC11CC", "json", geocoder=mock_geocode, log=False
         )
