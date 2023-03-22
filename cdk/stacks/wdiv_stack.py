@@ -23,7 +23,7 @@ from constructs import Construct
 #
 # sys.path.append("..")
 
-EE_IMAGE = "ami-0831bf28673eba8f4"
+EE_IMAGE = "ami-0a3db55acb952eae2"
 MONITORING_ACCOUNTS = {
     "development": "985364114241",
     "staging": "985364114241",
