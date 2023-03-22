@@ -5,6 +5,7 @@ import os
 from aws_cdk import core as cdk
 from aws_cdk.core import Tags
 
+from stacks.command_runner_stack import WDIVOncePerTagCommandRunner
 from stacks.wdiv_s3_trigger_stack import WDIVS3TriggerStack
 from stacks.wdiv_stack import WDIVStack
 
@@ -38,6 +39,8 @@ WDIVStack(
 )
 
 WDIVS3TriggerStack(app, "WDIVS3TriggerStack", env=env)
+
+WDIVOncePerTagCommandRunner(app, "WDIVOncePerTagCommandRunner", env=env)
 
 Tags.of(app).add("dc-product", "wdiv")
 Tags.of(app).add("dc-environment", dc_environment)
