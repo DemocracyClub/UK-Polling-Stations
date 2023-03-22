@@ -290,6 +290,9 @@ class WDIVStack(Stack):
                 role_name="CodeDeployEC2InstanceProfile",
                 managed_policies=[
                     iam.ManagedPolicy.from_aws_managed_policy_name(
+                        "AmazonSSMManagedInstanceCore",
+                    ),
+                    iam.ManagedPolicy.from_aws_managed_policy_name(
                         "AmazonSSMReadOnlyAccess",
                     ),
                     iam.ManagedPolicy.from_aws_managed_policy_name(

@@ -9,7 +9,7 @@ from aws_cdk import (
 from aws_cdk.core import Construct, Stack
 
 
-class EEOncePerTagCommandRunner(Stack):
+class WDIVOncePerTagCommandRunner(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
@@ -35,7 +35,7 @@ class EEOncePerTagCommandRunner(Stack):
             self,
             "once_per_tag_command_runner",
             function_name="once_per_tag_command_runner",
-            entry="./cdk_stacks/aws_lambda_functions/ssm_run_command_once",
+            entry="./cdk/lambdas/ssm_run_command_once",
             index="main.py",
             runtime=aws_lambda.Runtime.PYTHON_3_9,
             timeout=core.Duration.minutes(2),
@@ -58,7 +58,7 @@ class EEOncePerTagCommandRunner(Stack):
         schedule_expression,
         command,
         tag_name="dc-product",
-        tag_value="ee",
+        tag_value="wdiv",
     ):
         _command = aws_events.Rule(
             self,
