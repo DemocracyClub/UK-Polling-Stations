@@ -16,6 +16,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # corrections from council
         if (
+            record.polling_place_id == "8713"
+        ):  # Fritham Free Church -> Bramshaw Village Hall
+            record = record._replace(
+                polling_place_name="Bramshaw Village Hall",
+                polling_place_address_1="Bramshaw",
+                polling_place_address_4="Lyndhurst",
+                polling_place_postcode="SO43 7JE",
+                polling_place_easting="426868",
+                polling_place_northing="115670",
+            )
+
+        if (
             record.polling_place_id == "8818"
         ):  # Fordingbridge Town Hall, 63 High Street, Fordingbridge, SP6 1AS
             record = record._replace(polling_place_easting="414713")
