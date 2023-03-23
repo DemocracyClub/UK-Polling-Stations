@@ -24,6 +24,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="419480")
             record = record._replace(polling_place_northing="422649")
 
+        # Council Correction
+        if (
+            record.polling_place_id == "16504"
+        ):  # U.C.H.M (Former YMCA) ->The Tree of Life Centre
+            record = record._replace(
+                polling_place_name="The Tree of Life Centre (Formerly UCHM)",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
