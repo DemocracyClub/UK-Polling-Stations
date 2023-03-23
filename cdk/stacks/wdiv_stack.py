@@ -109,6 +109,9 @@ class WDIVStack(Stack):
         launch_template = ec2.LaunchTemplate(
             self,
             "wdiv-launch-template-id",
+            # Tested high traffic instance. Only use this or larger.
+            # c* types suggested as the app is CPU bound
+            # instance_type=ec2.InstanceType("c6a.2xlarge"),
             instance_type=ec2.InstanceType("t3a.large"),
             machine_image=self.latest_ami,
             launch_template_name="wdiv",
