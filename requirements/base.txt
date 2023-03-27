@@ -34,7 +34,7 @@ git+https://github.com/DemocracyClub/design-system.git@0.2.4
 git+https://github.com/DemocracyClub/dc_django_utils.git@2.1.4
 git+https://github.com/DemocracyClub/dc_logging.git@0.0.9
 
-pytest==7.2.1
+pytest==7.2.2
 mock==5.0.1
 aloe==0.2.0
 selenium
