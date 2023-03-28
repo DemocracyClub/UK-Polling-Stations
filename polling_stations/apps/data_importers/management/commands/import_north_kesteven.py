@@ -4,41 +4,33 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NKE"
     addresses_name = (
-        "2021-03-23T12:06:26.706618/North Kesteven Democracy_Club__06May2021_1.tsv"
+        "2023-05-04/2023-03-28T22:10:40.359076/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2021-03-23T12:06:26.706618/North Kesteven Democracy_Club__06May2021_1.tsv"
+        "2023-05-04/2023-03-28T22:10:40.359076/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2021-05-06"]
-    csv_delimiter = "\t"
+    elections = ["2023-05-04"]
     csv_encoding = "windows-1252"
-
-    def station_record_to_dict(self, record):
-        # Norton Disney Village Hall Main Street Norton Disney Lincoln LN6 9JU
-        if record.polling_place_id == "6586":
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
-
-        return super().station_record_to_dict(record)
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10006545220",  # THE CROFT, ROXHOLM, SLEAFORD
+            "10006510463",  # SLATE HOUSE FARM, MIDDLE FEN LANE, WASHINGBOROUGH, LINCOLN
+            "10006545127",  # OXFORD HOUSE, SLEAFORD ROAD, NOCTON HEATH, LINCOLN
+            "10006503842",  # THE BUNGALOW, MARTIN MOOR, METHERINGHAM, LINCOLN
+            "10006529962",  # THE BUNGALOW CAMPANET TATTERSHALL ROAD, BILLINGHAY, LINCOLN
+            "10006507711",  # FLAT SLEAFORD GOLF CLUB WILLOUGHBY ROAD, GREYLEES, SLEAFORD
+            "10006534879",  # CARAVAN AT MANOR COTTAGE SKINNAND PARSONS LANE, NAVENBY, LINCOLN
+            "100030854102",  # MILL HOUSE, ROSE COTTAGE LANE, COLEBY, LINCOLN
         ]:
             return None
 
         if record.addressline6 in [
-            "LN5 0JQ",
-            "LN6 9EW",
-            "LN6 9HW",
-            "NG34 0BU",
-            "LN4 1DJ",
-            "NG34 0BQ",
             "LN4 1EP",
-            "LN6 9PU",
-            "LN4 2AB",
+            "LN4 2FA",
+            "NG34 8AA",
         ]:
             return None
 
