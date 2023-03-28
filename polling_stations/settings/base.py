@@ -280,7 +280,7 @@ ADDRESS_MODEL = "addressbase.Address"
 ONSUD_MODEL = "addressbase.UprnToCouncil"
 
 EMAIL_SIGNUP_ENDPOINT = "https://democracyclub.org.uk/mailing_list/api_signup/v1/"
-DEFAULT_FROM_EMAIL = "Democracy Club <pollingstations@democracyclub.org.uk>"
+DEFAULT_FROM_EMAIL = "pollingstations@democracyclub.org.uk"
 EMAIL_SIGNUP_API_KEY = os.environ.get("EMAIL_SIGNUP_API_KEY", "")
 
 # Disable Basic Auth by default
@@ -346,7 +346,6 @@ if os.environ.get("DC_ENVIRONMENT"):
     )
 
     # Let's us send emails to users
-    DEFAULT_FROM_EMAIL = "pollingstations@democracyclub.org.uk"
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_PORT = 587
     EMAIL_HOST = "email-smtp.eu-west-1.amazonaws.com"

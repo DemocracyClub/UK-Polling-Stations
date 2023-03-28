@@ -523,6 +523,6 @@ class AddressTest(APITestCase):
         self.assertEqual(2, len(File.objects.all()))
         self.assertEqual(1, len(mail.outbox))
         self.assertEqual(
-            "Democracy Club <pollingstations@democracyclub.org.uk>",
+            "pollingstations@democracyclub.org.uk",
             mail.outbox[0].to[0],
         )
