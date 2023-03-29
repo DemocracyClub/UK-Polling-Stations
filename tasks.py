@@ -1,7 +1,10 @@
 import os
 import subprocess
 import sys
+import warnings
+from pathlib import Path
 
+import dotenv
 from invoke import task
 import boto3
 
@@ -42,6 +45,38 @@ def git_revision():
         revision = "Unknown"
 
     return revision
+
+
+def bootstrap_django():
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        dotenv.read_dotenv()
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "polling_stations.settings")
+    import django
+
+    django.setup()
+    sys.path.append(str(Path.cwd() / "polling_stations/apps/"))
+
+
+@task
+def import_council(ctx, environment, reg_code):
+    """
+    AWS_PROFILE=dev-wdiv-dc inv import-council development MDE
+    """
+    bootstrap_django()
+    from councils.models import Council
+
+    council = Council.objects.get(council_id=reg_code)
+    import_command = council.import_script_path.split("/")[-1][:-3]
+    tag_name = "dc-environment"
+    tag_value = environment
+    command = (
+        f"runuser -l polling_stations -c '/usr/bin/manage-py-command {import_command}'"
+    )
+    runner = RunOncePerTagRunCommandClient(tag_name=tag_name, tag_value=tag_value)
+    runner.run_command_on_single_instance(command)
+    print(f"Running {import_command} on {environment}")
+    print(runner.command_invocation)
 
 
 @task
