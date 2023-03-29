@@ -29,3 +29,5 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "BB1 2NL",
         ]:
             return None
+
+        return super().address_record_to_dict(record)
