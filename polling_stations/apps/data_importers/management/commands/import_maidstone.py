@@ -4,38 +4,28 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MAI"
     addresses_name = (
-        "2022-05-05/2022-03-23T15:47:49.310266/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-20T09:56:08.168950/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-23T15:47:49.310266/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-03-20T09:56:08.168950/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
-    def station_record_to_dict(self, record):
-        # Ulcombe Village Hall, Headcorn Road, Ulcombe, Maidstone
-        if record.polling_place_id == "3183":
-            record = record._replace(polling_place_postcode="ME17 1EB")
-
-        # Council Correction:
-        # OLD: Portacabin at Springfield House Sandling Road Maidstone ME14 2LP
-        # NEW: Portacabin at Dickens Road Car Park Dickens Road Maidstone Kent ME14 2QW
-        if record.polling_place_id == "3419":
-            record = record._replace(
-                polling_place_name="Portacabin at Dickens Road Car Park",
-                polling_place_address_1="Dickens Road",
-                polling_place_address_2="",
-                polling_place_address_3="Maidstone",
-                polling_place_address_4="Kent",
-                polling_place_postcode="ME14 2QW",
-            )
-
-        return super().station_record_to_dict(record)
-
     def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10022893205",  # CONIFER FARM, EMMET HILL LANE, LADDINGFORD, MAIDSTONE
+            "200003661383",  # THE CHERRIES, FORGE LANE, YALDING, MAIDSTONE
+            "200003722582",  # COTTON WOOD, FORGE LANE, YALDING, MAIDSTONE
+        ]:
+            return None
         if record.addressline6 in [
-            "ME15 9RA",
-            "ME18 6AT",
+            # look wrong
+            "ME18 5EG",
+            "ME18 5EF",
+            "ME18 5ED",
         ]:
             return None  #  split
         return super().address_record_to_dict(record)
