@@ -8,7 +8,7 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2023-05-04"]
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.housenumber.strip().lstrip("0")
 
         if uprn in [
             "100010387618",  # MILLSTONE HOUSE, THE GREEN, ECCLESTON, CHORLEY
