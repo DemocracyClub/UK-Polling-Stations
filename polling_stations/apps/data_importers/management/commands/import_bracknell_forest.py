@@ -1,21 +1,8 @@
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseHalaroseCsvImporter):
     council_id = "BRC"
-    addresses_name = "2021-04-12T13:33:17.499979/Democracy_Club__06May2021.tsv"
-    stations_name = "2021-04-12T13:33:17.499979/Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
-    csv_delimiter = "\t"
-
-    def address_record_to_dict(self, record):
-        if record.addressline6 in [
-            "RG42 6HB",
-            "RG42 6BX",
-            "SL5 8DH",
-            "RG12 9TH",
-            "RG40 3YZ",
-        ]:
-            return None
-
-        return super().address_record_to_dict(record)
+    addresses_name = "2023-05-04/2023-03-30T16:50:30.358526/Eros_SQL_Output002.csv"
+    stations_name = "2023-05-04/2023-03-30T16:50:30.358526/Eros_SQL_Output002.csv"
+    elections = ["2023-05-04"]
