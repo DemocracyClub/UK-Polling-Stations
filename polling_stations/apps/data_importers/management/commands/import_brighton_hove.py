@@ -24,3 +24,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Correction request from the council
+        # Community Hall, Downland Court, Stonery Road, Portslade, BN41 2PS
+        if record.polling_place_id == "13566":
+            record = record._replace(
+                polling_place_easting="525057",
+                polling_place_northing="106606",
+            )
+
+        return super().station_record_to_dict(record)
