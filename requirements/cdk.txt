@@ -11,6 +11,6 @@ aws_cdk.aws_s3_notifications == 1.198.0
 aws_cdk.aws_s3 == 1.198.0
 aws_cdk.aws_cloudfront == 1.198.0
 aws_cdk.aws_cloudfront_origins == 1.198.0
-aws_cdk.aws_route53_targets == 1.198.0
+aws_cdk.aws_route53_targets == 1.198.1
 aws_cdk.aws_events_targets == 1.198.0
 constructs < 4.0.0
