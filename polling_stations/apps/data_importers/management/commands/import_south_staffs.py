@@ -3,63 +3,54 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SST"
-    addresses_name = "2021-03-31T12:26:09.080338/South Staffs Democracy Club Report.csv"
-    stations_name = "2021-03-31T12:26:09.080338/South Staffs Democracy Club Report.csv"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
+    addresses_name = (
+        "2023-05-04/2023-03-21T09:13:08.644819/Democracy_Club__04May2023.tsv"
+    )
+    stations_name = (
+        "2023-05-04/2023-03-21T09:13:08.644819/Democracy_Club__04May2023.tsv"
+    )
+    elections = ["2023-05-04"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100031812029",  # 7 PARK CLOSE, CHESLYN HAY, WALSALL, WS6 7DA
-            "10003692636",  # NARROWBOAT SERENITY GAILEY WHARF WATLING STREET, GAILEY ST19 5PR
+            "100031833008",  # CHILLINGTON LODGE, WHITEHOUSE LANE, CODSALL WOOD, WOLVERHAMPTON
             "100031799992",  # GREENSFORGE HOUSE, GREENSFORGE, KINGSWINFORD, DY6 0AH
             "200004524554",  # IVETSEY BANK FARM, IVETSEY BANK, WHEATON ASTON, STAFFORD
             "10094875300",  # POOL FARM BUNGALOW, GAILEY LEA LANE, GAILEY, STAFFORD ST19 5PT
+            "100032282008",  # SHOOT LODGE, TEDDESLEY ROAD, PENKRIDGE, STAFFORD
+            "10090093164",  # 3 HAY HOUSE COURT, DUNSTON HEATH, STAFFORD
+            "10090091050",  # 2 HAY HOUSE COURT, DUNSTON HEATH, STAFFORD
+            "10090091049",  # 1 HAY HOUSE COURT, DUNSTON HEATH, STAFFORD
+            "200004526134",  # 135 RODBASTON, PENKRIDGE, STAFFORD
+            "200004528062",  # AMBLESIDE, WOLVERHAMPTON ROAD, PENKRIDGE, STAFFORD
+            "10003692787",  # 7B SANDYFIELDS ROAD, DUDLEY
+            "100032230221",  # UNIT 14 WOMBOURNE ENTERPRISE PARK BRIDGNORTH ROAD, WOMBOURNE
+            "10003693861",  # WILD WOOD, COUNTY LANE, ALBRIGHTON, WOLVERHAMPTON
         ]:
             return None
 
         if record.addressline6 in [
-            "ST19 9AB",
+            # splits
             "ST19 9AG",
-            "WV8 1QS",
+            "DY7 5HL",
             "WV9 5BW",
-            "ST19 5QH",
-            "WS6 7BL",
             "WV11 2DN",
-            "DY7 5EF",
-            "WV5 9BN",
-            "DY6 0BA",
-            "WV5 7EY"
-            #         "DY7 5HL",
-            #         "ST19 5RH",
+            "ST19 9LX",  # SHUTT GREEN, BREWOOD, STAFFORD
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Bede Hall, Wombourne Parish Offices, Giggetty Lane, Wombourne, WV5 9EZ => WV5 9ED
-        if record.polling_place_id == "4059":
-            record = record._replace(polling_place_postcode="WV5 9ED")
+        # Following warnings were checked, no correction needed:
+        # WARNING: Polling station Hyde Lea Village Hall (4779) is in Stafford Borough Council (STA)
+        # WARNING: Polling station St Bartholomew's Church Hall (4757) is in Wolverhampton City Council (WLV)
 
-        # Bishopswood Village Hall, Ivetsey Bank Road, Bishopswood, Stafford, ST19 9AR => ST19 9AB
-        if record.polling_place_id == "3833":
-            record = record._replace(polling_place_postcode="ST19 9AB")
-
-        # Village Hall, High Street, Wheaton Aston, South Staffordshire ST19 9PL => ST19 9NG
-        if record.polling_place_id == "3868":
-            record = record._replace(polling_place_postcode="ST19 9NG")
-
-        # Village Hall, Hyde Lea
-        if record.polling_place_id == "3849":
-            record = record._replace(
-                polling_place_easting="391056", polling_place_northing="319891"
-            )
-
-        # St Bartholomews Church Hall
-        if record.polling_place_id == "4044":
+        # St Bartholomew's Church Hall, Vicarage Road, Penn, Wolverhampton
+        if record.polling_place_id == "4757":
             record = record._replace(
                 polling_place_easting="389364", polling_place_northing="295314"
             )
