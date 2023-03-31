@@ -68,4 +68,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if rec["internal_council_id"] == "10410":
             rec["location"] = Point(-1.871852, 52.216259, srid=4326)
 
+        # Station change from Council
+        if rec["internal_council_id"] == "10556":
+            rec["postcode"] = "CV35 9RU"
+            rec["address"] = (
+                "Wellesbourne Sports and Community Centre\n"
+                "Loxley Close\n"
+                "Wellesbourne"
+            )
+            rec["location"] = None
+
         return rec
