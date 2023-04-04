@@ -4,7 +4,7 @@ from data_importers.github_importer import BaseGitHubImporter
 class Command(BaseGitHubImporter):
     srid = 4326
     council_id = "SEV"
-    elections = ["2021-05-06"]
+    elections = ["2023-05-04"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Sevenoaks"
     geom_type = "geojson"
 
