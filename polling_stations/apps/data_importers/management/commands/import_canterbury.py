@@ -7,7 +7,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "CAT"
-    elections = ["2021-05-06"]
+    elections = ["2023-05-04"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Canterbury"
     geom_type = "geojson"
 
