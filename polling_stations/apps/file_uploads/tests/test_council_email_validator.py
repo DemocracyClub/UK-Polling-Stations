@@ -16,6 +16,9 @@ class CouncilEmailValidatorTest(TestCase):
             self.council_email_validator("foo@electoralcommission.org.uk")
         )
 
+    def test_publicagroup(self):
+        self.assertIsNone(self.council_email_validator("foo@publicagroup.uk"))
+
     def test_fake_dem_club(self):
         with self.assertRaises(ValidationError):
             self.council_email_validator("foo@fakedemocracyclub.org.uk")
