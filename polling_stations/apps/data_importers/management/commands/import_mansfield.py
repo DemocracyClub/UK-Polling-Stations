@@ -3,32 +3,25 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "MAS"
-    addresses_name = "2021-03-17T14:10:56.004783/polling_station_export-2021-03-17.csv"
-    stations_name = "2021-03-17T14:10:56.004783/polling_station_export-2021-03-17.csv"
-    elections = ["2021-05-06"]
+    addresses_name = "2023-05-04/2023-03-23T16:11:56.327479/Eros_SQL_Output005.csv"
+    stations_name = "2023-05-04/2023-03-23T16:11:56.327479/Eros_SQL_Output005.csv"
+    elections = ["2023-05-04"]
     csv_delimiter = ","
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
-            "10091484435",  # 33B ALBERT STREET, MANSFIELD
-            "100031427156",  # 207 WESTFIELD LANE, MANSFIELD
-            "100031413924",  # FIRBANK HOUSE, NEWLANDS ROAD, FOREST TOWN, MANSFIELD
-            "100031415038",  # GREENACRES, OAKFIELD LANE, WARSOP, MANSFIELD
-            "10023932919",  # GLEADTHORPE GRANGE FARM NETHERFIELD LANE, MEDEN VALE
+            "10091487792",  # 65 CROMWELL STREET, MANSFIELD
+            "10023935274",  # 31 BIRCHLANDS, FOREST TOWN, MANSFIELD
         ]:
             return None
 
         if record.housepostcode in [
-            "NG19 6JF",
+            # Split
+            "NG20 0GD",
+            "NG18 3FG",
             "NG19 6AT",
-            "NG18 5RT",
-            "NG18 1EU",
-            "NG18 1ER",
-            "NG18 1EJ",
-            "NG18 1BQ",
-            "NG18 4LN",
         ]:
             return None
 
