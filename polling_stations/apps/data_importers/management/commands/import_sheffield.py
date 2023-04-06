@@ -41,6 +41,4 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
-        record = self.apply_council_station_corrections(record)
-
         return super().address_record_to_dict(record)
