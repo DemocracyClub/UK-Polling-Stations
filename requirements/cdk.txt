@@ -1,7 +1,7 @@
 -r base.txt
 
 aws_cdk.core == 1.198.1
-aws-cdk.cx-api == 1.198.1
+aws-cdk.cx-api == 2.73.0
 aws_cdk.aws_ec2 == 1.198.1
 aws_cdk.aws_autoscaling == 1.198.1
 aws_cdk.aws_codedeploy == 1.198.1
