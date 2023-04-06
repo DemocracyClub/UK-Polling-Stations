@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "EXE"
     addresses_name = (
-        "2022-05-05/2022-03-14T16:19:01.344084/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-04-06T16:06:54.372260/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-14T16:19:01.344084/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-04-06T16:06:54.372260/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -17,6 +17,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "10091473295",  # EXE VIEW LODGE STOKE HILL, EXETER
+            "100040222032",  # ARGYLL GARDENS, LOWER ARGYLL ROAD, EXETER
+            "10023116924",  # PARK HOUSE, PARK LANE, EXETER
+            "10023121146",  # 210A TOPSHAM ROAD, EXETER
+            "100040241841",  # BELLENDEN, WREFORDS LANE, EXETER
         ]:
             return None
 
