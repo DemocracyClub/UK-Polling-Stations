@@ -391,11 +391,16 @@ workflows:
     ##############
     # PRODUCTION #
     ##############
+    - prod-deploy-hold:
+        type: approval
+        requires:
+        - "Staging: AWS CodeDeploy"
     - cdk_deploy:
         name: "Production: CDK Deploy"
         requires:
         - "CDK Synth"
         - "Staging: AWS CodeDeploy"
+        - "prod-deploy-hold"
         context: [deployment-production-wdiv, slack-secrets]
         filters: { branches: { only: [ main, master ] } }
         dc-environment: production
