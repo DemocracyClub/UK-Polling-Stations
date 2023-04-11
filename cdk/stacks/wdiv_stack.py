@@ -111,8 +111,8 @@ class WDIVStack(Stack):
             "wdiv-launch-template-id",
             # Tested high traffic instance. Only use this or larger.
             # c* types suggested as the app is CPU bound
-            # instance_type=ec2.InstanceType("c6a.2xlarge"),
-            instance_type=ec2.InstanceType("t3a.large"),
+            instance_type=ec2.InstanceType("c6a.2xlarge"),
+            # instance_type=ec2.InstanceType("t3a.large"),
             machine_image=self.latest_ami,
             launch_template_name="wdiv",
             role=self.roles["codedeploy-ec2-instance-profile"],
