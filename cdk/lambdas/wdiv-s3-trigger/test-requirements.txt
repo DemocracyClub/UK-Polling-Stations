@@ -1,5 +1,5 @@
 -r requirements.txt
 
 responses==0.23.1
-moto[ses]==4.1.6
+moto[ses]==4.1.7
 pydantic==1.10.7
