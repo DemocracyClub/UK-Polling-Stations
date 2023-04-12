@@ -1,33 +1,34 @@
-from data_importers.management.commands import BaseShpStationsShpDistrictsImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseShpStationsShpDistrictsImporter):
-    srid = 27700
-    council_id = "E07000037"
-    districts_name = "High Peak Polling Districts"
-    stations_name = "High Peak Polling Districts.shp"
-    elections = [
-        "local.derbyshire.2017-05-04",
-        #'parl.2017-06-08'
-    ]
+class Command(BaseXpressDemocracyClubCsvImporter):
+    council_id = "HIG"
+    addresses_name = (
+        "2023-05-04/2023-04-12T16:06:53.275227/Democracy_Club__04May2023.tsv"
+    )
+    stations_name = (
+        "2023-05-04/2023-04-12T16:06:53.275227/Democracy_Club__04May2023.tsv"
+    )
+    elections = ["2023-05-04"]
+    csv_delimiter = "\t"
 
-    def district_record_to_dict(self, record):
-        name = str(record[0]).strip()
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-        # codes are embedded in the name string: extract them
-        code = name[name.find("(") + 1 : name.find(")")].strip()
+        if uprn in [
+            "10010727932",  # HOCKERLEY HALL FARM, HOCKERLEY LANE, WHALEY BRIDGE, HIGH PEAK
+            "10010747214",  # THE BUNGALOW, HARPUR HILL BUSINESS PARK, BUXTON
+            "10010715355",  # RED GAP FARM, GREEN FAIRFIELD, BUXTON
+            "10010720655",  # BLACK HILLGATE FARM, KETTLESHULME, HIGH PEAK
+        ]:
+            return None
 
-        return {"internal_council_id": code, "name": name, "polling_station_id": code}
+        if record.addressline6 in [
+            # splits
+            "S33 0AB",
+            "SK23 6BR",
+            "SK22 3DU",  # LARKHILL TERRACE, NEW MILLS, HIGH PEAK
+        ]:
+            return None
 
-    def station_record_to_dict(self, record):
-        name = str(record[0]).strip()
-
-        # codes are embedded in the name string: extract them
-        code = name[name.find("(") + 1 : name.find(")")].strip()
-
-        return {
-            "internal_council_id": code,
-            "postcode": "",
-            "address": str(record[1]).strip(),
-            "location": None,
-        }
+        return super().address_record_to_dict(record)
