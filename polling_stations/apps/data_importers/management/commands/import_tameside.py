@@ -4,48 +4,39 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TAM"
     addresses_name = (
-        "2022-05-05/2022-03-25T15:02:16.351806/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-04-12T13:11:26.820087/Democracy_Club__04May2023.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-25T15:02:16.351806/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-04-12T13:11:26.820087/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2023-05-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        if record.property_urn.lstrip("0") in [
-            # single property too far
-            "200004405547",
-            # another group too far
-            "10090073761",
-            "10090073763",
-            "10090073764",
-            "100012777279",
-            "200002032772",
-            # embedded in another area
-            "200004400819",
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10090073761",  # 19A WELLINGTON STREET, ASHTON-UNDER-LYNE
+            "10090073763",  #  21A WELLINGTON STREET, ASHTON-UNDER-LYNE
+            "10090073764",  # 21B WELLINGTON STREET, ASHTON-UNDER-LYNE
             "200004419358",  # FLAT 2 34 HUDSON ROAD, HYDE
             "200004406539",  # FLAT 2 BANK MILL MANCHESTER ROAD, MOSSLEY
-            # across another area
-            "10093148014",  # 1 MEADOW VIEW GARDENS, DROYLSDEN, MANCHESTER
-            "10093148018",  # 5 MEADOW VIEW GARDENS, DROYLSDEN, MANCHESTER
+            "10093148520",  # APARTMENT 3, 1 MARY STREET, HYDE
+            "10093148339",  # 15 BECKER CLOSE, DENTON, MANCHESTER
+            "200004410061",  # FLAT 2 2 OLD HALL LANE, MOTTRAM
+            "100012777909",  # HOPKINS FARM COTTAGE, ARLIES LANE, STALYBRIDGE
+            "100012777908",  # HOPKINS COTTAGE, ARLIES LANE, STALYBRIDGE
         ]:
             return None
 
         if record.addressline6 in [
-            "OL6 9LS",
-            "SK15 1HF",
+            # splits
+            "SK15 3QZ",
             "M34 7RZ",
+            "OL6 9LS",
+            "M43 6DG",
+            "SK14 2PF",
             "M43 7ZD",
-        ]:
-            return None  # split
-
-        if record.addressline6 in [
-            "SK14 3GD",  # embedded in another area. postcode centroid a long way from these residential properties
-            "SK14 3EB",  # embedded in another area
-            "SK14 3GU",  # dubious geolocation; too far; through another area
-            "M34 2WS",  # embedded in another area
-            "SK14 2BN",  # embedded in another area
         ]:
             return None
 
