@@ -8,7 +8,7 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2023-05-04"]
 
     def address_record_to_dict(self, record):
-        if record.addressline6 in [
+        if record.housepostcode in [
             # split
             "SL5 8RY",
             "RG42 2FB",
