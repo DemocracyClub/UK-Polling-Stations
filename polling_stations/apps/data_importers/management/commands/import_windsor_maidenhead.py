@@ -1,22 +1,12 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseDemocracyCountsCsvImporter):
     council_id = "WNM"
-    addresses_name = "2021-03-25T12:59:22.400019/polling_station_export-2021-03-24.csv"
-    stations_name = "2021-03-25T12:59:22.400019/polling_station_export-2021-03-24.csv"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
-
-    def address_record_to_dict(self, record):
-        uprn = record.uprn.strip().lstrip("0")
-
-        if uprn in [
-            "100081050796",  # PENNYFIELD, SWITCHBACK ROAD NORTH, MAIDENHEAD
-        ]:
-            return None
-
-        if record.housepostcode in ["SL6 2QS", "SL6 3DU", "SL4 3FG", "SL5 9RP"]:
-            return None
-
-        return super().address_record_to_dict(record)
+    addresses_name = (
+        "2023-05-04/2023-04-13T15:19:53.305902/democracy club polling districts.csv"
+    )
+    stations_name = (
+        "2023-05-04/2023-04-13T15:19:53.305902/democracy club polling stations.csv"
+    )
+    elections = ["2023-05-04"]
