@@ -59,6 +59,19 @@ def bootstrap_django():
 
 
 @task
+def import_eoni(ctx, environment):
+    """
+    AWS_PROFILE=dev-wdiv-dc inv import-eoni development
+    """
+    tag_name = "dc-environment"
+    tag_value = environment
+    command = f"output-on-error /var/www/polling_stations/import_eoni_from_s3.sh"
+    runner = RunOncePerTagRunCommandClient(tag_name=tag_name, tag_value=tag_value)
+    runner.run_command_on_single_instance(command)
+    print(runner.command_invocation)
+
+
+@task
 def import_council(ctx, environment, reg_code):
     """
     AWS_PROFILE=dev-wdiv-dc inv import-council development MDE

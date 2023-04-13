@@ -51,6 +51,11 @@ class WDIVOncePerTagCommandRunner(Stack):
                 "cron(1 * * * ? *)",
                 "/usr/bin/manage-py-command import_councils --only-contact-details --database principal",
             )
+            self.add_job(
+                "import_eoni",
+                "cron(30 2 * * ? *)",
+                "/usr/bin/manage-py-command import_eoni --only-contact-details --database principal",
+            )
 
     def add_job(
         self,

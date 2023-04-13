@@ -32,6 +32,7 @@ class Command(BaseStationsImporter, CsvMixin):
     csv_encoding = "utf-8"
     eoni_csv_encoding = "latin-1"
     additional_report_councils = NIR_IDS
+    elections = ["2023-05-04"]
 
     def add_arguments(self, parser):
         parser.add_argument("eoni_csv", help="The path to the EONI export csv")
