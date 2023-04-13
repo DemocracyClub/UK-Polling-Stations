@@ -1,4 +1,5 @@
-{% load i18n_with_welsh markdown %}
+{% load i18n_with_welsh %}
+{% load markdown_filter %}
 {% if cancelled_election.metadata.cancelled_election.title %}
     <h2>{{ cancelled_election.metadata.cancelled_election.title }}</h2>
 {% else %}

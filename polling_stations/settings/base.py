@@ -163,7 +163,6 @@ INSTALLED_APPS = (
     "rest_framework.authtoken",
     "rest_framework_gis",
     "django_extensions",
-    "markdown",
     "corsheaders",
     "pipeline",
     "dc_signup_form",
