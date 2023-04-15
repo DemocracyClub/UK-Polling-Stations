@@ -4,49 +4,69 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "IPS"
     addresses_name = (
-        "2022-05-05/2022-02-23T11:56:29.039800/Democracy_Club__05May2022.CSV"
+        "2023-05-04/2023-04-13T10:22:11.453698/Democracy_Club__04May2023.tsv"
     )
+
     stations_name = (
-        "2022-05-05/2022-02-23T11:56:29.039800/Democracy_Club__05May2022.CSV"
+        "2023-05-04/2023-04-13T10:22:11.453698/Democracy_Club__04May2023.tsv"
     )
-    elections = ["2022-05-05"]
+
+    elections = ["2023-05-04"]
+    csv_delimiter = "\t"
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "100091059987",  # 22 LINGFIELD ROAD, IPSWICH
+            "100091074230",  # 74 STRATFORD ROAD, IPSWICH
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Sikh Temple, Guru Nanak Gurdwara
-        if record.polling_place_id == "7914":
-            record = record._replace(polling_place_uprn="10035058265")
-
-        # Castle Hill United Reformed Church
-        if record.polling_place_id == "7930":
-            record = record._replace(polling_place_uprn="100091483837")
-
-        # Stoke Green Baptist Church Hall
-        if record.polling_place_id == "7741":
-            record = record._replace(polling_place_uprn="10004567047")
-
-        # Ascension Hall
-        if record.polling_place_id == "7748":
-            record = record._replace(polling_place_uprn="200001930783")
-
-        # Broomhill Library
-        if record.polling_place_id == "7752":
-            record = record._replace(polling_place_uprn="10004565452")
-
-        # St Mark`s RC Church Hall
-        if record.polling_place_id == "7777":
-            record = record._replace(polling_place_easting="614239")
-            record = record._replace(polling_place_northing="243310")
-
-        # Belstead Arms Public House
-        if record.polling_place_id == "7843":
+        # Sikh Temple, Guru Nanak Gurdwara, 719 Bramford Road, Ipswich, IP1 5BD
+        if record.polling_place_id == "8287":
             record = record._replace(
-                polling_place_uprn="10004566897", polling_place_postcode="IP2 9QU"
+                polling_place_easting="613488",
+                polling_place_northing="245784",
             )
 
-        # All Hallows Church Hall
-        if record.polling_place_id == "7755":
+        # Castle Hill United Reformed Church, Dryden Road, Ipswich, IP1 6QF
+        if record.polling_place_id == "8272":
             record = record._replace(
-                polling_place_uprn="10004564821", polling_place_postcode="IP3 0EN"
+                polling_place_easting="615235",
+                polling_place_northing="247231",
+            )
+
+        # Stoke Green Baptist Church Hall, Halifax Road, Ipswich, IP2 8RE
+        if record.polling_place_id == "8316":
+            record = record._replace(
+                polling_place_easting="615857",
+                polling_place_northing="242747",
+            )
+
+        # Ascension Hall, Larchcroft Road, Ipswich, IP1 6AN
+        if record.polling_place_id == "8207":
+            record = record._replace(
+                polling_place_easting="615625",
+                polling_place_northing="246829",
+            )
+
+        # Broomhill Library, Sherrington Road, Ipswich, IP1 4HT
+        if record.polling_place_id == "8211":
+            record = record._replace(
+                polling_place_easting="615423",
+                polling_place_northing="245891",
+            )
+
+        # Belstead Arms Public House, Radcliffe Drive, Ipswich, IP2 9QA
+        if record.polling_place_id == "8072":
+            record = record._replace(
+                polling_place_postcode="IP2 9QU",
+                polling_place_easting="613819",
+                polling_place_northing="242425",
             )
 
         return super().station_record_to_dict(record)
