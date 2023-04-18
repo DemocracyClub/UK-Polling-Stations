@@ -126,7 +126,7 @@ class EveryElectionWrapper:
             return next_charismatic_election_dates[0]
 
         # If we haven't set NEXT_CHARISMATIC_ELECTION_DATES,
-        # return the election
+        # return the earliest election
         return dates[0].strftime("%Y-%m-%d")
 
     def get_ballots_for_next_date(self):
