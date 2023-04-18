@@ -118,7 +118,7 @@ def get_data_with_elections(self, query_url):
 class EveryElectionWrapperTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_exception)
     def test_exception(self):
@@ -133,7 +133,7 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_no_elections
@@ -150,7 +150,7 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
@@ -169,16 +169,16 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=(datetime.now() + timedelta(days=1)).strftime(
-            "%Y-%m-%d"
-        ),
+        NEXT_CHARISMATIC_ELECTION_DATES=[
+            (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+        ],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
     )
     def test_non_charismatic_elections(self):
         # there are upcoming elections
-        # but they aren't on NEXT_CHARISMATIC_ELECTION_DATE
+        # but they aren't in NEXT_CHARISMATIC_ELECTION_DATES
         ee = EveryElectionWrapper(postcode="AA11AA")
         self.assertTrue(ee.request_success)
         self.assertFalse(ee.has_election())
@@ -190,7 +190,7 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_only_group
@@ -207,7 +207,7 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot
@@ -224,7 +224,7 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot
@@ -240,7 +240,7 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_only_group
@@ -257,7 +257,7 @@ class EveryElectionWrapperTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         ELECTION_BLACKLIST=["foo.bar.baz.date"],
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
@@ -271,7 +271,7 @@ class EveryElectionWrapperTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         ELECTION_BLACKLIST=["foo.bar.baz.date", "foo.bar.qux.date"],
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
@@ -429,7 +429,7 @@ def get_data_one_cancelled_ballot_with_metadata(self, query_url):
 class CancelledElectionTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data",
@@ -448,7 +448,7 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data",
@@ -467,7 +467,7 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data",
@@ -486,7 +486,7 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data",
@@ -508,7 +508,7 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATE=None,
+        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     @mock.patch(
         "data_finder.helpers.EveryElectionWrapper.get_data",

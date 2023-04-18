@@ -63,7 +63,11 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         https://github.com/DemocracyClub/UK-Polling-Stations/issues/2051
         """
 
-        election_date = getattr(settings, "NEXT_CHARISMATIC_ELECTION_DATE", None)
+        charismatic_dates = getattr(settings, "NEXT_CHARISMATIC_ELECTION_DATES", [])
+        try:
+            election_date = charismatic_dates[0]
+        except IndexError:
+            election_date = None
         if election_date:
             election_date: datetime = timezone.make_aware(
                 datetime.strptime(election_date, "%Y-%m-%d")
