@@ -391,8 +391,13 @@ from .constants.tiles import *  # noqa
 from .constants.uploads import *  # noqa
 
 # Import .local.py last - settings in local.py override everything else
+# only if we're not testing
 try:
-    from .local import *  # noqa
+    if (
+        not os.environ.get("DJANGO_SETTINGS_MODULE")
+        == "polling_stations.settings.testing"
+    ):
+        from .local import *  # noqa
 
     try:
         INSTALLED_APPS += PROD_APPS  # noqa
@@ -404,10 +409,6 @@ except ImportError:
 
 if not os.environ.get("DC_ENVIRONMENT"):
     INSTALLED_APPS += ("dashboard",)
-
-# importing test settings file if necessary (TODO chould be done better)
-if len(sys.argv) > 1 and sys.argv[1] in ["test", "harvest"]:
-    from .testing import *  # noqa
 
 
 if os.environ.get("CIRCLECI"):

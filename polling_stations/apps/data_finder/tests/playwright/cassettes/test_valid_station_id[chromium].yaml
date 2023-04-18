@@ -611,8 +611,8 @@ interactions:
       - gzip, deflate
       Connection:
       - keep-alive
-      User-Agent:
-      - python-requests/2.27.1
+#       User-Agent:
+#       - python-requests/2.27.1
     method: GET
     uri: https://api.mapbox.com/directions/v5/mapbox/driving-traffic/-3.8333333333333335,51.13333333333333;-2.995147704661227,51.595814835763214?&alternatives=false&geometries=polyline&steps=false&access_token=
   response:

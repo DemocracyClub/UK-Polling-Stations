@@ -1,4 +1,5 @@
 from .base import *  # noqa
+from dc_logging_client import DCWidePostcodeLoggingClient
 
 
 EVERY_ELECTION["CHECK"] = True  # noqa
@@ -17,6 +18,9 @@ MAPBOX_API_KEY = ""
 STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 
 RUNNING_TESTS = True
+
+POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 import os
 
