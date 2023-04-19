@@ -1,6 +1,26 @@
 from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
+def station_update(record):
+    # Council station change from:
+    # Main Street, Redbourne, Gainsborough, Lincolnshire, DN21 4QN
+    # to:
+    # St Andrews Church, 2 School Lane, Redbourne, Lincolnshire, DN21 4QN
+
+    if record.pollingstationnumber == "109":
+        record = record._replace(
+            pollingstationname="St Andrews Church",
+            pollingstationnumber="109",
+            pollingstationaddress_1="2 School Lane",
+            pollingstationaddress_2="Redbourne",
+            pollingstationaddress_3="Gainsborough",
+            pollingstationaddress_4="Lincolnshire",
+            pollingstationaddress_5="",
+            pollingstationpostcode="DN21 4QN",
+        )
+    return record
+
+
 class Command(BaseHalaroseCsvImporter):
     council_id = "NLN"
     addresses_name = "2023-05-04/2023-04-12T16:20:54.855801/Eros_SQL_Output002.csv"
@@ -8,6 +28,8 @@ class Command(BaseHalaroseCsvImporter):
     elections = ["2023-05-04"]
 
     def address_record_to_dict(self, record):
+        record = station_update(record)
+
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
@@ -35,3 +57,8 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        record = station_update(record)
+
+        return super().station_record_to_dict(record)
