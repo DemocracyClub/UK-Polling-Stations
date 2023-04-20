@@ -52,6 +52,10 @@ class RunOncePerTagRunCommandClient:
             InstanceIds=[self.instance_id],
             DocumentName="AWS-RunShellScript",
             Parameters={"commands": [command]},
+            CloudWatchOutputConfig={
+                "CloudWatchLogGroupName": "/aws/ssm/command_runner",
+                "CloudWatchOutputEnabled": True,
+            },
         )
         return self.command_invocation
 
@@ -66,9 +70,14 @@ class RunOncePerTagRunCommandClient:
             )
             status = response["Status"]
             if status == "Success":
+                print("Command Succeeded!")
                 print(response["StandardOutputContent"])
             if status == "Failed":
-                raise ValueError("Command filed")
+                print("Command Failed...")
+                print(response)
+                print(f"Stderr:{response['StandardErrorContent']}")
+                print(f"Stdout:{response['StandardOutputContent']}")
+                raise ValueError("Command failed")
 
 
 if __name__ == "__main__":
