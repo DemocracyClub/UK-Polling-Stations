@@ -3,10 +3,14 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SDE"
-    addresses_name = "2021-04-16T14:48:11.190882/Democracy_Club__06May2021.CSV"
-    stations_name = "2021-04-16T14:48:11.190882/Democracy_Club__06May2021.CSV"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
+    addresses_name = (
+        "2023-05-04/2023-04-20T10:35:14.553119/Democracy_Club__04May2023.tsv"
+    )
+    stations_name = (
+        "2023-05-04/2023-04-20T10:35:14.553119/Democracy_Club__04May2023.tsv"
+    )
+    elections = ["2023-05-04"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -28,26 +32,29 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10091582714",  # 4 SANDGATE ROAD, CHELLASTON, DERBY
             "10091582716",  # 6 SANDGATE ROAD, CHELLASTON, DERBY
             "10091582718",  # 8 SANDGATE ROAD, CHELLASTON, DERBY
-            "10090303873",  # 29 WESTONHILL CHALET PARK BRIDGE LANE, WESTON ON TRENT, DERBY
-            "10012010331",  # BONDWOOD BARN UNNAMED ROAD FROM BROOK STREET AND GREYSICH LANE TO FAIRVIEW FARM, HARTSHORNE, SWADLINCOTE
+            "10012010331",  # BONDWOOD BARN UNNAMED ROAD FROM BROOK STREET AND GREYSICH LANE TO FAIRVIEW FARM
+            "100032026593",  # WATERWORKS HOUSE, DERBY ROAD, STANTON-BY-BRIDGE, DERBY
+            "100030238970",  # 1 MARSTON LANE, HATTON, DERBY
+            "100030231955",  # 2 NEWTON MOUNT COTTAGES, BRETBY LANE, BRETBY, BURTON-ON-TRENT
+            "100032244975",  # WEBB COURT, PARK ROAD, OVERSEAL, SWADLINCOTE
+            "10000820723",  # SALTERSFORD HOUSE, EGGINTON, DERBY
+            "200003154106",  # BIRCHTREES FARM, EGGINTON, DERBY
+            "10094713650",  # 46 SWARTLING DRIVE, WOODVILLE, SWADLINCOTE
         ]:
             return None
 
         if record.addressline6 in [
-            "DE65 6SL",
-            "DE3 0AX",
-            "DE11 9AE",
+            # splits
             "DE65 6LE",
-            "DE65 6RG",
-            "DE12 6PZ",
-            "DE12 8DB",
             "DE11 0DQ",
-            "DE11 0HT",
-            "DE11 0TU",
-            "DE65 6BP",
-            "DE73 7GZ",
-            "DE11 9TG",
+            "DE3 0AX",  # KINGLAS DRIVE, MICKLEOVER, DERBY
+            "DE6 5JF",  # SUTTON-ON-THE-HILL, ASHBOURNE
         ]:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # WARNING: Polling station Mobile Unit (6211) is in Derby City Council (DER)
+        # Checked and no action required, it is a mobile station close to the council border
+        return super().station_record_to_dict(record)
