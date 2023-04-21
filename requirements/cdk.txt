@@ -7,7 +7,7 @@ aws_cdk.aws_autoscaling == 1.198.1
 aws_cdk.aws_codedeploy == 1.198.1
 aws_cdk.aws_lambda_python == 1.198.1
 aws_cdk.aws_lambda == 1.198.1
-aws_cdk.aws_s3_notifications == 1.198.1
+aws_cdk.aws_s3_notifications == 1.199.0
 aws_cdk.aws_s3 == 1.198.1
 aws_cdk.aws_cloudfront == 1.198.1
 aws_cdk.aws_cloudfront_origins == 1.198.1
