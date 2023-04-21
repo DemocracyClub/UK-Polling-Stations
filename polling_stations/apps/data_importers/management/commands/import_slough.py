@@ -4,22 +4,33 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SLG"
     addresses_name = (
-        "2022-05-05/2022-04-07T09:34:53.056236/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-04-21T14:19:22.418906/Democracy_Club__04May2023_Slough.CSV"
     )
     stations_name = (
-        "2022-05-05/2022-04-07T09:34:53.056236/Democracy_Club__05May2022.tsv"
+        "2023-05-04/2023-04-21T14:19:22.418906/Democracy_Club__04May2023_Slough.CSV"
     )
-    elections = ["2022-05-05"]
-    csv_delimiter = "\t"
+    elections = ["2023-05-04"]
 
     def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "200001911252",  # FLAT 35, PRIORY HEIGHTS, BUCKINGHAM AVENUE, SLOUGH
+        ]:
+            return None
+
         if record.addressline6 in [
-            "SL2 2LZ",
-            "SL3 7FU",
-            "SL3 8QT",
+            # splits
             "SL1 2LT",
-            "SL2 2DW",
         ]:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # The Centre, Farnham Road, Slough, SL1 4UT
+        # postcode in a wrong column, just moving it to the right place
+        if record.polling_place_id == "2305":
+            record = record._replace(polling_place_postcode="SL1 4UT")
+
+        return super().station_record_to_dict(record)
