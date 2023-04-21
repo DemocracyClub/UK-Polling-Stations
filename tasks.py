@@ -91,6 +91,7 @@ def import_council(ctx, environment, reg_code):
     runner.run_command_on_single_instance(command)
     print(f"Running {import_command} on {environment}")
     print(runner.command_invocation)
+    runner.poll_response()
 
 
 @task
@@ -100,10 +101,11 @@ def teardown_council(ctx, environment, reg_code):
     """
     tag_name = "dc-environment"
     tag_value = environment
-    command = f"/usr/bin/manage-py-command teardown --council {reg_code}"
+    command = f"runuser -l polling_stations -c '/usr/bin/manage-py-command teardown --council {reg_code}'"
     runner = RunOncePerTagRunCommandClient(tag_name=tag_name, tag_value=tag_value)
     runner.run_command_on_single_instance(command)
     print(runner.command_invocation)
+    runner.poll_response()
 
 
 @task
