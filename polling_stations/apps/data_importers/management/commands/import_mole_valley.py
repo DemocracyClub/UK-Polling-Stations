@@ -13,6 +13,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # Fairfield Centre - council address correction
+        if record.polling_place_id == "5488":
+            record = record._replace(
+                polling_place_address_1="34 Swan Court",
+                polling_place_address_2="High Street",
+                polling_place_address_3="Leatherhead",
+                polling_place_address_4="Surrey",
+                polling_place_postcode="KT22 8AH",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
