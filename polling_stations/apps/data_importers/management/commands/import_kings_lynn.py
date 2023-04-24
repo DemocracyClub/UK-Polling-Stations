@@ -13,10 +13,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # Family Entertainment Centre, Blue Bull Cafe Bar
+        # Council station change
+        # Family Entertainment Centre, Blue Bull Cafe Bar being replaced by
+        # Library, Burnthouse Drove, PE33 9NJ
         if record.polling_place_id == "23301":
             record = record._replace(
-                polling_place_easting="", polling_place_northing=""
+                polling_place_name="Library",
+                polling_place_address_1="Burnthouse Drove",
+                polling_place_address_2="",
+                polling_place_address_3="Upper Marham",
+                polling_place_address_4="KING`S LYNN",
+                polling_place_postcode="PE33 9NJ",
             )
 
         return super().station_record_to_dict(record)
