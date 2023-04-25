@@ -108,12 +108,11 @@ class EveryElectionWrapper:
         # if no ballots, return early
         if len(ballots) == 0:
             return None
-
         next_charismatic_election_dates = getattr(
             settings, "NEXT_CHARISMATIC_ELECTION_DATES", []
         )
         next_charismatic_election_dates.sort()
-        dates = [datetime.strptime(b["poll_open_date"], "%Y-%m-%d") for b in ballots]
+        dates = [b["poll_open_date"] for b in ballots]
         dates.sort()
 
         if next_charismatic_election_dates:
@@ -127,7 +126,7 @@ class EveryElectionWrapper:
 
         # If we haven't set NEXT_CHARISMATIC_ELECTION_DATES,
         # return the earliest election
-        return dates[0].strftime("%Y-%m-%d")
+        return dates[0]
 
     def get_ballots_for_next_date(self):
         if not self.request_success:
