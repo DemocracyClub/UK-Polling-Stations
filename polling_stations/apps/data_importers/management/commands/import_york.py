@@ -5,7 +5,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "YOR"
-    elections = ["2021-05-06"]
+    elections = ["2023-05-04"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-York"
     geom_type = "geojson"
 
