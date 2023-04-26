@@ -53,6 +53,30 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Leighterton Primary School, Leighterton, GL8 8UH
+        # correction from council
+        if record.polling_place_id == "21286":
+            record = record._replace(
+                polling_place_easting="382121",
+                polling_place_northing="191316",
+            )
+
+        # Bingham Hall, Bingham Hall, King Street, Cirencester, GL7 1JT
+        # correction from council
+        if record.polling_place_id == "23487":
+            record = record._replace(
+                polling_place_easting="402792",
+                polling_place_northing="201385",
+            )
+
+        # Tetbury Goods Shed Arts Centre, GL8 8EY
+        # correction from council
+        if record.polling_place_id == "21417":
+            record = record._replace(
+                polling_place_easting="389331",
+                polling_place_northing="193235",
+            )
+
         rec = super().station_record_to_dict(record)
 
         # St Mary`s Church, Meysey Hampton, GL7 5JS
