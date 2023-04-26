@@ -3,9 +3,13 @@ Specialised base import classes for handling data exported from
 popular Electoral Management Software packages
 """
 import abc
+import json
 import logging
 import os
+import tempfile
+import urllib
 
+import requests
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
@@ -14,10 +18,16 @@ from data_importers.addresshelpers import (
     format_residential_address,
     format_polling_station_address,
 )
-from data_importers.base_importers import BaseCsvStationsCsvAddressesImporter
+from data_importers.base_importers import (
+    BaseCsvStationsCsvAddressesImporter,
+    BaseGenericApiImporter,
+    BaseStationsImporter,
+    BaseAddressesImporter,
+)
 from data_finder.helpers import geocode_point_only, PostcodeError
 from uk_geo_utils.helpers import Postcode
 
+from data_importers.data_types import StationSet, AddressList
 
 """
 We see a lot of CSVs exported from Xpress
@@ -531,6 +541,150 @@ class BaseDemocracyCountsCsvImporter(
         return {
             "internal_council_id": getattr(record, self.station_id_field).strip(),
             "postcode": getattr(record, self.postcode_field).strip(),
+            "address": address,
+            "location": location,
+        }
+
+
+class BaseFcsDemocracyClubApiImporter(
+    BaseStationsImporter, BaseAddressesImporter, metaclass=abc.ABCMeta
+):
+    local_files = False
+    addresses_filetype = json
+    addresses_name = None
+    fcs_election_id = None
+    stations_name = None
+    srid = 4326
+    stations_filetype = "json"
+    station_name_field = "name"
+    address_fields = [
+        "addressLine1",
+        "addressLine2",
+        "addressLine3",
+        "addressLine4",
+        "addressLine5",
+    ]
+    postcode_field = "addressPostCode"
+    station_id_field = "id"
+    residential_uprn_field = "addressUprn"
+
+    @property
+    def stations_url(self):
+        return f"{self.get_api_url()}/api/DemocracyClub/Election/{self.fcs_election_id}/PollingStation/"
+
+    def get_api_key(self):
+        return os.environ.get(f"FCS_API_KEY_{self.council_id}")
+
+    def get_api_url(self):
+        return os.environ.get(f"FCS_API_URL_{self.council_id}")
+
+    def pre_import(self):
+        raise NotImplementedError
+
+    def import_data(self):
+        # Optional step for pre import tasks
+        try:
+            self.pre_import()
+        except NotImplementedError:
+            pass
+
+        self.stations = StationSet()
+        self.addresses = AddressList(self.logger)
+        self.import_residential_addresses()
+        self.import_polling_stations()
+        self.addresses.check_records()
+        self.addresses.update_uprn_to_council_model()
+        self.stations.save()
+
+    def get_addresses(self):
+        with tempfile.NamedTemporaryFile("w") as tmp:
+            response = requests.get(
+                self.stations_url,
+                headers={
+                    "X-API-KEY": self.get_api_key(),
+                    "User-Agent": "Scraper/DemocracyClub",
+                    "Accept": "*/*",
+                },
+                verify=False,
+            )
+            addresses = []
+            stations = response.json()
+            for station in stations:
+                for property in station["properties"]:
+                    property[self.station_id_field] = station[self.station_id_field]
+                addresses += station["properties"]
+            # Was getting JsonDecodeError when using json.dump(addresses,tmp)
+            tmp.write(json.dumps(addresses))
+            return self.get_data(self.stations_filetype, tmp.name)
+
+    def address_record_to_dict(self, record):
+        if not record.get(self.postcode_field).strip():
+            return None
+
+        address = format_residential_address(
+            [record.get(field) for field in self.address_fields]
+        )
+
+        uprn = str(record.get(self.residential_uprn_field))
+
+        return {
+            "address": address,
+            "postcode": record.get(self.postcode_field).strip(),
+            "polling_station_id": str(record.get(self.station_id_field)),
+            "uprn": uprn,
+        }
+
+    def get_stations(self):
+        with tempfile.NamedTemporaryFile() as tmp:
+            response = requests.get(
+                self.stations_url,
+                headers={
+                    "X-API-KEY": self.get_api_key(),
+                    "User-Agent": "Scraper/DemocracyClub",
+                    "Accept": "*/*",
+                },
+                verify=False,
+            )
+
+            tmp.write(response.content)
+            return self.get_data(self.stations_filetype, tmp.name)
+
+    def get_station_point(self, record):
+        location = None
+        badvalues = ["", 0, None]
+        if record["latitude"] not in badvalues and record["longitude"] not in badvalues:
+            # if we've got points, use them
+            location = Point(
+                float(record["latitude"]), float(record["longitude"]), srid=self.srid
+            )
+            return location
+        if not self.allow_station_point_from_postcode:
+            return None
+
+        # otherwise, geocode using postcode
+        postcode = record[self.postcode_field].strip()
+        if postcode == "":
+            return None
+
+        try:
+            location_data = geocode_point_only(postcode)
+            location = location_data.centroid
+        except PostcodeError:
+            location = None
+
+        return location
+
+    def station_record_to_dict(self, record):
+        address = format_polling_station_address(
+            [record.get(self.station_name_field)]
+            + [record.get(field) for field in self.address_fields]
+        )
+
+        location = self.get_station_point(record)
+
+        return {
+            "internal_council_id": record.get(self.station_id_field),
+            "postcode": record.get(self.postcode_field).strip(),
             "address": address,
             "location": location,
         }
