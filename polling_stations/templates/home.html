@@ -44,7 +44,7 @@
             {% elif not is_whitelabel %}
                 <div class="ds-card">
                     <div class="ds-card-body">
-                        <h2>{% blocktrans with election_date=election_date|date:"DATE_FORMAT" context="Section heading for information about elections on that date. election_date is already localised, e.g. '6 Mai 2021'." %}{{ election_date }} Elections{% endblocktrans %}</h2>
+                        <h2>{% blocktrans with election_date=election_date|date:"DATE_FORMAT" context="Section heading for information about elections on that date. election_date is already localised, e.g. '6 Mai 2021'." %}{{ election_date }} English Elections{% endblocktrans %}</h2>
 
                         {% if election_date_is_today %}
                             <p>{% trans "Polling stations are open from 7am to 10pm <strong>today</strong>." %}</p>
