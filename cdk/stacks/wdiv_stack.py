@@ -106,13 +106,19 @@ class WDIVStack(Stack):
         return wdiv_alb_tg
 
     def create_launch_template(self) -> ec2.LaunchTemplate:
+        # Tested high traffic instance. Only use this or larger.
+        # c* types suggested as the app is CPU bound
+        instance_types_per_env = {
+            "development": "t3a.medium",
+            "staging": "t3a.medium",
+            "production": "c6a.2xlarge",
+        }
         launch_template = ec2.LaunchTemplate(
             self,
             "wdiv-launch-template-id",
-            # Tested high traffic instance. Only use this or larger.
-            # c* types suggested as the app is CPU bound
-            instance_type=ec2.InstanceType("c6a.2xlarge"),
-            # instance_type=ec2.InstanceType("t3a.large"),
+            instance_type=ec2.InstanceType(
+                instance_types_per_env.get(self.dc_environment)
+            ),
             machine_image=self.latest_ami,
             launch_template_name="wdiv",
             role=self.roles["codedeploy-ec2-instance-profile"],
