@@ -298,7 +298,7 @@ class AddressList(AssignPollingStationsMixin):
         if duplicate_count >= 1:
             self.logger.log_message(
                 logging.WARNING,
-                f"{duplicate_count} UPRNs are duplicated in council data. These have been discarded.",
+                f"{duplicate_count} UPRNs are assigned to more than one station in council data. These have been discarded.",
             )
 
         self.elements = [
