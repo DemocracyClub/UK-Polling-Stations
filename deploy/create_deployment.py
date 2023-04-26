@@ -7,6 +7,29 @@ import time
 session = boto3.Session(region_name=os.environ.get("AWS_REGION"))
 
 
+def get_deployment_config_name(code_deploy_client):
+    deployment_group = code_deploy_client.get_deployment_group(
+        applicationName="WDIVCodeDeploy",
+        deploymentGroupName="WDIVDefaultDeploymentGroup",
+    )
+    asg_name = deployment_group["deploymentGroupInfo"]["autoScalingGroups"][0]["name"]
+    autoscale_client = session.client(
+        "autoscaling", region_name=os.environ.get("AWS_REGION")
+    )
+    autoscale_client.describe_auto_scaling_groups(AutoScalingGroupNames=[asg_name])[
+        "AutoScalingGroups"
+    ][0]
+    asg_info = autoscale_client.describe_auto_scaling_groups(
+        AutoScalingGroupNames=[asg_name]
+    )["AutoScalingGroups"][0]
+    instance_count = len(
+        [i for i in asg_info["Instances"] if i["LifecycleState"] == "InService"]
+    )
+    if instance_count > 1:
+        return "CodeDeployDefault.HalfAtATime"
+    return "CodeDeployDefault.AllAtOnce"
+
+
 def create_deployment():
     """
     Create a new deployment and return deploy ID
@@ -30,7 +53,7 @@ def create_deployment():
         applicationName="WDIVCodeDeploy",
         deploymentGroupName="WDIVDefaultDeploymentGroup",
         ignoreApplicationStopFailures=True,
-        deploymentConfigName="CodeDeployDefault.HalfAtATime",
+        deploymentConfigName=get_deployment_config_name(client),
         revision={
             "revisionType": "GitHub",
             "gitHubLocation": {
