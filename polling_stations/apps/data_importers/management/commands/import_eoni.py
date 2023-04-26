@@ -117,11 +117,17 @@ class Command(BaseStationsImporter, CsvMixin):
                         )
                         address_location.transform(4326)
                         address_location_ewkt = address_location.ewkt
+
+                    postcode = row["PRO_POSTCODE"].strip()
+                    address = row["PRO_FULLADDRESS"].strip()
+                    if address.endswith(f", {postcode}"):
+                        address = address.replace(f", {postcode}", "")
+
                     addresses.writerow(
                         {
                             "uprn": row["PRO_UPRN"].strip(),
-                            "address": row["PRO_FULLADDRESS"].strip(),
-                            "postcode": row["PRO_POSTCODE"].strip(),
+                            "address": address,
+                            "postcode": postcode,
                             "location": address_location_ewkt,
                             "addressbase_postal": "D",
                         }
