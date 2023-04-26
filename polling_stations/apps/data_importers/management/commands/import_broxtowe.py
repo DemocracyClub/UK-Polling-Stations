@@ -6,17 +6,18 @@ from data_importers.github_importer import BaseGitHubImporter
 
 class Command(BaseGitHubImporter, ShpMixin):
     council_id = "BRT"
-    elections = ["2021-05-06"]
+    elections = ["2023-05-04"]
 
     # This one is a bit of a mish-mash
     # The stations are on GitHub
     srid = 4326
+    districts_srid = 4326
     scraper_name = "wdiv-scrapers/DC-PollingStations-Broxtowe"
     geom_type = "geojson"
 
     # but we need to import the districts from a file on S3
     districts_srid = 27700
-    districts_name = "2021-03-19T10:01:42.698161566/Polling_Districts_Split_2021.zip"
+    districts_name = "2023-05-04/2023-04-26T19:25:20/Polling_Districts_Split_2021.zip"
     districts_filetype = "shp.zip"
     local_files = True
 
@@ -32,6 +33,8 @@ class Command(BaseGitHubImporter, ShpMixin):
         }
 
     def station_record_to_dict(self, record):
+        if record["CURR"].strip().upper() == "N":
+            return None
         location = self.extract_geometry(
             record, self.geom_type, self.get_srid("stations")
         )
@@ -41,16 +44,9 @@ class Command(BaseGitHubImporter, ShpMixin):
         else:
             address = "\n".join([record["LABEL"], record["ADDRESS"]])
 
-        # There are several portakabins at each site, we only want one of them.
-        if (
-            record["POLL_DIST"] in ["GRE2", "GRE3", "KIM1"]
-            and "Unit 1" not in record["LABEL"]
-        ):
-            return None
-
         return {
-            "internal_council_id": record["POLL_DIST"],
-            "polling_district_id": record["POLL_DIST"].replace(" ", ""),
+            "internal_council_id": record["PD"],
+            "polling_district_id": record["PD"],
             "address": address,
             "postcode": "",
             "location": location,
