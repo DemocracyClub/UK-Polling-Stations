@@ -302,7 +302,7 @@ workflows:
     - run_new_imports:
         name: "Development: Run New Imports"
         requires: [build_and_test]
-        context: [deployment-development-wdiv, slack-secrets]
+        context: [deployment-development-wdiv, slack-secrets, fcs-api]
         filters: { branches: { only: [ development ] } }
     ###########
     # STAGING #
@@ -310,7 +310,7 @@ workflows:
     - run_new_imports:
         name: "Staging: Run New Imports"
         requires: [build_and_test]
-        context: [deployment-staging-wdiv, slack-secrets]
+        context: [deployment-staging-wdiv, slack-secrets, fcs-api]
         filters: { branches: { only: [ main, master ] } }
     ##############
     # PRODUCTION #
@@ -318,7 +318,7 @@ workflows:
     - run_new_imports:
         name: "Production: Run New Imports"
         requires: [build_and_test, "Staging: Run New Imports"]
-        context: [deployment-production-wdiv, slack-secrets]
+        context: [deployment-production-wdiv, slack-secrets, fcs-api]
         filters: { branches: { only: [ main, master ] } }
 
 
@@ -358,7 +358,7 @@ workflows:
         # NB if no imports have changed this is a no-op
         name: "Development: Run New Imports Post Deploy"
         requires: ["Development: AWS CodeDeploy"]
-        context: [deployment-development-wdiv, slack-secrets]
+        context: [deployment-development-wdiv, slack-secrets, fcs-api]
         filters: { branches: { only: [ development ] } }
 
     ###########
@@ -385,7 +385,7 @@ workflows:
         # NB if no imports have changed this is a no-op
         name: "Staging: Run New Imports Post Deploy"
         requires: ["Staging: AWS CodeDeploy"]
-        context: [deployment-staging-wdiv, slack-secrets]
+        context: [deployment-staging-wdiv, slack-secrets, fcs-api]
         filters: { branches: { only: [ main, master ] } }
 
     ##############
@@ -418,5 +418,5 @@ workflows:
         # NB if no imports have changed this is a no-op
         name: "Production: Run New Imports Post Deploy"
         requires: ["Production: AWS CodeDeploy"]
-        context: [deployment-production-wdiv, slack-secrets]
+        context: [deployment-production-wdiv, slack-secrets, fcs-api]
         filters: { branches: { only: [ main, master ] } }
