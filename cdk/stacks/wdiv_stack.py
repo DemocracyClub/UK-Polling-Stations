@@ -109,8 +109,8 @@ class WDIVStack(Stack):
         # Tested high traffic instance. Only use this or larger.
         # c* types suggested as the app is CPU bound
         instance_types_per_env = {
-            "development": "t3a.medium",
-            "staging": "t3a.medium",
+            "development": "t3a.large",
+            "staging": "t3a.large",
             "production": "c6a.2xlarge",
         }
         launch_template = ec2.LaunchTemplate(
