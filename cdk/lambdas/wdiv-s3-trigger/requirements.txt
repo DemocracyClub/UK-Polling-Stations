@@ -20,7 +20,7 @@ requests-paginator==0.2.0
     # via -r cdk/lambdas/wdiv-s3-trigger/requirements.in
 sentry-sdk==1.20.0
     # via -r cdk/lambdas/wdiv-s3-trigger/requirements.in
-urllib3==1.26.15
+urllib3==2.0.0
     # via
     #   requests
     #   sentry-sdk
