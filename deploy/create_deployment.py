@@ -30,6 +30,7 @@ def create_deployment():
         applicationName="WDIVCodeDeploy",
         deploymentGroupName="WDIVDefaultDeploymentGroup",
         ignoreApplicationStopFailures=True,
+        deploymentConfigName="CodeDeployDefault.HalfAtATime",
         revision={
             "revisionType": "GitHub",
             "gitHubLocation": {
