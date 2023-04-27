@@ -1,45 +1,37 @@
-from django.contrib.gis.geos import MultiPoint
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.base_importers import BaseShpStationsShpDistrictsImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseShpStationsShpDistrictsImporter):
     council_id = "DOV"
-    elections = ["2021-05-06"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Dover"
-    geom_type = "geojson"
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        code = record["district"].split("-")[0].strip()
-
-        return {
-            "internal_council_id": code,
-            "name": record["district"],
-            "area": poly,
-            "polling_station_id": code,
-        }
+    stations_name = "2023-05-04/2023-04-27T06:17:27/Polling_Stations.shp"
+    stations_filetype = "shp"
+    districts_name = "2023-05-04/2023-04-27T06:17:27/DDC_Polling_Boundaries.shp"
+    districts_filetype = "shp"
+    elections = ["2023-05-04"]
 
     def station_record_to_dict(self, record):
-        if record["POLLING__1"] == "PAY" and record["OBJECTID"] == 199:
+        code = record[0].strip()
+        address = f"{record[1].strip()}, {record[3].strip()}"
+        if code == "PAY":
+            # Addresses in this ward are split between stations by address, not sub-district
+            # Therefore we can't tell where they should vote
             return None
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        if isinstance(location, MultiPoint) and len(location) == 1:
-            location = location[0]
+        return {
+            "internal_council_id": code,
+            "polling_district_id": code,
+            "address": address,
+            "postcode": "",
+        }
 
-        address = "\n".join([record["NAME_OF_PO"], record["LOCATION"]])
-        codes = record["POLLING__1"].split("&")
-        stations = []
-        for code in codes:
-            stations.append(
-                {
-                    "internal_council_id": code.strip(),
-                    "postcode": record["POSTCODE"],
-                    "address": address,
-                    "location": location,
-                }
-            )
-        return stations
+    def district_record_to_dict(self, record):
+        code = record[0].strip()
+        ward = record[7].strip()
+        if code == "PAY":
+            # Addresses in this ward are split between stations by address, not sub-district
+            # Therefore we can't tell where they should vote
+            return None
+        return {
+            "internal_council_id": code,
+            "name": f"{ward} - {code}",
+            "polling_station_id": code,
+        }
