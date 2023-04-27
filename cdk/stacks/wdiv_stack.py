@@ -339,7 +339,7 @@ class WDIVStack(Stack):
         cert_arns = {
             "development": "arn:aws:acm:us-east-1:356853674636:certificate/587f4682-6350-43d1-9a79-7380d351e1ed",
             "staging": "arn:aws:acm:us-east-1:047316047231:certificate/622bd46c-30ec-45ca-8860-5af5b7d7f9c5",
-            "production": "arn:aws:acm:us-east-1:864930021230:certificate/f93c7000-ec11-4e90-a016-7c6e0966bf3b",
+            "production": "arn:aws:acm:us-east-1:864930021230:certificate/8e2df750-10ed-437f-8f24-b8393d12f788",
         }
         cert = acm.Certificate.from_certificate_arn(
             self,
@@ -351,6 +351,10 @@ class WDIVStack(Stack):
             self,
             "FQDN",
         )
+
+        cf_domains = [fqdn]
+        if self.dc_environment == "production":
+            cf_domains.append(f"www.{fqdn}")
 
         cloudfront_dist = cloudfront.Distribution(
             self,
@@ -405,7 +409,7 @@ class WDIVStack(Stack):
                 )
             },
             certificate=cert,
-            domain_names=[fqdn],
+            domain_names=cf_domains,
             price_class=cloudfront.PriceClass.PRICE_CLASS_100,
         )
 
@@ -416,6 +420,15 @@ class WDIVStack(Stack):
             self,
             "FQDN_A_RECORD_TO_CF",
             zone=hosted_zone,
+            target=route_53.RecordTarget.from_alias(
+                route_53_target.CloudFrontTarget(cloudfront_dist)
+            ),
+        )
+        route_53.ARecord(
+            self,
+            "WWW_FQDN_A_RECORD_TO_CF",
+            zone=hosted_zone,
+            record_name=f"www.{fqdn}",
             target=route_53.RecordTarget.from_alias(
                 route_53_target.CloudFrontTarget(cloudfront_dist)
             ),
