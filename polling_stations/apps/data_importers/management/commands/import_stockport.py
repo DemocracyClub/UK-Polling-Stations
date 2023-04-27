@@ -47,7 +47,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # St Michael’s Scout Centre
         if record.polling_place_id == "11802":
-            record = record._replace(polling_place_easting="389240")
+            record = record._replace(polling_place_easting="389230")
             record = record._replace(polling_place_northing="385236")
 
         return super().station_record_to_dict(record)
