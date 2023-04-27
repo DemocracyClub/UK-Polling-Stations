@@ -179,6 +179,7 @@ class Command(BaseCommand):
             self.stdout.write(
                 "No import scripts have changed. So nothing new to import.\n"
             )
+            self.update_last_import_sha_on_ssm(to_sha)
         else:
             self.stdout.write("Not running import scripts")
 
