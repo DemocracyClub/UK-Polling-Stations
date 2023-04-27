@@ -14,12 +14,11 @@
     {% else %}
         <p>{% blocktrans with cancelled_election_name=cancelled_election.name %}The poll for <strong>{{ cancelled_election_name }}</strong> has been cancelled.{% endblocktrans %}</p>
     {% endif %}
+    <p>To learn more, please visit <a href="https://whocanivotefor.co.uk/elections/{{ cancelled_election.slug }}/">Who Can I Vote For?</a></p>
 {% endif %}
 
 {% if cancelled_election.metadata.cancelled_election.detail %}
-    {% filter markdown %}
-        {{ cancelled_election.metadata.cancelled_election.detail }}
-    {% endfilter %}
+    {% filter markdown %}{{ cancelled_election.metadata.cancelled_election.detail }}{% endfilter %}
 {% else %}
     {% if council.electoral_services_phone_numbers %}
         <p>
