@@ -96,6 +96,9 @@ class Command(BaseCommand):
                 )
                 continue
 
+    def run_misc_fixes(self):
+        call_command("misc_fixes")
+
     def output_summary(self):
         for line in self.summary:
             if line[0] == "INFO":
@@ -162,11 +165,13 @@ class Command(BaseCommand):
             self.stdout.write("Only import scripts have changed\n")
             self.stdout.write("Running import scripts\n")
             self.run_scripts(changed_scripts, cmd_opts)
+            self.run_misc_fixes()
             self.stdout.write("updating LAST_IMPORT_SHA on ssm")
             self.update_last_import_sha_on_ssm(to_sha)
         elif has_imports and has_application and is_post_deploy:
             self.stdout.write("App has deployed. OK to run import scripts")
             self.run_scripts(changed_scripts, cmd_opts)
+            self.run_misc_fixes()
             self.update_last_import_sha_on_ssm(to_sha)
         elif has_imports and has_application and not is_post_deploy:
             self.stdout.write("Need to deploy before running import scripts\n")
