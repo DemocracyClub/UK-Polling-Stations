@@ -26,6 +26,10 @@ class Command(BaseDemocracyCountsCsvImporter):
             "N69",  # Linstead Village Hall
         ]:
             record = record._replace(xordinate="", yordinate="")
+
+        # Council said get rid of all of them...
+        # List above left in for future reference
+        record = record._replace(xordinate="", yordinate="")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
