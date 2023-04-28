@@ -56,6 +56,27 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return rec
 
     def station_record_to_dict(self, record):
+        # We strip a bunch of uprns out of addressbase, so here they are
+        uprn_lookup = {
+            # Church of Jesus Christ of Latter Day Saints
+            "10004964484": ("596737", "223633"),
+            "10070236487": ("589609", "216095"),  # St. Luke`s Church Extension
+            "10004964366": ("600304", "222358"),  # St. Margaret`s Church Hall
+            "10004965085": ("594458", "218506"),  # St. Mary`s Church
+            "10004955624": ("589636", "218945"),  # Messing Village Hall
+            "10034899287": ("591266", "221514"),  # Easthorpe Church Hall
+            "10004945075": ("599320", "225080"),  # Quaker Meeting House
+            "303005879": ("595929", "232104"),  # Little Horkesley Village Hall
+            "100091625670": ("589422", "228582"),  # Chappel & Wakes Colne Village Hall
+            "10070236496": ("590290", "216096"),  # Tiptree United Reformed Church Hall
+            "303005757": ("591699", "225838"),  # Aldham Village Hall
+            "10004951443": ("590570", "232698"),  # Mount Bures Village Hall
+        }
+        if record.polling_place_uprn in uprn_lookup:
+            record = record._replace(
+                polling_place_easting=uprn_lookup[record.polling_place_uprn][0],
+                polling_place_northing=uprn_lookup[record.polling_place_uprn][1],
+            )
         # 'Paxman Academy, Paxman Avenue, Colchester, Essex, CO2 9DQ' (id: 12176)
         if record.polling_place_id == "12176":
             record = record._replace(polling_place_postcode="CO2 9DB")
