@@ -1,34 +1,20 @@
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.ems_importers import BaseHalaroseCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseHalaroseCsvImporter):
     council_id = "TON"
-    elections = ["2021-05-06"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-TonbridgeMalling"
-    geom_type = "geojson"
+    addresses_name = "2023-05-04/2023-04-28T13:21:46.272897/Eros_SQL_Output001.csv"
+    stations_name = "2023-05-04/2023-04-28T13:21:46.272897/Eros_SQL_Output001.csv"
+    elections = ["2023-05-04"]
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        if record["OBJECTID"] == 54 and record["PROPOSED_1"] == "Kings Hill South":
-            record["PROPOSED_P"] = "TKB"
-        return {
-            "internal_council_id": record["PROPOSED_P"],
-            "name": record["PROPOSED_1"],
-            "area": poly,
-        }
-
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        address = record["ADDRESS_1"]
-
-        return {
-            "internal_council_id": record["OBJECTID"],
-            "address": address,
-            "postcode": "",
-            "location": location,
-            "polling_district_id": record["PD_LETTER"],
-        }
+    def address_record_to_dict(self, record):
+        if record.housepostcode in [
+            # split
+            "TN11 0ES",
+            "ME19 5PA",
+            "ME19 5LL",
+            "TN10 4JJ",
+            "TN11 0AJ",
+        ]:
+            return None
+        return super().address_record_to_dict(record)
