@@ -4,29 +4,24 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "ECA"
     addresses_name = (
-        "2021-03-26T11:32:58.058350/Democracy Club - polling Districts 2021 V2.csv"
+        "2023-05-04/2023-04-28T10:26:41.812261/Democracy Club - Polling Districts.csv"
     )
     stations_name = (
-        "2021-03-26T11:32:58.058350/Democracy Club - Polling Stations 2021 V2.csv"
+        "2023-05-04/2023-04-28T10:26:41.812261/Democracy Club - Polling Stations.csv"
     )
-    elections = ["2021-05-06"]
-
-    def station_record_to_dict(self, record):
-        if record.stationcode == "LE1":
-            # KENNETT PAVILION
-            record = record._replace(postcode="CB8 7QF")
-
-        return super().station_record_to_dict(record)
+    elections = ["2023-05-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
-        if record.stationcode in [
-            "COV17/1",
-            "NEW43/1",
-            "NEW44/1",
+        if record.postcode in [
+            # split
+            "CB6 2SG",
         ]:
             return None
-        if uprn in ["10002611549"]:
+        if uprn in [
+            "100090041333",  # 15 BLACK BANK ROAD, LITTLE DOWNHAM, ELY
+            "100090041332",  # 17 BLACK BANK ROAD, LITTLE DOWNHAM, ELY
+        ]:
             return None
 
         return super().address_record_to_dict(record)
