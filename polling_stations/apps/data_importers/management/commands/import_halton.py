@@ -13,6 +13,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
+        name = record.polling_place_name.replace("`", "'")
+        record = record._replace(polling_place_name=name)
         # Holy Trinity Church Trinity Street Runcorn WA7 1BJ
         if record.polling_place_id == "3405":
             record = record._replace(polling_place_easting="351595")
@@ -22,6 +24,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "3396":
             record = record._replace(polling_place_easting="")
             record = record._replace(polling_place_northing="")
+
+        # User issue #572
+        # St Michael`s Catholic Church, St Michael`s Road, Widnes
+        if record.polling_place_id == "3444":
+            record = record._replace(polling_place_easting="")
+            record = record._replace(polling_place_northing="")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
