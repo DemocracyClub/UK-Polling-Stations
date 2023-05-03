@@ -31,3 +31,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Council Station Change via slack
+        # Piccadilly Community Centre -> Kingsbury Sports & Community Centre
+        if record.polling_place_id == "3997":
+            record = record._replace(
+                polling_place_name="Kingsbury Sports & Community Centre,,,B78 2LG",
+                polling_place_address_1="Pear Tree Avenue",
+                polling_place_address_2="",
+                polling_place_address_3="",
+                polling_place_address_4="Kingsbury",
+                polling_place_postcode="B78 2LG",
+            )
+        return super().station_record_to_dict(record)
