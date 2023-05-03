@@ -1,3 +1,4 @@
+import functools
 import os
 import sys
 
@@ -8,26 +9,37 @@ session = boto3.Session(region_name=os.environ.get("AWS_REGION"))
 
 
 def get_deployment_config_name(code_deploy_client):
-    deployment_group = code_deploy_client.get_deployment_group(
-        applicationName="WDIVCodeDeploy",
-        deploymentGroupName="WDIVDefaultDeploymentGroup",
-    )
-    asg_name = deployment_group["deploymentGroupInfo"]["autoScalingGroups"][0]["name"]
-    autoscale_client = session.client(
-        "autoscaling", region_name=os.environ.get("AWS_REGION")
-    )
-    autoscale_client.describe_auto_scaling_groups(AutoScalingGroupNames=[asg_name])[
-        "AutoScalingGroups"
-    ][0]
-    asg_info = autoscale_client.describe_auto_scaling_groups(
-        AutoScalingGroupNames=[asg_name]
-    )["AutoScalingGroups"][0]
-    instance_count = len(
-        [i for i in asg_info["Instances"] if i["LifecycleState"] == "InService"]
-    )
+    asg_name = get_default_deployment_group_asg_name(code_deploy_client)
+    instance_count = get_asg_instance_count(asg_name)
+
     if instance_count > 1:
         return "CodeDeployDefault.HalfAtATime"
     return "CodeDeployDefault.AllAtOnce"
+
+
+@functools.cache
+def get_default_deployment_group_asg_name(
+    code_deploy_client,
+    app_name="WDIVCodeDeploy",
+    deployment_group_name="WDIVDefaultDeploymentGroup",
+):
+    deployment_group = code_deploy_client.get_deployment_group(
+        applicationName=app_name,
+        deploymentGroupName=deployment_group_name,
+    )
+    asg_name = deployment_group["deploymentGroupInfo"]["autoScalingGroups"][0]["name"]
+    return asg_name
+
+
+@functools.cache
+def get_asg_instance_count(asg_name):
+    autoscale_client = session.client(
+        "autoscaling", region_name=os.environ.get("AWS_REGION")
+    )
+    asg_info = autoscale_client.describe_auto_scaling_groups(
+        AutoScalingGroupNames=[asg_name]
+    )["AutoScalingGroups"][0]
+    return len([i for i in asg_info["Instances"] if i["LifecycleState"] == "InService"])
 
 
 def create_deployment():
@@ -49,6 +61,11 @@ def create_deployment():
                 f"Another deploy ({active_deployments}) is blocking this one, waiting {WAIT_SECONDS} seconds"
             )
             time.sleep(WAIT_SECONDS)
+
+    if get_asg_instance_count(get_default_deployment_group_asg_name(client)) == 0:
+        sys.stdout.write("existing ASG is empty, so not creating deployment.")
+        return None
+
     deployment = client.create_deployment(
         applicationName="WDIVCodeDeploy",
         deploymentGroupName="WDIVDefaultDeploymentGroup",
@@ -143,6 +160,8 @@ def get_failed_target_info(deploy_client, deploy_id):
 
 def main():
     deployment_id = create_deployment()
+    if not deployment_id:
+        return
     check_deployment(deployment_id=deployment_id)
 
 
