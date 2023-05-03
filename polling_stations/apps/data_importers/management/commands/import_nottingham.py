@@ -20,3 +20,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Council Station Change https://trello.com/c/Z7H14XBS
+        # Mariner Court Common Room -> Crabtree Farm Community Centre
+        if record.polling_place_id == "6853":
+            record = record._replace(
+                polling_place_name="Crabtree Farm Community Centre",
+                polling_place_address_1="Steadfold Close",
+                polling_place_address_2="",
+                polling_place_address_3="",
+                polling_place_address_4="Nottingham",
+                polling_place_postcode="NG6 8AX",
+            )
+        return super().station_record_to_dict(record)
