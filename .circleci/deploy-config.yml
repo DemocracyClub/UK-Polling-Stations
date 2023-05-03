@@ -351,9 +351,9 @@ workflows:
         context: [deployment-development-wdiv, slack-secrets]
         filters: { branches: { only: [ development ] } }
         dc-environment: development
-        min-size: 1
+        min-size: 0
         max-size: 2
-        desired-capacity: 1
+        desired-capacity: 0
     - run_new_imports_post_deploy:
         # NB if no imports have changed this is a no-op
         name: "Development: Run New Imports Post Deploy"
