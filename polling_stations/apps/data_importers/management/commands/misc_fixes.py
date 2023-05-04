@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-# from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point
 from pollingstations.models import PollingStation, PollingDistrict
 from councils.models import Council
 from addressbase.models import Address, UprnToCouncil
@@ -152,5 +152,21 @@ class Command(BaseCommand):
             print("Deleting data for council %s..." % (council_id))
 
         print("..done")
+
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/579/change/
+        print("Fixing point for ALTON MANOR COMMUNITY CENTRE - Amber Valley")
+        for station_id in ["BEL", "BNB", "BEA/BEB"]:
+            update_station_point("AMB", station_id, Point(-1.4621, 53.0305, srid=4326))
+
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/580/change/
+        print("Fix postcode for Army Cadet Centre - West Suffolk")
+        update_station_address("WSK", "16719", postcode="CB9 9HG")
+
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/581/change/
+        print("Fixing point for Belper Leisure Centre - Amber Valley")
+        for station_id in ["BEG/1 - BEW", "BEG/2"]:
+            update_station_point(
+                "AMB", station_id, Point(-1.45690, 53.02595, srid=4326)
+            )
 
         print("*** ...finished applying misc fixes. ***")
