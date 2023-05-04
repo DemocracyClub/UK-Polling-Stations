@@ -169,4 +169,12 @@ class Command(BaseCommand):
                 "AMB", station_id, Point(-1.45690, 53.02595, srid=4326)
             )
 
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/604/change/
+        print("Fixing point for GREGSON GREEN COMMUNITY CENTRE - South Ribble")
+        update_station_point(
+            "SRI",
+            "61-gregson-green-community-centre",
+            Point(-2.619000, 53.734334, srid=4326),
+        )
+
         print("*** ...finished applying misc fixes. ***")
