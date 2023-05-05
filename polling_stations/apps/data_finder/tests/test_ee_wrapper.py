@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+from urllib.parse import parse_qs
+
 import mock
 import requests
 from django.test import TestCase, override_settings
@@ -399,9 +401,14 @@ def get_data_one_cancelled_ballot_with_replacement(self, query_url):
         "replaced_by": None,
         "metadata": None,
     }
-    if query_url.endswith(
-        "/api/elections.json?postcode=AA1 1AA&future=1&current=1&identifier_type=ballot"
-    ):
+    query_params = parse_qs(query_url.split("?")[-1])
+    expected_params = {
+        "postcode": ["AA1 1AA"],
+        "future": ["1"],
+        "current": ["1"],
+        "identifier_type": ["ballot"],
+    }
+    if query_params == expected_params:
         return [this_election, that_election]
     if query_url.endswith("/api/elections/local.foo.thatdate.json"):
         return that_election

@@ -68,3 +68,24 @@ class PollingEntityMixin:
     def geo(self, request, format=None):
         self.geo = True
         return self.output(request)
+
+
+def parse_qs_to_python(qs: dict):
+    qs = dict(qs)
+
+    def _clean_value(v):
+        if v in ["0", "false", "False"]:
+            return False
+        if v in ["1", "true", "True"]:
+            return True
+        return v
+
+    for k, v in qs.items():
+        if isinstance(v, list):
+            sub_list = []
+            for sub_v in v:
+                sub_list.append(_clean_value(sub_v))
+            qs[k] = sub_list
+        else:
+            qs[k] = _clean_value(v)
+    return qs

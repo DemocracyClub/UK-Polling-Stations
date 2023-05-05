@@ -16,6 +16,7 @@ from data_finder.helpers import (
 from pollingstations.models import CustomFinder
 from uk_geo_utils.helpers import AddressSorter, Postcode
 from .address import PostcodeResponseSerializer, get_bug_report_url
+from .mixins import parse_qs_to_python
 
 
 class PostcodeViewSet(ViewSet, LogLookUpMixin):
@@ -54,10 +55,14 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return routing_helper.addresses[0].uprntocouncil.advance_voting_station
         return None
 
-    def get_ee_wrapper(self, postcode, rh):
+    def get_ee_wrapper(self, postcode, rh, query_params):
         if rh.route_type == "multiple_addresses":
             return EmptyEveryElectionWrapper()
-        return EveryElectionWrapper(postcode)
+        kwargs = {}
+        query_params = parse_qs_to_python(query_params)
+        if include_current := query_params.get("include_current", False):
+            kwargs["include_current"] = any(include_current)
+        return EveryElectionWrapper(postcode, **kwargs)
 
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
         postcode = Postcode(postcode)
@@ -90,7 +95,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         ret["polling_station_known"] = False
         ret["polling_station"] = None
 
-        ee = self.get_ee_wrapper(postcode, rh)
+        ee = self.get_ee_wrapper(postcode, rh, request.query_params)
         has_election = ee.has_election()
         if has_election:
             # get polling station if there is an election in this area

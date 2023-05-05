@@ -43,7 +43,7 @@ class AddressTest(TestCase):
         self.request.user = AnonymousUser()
         self.request = APIView().initialize_request(self.request)
         self.endpoint = AddressViewSet()
-        self.endpoint.get_ee_wrapper = lambda x: EEMockWithElection()
+        self.endpoint.get_ee_wrapper = lambda x, params: EEMockWithElection()
 
     def test_station_found(self):
         response = self.endpoint.retrieve(
@@ -66,7 +66,7 @@ class AddressTest(TestCase):
         self.assertEqual(1, len(response.data["ballots"]))
 
     def test_station_found_but_no_election(self):
-        self.endpoint.get_ee_wrapper = lambda x: EEMockWithoutElection()
+        self.endpoint.get_ee_wrapper = lambda x, params: EEMockWithoutElection()
         response = self.endpoint.retrieve(
             self.request,
             "200",

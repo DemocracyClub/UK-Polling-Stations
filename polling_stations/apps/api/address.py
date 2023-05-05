@@ -18,6 +18,7 @@ from uk_geo_utils.helpers import Postcode
 from pollingstations.models import AdvanceVotingStation
 from .councils import CouncilDataSerializer
 from .fields import PointField
+from .mixins import parse_qs_to_python
 from .pollingstations import PollingStationGeoSerializer
 
 
@@ -92,12 +93,18 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         assert "uprn" in kwargs
         return Address.objects.get(uprn=kwargs["uprn"])
 
-    def get_ee_wrapper(self, address):
+    def get_ee_wrapper(self, address, query_params):
         rh = RoutingHelper(address.postcode)
+        kwargs = {}
+        query_params = parse_qs_to_python(query_params)
+        if include_current := query_params.get("include_current", False):
+            kwargs["include_current"] = any(include_current)
+
         if not rh.addresses_have_single_station:
             if address.location:
-                return EveryElectionWrapper(point=address.location)
-        return EveryElectionWrapper(postcode=address.postcode)
+                return EveryElectionWrapper(point=address.location, **kwargs)
+
+        return EveryElectionWrapper(postcode=address.postcode, **kwargs)
 
     def retrieve(
         self, request, uprn=None, format=None, geocoder=geocode_point_only, log=True
@@ -130,8 +137,7 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
 
         ret["polling_station_known"] = False
         ret["polling_station"] = None
-
-        ee = self.get_ee_wrapper(address)
+        ee = self.get_ee_wrapper(address, request.query_params)
         has_election = ee.has_election()
         # An address might have an election but we might not know the polling station.
         if has_election and address.polling_station_id:
