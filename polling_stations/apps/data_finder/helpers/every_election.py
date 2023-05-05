@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from typing import List
+from urllib.parse import urljoin, urlencode
 
 import requests
 from django.conf import settings
@@ -11,7 +12,14 @@ session = requests.session()
 
 
 class EveryElectionWrapper:
-    def __init__(self, postcode=None, point=None, council_id=None):
+    def __init__(
+        self, postcode=None, point=None, council_id=None, include_current=False
+    ):
+        self.base_params = {"identifier_type": "ballot", "current": 1}
+        if not include_current:
+            # When future=1, current-but-past elections are excluded.
+            # Only pass future if include_current is False
+            self.base_params["future"] = 1
         if not any((postcode, point, council_id)):
             raise ValueError("Expected either a point, postcode or council_id")
         try:
@@ -35,24 +43,27 @@ class EveryElectionWrapper:
             self.request_success = False
 
     def get_data_by_postcode(self, postcode):
-        query_url = (
-            "%sapi/elections.json?postcode=%s&future=1&current=1&identifier_type=ballot"
-            % (
-                settings.EE_BASE,
-                postcode,
-            )
+        params = self.base_params.copy()
+        params.update(
+            {
+                "postcode": postcode,
+            }
         )
+        root_url = urljoin(settings.EE_BASE, "api/elections.json")
+        query_url = f"{root_url}?{urlencode(params)}"
+
         return self.get_data(query_url)
 
     def get_data_by_point(self, point):
-        query_url = (
-            "%sapi/elections.json?coords=%s,%s&future=1&current=1&identifier_type=ballot"
-            % (
-                settings.EE_BASE,
-                point.y,
-                point.x,
-            )
+        params = self.base_params.copy()
+        params.update(
+            {
+                "coords": f"{point.y},{point.x}",
+            }
         )
+
+        root_url = urljoin(settings.EE_BASE, "api/elections.json")
+        query_url = f"{root_url}?{urlencode(params)}"
         return self.get_data(query_url)
 
     def get_election_intersecting_local_authority(self, council_id):
