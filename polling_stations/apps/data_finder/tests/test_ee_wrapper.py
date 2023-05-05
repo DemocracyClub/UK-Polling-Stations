@@ -445,7 +445,7 @@ class CancelledElectionTests(TestCase):
     def test_two_ballots_one_cancelled(self):
         ee = EveryElectionWrapper(postcode="AA11AA")
         self.assertTrue(ee.request_success)
-        self.assertTrue(ee.has_election())
+        self.assertTrue(ee.has_election(future_only=False))
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
         self.assertEqual(cancelled_info["name"], None)
