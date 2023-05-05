@@ -196,7 +196,7 @@ class WDIVStack(Stack):
             "asg-id",
             vpc=self.default_vpc,
             launch_template=self.launch_template,
-            desired_capacity=20,
+            desired_capacity=2,
             min_capacity=1,
             max_capacity=25,
         )
