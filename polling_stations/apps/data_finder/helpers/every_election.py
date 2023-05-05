@@ -4,6 +4,7 @@ from typing import List
 from urllib.parse import urljoin, urlencode
 
 import requests
+from dateutil.parser import parse
 from django.conf import settings
 from django.core.cache import cache
 from uk_geo_utils.helpers import Postcode
@@ -206,7 +207,7 @@ class EveryElectionWrapper:
 
         return rec
 
-    def has_election(self):
+    def has_election(self, future_only=True):
         if not settings.EVERY_ELECTION["CHECK"]:
             return settings.EVERY_ELECTION["HAS_ELECTION"]
 
@@ -215,7 +216,14 @@ class EveryElectionWrapper:
             # assume there *is* an upcoming election
             return True
 
-        if len(self.ballots) > 0 and not self.all_ballots_cancelled:
+        ballots_to_check = self.ballots[:]
+        if future_only:
+            ballots_to_check = []
+            for ballot in self.ballots:
+                if parse(ballot["poll_open_date"]) >= datetime.today():
+                    ballots_to_check.append(ballot)
+
+        if len(ballots_to_check) > 0 and not self.all_ballots_cancelled:
             return True
         return False
 
