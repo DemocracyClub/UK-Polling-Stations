@@ -30,3 +30,5 @@ CACHES = {
 # from dc_logging_client import DCWidePostcodeLoggingClient
 # POSTCODE_LOGGER = DCWidePostcodeLoggingClient(direct_connection=True)
 POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)
+
+SHOW_GB_ID_MESSAGING = False

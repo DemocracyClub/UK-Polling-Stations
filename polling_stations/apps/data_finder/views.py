@@ -62,6 +62,9 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         https://github.com/DemocracyClub/UK-Polling-Stations/pull/2037/files#diff-78a9fc588889ef751c68b530b1af1e80
         https://github.com/DemocracyClub/UK-Polling-Stations/issues/2051
         """
+        context["show_gb_id_messaging"] = getattr(
+            settings, "SHOW_GB_ID_MESSAGING", False
+        )
 
         charismatic_dates = getattr(settings, "NEXT_CHARISMATIC_ELECTION_DATES", [])
         try:
