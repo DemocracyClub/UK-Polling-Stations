@@ -14,12 +14,6 @@ def test_api_beta(page, live_server):
         expect(page.locator("h1")).to_have_text("Api Root")
 
 
-def test_email_mailing_list(page, live_server):
-    with check_for_console_errors(page):
-        page.goto(f"{live_server.url}/email/mailing_list")
-        expect(page.locator("h3")).to_have_text("Join our mailing list")
-
-
 def test_feedback(page, live_server):
     with check_for_console_errors(page):
         page.goto(f"{live_server.url}/feedback")
