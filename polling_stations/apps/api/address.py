@@ -94,17 +94,12 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         return Address.objects.get(uprn=kwargs["uprn"])
 
     def get_ee_wrapper(self, address, query_params):
-        rh = RoutingHelper(address.postcode)
         kwargs = {}
         query_params = parse_qs_to_python(query_params)
         if include_current := query_params.get("include_current", False):
             kwargs["include_current"] = any(include_current)
 
-        if not rh.addresses_have_single_station:
-            if address.location:
-                return EveryElectionWrapper(point=address.location, **kwargs)
-
-        return EveryElectionWrapper(postcode=address.postcode, **kwargs)
+        return EveryElectionWrapper(point=address.location, **kwargs)
 
     def retrieve(
         self, request, uprn=None, format=None, geocoder=geocode_point_only, log=True
