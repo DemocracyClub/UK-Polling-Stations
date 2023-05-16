@@ -57,7 +57,6 @@ class TestHtml:
             reverse("address_view", kwargs={"uprn": AddressFactory().uprn}),
             reverse("address_select_view", kwargs={"postcode": "AA1 1ZZ"}),
             reverse("dashboard:index"),
-            reverse("dc_signup_form:election_reminders_signup_view"),
             reverse("example"),
             reverse("postcode_view", kwargs={"postcode": "AA1 1ZZ"}),
             reverse("we_dont_know", kwargs={"postcode": "AA1 1ZZ"}),

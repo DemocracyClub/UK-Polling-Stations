@@ -135,7 +135,6 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
-                "dc_signup_form.context_processors.signup_form",
                 "feedback.context_processors.feedback_form",
                 "bug_reports.context_processors.bug_report_form",
                 "pollingstations.context_processors.google_analytics",
@@ -179,7 +178,6 @@ INSTALLED_APPS = (
     "django_extensions",
     "corsheaders",
     "pipeline",
-    "dc_signup_form",
     "apiblueprint_view",
     "dc_design_system",
     "dc_utils",
@@ -291,10 +289,7 @@ TEST_RUNNER = "django.test.runner.DiscoverRunner"
 ADDRESS_MODEL = "addressbase.Address"
 ONSUD_MODEL = "addressbase.UprnToCouncil"
 
-EMAIL_SIGNUP_ENDPOINT = "https://democracyclub.org.uk/mailing_list/api_signup/v1/"
 DEFAULT_FROM_EMAIL = "pollingstations@democracyclub.org.uk"
-EMAIL_SIGNUP_API_KEY = os.environ.get("EMAIL_SIGNUP_API_KEY", "")
-
 # Disable Basic Auth by default
 # We only want to use this on staging deploys
 BASICAUTH_DISABLE = True

@@ -77,7 +77,6 @@ extra_patterns = [
         ),
         name="about",
     ),
-    re_path(r"^email/", include("dc_signup_form.urls")),
 ]
 
 if "dashboard" in settings.INSTALLED_APPS:
