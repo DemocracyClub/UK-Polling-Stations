@@ -118,6 +118,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         UprnToCouncil.objects.filter(lad__in=council.identifiers).update(
             polling_station_id=""
         )
+        # DataQuality.objects.filter(council=council).delete()
 
     def get_council(self, council_id):
         return Council.objects.get(pk=council_id)
@@ -184,6 +185,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         record[0].num_stations = station_report.get_stations_imported()
         record[0].num_districts = district_report.get_districts_imported()
         record[0].num_addresses = address_report.get_addresses_with_station_id()
+        record[0].station_data_file = station_report.get_file_set()
         record[0].report = report.generate_string_report()
         record[0].save()
 
