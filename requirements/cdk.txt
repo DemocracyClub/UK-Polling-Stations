@@ -12,5 +12,5 @@ aws_cdk.aws_s3 == 1.199.0
 aws_cdk.aws_cloudfront == 1.199.0
 aws_cdk.aws_cloudfront_origins == 1.199.0
 aws_cdk.aws_route53_targets == 1.199.0
-aws_cdk.aws_events_targets == 1.199.0
+aws_cdk.aws_events_targets == 1.202.0
 constructs < 4.0.0
