@@ -5,7 +5,7 @@ aws-cdk.cx-api == 1.199.0
 aws_cdk.aws_ec2 == 1.199.0
 aws_cdk.aws_autoscaling == 1.199.0
 aws_cdk.aws_codedeploy == 1.199.0
-aws_cdk.aws_lambda_python == 1.199.0
+aws_cdk.aws_lambda_python == 1.202.0
 aws_cdk.aws_lambda == 1.199.0
 aws_cdk.aws_s3_notifications == 1.199.0
 aws_cdk.aws_s3 == 1.199.0
