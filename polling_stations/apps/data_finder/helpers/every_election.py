@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from typing import Optional
 from typing import List
 from urllib.parse import urljoin, urlencode
@@ -199,7 +199,7 @@ class EveryElectionWrapper:
                     cancelled_ballot["replaced_by"],
                 )
                 new_ballot = self.get_data(query_url)
-                rec["rescheduled_date"] = datetime.strptime(
+                rec["rescheduled_date"] = datetime.datetime.strptime(
                     new_ballot["poll_open_date"], "%Y-%m-%d"
                 ).strftime("%-d %B %Y")
             except requests.exceptions.RequestException:
@@ -220,7 +220,7 @@ class EveryElectionWrapper:
         if future_only:
             ballots_to_check = []
             for ballot in self.ballots:
-                if parse(ballot["poll_open_date"]) >= datetime.today():
+                if parse(ballot["poll_open_date"]).date() >= datetime.date.today():
                     ballots_to_check.append(ballot)
 
         if len(ballots_to_check) > 0 and not self.all_ballots_cancelled:
