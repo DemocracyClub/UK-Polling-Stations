@@ -6,7 +6,8 @@
 For now deps are managed with pip-tools:
 ```
 pip install pip-tools
-python -m piptools compile --resolver backtracking -o cdk/lambdas/wdiv-s3-trigger/requirements.txt cdk/lambdas/wdiv-s3-trigger/requirements.in
+python -m pip-compile --generate-hashes  --resolver=backtracking -o cdk/lambdas/wdiv-s3-trigger/requirements/base.txt cdk/lambdas/wdiv-s3-trigger/requirements/base.in
+python -m pip-compile --generate-hashes  --resolver=backtracking -o cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt cdk/lambdas/wdiv-s3-trigger/requirements/testing.in
 ```
 
 Deploy with:
