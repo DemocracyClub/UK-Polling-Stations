@@ -1,3 +1,0 @@
-requests>=2.22.0
-sentry_sdk==1.16.0
-requests-paginator==0.2.0

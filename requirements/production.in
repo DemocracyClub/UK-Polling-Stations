@@ -1,0 +1,5 @@
+-c base.txt
+
+ec2_tag_conditional==0.1.2
+gunicorn==20.1.0
+https://github.com/xncbf/django-dynamodb-cache/archive/refs/tags/v0.5.1.zip

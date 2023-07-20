@@ -1,0 +1,16 @@
+-c base.txt
+
+aws_cdk.core < 2.0.0
+aws-cdk.cx-api < 2.0.0
+aws_cdk.aws_ec2 < 2.0.0
+aws_cdk.aws_autoscaling < 2.0.0
+aws_cdk.aws_codedeploy < 2.0.0
+aws_cdk.aws_lambda_python < 2.0.0
+aws_cdk.aws_lambda < 2.0.0
+aws_cdk.aws_s3_notifications < 2.0.0
+aws_cdk.aws_s3 < 2.0.0
+aws_cdk.aws_cloudfront < 2.0.0
+aws_cdk.aws_cloudfront_origins < 2.0.0
+aws_cdk.aws_route53_targets < 2.0.0
+aws_cdk.aws_events_targets < 2.0.0
+constructs < 4.0.0

@@ -1,0 +1,4 @@
+-c testing.txt
+
+wheel
+coveralls > 3.0

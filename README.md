@@ -40,9 +40,22 @@ The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing
 **This currently cannot be done on OSX; Refer to [this issue](https://github.com/DemocracyClub/UK-Polling-Stations/issues/1400) for more details.**
 
 ### Install python dependencies
+
+- Local Dev without CDK libs
 ```
-pip install -r requirements/base.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt
 ```
+
+- Local Dev with CDK libs
+```
+pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt
+```
+
+- Just Running Tests
+```
+pip install -r requirements/base.txt -r requirements/testing.txt
+```
+
 
 ### Install front-end dependencies
 ```
