@@ -246,6 +246,7 @@ def requirements(ctx, upgrade=False):
         "requirements/base.in": "requirements/base.txt",
         "requirements/testing.in": "requirements/testing.txt",
         "requirements/cdk.in": "requirements/cdk.txt",
+        "requirements/ci.in": "requirements/ci.txt",
         "requirements/local.in": "requirements/local.txt",
         "cdk/lambdas/wdiv-s3-trigger/requirements/base.in": "cdk/lambdas/wdiv-s3-trigger/requirements.txt",
         "cdk/lambdas/wdiv-s3-trigger/requirements/testing.in": "cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt",
