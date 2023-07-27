@@ -39,7 +39,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
 
       - node/install:
           node-version: '16.13.0'
@@ -58,10 +58,15 @@ jobs:
             python -m venv .venv
             . .venv/bin/activate
             python -m pip install --upgrade pip
-            python -m pip install wheel
-            python -m pip install coveralls
-            python -m pip install -r requirements/testing.txt
+            pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/ci.txt
             playwright install
+
+      - run:
+          name: install lambda trigger Python dependencies
+          command: |
+            . .venv/bin/activate
+            pip install -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
+            pip install -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 
       - run:
           name: install CDK Python dependencies
@@ -69,12 +74,18 @@ jobs:
             . .venv/bin/activate
             pip install -r requirements/cdk.txt
 
+      - run:
+          name: install Prod dependencies
+          command: |
+            . .venv/bin/activate
+            pip install -r requirements/production.txt
+
       - save_cache:
           paths:
             - ./.venv
             - ./node_modules
             - ./home/circleci/.cache
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
 
       - run:
           name: Install HTML Tidy
@@ -125,7 +136,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
       - aws-cli/setup
       - run:
           name: Check and run new import scripts.
@@ -224,7 +235,7 @@ jobs:
     steps:
     - checkout
     - restore_cache:
-        key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+        key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
     - run:
         name: "Code Deploy: Create deployment group"
         command: |
@@ -267,7 +278,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
       - aws-cli/setup
       - run:
           name: Check and run new import scripts after a deploy.
