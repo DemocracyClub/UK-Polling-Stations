@@ -13,4 +13,4 @@ source /var/www/polling_stations/code/venv/bin/activate
 pip install --upgrade pip
 
 # Install requirements
-pip install --requirement /var/www/polling_stations/code/requirements/production.txt
+pip install --requirement /var/www/polling_stations/code/requirements/base.txt --requirement /var/www/polling_stations/code/requirements/production.txt
