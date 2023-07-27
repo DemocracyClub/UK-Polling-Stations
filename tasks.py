@@ -231,3 +231,32 @@ def create_deployment(ctx, profile, commit=None):
     ctx.run(
         f"AWS_PROFILE={profile} COMMIT_SHA={commit} python deploy/create_deployment.py"
     )
+
+
+@task(
+    help={
+        "upgrade": "attempt to upgrade dependencies in line with .in constraint file",
+    }
+)
+def requirements(ctx, upgrade=False):
+    """
+    Generate various requirements/*.txt files
+    """
+    paths = {
+        "requirements/base.in": "requirements/base.txt",
+        "requirements/testing.in": "requirements/testing.txt",
+        "requirements/cdk.in": "requirements/cdk.txt",
+        "requirements/local.in": "requirements/local.txt",
+        "cdk/lambdas/wdiv-s3-trigger/requirements/base.in": "cdk/lambdas/wdiv-s3-trigger/requirements.txt",
+        "cdk/lambdas/wdiv-s3-trigger/requirements/testing.in": "cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt",
+    }
+    for in_file, out_file in paths.items():
+        if upgrade:
+            msg = f"\nGenerating {out_file} from {in_file}, and looking for upgrades\n"
+            cmd = f"pip-compile --generate-hashes --upgrade -o {out_file} {in_file}"
+        else:
+            msg = f"\nGenerating {out_file} from {in_file}, and looking for upgrades\n"
+            cmd = f"pip-compile --generate-hashes -o {out_file} {in_file}"
+
+        sys.stdout.write(msg)
+        ctx.run(cmd)
