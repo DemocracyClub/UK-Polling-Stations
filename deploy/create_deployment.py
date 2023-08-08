@@ -16,12 +16,15 @@ def get_deployment_config_name(code_deploy_client):
     autoscale_client = session.client(
         "autoscaling", region_name=os.environ.get("AWS_REGION")
     )
-    autoscale_client.describe_auto_scaling_groups(AutoScalingGroupNames=[asg_name])[
-        "AutoScalingGroups"
-    ][0]
-    asg_info = autoscale_client.describe_auto_scaling_groups(
+
+    asgs = autoscale_client.describe_auto_scaling_groups(
         AutoScalingGroupNames=[asg_name]
-    )["AutoScalingGroups"][0]
+    )
+
+    if len(asgs["AutoScalingGroups"]) == 0:
+        return "CodeDeployDefault.AllAtOnce"
+
+    asg_info = asgs["AutoScalingGroups"][0]
     instance_count = len(
         [i for i in asg_info["Instances"] if i["LifecycleState"] == "InService"]
     )
