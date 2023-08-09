@@ -411,9 +411,9 @@ pytest-flakes==4.0.5 \
     --hash=sha256:953134e97215ae31f6879fbd7368c18d43f709dc2fab5b7777db2bb2bac3a924 \
     --hash=sha256:d0e8602d882744fc6169247b62a51203c5a3d8f160892ff3b82f5b9c1e4bb675
     # via -r requirements/testing.in
-pytest-playwright==0.3.3 \
-    --hash=sha256:83a896b1b28bfaa081ca9ea27229a06a114e106e2e62fb3d5f06544748fbc1fe \
-    --hash=sha256:9bf79c633c97dd1405308b8d3600e6c8c2a200a733e2f36c5a150ba4701936f8
+pytest-playwright==0.4.2 \
+    --hash=sha256:68dd0069e2dbf8e6024c6237d51d0277626687d94ba0dd387cea2a94ae4005b9 \
+    --hash=sha256:9e9622e5507f8d27a3c7fd07aadcf43122f0086b69d1b3e6728995c8dbc0e44f
     # via -r requirements/testing.in
 pytest-pycodestyle==2.3.1 \
     --hash=sha256:2901327b8e6beab90298a9803074483efe560e191bef81d9e18119b141222830
