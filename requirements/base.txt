@@ -52,7 +52,7 @@ botocore==1.31.12 \
     #   -r requirements/base.in
     #   boto3
     #   s3transfer
-cachetools==4.2.4 \
+cachetools==v4.2.4 \
     --hash=sha256:89ea6f1b638d5a73a4f9226be57ac5e4f399d22770b92355f92dcb0f7f001693 \
     --hash=sha256:92971d3cb7d2a97efff7c7bb1657f21a8f5fb309a37530537c71b1774189f2d1
     # via dc-logging-utils
@@ -277,9 +277,9 @@ django-pipeline==2.0.8 \
     --hash=sha256:26f1d344a7bf39bc92c9dc520093471d912de53abd7d22ac715e77d779a831c8 \
     --hash=sha256:56c299cec0e644e77d5f928f4cebfff804b919cc10ff5c0bfaa070ff57e8da44
     # via dc-django-utils
-django-sesame==3.1 \
-    --hash=sha256:5ca0366259f86e5c0d38ee6401c3df39cf9b7af9dfcc13cc229bc2b7cc862a9b \
-    --hash=sha256:91ede4fe1bc6e6a8994441adf747f75b9e7e76a6a7c96e76c2980f8ac10dce60
+django-sesame==3.2.1 \
+    --hash=sha256:86ccfce17d0520289f62df0ea4ce97d72239f89b87a215d9d09aeeb83e05d4fe \
+    --hash=sha256:b7a8466ba34b6f6910e3b7287d4762fefc27e75809c7ffecd17cb5f2261450a4
     # via -r requirements/base.in
 djangorestframework==3.14.0 \
     --hash=sha256:579a333e6256b09489cbe0a067e66abe55c6595d8926be6b99423786334350c8 \
