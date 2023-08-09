@@ -26,7 +26,7 @@ rtree==1.0.1
 sentry_sdk
 boto==2.49.0
 boto3>1.0.0,<2.0.0
-uk-geo-utils==0.11.0
+uk-geo-utils==0.12.0
 freezegun==1.2.2
 
 https://github.com/DemocracyClub/dc_signup_form/archive/refs/tags/2.2.0.zip

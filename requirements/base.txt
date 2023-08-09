@@ -52,7 +52,7 @@ botocore==1.31.12 \
     #   -r requirements/base.in
     #   boto3
     #   s3transfer
-cachetools==4.2.4 \
+cachetools==v4.2.4 \
     --hash=sha256:89ea6f1b638d5a73a4f9226be57ac5e4f399d22770b92355f92dcb0f7f001693 \
     --hash=sha256:92971d3cb7d2a97efff7c7bb1657f21a8f5fb309a37530537c71b1774189f2d1
     # via dc-logging-utils
@@ -773,9 +773,9 @@ typing-extensions==4.7.1 \
     # via
     #   asgiref
     #   dj-database-url
-uk-geo-utils==0.11.0 \
-    --hash=sha256:3bf559d6f32aa47359a364b5c650579f6f35564fd601fa72b3fe1cdfed7fdaeb \
-    --hash=sha256:84cae2b3da2baea1c1ce41bfd23501f5e3db19b6436a3ff7ef49619966ce1940
+uk-geo-utils==0.12.0 \
+    --hash=sha256:0695cc971e191a5fefdb6e709fa110ab7ca4ee000526cd30db8171d1c881f6b6 \
+    --hash=sha256:b4ee8bfe7550e860933e7743408a9e72abf5197c45d264b02d250158c8538f47
     # via -r requirements/base.in
 unicodecsv==0.14.1 \
     --hash=sha256:018c08037d48649a0412063ff4eda26eaa81eff1546dbffa51fa5293276ff7fc
