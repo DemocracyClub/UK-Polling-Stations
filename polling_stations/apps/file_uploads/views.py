@@ -2,7 +2,11 @@ import json
 import logging
 from datetime import datetime
 
+import boto3
 from addressbase.models import UprnToCouncil
+from boto.pyami.config import Config
+from botocore.exceptions import ClientError
+from councils.models import Council
 from data_finder.helpers import EveryElectionWrapper
 from django.conf import settings
 from django.contrib import messages
@@ -18,22 +22,16 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.views.generic import DetailView, FormView, ListView, TemplateView
-from sentry_sdk import capture_message
-from sesame.utils import get_query_string, get_user
-
-from .utils import assign_councils_to_user, get_domain
-
-User = get_user_model()
-
-import boto3
-from boto.pyami.config import Config
-from botocore.exceptions import ClientError
-from councils.models import Council
 from file_uploads.forms import CouncilLoginForm
 from marshmallow import Schema, fields, validate
 from marshmallow import ValidationError as MarshmallowValidationError
+from sentry_sdk import capture_message
+from sesame.utils import get_query_string, get_user
 
 from .models import File, Upload
+from .utils import assign_councils_to_user, get_domain
+
+User = get_user_model()
 
 
 class FileSchema(Schema):

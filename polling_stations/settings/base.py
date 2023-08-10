@@ -2,8 +2,10 @@ import os
 import sys
 from pathlib import Path
 
+import dc_design_system
 from dc_logging_client import DCWidePostcodeLoggingClient
 from django.utils.translation import gettext_lazy as _
+from rich import traceback
 
 # PATH vars
 
@@ -199,7 +201,6 @@ PROJECT_APPS = (
 
 INSTALLED_APPS += PROJECT_APPS
 
-import dc_design_system
 
 PIPELINE["SASS_ARGUMENTS"] += " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 
@@ -424,6 +425,4 @@ if os.environ.get("CIRCLECI"):
 
 
 # Register Rich as default handler for stacktraces
-from rich.traceback import install
-
-install(show_locals=True)
+traceback.install(show_locals=True)
