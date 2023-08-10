@@ -81,25 +81,66 @@ class Command(BaseStationsImporter, CsvMixin):
     def get_base_folder_path(self):
         return str(self.eoni_data_root)
 
-    def pre_process_data(self, reprojected=False):
-        if not self.stations_only:
-            addresses = csv.DictWriter(
-                open(self.paths["addresses"], "w", encoding=self.csv_encoding),
-                fieldnames=ADDRESSES_FIELDS,
+    def address_from_row(self, row, reprojected):
+        if reprojected:
+            address_location_ewkt = (
+                f"SRID=4326;POINT({row['PRO_X_4326']} {row['PRO_Y_4326']})"
             )
-            addresses.writeheader()
-            uprns = csv.DictWriter(
-                open(self.paths["uprn_to_council"], "w", encoding=self.csv_encoding),
-                fieldnames=UPRN_FIELDS,
+        else:
+            address_location = Point(
+                int(row["PRO_X_COR"]), int(row["PRO_Y_COR"]), srid=29902
             )
-            uprns.writeheader()
+            address_location.transform(4326)
+            address_location_ewkt = address_location.ewkt
 
-        stations = csv.DictWriter(
-            open(self.paths["stations"], "w", encoding=self.csv_encoding),
-            fieldnames=STATION_FIELDS,
-        )
-        stations.writeheader()
+        postcode = row["PRO_POSTCODE"].strip()
+        address = row["PRO_FULLADDRESS"].strip()
+        if address.endswith(f", {postcode}"):
+            address = address.replace(f", {postcode}", "")
+        return {
+            "uprn": row["PRO_UPRN"].strip(),
+            "address": address,
+            "postcode": postcode,
+            "location": address_location_ewkt,
+            "addressbase_postal": "D",
+        }
+
+    def station_from_row(self, row, reprojected):
+        if reprojected:
+            station_location_ewkt = (
+                f"SRID=4326;POINT({row['PREM_X_4326']} {row['PREM_Y_4326']})"
+            )
+        else:
+            location = Point(
+                int(row["PREM_X_COR"]),
+                int(row["PREM_Y_COR"]),
+                srid=29902,
+            )
+            location.transform(4326)
+            station_location_ewkt = location.ewkt
+
+        return {
+            "internal_council_id": row["PREM_ID"],
+            "postcode": row["PREM_POSTCODE"].strip(),
+            "address": f'{row["PREM_NAME"].strip()}, {row["PREM_FULLADDRESS"].strip()}',
+            "location": station_location_ewkt,
+            "council_id": "EONI",
+            "sample_uprn": row["PRO_UPRN"].strip(),
+        }
+
+    def uprn_from_row(self, row):
+        return {
+            "uprn": row["PRO_UPRN"],
+            "lad": "EONI",
+            "polling_station_id": row["PREM_ID"],
+            "advance_voting_station_id": "NULL",
+        }
+
+    def pre_process_data(self, reprojected=False):
         station_data = {}
+        address_data = []
+        uprn_data = []
+
         with self.eoni_export_path.open(
             "r", encoding=self.eoni_csv_encoding
         ) as eoni_csv:
@@ -107,62 +148,23 @@ class Command(BaseStationsImporter, CsvMixin):
             reader = csv.DictReader(eoni_csv)
             for row in reader:
                 if not self.stations_only:
-                    if reprojected:
-                        address_location_ewkt = (
-                            f"SRID=4326;POINT({row['PRO_X_4326']} {row['PRO_Y_4326']})"
-                        )
-                    else:
-                        address_location = Point(
-                            int(row["PRO_X_COR"]), int(row["PRO_Y_COR"]), srid=29902
-                        )
-                        address_location.transform(4326)
-                        address_location_ewkt = address_location.ewkt
-
-                    postcode = row["PRO_POSTCODE"].strip()
-                    address = row["PRO_FULLADDRESS"].strip()
-                    if address.endswith(f", {postcode}"):
-                        address = address.replace(f", {postcode}", "")
-
-                    addresses.writerow(
-                        {
-                            "uprn": row["PRO_UPRN"].strip(),
-                            "address": address,
-                            "postcode": postcode,
-                            "location": address_location_ewkt,
-                            "addressbase_postal": "D",
-                        }
-                    )
-
-                    uprns.writerow(
-                        {
-                            "uprn": row["PRO_UPRN"],
-                            "lad": "EONI",
-                            "polling_station_id": row["PREM_ID"],
-                            "advance_voting_station_id": "NULL",
-                        }
-                    )
+                    address_data.append(self.address_from_row(row, reprojected))
+                    uprn_data.append(self.uprn_from_row(row))
 
                 if row["PREM_ID"] not in station_data:
-                    if reprojected:
-                        station_location_ewkt = f"SRID=4326;POINT({row['PREM_X_4326']} {row['PREM_Y_4326']})"
-                    else:
-                        location = Point(
-                            int(row["PREM_X_COR"]),
-                            int(row["PREM_Y_COR"]),
-                            srid=29902,
-                        )
-                        location.transform(4326)
-                        station_location_ewkt = location.ewkt
-                    station_data[row["PREM_ID"]] = {
-                        "internal_council_id": row["PREM_ID"],
-                        "postcode": row["PREM_POSTCODE"].strip(),
-                        "address": f'{row["PREM_NAME"].strip()}, {row["PREM_FULLADDRESS"].strip()}',
-                        "location": station_location_ewkt,
-                        "council_id": "EONI",
-                        "sample_uprn": row["PRO_UPRN"].strip(),
-                    }
-            for internal_council_id, station in station_data.items():
-                stations.writerow(station)
+                    station_data[row["PREM_ID"]] = self.station_from_row(
+                        row, reprojected
+                    )
+        self.write_csv(self.paths["stations"], STATION_FIELDS, station_data.values())
+        if not self.stations_only:
+            self.write_csv(self.paths["addresses"], ADDRESSES_FIELDS, address_data)
+            self.write_csv(self.paths["uprn_to_council"], UPRN_FIELDS, uprn_data)
+
+    def write_csv(self, path, fieldnames, data):
+        with open(path, "w", encoding=self.csv_encoding) as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(data)
 
     def clear_old_data(self):
         # Polling stations use reg codes
@@ -170,17 +172,17 @@ class Command(BaseStationsImporter, CsvMixin):
 
         if not self.stations_only:
             # UprnToCouncil uses GSS codes
-            NIR_AND_EONI = [
+            nir_and_eoni = [
                 c.geography.gss
                 for c in Council.objects.using(DB_NAME)
                 .filter(council_id__in=NIR_IDS)
                 .select_related("geography")
             ]
-            NIR_AND_EONI.append("EONI")  # Include fake 'EONI' gss just in case
+            nir_and_eoni.append("EONI")  # Include fake 'EONI' gss just in case
             Address.objects.using(DB_NAME).filter(
-                uprntocouncil__lad__in=NIR_AND_EONI
+                uprntocouncil__lad__in=nir_and_eoni
             ).delete()
-            UprnToCouncil.objects.using(DB_NAME).filter(lad__in=NIR_AND_EONI).delete()
+            UprnToCouncil.objects.using(DB_NAME).filter(lad__in=nir_and_eoni).delete()
 
     def copy_data(self):
         if not self.stations_only:
