@@ -14,9 +14,8 @@ At [DemocracyClub](https://democracyclub.org.uk/) we value contributions to our 
 * Use descriptive commit messages.
 * Check your work against our test suite. You can run tests locally using:
     * `pytest` (unit tests)
-    or enable [travis-ci](https://travis-ci.org/) for your fork, so the tests will be executed after a `push`.
-* Check your work against our coding standards. We use [pyflakes](https://github.com/PyCQA/pyflakes) for linting and [black](https://github.com/ambv/black) for code formatting:
-     * `pytest --flakes` (lint with pyflakes)
+* Check your work against our coding standards. We use [ruff](https://beta.ruff.rs/docs/) for linting and [black](https://github.com/ambv/black) for code formatting:
+     * `pytest --ruff` (lint with ruff)
      * `black .` (auto-format with black)
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository.

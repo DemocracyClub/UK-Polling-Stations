@@ -17,3 +17,4 @@ pytest-subtests
 playwright
 pytest-playwright
 pytest-vcr
+ruff
