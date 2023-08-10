@@ -356,24 +356,10 @@ pluggy==1.2.0 \
     # via
     #   -c requirements/base.txt
     #   pytest
-py==1.11.0 \
-    --hash=sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719 \
-    --hash=sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378
-    # via
-    #   -c requirements/base.txt
-    #   pytest-pycodestyle
-pycodestyle==2.11.0 \
-    --hash=sha256:259bcc17857d8a8b3b4a2327324b79e5f020a13c16074670f9c8c8f872ea76d0 \
-    --hash=sha256:5d1013ba8dc7895b548be5afb05740ca82454fd899971563d2ef625d090326f8
-    # via pytest-pycodestyle
 pyee==9.0.4 \
     --hash=sha256:2770c4928abc721f46b705e6a72b0c59480c4a69c9a83ca0b00bb994f1ea4b32 \
     --hash=sha256:9f066570130c554e9cc12de5a9d86f57c7ee47fece163bbdaa3e9c933cfbdfa5
     # via playwright
-pyflakes==3.1.0 \
-    --hash=sha256:4132f6d49cb4dae6819e5379898f2b8cce3c5f23994194c24b77d5da2e36f774 \
-    --hash=sha256:a0aae034c444db0071aa077972ba4768d40c830d9539fd45bf4cd3f8f6992efc
-    # via pytest-flakes
 pysocks==1.7.1 \
     --hash=sha256:08e69f092cc6dbe92a0fdd16eeb9b9ffbc13cadfe5ca4c7bd92ffb078b293299 \
     --hash=sha256:2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5 \
@@ -388,9 +374,7 @@ pytest==7.4.0 \
     #   pytest-base-url
     #   pytest-cov
     #   pytest-django
-    #   pytest-flakes
     #   pytest-playwright
-    #   pytest-pycodestyle
     #   pytest-subtests
     #   pytest-vcr
 pytest-base-url==2.0.0 \
@@ -407,16 +391,13 @@ pytest-django==4.5.2 \
     # via
     #   -c requirements/base.txt
     #   -r requirements/testing.in
-pytest-flakes==4.0.5 \
-    --hash=sha256:953134e97215ae31f6879fbd7368c18d43f709dc2fab5b7777db2bb2bac3a924 \
-    --hash=sha256:d0e8602d882744fc6169247b62a51203c5a3d8f160892ff3b82f5b9c1e4bb675
-    # via -r requirements/testing.in
 pytest-playwright==0.4.2 \
     --hash=sha256:68dd0069e2dbf8e6024c6237d51d0277626687d94ba0dd387cea2a94ae4005b9 \
     --hash=sha256:9e9622e5507f8d27a3c7fd07aadcf43122f0086b69d1b3e6728995c8dbc0e44f
     # via -r requirements/testing.in
-pytest-pycodestyle==2.3.1 \
-    --hash=sha256:2901327b8e6beab90298a9803074483efe560e191bef81d9e18119b141222830
+pytest-ruff==0.1.1 \
+    --hash=sha256:db33c8d32d730d61d372c1ac4615b1036c47a14c781cbc0ae71811c4cadadc47 \
+    --hash=sha256:f599768ff3834d6b1d6d26b25a030a5b1dcc9cf187239bd9621a7f25f7d8fe46
     # via -r requirements/testing.in
 pytest-subtests==0.11.0 \
     --hash=sha256:453389984952eec85ab0ce0c4f026337153df79587048271c7fd0f49119c07e4 \
@@ -502,7 +483,9 @@ ruff==0.0.284 \
     --hash=sha256:ebd3cc55cd499d326aac17a331deaea29bea206e01c08862f9b5c6e93d77a491 \
     --hash=sha256:f67ed868d79fbcc61ad0fa034fe6eed2e8d438d32abce9c04b7c4c1464b2cf8e \
     --hash=sha256:f86b2b1e7033c00de45cc176cf26778650fb8804073a0495aca2f674797becbb
-    # via -r requirements/testing.in
+    # via
+    #   -r requirements/testing.in
+    #   pytest-ruff
 selenium==4.11.2 \
     --hash=sha256:98e72117b194b3fa9c69b48998f44bf7dd4152c7bd98544911a1753b9f03cc7d \
     --hash=sha256:9f9a5ed586280a3594f7461eb1d9dab3eac9d91e28572f365e9b98d9d03e02b5

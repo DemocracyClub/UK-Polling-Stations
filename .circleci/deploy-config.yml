@@ -112,7 +112,7 @@ jobs:
           command: |
             . .venv/bin/activate
             python manage.py collectstatic --no-input
-            pytest --flakes --cov-report= --cov=polling_stations
+            pytest --ruff --cov-report= --cov=polling_stations
 
       - run:
           name: Submit coverage

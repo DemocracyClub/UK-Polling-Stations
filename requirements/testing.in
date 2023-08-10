@@ -10,11 +10,10 @@ selenium
 coverage < 7.0
 pytest
 pytest-django
-pytest-pycodestyle
-pytest-flakes
 pytest-cov
 pytest-subtests
 playwright
 pytest-playwright
+pytest-ruff
 pytest-vcr
 ruff
