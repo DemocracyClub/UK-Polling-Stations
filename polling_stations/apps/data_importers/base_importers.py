@@ -556,11 +556,9 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             return None
 
         overlap_percentage = (intersection_area / district_area) * 100
-        if overlap_percentage > 99:
-            # meh - close enough
-            level = logging.INFO
-        else:
-            level = logging.WARNING
+
+        # meh - close enough
+        level = logging.INFO if overlap_percentage > 99 else logging.WARNING
 
         self.logger.log_message(
             level,

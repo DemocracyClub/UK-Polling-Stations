@@ -134,7 +134,7 @@ class CouncilViewSet(ReadOnlyModelViewSet):
             council = Council.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({"detail": "Not found."}, 404)
-        except:
+        except Exception:
             return Response({"detail": "Internal server error"}, 500)
 
         return Response(

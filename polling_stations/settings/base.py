@@ -1,3 +1,4 @@
+import contextlib
 import os
 import sys
 from pathlib import Path
@@ -408,10 +409,8 @@ try:
     if os.environ.get("DJANGO_SETTINGS_MODULE") != "polling_stations.settings.testing":
         from .local import *  # noqa
 
-    try:
+    with contextlib.suppress(NameError):
         INSTALLED_APPS += PROD_APPS  # noqa
-    except NameError:
-        pass
 
 except ImportError:
     pass

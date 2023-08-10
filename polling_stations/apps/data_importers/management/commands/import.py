@@ -171,7 +171,7 @@ class Command(BaseCommand):
             head, tail = os.path.split(f)
             try:
                 cmd = load_command(f)
-            except:
+            except Exception:
                 # usually we want to handle a specific exception, but in in this situation
                 # if there is any issue (at all) trying to load the module,
                 # we just want to log it and move on to the next script
