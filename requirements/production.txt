@@ -16,15 +16,15 @@ boto==2.49.0 \
     # via
     #   -c requirements/base.txt
     #   ec2-tag-conditional
-boto3==1.28.10 \
-    --hash=sha256:67001b3f512cbe2e00e352c65fb443b504e5e388fee39d73bcc42da1ae87d9e3 \
-    --hash=sha256:cb8af03f553f1c7db7137bc897785baeeaa97b8fde483eb1cdb1f1ef3cec9cb7
+boto3==1.28.23 \
+    --hash=sha256:807d4a4698ba9a76d5901a1663ff1943d13efbc388908f38b60f209c3511f1d6 \
+    --hash=sha256:839deb868d1278dd5a3f87208cfc4a8e259c95ca3cbe607cc322d435f02f63b0
     # via
     #   -c requirements/base.txt
     #   django-dynamodb-cache
-botocore==1.31.10 \
-    --hash=sha256:736a9412f405d6985570c4a87b533c2396dd8d4042d8c7a0ca14e73d4f1bcf9d \
-    --hash=sha256:a3bfd3627a490faedf37d79373d6957936d7720888ca85466e0471cb921e4557
+botocore==1.31.23 \
+    --hash=sha256:d0a95f74eb6bd99e8f52f16af0a430ba6cd1526744f40ffdd3fcccceeaf961c2 \
+    --hash=sha256:f3258feaebce48f138eb2675168c4d33cc3d99e9f45af13cb8de47bdc2b9c573
     # via
     #   -c requirements/base.txt
     #   boto3
@@ -42,9 +42,9 @@ django-dynamodb-cache @ https://github.com/xncbf/django-dynamodb-cache/archive/r
 ec2-tag-conditional==0.1.2 \
     --hash=sha256:d3f9c273a7f5c8af05a7dfec3e4c8b4a18435390dbd309c8934096a2bef57ded
     # via -r requirements/production.in
-gunicorn==20.1.0 \
-    --hash=sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e \
-    --hash=sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8
+gunicorn==21.2.0 \
+    --hash=sha256:3213aa5e8c24949e792bcacfc176fef362e7aac80b76c56f6b5122bf350722f0 \
+    --hash=sha256:88ec8bff1d634f98e61b9f65bc4bf3cd918a90806c6f5c48bc5603849ec81033
     # via -r requirements/production.in
 jmespath==1.0.1 \
     --hash=sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980 \
@@ -53,6 +53,12 @@ jmespath==1.0.1 \
     #   -c requirements/base.txt
     #   boto3
     #   botocore
+packaging==23.1 \
+    --hash=sha256:994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61 \
+    --hash=sha256:a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f
+    # via
+    #   -c requirements/base.txt
+    #   gunicorn
 python-dateutil==2.8.2 \
     --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
     --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
@@ -89,8 +95,3 @@ urllib3==1.26.16 \
     # via
     #   -c requirements/base.txt
     #   botocore
-
-# WARNING: The following packages were not pinned, but pip requires them to be
-# pinned when the requirements file includes hashes and the requirement is not
-# satisfied by a package already installed. Consider using the --allow-unsafe flag.
-# setuptools
