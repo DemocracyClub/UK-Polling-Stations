@@ -49,5 +49,4 @@ class WelshNameMutationMixin:
                         mutated = mutated.title()
                     return mutated + name[len(original) :]
             return name
-        else:
-            return str(self)
+        return str(self)

@@ -33,8 +33,8 @@ class Address(AbstractAddress):
         )
         if len(others) == 1:
             return others[0].council
-        else:
-            return None
+
+        return None
 
     @property
     def council_id(self):
@@ -61,8 +61,7 @@ class Address(AbstractAddress):
         )
         if len(station) == 1:
             return station[0]
-        else:
-            return None
+        return None
 
 
 class UprnToCouncil(models.Model):

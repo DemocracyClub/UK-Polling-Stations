@@ -57,8 +57,7 @@ class RoutingHelper:
 
         if len(council_map) == 1:
             return None
-        else:
-            return [v[1] for v in council_map.values()]
+        return [v[1] for v in council_map.values()]
 
     @property
     def polling_stations(self):
@@ -79,8 +78,7 @@ class RoutingHelper:
         that it is not an empty string"""
         if len(self.polling_stations) == 1:
             return bool(list(self.polling_stations)[0])
-        else:
-            return False
+        return False
 
     @cached_property
     def route_type(self):
@@ -97,10 +95,9 @@ class RoutingHelper:
             # all the addresses in this postcode
             # map to one polling station
             return "single_address"
-        else:
-            # addresses in this postcode map to
-            # multiple polling stations
-            return "multiple_addresses"
+        # addresses in this postcode map to
+        # multiple polling stations
+        return "multiple_addresses"
 
     @cached_property
     def view(self):

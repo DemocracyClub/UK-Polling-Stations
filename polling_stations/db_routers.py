@@ -13,8 +13,7 @@ class ReplicationRouter(object):
     def db_for_write(self, model, **hints):
         if os.environ.get("CIRCLECI"):
             return DEFAULT_DB_ALIAS
-        else:
-            return settings.PRINCIPAL_DB_NAME
+        return settings.PRINCIPAL_DB_NAME
 
     def allow_relation(self, obj1, obj2, **hints):
         return True

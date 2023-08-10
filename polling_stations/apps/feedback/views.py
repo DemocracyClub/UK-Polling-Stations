@@ -26,8 +26,7 @@ class FeedbackFormView(UpdateView):
             and self.object.source_url != "/feedback/"
         ):
             return self.object.source_url
-        else:
-            return "/"
+        return "/"
 
 
 class RecordJsonFeedback(View):

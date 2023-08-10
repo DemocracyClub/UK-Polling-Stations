@@ -47,8 +47,7 @@ class LanguageMixin(object):
             and self.request.session[translation]
         ):
             return self.request.session[translation]
-        else:
-            return ""
+        return ""
 
 
 class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
@@ -142,8 +141,7 @@ class BasePollingStationView(
             return dh.get_directions(
                 start_location=self.location, end_location=self.station.location
             )
-        else:
-            return None
+        return None
 
     def get_context_data(self, **context):
         context["tile_layer"] = settings.TILE_LAYER
@@ -211,12 +209,12 @@ class PostcodeView(BasePollingStationView):
 
         if rh.view != "postcode_view":
             return HttpResponseRedirect(rh.get_canonical_url(request))
-        else:
-            # we are already in postcode_view
-            self.postcode = Postcode(kwargs["postcode"])
-            context = self.get_context_data(**kwargs)
 
-            return self.render_to_response(context)
+        # we are already in postcode_view
+        self.postcode = Postcode(kwargs["postcode"])
+        context = self.get_context_data(**kwargs)
+
+        return self.render_to_response(context)
 
     def get_location(self):
         return geocode(self.postcode)
@@ -332,10 +330,10 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
 
         if not rh.councils:
             return HttpResponseRedirect(rh.get_canonical_url(request))
-        else:
-            self.council_ids = rh.councils
-            context = self.get_context_data(**kwargs)
-            return self.render_to_response(context)
+
+        self.council_ids = rh.councils
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
 
     def get_context_data(self, **context):
         context["councils"] = Council.objects.filter(council_id__in=self.council_ids)

@@ -177,5 +177,4 @@ class DirectionsHelper:
                 except DirectionsException:
                     pass
             return None
-        else:
-            return None
+        return None

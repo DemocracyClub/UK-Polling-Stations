@@ -123,8 +123,8 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
         try:
-            l = geocoder(address.postcode)
-            location = l.centroid
+            geocoded_postcode = geocoder(address.postcode)
+            location = geocoded_postcode.centroid
         except PostcodeError:
             location = None
         ret["postcode_location"] = location

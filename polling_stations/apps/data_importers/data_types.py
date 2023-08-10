@@ -68,8 +68,7 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
         for e in self.elements:
             if isinstance(e, dict):
                 return e["council"].council_id
-            else:
-                return e.council.council_id
+            return e.council.council_id
         return None
 
     @property
@@ -223,8 +222,7 @@ class StationSet(CustomSet):
         for e in self.elements:
             if isinstance(e, dict):
                 return e["council"].council_id
-            else:
-                return e.council.council_id
+            return e.council.council_id
         return None
 
     def save(self):
@@ -338,8 +336,8 @@ class AddressList(AssignPollingStationsMixin):
                 == Postcode(addressbase_record["postcode"]).with_space
             ):
                 continue
-            else:
-                to_remove.append(input_record)
+
+            to_remove.append(input_record)
         if len(to_remove) >= 1:
             self.logger.log_message(
                 logging.WARNING,

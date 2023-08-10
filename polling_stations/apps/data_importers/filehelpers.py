@@ -91,9 +91,8 @@ class ShpHelper:
 
             sf = shapefile.Reader(shp_file, encoding=self.encoding)
             return sf.shapeRecords()
-        else:
-            sf = shapefile.Reader(self.filepath, encoding=self.encoding)
-            return sf.shapeRecords()
+        sf = shapefile.Reader(self.filepath, encoding=self.encoding)
+        return sf.shapeRecords()
 
 
 class GeoJsonHelper:
@@ -162,17 +161,17 @@ class FileHelperFactory:
     def create(filetype, filepath, options):
         if filetype == "shp":
             return ShpHelper(filepath, zip=False, encoding=options["shp_encoding"])
-        elif filetype == "shp.zip":
+        if filetype == "shp.zip":
             return ShpHelper(filepath, zip=True, encoding=options["shp_encoding"])
-        elif filetype == "kml":
+        if filetype == "kml":
             return KmlHelper(filepath)
-        elif filetype == "geojson":
+        if filetype == "geojson":
             return GeoJsonHelper(filepath)
-        elif filetype == "json":
+        if filetype == "json":
             return JsonHelper(filepath)
-        elif filetype == "csv":
+        if filetype == "csv":
             return CsvHelper(
                 filepath, options["csv_encoding"], options["csv_delimiter"]
             )
-        else:
-            raise ValueError("Unexpected file type: %s" % (filetype))
+
+        raise ValueError("Unexpected file type: %s" % (filetype))
