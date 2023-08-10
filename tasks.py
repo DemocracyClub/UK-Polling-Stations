@@ -256,7 +256,7 @@ def requirements(ctx, upgrade=False):
             msg = f"\nGenerating {out_file} from {in_file}, and looking for upgrades\n"
             cmd = f"pip-compile --generate-hashes --upgrade -o {out_file} {in_file}"
         else:
-            msg = f"\nGenerating {out_file} from {in_file}, and looking for upgrades\n"
+            msg = f"\nGenerating {out_file} from {in_file}, but not looking for upgrades\n"
             cmd = f"pip-compile --generate-hashes -o {out_file} {in_file}"
 
         sys.stdout.write(msg)
