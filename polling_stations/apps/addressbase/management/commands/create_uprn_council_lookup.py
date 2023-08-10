@@ -19,9 +19,9 @@ class Command(BaseCommand):
         self.cursor = connection.cursor()
         # Set where we'll write the join query to.
         if kwargs["destination"]:
-            self.dst = Path(kwargs["destination"]).open("w")
+            self.dst = Path(kwargs["destination"])
         else:
-            self.dst = Path("./uprn-to-councils.csv").open("w")
+            self.dst = Path("./uprn-to-councils.csv")
 
         # Build the temporary subdivided council polygon table
         # See http://blog.cleverelephant.ca/2019/11/subdivide.html for why we're doing this.
@@ -43,26 +43,27 @@ class Command(BaseCommand):
         # spatial join between councils_council_subdivided and addressbase
         # & dump out a CSV file
         self.stdout.write("Joining addresses to councils...")
-        self.cursor.copy_expert(
-            """
-            COPY (SELECT
-                    a.uprn as uprn,
-                    c.gss as lad,
-                    '' as polling_station_id,
-                    null as advance_voting_station_id
-                FROM
-                    addressbase_address a
-                    JOIN
-                    councils_council_subdivided c
-                    ON
-                    ST_Covers(c.geom, a.location)
-                    )
-                TO STDOUT
+        with self.dst.open("w") as destination:
+            self.cursor.copy_expert(
+                """
+                COPY (SELECT
+                        a.uprn as uprn,
+                        c.gss as lad,
+                        '' as polling_station_id,
+                        null as advance_voting_station_id
+                    FROM
+                        addressbase_address a
+                        JOIN
+                        councils_council_subdivided c
+                        ON
+                        ST_Covers(c.geom, a.location)
+                        )
+                    TO STDOUT
 
-            with DELIMITER ',';
-            """,
-            self.dst,
-        )
+                with DELIMITER ',';
+                """,
+                destination,
+            )
         self.stdout.write(f"Output written to: {self.dst.name}")
 
         # Drop councils_council_subdivided

@@ -1,6 +1,6 @@
 import json
-import os
 import re
+from pathlib import Path
 
 from django.http import HttpResponse
 from django.views import View
@@ -8,12 +8,10 @@ from django.views import View
 
 class SandboxView(View):
     def get(self, request, *args, **kwargs):
-        base_path = os.path.dirname(__file__)
+        base_path = Path(__file__).parent
 
-        def get_fixture(filename):
-            return open(
-                os.path.join(base_path, "sandbox-responses", filename + ".json")
-            )
+        def get_fixture_path(filename):
+            return base_path / "sandbox-responses" / f"{filename}.json"
 
         example_postcodes = (
             "AA12AA",  # station known
@@ -24,9 +22,10 @@ class SandboxView(View):
         if "postcode" in kwargs:
             postcode = re.sub("[^A-Z0-9]", "", kwargs["postcode"].upper())
             if postcode in example_postcodes:
-                return HttpResponse(
-                    get_fixture(postcode), content_type="application/json", status=200
-                )
+                with get_fixture_path(postcode).open() as fixture:
+                    return HttpResponse(
+                        fixture, content_type="application/json", status=200
+                    )
             return HttpResponse(
                 json.dumps({"message": "Could not geocode from any source"}),
                 content_type="application/json",
@@ -39,11 +38,12 @@ class SandboxView(View):
         )
         if "slug" in kwargs:
             if kwargs["slug"] in example_slugs:
-                return HttpResponse(
-                    get_fixture(kwargs["slug"]),
-                    content_type="application/json",
-                    status=200,
-                )
+                with get_fixture_path(kwargs["slug"]).open() as fixture:
+                    return HttpResponse(
+                        fixture,
+                        content_type="application/json",
+                        status=200,
+                    )
             return HttpResponse(
                 json.dumps({"message": "Address not found"}),
                 content_type="application/json",
