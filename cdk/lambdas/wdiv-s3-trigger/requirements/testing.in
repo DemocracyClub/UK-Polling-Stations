@@ -1,6 +1,5 @@
--c ../requirements.txt
--c ../../../../requirements/testing.txt
+-c ../../../../requirements/constraints.txt
 
 responses
 moto[ses]
-pydantic
+pydantic~=1.0

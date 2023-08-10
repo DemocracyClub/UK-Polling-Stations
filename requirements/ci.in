@@ -1,4 +1,4 @@
--c testing.txt
+-c constraints.txt
 
 wheel
 coveralls > 3.0
