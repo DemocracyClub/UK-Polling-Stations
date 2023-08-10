@@ -34,8 +34,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
     def generate_polling_station(self, routing_helper):
         if routing_helper.route_type == "single_address":
             return routing_helper.addresses[0].polling_station
-        else:
-            return None
+        return None
 
     def generate_custom_finder(self, geocoder, postcode):
         try:
@@ -45,10 +44,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         if finder and finder.base_url:
             if finder.can_pass_postcode:
                 return finder.base_url + finder.encoded_postcode
-            else:
-                return finder.base_url
-        else:
-            return None
+            return finder.base_url
+        return None
 
     def generate_advance_voting_station(self, routing_helper):
         if routing_helper.route_type == "single_address":

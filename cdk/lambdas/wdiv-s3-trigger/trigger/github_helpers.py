@@ -78,8 +78,8 @@ class GitHubIssue:
 
             if existing_issue:
                 return self.update_existing_issue(existing_issue)
-            else:
-                return self.create_new_issue()
+
+            return self.create_new_issue()
 
         return self.debug()
 

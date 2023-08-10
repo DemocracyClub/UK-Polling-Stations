@@ -36,10 +36,9 @@ class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
     def extract_geometry(self, record, format, srid):
         if format == "geojson":
             return self.extract_json_geometry(record, srid)
-        elif format == "gml":
+        if format == "gml":
             return self.extract_gml_geometry(record, srid)
-        else:
-            raise ValueError("Unsupported format: %s" % (format))
+        raise ValueError("Unsupported format: %s" % (format))
 
     def extract_json_geometry(self, record, srid):
         geom = json.loads(record["geometry"])
@@ -58,5 +57,4 @@ class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):
             if len(ds[0]) == 1:
                 wkt = next(iter(ds[0])).geom.wkt
                 return self.clean_poly(GEOSGeometry(wkt, srid=srid))
-            else:
-                raise ValueError("Expected 1 feature, found %i" % len(ds[0]))
+            raise ValueError("Expected 1 feature, found %i" % len(ds[0]))

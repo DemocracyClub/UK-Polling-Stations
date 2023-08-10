@@ -68,7 +68,7 @@ class Upload(models.Model):
                 self.timestamp + timedelta(seconds=180) > now()
             ):
                 return "Waiting"
-            elif ("Expected 2 files, found 1" in f.errors) and (
+            if ("Expected 2 files, found 1" in f.errors) and (
                 self.timestamp + timedelta(seconds=180) < now()
             ):
                 return "Error One File"
@@ -138,10 +138,9 @@ class Upload(models.Model):
         server_env = getattr(settings, "SERVER_ENVIRONMENT", None)
         if server_env == "production":
             return title
-        elif server_env in ["staging", "development", "test"]:
+        if server_env in ["staging", "development", "test"]:
             return f"TEST/{title}"
-        else:
-            return f"LOCALTEST/{title}"
+        return f"LOCALTEST/{title}"
 
     @property
     def pr_body(self):
@@ -149,10 +148,10 @@ class Upload(models.Model):
         server_env = getattr(settings, "SERVER_ENVIRONMENT", "unknown_env")
         if server_env == "production":
             return message
-        elif server_env in ["staging", "development", "test"]:
+        if server_env in ["staging", "development", "test"]:
             return f"**NB triggered from {server_env} instance**\n{message}"
-        else:
-            return f"**NB triggered from local machine**\n{message}"
+        f"**NB triggered from local machine**\n{message}"
+        return None
 
     def send_confirmation_email(self):
         server_env = getattr(settings, "SERVER_ENVIRONMENT", "unknown_env")
@@ -162,7 +161,7 @@ class Upload(models.Model):
         if server_env == "production" and self.upload_user is None:
             return
         # if we're in production, and the upload user exists, send them an email
-        elif server_env == "production" and self.upload_user.email:
+        if server_env == "production" and self.upload_user.email:
             to = self.upload_user.email
         # for all other environments, send the email to the default
         # from email with a subject line that makes it clear

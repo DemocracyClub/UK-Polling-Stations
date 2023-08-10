@@ -15,5 +15,5 @@ class TokenAuthSupportQueryString(TokenAuthentication):
             and "HTTP_AUTHORIZATION" not in request.META
         ):
             return self.authenticate_credentials(request.query_params.get("auth_token"))
-        else:
-            return super(TokenAuthSupportQueryString, self).authenticate(request)
+
+        return super(TokenAuthSupportQueryString, self).authenticate(request)

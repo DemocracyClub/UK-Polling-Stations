@@ -91,8 +91,7 @@ class Council(WelshNameMutationMixin, models.Model):
         }
         if len(identifier_nations) == 1:
             return identifier_nations.pop()
-        else:
-            return ""
+        return ""
 
     @property
     def short_name(self):

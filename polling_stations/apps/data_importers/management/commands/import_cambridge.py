@@ -27,5 +27,4 @@ class Command(BaseHalaroseCsvImporter):
                 srid=27700,
             )
 
-        else:
-            return super().get_station_point(record)
+        return super().get_station_point(record)

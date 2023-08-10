@@ -21,8 +21,7 @@ class BugReportFormView(CreateView):
             and "report_problem" not in self.object.source_url
         ):
             return self.object.source_url
-        else:
-            return "/"
+        return "/"
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -54,5 +53,4 @@ class BugReportFormView(CreateView):
             report.save()
             self.object = report
             return HttpResponseRedirect(self.get_success_url())
-        else:
-            return self.form_invalid(form)
+        return self.form_invalid(form)

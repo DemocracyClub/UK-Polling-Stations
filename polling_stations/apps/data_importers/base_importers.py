@@ -139,8 +139,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
             and self.districts_srid is not None
         ):
             return self.districts_srid
-        else:
-            return self.srid
+        return self.srid
 
     @abc.abstractmethod
     def import_data(self):
@@ -410,14 +409,13 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 station_hash = self.get_station_hash(station)
                 if station_hash in seen:
                     continue
-                else:
-                    self.logger.log_message(
-                        logging.INFO,
-                        "Polling station added to set:\n%s",
-                        variable=station,
-                        pretty=True,
-                    )
-                    seen.add(station_hash)
+                self.logger.log_message(
+                    logging.INFO,
+                    "Polling station added to set:\n%s",
+                    variable=station,
+                    pretty=True,
+                )
+                seen.add(station_hash)
             except NotImplementedError:
                 pass
 
@@ -777,7 +775,7 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
                 )
             return True
 
-        elif district_ids_from_stations:
+        if district_ids_from_stations:
             self.write_info("Stations have district ids attached")
 
             for district_id in get_missing(district_ids_from_stations, district_ids):

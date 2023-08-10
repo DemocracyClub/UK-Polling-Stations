@@ -284,8 +284,7 @@ class EveryElectionWrapper:
         if self.has_election and self.request_success:
             uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
             return len(uncancelled_ballots) > 1
-        else:
-            return False
+        return False
 
 
 class EmptyEveryElectionWrapper:

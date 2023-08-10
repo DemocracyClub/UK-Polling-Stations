@@ -30,9 +30,8 @@ class Command(BaseGitHubImporter):
 
         if (record["district"], postcode) in self.seen:
             return None
-        else:
-            self.seen.add((record["district"], postcode))
 
+        self.seen.add((record["district"], postcode))
         return {
             "internal_council_id": record["psnumber"],
             "polling_district_id": record["district"],
