@@ -631,13 +631,13 @@ exceptiongroup==1.1.2 \
     # via
     #   -c requirements/base.txt
     #   cattrs
-importlib-resources==6.0.0 \
-    --hash=sha256:4cf94875a8368bd89531a756df9a9ebe1f150e0f885030b461237bc7f2d905f2 \
-    --hash=sha256:d952faee11004c045f785bb5636e8f885bed30dc3c940d5d42798a2a4541c185
+importlib-resources==6.0.1 \
+    --hash=sha256:134832a506243891221b88b4ae1213327eea96ceb4e407a00d790bb0626f45cf \
+    --hash=sha256:4359457e42708462b9626a04657c6208ad799ceb41e5c58c57ffa0e6a098a5d4
     # via jsii
-jsii==1.85.0 \
-    --hash=sha256:379feb1a1a3c4e449307564f42a7cddef05e43760cbfbbfe8434f6448cd668a0 \
-    --hash=sha256:b77194cf053c06c6bdffc887a4d1d2a41113c6f4780a7d78d70a780a70998008
+jsii==1.86.1 \
+    --hash=sha256:32eb46ed4c9a35bc92b892ef049ed1996f13be38ffef964d607e8fe930471b3e \
+    --hash=sha256:44f9a820eea92c9508693f72d3129b5a080421c949c32303f4f7b2cc98a81f59
     # via
     #   aws-cdk-assets
     #   aws-cdk-aws-acmpca
