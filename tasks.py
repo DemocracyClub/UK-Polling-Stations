@@ -126,7 +126,13 @@ def describe_parameters(ctx, profile=os.environ.get("AWS_PROFILE", None)):
     }
 )
 def rds_psql(
-    ctx, profile, user="postgres", db_name=None, host=None, password=None, print=False
+    ctx,
+    profile,
+    user="postgres",
+    db_name=None,
+    host=None,
+    password=None,
+    print=False,
 ):
     """
     Start psql client to rds associate with <profile> account.

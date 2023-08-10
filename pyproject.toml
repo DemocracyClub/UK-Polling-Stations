@@ -1,0 +1,13 @@
+[tool.ruff]
+line-length = 88
+ignore = [
+    "E501",
+    "E203", #https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html#slices
+]
+extend-select = [
+    "I",
+    "C4",
+    "SIM",
+    "Q003",
+    "RET",
+]
