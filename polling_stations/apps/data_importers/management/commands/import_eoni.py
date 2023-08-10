@@ -185,14 +185,16 @@ class Command(BaseStationsImporter, CsvMixin):
     def copy_data(self):
         if not self.stations_only:
             cursor = connections[DB_NAME].cursor()
-            cursor.copy_expert(
-                "COPY addressbase_address FROM STDIN CSV HEADER",
-                open(self.paths["addresses"]),
-            )
-            cursor.copy_expert(
-                "COPY addressbase_uprntocouncil FROM STDIN WITH NULL AS 'NULL' CSV HEADER",
-                open(self.paths["uprn_to_council"]),
-            )
+            with open(self.paths["addresses"]) as file:
+                cursor.copy_expert(
+                    "COPY addressbase_address FROM STDIN CSV HEADER",
+                    file,
+                )
+            with open(self.paths["uprn_to_council"]) as file:
+                cursor.copy_expert(
+                    "COPY addressbase_uprntocouncil FROM STDIN WITH NULL AS 'NULL' CSV HEADER",
+                    file,
+                )
 
     def assign_uprn_to_councils(self):
         ni_councils = (
