@@ -1,3 +1,4 @@
+import contextlib
 import os
 import sys
 import time
@@ -95,12 +96,10 @@ def check_deployment(deployment_id):
     if deployment["status"] in ["Failed", "Stopped"]:
         print("FAIL")
         print(deployment["errorInformation"])
-        try:
+        with contextlib.suppress(
+            Exception  #  This is some optional logging, so no sweat if it fails
+        ):
             summarise_failure(client, deployment_id)
-
-        except Exception:
-            # This is some optional logging, so no sweat if it fails
-            pass
 
         # delete the ASG that was created during the failed deployment
         delete_asg(asg_name=deployment["targetInstances"]["autoScalingGroups"][0])
