@@ -1,5 +1,6 @@
 from councils.models import Council
 from django.db import models
+from django.db.models.signals import post_save
 
 
 class DataQuality(models.Model):
@@ -18,9 +19,6 @@ class DataQuality(models.Model):
     num_stations = models.IntegerField(default=0)
     num_districts = models.IntegerField(default=0)
     num_addresses = models.IntegerField(default=0)
-
-
-from django.db.models.signals import post_save
 
 
 def council_saved(sender, **kwargs):

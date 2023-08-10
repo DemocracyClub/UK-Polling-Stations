@@ -1,5 +1,6 @@
 from .base import *  # noqa
 from dc_logging_client import DCWidePostcodeLoggingClient
+import os
 
 
 EVERY_ELECTION["CHECK"] = True  # noqa
@@ -22,6 +23,5 @@ RUNNING_TESTS = True
 POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-import os
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
