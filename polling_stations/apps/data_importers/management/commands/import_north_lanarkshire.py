@@ -1,7 +1,6 @@
-from django.template.defaultfilters import slugify
-
 from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from django.template.defaultfilters import slugify
 
 
 class Command(BaseHalaroseCsvImporter):

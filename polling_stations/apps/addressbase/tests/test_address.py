@@ -1,8 +1,7 @@
-from django.test import TestCase
-
 from addressbase.models import UprnToCouncil
 from addressbase.tests.factories import UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
+from django.test import TestCase
 
 
 class TestAddressFactory(TestCase):

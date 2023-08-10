@@ -17,7 +17,7 @@ class OpeningTimes:
         self.time_fmt = time_fmt
 
     def add_date(self, date: date) -> List:
-        if not date in self.dates:
+        if date not in self.dates:
             self.dates[date]: List[time, time] = []
         return self.dates[date]
 

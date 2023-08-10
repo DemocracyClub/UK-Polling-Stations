@@ -6,10 +6,9 @@ import time
 from pathlib import Path
 
 import boto3
-from django.core.management import BaseCommand
-from django.db import connections, DEFAULT_DB_ALIAS
 from django.conf import settings
-
+from django.core.management import BaseCommand
+from django.db import DEFAULT_DB_ALIAS, connections
 
 APPROX_ADDRESS_BASE_BYTES = 3_300_000_000
 

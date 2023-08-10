@@ -1,10 +1,9 @@
-from django.apps import apps
-from django.core.management.base import BaseCommand
-
 from addressbase.models import UprnToCouncil
 from councils.models import Council
 from data_importers.models import DataQuality
-from pollingstations.models import PollingStation, PollingDistrict, AdvanceVotingStation
+from django.apps import apps
+from django.core.management.base import BaseCommand
+from pollingstations.models import AdvanceVotingStation, PollingDistrict, PollingStation
 
 """
 Clear PollingDistrict, PollingStation, and AdvancedVotingStation models

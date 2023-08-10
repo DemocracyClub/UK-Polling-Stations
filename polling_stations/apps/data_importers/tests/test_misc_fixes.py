@@ -1,22 +1,21 @@
-from django.contrib.gis.geos import Point, MultiPolygon, Polygon
-from django.test import TestCase
-
-from addressbase.models import UprnToCouncil, Address
+from addressbase.models import Address, UprnToCouncil
 from addressbase.tests.factories import UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
 from data_importers.management.commands.misc_fixes import (
-    update_station_point,
-    update_station_address,
     assign_addresses_by_district,
+    delete_council_data,
+    remove_points_from_addressbase,
     unassign_addresses_by_district,
     unassign_uprns,
-    remove_points_from_addressbase,
-    delete_council_data,
+    update_station_address,
+    update_station_point,
 )
-from pollingstations.models import PollingStation, PollingDistrict
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
+from django.test import TestCase
+from pollingstations.models import PollingDistrict, PollingStation
 from pollingstations.tests.factories import (
-    PollingStationFactory,
     PollingDistrictFactory,
+    PollingStationFactory,
 )
 
 

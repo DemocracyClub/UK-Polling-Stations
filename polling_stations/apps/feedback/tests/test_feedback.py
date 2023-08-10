@@ -1,6 +1,8 @@
 import json
-from django.test import TestCase, override_settings
+
 from django.core.management import call_command
+from django.test import TestCase, override_settings
+
 from polling_stations.apps.councils.tests.factories import CouncilFactory
 
 """

@@ -1,8 +1,6 @@
-from django.contrib.gis.db import models
-
-from django_extensions.db.models import TimeStampedModel
-
 from councils.models import Council
+from django.contrib.gis.db import models
+from django_extensions.db.models import TimeStampedModel
 
 
 class LoggedPostcode(TimeStampedModel):

@@ -1,8 +1,8 @@
-from django.db import connection
-from django.core.management.base import BaseCommand
 from pathlib import Path
 
 from addressbase.models import Address, UprnToCouncil
+from django.core.management.base import BaseCommand
+from django.db import connection
 
 
 class Command(BaseCommand):

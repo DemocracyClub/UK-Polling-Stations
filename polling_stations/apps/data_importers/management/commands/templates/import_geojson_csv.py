@@ -3,9 +3,8 @@ Import COUNCIL
 """
 import sys
 
-from django.contrib.gis.geos import Point
-
 from data_importers.management.commands import BaseCsvStationsJsonDistrictsImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseCsvStationsJsonDistrictsImporter):

@@ -1,9 +1,8 @@
-from django.test import TestCase
-
-from addressbase.models import UprnToCouncil, Address
+from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
 from data_importers.data_types import AssignPollingStationsMixin
+from django.test import TestCase
 
 
 class MockCollection(AssignPollingStationsMixin):

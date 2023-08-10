@@ -1,6 +1,6 @@
-from django.contrib.gis.geos import Point, MultiPoint
 from data_importers.data_types import StationSet
 from data_importers.github_importer import BaseGitHubImporter
+from django.contrib.gis.geos import MultiPoint, Point
 
 
 class Command(BaseGitHubImporter):

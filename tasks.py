@@ -4,9 +4,9 @@ import sys
 import warnings
 from pathlib import Path
 
+import boto3
 import dotenv
 from invoke import task
-import boto3
 
 from cdk.lambdas.ssm_run_command_once.command_runner import (
     RunOncePerTagRunCommandClient,

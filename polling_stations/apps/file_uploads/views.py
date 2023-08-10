@@ -2,37 +2,37 @@ import json
 import logging
 from datetime import datetime
 
+from addressbase.models import UprnToCouncil
+from data_finder.helpers import EveryElectionWrapper
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import Prefetch, Count, Max
-from django.http import JsonResponse, HttpResponseRedirect
+from django.db.models import Count, Max, Prefetch
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from django.views.generic import DetailView, ListView, TemplateView, FormView
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 from sentry_sdk import capture_message
 from sesame.utils import get_query_string, get_user
 
-from addressbase.models import UprnToCouncil
-from data_finder.helpers import EveryElectionWrapper
-from .utils import get_domain, assign_councils_to_user
+from .utils import assign_councils_to_user, get_domain
 
 User = get_user_model()
 
 import boto3
 from boto.pyami.config import Config
 from botocore.exceptions import ClientError
+from councils.models import Council
+from file_uploads.forms import CouncilLoginForm
 from marshmallow import Schema, fields, validate
 from marshmallow import ValidationError as MarshmallowValidationError
 
-from file_uploads.forms import CouncilLoginForm
-from councils.models import Council
 from .models import File, Upload
 
 

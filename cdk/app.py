@@ -4,11 +4,9 @@ import os
 
 from aws_cdk import core as cdk
 from aws_cdk.core import Tags
-
 from stacks.command_runner_stack import WDIVOncePerTagCommandRunner
 from stacks.wdiv_s3_trigger_stack import WDIVS3TriggerStack
 from stacks.wdiv_stack import WDIVStack
-
 
 valid_environments = (
     "development",

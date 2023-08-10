@@ -10,8 +10,9 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterIndexTogether(
             name="pollingstation",
-            index_together=set(
-                [("council", "internal_council_id"), ("council", "polling_district_id")]
-            ),
+            index_together={
+                ("council", "internal_council_id"),
+                ("council", "polling_district_id"),
+            },
         )
     ]

@@ -1,19 +1,19 @@
-import glob, os, re, traceback
+import glob
+import os
+import re
+import traceback
 from importlib.machinery import SourceFileLoader
 from multiprocessing import Pool
+
 from django import db
 from django.apps import apps
 from django.core.management.base import BaseCommand
-
 from pollingstations.models import PollingStation
 
 
 # does this regular expression match any of the elements in this list?
 def match_in(regex, lst):
-    for el in lst:
-        if re.match(regex, el):
-            return True
-    return False
+    return any(re.match(regex, el) for el in lst)
 
 
 # load a django management command from file f

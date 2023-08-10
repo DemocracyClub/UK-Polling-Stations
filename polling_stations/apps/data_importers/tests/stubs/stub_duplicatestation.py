@@ -1,6 +1,6 @@
 import os
-from data_importers.tests.stubs import BaseStubCsvStationsJsonDistrictsImporter
 
+from data_importers.tests.stubs import BaseStubCsvStationsJsonDistrictsImporter
 
 """
 Define a stub implementation of json importer we can run tests against

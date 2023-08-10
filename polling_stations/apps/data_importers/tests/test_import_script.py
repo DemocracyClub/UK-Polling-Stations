@@ -1,6 +1,5 @@
-from django.test import TestCase
-
 from data_importers.import_script import ImportScript
+from django.test import TestCase
 
 
 class ImportScriptTest(TestCase):

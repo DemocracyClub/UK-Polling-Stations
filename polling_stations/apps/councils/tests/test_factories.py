@@ -1,7 +1,6 @@
-from django.test import TestCase
-
 from councils.models import CouncilGeography
 from councils.tests.factories import CouncilFactory
+from django.test import TestCase
 
 
 class TestCouncilFactory(TestCase):

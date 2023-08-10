@@ -1,5 +1,5 @@
 from addressbase.models import UprnToCouncil
-from data_finder.helpers import geocode_point_only, PostcodeError
+from data_finder.helpers import PostcodeError, geocode_point_only
 from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
@@ -63,9 +63,8 @@ class Command(BaseHalaroseCsvImporter):
             "pollingstationaddress_3",
             "pollingstationaddress_2",
         ]:
-            if getattr(record, field):
-                if getattr(record, field).startswith("EH"):
-                    return getattr(record, field).strip()
+            if getattr(record, field) and getattr(record, field).startswith("EH"):
+                return getattr(record, field).strip()
 
         return None
 

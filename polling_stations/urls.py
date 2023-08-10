@@ -1,26 +1,23 @@
 # -*- coding: utf-8 -*-
 
 
+from api.docs import ApiDocsView
+from api.router import router
+from data_finder.views import (
+    AddressFormView,
+    AddressView,
+    ExamplePostcodeView,
+    HomeView,
+    MultipleCouncilsView,
+    PostcodeView,
+    WeDontKnowView,
+)
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
-
-from api.router import router
-from api.docs import ApiDocsView
-from data_finder.views import (
-    HomeView,
-    PostcodeView,
-    ExamplePostcodeView,
-    AddressView,
-    AddressFormView,
-    WeDontKnowView,
-    MultipleCouncilsView,
-)
 from pollingstations.views import status_check
-
 
 admin.autodiscover()
 

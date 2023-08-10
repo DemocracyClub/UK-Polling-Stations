@@ -1,19 +1,17 @@
 """
 Models for actual Polling Stations and Polling Districts!
 """
+import urllib.parse
 from datetime import datetime
 from itertools import groupby
-import urllib.parse
 
+from core.opening_times import OpeningTimes
+from councils.models import Council
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import JSONField
 from django.utils.functional import cached_property
 from django.utils.translation import gettext as _
-
-
-from core.opening_times import OpeningTimes
-from councils.models import Council
 from uk_geo_utils.helpers import Postcode
 
 

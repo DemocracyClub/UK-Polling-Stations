@@ -1,7 +1,7 @@
 import os
-from django.contrib.gis.geos import Point
-from data_importers.tests.stubs import BaseStubCsvStationsKmlDistrictsImporter
 
+from data_importers.tests.stubs import BaseStubCsvStationsKmlDistrictsImporter
+from django.contrib.gis.geos import Point
 
 """
 Define a stub implementation of kml importer we can run tests against

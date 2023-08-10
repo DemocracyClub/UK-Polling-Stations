@@ -1,9 +1,8 @@
-from django.test import TestCase
-
+from addressbase.models import Address, UprnToCouncil
 from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import stub_xpress_democlub, stub_xpress_weblookup
+from django.test import TestCase
 from pollingstations.models import PollingStation
-from addressbase.models import UprnToCouncil, Address
 
 
 class XpressDemocracyClubImportTests(TestCase):
@@ -57,7 +56,7 @@ class XpressDemocracyClubImportTests(TestCase):
 
         # 4 records should have been inserted, and one discarded
         self.assertEqual(4, len(imported_uprns))
-        expected = set(["1", "2", "4", "5"])
+        expected = {"1", "2", "4", "5"}
         self.assertEqual(set(imported_uprns), expected)
 
     def test_station_ids(self):

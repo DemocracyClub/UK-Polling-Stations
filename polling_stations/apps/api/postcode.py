@@ -1,20 +1,20 @@
+from data_finder.helpers import (
+    EveryElectionWrapper,
+    PostcodeError,
+    RoutingHelper,
+    geocode,
+    get_council,
+)
+from data_finder.helpers.every_election import EmptyEveryElectionWrapper
+from data_finder.views import LogLookUpMixin
+from django.core.exceptions import ObjectDoesNotExist
+from pollingstations.models import CustomFinder
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from django.core.exceptions import ObjectDoesNotExist
 from uk_geo_utils.geocoders import MultipleCodesException
-
-from data_finder.helpers.every_election import EmptyEveryElectionWrapper
-from data_finder.views import LogLookUpMixin
-from data_finder.helpers import (
-    EveryElectionWrapper,
-    get_council,
-    geocode,
-    PostcodeError,
-    RoutingHelper,
-)
-from pollingstations.models import CustomFinder
 from uk_geo_utils.helpers import AddressSorter, Postcode
+
 from .address import PostcodeResponseSerializer, get_bug_report_url
 from .mixins import parse_qs_to_python
 
@@ -130,9 +130,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         log_data["language"] = ""
         log_data["api_user"] = request.user
         log_data["has_election"] = has_election
-        if log:
-            if not ret["addresses"]:
-                self.log_postcode(postcode, log_data, "api")
+        if log and not ret["addresses"]:
+            self.log_postcode(postcode, log_data, "api")
             # don't log 'address select' hits
 
         ret["report_problem_url"] = get_bug_report_url(

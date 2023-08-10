@@ -1,22 +1,35 @@
 import json
+import typing
 from pathlib import Path
 
-import typing
-from aws_cdk import (
-    aws_ec2 as ec2,
-    aws_iam as iam,
-    aws_certificatemanager as acm,
-    aws_autoscaling as autoscaling,
-    aws_elasticloadbalancingv2 as elbv2,
-    aws_codedeploy as codedeploy,
-    aws_ssm as ssm,
-    aws_route53 as route_53,
-)
 import aws_cdk.aws_cloudfront as cloudfront
 import aws_cdk.aws_cloudfront_origins as origins
 import aws_cdk.aws_route53_targets as route_53_target
-
-from aws_cdk.core import Stack, Duration, Environment
+from aws_cdk import (
+    aws_autoscaling as autoscaling,
+)
+from aws_cdk import (
+    aws_certificatemanager as acm,
+)
+from aws_cdk import (
+    aws_codedeploy as codedeploy,
+)
+from aws_cdk import (
+    aws_ec2 as ec2,
+)
+from aws_cdk import (
+    aws_elasticloadbalancingv2 as elbv2,
+)
+from aws_cdk import (
+    aws_iam as iam,
+)
+from aws_cdk import (
+    aws_route53 as route_53,
+)
+from aws_cdk import (
+    aws_ssm as ssm,
+)
+from aws_cdk.core import Duration, Environment, Stack
 from constructs import Construct
 
 # import sys
@@ -82,7 +95,7 @@ class WDIVStack(Stack):
         self.create_cloudfront(self.alb)
 
     def create_wdiv_alb_tg(self) -> elbv2.ApplicationTargetGroup:
-        wdiv_alb_tg = elbv2.ApplicationTargetGroup(
+        return elbv2.ApplicationTargetGroup(
             self,
             "wdiv-alb-tg-id",
             port=80,
@@ -103,7 +116,6 @@ class WDIVStack(Stack):
             vpc=self.default_vpc,
             deregistration_delay=Duration.seconds(60),
         )
-        return wdiv_alb_tg
 
     def create_launch_template(self) -> ec2.LaunchTemplate:
         # Tested high traffic instance. Only use this or larger.
@@ -114,7 +126,7 @@ class WDIVStack(Stack):
             "production": "t3a.large",
             # "production": "c6a.2xlarge",
         }
-        launch_template = ec2.LaunchTemplate(
+        return ec2.LaunchTemplate(
             self,
             "wdiv-launch-template-id",
             instance_type=ec2.InstanceType(
@@ -137,7 +149,6 @@ class WDIVStack(Stack):
                 )
             ],
         )
-        return launch_template
 
     def create_instance_security_group(self) -> ec2.SecurityGroup:
         instance_security_group = ec2.SecurityGroup(

@@ -1,8 +1,8 @@
+from api.pollingstations import PollingStationViewSet
+from councils.tests.factories import CouncilFactory
 from django.core.management import call_command
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory
-from api.pollingstations import PollingStationViewSet
-from councils.tests.factories import CouncilFactory
 
 
 class PollingStationsTest(TestCase):

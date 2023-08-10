@@ -1,13 +1,11 @@
-from dc_utils.tests.helpers import validate_html
-from django.test import TestCase
-from django.urls import reverse
+import mock
+import pytest
 from addressbase.tests.factories import AddressFactory, UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
+from dc_utils.tests.helpers import validate_html
 from django.contrib.gis.geos import Point
-
-import pytest
-
-import mock
+from django.test import TestCase
+from django.urls import reverse
 
 
 class TestHtml:

@@ -2,18 +2,17 @@ import json
 import operator
 from functools import reduce
 
+from addressbase.models import Address
+from councils.models import Council
+from data_finder.helpers import RoutingHelper
 from django.db import connection
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views import View
-from django.views.generic import TemplateView, DetailView, ListView
-from uk_geo_utils.helpers import Postcode
-
-from addressbase.models import Address
-from councils.models import Council
-from data_finder.helpers import RoutingHelper
+from django.views.generic import DetailView, ListView, TemplateView
 from pollingstations.models import PollingStation
+from uk_geo_utils.helpers import Postcode
 
 
 class IndexView(ListView):
@@ -103,9 +102,7 @@ class PostCodeGeoJSONView(View):
     def get(self, request, postcode):
         postcode = Postcode(postcode)
         addresses = Address.objects.filter(postcode=postcode.with_space)
-        station_ids = sorted(
-            set((a.council_id, a.polling_station_id) for a in addresses)
-        )
+        station_ids = sorted({(a.council_id, a.polling_station_id) for a in addresses})
         if station_ids:
             stations = PollingStation.objects.filter(
                 reduce(

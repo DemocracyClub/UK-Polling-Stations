@@ -10,10 +10,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterUniqueTogether(
             name="pollingdistrict",
-            unique_together=set([("council", "internal_council_id")]),
+            unique_together={("council", "internal_council_id")},
         ),
         migrations.AlterUniqueTogether(
             name="pollingstation",
-            unique_together=set([("council", "internal_council_id")]),
+            unique_together={("council", "internal_council_id")},
         ),
     ]

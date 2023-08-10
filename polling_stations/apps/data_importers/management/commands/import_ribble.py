@@ -1,6 +1,5 @@
-from django.contrib.gis.geos import Point
-
 from data_importers.base_importers import BaseStationsDistrictsImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseStationsDistrictsImporter):

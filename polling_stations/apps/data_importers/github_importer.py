@@ -1,10 +1,11 @@
 import abc
 import json
 import tempfile
-from django.contrib.gis.geos import GEOSGeometry
-from django.contrib.gis.gdal import DataSource
-from django.utils.encoding import force_bytes
+
 from data_importers.base_importers import BaseGenericApiImporter
+from django.contrib.gis.gdal import DataSource
+from django.contrib.gis.geos import GEOSGeometry
+from django.utils.encoding import force_bytes
 
 
 class BaseGitHubImporter(BaseGenericApiImporter, metaclass=abc.ABCMeta):

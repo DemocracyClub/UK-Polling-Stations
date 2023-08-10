@@ -1,12 +1,11 @@
+import re
+import subprocess
 from pathlib import Path
 
 import boto3
 import botocore
 from django.apps import apps
 from django.core.management import BaseCommand, call_command
-
-import re
-import subprocess
 
 
 def get_paths_changed(from_sha, to_sha):

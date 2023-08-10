@@ -1,8 +1,8 @@
+from bug_reports.admin import BugReportAdmin
+from bug_reports.models import BugReport
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from django.test.client import RequestFactory
-from bug_reports.admin import BugReportAdmin
-from bug_reports.models import BugReport
 
 
 class BugReportAdminTest(TestCase):

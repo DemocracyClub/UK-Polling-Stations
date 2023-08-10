@@ -1,9 +1,8 @@
 import factory
+from councils.tests.factories import CouncilFactory
 from django.contrib.gis.geos import Point
 from faker.providers import BaseProvider
-
-from councils.tests.factories import CouncilFactory
-from pollingstations.models import PollingStation, PollingDistrict, AdvanceVotingStation
+from pollingstations.models import AdvanceVotingStation, PollingDistrict, PollingStation
 
 
 class DjangoGeoPointProvider(BaseProvider):

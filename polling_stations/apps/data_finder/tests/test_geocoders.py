@@ -1,9 +1,9 @@
 import mock
-from django.test import TestCase, override_settings
 from data_finder.helpers.geocoders import (
     geocode,
     geocode_point_only,
 )
+from django.test import TestCase, override_settings
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     OnspdGeocoder,

@@ -1,11 +1,10 @@
 import json
 
+from councils.models import Council
+from councils.tests.factories import CouncilFactory
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
-
-from councils.models import Council
-from councils.tests.factories import CouncilFactory
 from pollingstations.models import PollingStation
 
 """

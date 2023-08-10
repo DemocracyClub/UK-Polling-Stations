@@ -3,8 +3,8 @@ from urllib.parse import parse_qs
 
 import mock
 import requests
-from django.test import TestCase, override_settings
 from data_finder.helpers import EveryElectionWrapper
+from django.test import TestCase, override_settings
 
 
 # mock get_data() functions
@@ -81,10 +81,9 @@ def get_data_cancelled_ballot_has_id_requirements(self, query_url):
 
 
 def get_data_some_ballots_have_id_requirements(self, query_url):
-    ballots = get_data_all_ballots_have_id_requirements(
+    return get_data_all_ballots_have_id_requirements(
         self, query_url
     ) + get_data_group_and_ballot(self, query_url)
-    return ballots
 
 
 def get_data_with_elections(self, query_url):

@@ -2,15 +2,13 @@ import abc
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-
-from uk_geo_utils.helpers import Postcode
+from pollingstations.models import Council
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
-    OnspdGeocoder,
     CodesNotFoundException,
+    OnspdGeocoder,
 )
-
-from pollingstations.models import Council
+from uk_geo_utils.helpers import Postcode
 
 
 class PostcodeError(Exception):

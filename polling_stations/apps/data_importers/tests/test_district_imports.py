@@ -1,17 +1,16 @@
 # High-level functional tests for import scripts
-from django.db import IntegrityError
-from django.test import TestCase
-
 from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import (
-    stub_specialcases,
-    stub_duplicatestation,
     stub_duplicatedistrict,
-    stub_kmlimport_different_srids,
-    stub_kmlimport,
-    stub_jsonimport_different_srids,
+    stub_duplicatestation,
     stub_jsonimport,
+    stub_jsonimport_different_srids,
+    stub_kmlimport,
+    stub_kmlimport_different_srids,
+    stub_specialcases,
 )
+from django.db import IntegrityError
+from django.test import TestCase
 from pollingstations.models import PollingDistrict, PollingStation
 
 

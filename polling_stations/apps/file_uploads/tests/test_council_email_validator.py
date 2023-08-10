@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-
 from file_uploads.forms import CouncilEmailValidator
 
 

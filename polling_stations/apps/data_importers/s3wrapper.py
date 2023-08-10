@@ -1,9 +1,10 @@
 import glob
 import os
 import shutil
+
 from boto.pyami.config import Config
-from boto.s3.connection import OrdinaryCallingFormat
 from boto.s3 import connect_to_region
+from boto.s3.connection import OrdinaryCallingFormat
 from django.conf import settings
 
 

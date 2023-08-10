@@ -1,10 +1,12 @@
 import csv
 import datetime
-from django.urls import re_path
+
 from django.contrib import admin
 from django.http import HttpResponse, HttpResponseForbidden
+from django.urls import re_path
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
+
 from .models import BugReport
 
 

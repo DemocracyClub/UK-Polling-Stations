@@ -1,9 +1,9 @@
 from aws_cdk import (
     aws_events,
     aws_events_targets,
+    aws_iam,
     aws_lambda,
     aws_lambda_python,
-    aws_iam,
     core,
 )
 from aws_cdk.core import Construct, Stack

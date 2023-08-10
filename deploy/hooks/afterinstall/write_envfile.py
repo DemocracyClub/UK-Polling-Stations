@@ -7,7 +7,6 @@ from typing import Dict, List
 
 import boto3
 
-
 client = boto3.client("ssm", region_name="eu-west-2")
 
 
@@ -33,9 +32,7 @@ def get_parameter_store_vars() -> Dict:
 
 def get_deploy_vars() -> Dict:
     with open(Path(__file__).parents[2] / "deploy-env-vars.json") as f:
-        deploy_vars = json.loads(f.read())
-
-    return deploy_vars
+        return json.loads(f.read())
 
 
 def write_parameters_to_envfile() -> None:

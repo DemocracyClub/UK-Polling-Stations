@@ -1,8 +1,8 @@
-from django.core.management.base import BaseCommand
 import csv
 from pathlib import Path
 
 from addressbase.models import Address
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):

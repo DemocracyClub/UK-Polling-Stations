@@ -1,7 +1,6 @@
-from django.contrib.gis.geos import Point, GEOSGeometry
-
 from data_importers.base_importers import BaseCsvStationsKmlDistrictsImporter
 from data_importers.management.commands import BaseCsvStationsJsonDistrictsImporter
+from django.contrib.gis.geos import GEOSGeometry, Point
 
 
 class BaseStubCsvStationsJsonDistrictsImporter(BaseCsvStationsJsonDistrictsImporter):

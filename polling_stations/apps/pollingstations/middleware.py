@@ -1,6 +1,7 @@
 import re
-from django.conf import settings
+
 from basicauth.middleware import BasicAuthMiddleware as BaseBasicAuthMiddleware
+from django.conf import settings
 
 
 class BasicAuthMiddleware(BaseBasicAuthMiddleware):

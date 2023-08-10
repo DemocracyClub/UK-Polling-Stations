@@ -1,10 +1,9 @@
-from django.test import TestCase
-
 from councils.models import Council
+from django.test import TestCase
 from pollingstations.tests.factories import (
-    PollingStationFactory,
-    PollingDistrictFactory,
     AdvanceVotingStationFactory,
+    PollingDistrictFactory,
+    PollingStationFactory,
 )
 
 

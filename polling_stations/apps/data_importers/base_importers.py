@@ -2,37 +2,37 @@
 Defines the base importer classes to implement
 """
 import abc
+import contextlib
 import datetime
-import json
 import glob
+import json
 import logging
 import os
 import tempfile
 import urllib.request
-from typing import List, Callable
+from typing import Callable, List
 
 import rtree
-from django.apps import apps
-from django.contrib.gis import geos
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
-from django.contrib.gis.geos import Point, GEOSGeometry, GEOSException
-
 from addressbase.models import UprnToCouncil
 from councils.models import Council
-from data_importers.data_types import AddressList, DistrictSet, StationSet
-from data_importers.data_quality_report import (
-    DataQualityReportBuilder,
-    StationReport,
-    DistrictReport,
-    AddressReport,
-)
 from data_importers.contexthelpers import Dwellings
+from data_importers.data_quality_report import (
+    AddressReport,
+    DataQualityReportBuilder,
+    DistrictReport,
+    StationReport,
+)
+from data_importers.data_types import AddressList, DistrictSet, StationSet
 from data_importers.filehelpers import FileHelperFactory
 from data_importers.loghelper import LogHelper
-from data_importers.s3wrapper import S3Wrapper
-from pollingstations.models import PollingDistrict, PollingStation
 from data_importers.models import DataQuality
+from data_importers.s3wrapper import S3Wrapper
+from django.apps import apps
+from django.conf import settings
+from django.contrib.gis import geos
+from django.contrib.gis.geos import GEOSException, GEOSGeometry, Point
+from django.core.management.base import BaseCommand, CommandError
+from pollingstations.models import PollingDistrict, PollingStation
 
 
 class CsvMixin:
@@ -198,10 +198,9 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         return os.path.abspath(path)
 
     def get_base_folder_path(self):
-        if getattr(self, "local_files", True):
-            if self.base_folder_path is None:
-                path = os.path.join(self.data_path, self.council_id)
-                return glob.glob(path)[0]
+        if getattr(self, "local_files", True) and self.base_folder_path is None:
+            path = os.path.join(self.data_path, self.council_id)
+            return glob.glob(path)[0]
         return self.base_folder_path
 
     def covers_current_elections(self):
@@ -523,8 +522,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
     def clean_poly(self, poly):
         if isinstance(poly, geos.Polygon):
-            poly = geos.MultiPolygon(poly, srid=self.get_srid("districts"))
-            return poly
+            return geos.MultiPolygon(poly, srid=self.get_srid("districts"))
         return poly
 
     def strip_z_values(self, geojson):
@@ -557,7 +555,7 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
             intersection_area = intersection.transform(27700, clone=True).area
         except GEOSException as e:
             self.logger.log_message(logging.ERROR, str(e))
-            return
+            return None
 
         overlap_percentage = (intersection_area / district_area) * 100
         if overlap_percentage > 99:
@@ -685,7 +683,7 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
 
             self.add_residential_address(address_info)
 
-        element_set = set(frozenset(d.items()) for d in self.addresses.elements)
+        element_set = {frozenset(d.items()) for d in self.addresses.elements}
         self.write_info(
             "Addresses: Found {:,} unique records after converting to dicts. Removing duplicates".format(
                 len(element_set)
@@ -796,13 +794,12 @@ class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter)
                     variable=district_id,
                 )
             return False
+        return None
 
     def import_data(self):
         # Optional step for pre import tasks
-        try:
+        with contextlib.suppress(NotImplementedError):
             self.pre_import()
-        except NotImplementedError:
-            pass
 
         self.stations = StationSet()
         self.districts = DistrictSet()
@@ -819,10 +816,9 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
 
     def import_data(self):
         # Optional step for pre import tasks
-        try:
+        with contextlib.suppress(NotImplementedError):
             self.pre_import()
-        except NotImplementedError:
-            pass
+
         self.stations = StationSet()
         self.addresses = AddressList(self.logger)
         self.import_residential_addresses()
@@ -918,10 +914,9 @@ class BaseScotlandSpatialHubImporter(
         return os.path.abspath(path)
 
     def get_base_folder_path(self):
-        if getattr(self, "local_files", True):
-            if self.base_folder_path is None:
-                path = os.path.join(self.data_path, self.data_prefix + "*")
-                return glob.glob(path)[0]
+        if getattr(self, "local_files", True) and self.base_folder_path is None:
+            path = os.path.join(self.data_path, self.data_prefix + "*")
+            return glob.glob(path)[0]
         return self.base_folder_path
 
     def parse_string(self, text):
@@ -992,10 +987,8 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
 
     def import_data(self):
         # Optional step for pre import tasks
-        try:
+        with contextlib.suppress(NotImplementedError):
             self.pre_import()
-        except NotImplementedError:
-            pass
 
         self.districts = DistrictSet()
         self.stations = StationSet()

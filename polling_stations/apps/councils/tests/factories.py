@@ -2,7 +2,6 @@ import itertools
 import string
 
 import factory
-
 from councils.models import Council, CouncilGeography
 
 

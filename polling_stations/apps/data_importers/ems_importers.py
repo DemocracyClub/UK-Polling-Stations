@@ -3,31 +3,29 @@ Specialised base import classes for handling data exported from
 popular Electoral Management Software packages
 """
 import abc
+import contextlib
 import json
 import logging
 import os
 import tempfile
-import urllib
 
 import requests
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.gis.geos import Point
-from django.utils.text import slugify
 from addressbase.models import Address
+from data_finder.helpers import PostcodeError, geocode_point_only
 from data_importers.addresshelpers import (
-    format_residential_address,
     format_polling_station_address,
+    format_residential_address,
 )
 from data_importers.base_importers import (
-    BaseCsvStationsCsvAddressesImporter,
-    BaseGenericApiImporter,
-    BaseStationsImporter,
     BaseAddressesImporter,
+    BaseCsvStationsCsvAddressesImporter,
+    BaseStationsImporter,
 )
-from data_finder.helpers import geocode_point_only, PostcodeError
+from data_importers.data_types import AddressList, StationSet
+from django.contrib.gis.geos import Point
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.text import slugify
 from uk_geo_utils.helpers import Postcode
-
-from data_importers.data_types import StationSet, AddressList
 
 """
 We see a lot of CSVs exported from Xpress
@@ -80,10 +78,9 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         return "-".join([getattr(record, self.station_id_field)])
 
     def get_station_address(self, record):
-        address = format_polling_station_address(
+        return format_polling_station_address(
             [getattr(record, field).strip() for field in self.station_address_fields]
         )
-        return address
 
     def get_station_postcode(self, record):
         return getattr(record, self.station_postcode_field).strip()
@@ -357,14 +354,13 @@ class BaseHalaroseCsvImporter(
         )
 
     def get_station_address(self, record):
-        address = format_polling_station_address(
+        return format_polling_station_address(
             [
                 getattr(record, field).strip()
                 for field in self.station_address_fields
                 if getattr(record, field).strip()
             ]
         )
-        return address
 
     def get_station_point(self, record):
         if not self.allow_station_point_from_postcode:
@@ -583,10 +579,8 @@ class BaseFcsDemocracyClubApiImporter(
 
     def import_data(self):
         # Optional step for pre import tasks
-        try:
+        with contextlib.suppress(NotImplementedError):
             self.pre_import()
-        except NotImplementedError:
-            pass
 
         self.stations = StationSet()
         self.addresses = AddressList(self.logger)
@@ -654,10 +648,9 @@ class BaseFcsDemocracyClubApiImporter(
         badvalues = ["", 0, None]
         if record["latitude"] not in badvalues and record["longitude"] not in badvalues:
             # if we've got points, use them
-            location = Point(
+            return Point(
                 float(record["latitude"]), float(record["longitude"]), srid=self.srid
             )
-            return location
         if not self.allow_station_point_from_postcode:
             return None
 

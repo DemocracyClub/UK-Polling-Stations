@@ -1,7 +1,8 @@
 import os
+import time
+
 import boto3
 from botocore.exceptions import ClientError
-import time
 
 session = boto3.Session(region_name=os.environ.get("AWS_REGION"))
 
@@ -47,7 +48,7 @@ def create_default_asg():
     subnet_ids = get_subnet_ids()
     target_group_arn = get_target_group_arn()
 
-    response = client.create_auto_scaling_group(
+    return client.create_auto_scaling_group(
         AutoScalingGroupName="default",
         AvailabilityZones=[
             "eu-west-2a",
@@ -75,7 +76,6 @@ def create_default_asg():
         ],
         VPCZoneIdentifier=",".join(subnet_ids),
     )
-    return response
 
 
 def get_service_role():
@@ -139,6 +139,7 @@ def main():
     # step as the instance needs to have initialised and be in ready state
     # before code deploy can create a start deployment
     time.sleep(60)
+    return None
 
 
 if __name__ == "__main__":

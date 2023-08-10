@@ -1,7 +1,6 @@
+from councils.tests.factories import CouncilFactory
 from django.core.management import call_command
 from django.test import TestCase
-
-from councils.tests.factories import CouncilFactory
 from pollingstations.models import PollingStation
 
 

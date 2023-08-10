@@ -1,11 +1,10 @@
-from django.test import TestCase
-
-from addressbase.models import UprnToCouncil, Address
+from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
-from pollingstations.models import PollingStation, PollingDistrict
-from data_importers.models import DataQuality
 from data_importers.management.commands.teardown import Command
+from data_importers.models import DataQuality
+from django.test import TestCase
+from pollingstations.models import PollingDistrict, PollingStation
 
 
 class TestTeardown(TestCase):
@@ -72,9 +71,7 @@ class TestTeardown(TestCase):
         self.assertEqual(PollingDistrict.objects.count(), 3)
         self.assertListEqual(
             sorted(
-                list(
-                    UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
-                )
+                UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
             ),
             [
                 ("X01000000", "ps1"),
@@ -103,9 +100,7 @@ class TestTeardown(TestCase):
         self.assertEqual(PollingDistrict.objects.count(), 1)
         self.assertListEqual(
             sorted(
-                list(
-                    UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
-                )
+                UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
             ),
             [
                 ("X01000000", ""),
@@ -132,9 +127,7 @@ class TestTeardown(TestCase):
         self.assertEqual(PollingDistrict.objects.count(), 3)
         self.assertListEqual(
             sorted(
-                list(
-                    UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
-                )
+                UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
             ),
             [
                 ("X01000000", "ps1"),
@@ -175,9 +168,7 @@ class TestTeardown(TestCase):
         self.assertEqual(PollingDistrict.objects.count(), 0)
         self.assertListEqual(
             sorted(
-                list(
-                    UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
-                )
+                UprnToCouncil.objects.all().values_list("lad", "polling_station_id")
             ),
             [("X01000000", ""), ("X01000000", ""), ("X01000001", "")],
         )

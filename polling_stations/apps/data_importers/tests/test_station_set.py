@@ -1,9 +1,8 @@
-from django.contrib.gis.geos import Point
-from django.test import TestCase
-
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from data_importers.data_types import StationSet
+from django.contrib.gis.geos import Point
+from django.test import TestCase
 from pollingstations.models import PollingStation
 
 

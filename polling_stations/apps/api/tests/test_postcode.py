@@ -1,12 +1,13 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import AnonymousUser
-from django.contrib.gis.geos import Point
-from django.core.management import call_command
-from rest_framework.test import APIRequestFactory, APITestCase
-from rest_framework.views import APIView
 from api.postcode import PostcodeViewSet
 from councils.tests.factories import CouncilFactory
 from data_finder.helpers import PostcodeError
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.gis.geos import Point
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.management import call_command
+from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.views import APIView
+
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
 
@@ -54,6 +55,7 @@ def mock_geocode(postcode):
 
     if postcode == "FOOBAR":
         raise PostcodeError("oh noes!!")
+    return None
 
 
 class PostcodeTest(APITestCase):

@@ -1,5 +1,4 @@
 import factory
-
 from addressbase.models import Address, UprnToCouncil
 
 

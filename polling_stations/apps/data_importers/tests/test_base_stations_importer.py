@@ -1,12 +1,11 @@
 import os
 from unittest.mock import patch
 
-from django.contrib.gis.geos import Point
-from django.test import TestCase
-
 from councils.tests.factories import CouncilFactory
 from data_importers.base_importers import BaseStationsImporter
 from data_importers.data_types import StationSet
+from django.contrib.gis.geos import Point
+from django.test import TestCase
 
 
 class MockLogger:

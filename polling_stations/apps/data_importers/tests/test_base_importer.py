@@ -1,14 +1,13 @@
 import datetime
 from unittest.mock import patch
 
-from django.core.management import CommandError
-from django.test import TestCase
-
 from addressbase.models import UprnToCouncil
 from addressbase.tests.factories import UprnToCouncilFactory
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
 from data_importers.base_importers import BaseImporter
+from django.core.management import CommandError
+from django.test import TestCase
 from pollingstations.tests.factories import PollingStationFactory
 
 

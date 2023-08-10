@@ -20,8 +20,7 @@ class ImportScript:
             "Xpress DC": "BaseXpressDemocracyClubCsvImporter",
             "Democracy Counts": "BaseDemocracyCountsCsvImporter",
         }
-        importer_class = classes.get(self.ems, "Unknown")
-        return importer_class
+        return classes.get(self.ems, "Unknown")
 
     @property
     def csv_encoding_string(self):

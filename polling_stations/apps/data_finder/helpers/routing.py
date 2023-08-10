@@ -1,14 +1,12 @@
 from urllib.parse import urlencode
 
-from django.urls import reverse
-from django.utils.functional import cached_property
-from uk_geo_utils.helpers import Postcode
-
 from addressbase.models import Address
-
 
 # use a postcode to decide which endpoint the user should be directed to
 from councils.models import CouncilGeography
+from django.urls import reverse
+from django.utils.functional import cached_property
+from uk_geo_utils.helpers import Postcode
 
 
 class RoutingHelper:
@@ -60,7 +58,7 @@ class RoutingHelper:
         if len(council_map) == 1:
             return None
         else:
-            return list(v[1] for v in council_map.values())
+            return [v[1] for v in council_map.values()]
 
     @property
     def polling_stations(self):
@@ -118,6 +116,7 @@ class RoutingHelper:
             # postcode is not in addressbase table or we
             # don't have any polling station information for it.
             return "postcode_view"
+        return None
 
     @cached_property
     def kwargs(self):

@@ -1,6 +1,7 @@
 import json
 import os
 import re
+
 from django.http import HttpResponse
 from django.views import View
 
@@ -8,9 +9,11 @@ from django.views import View
 class SandboxView(View):
     def get(self, request, *args, **kwargs):
         base_path = os.path.dirname(__file__)
-        get_fixture = lambda filename: open(
-            os.path.join(base_path, "sandbox-responses", filename + ".json")
-        )
+
+        def get_fixture(filename):
+            return open(
+                os.path.join(base_path, "sandbox-responses", filename + ".json")
+            )
 
         example_postcodes = (
             "AA12AA",  # station known

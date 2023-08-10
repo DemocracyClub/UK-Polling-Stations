@@ -1,10 +1,9 @@
-from django.contrib.gis.geos import Polygon, Point, MultiPolygon
-from django.test import TestCase
-
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
 from data_importers.data_types import DistrictSet
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
+from django.test import TestCase
 from pollingstations.models import PollingDistrict
 
 

@@ -6,10 +6,9 @@ import abc
 import logging
 from collections import namedtuple
 
-from django.db import connection
-
-from addressbase.models import get_uprn_hash_table, UprnToCouncil, Address
+from addressbase.models import Address, UprnToCouncil, get_uprn_hash_table
 from councils.models import Council
+from django.db import connection
 from pollingstations.models import PollingDistrict, PollingStation
 from uk_geo_utils.helpers import Postcode
 
@@ -71,6 +70,7 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
                 return e["council"].council_id
             else:
                 return e.council.council_id
+        return None
 
     @property
     def gss_code(self):
@@ -225,6 +225,7 @@ class StationSet(CustomSet):
                 return e["council"].council_id
             else:
                 return e.council.council_id
+        return None
 
     def save(self):
         stations_db = []

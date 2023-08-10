@@ -1,7 +1,6 @@
-from django.contrib import admin
-
 from core.admin_mixins import ReadOnlyModelAdminMixin
 from councils.models import Council
+from django.contrib import admin
 
 
 class CouncilUserInline(admin.StackedInline):

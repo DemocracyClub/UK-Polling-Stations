@@ -1,5 +1,6 @@
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 from pathlib import Path
+
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
 def make_base_folder_path():

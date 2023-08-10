@@ -1,7 +1,6 @@
-from django.utils.text import slugify
-
 from data_importers.geo_utils import fix_bad_polygons
 from data_importers.github_importer import BaseGitHubImporter
+from django.utils.text import slugify
 
 
 class Command(BaseGitHubImporter):

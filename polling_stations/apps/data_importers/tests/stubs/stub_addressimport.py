@@ -1,6 +1,7 @@
 import os
-from django.contrib.gis.geos import Point
+
 from data_importers.management.commands import BaseCsvStationsCsvAddressesImporter
+from django.contrib.gis.geos import Point
 
 """
 Define a stub implementation of address importer we can run tests against

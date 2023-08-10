@@ -1,6 +1,7 @@
+from pathlib import Path
+
 from django.core.management.base import BaseCommand
 from django.db import connection
-from pathlib import Path
 
 
 class Command(BaseCommand):

@@ -1,7 +1,6 @@
-from django.db import transaction
-from django.db import connection
+from django.contrib.gis.geos import LinearRing, MultiPolygon, Polygon
+from django.db import connection, transaction
 from pollingstations.models import PollingDistrict
-from django.contrib.gis.geos import MultiPolygon, Polygon, LinearRing
 
 
 def convert_linestring_to_multiploygon(linestring):
@@ -14,8 +13,7 @@ def convert_linestring_to_multiploygon(linestring):
 
     # now we have a LinearRing we can make a Polygon.. and the rest is simple
     poly = Polygon(ring)
-    multipoly = MultiPolygon(poly)
-    return multipoly
+    return MultiPolygon(poly)
 
 
 @transaction.atomic
