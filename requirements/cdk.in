@@ -1,4 +1,4 @@
--c base.txt
+-c constraints.txt
 
 aws_cdk.core < 2.0.0
 aws-cdk.cx-api < 2.0.0

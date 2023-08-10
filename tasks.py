@@ -254,9 +254,23 @@ def requirements(ctx, upgrade=False):
         "requirements/cdk.in": "requirements/cdk.txt",
         "requirements/ci.in": "requirements/ci.txt",
         "requirements/local.in": "requirements/local.txt",
+        "requirements/production.in": "requirements/production.txt",
         "cdk/lambdas/wdiv-s3-trigger/requirements/base.in": "cdk/lambdas/wdiv-s3-trigger/requirements.txt",
         "cdk/lambdas/wdiv-s3-trigger/requirements/testing.in": "cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt",
     }
+
+    cmd_opts = [
+        "--strip-extras",
+        "--resolver=backtracking",
+        "--generate-hashes",
+        "--allow-unsafe",
+    ]
+
+    sys.stdout.write("Generating Constraints file...")
+    ctx.run(
+        f"pip-compile {' '.join(cmd_opts)} {' '.join(paths.keys())} -o requirements/constraints.txt"
+    )
+
     for in_file, out_file in paths.items():
         if upgrade:
             msg = f"\nGenerating {out_file} from {in_file}, and looking for upgrades\n"
@@ -266,4 +280,5 @@ def requirements(ctx, upgrade=False):
             cmd = f"pip-compile --generate-hashes -o {out_file} {in_file}"
 
         sys.stdout.write(msg)
+
         ctx.run(cmd)

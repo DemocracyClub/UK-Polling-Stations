@@ -1,5 +1,4 @@
--c testing.txt
--c base.txt
+-c constraints.txt
 
 ipdb
 django-debug-toolbar

@@ -1,3 +1,5 @@
+-c constraints.txt
+
 black~=23.0
 commitment<4.0.0
 dj-database-url
