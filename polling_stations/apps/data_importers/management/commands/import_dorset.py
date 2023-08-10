@@ -1,10 +1,8 @@
-from django.contrib.gis.geos import Point
-
 from addressbase.models import Address
 from data_importers.management.commands import (
     BaseXpressDemocracyClubCsvImporter,
 )
-
+from django.contrib.gis.geos import Point
 
 CORRECTIONS = {
     "39064": {

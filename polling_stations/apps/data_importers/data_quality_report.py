@@ -1,13 +1,12 @@
+from addressbase.models import UprnToCouncil
+from councils.models import Council
 from django.db import connection
 from django.db.models import Q
+from pollingstations.models import PollingDistrict, PollingStation
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
-
-from councils.models import Council
-from pollingstations.models import PollingStation, PollingDistrict
-from addressbase.models import UprnToCouncil
 
 
 # data quality stats for polling stations

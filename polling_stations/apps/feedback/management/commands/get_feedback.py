@@ -2,9 +2,8 @@ import csv
 from pathlib import Path
 
 from addressbase.models import UprnToCouncil
-from django.core.management.base import BaseCommand
-
 from councils.models import Council
+from django.core.management.base import BaseCommand
 
 NATIONS = {"E": "England", "N": "Northern Ireland", "S": "Scotland", "W": "Wales"}
 NI_COUNCIL_NAMES = {

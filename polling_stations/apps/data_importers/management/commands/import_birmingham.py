@@ -1,6 +1,5 @@
-from django.contrib.gis.geos import Point
-
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseHalaroseCsvImporter):

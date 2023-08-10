@@ -1,15 +1,15 @@
+from councils.models import Council
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
-from django.http import HttpResponsePermanentRedirect, Http404
+from django.http import Http404, HttpResponsePermanentRedirect
+from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import serializers
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework_csv.renderers import CSVRenderer
 from rest_framework_gis.fields import GeometrySerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from django.core.exceptions import ObjectDoesNotExist
-from councils.models import Council
 
 
 def contact_type_to_dict(obj, contact_type):

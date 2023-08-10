@@ -1,9 +1,9 @@
 from unittest import mock
-from django.test import TestCase
 
 import pytest
 from councils.models import Council, UserCouncils
 from django.contrib.auth.models import User
+from django.test import TestCase
 from file_uploads.utils import assign_councils_to_user
 
 TEST_CUSTOM_DOMAINS = {

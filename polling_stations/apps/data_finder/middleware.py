@@ -4,8 +4,7 @@ class UTMTrackerMiddleware(object):
 
     def __call__(self, request):
         self.process_request(request)
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
 
     def process_request(self, request):
         def _get_value_from_req(key):

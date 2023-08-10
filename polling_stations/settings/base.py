@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 from pathlib import Path
 
 from dc_logging_client import DCWidePostcodeLoggingClient
@@ -6,10 +7,21 @@ from django.utils.translation import gettext_lazy as _
 
 # PATH vars
 
-here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
+
+def here(*x):
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
+
+
 PROJECT_ROOT = here("..")
-root = lambda *x: os.path.join(os.path.abspath(PROJECT_ROOT), *x)
-repo_root = lambda *x: os.path.join(os.path.abspath(here("../..")), *x)
+
+
+def root(*x):
+    return os.path.join(os.path.abspath(PROJECT_ROOT), *x)
+
+
+def repo_root(*x):
+    return os.path.join(os.path.abspath(here("../..")), *x)
+
 
 sys.path.insert(0, root("apps"))
 
@@ -36,7 +48,6 @@ DATABASES = {
     }
 }
 
-import dj_database_url
 
 # DATABASES["default"] = dj_database_url.config()
 # DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
@@ -393,10 +404,7 @@ from .constants.uploads import *  # noqa
 # Import .local.py last - settings in local.py override everything else
 # only if we're not testing
 try:
-    if (
-        not os.environ.get("DJANGO_SETTINGS_MODULE")
-        == "polling_stations.settings.testing"
-    ):
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "polling_stations.settings.testing":
         from .local import *  # noqa
 
     try:

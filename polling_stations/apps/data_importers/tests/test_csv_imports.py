@@ -1,8 +1,7 @@
-from django.test import TestCase
-
-from addressbase.models import UprnToCouncil, Address
+from addressbase.models import Address, UprnToCouncil
 from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import stub_addressimport
+from django.test import TestCase
 
 
 # High-level functional tests for import scripts

@@ -3,9 +3,8 @@ Import COUNCIL
 """
 import sys
 
-from django.contrib.gis.geos import Point, GEOSGeometry
-
 from data_importers.management.commands import BaseCsvStationsKmlDistrictsImporter
+from django.contrib.gis.geos import GEOSGeometry, Point
 
 
 class Command(BaseCsvStationsKmlDistrictsImporter):

@@ -1,6 +1,6 @@
+from data_importers.data_quality_report import DataQualityReportBuilder
 from django.apps import apps
 from django.core.management.base import BaseCommand
-from data_importers.data_quality_report import DataQualityReportBuilder
 
 
 class Command(BaseCommand):

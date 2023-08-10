@@ -2,18 +2,19 @@ import json
 from html import unescape
 
 import requests
+from councils.models import Council, CouncilGeography
 from django.apps import apps
-from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.conf import settings
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.core.management.base import BaseCommand
 from django.db import DEFAULT_DB_ALIAS
 from requests.exceptions import HTTPError
 from retry import retry
-from councils.models import Council, CouncilGeography
+
 from polling_stations.settings.constants.councils import (
-    WELSH_COUNCIL_NAMES,
     COUNCIL_ID_FIELD,
     NIR_IDS,
+    WELSH_COUNCIL_NAMES,
 )
 
 

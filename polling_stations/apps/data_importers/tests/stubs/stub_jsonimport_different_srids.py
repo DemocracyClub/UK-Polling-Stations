@@ -1,7 +1,7 @@
 import os
-from django.contrib.gis.geos import Point
-from data_importers.tests.stubs import BaseStubCsvStationsJsonDistrictsImporter
 
+from data_importers.tests.stubs import BaseStubCsvStationsJsonDistrictsImporter
+from django.contrib.gis.geos import Point
 
 """
 Define a stub implementation of json importer we can run tests against

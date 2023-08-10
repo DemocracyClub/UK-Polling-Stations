@@ -1,4 +1,5 @@
 import os
+
 import requests
 from requests.exceptions import HTTPError
 from requests_paginator import RequestsPaginator

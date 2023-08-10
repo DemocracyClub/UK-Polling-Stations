@@ -1,8 +1,7 @@
+from data_importers.base_importers import BaseStationsDistrictsImporter
+from data_importers.data_types import DistrictSet, StationSet
 from django.contrib.gis.geos import Point
 from django.test import TestCase
-
-from data_importers.base_importers import BaseStationsDistrictsImporter
-from data_importers.data_types import StationSet, DistrictSet
 
 
 class MockLogger:

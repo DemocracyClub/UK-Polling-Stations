@@ -74,7 +74,7 @@ class Command(BaseHalaroseCsvImporter):
             "35-neuadd-bentref-clynnog-fawr": "36-festri-capel-mc-pantglas",
             "36-festri-capel-mc-pantglas": "34-festri-capel-brynaerau-pontllyfni",
         }
-        if rec and rec["polling_station_id"] in fix_stations.keys():
+        if rec and rec["polling_station_id"] in fix_stations:
             rec["polling_station_id"] = fix_stations[rec["polling_station_id"]]
 
         return rec

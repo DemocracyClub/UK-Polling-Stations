@@ -1,16 +1,16 @@
 import csv
 from pathlib import Path
 
-from django.contrib.gis.geos import Point
-from django.db import connections
-
-from addressbase.models import UprnToCouncil, Address
-from polling_stations.db_routers import get_principal_db_name
-from polling_stations.settings.constants.councils import NIR_IDS
+from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from data_importers.base_importers import BaseStationsImporter, CsvMixin
 from data_importers.data_types import StationSet
-from pollingstations.models import PollingStation, CustomFinder
+from django.contrib.gis.geos import Point
+from django.db import connections
+from pollingstations.models import CustomFinder, PollingStation
+
+from polling_stations.db_routers import get_principal_db_name
+from polling_stations.settings.constants.councils import NIR_IDS
 
 ADDRESSES_FIELDS = ["uprn", "address", "postcode", "location", "addressbase_postal"]
 UPRN_FIELDS = ["uprn", "lad", "polling_station_id", "advance_voting_station_id"]
@@ -209,7 +209,7 @@ class Command(BaseStationsImporter, CsvMixin):
             uprns_in_council.update(lad=council.geography.gss)
 
     def station_record_to_dict(self, record):
-        if not record.sample_uprn in UPRN_TO_COUNCIL_CACHE:
+        if record.sample_uprn not in UPRN_TO_COUNCIL_CACHE:
             UPRN_TO_COUNCIL_CACHE[record.sample_uprn] = Council.objects.using(
                 DB_NAME
             ).get(
@@ -227,6 +227,7 @@ class Command(BaseStationsImporter, CsvMixin):
                 "address": record.address,
                 "location": Point().from_ewkt(record.location),
             }
+        return None
 
     def import_data(self):
         # We only need to import stations as addresses and UPRN to Council

@@ -43,5 +43,5 @@ class Migration(migrations.Migration):
                 ("imd", models.CharField(max_length=5, blank=True)),
             ],
         ),
-        migrations.AlterIndexTogether(name="onsud", index_together=set([("lad",)])),
+        migrations.AlterIndexTogether(name="onsud", index_together={("lad",)}),
     ]

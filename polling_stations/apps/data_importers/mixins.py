@@ -1,11 +1,10 @@
 from typing import List
 
-from rich.table import Table
-
 from addressbase.models import UprnToCouncil
 from councils.models import Council
-from data_importers.base_importers import BaseImporter, BaseBaseImporter
+from data_importers.base_importers import BaseBaseImporter, BaseImporter
 from pollingstations.models import AdvanceVotingStation
+from rich.table import Table
 
 
 def advance_voting_report(import_cls: "AdvanceVotingMixin", council: Council) -> Table:

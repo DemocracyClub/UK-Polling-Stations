@@ -1,11 +1,12 @@
-from django.core.management import call_command
-from django.test import TestCase
-from django.contrib.auth.models import AnonymousUser
-from django.contrib.gis.geos import Point
-from rest_framework.test import APIRequestFactory
-from rest_framework.views import APIView
 from api.address import AddressViewSet
 from councils.tests.factories import CouncilFactory
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.gis.geos import Point
+from django.core.management import call_command
+from django.test import TestCase
+from rest_framework.test import APIRequestFactory
+from rest_framework.views import APIView
+
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
 

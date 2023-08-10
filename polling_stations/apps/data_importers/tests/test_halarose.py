@@ -1,9 +1,9 @@
 from collections import namedtuple
-from django.test import TestCase
 
 from addressbase.models import Address, UprnToCouncil
 from councils.tests.factories import CouncilFactory
 from data_importers.tests.stubs import stub_halaroseimport
+from django.test import TestCase
 from pollingstations.models import PollingStation
 
 
@@ -57,7 +57,7 @@ class HalaroseImportTests(TestCase):
         )
 
         self.assertEqual(2, len(imported_uprns))
-        expected = set(["2", "3"])
+        expected = {"2", "3"}
         self.assertEqual(set(imported_uprns), expected)
 
     def test_station_ids(self):
@@ -68,12 +68,10 @@ class HalaroseImportTests(TestCase):
             .values_list("uprn", "polling_station_id")
         )
 
-        expected = set(
-            [
-                ("2", "10-penyrheol-boxing-club"),
-                ("3", "10-penyrheol-boxing-club"),
-            ]
-        )
+        expected = {
+            ("2", "10-penyrheol-boxing-club"),
+            ("3", "10-penyrheol-boxing-club"),
+        }
         self.assertEqual(set(imported_uprns_and_ids), expected)
 
     def test_stations(self):
@@ -86,12 +84,10 @@ class HalaroseImportTests(TestCase):
         # we inserted 2 stations, even though only one of them
         # had no valid addresses associated with it
         self.assertEqual(2, len(stations))
-        expected = set(
-            [
-                "Penyrheol Boxing Club\nGower View Road\nPenyrheol\nSwansea",
-                "St Ambrose Church Hall\nWest Cliff Road\nBournemouth",
-            ]
-        )
+        expected = {
+            "Penyrheol Boxing Club\nGower View Road\nPenyrheol\nSwansea",
+            "St Ambrose Church Hall\nWest Cliff Road\nBournemouth",
+        }
         self.assertEqual(set(stations), expected)
 
     def test_address_formatter(self):

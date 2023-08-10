@@ -1,9 +1,7 @@
-from django.core.management.base import BaseCommand
-
-from django.contrib.gis.geos import Point
-from pollingstations.models import PollingStation, PollingDistrict
-from councils.models import Council
 from addressbase.models import Address, UprnToCouncil
+from councils.models import Council
+from django.core.management.base import BaseCommand
+from pollingstations.models import PollingDistrict, PollingStation
 
 
 def update_station_point(council_id, station_id, point):

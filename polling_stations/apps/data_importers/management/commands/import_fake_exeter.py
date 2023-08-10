@@ -1,11 +1,10 @@
-from django.contrib.gis.geos import Point
+from pathlib import Path
 
 from addressbase.models import UprnToCouncil
 from core.opening_times import OpeningTimes
-from data_importers.mixins import AdvanceVotingMixin
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from pathlib import Path
-
+from data_importers.mixins import AdvanceVotingMixin
+from django.contrib.gis.geos import Point
 from pollingstations.models import AdvanceVotingStation
 
 

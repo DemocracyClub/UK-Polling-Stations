@@ -2,18 +2,16 @@ import re
 from io import StringIO
 from unittest.mock import Mock, patch
 
-from django.core.management import call_command
-from django.test import TestCase
-
 from data_importers.management.commands.run_new_imports import (
-    get_paths_changed,
-    git_rev_parse,
-    get_changed_scripts,
-    is_import_script,
     any_import_scripts,
     any_non_import_scripts,
-    Command as run_new_imports_command,
+    get_changed_scripts,
+    get_paths_changed,
+    git_rev_parse,
+    is_import_script,
 )
+from django.core.management import call_command
+from django.test import TestCase
 
 no_scripts = [
     "polling_stations/apps/councils/management/commands/import_councils.py",
@@ -66,7 +64,7 @@ def test_git_rev_parse():
     assert re.match(r"[a-f0-9]{40}", git_rev_parse("HEAD"))
 
     # This commit needs to exist in the repo history
-    assert "1012c398b13d2e9c87f718b87e07ee9cd1c26222" == git_rev_parse("1012c39")
+    assert git_rev_parse("1012c39") == "1012c398b13d2e9c87f718b87e07ee9cd1c26222"
 
 
 def test_is_import_script():

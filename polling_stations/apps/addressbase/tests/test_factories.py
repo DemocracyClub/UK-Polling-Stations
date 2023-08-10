@@ -1,7 +1,6 @@
-from django.test import TestCase
-
 from addressbase.models import Address
 from addressbase.tests.factories import AddressFactory, UprnToCouncilFactory
+from django.test import TestCase
 
 
 class TestAddressFactory(TestCase):

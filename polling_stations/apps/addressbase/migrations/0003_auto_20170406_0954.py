@@ -25,6 +25,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AlterUniqueTogether(
-            name="blacklist", unique_together=set([("postcode", "lad")])
+            name="blacklist", unique_together={("postcode", "lad")}
         ),
     ]

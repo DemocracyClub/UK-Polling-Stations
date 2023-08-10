@@ -1,8 +1,8 @@
 import os
 
+from councils.models import Council, UserCouncils
 from django.db.models import Q
 
-from councils.models import Council, UserCouncils
 from polling_stations.settings.constants.uploads import CUSTOM_DOMAINS
 
 

@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import CreateView
+
 from .forms import BugReportForm
-from django.contrib import messages
 
 
 class BugReportFormView(CreateView):

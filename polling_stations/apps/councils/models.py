@@ -3,8 +3,8 @@ from pathlib import Path
 
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.db.models import JSONField
 from django.contrib.postgres.fields import ArrayField
+from django.db.models import JSONField
 from django.utils.translation import get_language
 
 from polling_stations.i18n.cy import WelshNameMutationMixin
@@ -84,11 +84,11 @@ class Council(WelshNameMutationMixin, models.Model):
             for identifier in self.identifiers
             if re.match(gss_pattern, identifier)
         ]
-        identifier_nations = set(
+        identifier_nations = {
             nations_lookup[identifier[0]]
             for identifier in identifier_matches
             if identifier
-        )
+        }
         if len(identifier_nations) == 1:
             return identifier_nations.pop()
         else:

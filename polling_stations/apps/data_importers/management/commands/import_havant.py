@@ -1,5 +1,3 @@
-from django.contrib.gis.geos import Point
-
 from data_importers.management.commands import BaseXpressWebLookupCsvImporter
 
 STATION_LOCATIONS = {

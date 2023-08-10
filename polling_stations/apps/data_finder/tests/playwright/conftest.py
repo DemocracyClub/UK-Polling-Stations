@@ -1,6 +1,8 @@
 import os
+
 import pytest
 from django.core.management import call_command
+
 from polling_stations.apps.councils.tests.factories import CouncilFactory
 
 

@@ -145,11 +145,13 @@ class HandlerTests(TestCase):
 
     def load_fixture(self, filename, key="data.csv", mimetype=None):
         # load a fixture into our pretend S3 bucket
-        guess_content_type = (
-            lambda filename: "text/tab-separated-values"
-            if filename.lower().endswith(".tsv")
-            else "text/csv"
-        )
+        def guess_content_type(filename):
+            return (
+                "text/tab-separated-values"
+                if filename.lower().endswith(".tsv")
+                else "text/csv"
+            )
+
         if not mimetype:
             mimetype = guess_content_type(filename)
         fixture_path = Path(__file__).parent / "fixtures" / filename

@@ -1,12 +1,12 @@
 from django.urls import re_path
+from file_uploads.api import UploadViewSet
 from rest_framework import routers
+
 from .address import AddressViewSet
-from .councils import CouncilViewSet, CouncilCSVViewSet
+from .councils import CouncilCSVViewSet, CouncilViewSet
 from .pollingstations import PollingStationViewSet
 from .postcode import PostcodeViewSet
 from .sandbox import SandboxView
-from file_uploads.api import UploadViewSet
-
 
 router = routers.DefaultRouter()
 router.register(r"councils", CouncilViewSet)

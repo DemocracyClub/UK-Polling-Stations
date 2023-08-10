@@ -30,8 +30,7 @@ def get_dialect(sample, key):
     # sometimes we get CSVs with a TSV extension or TSVs with a CSV extension,
     # so we'll try and use csv.Sniffer to work it out for us.
     try:
-        dialect = csv.Sniffer().sniff(sample, [",", "\t"])
-        return dialect
+        return csv.Sniffer().sniff(sample, [",", "\t"])
     except csv.Error:
         # if that fails, make an assumption based on the file extension
         if key.lower().endswith(".tsv"):

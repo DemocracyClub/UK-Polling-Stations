@@ -1,12 +1,11 @@
+from councils.models import Council
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import BTreeIndex, GistIndex
+from pollingstations.models import PollingStation
 from uk_geo_utils.models import (
     AbstractAddress,
     AbstractOnsudManager,
 )
-
-from councils.models import Council
-from pollingstations.models import PollingStation
 
 
 class Address(AbstractAddress):

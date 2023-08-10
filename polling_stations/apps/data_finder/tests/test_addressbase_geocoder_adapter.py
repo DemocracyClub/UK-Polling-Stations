@@ -1,6 +1,6 @@
+from data_finder.helpers.geocoders import AddressBaseGeocoderAdapter
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
-from data_finder.helpers.geocoders import AddressBaseGeocoderAdapter
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     MultipleCodesException,

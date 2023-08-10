@@ -5,7 +5,6 @@ import sys
 from unittest import TestCase, mock
 
 import responses
-
 from trigger.github_helpers import raise_github_issue
 
 

@@ -1,12 +1,11 @@
 from collections import namedtuple
 from unittest import mock
 
+from councils.tests.factories import CouncilFactory
+from data_finder.helpers import RoutingHelper
 from django.core.management import call_command
 from django.http import QueryDict
 from django.test import TestCase
-
-from councils.tests.factories import CouncilFactory
-from data_finder.helpers import RoutingHelper
 
 MockAddress = namedtuple(
     "MockAddress",

@@ -24,6 +24,6 @@ class ReplicationRouter(object):
 
 
 def get_principal_db_name():
-    if settings.PRINCIPAL_DB_NAME in settings.DATABASES.keys():
+    if settings.PRINCIPAL_DB_NAME in settings.DATABASES:
         return settings.PRINCIPAL_DB_NAME
     return DEFAULT_DB_ALIAS

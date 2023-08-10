@@ -1,9 +1,9 @@
-from django.core import mail
-from django.conf import settings
-from django.test import TestCase
-from file_uploads.models import Upload
 from councils.models import Council
+from django.conf import settings
+from django.core import mail
+from django.test import TestCase
 from file_uploads.management.commands import check_pending
+from file_uploads.models import Upload
 from freezegun import freeze_time
 
 

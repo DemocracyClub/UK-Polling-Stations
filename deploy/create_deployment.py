@@ -1,8 +1,8 @@
 import os
 import sys
+import time
 
 import boto3
-import time
 
 session = boto3.Session(region_name=os.environ.get("AWS_REGION"))
 

@@ -8,8 +8,7 @@ class WhiteLabelMiddleware(object):
 
     def __call__(self, request):
         self.process_request(request)
-        response = self.process_response(request, self.get_response(request))
-        return response
+        return self.process_response(request, self.get_response(request))
 
     def process_request(self, request):
         base_path = request.path.split("/")[1]
@@ -22,7 +21,6 @@ class WhiteLabelMiddleware(object):
 
     def process_response(self, request, response):
         base_path = request.path.split("/")[1]
-        if base_path in settings.EMBED_PREFIXES:
-            if "X-Frame-Options" in response:
-                del response["X-Frame-Options"]
+        if base_path in settings.EMBED_PREFIXES and "X-Frame-Options" in response:
+            del response["X-Frame-Options"]
         return response

@@ -1,3 +1,5 @@
+from django.utils.http import urlencode
+from pollingstations.models import PollingStation
 from rest_framework.mixins import ListModelMixin
 from rest_framework.reverse import reverse
 from rest_framework.serializers import (
@@ -7,8 +9,7 @@ from rest_framework.serializers import (
 )
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from django.utils.http import urlencode
-from pollingstations.models import PollingStation
+
 from .mixins import PollingEntityMixin
 
 

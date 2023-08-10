@@ -12,9 +12,8 @@ class PointField(serializers.Field):
         if value is None:
             return value
 
-        value = {
+        return {
             "type": "Feature",
             "properties": None,
             "geometry": {"type": "Point", "coordinates": [value.x, value.y]},
         }
-        return value

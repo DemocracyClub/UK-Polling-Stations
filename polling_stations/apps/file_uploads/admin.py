@@ -1,7 +1,6 @@
-from django.contrib import admin
-
 from core.admin_mixins import ReadOnlyModelAdminMixin
-from file_uploads.models import Upload, File
+from django.contrib import admin
+from file_uploads.models import File, Upload
 
 
 class FileInline(admin.StackedInline):

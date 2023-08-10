@@ -1,17 +1,16 @@
 from datetime import timedelta
-from commitment import GitHubCredentials, GitHubClient
-from django.conf import settings
-from django.contrib.gis.db import models
-from django.utils.timezone import now
-from django.db import transaction
-from django.core.mail import EmailMessage
 
-from django.template.loader import render_to_string
-from requests import HTTPError
-
+from commitment import GitHubClient, GitHubCredentials
 from councils.models import Council
 from data_importers.import_script import ImportScript
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.gis.db import models
+from django.core.mail import EmailMessage
+from django.db import transaction
+from django.template.loader import render_to_string
+from django.utils.timezone import now
+from requests import HTTPError
 
 status_map = {
     "Pending": "⌛",
@@ -34,10 +33,9 @@ class UploadQuerySet(models.QuerySet):
 
     def pending_upload_qs(self):
         from_time = now() - timedelta(minutes=20)
-        qs = Upload.objects.filter(
+        return Upload.objects.filter(
             timestamp__lte=from_time, warning_about_pending_sent=False
         )
-        return qs
 
 
 class Upload(models.Model):
@@ -85,7 +83,7 @@ class Upload(models.Model):
 
     @property
     def import_script(self):
-        if not self.status == "OK":
+        if self.status != "OK":
             return None
 
         elections = [str(self.election_date)]
@@ -96,7 +94,6 @@ class Upload(models.Model):
             path = "/".join(file.key.split("/")[1:])
             import_script = ImportScript(
                 **{
-                    "council_id": council_id,
                     "council_id": council_id,
                     "ems": file.ems,
                     "addresses_name": path,

@@ -1,28 +1,28 @@
 import abc
 from datetime import datetime
 
-from django.conf import settings
-from django.contrib.gis.geos import Point
-from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404
-from django.views.generic import FormView, TemplateView
-from django.utils import translation, timezone
-from uk_geo_utils.geocoders import MultipleCodesException
-
 from addressbase.models import Address
 from councils.models import Council
-from pollingstations.models import PollingStation, CustomFinder
+from django.conf import settings
+from django.contrib.gis.geos import Point
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.utils import timezone, translation
+from django.views.generic import FormView, TemplateView
+from pollingstations.models import CustomFinder, PollingStation
+from uk_geo_utils.geocoders import MultipleCodesException
 from uk_geo_utils.helpers import AddressSorter, Postcode
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
-from .forms import PostcodeLookupForm, AddressSelectForm
+
+from .forms import AddressSelectForm, PostcodeLookupForm
 from .helpers import (
     DirectionsHelper,
-    get_council,
-    geocode,
     EveryElectionWrapper,
     PostcodeError,
     RoutingHelper,
+    geocode,
+    get_council,
 )
 from .helpers.every_election import EmptyEveryElectionWrapper
 
@@ -127,6 +127,7 @@ class BasePollingStationView(
             return None
         if hasattr(self, "address"):
             return self.address.uprntocouncil.advance_voting_station
+        return None
 
     def get_ee_wrapper(self, rh):
         if rh and rh.route_type == "multiple_addresses":
@@ -230,7 +231,7 @@ class PostcodeView(BasePollingStationView):
         any of the uprns.
         Either way let's be explicit that station is None
         """
-        return None
+        return
 
 
 class AddressView(BasePollingStationView):

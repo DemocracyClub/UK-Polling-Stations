@@ -1,13 +1,13 @@
 import os
 
-from django.test import TestCase
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
 from data_importers.base_importers import BaseImporter
 from data_importers.ems_importers import BaseXpressDemocracyClubCsvImporter
 from data_importers.mixins import AdvanceVotingMixin
-from pollingstations.models import PollingStation, AdvanceVotingStation
+from django.test import TestCase
+from pollingstations.models import AdvanceVotingStation, PollingStation
 from pollingstations.tests.factories import AdvanceVotingStationFactory
 
 

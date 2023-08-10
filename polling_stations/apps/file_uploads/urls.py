@@ -1,13 +1,13 @@
-from django.urls import re_path, path, reverse_lazy
-from django.views.generic import TemplateView, RedirectView
+from django.urls import path, re_path, reverse_lazy
+from django.views.generic import RedirectView, TemplateView
 
 from .views import (
-    CouncilListView,
+    AuthenticateView,
     CouncilDetailView,
+    CouncilListView,
+    CouncilLoginView,
     FileDetailView,
     FileUploadView,
-    CouncilLoginView,
-    AuthenticateView,
 )
 
 app_name = "file_uploads"

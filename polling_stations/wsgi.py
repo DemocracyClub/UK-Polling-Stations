@@ -14,10 +14,10 @@ framework.
 
 """
 import os
-
-import dotenv
 from os.path import abspath, dirname
 from sys import path
+
+import dotenv
 
 SITE_ROOT = dirname(dirname(abspath(__file__)))
 path.append(SITE_ROOT)

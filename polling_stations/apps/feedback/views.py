@@ -1,7 +1,7 @@
-from django.http import HttpResponse
-from django.views.generic import View, UpdateView
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib import messages
+from django.http import HttpResponse
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.generic import UpdateView, View
 
 from .forms import FeedbackForm
 from .models import Feedback

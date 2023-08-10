@@ -1,7 +1,6 @@
 import datetime
-from typing import Optional
-from typing import List
-from urllib.parse import urljoin, urlencode
+from typing import List, Optional
+from urllib.parse import urlencode, urljoin
 
 import requests
 from dateutil.parser import parse
@@ -112,8 +111,8 @@ class EveryElectionWrapper:
     def get_future_election_dates(self):
         if not self.request_success:
             return []
-        dates = set([e["poll_open_date"] for e in self.elections if not e["cancelled"]])
-        return sorted(list(dates))
+        dates = {e["poll_open_date"] for e in self.elections if not e["cancelled"]}
+        return sorted(dates)
 
     def _get_next_election_date(self):
         ballots = self.get_all_ballots()
@@ -147,8 +146,7 @@ class EveryElectionWrapper:
         if len(ballots) == 0:
             return ballots
         next_election_date = self._get_next_election_date()
-        ballots = [e for e in ballots if e["poll_open_date"] == next_election_date]
-        return ballots
+        return [e for e in ballots if e["poll_open_date"] == next_election_date]
 
     def get_cancelled_ballots(self):
         return [b for b in self.ballots if b["cancelled"]]

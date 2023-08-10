@@ -43,5 +43,4 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Portacabin on north side of green, Fairfield Square/Hythe Road, Portsmouth, PO6 3JS
         # St Peter & St Paul Hall, Old Wymering Lane, Wymering, PO6 3NH
 
-        rec = super().station_record_to_dict(record)
-        return rec
+        return super().station_record_to_dict(record)

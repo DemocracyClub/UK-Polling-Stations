@@ -1,7 +1,6 @@
-from django.test import TestCase
-
 from addressbase.tests.factories import AddressFactory
 from data_importers.data_types import AddressList
+from django.test import TestCase
 
 
 class MockLogger:

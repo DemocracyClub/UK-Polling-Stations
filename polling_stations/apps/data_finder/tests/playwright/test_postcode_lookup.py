@@ -1,6 +1,6 @@
 import pytest
-from playwright.sync_api import expect
 from context_managers import check_for_console_errors
+from playwright.sync_api import expect
 
 
 @pytest.mark.vcr()

@@ -2,12 +2,11 @@ import csv
 import fnmatch
 import json
 import os
-import shapefile
 import tempfile
 import zipfile
-
 from collections import namedtuple
 
+import shapefile
 from django.contrib.gis.gdal import DataSource
 
 

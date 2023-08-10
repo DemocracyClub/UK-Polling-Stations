@@ -52,8 +52,7 @@ def get_distance(start, end):
     start_bng = start.transform(27700, clone=True)
     end_bng = end.transform(27700, clone=True)
 
-    distance_km = start_bng.distance(end_bng) / 1000
-    return distance_km
+    return start_bng.distance(end_bng) / 1000
 
 
 class DirectionsException(Exception):

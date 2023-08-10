@@ -1,6 +1,5 @@
-from django.db import models
-
 from councils.models import Council
+from django.db import models
 
 
 class DataQuality(models.Model):

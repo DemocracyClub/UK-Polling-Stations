@@ -1,7 +1,8 @@
 import json
+
+from data_finder.helpers.directions import DirectionsException, GoogleDirectionsClient
 from django.contrib.gis.geos import Point
 from django.test import TestCase
-from data_finder.helpers.directions import DirectionsException, GoogleDirectionsClient
 
 
 class GoogleDirectionsClientInvalidMock(GoogleDirectionsClient):
