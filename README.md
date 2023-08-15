@@ -43,19 +43,21 @@ The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing
 
 - Local Dev without CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
 ```
 
 - Local Dev with CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
 ```
 
 - Just Running Tests
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
 ```
 
+- Update requirements
+Bump version in relevant requirements file, e.g. ```base.in``` then run ```python -m invoke requirements --upgrade```.
 
 ### Install front-end dependencies
 ```
