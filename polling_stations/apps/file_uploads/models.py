@@ -11,6 +11,7 @@ from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.timezone import now
 from requests import HTTPError
+from sentry_sdk import capture_message
 
 status_map = {
     "Pending": "⌛",
@@ -203,10 +204,9 @@ class Upload(models.Model):
         self.save()
 
     def make_pull_request(self):
-        print("creating pull request")
         if getattr(settings, "RUNNING_TESTS", False):
             return
-
+        capture_message(f"Attempting to create PR for {self.branch_name}", level="info")
         creds = GitHubCredentials(
             repo=settings.GITHUB_REPO,
             name=settings.GITHUB_USERNAME,
@@ -218,7 +218,9 @@ class Upload(models.Model):
             client.create_branch(self.branch_name)
         except HTTPError as e:
             if e.response.json()["message"] == "Reference already exists":
-                print("Branch already exists")
+                capture_message(
+                    f"Branch {self.branch_name} already exists", level="warning"
+                )
             else:
                 raise e
 
@@ -240,7 +242,7 @@ class Upload(models.Model):
                 e.response.json()["errors"][0]["message"]
                 == f"A pull request already exists for DemocracyClub:{self.branch_name}."
             ):
-                print("PR already exists.")
+                capture_message(f"PR already exists for {self.branch_name}:\n{e}")
             else:
                 raise e
 
