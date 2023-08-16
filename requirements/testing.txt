@@ -258,12 +258,6 @@ iniconfig==2.0.0 \
     # via
     #   -c requirements/constraints.txt
     #   pytest
-mock==5.1.0 \
-    --hash=sha256:18c694e5ae8a208cdb3d2c20a993ca1a7b0efa258c247a1e565150f477f83744 \
-    --hash=sha256:5e96aad5ccda4718e0a229ed94b2024df75cc2d55575ba5762d31f5767b8767d
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/testing.in
 multidict==6.0.4 \
     --hash=sha256:01a3a55bd90018c9c080fbb0b9f4891db37d148a0a18722b42f94694f8b6d4c9 \
     --hash=sha256:0b1a97283e0c85772d613878028fec909f003993e1007eafa715b24b377cb9b8 \

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
+from unittest import mock
 from urllib.parse import parse_qs
 
-import mock
 import requests
 from data_finder.helpers import EveryElectionWrapper
 from django.test import TestCase, override_settings

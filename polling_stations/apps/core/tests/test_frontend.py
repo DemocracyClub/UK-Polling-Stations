@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 import pytest
 from addressbase.tests.factories import AddressFactory, UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory

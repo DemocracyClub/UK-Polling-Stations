@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 from data_finder.helpers.geocoders import (
     geocode,
     geocode_point_only,
