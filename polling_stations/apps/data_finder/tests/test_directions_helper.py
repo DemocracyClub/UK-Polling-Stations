@@ -1,4 +1,5 @@
-import mock
+from unittest import mock
+
 from data_finder.helpers import DirectionsHelper
 from data_finder.helpers.directions import Directions, DirectionsException
 from django.contrib.gis.geos import Point
