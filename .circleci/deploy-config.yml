@@ -2,9 +2,9 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.2
-  slack: circleci/slack@4.1
-  aws-cli: circleci/aws-cli@3.1
+  node: circleci/node@5.1.0
+  slack: circleci/slack@4.12.5
+  aws-cli: circleci/aws-cli@4.0.0
 
 
 # the default pipeline parameters, which will be updated according to
