@@ -300,7 +300,6 @@ jobs:
 
 
 workflows:
-  version: 2
   test_and_run_importers:
     # NB the script called by run_new_imports will bail early if there are also application changes present
     when: << pipeline.parameters.imports-changed >>
