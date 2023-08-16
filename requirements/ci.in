@@ -1,4 +1,2 @@
--c constraints.txt
-
 wheel
 coveralls > 3.0
