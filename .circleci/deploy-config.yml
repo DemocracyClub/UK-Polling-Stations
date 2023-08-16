@@ -58,27 +58,27 @@ jobs:
             python -m venv .venv
             . .venv/bin/activate
             python -m pip install --upgrade pip
-            pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/ci.txt
+            pip install --no-deps -r requirements/base.txt -r requirements/testing.txt -r requirements/ci.txt
             playwright install
 
       - run:
           name: install lambda trigger Python dependencies
           command: |
             . .venv/bin/activate
-            pip install -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
-            pip install -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+            pip install --no-deps -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
+            pip install --no-deps -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 
       - run:
           name: install CDK Python dependencies
           command: |
             . .venv/bin/activate
-            pip install -r requirements/cdk.txt
+            pip install --no-deps -r requirements/cdk.txt
 
       - run:
           name: install Prod dependencies
           command: |
             . .venv/bin/activate
-            pip install -r requirements/production.txt
+            pip install --no-deps -r requirements/production.txt
 
       - save_cache:
           paths:
@@ -176,7 +176,7 @@ jobs:
           pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
           python -m venv .venv
           . .venv/bin/activate
-          python -m pip install -r requirements/cdk.txt
+          python -m pip install --no-deps -r requirements/cdk.txt
     - save_cache:
         paths:
           - ./.venv
