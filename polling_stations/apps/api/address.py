@@ -59,6 +59,7 @@ class BallotSerializer(serializers.Serializer):
     elected_role = serializers.CharField(read_only=True, allow_null=True)
     metadata = serializers.DictField(read_only=True, allow_null=True)
     cancelled = serializers.BooleanField(read_only=True)
+    cancellation_reason = serializers.CharField(read_only=True, allow_null=True)
     replaced_by = serializers.CharField(read_only=True, allow_null=True)
     replaces = serializers.CharField(read_only=True, allow_null=True)
 
