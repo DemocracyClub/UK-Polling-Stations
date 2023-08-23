@@ -58,8 +58,6 @@ def get_csv_report(response, key):
         report["errors"].append("Failed to decode body using any expected encoding")
         return report
 
-    decoded = decoded.replace("\x00", "")
-
     dialect = get_dialect(decoded.splitlines()[0], key)
     records = csv.reader(
         decoded.splitlines(True),
