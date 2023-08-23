@@ -58,15 +58,16 @@ def get_csv_report(response, key):
         report["errors"].append("Failed to decode body using any expected encoding")
         return report
 
-    dialect = get_dialect(decoded.splitlines()[0], key)
+    decoded = decoded.replace("\x00", "")
 
+    dialect = get_dialect(decoded.splitlines()[0], key)
+    records = csv.reader(
+        decoded.splitlines(True),
+        dialect=dialect,
+        delimiter=dialect.delimiter,
+        quotechar=dialect.quotechar,
+    )
     try:
-        records = csv.reader(
-            decoded.splitlines(True),
-            dialect=dialect,
-            delimiter=dialect.delimiter,
-            quotechar=dialect.quotechar,
-        )
         header = next(records)
         expected_row_length = len(header)
         if expected_row_length < 3:
@@ -90,8 +91,8 @@ def get_csv_report(response, key):
         report["csv_valid"] = True
         report["csv_rows"] = total_rows
         return report
-    except csv.Error:
-        report["errors"].append("Failed to parse body")
+    except csv.Error as e:
+        report["errors"].append(f"Failed to parse body -> line {records.line_num}: {e}")
         return report
 
 
