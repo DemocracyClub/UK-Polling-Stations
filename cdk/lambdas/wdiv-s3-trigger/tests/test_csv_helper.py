@@ -138,4 +138,17 @@ class CsvHelperTests(TestCase):
             get_fixture("not-a-csv.csv", "text/csv"), "not-a-csv.csv"
         )
         self.assertFalse(report["csv_valid"])
-        self.assertEqual("Failed to parse body", report["errors"][0])
+        print(report["errors"])
+        self.assertEqual(
+            "File has only 2 columns. We might have failed to detect the delimiter",
+            report["errors"][0],
+        )
+
+    def test_valid_with_nul(self):
+        report = get_csv_report(
+            get_fixture("ems-xpress-dc-nul.csv", "text/csv"), "ems-xpress-dc.csv"
+        )
+        self.assertTrue(report["csv_valid"])
+        self.assertEqual(10, report["csv_rows"])
+        self.assertEqual("utf-8", report["csv_encoding"])
+        self.assertEqual("Xpress DC", report["ems"])
