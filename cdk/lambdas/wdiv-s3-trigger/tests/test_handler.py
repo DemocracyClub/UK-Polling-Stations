@@ -7,8 +7,11 @@ from unittest import TestCase
 
 import boto3
 import moto
+import pytest
 import responses
 from botocore.exceptions import ClientError
+from councils.tests.factories import CouncilFactory
+from file_uploads.api import UploadSerializer
 from moto import mock_s3, mock_ses
 from moto.s3 import responses as moto_s3_responses
 from moto.ses import ses_backends
@@ -58,6 +61,7 @@ trigger_payload = json.loads(
 os.environ["AWS_DEFAULT_REGION"] = moto_s3_responses.DEFAULT_REGION_NAME = "eu-west-1"
 
 
+@pytest.mark.django_db
 class HandlerTests(TestCase):
     """
     This is a very high-level integration test touching most of the codebase.
@@ -133,6 +137,11 @@ class HandlerTests(TestCase):
             json={},
             status=200,
         )
+        CouncilFactory(
+            **{
+                "council_id": "X01000000",
+            }
+        )
 
         sys.stdout = io.StringIO()
 
@@ -194,6 +203,10 @@ class HandlerTests(TestCase):
                 }
             ],
         }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
         self.assertDictEqual(expected_dict, json.loads(responses.calls[3].request.body))
         resp = self.conn.get_object(
             Bucket=self.final_bucket,
@@ -245,6 +258,10 @@ class HandlerTests(TestCase):
                 },
             ],
         }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
         self.assertDictEqual(expected_dict, json.loads(responses.calls[3].request.body))
         resp = self.conn.get_object(
             Bucket=self.final_bucket,
@@ -283,6 +300,10 @@ class HandlerTests(TestCase):
                 }
             ],
         }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
         self.assertDictEqual(expected_dict, json.loads(responses.calls[1].request.body))
         with self.assertRaises(ClientError):
             self.conn.get_object(
@@ -322,6 +343,10 @@ class HandlerTests(TestCase):
                 }
             ],
         }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
         self.assertDictEqual(expected_dict, json.loads(responses.calls[1].request.body))
         with self.assertRaises(ClientError):
             self.conn.get_object(
@@ -368,6 +393,10 @@ class HandlerTests(TestCase):
                 }
             ],
         }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
         self.assertDictEqual(expected_dict, json.loads(responses.calls[3].request.body))
         resp = self.conn.get_object(
             Bucket=self.final_bucket,
