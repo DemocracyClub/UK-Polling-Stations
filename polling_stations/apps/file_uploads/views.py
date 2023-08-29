@@ -129,6 +129,12 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
 
     @method_decorator(csrf_protect)
     def post(self, request, *args, **kwargs):
+        """
+        Expects a request matching the UploadRequestSchema
+        Fetches, and returns, a presigned url for an s3 upload.
+        This endpoint is called in templates/upload.html from the js,
+        which then uses the presigned url to upload the users files.
+        """
         body = json.loads(request.body)
 
         try:

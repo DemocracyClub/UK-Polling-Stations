@@ -1,0 +1,53 @@
+%%{
+  init: {
+    'noteAlign': 'Left'
+  }
+}%%
+
+sequenceDiagram
+    participant UC as upload.html
+    participant FUV as FileUploadView
+    participant s3_uploads as s3 uploads bucket
+    participant WST as wdiv-s3-trigger
+    participant s3_elections as s3 elections bucket
+    participant UA as api/beta/uploads
+
+    %%    Role Labels
+    %%    * `upload.html`: JS is running on the client - and code is in the template
+    %%    * `FileUploadView`: The logic in the `post` method, running on an ec2 instance
+    %%    * AWS s3 'uploads' bucket: eg `pollingstations-uploads-production`
+    %%    * `wdiv-s3-trigger`: the lambda function of the same name
+    %%    * AWS s3 'elections' bucket: eg `pollingstations-elections-production`
+    %%    * `api/beta/uploads` the logic in the UploadSerializer.create method.
+
+    activate UC
+    UC ->>+ FUV: POST (matches `UploadRequestSchema`)
+
+    FUV ->> s3_uploads: Request pre-signed url(s)
+    s3_uploads -->> FUV: Return pre-signed url(s)
+    FUV -->>- UC: Return pre-signed url(s)
+
+    UC ->> s3_uploads: Upload files to bucket
+    deactivate UC
+
+    s3_uploads ->>+ WST: uploaded file triggers<br/>wdiv-s3-trigger function
+
+    note over WST: - Check if CSV is valid<br/>- Generate report
+
+    alt CSV is valid
+        WST ->> s3_elections: copy file to elections bucket
+        WST ->> GH-UK-Polling-Stations: Raise issue
+        WST ->> s3_elections: sync report to s3
+    else CSV is invalid
+        note over WST: - send error email
+    end
+
+    activate UA
+    WST ->> UA: POST report to WDIV
+    deactivate WST
+
+    UA ->> GH-UK-Polling-Stations: Make Pull Request
+
+    note over UA: - Send confirmation email
+
+    deactivate UA
