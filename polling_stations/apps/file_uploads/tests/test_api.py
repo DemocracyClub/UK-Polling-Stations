@@ -1,4 +1,5 @@
 import os
+from unittest.mock import Mock, patch
 
 from councils.tests.factories import CouncilFactory
 from django.conf import settings
@@ -9,7 +10,10 @@ from file_uploads.models import File, Upload
 from freezegun import freeze_time
 from rest_framework.test import APITestCase
 
+successful_upload_pull_request = Mock()
 
+
+@patch("file_uploads.models.Upload.make_pull_request", successful_upload_pull_request)
 class AddressTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
@@ -25,6 +29,9 @@ class AddressTest(APITestCase):
             "polling_stations/apps/file_uploads/fixtures/test_api.json",
             verbosity=0,
         )
+
+    def tearDown(self):
+        successful_upload_pull_request.reset_mock()
 
     def test_invalid_payload(self):
         invalid_payloads = [
@@ -59,6 +66,7 @@ class AddressTest(APITestCase):
             self.assertEqual(0, len(Upload.objects.all()))
             self.assertEqual(0, len(File.objects.all()))
             self.assertEqual(0, len(mail.outbox))
+            successful_upload_pull_request.assert_not_called()
 
     def test_get_request(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -79,6 +87,7 @@ class AddressTest(APITestCase):
         self.assertEqual(0, len(Upload.objects.all()))
         self.assertEqual(0, len(File.objects.all()))
         self.assertEqual(0, len(mail.outbox))
+        successful_upload_pull_request.assert_not_called()
 
     def test_valid_payload_bad_credentials(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token normaluser-key")
@@ -93,6 +102,7 @@ class AddressTest(APITestCase):
         self.assertEqual(0, len(Upload.objects.all()))
         self.assertEqual(0, len(File.objects.all()))
         self.assertEqual(0, len(mail.outbox))
+        successful_upload_pull_request.assert_not_called()
 
     def test_valid_payload_zero_files(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -125,8 +135,11 @@ class AddressTest(APITestCase):
             mail.outbox[0].body,
             f"File upload failure: {upload}. Please investigate further.",
         )
+        successful_upload_pull_request.assert_not_called()
 
-    def test_valid_payload_one_file(self):
+    def test_valid_payload_one_file(
+        self,
+    ):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
         os.environ["SERVER_ENVIRONMENT"] = "production"
         Upload.objects.create(
@@ -165,6 +178,7 @@ class AddressTest(APITestCase):
             mail.outbox[0].subject,
             "Your file upload for Piddleton Parish (2020-05-07) was successful",
         )
+        successful_upload_pull_request.assert_called()
 
     def test_valid_payload_two_files(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -213,6 +227,7 @@ class AddressTest(APITestCase):
             mail.outbox[0].subject,
             "Your file upload for Piddleton Parish (2020-05-07) was successful",
         )
+        successful_upload_pull_request.assert_called()
 
     def test_multiple_files_out_of_order_delivery(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -267,6 +282,7 @@ class AddressTest(APITestCase):
             mail.outbox[0].subject,
             "Your file upload for Piddleton Parish (2020-05-07) was successful",
         )
+        successful_upload_pull_request.assert_called()
 
         # The second payload we receive only contains one of the files
         # that was in the first payload.
@@ -475,6 +491,7 @@ class AddressTest(APITestCase):
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(2, len(File.objects.all()))
         self.assertEqual(0, len(mail.outbox))
+        successful_upload_pull_request.assert_called()
 
     def test_empty_upload_user_email_address(self):
         # Test the email content when the upload user has no email address
@@ -523,3 +540,4 @@ class AddressTest(APITestCase):
             "pollingstations@democracyclub.org.uk",
             mail.outbox[0].to[0],
         )
+        successful_upload_pull_request.assert_called()
