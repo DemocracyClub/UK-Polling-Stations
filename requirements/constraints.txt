@@ -4,10 +4,6 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/constraints.txt --strip-extras requirements/constraints.in
 #
-appnope==0.1.3 \
-    --hash=sha256:02bd91c4de869fbb1e1c50aafc4098827a7a54ab2f39d9dcba6c9547ed920e24 \
-    --hash=sha256:265a455292d0bd8a72453494fa24df5a11eb18373a60c7c0430889f22548605e
-    # via ipython
 asgiref==3.7.2 \
     --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
     --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
@@ -2095,9 +2091,9 @@ s3transfer==0.6.2 \
     --hash=sha256:b014be3a8a2aab98cfe1abc7229cc5a9a0cf05eb9c1f2b86b230fd8df3f78084 \
     --hash=sha256:cab66d3380cca3e70939ef2255d01cd8aece6a4907a9528740f668c4b0611861
     # via boto3
-selenium==4.11.2 \
-    --hash=sha256:98e72117b194b3fa9c69b48998f44bf7dd4152c7bd98544911a1753b9f03cc7d \
-    --hash=sha256:9f9a5ed586280a3594f7461eb1d9dab3eac9d91e28572f365e9b98d9d03e02b5
+selenium==4.13.0 \
+    --hash=sha256:3c413a4f1b8af67824703195e3b1c19cfb1c3186c799efa035d55fd59d6dd59f \
+    --hash=sha256:f0f9185c01ae249a321529c4e3aa0edc2a900642e61fdbb76988cd72d2762ece
     # via -r requirements/testing.in
 sentry-sdk==1.29.2 \
     --hash=sha256:3e17215d8006612e2df02b0e73115eb8376c37e3f586d8436fa41644e605074d \
