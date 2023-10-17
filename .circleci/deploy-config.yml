@@ -182,6 +182,22 @@ jobs:
           - ./.venv
           - ./node_modules
         key: v1-machine-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}
+    - run:
+        name: CDK version
+        command: |
+          npx cdk --version
+    - run:
+        name: CDK synth
+        command: |
+          . .venv/bin/activate
+          npx cdk synth --all
+    - persist_to_workspace:
+        root: ~/repo/
+        paths: [ cdk.out ]
+    - slack/notify:
+        event: fail
+        template: basic_fail_1
+        channel: $SLACK_DEFAULT_CHANNEL
 
   cdk_deploy:
     machine:
