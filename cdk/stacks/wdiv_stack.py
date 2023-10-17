@@ -2,14 +2,18 @@ import json
 import typing
 from pathlib import Path
 
-import aws_cdk.aws_cloudfront as cloudfront
-import aws_cdk.aws_cloudfront_origins as origins
-import aws_cdk.aws_route53_targets as route_53_target
+from aws_cdk import Duration, Environment, Stack
 from aws_cdk import (
     aws_autoscaling as autoscaling,
 )
 from aws_cdk import (
     aws_certificatemanager as acm,
+)
+from aws_cdk import (
+    aws_cloudfront as cloudfront,
+)
+from aws_cdk import (
+    aws_cloudfront_origins as origins,
 )
 from aws_cdk import (
     aws_codedeploy as codedeploy,
@@ -27,9 +31,11 @@ from aws_cdk import (
     aws_route53 as route_53,
 )
 from aws_cdk import (
+    aws_route53_targets as route_53_target,
+)
+from aws_cdk import (
     aws_ssm as ssm,
 )
-from aws_cdk.core import Duration, Environment, Stack
 from constructs import Construct
 
 # import sys

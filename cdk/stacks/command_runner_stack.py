@@ -1,12 +1,13 @@
+import aws_cdk.aws_lambda_python_alpha as aws_lambda_python
 from aws_cdk import (
+    Duration,
+    Stack,
     aws_events,
     aws_events_targets,
     aws_iam,
     aws_lambda,
-    aws_lambda_python,
-    core,
 )
-from aws_cdk.core import Construct, Stack
+from constructs import Construct
 
 
 class WDIVOncePerTagCommandRunner(Stack):
@@ -17,7 +18,7 @@ class WDIVOncePerTagCommandRunner(Stack):
             self,
             "OncePerTagCommandRunnerRole",
             assumed_by=aws_iam.ServicePrincipal("lambda.amazonaws.com"),
-            max_session_duration=core.Duration.hours(1),
+            max_session_duration=Duration.hours(1),
         )
         for managed_policy_arn in [
             "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
@@ -38,7 +39,7 @@ class WDIVOncePerTagCommandRunner(Stack):
             entry="./cdk/lambdas/ssm_run_command_once",
             index="main.py",
             runtime=aws_lambda.Runtime.PYTHON_3_9,
-            timeout=core.Duration.minutes(2),
+            timeout=Duration.minutes(2),
             role=role,
         )
 

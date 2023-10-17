@@ -2,14 +2,13 @@ import json
 import typing
 from pathlib import Path
 
+import aws_cdk.aws_lambda_python_alpha as aws_lambda_python
+from aws_cdk import Duration, Environment, Stack
 from aws_cdk import (
     aws_iam as iam,
 )
 from aws_cdk import (
     aws_lambda as aws_lambda,
-)
-from aws_cdk import (
-    aws_lambda_python as aws_lambda_python,
 )
 from aws_cdk import (
     aws_s3 as s3,
@@ -20,7 +19,6 @@ from aws_cdk import (
 from aws_cdk import (
     aws_ssm as ssm,
 )
-from aws_cdk.core import Duration, Environment, Stack
 from constructs import Construct
 
 MONITORING_ACCOUNTS = {"development": "985364114241"}
