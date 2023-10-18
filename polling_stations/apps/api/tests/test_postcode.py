@@ -130,6 +130,7 @@ class PostcodeTest(APITestCase):
         self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(1, len(response.data["ballots"]))
+        self.assertTrue("requires_voter_id" in response.data["ballots"][0])
 
     def test_station_found_but_no_election(self):
         self.endpoint.get_ee_wrapper = lambda x, rh, params: EEMockWithoutElection()
