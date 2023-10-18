@@ -62,6 +62,7 @@ class BallotSerializer(serializers.Serializer):
     cancellation_reason = serializers.CharField(read_only=True, allow_null=True)
     replaced_by = serializers.CharField(read_only=True, allow_null=True)
     replaces = serializers.CharField(read_only=True, allow_null=True)
+    requires_voter_id = serializers.CharField(read_only=True, allow_null=True)
 
     def get_ballot_paper_id(self, obj):
         return obj["election_id"]
