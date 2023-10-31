@@ -37,9 +37,9 @@ aws-cdk-aws-lambda-python-alpha==2.101.1a0 \
     --hash=sha256:599339c4eb8d6f8922bf0ebdd25bc58abd9016f6c8aa02ddfbf653592589e6a7 \
     --hash=sha256:87d261cf07ef1e5d5342dd226b171c19dade5ef681d1ef4f2d14f27bfcaad640
     # via -r requirements/cdk.in
-aws-cdk-lib==2.101.1 \
-    --hash=sha256:8f806e7d98d54f9c563d199f608b70989ab7e2cd8d0335b6a21af0b022f34d39 \
-    --hash=sha256:ccd71da043868292c06ef592dd1729fd77c83188240639eec88e561fd2f112b8
+aws-cdk-lib==2.103.1 \
+    --hash=sha256:798d5acdb4603d9f49466216781686a1e2dcf7d9bd2ffdc05a002730739e92a3 \
+    --hash=sha256:e558c5ae5ee7a5fe0560368cee65d1ace28a203078fa98ce99007c539085e083
     # via
     #   -r requirements/cdk.in
     #   aws-cdk-aws-lambda-python-alpha
