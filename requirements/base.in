@@ -1,4 +1,4 @@
-black~=23.0
+black~=23.10
 commitment<4.0.0
 dj-database-url
 django-apiblueprint-view==2.4.0
