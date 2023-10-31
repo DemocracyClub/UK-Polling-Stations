@@ -447,8 +447,9 @@ djangorestframework==3.14.0 \
     #   -r requirements/base.in
     #   djangorestframework-csv
     #   djangorestframework-gis
-djangorestframework-csv==2.1.1 \
-    --hash=sha256:aa0ee4c894fe319c68e042b05c61dace43a9fb6e6872e1abe1724ca7ea4d15f7
+djangorestframework-csv==3.0.1 \
+    --hash=sha256:76ca3530c362e90ed46316002ea0b17e7e4e14c78240c787125d2c8f7c6c0174 \
+    --hash=sha256:91484439b3eb555eb6496dcf25c9f8d12746533feb9eb35360f5cccee42dfd15
     # via -r requirements/base.in
 djangorestframework-gis==1.0 \
     --hash=sha256:921c5adbc9a7c0502c905957a6695b67f55d7bf6582e1ab837888b55a1fce5a6 \
@@ -1440,7 +1441,6 @@ six==1.16.0 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
     # via
     #   asttokens
-    #   djangorestframework-csv
     #   python-dateutil
 sniffio==1.3.0 \
     --hash=sha256:e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101 \
@@ -1518,9 +1518,6 @@ uk-geo-utils==0.12.0 \
     --hash=sha256:0695cc971e191a5fefdb6e709fa110ab7ca4ee000526cd30db8171d1c881f6b6 \
     --hash=sha256:b4ee8bfe7550e860933e7743408a9e72abf5197c45d264b02d250158c8538f47
     # via -r requirements/base.in
-unicodecsv==0.14.1 \
-    --hash=sha256:018c08037d48649a0412063ff4eda26eaa81eff1546dbffa51fa5293276ff7fc
-    # via djangorestframework-csv
 urllib3==1.26.17 \
     --hash=sha256:24d6a242c28d29af46c3fae832c36db3bbebcc533dd1bb549172cd739c82df21 \
     --hash=sha256:94a757d178c9be92ef5539b8840d48dc9cf1b2709c9d6b588232a055c524458b
