@@ -28,12 +28,13 @@ window.PollingStationMap = function(div_id) {
             markerColor: 'purple',
             iconColor: 'white',
             shape: 'circle',
-            prefix: 'fa'
+            prefix: 'fa',
         });
 
         var station = L.marker(station_point, {
             'clickable': true,
-            'icon': stationMarker
+            'icon': stationMarker,
+            'title': "Your polling station",
         });
         station.addTo(map);
         markers.push(station);
@@ -62,7 +63,9 @@ window.PollingStationMap = function(div_id) {
                 // home
                 var home = L.marker(firstpolyline._latlngs[0], {
                     'clickable': true,
-                    'icon': homeMarker
+                    'icon': homeMarker,
+                    'title': "Your home",
+
                 });
                 home.addTo(map);
                 markers.push(home);
