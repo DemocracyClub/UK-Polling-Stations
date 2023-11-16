@@ -21,9 +21,9 @@ attrs==23.1.0 \
     #   outcome
     #   pytest-subtests
     #   trio
-aws-cdk-asset-awscli-v1==2.2.200 \
-    --hash=sha256:af4d67ef7aa4183073e63be5f88d1ce1912b24d2ebac35148e84678d674bdfcd \
-    --hash=sha256:ed1b881402b255daec151e386581a627ce13f4d5cb94b7184e6efc38d27584b0
+aws-cdk-asset-awscli-v1==2.2.201 \
+    --hash=sha256:56fe2ef91d3c8d33559aa32d2130e5f35f23af1fb82f06648ebbc82ffe0a5879 \
+    --hash=sha256:88d1c269fd5cf8c9f6e0464ed22e2d4f269dfd5b36b8c4d37687bdba9c269839
     # via aws-cdk-lib
 aws-cdk-asset-kubectl-v20==2.1.2 \
     --hash=sha256:346283e43018a43e3b3ca571de3f44e85d49c038dc20851894cb8f9b2052b164 \
@@ -37,9 +37,9 @@ aws-cdk-aws-lambda-python-alpha==2.101.1a0 \
     --hash=sha256:599339c4eb8d6f8922bf0ebdd25bc58abd9016f6c8aa02ddfbf653592589e6a7 \
     --hash=sha256:87d261cf07ef1e5d5342dd226b171c19dade5ef681d1ef4f2d14f27bfcaad640
     # via -r requirements/cdk.in
-aws-cdk-lib==2.101.1 \
-    --hash=sha256:8f806e7d98d54f9c563d199f608b70989ab7e2cd8d0335b6a21af0b022f34d39 \
-    --hash=sha256:ccd71da043868292c06ef592dd1729fd77c83188240639eec88e561fd2f112b8
+aws-cdk-lib==2.109.0 \
+    --hash=sha256:14bde55e9c658b2b6385246e94bf0bdd155ad821ebcf6e5a7e179bf5d44c08e8 \
+    --hash=sha256:dd07a7fdea47b6004020513027d1ab6c50c4b4f21c1bb8640a973e83e3c5effd
     # via
     #   -r requirements/cdk.in
     #   aws-cdk-aws-lambda-python-alpha
@@ -615,9 +615,9 @@ jmespath==1.0.1 \
     # via
     #   boto3
     #   botocore
-jsii==1.90.0 \
-    --hash=sha256:2fcc68d8cf88260bc8e502789d43ab46e7672b6f82d498ed62a52a4366fbccc5 \
-    --hash=sha256:e8a9a94c5116da96f11e79f16d4a290e1e7e1652b4addb8cce5c56f8ef570479
+jsii==1.92.0 \
+    --hash=sha256:2b5205c0fec87e1a9a9f283f60577ad172d7124bb614b8cdadc963306e1ac75f \
+    --hash=sha256:30deaea011e146e1d4c0dbb35bd7effd4d292cef676052e5672a825fc1aaaebf
     # via
     #   aws-cdk-asset-awscli-v1
     #   aws-cdk-asset-kubectl-v20
