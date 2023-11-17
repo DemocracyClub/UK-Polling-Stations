@@ -359,8 +359,8 @@ dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/t
 dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.4.0.zip \
     --hash=sha256:8e008a5e058f4997f542e6e0541ddc0f80749c4c9983a463e3a7ab76cf681ab4
     # via -r requirements/base.in
-dc-logging-utils @ https://github.com/DemocracyClub/dc_logging/archive/refs/tags/0.0.10.zip \
-    --hash=sha256:00de2ed77255f303a832a40c23d8ea2d35eb5da114388617accc25a87441edea
+dc-logging-utils @ https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.1.zip \
+    --hash=sha256:98fc7676c2abdef3780a1e769db641d72bf5934bfc3c25fbb28f251e637ffb1d
     # via -r requirements/base.in
 decorator==5.1.1 \
     --hash=sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330 \

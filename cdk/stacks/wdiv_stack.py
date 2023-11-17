@@ -48,6 +48,12 @@ MONITORING_ACCOUNTS = {
     "staging": "985364114241",
     "production": "488745607445",
 }
+# Lambda function suffix to use per DC environment
+LOGGER_SUFFIXES = {
+    "development": "development",
+    "staging": "development",
+    "production": "production",
+}
 
 
 class WDIVStack(Stack):
@@ -273,14 +279,14 @@ class WDIVStack(Stack):
             "CodeDeploy-EC2-Permissions",
             Path("./policies/codedeploy_ec2_permissions.json"),
         )
-        logging_assume_role_statement = iam.PolicyStatement.from_json(
+        logging_invoke_statement = iam.PolicyStatement.from_json(
             {
                 "Effect": "Allow",
-                "Action": "sts:AssumeRole",
-                "Resource": f"arn:aws:iam::{self.monitoring_account_id}:role/put-record-from-{self.account_id}",
+                "Action": "lambda:InvokeFunction",
+                "Resource": f"arn:aws:lambda:eu-west-2:{self.monitoring_account_id}:function:ingest-dc-postcode-searches-{LOGGER_SUFFIXES[self.dc_environment]}",
             }
         )
-        codedeploy_ec2_permissions_policy.add_statements(logging_assume_role_statement)
+        codedeploy_ec2_permissions_policy.add_statements(logging_invoke_statement)
 
         return {
             "codedeploy-launch-template-permissions": create_policy(

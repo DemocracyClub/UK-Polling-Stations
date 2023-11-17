@@ -229,8 +229,8 @@ dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-logging-utils @ https://github.com/DemocracyClub/dc_logging/archive/refs/tags/0.0.10.zip \
-    --hash=sha256:00de2ed77255f303a832a40c23d8ea2d35eb5da114388617accc25a87441edea
+dc-logging-utils @ https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.1.zip \
+    --hash=sha256:98fc7676c2abdef3780a1e769db641d72bf5934bfc3c25fbb28f251e637ffb1d
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
