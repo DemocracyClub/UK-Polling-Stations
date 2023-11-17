@@ -372,11 +372,9 @@ if os.environ.get("DC_ENVIRONMENT"):
         ]
 
     # Logging Client
-    FIREHOSE_ACCOUNT_ARN = os.environ.get("FIREHOSE_ACCOUNT_ARN", None)
-    if FIREHOSE_ACCOUNT_ARN:
-        POSTCODE_LOGGER = DCWidePostcodeLoggingClient(
-            assume_role_arn=FIREHOSE_ACCOUNT_ARN
-        )
+    LOGGER_ARN = os.environ.get("LOGGER_ARN", None)
+    if LOGGER_ARN:
+        POSTCODE_LOGGER = DCWidePostcodeLoggingClient(function_arn=LOGGER_ARN)
 
     INSTALLED_APPS += ("django_dynamodb_cache",)
     CACHES = {
