@@ -161,7 +161,9 @@ coverage==6.5.0 \
 coveralls==3.3.1 \
     --hash=sha256:b32a8bb5d2df585207c119d6c01567b81fba690c9c10a753bfe27a335bfc43ea \
     --hash=sha256:f42015f31d386b351d4226389b387ae173207058832fbf5c8ec4b40e27b16026
-    # via -r requirements/ci.in
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/ci.in
 docopt==0.6.2 \
     --hash=sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491
     # via
@@ -179,13 +181,15 @@ requests==2.31.0 \
     # via
     #   -c requirements/constraints.txt
     #   coveralls
-urllib3==1.26.18 \
-    --hash=sha256:34b97092d7e0a3a8cf7cd10e386f401b3737364026c45e622aa02903dffe0f07 \
-    --hash=sha256:f8ecc1bba5667413457c529ab955bf8c67b45db799d159066261719e328580a0
+urllib3==2.0.7 \
+    --hash=sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84 \
+    --hash=sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e
     # via
     #   -c requirements/constraints.txt
     #   requests
 wheel==0.41.3 \
     --hash=sha256:488609bc63a29322326e05560731bf7bfea8e48ad646e1f5e40d366607de0942 \
     --hash=sha256:4d4987ce51a49370ea65c0bfd2234e8ce80a12780820d9dc462597a6e60d0841
-    # via -r requirements/ci.in
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/ci.in
