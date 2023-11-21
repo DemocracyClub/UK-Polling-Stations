@@ -39,14 +39,20 @@ django==4.2.7 \
 django-dynamodb-cache==0.5.3 \
     --hash=sha256:63d29e7c9264606bc5fbcd648d6b9cb97808e3f7bf460de7b4f8921001a0b550 \
     --hash=sha256:f48017a8190d3eb6b6169c70a49a1912619c7b83a71c0340e2150856525ebb1f
-    # via -r requirements/production.in
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/production.in
 ec2-tag-conditional==0.1.2 \
     --hash=sha256:d3f9c273a7f5c8af05a7dfec3e4c8b4a18435390dbd309c8934096a2bef57ded
-    # via -r requirements/production.in
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/production.in
 gunicorn==20.1.0 \
     --hash=sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e \
     --hash=sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8
-    # via -r requirements/production.in
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/production.in
 jmespath==1.0.1 \
     --hash=sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980 \
     --hash=sha256:90261b206d6defd58fdd5e85f478bf633a2901798906be2ad389150c5c60edbe
@@ -84,9 +90,9 @@ typing-extensions==4.8.0 \
     # via
     #   -c requirements/constraints.txt
     #   asgiref
-urllib3==1.26.18 \
-    --hash=sha256:34b97092d7e0a3a8cf7cd10e386f401b3737364026c45e622aa02903dffe0f07 \
-    --hash=sha256:f8ecc1bba5667413457c529ab955bf8c67b45db799d159066261719e328580a0
+urllib3==2.0.7 \
+    --hash=sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84 \
+    --hash=sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e
     # via
     #   -c requirements/constraints.txt
     #   botocore
