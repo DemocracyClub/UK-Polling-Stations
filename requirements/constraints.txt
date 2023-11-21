@@ -1489,9 +1489,9 @@ uk-geo-utils==0.12.0 \
     --hash=sha256:0695cc971e191a5fefdb6e709fa110ab7ca4ee000526cd30db8171d1c881f6b6 \
     --hash=sha256:b4ee8bfe7550e860933e7743408a9e72abf5197c45d264b02d250158c8538f47
     # via -r requirements/base.in
-urllib3==1.26.18 \
-    --hash=sha256:34b97092d7e0a3a8cf7cd10e386f401b3737364026c45e622aa02903dffe0f07 \
-    --hash=sha256:f8ecc1bba5667413457c529ab955bf8c67b45db799d159066261719e328580a0
+urllib3==2.0.7 \
+    --hash=sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84 \
+    --hash=sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
     #   botocore
