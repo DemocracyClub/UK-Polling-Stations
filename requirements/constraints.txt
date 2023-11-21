@@ -394,9 +394,10 @@ django==4.2.7 \
     #   django-sesame
     #   djangorestframework
     #   uk-geo-utils
-django-apiblueprint-view==2.4.0 \
-    --hash=sha256:4240d9bd30f9d14396c5c05054d9159e0d3308ecdeed3e37271550c6559b528f \
-    --hash=sha256:ec188366d0f951df966e9bf086bdde866da5dfadda478db8c41025395f48694d
+django-apiblueprint-view==2.5.0 \
+    --hash=sha256:0911591fb2fede94e3a1d9080a8ad5d7167ae3cedb81b91678ae4381f5adba6d \
+    --hash=sha256:56c849ac30e81ca6b8cf925b2c4ac85009dea85b6c5794f1d8d21556364b7239 \
+    --hash=sha256:95bdaa8c4b05e5d58548c3a5ee8ad9a9e08a34ed56ff6bbd7869a1d1b63c071b
     # via -r requirements/base.in
 django-basicauth==0.5.3 \
     --hash=sha256:15e9e366f698f53c71b1e794dafea060f990a2ac556bae6b7330dd25324a091c \
