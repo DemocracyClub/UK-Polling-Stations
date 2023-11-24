@@ -1405,9 +1405,9 @@ selenium==4.15.2 \
     --hash=sha256:22eab5a1724c73d51b240a69ca702997b717eee4ba1f6065bf5d6b44dba01d48 \
     --hash=sha256:9e82cd1ac647fb73cf0d4a6e280284102aaa3c9d94f0fa6e6cc4b5db6a30afbf
     # via -r requirements/testing.in
-sentry-sdk==1.35.0 \
-    --hash=sha256:04e392db9a0d59bd49a51b9e3a92410ac5867556820465057c2ef89a38e953e9 \
-    --hash=sha256:a7865952701e46d38b41315c16c075367675c48d049b90a4cc2e41991ebc7efa
+sentry-sdk==1.37.1 \
+    --hash=sha256:7cd324dd2877fdc861f75cba4242bce23a58272a6fea581fcb218bb718bd9cc5 \
+    --hash=sha256:a249c7364827ee89daaa078bb8b56ece0b3d52d9130961bef2302b79bdf7fe70
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
     #   -r requirements/base.in
