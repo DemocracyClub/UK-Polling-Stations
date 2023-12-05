@@ -353,7 +353,7 @@ cryptography==41.0.5 \
     --hash=sha256:ec3b055ff8f1dce8e6ef28f626e0972981475173d7973d63f271b29c8a2897da \
     --hash=sha256:fba1e91467c65fe64a82c689dc6cf58151158993b13eb7a7f3f4b7f395636723
     # via moto
-dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.3.0.zip \
+dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.2.zip \
     --hash=sha256:55757bd7742669dd63dc9064a2ced4cbc603c8ec79117f03e047092db272c8f9
     # via -r requirements/base.in
 dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.4.0.zip \
