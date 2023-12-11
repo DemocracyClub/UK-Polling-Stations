@@ -28,7 +28,6 @@ def repo_root(*x):
 
 sys.path.insert(0, root("apps"))
 
-
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
@@ -51,7 +50,6 @@ DATABASES = {
     }
 }
 
-
 # DATABASES["default"] = dj_database_url.config()
 # DATABASES["default"]["ENGINE"] = "django.contrib.gis.db.backends.postgis"
 
@@ -64,7 +62,6 @@ ALLOWED_HOSTS = []
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
 TIME_ZONE = "Europe/London"
-
 
 SITE_ID = 1
 
@@ -99,9 +96,7 @@ STATICFILES_DIRS = (root("assets"), root("../node_modules"))
 
 from dc_utils.settings.pipeline import *  # noqa
 
-
 from .static_files import PIPELINE, STATICFILES_FINDERS  # noqa
-
 
 MIDDLEWARE = (
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -199,7 +194,6 @@ PROJECT_APPS = (
 
 INSTALLED_APPS += PROJECT_APPS
 
-
 PIPELINE["SASS_ARGUMENTS"] += " -I " + dc_design_system.DC_SYSTEM_PATH + "/system"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
@@ -236,7 +230,6 @@ LOGGING = {
     },
 }
 
-
 LANGUAGE_CODE = "en"
 LANGUAGES = [
     ("en", "English"),
@@ -246,23 +239,15 @@ USE_I18N = (True,)
 
 LOCALE_PATHS = (repo_root("locale"),)
 
-
 LOGIN_REDIRECT_URL = "file_uploads:councils_list"
 LOGOUT_REDIRECT_URL = "home"
 
-
 # API Settings
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "api.authentication.authentication.HardcodedTokenAuthentication"
     ],
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "api.authentication.authentication.TokenAuthSupportQueryString",
-    ),
-    "DEFAULT_THROTTLE_CLASSES": ("rest_framework.throttling.AnonRateThrottle",),
-    "DEFAULT_THROTTLE_RATES": {"anon": "1000/day"},
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -276,14 +261,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ()
 CORS_URLS_REGEX = r"^/(api|embed)/.*$"
 
-
 INTERNAL_IPS = "127.0.0.1"
 SITE_TITLE = _("Where Do I Vote?")
 SITE_LOGO = "images/logo_icon.svg"
 SITE_LOGO_WIDTH = "390px"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
-
 
 ADDRESS_MODEL = "addressbase.Address"
 ONSUD_MODEL = "addressbase.UprnToCouncil"
@@ -385,7 +368,6 @@ if os.environ.get("DC_ENVIRONMENT"):
         }
     }
 
-
 # import application constants
 from .constants.councils import *  # noqa
 from .constants.db import *  # noqa
@@ -410,10 +392,8 @@ except ImportError:
 if not os.environ.get("DC_ENVIRONMENT"):
     INSTALLED_APPS += ("dashboard",)
 
-
 if os.environ.get("CIRCLECI"):
     from .ci import *  # noqa
-
 
 # Register Rich as default handler for stacktraces
 traceback.install(show_locals=True)

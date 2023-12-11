@@ -79,7 +79,9 @@ class PostcodeTest(APITestCase):
 
     def setUp(self):
         factory = APIRequestFactory()
-        self.request = factory.get("/foo", format="json")
+        self.request = factory.get(
+            "/foo", format="json", headers={"Authorization": "Token test_token"}
+        )
         self.request.user = AnonymousUser()
         self.request = APIView().initialize_request(self.request)
         self.endpoint = PostcodeViewSet()
