@@ -178,7 +178,6 @@ INSTALLED_APPS = (
     "django_extensions",
     "corsheaders",
     "pipeline",
-    "apiblueprint_view",
     "dc_design_system",
     "dc_utils",
 )

@@ -2,12 +2,6 @@ from context_managers import check_for_console_errors
 from playwright.sync_api import expect
 
 
-def test_api(page, live_server):
-    with check_for_console_errors(page):
-        page.goto(f"{live_server.url}/api")
-        expect(page.locator("text=wheredoivote.co.uk Beta API")).not_to_be_empty()
-
-
 def test_api_beta(page, live_server):
     with check_for_console_errors(page):
         page.goto(f"{live_server.url}/api/beta")
