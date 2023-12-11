@@ -43,7 +43,7 @@ The API docs rely on [drafter](https://github.com/apiaryio/drafter/) for parsing
 
 - Local Dev without CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 ```
 
 - Local Dev with CDK libs
