@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-from api.docs import ApiDocsView
 from api.router import router
 from data_finder.views import (
     AddressFormView,
@@ -63,7 +62,6 @@ extra_patterns = [
     re_path(r"^accounts/", include("django.contrib.auth.urls")),
     re_path(r"^i18n/", include("django.conf.urls.i18n")),
     re_path(r"^api/beta/", include(router.urls)),
-    re_path(r"^api/$", ApiDocsView.as_view(), name="api_docs"),
     re_path(r"^admin/", admin.site.urls),
     re_path(r"^feedback/", include("feedback.urls")),
     re_path(r"^report_problem/", include("bug_reports.urls")),
