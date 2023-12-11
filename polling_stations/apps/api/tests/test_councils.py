@@ -37,7 +37,9 @@ class CouncilsTest(TestCase):
 
     def setUp(self):
         factory = APIRequestFactory()
-        self.request = factory.get("/foo", format="json")
+        self.request = factory.get(
+            "/foo", format="json", headers={"Authorization": "Token test_token"}
+        )
 
     def test_list(self):
         response = CouncilViewSet.as_view({"get": "list"})(self.request)
@@ -112,7 +114,11 @@ class CouncilsTest(TestCase):
     def test_council_csv_endpoint(self):
         with self.assertNumQueries(1):
             response = CouncilCSVViewSet.as_view({"get": "list"})(
-                APIRequestFactory().get("/api/beta/council_csv/", format="csv")
+                APIRequestFactory().get(
+                    "/api/beta/council_csv/",
+                    format="csv",
+                    headers={"Authorization": "Token test_token"},
+                )
             )
         self.assertEqual(response.status_code, 200)
         response.render()

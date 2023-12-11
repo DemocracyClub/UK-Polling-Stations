@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
 from django.core.management import call_command
+from django.test import override_settings
 from file_uploads.models import File, Upload
 from freezegun import freeze_time
 from rest_framework.test import APITestCase
@@ -14,6 +15,7 @@ successful_upload_pull_request = Mock()
 
 
 @patch("file_uploads.models.Upload.make_pull_request", successful_upload_pull_request)
+@override_settings(API_AUTH_TOKENS=["superuser-key"])
 class AddressTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
@@ -90,13 +92,14 @@ class AddressTest(APITestCase):
         successful_upload_pull_request.assert_not_called()
 
     def test_valid_payload_bad_credentials(self):
-        self.client.credentials(HTTP_AUTHORIZATION="Token normaluser-key")
+        self.client.credentials(HTTP_AUTHORIZATION="Token test_token")
         payload = {
             "gss": "X01000001",
             "timestamp": "2020-01-10T13:26:05Z",
             "github_issue": "",
             "file_set": [],
         }
+
         resp = self.client.post("/api/beta/uploads/", payload, format="json")
         self.assertEqual(403, resp.status_code)  # Forbidden
         self.assertEqual(0, len(Upload.objects.all()))
