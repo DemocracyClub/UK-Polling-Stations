@@ -5,8 +5,6 @@ from councils.tests.factories import CouncilFactory
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
-from django.core.management import call_command
-from django.test import override_settings
 from file_uploads.models import File, Upload
 from freezegun import freeze_time
 from rest_framework.test import APITestCase
@@ -15,7 +13,6 @@ successful_upload_pull_request = Mock()
 
 
 @patch("file_uploads.models.Upload.make_pull_request", successful_upload_pull_request)
-@override_settings(API_AUTH_TOKENS=["superuser-key"])
 class AddressTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
@@ -24,12 +21,6 @@ class AddressTest(APITestCase):
             name="Piddleton Parish Council",
             identifiers=["X01000001"],
             geography__geography=None,
-        )
-
-        call_command(  # Hack to avoid converting all fixtures to factories
-            "loaddata",
-            "polling_stations/apps/file_uploads/fixtures/test_api.json",
-            verbosity=0,
         )
 
     def tearDown(self):
