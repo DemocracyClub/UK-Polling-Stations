@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-15 15:35+0000\n"
+"POT-Creation-Date: 2023-12-19 11:38+0000\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -27,12 +27,12 @@ msgstr ""
 msgid "Description"
 msgstr "Disgrifiad"
 
-#: polling_stations/apps/bug_reports/models.py:15
+#: polling_stations/apps/bug_reports/models.py:14
 msgid "Provide information about the problem to help us improve our service:"
 msgstr ""
 "Darparwch wybodaeth am y broblem er mwyn ein helpu i wella ein gwasanaeth:"
 
-#: polling_stations/apps/bug_reports/models.py:23
+#: polling_stations/apps/bug_reports/models.py:22
 msgid "(Optional) Email address:"
 msgstr "Cyfeiriad e-bost (dewisol):"
 
@@ -66,12 +66,12 @@ msgstr "Dangosfwrdd"
 msgid "Postcode:"
 msgstr "Cod post:"
 
-#: polling_stations/apps/data_finder/forms.py:8
+#: polling_stations/apps/data_finder/forms.py:7
 msgid "Enter your postcode"
 msgstr "Rhowch eich cod post"
 
 #: polling_stations/apps/feedback/forms.py:19
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:11
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:21
 msgid "Did you find this useful?"
 msgstr "A oedd hwn yn ddefnyddiol i chi?"
 
@@ -79,25 +79,25 @@ msgstr "A oedd hwn yn ddefnyddiol i chi?"
 msgid "Comments"
 msgstr "Sylwadau"
 
+#: polling_stations/apps/feedback/models.py:5
 #: polling_stations/apps/feedback/models.py:6
-#: polling_stations/apps/feedback/models.py:7
 msgid "Yes"
 msgstr "Oedd"
 
+#: polling_stations/apps/feedback/models.py:5
 #: polling_stations/apps/feedback/models.py:6
-#: polling_stations/apps/feedback/models.py:7
 msgid "No"
 msgstr "Nac oedd"
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:22
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:32
 msgid "Has this information made you more likely to vote?"
 msgstr ""
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:31
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:41
 msgid "Can you tell us anything more?"
 msgstr "Allwch chi ddweud rhagor i ni?"
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:33
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:43
 msgid "Send feedback"
 msgstr "Anfon adborth"
 
@@ -107,9 +107,9 @@ msgstr "Anfon adborth"
 msgid "Uploads"
 msgstr "Uwchlwythiadau"
 
-#: polling_stations/settings/base.py:272
+#: polling_stations/settings/base.py:282
 #: polling_stations/templates/base.html:68
-#: polling_stations/templates/base.html:102
+#: polling_stations/templates/base.html:100
 msgid "Where Do I Vote?"
 msgstr "Ble Ydw i'n Pleidleisio?"
 
@@ -143,19 +143,24 @@ msgid "Privacy"
 msgstr "Preifatrwydd"
 
 #: polling_stations/templates/base.html:73
-#: polling_stations/templates/base.html:84
+msgctxt "Application Programming Interface"
+msgid "API"
+msgstr "API"
+
+#: polling_stations/templates/base.html:74
+#: polling_stations/templates/base.html:85
 msgid "Blog"
 msgstr "Blog"
 
-#: polling_stations/templates/base.html:74
+#: polling_stations/templates/base.html:75
 msgid "Contact"
 msgstr "Cyswllt"
 
-#: polling_stations/templates/base.html:77
+#: polling_stations/templates/base.html:78
 msgid "Made by Democracy Club"
 msgstr "Gwnaed gan <span lang=\"en\">Democracy Club</span>"
 
-#: polling_stations/templates/base.html:79
+#: polling_stations/templates/base.html:80
 msgid ""
 "Democracy Club is a UK based Community Interest Company that builds the "
 "digital infrastructure needed for a 21st century democracy."
@@ -164,45 +169,45 @@ msgstr ""
 "span> sy'n adeiladu'r isadeiledd digidol sydd ei angen ar gyfer "
 "democratiaeth y 21ain ganrif."
 
-#: polling_stations/templates/base.html:82
+#: polling_stations/templates/base.html:83
 msgid "About Democracy Club"
 msgstr "Ynglŷn â <span lang=\"en\">Democracy Club</span>"
 
-#: polling_stations/templates/base.html:83
+#: polling_stations/templates/base.html:84
 msgid "Contact Us"
 msgstr "Cysylltu â Ni"
 
-#: polling_stations/templates/base.html:85
+#: polling_stations/templates/base.html:86
 msgctxt "link to Democracy Club Twitter page"
 msgid "Twitter"
 msgstr "Twitter"
 
-#: polling_stations/templates/base.html:86
+#: polling_stations/templates/base.html:87
 msgctxt "link to Democracy Club Facebook page"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: polling_stations/templates/base.html:87
+#: polling_stations/templates/base.html:88
 msgctxt "link to Democracy Club GitHub page"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: polling_stations/templates/base.html:99
+#: polling_stations/templates/base.html:97
 msgid "democracy"
 msgstr ""
 
-#: polling_stations/templates/base.html:99
+#: polling_stations/templates/base.html:97
 msgid "club"
 msgstr ""
 
-#: polling_stations/templates/base.html:108
+#: polling_stations/templates/base.html:106
 #, python-format
 msgid "Contains OS data © Crown copyright and database right %(current_year)s"
 msgstr ""
 "Yn cynnwys data Arolwg Ordnans © Hawlfraint a hawliau cronfa ddata'r Goron "
 "%(current_year)s"
 
-#: polling_stations/templates/base.html:109
+#: polling_stations/templates/base.html:107
 #, python-format
 msgid ""
 "Contains Royal Mail data © Royal Mail copyright and database right "
@@ -211,7 +216,7 @@ msgstr ""
 "Yn cynnwys data'r Post Brenhinol © Hawlfraint a hawliau cronfa ddata'r Post "
 "Brenhinol %(current_year)s"
 
-#: polling_stations/templates/base.html:110
+#: polling_stations/templates/base.html:108
 #, python-format
 msgid ""
 "Contains National Statistics data © Crown copyright and database right "
@@ -220,7 +225,7 @@ msgstr ""
 "Yn cynnwys data Ystadegau Gwladol © Hawlfraint a hawliau cronfa ddata'r "
 "Goron %(current_year)s"
 
-#: polling_stations/templates/base.html:113
+#: polling_stations/templates/base.html:111
 #, fuzzy, python-format
 #| msgid ""
 #| "Copyright ©\n"
@@ -290,11 +295,11 @@ msgid ""
 "this advance voting station\""
 msgstr ""
 
-#: polling_stations/templates/fragments/cancelled_election.html:5
+#: polling_stations/templates/fragments/cancelled_election.html:6
 msgid "Cancelled Election"
 msgstr "Etholiad wedi'i Ganslo"
 
-#: polling_stations/templates/fragments/cancelled_election.html:10
+#: polling_stations/templates/fragments/cancelled_election.html:11
 #, python-format
 msgid ""
 "The poll for <strong>%(cancelled_election_name)s</strong> has been "
@@ -304,12 +309,12 @@ msgstr ""
 "cael ei aildrefnu."
 
 #. Translators: 'it' is a postponed election
-#: polling_stations/templates/fragments/cancelled_election.html:12
+#: polling_stations/templates/fragments/cancelled_election.html:13
 #, python-format
 msgid "It will now take place on %(cancelled_election_rescheduled_date)s."
 msgstr "Bydd bellach yn digwydd ar %(cancelled_election_rescheduled_date)s."
 
-#: polling_stations/templates/fragments/cancelled_election.html:14
+#: polling_stations/templates/fragments/cancelled_election.html:15
 #, python-format
 msgid ""
 "The poll for <strong>%(cancelled_election_name)s</strong> has been cancelled."
@@ -434,15 +439,6 @@ msgstr ""
 "            neu eu ffonio nhw ar <strong><a href=\"tel:"
 "%(council_phone)s\">%(council_phone)s</a></strong>.\n"
 "        "
-
-#: polling_stations/templates/fragments/ical_feed.html:6
-#, python-format
-msgid "Add future elections in %(postcode)s to your calendar:"
-msgstr "Ychwanegwch etholiadau sydd ar ddod yn %(postcode)s ar eich calendr."
-
-#: polling_stations/templates/fragments/ical_feed.html:9
-msgid "iCal feed"
-msgstr "Ffrwd iCal"
 
 #: polling_stations/templates/fragments/info_on_your_candidates.html:6
 msgid "Information on your candidates"
@@ -667,13 +663,13 @@ msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 msgid " on %(NEXT_CHARISMATIC_ELECTION_DATE)s"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:85
+#: polling_stations/templates/fragments/polling_station_known.html:86
 msgid ""
 "If you have a postal vote, you can hand it in at this polling station on "
 "election day up to 10pm"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:97
+#: polling_stations/templates/fragments/polling_station_known.html:99
 msgid ""
 "\n"
 "                <h3>Advance voting trial</h3>\n"
@@ -846,17 +842,17 @@ msgstr ""
 msgid "You do not need photo ID to vote by post."
 msgstr "Nid oes angen eich cerdyn pleidleisio arnoch i bleidleisio."
 
-#: polling_stations/templates/home.html:48
+#: polling_stations/templates/home.html:47
 #, python-format
 msgid "%(election_date)s Elections"
 msgstr "Etholiadau %(election_date)s"
 
-#: polling_stations/templates/home.html:51
+#: polling_stations/templates/home.html:50
 msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
 msgstr ""
 "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh <strong>heddiw</strong>."
 
-#: polling_stations/templates/home.html:54
+#: polling_stations/templates/home.html:53
 #, python-format
 msgctxt ""
 "day_of_week  and election_date are localised, e.g. 'Dydd Lau' and '6 Mai "
@@ -886,12 +882,16 @@ msgstr ""
 "Neu, mae angen i chi gysylltu â'ch cyngor. Mae'n bosib bod trigolion yn "
 "%(postcode)s yn un o'r ardaloedd cyngor canlynol:"
 
+#, python-format
+#~ msgid "Add future elections in %(postcode)s to your calendar:"
+#~ msgstr ""
+#~ "Ychwanegwch etholiadau sydd ar ddod yn %(postcode)s ar eich calendr."
+
+#~ msgid "iCal feed"
+#~ msgstr "Ffrwd iCal"
+
 #~ msgid "You don't need your poll card to vote."
 #~ msgstr "Nid oes angen eich cerdyn pleidleisio arnoch i bleidleisio."
-
-#~ msgctxt "Application Programming Interface"
-#~ msgid "API"
-#~ msgstr "API"
 
 #~ msgid "Mailing List"
 #~ msgstr "Rhestr Bostio"
