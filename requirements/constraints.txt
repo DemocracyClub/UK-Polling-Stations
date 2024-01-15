@@ -71,16 +71,16 @@ boto==2.49.0 \
     # via
     #   -r requirements/base.in
     #   ec2-tag-conditional
-boto3==1.29.2 \
-    --hash=sha256:6617ac176efb21485ebc3a058a3a97feb1300141421ae3d1809562c4cac1d5f9 \
-    --hash=sha256:f3024bba9ac980007ba7b5f28a9734d111fb5466e2426ac76c5edbd6dedd8db2
+boto3==1.34.19 \
+    --hash=sha256:4c76ef92af7dbdcea21b196a2699671e82e8814d4cfe570c48eda477dd1aeb19 \
+    --hash=sha256:95d2c2bde86a0934d4c461020c50fc1344b444f167654e215f1de549bc77fc0f
     # via
     #   -r requirements/base.in
     #   django-dynamodb-cache
     #   moto
-botocore==1.32.2 \
-    --hash=sha256:0e231524e9b72169fe0b8d9310f47072c245fb712778e0669f53f264f0e49536 \
-    --hash=sha256:a68a33193d8cd59e3b2142bff632e562afc02f9c4417e3dcc81a6e1b1f47148e
+botocore==1.34.19 \
+    --hash=sha256:64352b2f05de5c6ab025c1d5232880c22775356dcc5a53d798a6f65db847e826 \
+    --hash=sha256:a4a39c7092960f5da2439efc5f6220730dab634aaff4c1444bbd1dfa43bc28cc
     # via
     #   -r requirements/base.in
     #   boto3
@@ -1397,9 +1397,9 @@ ruff==0.1.9 \
     # via
     #   -r requirements/testing.in
     #   pytest-ruff
-s3transfer==0.7.0 \
-    --hash=sha256:10d6923c6359175f264811ef4bf6161a3156ce8e350e705396a7557d6293c33a \
-    --hash=sha256:fd3889a66f5fe17299fe75b82eae6cf722554edca744ca5d5fe308b104883d2e
+s3transfer==0.10.0 \
+    --hash=sha256:3cdb40f5cfa6966e812209d0994f2a4709b561c88e90cf00c2696d2df4e56b2e \
+    --hash=sha256:d0c8bbf672d5eebbe4e57945e23b972d963f07d82f661cabf678a5c88831595b
     # via boto3
 selenium==4.15.2 \
     --hash=sha256:22eab5a1724c73d51b240a69ca702997b717eee4ba1f6065bf5d6b44dba01d48 \
