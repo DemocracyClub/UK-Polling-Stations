@@ -32,11 +32,14 @@ aws-cdk-asset-node-proxy-agent-v6==2.0.1 \
 aws-cdk-aws-lambda-python-alpha==2.110.0a0 \
     --hash=sha256:5224d96d42e43069593194d907cb91e794cd1fd34fae7b33a6bc3ad5a876900b \
     --hash=sha256:e67f89e6e95cd745fa499e7702c3b4c239e14ff4f93195579bef891df38c6810
-    # via -r requirements/cdk.in
-aws-cdk-lib==2.110.0 \
-    --hash=sha256:2f6650e8d365fb2b143e65cf22d91de45c090636d8a2f1ac68efc302187780f7 \
-    --hash=sha256:80a8eac6dcc2dd38496d9296efb1d90b45051dd1748743555bf69cfe83b1aa0a
     # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/cdk.in
+aws-cdk-lib==2.121.1 \
+    --hash=sha256:2081ce974124f303348901719f791957ce6aa6b184c6fee30b988bc09f0b1bdd \
+    --hash=sha256:3ad1573000dca9360a8fbf50fd5d835910f729deaec4848438e5faa1bf79949e
+    # via
+    #   -c requirements/constraints.txt
     #   -r requirements/cdk.in
     #   aws-cdk-aws-lambda-python-alpha
 cattrs==23.1.2 \
@@ -49,6 +52,7 @@ constructs==10.3.0 \
     --hash=sha256:2972f514837565ff5b09171cfba50c0159dfa75ee86a42921ea8c86f2941b3d2 \
     --hash=sha256:518551135ec236f9cc6b86500f4fbbe83b803ccdc6c2cb7684e0b7c4d234e7b1
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/cdk.in
     #   aws-cdk-aws-lambda-python-alpha
     #   aws-cdk-lib
@@ -64,9 +68,9 @@ importlib-resources==6.1.1 \
     # via
     #   -c requirements/constraints.txt
     #   jsii
-jsii==1.92.0 \
-    --hash=sha256:2b5205c0fec87e1a9a9f283f60577ad172d7124bb614b8cdadc963306e1ac75f \
-    --hash=sha256:30deaea011e146e1d4c0dbb35bd7effd4d292cef676052e5672a825fc1aaaebf
+jsii==1.94.0 \
+    --hash=sha256:1105bae271ae47c27cf31c1565c5157306efed5ad9323c9a27336f962f465716 \
+    --hash=sha256:175abc356603d98f18ab6f6aa74bfeae253e4e56340aef9dc40bbb1a6a59868b
     # via
     #   -c requirements/constraints.txt
     #   aws-cdk-asset-awscli-v1
