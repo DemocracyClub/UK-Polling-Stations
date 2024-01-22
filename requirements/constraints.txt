@@ -35,13 +35,13 @@ aws-cdk-asset-node-proxy-agent-v6==2.0.1 \
     --hash=sha256:42cdbc1de2ed3f845e3eb883a72f58fc7e5554c2e0b6fcdb366c159778dce74d \
     --hash=sha256:e442673d4f93137ab165b75386761b1d46eea25fc5015e5145ae3afa9da06b6e
     # via aws-cdk-lib
-aws-cdk-aws-lambda-python-alpha==2.110.0a0 \
-    --hash=sha256:5224d96d42e43069593194d907cb91e794cd1fd34fae7b33a6bc3ad5a876900b \
-    --hash=sha256:e67f89e6e95cd745fa499e7702c3b4c239e14ff4f93195579bef891df38c6810
+aws-cdk-aws-lambda-python-alpha==2.122.0a0 \
+    --hash=sha256:8b282c8c3a79e7b1ce19bb4694db850adf56d1f49a16f698a6a679725dbfc566 \
+    --hash=sha256:a053333b346da6eed20c5dbe177ae85a1858849780aa05a0b5896f1646f88e1e
     # via -r requirements/cdk.in
-aws-cdk-lib==2.110.0 \
-    --hash=sha256:2f6650e8d365fb2b143e65cf22d91de45c090636d8a2f1ac68efc302187780f7 \
-    --hash=sha256:80a8eac6dcc2dd38496d9296efb1d90b45051dd1748743555bf69cfe83b1aa0a
+aws-cdk-lib==2.122.0 \
+    --hash=sha256:322a230864076738da8d138b0dbf2050a31c0caa7f27d8da128d8174150aaebe \
+    --hash=sha256:562eb5cb0f2a5111a71a4a3b727d5d077c0eaaa55dc1748922ccdb3f25ef49cd
     # via
     #   -r requirements/cdk.in
     #   aws-cdk-aws-lambda-python-alpha
@@ -610,9 +610,9 @@ jmespath==1.0.1 \
     # via
     #   boto3
     #   botocore
-jsii==1.92.0 \
-    --hash=sha256:2b5205c0fec87e1a9a9f283f60577ad172d7124bb614b8cdadc963306e1ac75f \
-    --hash=sha256:30deaea011e146e1d4c0dbb35bd7effd4d292cef676052e5672a825fc1aaaebf
+jsii==1.94.0 \
+    --hash=sha256:1105bae271ae47c27cf31c1565c5157306efed5ad9323c9a27336f962f465716 \
+    --hash=sha256:175abc356603d98f18ab6f6aa74bfeae253e4e56340aef9dc40bbb1a6a59868b
     # via
     #   aws-cdk-asset-awscli-v1
     #   aws-cdk-asset-kubectl-v20
