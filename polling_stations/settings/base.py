@@ -261,6 +261,12 @@ SPECTACULAR_SETTINGS = {
 }
 ENABLE_API_DOCS = False
 
+READ_ONLY_API_AUTH_TOKENS = [
+    key.strip() for key in os.environ.get("READ_ONLY_API_AUTH_TOKENS", "").split(",")
+]
+SUPERUSER_API_AUTH_TOKENS = [
+    key.strip() for key in os.environ.get("SUPERUSER_API_AUTH_TOKENS", "").split(",")
+]
 
 EMBED_PREFIXES = ("embed",)
 
