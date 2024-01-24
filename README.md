@@ -223,7 +223,7 @@ There are two types of token:
 * `READ_ONLY_API_AUTH_TOKENS`
 * `SUPERUSER_API_AUTH_TOKENS`
 
-Both are lists that are defined in settings. To add a token, add a string to the correct list.
+Both are lists that are defined in settings. To add a token, add a string to the correct list, or set environment variables as comma seperated values.
 
 Superuser API tokens are designed for the Trigger function that posts information about newly updated files back to the uploads app.
 
