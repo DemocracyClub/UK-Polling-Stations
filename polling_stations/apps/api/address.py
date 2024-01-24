@@ -8,6 +8,13 @@ from data_finder.helpers import (
 )
 from data_finder.views import LogLookUpMixin
 from django.core.exceptions import ObjectDoesNotExist
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    extend_schema,
+    extend_schema_field,
+)
 from pollingstations.models import AdvanceVotingStation
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -48,7 +55,17 @@ class AdvanceVotingStationSerializer(serializers.ModelSerializer):
 
     opening_times = serializers.SerializerMethodField()
 
+    @extend_schema_field(
+        {
+            "type": "array",
+            "example": [
+                ["2022-05-03", "08:00", "16:00"],
+                ["2022-05-04", "08:00", "16:00"],
+            ],
+        }
+    )
     def get_opening_times(self, obj: AdvanceVotingStation):
+        #
         return obj.opening_times_table
 
 
@@ -64,20 +81,29 @@ class BallotSerializer(serializers.Serializer):
     replaces = serializers.CharField(read_only=True, allow_null=True)
     requires_voter_id = serializers.CharField(read_only=True, allow_null=True)
 
-    def get_ballot_paper_id(self, obj):
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_ballot_paper_id(self, obj) -> str:
         return obj["election_id"]
 
-    def get_ballot_title(self, obj):
+    @extend_schema_field(OpenApiTypes.STR)
+    def get_ballot_title(self, obj) -> str:
         return obj["election_title"]
 
 
 class PostcodeResponseSerializer(serializers.Serializer):
-    polling_station_known = serializers.BooleanField(read_only=True)
-    postcode_location = PointField(read_only=True)
+    polling_station_known = serializers.BooleanField(
+        read_only=True, help_text="Do we know where this user should vote?"
+    )
+    postcode_location = PointField(
+        read_only=True,
+        help_text="A GeoJSON Feature containing a Point object describing the centroid of the input postcode.",
+    )
     custom_finder = serializers.CharField(read_only=True)
     advance_voting_station = AdvanceVotingStationSerializer(read_only=True)
     council = CouncilDataSerializer(read_only=True)
-    polling_station = PollingStationGeoSerializer(read_only=True)
+    polling_station = PollingStationGeoSerializer(
+        read_only=True, allow_null=True, help_text="A GeoJSON polling station feature"
+    )
     addresses = AddressSerializer(read_only=True, many=True)
     report_problem_url = serializers.CharField(read_only=True)
     metadata = serializers.DictField(read_only=True)
@@ -102,6 +128,21 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
 
         return EveryElectionWrapper(point=address.location, **kwargs)
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="uprn",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+                description="A Valid UK UPRN",
+                examples=[
+                    OpenApiExample(
+                        "Example 1", summary="Ampthill Fish Shop", value="100080051217"
+                    ),
+                ],
+            )
+        ]
+    )
     def retrieve(
         self, request, uprn=None, format=None, geocoder=geocode_point_only, log=True
     ):

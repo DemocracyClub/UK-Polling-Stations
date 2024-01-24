@@ -2,6 +2,8 @@ from councils.models import Council
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.http import Http404, HttpResponsePermanentRedirect
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -43,15 +45,18 @@ COUNCIL_FIELDS = (
 
 
 class CouncilContactsMixin(object):
+    @extend_schema_field(OpenApiTypes.STR)
     def get_phone(self, obj):
         try:
             return obj.electoral_services_phone_numbers[0]
         except IndexError:
             return ""
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_electoral_services_contacts(self, obj):
         return contact_type_to_dict(obj, "electoral_services")
 
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def get_registration_contacts(self, obj):
         return contact_type_to_dict(obj, "registration")
 

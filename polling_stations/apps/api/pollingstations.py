@@ -1,4 +1,6 @@
 from django.utils.http import urlencode
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from pollingstations.models import PollingStation
 from rest_framework.mixins import ListModelMixin
 from rest_framework.reverse import reverse
@@ -14,6 +16,7 @@ from .mixins import PollingEntityMixin
 
 
 class PollingStationSerializer:
+    @extend_schema_field(OpenApiTypes.OBJECT)
     def generate_urls(self, record):
         query_args = urlencode(
             {"council_id": record.council_id, "station_id": record.internal_council_id}
@@ -49,6 +52,7 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
     urls = SerializerMethodField("generate_urls")
     council = SerializerMethodField("generate_council")
 
+    @extend_schema_field(OpenApiTypes.URI)
     def generate_council(self, record):
         return reverse(
             "council-detail",
@@ -56,6 +60,7 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
             kwargs={"pk": record.council_id},
         )
 
+    @extend_schema_field(OpenApiTypes.STR)
     def generate_id(self, record):
         return "%s.%s" % (record.council_id, record.internal_council_id)
 

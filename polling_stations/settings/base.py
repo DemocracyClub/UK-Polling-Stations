@@ -174,6 +174,7 @@ INSTALLED_APPS = (
     "pipeline",
     "dc_design_system",
     "dc_utils",
+    "drf_spectacular",
 )
 
 PROJECT_APPS = (
@@ -247,9 +248,19 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "api.authentication.authentication.HardcodedTokenAuthentication"
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "WhereDoIVote API",
+    "VERSION": "beta",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+ENABLE_API_DOCS = False
+
 
 EMBED_PREFIXES = ("embed",)
 
