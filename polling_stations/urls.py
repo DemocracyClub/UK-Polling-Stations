@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-
 from api.router import router
 from data_finder.views import (
     AddressFormView,
@@ -16,10 +14,14 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 from pollingstations.views import status_check
 
 admin.autodiscover()
-
 
 core_patterns = [
     re_path(r"^status_check/$", status_check, name="status_check"),
@@ -81,6 +83,19 @@ if "dashboard" in settings.INSTALLED_APPS:
     extra_patterns.append(
         re_path(r"^dashboard/", include("dashboard.urls", namespace="dashboard"))
     )
+
+if getattr(settings, "ENABLE_API_DOCS", False):
+    extra_patterns += [
+        path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+        path(
+            "api/docs/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"
+        ),
+        path(
+            "api/swagger/",
+            SpectacularSwaggerView.as_view(url_name="schema"),
+            name="swagger",
+        ),
+    ]
 
 PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:

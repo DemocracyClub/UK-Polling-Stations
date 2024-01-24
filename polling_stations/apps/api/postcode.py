@@ -8,6 +8,8 @@ from data_finder.helpers import (
 from data_finder.helpers.every_election import EmptyEveryElectionWrapper
 from data_finder.views import LogLookUpMixin
 from django.core.exceptions import ObjectDoesNotExist
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from pollingstations.models import CustomFinder
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -61,6 +63,21 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             kwargs["include_current"] = any(include_current)
         return EveryElectionWrapper(postcode, **kwargs)
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="postcode",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+                description="A Valid UK postcode",
+                examples=[
+                    OpenApiExample(
+                        "Example 1", summary="Buckingham Palace", value="SW1A 1AA"
+                    ),
+                ],
+            )
+        ]
+    )
     def retrieve(self, request, postcode=None, format=None, geocoder=geocode, log=True):
         postcode = Postcode(postcode)
         ret = {}
