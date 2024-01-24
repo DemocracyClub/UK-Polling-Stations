@@ -184,3 +184,47 @@ As part of preparations for upcoming elections, `NEXT_CHARISMATIC_ELECTION_DATES
 `settings/constants/elections.py`. This var takes a ["YYYY-MM-DD",] format.
 
 To show messaging about the 2022 GB voter ID legislation, update `SHOW_GB_ID_MESSAGING` to `True` in `settings/constants/elections.py`.
+
+## API
+
+This project has an API, however it's not designed for public consumption.
+
+To authenticate against the API you need to pass a token in the `auth_token` GET parameter.
+
+The main API endpoints are `postcode` and `address`. These endpoints return polling station information for the given location.
+
+In turn, they request the EveryElection API.
+
+```mermaid
+
+sequenceDiagram
+    AggregatorAPI ->> WDIV: Call from Aggregator API
+    WDIV ->> EE: WDIV calls EE to see if there are elections
+    EE ->> WDIV: Election data returned
+    WDIV ->> AggregatorAPI: Return polling station and election data to AggregatorAPI
+
+```
+This workflow is the same for the `postcode` and `address` endpoints.
+
+The documentation for the AggregatorAPI should explain the main concepts for this API.
+
+### API development documentation
+
+We use [`drf-spectacular`](https://github.com/tfranzel/drf-spectacular) to document the API.
+
+The documentation is inline with the code, meaning that comments and annotations should be enough
+in most case to understand what's going on.  `drf-spectacular` comes with some views for
+`Redoc` and `Swagger`. To enable these, set `ENABLE_API_DOCS=True` in `local.py` and visit `http://localhost:8000/api/swagger/` or `http://localhost:8000/api/docs/`.
+
+## Adding tokens
+
+There are two types of token:
+
+* `READ_ONLY_API_AUTH_TOKENS`
+* `SUPERUSER_API_AUTH_TOKENS`
+
+Both are lists that are defined in settings. To add a token, add a string to the correct list.
+
+Superuser API tokens are designed for the Trigger function that posts information about newly updated files back to the uploads app.
+
+Read only tokens are for the workflow outlined above.

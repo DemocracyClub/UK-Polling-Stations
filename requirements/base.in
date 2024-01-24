@@ -9,6 +9,7 @@ Django<4.3
 djangorestframework
 djangorestframework-csv
 djangorestframework-gis
+drf_spectacular<1
 django-cors-headers
 django-sesame
 fastkml
