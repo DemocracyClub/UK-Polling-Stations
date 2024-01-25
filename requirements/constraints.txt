@@ -23,9 +23,9 @@ attrs==23.1.0 \
     #   outcome
     #   pytest-subtests
     #   trio
-aws-cdk-asset-awscli-v1==2.2.201 \
-    --hash=sha256:56fe2ef91d3c8d33559aa32d2130e5f35f23af1fb82f06648ebbc82ffe0a5879 \
-    --hash=sha256:88d1c269fd5cf8c9f6e0464ed22e2d4f269dfd5b36b8c4d37687bdba9c269839
+aws-cdk-asset-awscli-v1==2.2.202 \
+    --hash=sha256:3ef87d6530736b3a7b0f777fe3b4297994dd40c3ce9306d95f80f48fb18036e8 \
+    --hash=sha256:96205ea2e5e132ec52fabfff37ea25b9b859498f167d05b32564c949822cd331
     # via aws-cdk-lib
 aws-cdk-asset-kubectl-v20==2.1.2 \
     --hash=sha256:346283e43018a43e3b3ca571de3f44e85d49c038dc20851894cb8f9b2052b164 \
@@ -35,13 +35,13 @@ aws-cdk-asset-node-proxy-agent-v6==2.0.1 \
     --hash=sha256:42cdbc1de2ed3f845e3eb883a72f58fc7e5554c2e0b6fcdb366c159778dce74d \
     --hash=sha256:e442673d4f93137ab165b75386761b1d46eea25fc5015e5145ae3afa9da06b6e
     # via aws-cdk-lib
-aws-cdk-aws-lambda-python-alpha==2.110.0a0 \
-    --hash=sha256:5224d96d42e43069593194d907cb91e794cd1fd34fae7b33a6bc3ad5a876900b \
-    --hash=sha256:e67f89e6e95cd745fa499e7702c3b4c239e14ff4f93195579bef891df38c6810
+aws-cdk-aws-lambda-python-alpha==2.123.0a0 \
+    --hash=sha256:30180775fd7164e46cb4472711e19710545d98b4e7807661cd05e717c3e8a5c3 \
+    --hash=sha256:39ef651ad337f5b12f975943f5419ab3db30008e54274b5eeb104d0e3f03749e
     # via -r requirements/cdk.in
-aws-cdk-lib==2.110.0 \
-    --hash=sha256:2f6650e8d365fb2b143e65cf22d91de45c090636d8a2f1ac68efc302187780f7 \
-    --hash=sha256:80a8eac6dcc2dd38496d9296efb1d90b45051dd1748743555bf69cfe83b1aa0a
+aws-cdk-lib==2.123.0 \
+    --hash=sha256:212f72f1a8a199cfb5800b9ccd69df00aba99a8bf0765ff983446efebdb2431b \
+    --hash=sha256:99b5b202ccb7a42acf043278e3c0135f6d4fe046687dcc117b6f32ce7ac4d831
     # via
     #   -r requirements/cdk.in
     #   aws-cdk-aws-lambda-python-alpha
@@ -610,9 +610,9 @@ jmespath==1.0.1 \
     # via
     #   boto3
     #   botocore
-jsii==1.92.0 \
-    --hash=sha256:2b5205c0fec87e1a9a9f283f60577ad172d7124bb614b8cdadc963306e1ac75f \
-    --hash=sha256:30deaea011e146e1d4c0dbb35bd7effd4d292cef676052e5672a825fc1aaaebf
+jsii==1.94.0 \
+    --hash=sha256:1105bae271ae47c27cf31c1565c5157306efed5ad9323c9a27336f962f465716 \
+    --hash=sha256:175abc356603d98f18ab6f6aa74bfeae253e4e56340aef9dc40bbb1a6a59868b
     # via
     #   aws-cdk-asset-awscli-v1
     #   aws-cdk-asset-kubectl-v20
