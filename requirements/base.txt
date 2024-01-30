@@ -7,69 +7,44 @@
 asgiref==3.7.2 \
     --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
     --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
-    # via
-    #   -c requirements/constraints.txt
-    #   django
-    #   django-cors-headers
-black==23.12.1 \
-    --hash=sha256:0808494f2b2df923ffc5723ed3c7b096bd76341f6213989759287611e9837d50 \
-    --hash=sha256:1fa88a0f74e50e4487477bc0bb900c6781dbddfdfa32691e780bf854c3b4a47f \
-    --hash=sha256:25e57fd232a6d6ff3f4478a6fd0580838e47c93c83eaf1ccc92d4faf27112c4e \
-    --hash=sha256:2d9e13db441c509a3763a7a3d9a49ccc1b4e974a47be4e08ade2a228876500ec \
-    --hash=sha256:3e1b38b3135fd4c025c28c55ddfc236b05af657828a8a6abe5deec419a0b7055 \
-    --hash=sha256:3fa4be75ef2a6b96ea8d92b1587dd8cb3a35c7e3d51f0738ced0781c3aa3a5a3 \
-    --hash=sha256:4ce3ef14ebe8d9509188014d96af1c456a910d5b5cbf434a09fef7e024b3d0d5 \
-    --hash=sha256:4f0031eaa7b921db76decd73636ef3a12c942ed367d8c3841a0739412b260a54 \
-    --hash=sha256:602cfb1196dc692424c70b6507593a2b29aac0547c1be9a1d1365f0d964c353b \
-    --hash=sha256:6d1bd9c210f8b109b1762ec9fd36592fdd528485aadb3f5849b2740ef17e674e \
-    --hash=sha256:78baad24af0f033958cad29731e27363183e140962595def56423e626f4bee3e \
-    --hash=sha256:8d4df77958a622f9b5a4c96edb4b8c0034f8434032ab11077ec6c56ae9f384ba \
-    --hash=sha256:97e56155c6b737854e60a9ab1c598ff2533d57e7506d97af5481141671abf3ea \
-    --hash=sha256:9c4352800f14be5b4864016882cdba10755bd50805c95f728011bcb47a4afd59 \
-    --hash=sha256:a4d6a9668e45ad99d2f8ec70d5c8c04ef4f32f648ef39048d010b0689832ec6d \
-    --hash=sha256:a920b569dc6b3472513ba6ddea21f440d4b4c699494d2e972a1753cdc25df7b0 \
-    --hash=sha256:ae76c22bde5cbb6bfd211ec343ded2163bba7883c7bc77f6b756a1049436fbb9 \
-    --hash=sha256:b18fb2ae6c4bb63eebe5be6bd869ba2f14fd0259bda7d18a46b764d8fb86298a \
-    --hash=sha256:c04b6d9d20e9c13f43eee8ea87d44156b8505ca8a3c878773f68b4e4812a421e \
-    --hash=sha256:c88b3711d12905b74206227109272673edce0cb29f27e1385f33b0163c414bba \
-    --hash=sha256:dd15245c8b68fe2b6bd0f32c1556509d11bb33aec9b5d0866dd8e2ed3dba09c2 \
-    --hash=sha256:e0aaf6041986767a5e0ce663c7a2f0e9eaf21e6ff87a5f95cbf3675bfd4c41d2
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+black==24.1.1 \
+    --hash=sha256:0269dfdea12442022e88043d2910429bed717b2d04523867a85dacce535916b8 \
+    --hash=sha256:07204d078e25327aad9ed2c64790d681238686bce254c910de640c7cc4fc3aa6 \
+    --hash=sha256:08b34e85170d368c37ca7bf81cf67ac863c9d1963b2c1780c39102187ec8dd62 \
+    --hash=sha256:1a95915c98d6e32ca43809d46d932e2abc5f1f7d582ffbe65a5b4d1588af7445 \
+    --hash=sha256:2588021038bd5ada078de606f2a804cadd0a3cc6a79cb3e9bb3a8bf581325a4c \
+    --hash=sha256:2fa6a0e965779c8f2afb286f9ef798df770ba2b6cee063c650b96adec22c056a \
+    --hash=sha256:34afe9da5056aa123b8bfda1664bfe6fb4e9c6f311d8e4a6eb089da9a9173bf9 \
+    --hash=sha256:3897ae5a21ca132efa219c029cce5e6bfc9c3d34ed7e892113d199c0b1b444a2 \
+    --hash=sha256:40657e1b78212d582a0edecafef133cf1dd02e6677f539b669db4746150d38f6 \
+    --hash=sha256:48b5760dcbfe5cf97fd4fba23946681f3a81514c6ab8a45b50da67ac8fbc6c7b \
+    --hash=sha256:5242ecd9e990aeb995b6d03dc3b2d112d4a78f2083e5a8e86d566340ae80fec4 \
+    --hash=sha256:5cdc2e2195212208fbcae579b931407c1fa9997584f0a415421748aeafff1168 \
+    --hash=sha256:5d7b06ea8816cbd4becfe5f70accae953c53c0e53aa98730ceccb0395520ee5d \
+    --hash=sha256:7258c27115c1e3b5de9ac6c4f9957e3ee2c02c0b39222a24dc7aa03ba0e986f5 \
+    --hash=sha256:854c06fb86fd854140f37fb24dbf10621f5dab9e3b0c29a690ba595e3d543024 \
+    --hash=sha256:a21725862d0e855ae05da1dd25e3825ed712eaaccef6b03017fe0853a01aa45e \
+    --hash=sha256:a83fe522d9698d8f9a101b860b1ee154c1d25f8a82ceb807d319f085b2627c5b \
+    --hash=sha256:b3d64db762eae4a5ce04b6e3dd745dcca0fb9560eb931a5be97472e38652a161 \
+    --hash=sha256:e298d588744efda02379521a19639ebcd314fba7a49be22136204d7ed1782717 \
+    --hash=sha256:e2c8dfa14677f90d976f68e0c923947ae68fa3961d61ee30976c388adc0b02c8 \
+    --hash=sha256:ecba2a15dfb2d97105be74bbfe5128bc5e9fa8477d8c46766505c1dda5883aac \
+    --hash=sha256:fc1ec9aa6f4d98d022101e015261c056ddebe3da6a8ccfc2c792cbe0349d48b7
 boto==2.49.0 \
     --hash=sha256:147758d41ae7240dc989f0039f27da8ca0d53734be0eb869ef16e3adcfa462e8 \
     --hash=sha256:ea0d3b40a2d852767be77ca343b58a9e3a4b00d9db440efb8da74b4e58025e5a
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 boto3==1.34.30 \
     --hash=sha256:9e1476ce2b26437881a0381bf2daa54de619ac74ab4bd74278668acda6004a64 \
     --hash=sha256:cd6173380768faaecf6236dbdcec15d8d032cbb162ce354fdb111056a74fc298
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 botocore==1.34.30 \
     --hash=sha256:caf82d91c2ff61235284a07ffdfba006873e0752e00896052f901a37720cefa4 \
     --hash=sha256:e071a9766e7fc2221ca42ec01dfc54368a7518610787342ea622f6edc57f7891
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-    #   boto3
-    #   s3transfer
 cachetools==5.3.2 \
     --hash=sha256:086ee420196f7b2ab9ca2db2520aca326318b68fe5ba8bc4d49cca91add450f2 \
     --hash=sha256:861f35a13a451f94e301ce2bec7cac63e881232ccce7ed67fab9b5df4d3beaa1
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-logging-utils
 certifi==2023.11.17 \
     --hash=sha256:9b469f3a900bf28dc19b8cfbf8019bf47f7fdd1a65a1d4ffb98fc14166beb4d1 \
     --hash=sha256:e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474
-    # via
-    #   -c requirements/constraints.txt
-    #   requests
-    #   sentry-sdk
 cffi==1.16.0 \
     --hash=sha256:0c9ef6ff37e974b73c25eecc13952c55bceed9112be2d9d938ded8e856138bcc \
     --hash=sha256:131fd094d1065b19540c3d72594260f118b231090295d8c34e19a7bbcf2e860a \
@@ -123,9 +98,6 @@ cffi==1.16.0 \
     --hash=sha256:ee07e47c12890ef248766a6e55bd38ebfb2bb8edd4142d56db91b21ea68b7627 \
     --hash=sha256:fa3a0128b152627161ce47201262d3140edb5a5c3da88d73a1b790a959126956 \
     --hash=sha256:fcc8eb6d5902bb1cf6dc4f187ee3ea80a1eba0a89aba40a5cb20a5087d961357
-    # via
-    #   -c requirements/constraints.txt
-    #   django-apiblueprint-view
 charset-normalizer==3.3.2 \
     --hash=sha256:06435b539f889b1f6f4ac1758871aae42dc3a8c0e24ac9e60c2384973ad73027 \
     --hash=sha256:06a81e93cd441c56a9b65d8e1d043daeb97a3d0856d177d5c90ba85acb3db087 \
@@ -217,174 +189,80 @@ charset-normalizer==3.3.2 \
     --hash=sha256:fb69256e180cb6c8a894fee62b3afebae785babc1ee98b81cdf68bbca1987f33 \
     --hash=sha256:fd1abc0d89e30cc4e02e4064dc67fcc51bd941eb395c502aac3ec19fab46b519 \
     --hash=sha256:ff8fa367d09b717b2a17a052544193ad76cd49979c805768879cb63d9ca50561
-    # via
-    #   -c requirements/constraints.txt
-    #   requests
 click==8.1.7 \
     --hash=sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28 \
     --hash=sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de
-    # via
-    #   -c requirements/constraints.txt
-    #   black
 commitment==3.0.1 \
     --hash=sha256:08577d6caef8b8bed6375f0c97343073eeac500f2568b66419f626a94a9be5e8 \
     --hash=sha256:1fe73698d550dc0acc4884587481ebb561fdb76fa2f79d91228f5b4506b250d8
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.3.0.zip \
     --hash=sha256:55757bd7742669dd63dc9064a2ced4cbc603c8ec79117f03e047092db272c8f9
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.4.0.zip \
     --hash=sha256:8e008a5e058f4997f542e6e0541ddc0f80749c4c9983a463e3a7ab76cf681ab4
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 dc-logging-utils @ https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.1.zip \
     --hash=sha256:98fc7676c2abdef3780a1e769db641d72bf5934bfc3c25fbb28f251e637ffb1d
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 decorator==5.1.1 \
     --hash=sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330 \
     --hash=sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186
-    # via
-    #   -c requirements/constraints.txt
-    #   retry
 dj-database-url==2.1.0 \
     --hash=sha256:04bc34b248d4c21aaa13e4ab419ae6575ef5f10f3df735ce7da97722caa356e0 \
     --hash=sha256:f2042cefe1086e539c9da39fad5ad7f61173bf79665e69bf7e4de55fa88b135f
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 django==4.2.9 \
     --hash=sha256:12498cc3cb8bc8038539fef9e90e95f507502436c1f0c3a673411324fa675d14 \
     --hash=sha256:2cc2fc7d1708ada170ddd6c99f35cc25db664f165d3794bc7723f46b2f8c8984
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-    #   dc-django-utils
-    #   dj-database-url
-    #   django-apiblueprint-view
-    #   django-basicauth
-    #   django-cors-headers
-    #   django-extensions
-    #   django-localflavor
-    #   django-sesame
-    #   djangorestframework
-    #   uk-geo-utils
 django-apiblueprint-view==2.4.0 \
     --hash=sha256:4240d9bd30f9d14396c5c05054d9159e0d3308ecdeed3e37271550c6559b528f \
     --hash=sha256:ec188366d0f951df966e9bf086bdde866da5dfadda478db8c41025395f48694d
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 django-basicauth==0.5.3 \
     --hash=sha256:15e9e366f698f53c71b1e794dafea060f990a2ac556bae6b7330dd25324a091c \
     --hash=sha256:e5e47d1acdc1943bedcc1bf673059d6c15e257dfe9eef67a22fb824f79546c0d
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 django-cors-headers==4.3.1 \
     --hash=sha256:0b1fd19297e37417fc9f835d39e45c8c642938ddba1acce0c1753d3edef04f36 \
     --hash=sha256:0bf65ef45e606aff1994d35503e6b677c0b26cafff6506f8fd7187f3be840207
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 django-dotenv==1.4.2 \
     --hash=sha256:3812bb0f4876cf31f902aad140f0645e120e51ee30eb7c40c22050f58a0e4adb \
     --hash=sha256:a9b1b40a70bd321acd231926acedb9bd2c5e873e33a1873b34a7276d196a765e
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 django-extensions==3.2.3 \
     --hash=sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a \
     --hash=sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 django-localflavor==4.0 \
     --hash=sha256:11859e522dba74aa6dde5a659242b1fbc5efb4dea08e9b77315402bdeca5194e \
     --hash=sha256:7a5b1df03ca8e10df9d1b3c2e4314e43383067868183cdf41ab4e7a973694a8b
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 django-pipeline==2.1.0 \
     --hash=sha256:36a6ce56fdf1d0811e4d51897f534acca35ebb35be699d9d0fd9970e634792a4 \
     --hash=sha256:e91627faee22c4c65eb7d134ef53a9d97253c99e4dd914af8ea9c8c58c01de93
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-django-utils
 django-sesame==3.2.2 \
     --hash=sha256:523ebd4d04e28c897c262f25b78b6fd8f37e11cdca6e277fdc8bf496bd686cf5 \
     --hash=sha256:5d753a309166356b6a0d7fc047690943b9e80b4aa7952f1a6400fe6ce60d573c
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 djangorestframework==3.14.0 \
     --hash=sha256:579a333e6256b09489cbe0a067e66abe55c6595d8926be6b99423786334350c8 \
     --hash=sha256:eb63f58c9f218e1a7d064d17a70751f528ed4e1d35547fdade9aaf4cd103fd08
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-    #   djangorestframework-csv
-    #   djangorestframework-gis
 djangorestframework-csv==3.0.2 \
     --hash=sha256:b269b692feda1971e1342f395a21d339c6a16d2961ff64357a9a6188f27af10f \
     --hash=sha256:d1bcfbaaeaa5145af6bb0985a36a5bbf2f853d9961c722f69c7b0c9c3bcc269a
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 djangorestframework-gis==1.0 \
     --hash=sha256:921c5adbc9a7c0502c905957a6695b67f55d7bf6582e1ab837888b55a1fce5a6 \
     --hash=sha256:bb715f05a111c02b9acc4021b17566e40c0b90dd833c583bac3d67f92be9667d
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 exceptiongroup==1.2.0 \
     --hash=sha256:4bfd3996ac73b41e9b9628b04e079f193850720ea5945fc96a08633c66912f14 \
     --hash=sha256:91f5c769735f051a4290d52edd0858999b57e5876e9f85937691bd4c9fa3ed68
-    # via
-    #   -c requirements/constraints.txt
-    #   pytest
 fastkml==0.12 \
     --hash=sha256:34d8eb2f77b554002743bb8be5678f89d8ecea5a64ded1480028f43405d8b638 \
     --hash=sha256:73e68cf1f6640dd701d0bfeefb8f9a01145fec30b6a84beff0056f9ae04d7630
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 freezegun==1.4.0 \
     --hash=sha256:10939b0ba0ff5adaecf3b06a5c2f73071d9678e507c5eaedb23c761d56ac774b \
     --hash=sha256:55e0fc3c84ebf0a96a5aa23ff8b53d70246479e9a68863f1fcac5a3e52f19dd6
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 idna==3.6 \
     --hash=sha256:9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca \
     --hash=sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
-    # via
-    #   -c requirements/constraints.txt
-    #   requests
 iniconfig==2.0.0 \
     --hash=sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3 \
     --hash=sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374
-    # via
-    #   -c requirements/constraints.txt
-    #   pytest
 jmespath==1.0.1 \
     --hash=sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980 \
     --hash=sha256:90261b206d6defd58fdd5e85f478bf633a2901798906be2ad389150c5c60edbe
-    # via
-    #   -c requirements/constraints.txt
-    #   boto3
-    #   botocore
 jsmin==3.0.1 \
     --hash=sha256:c0959a121ef94542e807a674142606f7e90214a2b3d1eb17300244bbb5cc2bfc
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-django-utils
 libsass==0.22.0 \
     --hash=sha256:081e256ab3c5f3f09c7b8dea3bf3bf5e64a97c6995fd9eea880639b3f93a9f9a \
     --hash=sha256:3ab5ad18e47db560f4f0c09e3d28cf3bb1a44711257488ac2adad69f4f7f8425 \
@@ -392,9 +270,6 @@ libsass==0.22.0 \
     --hash=sha256:65455a2728b696b62100eb5932604aa13a29f4ac9a305d95773c14aaa7200aaf \
     --hash=sha256:89c5ce497fcf3aba1dd1b19aae93b99f68257e5f2026b731b00a872f13324c7f \
     --hash=sha256:f1efc1b612299c88aec9e39d6ca0c266d360daa5b19d9430bdeaffffa86993f9
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-django-utils
 lxml==5.1.0 \
     --hash=sha256:13521a321a25c641b9ea127ef478b580b5ec82aa2e9fc076c86169d161798b01 \
     --hash=sha256:14deca1460b4b0f6b01f1ddc9557704e8b365f55c63070463f6c18619ebf964f \
@@ -474,72 +349,36 @@ lxml==5.1.0 \
     --hash=sha256:ed8c3d2cd329bf779b7ed38db176738f3f8be637bb395ce9629fc76f78afe3d4 \
     --hash=sha256:f4c9bda132ad108b387c33fabfea47866af87f4ea6ffb79418004f0521e63204 \
     --hash=sha256:f643ffd2669ffd4b5a3e9b41c909b72b2a1d5e4915da90a77e119b8d48ce867a
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 markdown==3.5.2 \
     --hash=sha256:d43323865d89fc0cb9b20c75fc8ad313af307cc087e84b657d9eec768eddeadd \
     --hash=sha256:e1ac7b3dc550ee80e602e71c1d168002f062e49f1b11e26a36264dafd4df2ef8
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-    #   dc-django-utils
 markdown-it-py==3.0.0 \
     --hash=sha256:355216845c60bd96232cd8d8c40e8f9765cc86f46880e43a8fd22dc1a1a8cab1 \
     --hash=sha256:e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb
-    # via
-    #   -c requirements/constraints.txt
-    #   rich
 markdown2==2.4.12 \
     --hash=sha256:1bc8692696954d597778e0e25713c14ca56d87992070dedd95c17eddaf709204 \
     --hash=sha256:98f47591006f0ace0644cbece03fed6f3845513286f6c6e9f8bcf6a575174e2c
-    # via
-    #   -c requirements/constraints.txt
-    #   django-apiblueprint-view
 marshmallow==3.20.2 \
     --hash=sha256:4c1daff273513dc5eb24b219a8035559dc573c8f322558ef85f5438ddd1236dd \
     --hash=sha256:c21d4b98fee747c130e6bc8f45c4b3199ea66bc00c12ee1f639f0aeca034d5e9
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
     --hash=sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba
-    # via
-    #   -c requirements/constraints.txt
-    #   markdown-it-py
 mypy-extensions==1.0.0 \
     --hash=sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d \
     --hash=sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782
-    # via
-    #   -c requirements/constraints.txt
-    #   black
 packaging==23.2 \
     --hash=sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5 \
     --hash=sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7
-    # via
-    #   -c requirements/constraints.txt
-    #   black
-    #   marshmallow
-    #   pytest
 pathspec==0.12.1 \
     --hash=sha256:a0d503e138a4c123b27490a4f7beda6a01c6f288df0e4a8b79c7eb0dc7b4cc08 \
     --hash=sha256:a482d51503a1ab33b1c67a6c3813a26953dbdc71c31dacaef9a838c4e29f5712
-    # via
-    #   -c requirements/constraints.txt
-    #   black
 platformdirs==4.1.0 \
     --hash=sha256:11c8f37bcca40db96d8144522d925583bdb7a31f7b0e37e3ed4318400a8e2380 \
     --hash=sha256:906d548203468492d432bcb294d4bc2fff751bf84971fbb2c10918cc206ee420
-    # via
-    #   -c requirements/constraints.txt
-    #   black
 pluggy==1.4.0 \
     --hash=sha256:7db9f7b503d67d1c5b95f59773ebb58a8c1c288129a88665838012cfb07b8981 \
     --hash=sha256:8c85c2876142a764e5b7548e7d9a0e0ddb46f5185161049a79b7e974454223be
-    # via
-    #   -c requirements/constraints.txt
-    #   pytest
 psycopg2-binary==2.9.9 \
     --hash=sha256:03ef7df18daf2c4c07e2695e8cfd5ee7f748a1d54d802330985a78d2a5a6dca9 \
     --hash=sha256:0a602ea5aff39bb9fac6308e9c9d82b9a35c2bf288e184a816002c9fae930b77 \
@@ -613,77 +452,37 @@ psycopg2-binary==2.9.9 \
     --hash=sha256:f7ae5d65ccfbebdfa761585228eb4d0df3a8b15cfb53bd953e713e09fbb12957 \
     --hash=sha256:f7fc5a5acafb7d6ccca13bfa8c90f8c51f13d8fb87d95656d3950f0158d3ce53 \
     --hash=sha256:f9b5571d33660d5009a8b3c25dc1db560206e2d2f89d3df1cb32d72c0d117d52
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-    #   uk-geo-utils
 py==1.11.0 \
     --hash=sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719 \
     --hash=sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378
-    # via
-    #   -c requirements/constraints.txt
-    #   retry
 pycparser==2.21 \
     --hash=sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9 \
     --hash=sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206
-    # via
-    #   -c requirements/constraints.txt
-    #   cffi
 pygeoif==0.7 \
     --hash=sha256:11aa0c071d38befa4af3bd123efa834abe0823a873f3744f0a070a44025afe04
-    # via
-    #   -c requirements/constraints.txt
-    #   fastkml
 pygments==2.17.2 \
     --hash=sha256:b27c2826c47d0f3219f29554824c30c5e8945175d888647acd804ddd04af846c \
     --hash=sha256:da46cec9fd2de5be3a8a784f434e4c4ab670b4ff54d605c4c2717e9d49c4c367
-    # via
-    #   -c requirements/constraints.txt
-    #   rich
 pyshp==2.3.1 \
     --hash=sha256:4caec82fd8dd096feba8217858068bacb2a3b5950f43c048c6dc32a3489d5af1 \
     --hash=sha256:67024c0ccdc352ba5db777c4e968483782dfa78f8e200672a90d2d30fd8b7b49
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 pytest==7.4.4 \
     --hash=sha256:2cf0005922c6ace4a3e2ec8b4080eb0d9753fdc93107415332f50ce9e7994280 \
     --hash=sha256:b090cdf5ed60bf4c45261be03239c2c1c22df034fbffe691abe93cd80cea01d8
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-django-utils
-    #   pytest-django
 pytest-django==4.7.0 \
     --hash=sha256:4e1c79d5261ade2dd58d91208017cd8f62cb4710b56e012ecd361d15d5d662a2 \
     --hash=sha256:92d6fd46b1d79b54fb6b060bbb39428073396cec717d5f2e122a990d4b6aa5e8
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-django-utils
 python-dateutil==2.8.2 \
     --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
     --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
-    # via
-    #   -c requirements/constraints.txt
-    #   botocore
-    #   fastkml
-    #   freezegun
 python-stdnum==1.19 \
     --hash=sha256:133ec82f56390ea74c190569e98f2fb14b869808b1d54785708f22d0fead8b3f \
     --hash=sha256:1b5b401ad3f45b798b0317313b781a433f5d7a5ff2c9feb8054664f76f78644e
-    # via
-    #   -c requirements/constraints.txt
-    #   django-localflavor
 pytidylib==0.3.2 \
     --hash=sha256:22b1c8d75970d8064ff999c2369e98af1d0685417eda4c829a5c9f56764b0af3
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-django-utils
 pytz==2023.4 \
     --hash=sha256:31d4583c4ed539cd037956140d695e42c033a19e984bfce9964a3f7d59bc2b40 \
     --hash=sha256:f90ef520d95e7c46951105338d918664ebfd6f1d995bd7d153127ce90efafa6a
-    # via
-    #   -c requirements/constraints.txt
-    #   djangorestframework
 rapidfuzz==3.6.1 \
     --hash=sha256:01835d02acd5d95c1071e1da1bb27fe213c84a013b899aba96380ca9962364bc \
     --hash=sha256:01eb03cd880a294d1bf1a583fdd00b87169b9cc9c9f52587411506658c864d73 \
@@ -775,34 +574,18 @@ rapidfuzz==3.6.1 \
     --hash=sha256:f59d19078cc332dbdf3b7b210852ba1f5db8c0a2cd8cc4c0ed84cc00c76e6802 \
     --hash=sha256:fbc07e2e4ac696497c5f66ec35c21ddab3fc7a406640bffed64c26ab2f7ce6d6 \
     --hash=sha256:fde9b14302a31af7bdafbf5cfbb100201ba21519be2b9dedcf4f1048e4fbe65d
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 refract==0.4.0 \
     --hash=sha256:646235e2a5dbb197968a3c5374a95af6f033808348f4ea6620f2f93e8c53536a \
     --hash=sha256:7b607c31bc2f3b40366dd1eb5e193a65a339104087c09954e6be2238ccdd6c69
-    # via
-    #   -c requirements/constraints.txt
-    #   django-apiblueprint-view
 requests==2.31.0 \
     --hash=sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f \
     --hash=sha256:942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-    #   commitment
 retry==0.9.2 \
     --hash=sha256:ccddf89761fa2c726ab29391837d4327f819ea14d244c232a1d24c67a2f98606 \
     --hash=sha256:f8bfa8b99b69c4506d6f5bd3b0aabf77f98cdb17f3c9fc3f5ca820033336fba4
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 rich==13.7.0 \
     --hash=sha256:5cb5123b5cf9ee70584244246816e9114227e0b98ad9176eede6ad54bf5403fa \
     --hash=sha256:6da14c108c4866ee9520bbffa71f6fe3962e193b7da68720583850cd4548e235
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 rtree==1.2.0 \
     --hash=sha256:008d86fd8990f3ca15c06834ae597e16209b3e0a3d6512f0a3489c201011390f \
     --hash=sha256:0b4ba127dfdbdc9e415d2bb578f6e6dff92082117722d8703b740231f7a0b1c3 \
@@ -814,65 +597,30 @@ rtree==1.2.0 \
     --hash=sha256:80813bb1a66e65033e6601e54fded428a5b710b41948c83a298943587b3c3e4f \
     --hash=sha256:cd8653f0e961dcd3f3ab09e10a831885ea9feceb45be6bc761a773c314518b49 \
     --hash=sha256:f5145f7852bf7f95c126fb16bf1a4c2ca9300ae151b07f8a0f7083ea47912675
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 s3transfer==0.10.0 \
     --hash=sha256:3cdb40f5cfa6966e812209d0994f2a4709b561c88e90cf00c2696d2df4e56b2e \
     --hash=sha256:d0c8bbf672d5eebbe4e57945e23b972d963f07d82f661cabf678a5c88831595b
-    # via
-    #   -c requirements/constraints.txt
-    #   boto3
 sentry-sdk==1.39.2 \
     --hash=sha256:24c83b0b41c887d33328a9166f5950dc37ad58f01c9f2fbff6b87a6f1094170c \
     --hash=sha256:acaf597b30258fc7663063b291aa99e58f3096e91fe1e6634f4b79f9c1943e8e
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
-    # via
-    #   -c requirements/constraints.txt
-    #   python-dateutil
 sqlparse==0.4.4 \
     --hash=sha256:5430a4fe2ac7d0f93e66f1efc6e1338a41884b7ddf2a350cedd20ccc4d9d28f3 \
     --hash=sha256:d446183e84b8349fa3061f0fe7f06ca94ba65b426946ffebe6e3e8295332420c
-    # via
-    #   -c requirements/constraints.txt
-    #   django
 tomli==2.0.1 \
     --hash=sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc \
     --hash=sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f
-    # via
-    #   -c requirements/constraints.txt
-    #   black
-    #   pytest
 typing-extensions==4.9.0 \
     --hash=sha256:23478f88c37f27d76ac8aee6c905017a143b0b1b886c3c9f66bc2fd94f9f5783 \
     --hash=sha256:af72aea155e91adfc61c3ae9e0e342dbc0cba726d6cba4b6c72c1f34e47291cd
-    # via
-    #   -c requirements/constraints.txt
-    #   asgiref
-    #   black
-    #   dj-database-url
 uk-geo-utils==0.12.0 \
     --hash=sha256:0695cc971e191a5fefdb6e709fa110ab7ca4ee000526cd30db8171d1c881f6b6 \
     --hash=sha256:b4ee8bfe7550e860933e7743408a9e72abf5197c45d264b02d250158c8538f47
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
 urllib3==1.26.18 \
     --hash=sha256:34b97092d7e0a3a8cf7cd10e386f401b3737364026c45e622aa02903dffe0f07 \
     --hash=sha256:f8ecc1bba5667413457c529ab955bf8c67b45db799d159066261719e328580a0
-    # via
-    #   -c requirements/constraints.txt
-    #   botocore
-    #   requests
-    #   sentry-sdk
 whitenoise==6.4.0 \
     --hash=sha256:599dc6ca57e48929dfeffb2e8e187879bfe2aed0d49ca419577005b7f2cc930b \
     --hash=sha256:a02d6660ad161ff17e3042653c8e3f5ecbb2a2481a006bde125b9efb9a30113a
-    # via
-    #   -c requirements/constraints.txt
-    #   dc-django-utils
