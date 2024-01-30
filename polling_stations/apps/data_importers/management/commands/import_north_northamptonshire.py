@@ -3,21 +3,18 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NNT"
-    addresses_name = (
-        "2024-02-15/2024-01-25T10:56:24.479815/Democracy_Club__15February2024.tsv"
-    )
-    stations_name = (
-        "2024-02-15/2024-01-25T10:56:24.479815/Democracy_Club__15February2024.tsv"
-    )
+    addresses_name = "2024-02-15/2024-01-30T16:43:45.816756/Democracy_Club__15February2024_version2.tsv"
+    stations_name = "2024-02-15/2024-01-30T16:43:45.816756/Democracy_Club__15February2024_version2.tsv"
     elections = ["2024-02-15"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         if record.addressline6 in [
-            "NN8 1SH",
-            "NN10 9JD",
+            # split
             "NN10 9NJ",
             "NN8 4WG",
+            "NN10 9JD",
+            "NN8 1SH",
             "NN8 3JX",
             "NN29 7NL",
         ]:
