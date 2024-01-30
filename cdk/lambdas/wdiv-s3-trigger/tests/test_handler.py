@@ -12,7 +12,7 @@ import responses
 from botocore.exceptions import ClientError
 from councils.tests.factories import CouncilFactory
 from file_uploads.api import UploadSerializer
-from moto import mock_s3, mock_ses
+from moto import mock_aws
 from moto.s3 import responses as moto_s3_responses
 from moto.ses import ses_backends
 from trigger.handler import main
@@ -99,14 +99,14 @@ class HandlerTests(TestCase):
         os.environ["WDIV_WEBHOOK_URL"] = "https://wheredoivote.co.uk/api/beta/uploads/"
 
         # set up pretend s3 bucket
-        self.s3mock = mock_s3()
+        self.s3mock = mock_aws()
         self.s3mock.start()
         self.conn = boto3.client("s3")
         self.conn.create_bucket(Bucket=self.upload_bucket)
         self.conn.create_bucket(Bucket=self.final_bucket)
 
         # mock SES
-        self.sesmock = mock_ses()
+        self.sesmock = mock_aws()
         self.sesmock.start()
         conn = boto3.client("ses", region)
         conn.verify_email_identity(EmailAddress="pollingstations@democracyclub.org.uk")
