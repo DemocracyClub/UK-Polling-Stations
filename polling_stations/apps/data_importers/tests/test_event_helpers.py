@@ -1,12 +1,13 @@
-from councils.models import Council
 from councils.tests.factories import CouncilFactory
+from data_importers.event_helpers import record_teardown_event
+from data_importers.event_types import DataEventType
+from data_importers.models import DataEvent
 from django.test import TestCase
-from pollingstations.tests.factories import PollingStationFactory
 
 
 class CouncilTest(TestCase):
     def setUp(self):
-        nwp_council = CouncilFactory(
+        self.nwp_council = CouncilFactory(
             **{
                 "council_id": "NWP",
                 "electoral_services_address": "Newport City Council\nCivic Centre\nNewport\nSouth Wales",
@@ -18,15 +19,17 @@ class CouncilTest(TestCase):
                 "identifiers": ["W06000022"],
             }
         )
-        PollingStationFactory(council=nwp_council)
-        stations_council = CouncilFactory()
-        PollingStationFactory(council=stations_council)
-        CouncilFactory(council_id="JKL", name="No Stations Council")
 
-    def test_nation(self):
-        newport = Council.objects.get(pk="NWP")
-        self.assertEqual("Wales", newport.nation)
-
-    def test_with_polling_stations_in_db_qs(self):
-        self.assertEqual(len(Council.objects.all()), 3)
-        self.assertEqual(len(Council.objects.with_polling_stations_in_db()), 2)
+    def test_record_teardown_event(self):
+        self.assertEqual(len(DataEvent.objects.all()), 0)
+        record_teardown_event(self.nwp_council.council_id)
+        self.assertEqual(
+            len(
+                DataEvent.objects.filter(
+                    event_type=DataEventType.TEARDOWN,
+                    council=self.nwp_council,
+                )
+            ),
+            1,
+        )
+        self.assertEqual(len(DataEvent.objects.all()), 1)

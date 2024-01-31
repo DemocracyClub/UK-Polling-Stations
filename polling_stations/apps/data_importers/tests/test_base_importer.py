@@ -6,24 +6,29 @@ from addressbase.tests.factories import UprnToCouncilFactory
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
 from data_importers.base_importers import BaseImporter
+from data_importers.event_types import DataEventType
+from data_importers.models import DataEvent
 from django.core.management import CommandError
 from django.test import TestCase
+from file_uploads.tests.factories import UploadFactory
 from pollingstations.tests.factories import PollingStationFactory
 
 
 class BaseImporterTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.council = CouncilFactory()
+        cls.council_a = CouncilFactory(council_id="AAA")
+        cls.council_b = CouncilFactory(council_id="BBB")
         cls.ps = PollingStationFactory()
         UprnToCouncilFactory(
-            lad=cls.council.identifiers[0],
+            lad=cls.council_a.identifiers[0],
             polling_station_id=cls.ps.internal_council_id,
         )
 
     @patch("data_importers.base_importers.BaseImporter.__abstractmethods__", set())
     def setUp(self):
         self.base_importer = BaseImporter()
+        self.base_importer.council_id = self.council_a.council_id
         self.base_importer_past_election = BaseImporter()
         self.base_importer_past_election.elections = ["2000-01-01"]
         self.base_importer_today_election = BaseImporter()
@@ -33,6 +38,7 @@ class BaseImporterTest(TestCase):
             "2000-01-01",
             str(datetime.date.today()),
         ]
+        self.base_importer_multi_election.council_id = self.council_b.council_id
         self.base_importer_tomorrow_election = BaseImporter()
         self.base_importer_tomorrow_election.elections = [
             str(datetime.date.today() + datetime.timedelta(days=1))
@@ -46,17 +52,17 @@ class BaseImporterTest(TestCase):
         self.assertEqual(
             len(
                 UprnToCouncil.objects.filter(
-                    lad=self.council.identifiers[0],
+                    lad=self.council_a.identifiers[0],
                     polling_station_id=self.ps.internal_council_id,
                 )
             ),
             1,
         )
-        self.base_importer.teardown(self.council)
+        self.base_importer.teardown(self.council_a)
         self.assertEqual(
             len(
                 UprnToCouncil.objects.filter(
-                    lad=self.council.identifiers[0], polling_station_id=""
+                    lad=self.council_a.identifiers[0], polling_station_id=""
                 )
             ),
             1,
@@ -64,20 +70,23 @@ class BaseImporterTest(TestCase):
         self.assertEqual(
             len(
                 UprnToCouncil.objects.filter(
-                    lad=self.council.identifiers[0],
+                    lad=self.council_a.identifiers[0],
                     polling_station_id=self.ps.internal_council_id,
                 )
             ),
             0,
         )
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.TEARDOWN).count(), 1
+        )
 
     def test_get_council(self):
-        council_from_reg = self.base_importer.get_council(self.council.council_id)
+        council_from_reg = self.base_importer.get_council(self.council_a.council_id)
         self.assertIsInstance(council_from_reg, Council)
         self.assertRaises(
             Council.DoesNotExist,
             self.base_importer.get_council,
-            council_id=self.council.identifiers[0],
+            council_id=self.council_a.identifiers[0],
         )
 
     def test_no_election_attribute(self):
@@ -85,7 +94,7 @@ class BaseImporterTest(TestCase):
             CommandError,
             r"Import script for .* does not have an elections attribute",
             self.base_importer.handle,
-            self.council.council_id,
+            self.council_a.council_id,
             **self.opts,
         )
 
@@ -97,7 +106,7 @@ class BaseImporterTest(TestCase):
                 r"self.elections=\['2000-01-01'\]Consider passing the '--include-past-elections' flag"
             ),
             self.base_importer_past_election.handle,
-            self.council.council_id,
+            self.council_a.council_id,
             **self.opts,
         )
 
@@ -107,3 +116,49 @@ class BaseImporterTest(TestCase):
         self.assertTrue(self.base_importer_today_election.covers_current_elections())
         self.assertTrue(self.base_importer_multi_election.covers_current_elections())
         self.assertTrue(self.base_importer_tomorrow_election.covers_current_elections())
+
+    @patch("data_importers.base_importers.BaseImporter.get_upload")
+    def test_record_import_event(self, mock_get_upload):
+        mock_get_upload.return_value = None
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.IMPORT).count(), 0
+        )
+        self.base_importer.record_import_event()
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.IMPORT).count(), 1
+        )
+        self.assertEqual(
+            DataEvent.objects.get(council=self.council_a).election_dates,
+            [],
+        )
+
+    @patch("data_importers.base_importers.BaseImporter.get_upload")
+    def test_record_import_event_multiple_elections(self, mock_get_upload):
+        mock_get_upload.return_value = None
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.IMPORT).count(), 0
+        )
+        self.base_importer_multi_election.record_import_event()
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.IMPORT).count(), 1
+        )
+        self.assertEqual(
+            len(DataEvent.objects.get(council=self.council_b).election_dates),
+            2,
+        )
+
+    @patch("data_importers.base_importers.BaseImporter.get_upload")
+    def test_record_import_event_with_upload(self, mock_get_upload):
+        upload = UploadFactory()
+        mock_get_upload.return_value = upload
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.IMPORT).count(), 0
+        )
+        self.base_importer.record_import_event()
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.IMPORT).count(), 1
+        )
+        self.assertEqual(
+            DataEvent.objects.get(council=self.council_a).upload,
+            upload,
+        )
