@@ -9,7 +9,7 @@ def get_stat_from_nomis(dataset, measure, gss_code):
     This is based on 2011 data, so is getting pretty out of date, but is
     a good sanity check.
     """
-    url = "http://www.nomisweb.co.uk/api/v01/dataset/{dataset}.data.json?date=latest&geography={gss_code}&rural_urban=0&cell=0&measures={measures}".format(
+    url = "http://www.nomisweb.co.uk/api/v01/dataset/{dataset}.data.json?date=latest&geography={gss_code}&measures={measures}&c2021_dwell_1=0".format(
         dataset=dataset, gss_code=gss_code, measures=measure
     )
     r = requests.get(url)
@@ -23,7 +23,7 @@ def get_stat_from_nomis(dataset, measure, gss_code):
 
 class Dwellings:
     def from_census(self, gss_code):
-        return get_stat_from_nomis("NM_618_1", "20100", gss_code)
+        return get_stat_from_nomis("NM_2304_1", "20100", gss_code)
 
     def from_addressbase(self, polygon):
         return Address.objects.filter(location__within=polygon).count()
