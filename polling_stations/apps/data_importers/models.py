@@ -1,6 +1,18 @@
 from councils.models import Council
+from data_importers.event_types import DataEventType
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.signals import post_save
+from django_extensions.db.models import TimeStampedModel
+from file_uploads.models import Upload
+
+
+class DataEvent(TimeStampedModel):
+    council = models.ForeignKey(Council, on_delete=models.CASCADE)
+    upload = models.ForeignKey(Upload, null=True, on_delete=models.CASCADE)
+    event_type = models.CharField(choices=DataEventType.choices)
+    election_dates = ArrayField(models.DateField(), default=list)
+    metadata = models.JSONField(default=dict)
 
 
 class DataQuality(models.Model):
