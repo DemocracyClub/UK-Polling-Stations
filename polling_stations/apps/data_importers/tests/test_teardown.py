@@ -1,8 +1,9 @@
 from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
+from data_importers.event_types import DataEventType
 from data_importers.management.commands.teardown import Command
-from data_importers.models import DataQuality
+from data_importers.models import DataEvent, DataQuality
 from django.test import TestCase
 from pollingstations.models import PollingDistrict, PollingStation
 
@@ -120,6 +121,9 @@ class TestTeardown(TestCase):
                 }
             ),
         )
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.TEARDOWN).count(), 1
+        )
 
     def test_teardown_all_councils(self):
         self.assertEqual(Council.objects.count(), 2)
@@ -195,4 +199,8 @@ class TestTeardown(TestCase):
                     "num_stations": 0,
                 }
             ),
+        )
+
+        self.assertEqual(
+            DataEvent.objects.filter(event_type=DataEventType.TEARDOWN).count(), 2
         )

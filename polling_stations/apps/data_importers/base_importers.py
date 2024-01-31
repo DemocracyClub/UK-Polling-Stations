@@ -23,15 +23,18 @@ from data_importers.data_quality_report import (
     StationReport,
 )
 from data_importers.data_types import AddressList, DistrictSet, StationSet
+from data_importers.event_helpers import record_teardown_event
 from data_importers.filehelpers import FileHelperFactory
 from data_importers.loghelper import LogHelper
-from data_importers.models import DataQuality
+from data_importers.models import DataEvent, DataEventType, DataQuality
 from data_importers.s3wrapper import S3Wrapper
 from django.apps import apps
 from django.conf import settings
 from django.contrib.gis import geos
 from django.contrib.gis.geos import GEOSException, GEOSGeometry, Point
 from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
+from file_uploads.models import File, Upload
 from pollingstations.models import PollingDistrict, PollingStation
 
 
@@ -112,12 +115,14 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         )
 
     def teardown(self, council):
-        super().teardown(council)
-        PollingStation.objects.filter(council=council).delete()
-        PollingDistrict.objects.filter(council=council).delete()
-        UprnToCouncil.objects.filter(lad__in=council.identifiers).update(
-            polling_station_id=""
-        )
+        with transaction.atomic():
+            super().teardown(council)
+            PollingStation.objects.filter(council=council).delete()
+            PollingDistrict.objects.filter(council=council).delete()
+            UprnToCouncil.objects.filter(lad__in=council.identifiers).update(
+                polling_station_id=""
+            )
+            record_teardown_event(self.council_id)
 
     def get_council(self, council_id):
         return Council.objects.get(pk=council_id)
@@ -223,6 +228,24 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
                 )
         return False
 
+    @abc.abstractmethod
+    def get_upload(self):
+        pass
+
+    def record_import_event(self):
+        election_dates = []
+        if hasattr(self, "elections"):
+            election_dates = [
+                datetime.datetime.strptime(date_string, "%Y-%m-%d")
+                for date_string in self.elections
+            ]
+        DataEvent.objects.create(
+            council=self.get_council(self.council_id),
+            upload=self.get_upload(),
+            event_type=DataEventType.IMPORT,
+            election_dates=election_dates,
+        )
+
     def handle(self, *args, **kwargs):
         """
         Manually run system checks for the
@@ -269,7 +292,9 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
 
         self.base_folder_path = self.get_base_folder_path()
 
-        self.import_data()
+        with transaction.atomic():
+            self.import_data()
+            self.record_import_event()
 
         # Optional step for post import tasks
         self.post_import()
@@ -514,6 +539,9 @@ class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def districts_name(self):
         pass
 
+    def get_upload(self):
+        return None
+
     def get_districts(self):
         districts_file = os.path.join(self.base_folder_path, self.districts_name)
         return self.get_data(self.districts_filetype, districts_file)
@@ -640,6 +668,17 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def address_record_to_dict(self, record):
         pass
+
+    def get_upload(self):
+        try:
+            upload = File.objects.get(
+                key=f"{self.council_id}/{self.addresses_name}"
+            ).upload
+        except File.DoesNotExist:
+            return None
+        except Upload.DoesNotExist:
+            return None
+        return upload
 
     def write_context_data(self):
         dwellings = Dwellings()
@@ -1008,6 +1047,9 @@ class BaseGenericApiImporter(BaseStationsDistrictsImporter):
         with tempfile.NamedTemporaryFile() as tmp:
             urllib.request.urlretrieve(self.stations_url, tmp.name)
             return self.get_data(self.stations_filetype, tmp.name)
+
+    def get_upload(self):
+        return None
 
 
 class BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter):

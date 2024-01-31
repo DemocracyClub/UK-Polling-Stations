@@ -5,8 +5,9 @@ from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from data_importers.base_importers import BaseStationsImporter, CsvMixin
 from data_importers.data_types import StationSet
+from data_importers.event_helpers import record_teardown_event
 from django.contrib.gis.geos import Point
-from django.db import connections
+from django.db import connections, transaction
 from pollingstations.models import CustomFinder, PollingStation
 
 from polling_stations.db_routers import get_principal_db_name
@@ -76,8 +77,13 @@ class Command(BaseStationsImporter, CsvMixin):
         # Only remove old polling stations, as the UPRN to Council table
         # is populated by this command previously, so deleting data form it
         # isn't useful.
-        CustomFinder.objects.using(DB_NAME).filter(area_code="N07000001").delete()
-        PollingStation.objects.using(DB_NAME).filter(council_id__in=NIR_IDS).delete()
+        with transaction.atomic():
+            CustomFinder.objects.using(DB_NAME).filter(area_code="N07000001").delete()
+            PollingStation.objects.using(DB_NAME).filter(
+                council_id__in=NIR_IDS
+            ).delete()
+            for council_id in NIR_IDS:
+                record_teardown_event(council_id)
 
     def get_base_folder_path(self):
         return str(self.eoni_data_root)

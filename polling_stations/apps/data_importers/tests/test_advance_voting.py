@@ -59,12 +59,18 @@ class AdvanceVotingTests(TestCase):
             def import_data(self):
                 pass
 
+            def get_upload(self):
+                pass
+
         class GoodAdvanceVotingImporter(BaseImporter, AdvanceVotingMixin):
             def post_import(self):
                 super().post_import()
                 pass
 
             def import_data(self):
+                pass
+
+            def get_upload(self):
                 pass
 
         with self.assertRaises(TypeError) as e:

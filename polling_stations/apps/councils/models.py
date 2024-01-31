@@ -4,10 +4,20 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.db.models import JSONField
+from django.db import DEFAULT_DB_ALIAS
+from django.db.models import Count, JSONField
 from django.utils.translation import get_language
 
 from polling_stations.i18n.cy import WelshNameMutationMixin
+
+
+class CouncilQueryset(models.QuerySet):
+    def with_polling_stations_in_db(self):
+        return (
+            self.using(DEFAULT_DB_ALIAS)
+            .annotate(ps_count=Count("pollingstation"))
+            .exclude(pollingstation=None)
+        )
 
 
 class Council(WelshNameMutationMixin, models.Model):
@@ -36,7 +46,7 @@ class Council(WelshNameMutationMixin, models.Model):
 
     users = models.ManyToManyField(through="UserCouncils", to=settings.AUTH_USER_MODEL)
 
-    objects = models.Manager()
+    objects = CouncilQueryset.as_manager()
 
     def __str__(self):
         try:

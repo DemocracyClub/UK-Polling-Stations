@@ -1,8 +1,10 @@
 from addressbase.models import UprnToCouncil
 from councils.models import Council
+from data_importers.event_helpers import record_teardown_event
 from data_importers.models import DataQuality
 from django.apps import apps
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from pollingstations.models import AdvanceVotingStation, PollingDistrict, PollingStation
 
 """
@@ -41,6 +43,7 @@ class Command(BaseCommand):
             default=False,
         )
 
+    @transaction.atomic
     def handle(self, *args, **kwargs):
         """
         Manually run system checks for the
@@ -74,10 +77,14 @@ class Command(BaseCommand):
                 dq.num_districts = 0
                 dq.num_stations = 0
                 dq.save()
+
+                record_teardown_event(council_id)
                 print("..done")
 
         elif kwargs.get("all"):
             print("Deleting ALL data...")
+            for council in Council.objects.with_polling_stations_in_db():
+                record_teardown_event(council.council_id)
             PollingDistrict.objects.all().delete()
             PollingStation.objects.all().delete()
             AdvanceVotingStation.objects.all().delete()
