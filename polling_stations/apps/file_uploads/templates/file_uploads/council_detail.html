@@ -52,8 +52,12 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if upload.status != "Pending" %}
-                                {% if STATIONS %}✔{% else %}❌{% endif %}
+                            {% if live_upload %}
+                                {% if upload.pk == live_upload.pk %}
+                                    ✔️
+                                {% endif %}
+                            {% else %}
+                                ❌
                             {% endif %}
                         </td>
                     </tr>

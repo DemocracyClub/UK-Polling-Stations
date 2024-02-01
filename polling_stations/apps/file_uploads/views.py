@@ -259,6 +259,7 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                     "example_uprn": example_uprn_map.get(station.internal_council_id),
                 }
             )
+        context["live_upload"] = council.live_upload
 
         return context
 
