@@ -232,13 +232,13 @@ commitment==3.0.1 \
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.3.0.zip \
-    --hash=sha256:55757bd7742669dd63dc9064a2ced4cbc603c8ec79117f03e047092db272c8f9
+dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.5.zip \
+    --hash=sha256:c6870dc68fb924e5598bc95292137ba47b4d7ec195df785c0f6c066746e06805
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.4.0.zip \
-    --hash=sha256:8e008a5e058f4997f542e6e0541ddc0f80749c4c9983a463e3a7ab76cf681ab4
+dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.4.1.zip \
+    --hash=sha256:681b7e69758e54f9de0cfbebe8bd6e99447578c01107d2f7d6ec0b374f48f3b0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -474,6 +474,12 @@ lxml==5.1.0 \
     --hash=sha256:ed8c3d2cd329bf779b7ed38db176738f3f8be637bb395ce9629fc76f78afe3d4 \
     --hash=sha256:f4c9bda132ad108b387c33fabfea47866af87f4ea6ffb79418004f0521e63204 \
     --hash=sha256:f643ffd2669ffd4b5a3e9b41c909b72b2a1d5e4915da90a77e119b8d48ce867a
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.in
+markdown==3.5.2 \
+    --hash=sha256:d43323865d89fc0cb9b20c75fc8ad313af307cc087e84b657d9eec768eddeadd \
+    --hash=sha256:e1ac7b3dc550ee80e602e71c1d168002f062e49f1b11e26a36264dafd4df2ef8
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
