@@ -257,7 +257,7 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                 }
             )
         context["live_upload"] = council.live_upload
-
+        context["events"] = council.dataevent_set.all().order_by("-created")
         return context
 
 

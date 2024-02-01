@@ -174,4 +174,44 @@
         </div>
     {%  endif %}
 
+    {% if user.is_superuser %}
+        <div class="ds-card ds-padded">
+            <h2>Data Events</h2>
+            <p>
+                {% if object.dataevent_set.latest.event_type == 'IMPORT' %}
+                    The most recent event was an import. This means there are polling stations visible to users.
+                {% elif  object.dataevent_set.latest.event_type == 'TEARDOWN' %}
+                    The most recent event was a teardown. This means there are no polling stations visible to users
+                {% endif %}
+            </p>
+            <div class="ds-table">
+                <table>
+                    <caption>Events - new to old</caption>
+                    <tr>
+                        <th>Event Time</th>
+                        <th>Event Type</th>
+                        <th>Election Dates</th>
+                        <th>Upload</th>
+                    </tr>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.created }}</td>
+                            <td>{{ event.event_type }}</td>
+                            <td>{{ event.election_dates }}</td>
+                            <td>
+                                {% if event.event_type == 'IMPORT' %}
+                                    {{ event.upload }}
+                                {% elif event.event_type == 'TEARDOWN'  %}
+                                    N/A
+                                {% else %}
+                                    Missing
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
 {% endblock council_content %}
