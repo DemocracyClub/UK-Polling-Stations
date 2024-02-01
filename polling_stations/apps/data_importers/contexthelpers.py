@@ -12,7 +12,10 @@ def get_stat_from_nomis(dataset, measure, gss_code):
     url = "http://www.nomisweb.co.uk/api/v01/dataset/{dataset}.data.json?date=latest&geography={gss_code}&measures={measures}&c2021_dwell_1=0".format(
         dataset=dataset, gss_code=gss_code, measures=measure
     )
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        return 0
     if r.status_code != 200:
         return 0
     data = r.json()
