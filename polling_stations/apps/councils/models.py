@@ -1,6 +1,8 @@
 import re
 from pathlib import Path
 
+from data_importers.event_types import DataEventType
+from django.apps import apps
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -139,6 +141,36 @@ class Council(WelshNameMutationMixin, models.Model):
             )
 
         return str(import_script_path)
+
+    @property
+    def has_polling_stations_in_db(self):
+        if self.pollingstation_set.count() > 0:
+            return True
+        return False
+
+    def latest_data_event(self, event_type):
+        data_event_model = apps.get_model("data_importers", "DataEvent")
+        try:
+            return self.dataevent_set.filter(event_type=event_type).latest()
+        except data_event_model.DoesNotExist:
+            return None
+
+    @property
+    def live_upload(self):
+        if not self.has_polling_stations_in_db:
+            return None
+        latest_import = self.latest_data_event(DataEventType.IMPORT)
+        latest_teardown = self.latest_data_event(DataEventType.TEARDOWN)
+        if (
+            latest_teardown
+            and latest_import
+            and (latest_import.created > latest_teardown.created)
+            and latest_import.upload
+        ):
+            return latest_import.upload
+        if latest_import and not latest_teardown and latest_import.upload:
+            return latest_import.upload
+        return None
 
 
 class CouncilGeography(models.Model):
