@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import Count, Max, Prefetch
+from django.db.models import Max, Prefetch
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -199,12 +199,9 @@ class CouncilView:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        qs = (
-            Council.objects.using(DEFAULT_DB_ALIAS)
-            .annotate(ps_count=Count("pollingstation"))
-            .filter(ps_count__gt=0)
-        )
-        context["COUNCILS_WITH_STATIONS"] = {council.council_id for council in qs}
+        context[
+            "COUNCILS_WITH_STATIONS"
+        ] = Council.objects.with_polling_stations_in_db()
 
         if self.kwargs.get("pk"):
             upcoming_election_dates = EveryElectionWrapper(
