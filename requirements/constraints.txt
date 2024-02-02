@@ -1143,9 +1143,9 @@ pytest-django==4.7.0 \
     # via
     #   -r requirements/testing.in
     #   dc-django-utils
-pytest-playwright==0.4.3 \
-    --hash=sha256:699e2c47fbb1e6a57895454693eba278cf55d04d44c15017709b00e1de1d9ccd \
-    --hash=sha256:c9ff6e7ebfd967b562f5c3d67f1ae6b45a061d6ea51ad304fdd95aca9db20774
+pytest-playwright==0.4.4 \
+    --hash=sha256:5488db4cc49028491c5130af0a2bb6b1d0b222a202217f6d14491d4c9aa67ff9 \
+    --hash=sha256:df306f3a60a8631a3cfde1b95a2ed5a89203a3408dfa1154de049ca7de87c90b
     # via -r requirements/testing.in
 pytest-ruff==0.2.1 \
     --hash=sha256:078ad696bfa347b466991ed4f9cc5ec807f5a171d7f06091660d8f16ba03a5dc \
