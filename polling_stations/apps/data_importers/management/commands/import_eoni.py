@@ -38,6 +38,7 @@ class Command(BaseStationsImporter, CsvMixin):
     elections = ["2023-05-18"]
 
     def add_arguments(self, parser):
+        super().add_argument(parser)
         parser.add_argument("eoni_csv", help="The path to the EONI export csv")
         parser.add_argument(
             "--stations-only",
