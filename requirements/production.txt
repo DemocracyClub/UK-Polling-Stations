@@ -16,23 +16,23 @@ boto==2.49.0 \
     # via
     #   -c requirements/constraints.txt
     #   ec2-tag-conditional
-boto3==1.34.30 \
-    --hash=sha256:9e1476ce2b26437881a0381bf2daa54de619ac74ab4bd74278668acda6004a64 \
-    --hash=sha256:cd6173380768faaecf6236dbdcec15d8d032cbb162ce354fdb111056a74fc298
+boto3==1.34.35 \
+    --hash=sha256:4052031f9ac18924e94be7c30a5f0af5843a4752b8c8cb9034cd978be252b61b \
+    --hash=sha256:53897701ab4f307fbcfdade673eae809dfc5eabb6102053c84907aa27de66e53
     # via
     #   -c requirements/constraints.txt
     #   django-dynamodb-cache
-botocore==1.34.30 \
-    --hash=sha256:caf82d91c2ff61235284a07ffdfba006873e0752e00896052f901a37720cefa4 \
-    --hash=sha256:e071a9766e7fc2221ca42ec01dfc54368a7518610787342ea622f6edc57f7891
+botocore==1.34.35 \
+    --hash=sha256:8a2b53ab772584a5f7e2fe1e4a59028b0602cfef8e39d622db7c6b670e4b1ee6 \
+    --hash=sha256:b67b8c865973202dc655a493317ae14b33d115e49ed6960874eb05d950167b37
     # via
     #   -c requirements/constraints.txt
     #   boto3
     #   django-dynamodb-cache
     #   s3transfer
-django==4.2.9 \
-    --hash=sha256:12498cc3cb8bc8038539fef9e90e95f507502436c1f0c3a673411324fa675d14 \
-    --hash=sha256:2cc2fc7d1708ada170ddd6c99f35cc25db664f165d3794bc7723f46b2f8c8984
+django==4.2.10 \
+    --hash=sha256:a2d4c4d4ea0b6f0895acde632071aff6400bfc331228fc978b05452a0ff3e9f1 \
+    --hash=sha256:b1260ed381b10a11753c73444408e19869f3241fc45c985cd55a30177c789d13
     # via
     #   -c requirements/constraints.txt
     #   django-dynamodb-cache
