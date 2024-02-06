@@ -4,9 +4,9 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=cdk/lambdas/wdiv-s3-trigger/requirements.txt --strip-extras cdk/lambdas/wdiv-s3-trigger/requirements/base-constrained.in
 #
-certifi==2023.11.17 \
-    --hash=sha256:9b469f3a900bf28dc19b8cfbf8019bf47f7fdd1a65a1d4ffb98fc14166beb4d1 \
-    --hash=sha256:e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474
+certifi==2024.2.2 \
+    --hash=sha256:0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f \
+    --hash=sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
     # via
     #   -c cdk/lambdas/wdiv-s3-trigger/requirements/../../../../requirements/constraints.txt
     #   requests
@@ -123,9 +123,9 @@ requests-paginator==0.2.0 \
     # via
     #   -c cdk/lambdas/wdiv-s3-trigger/requirements/../../../../requirements/constraints.txt
     #   -r cdk/lambdas/wdiv-s3-trigger/requirements/base.in
-sentry-sdk==1.39.2 \
-    --hash=sha256:24c83b0b41c887d33328a9166f5950dc37ad58f01c9f2fbff6b87a6f1094170c \
-    --hash=sha256:acaf597b30258fc7663063b291aa99e58f3096e91fe1e6634f4b79f9c1943e8e
+sentry-sdk==1.40.1 \
+    --hash=sha256:1bb9cf4ac317906d20787693b5e7f3e42160a90e8bbf1fc544f91c52fa76b68f \
+    --hash=sha256:69fc5e7512371547207821d801485f45e3c62db629f02f56f58431a10864ac34
     # via
     #   -c cdk/lambdas/wdiv-s3-trigger/requirements/../../../../requirements/constraints.txt
     #   -r cdk/lambdas/wdiv-s3-trigger/requirements/base.in
