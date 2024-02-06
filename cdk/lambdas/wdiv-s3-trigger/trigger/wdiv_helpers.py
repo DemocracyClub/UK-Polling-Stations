@@ -2,8 +2,11 @@ import requests
 from requests.exceptions import HTTPError
 
 
-def gss_to_council(gss):
-    r = requests.get(f"https://wheredoivote.co.uk/api/beta/councils/{gss}.json")
+def gss_to_council(gss, wdiv_api_key):
+    r = requests.get(
+        f"https://wheredoivote.co.uk/api/beta/councils/{gss}.json",
+        headers={"Authorization": f"Token {wdiv_api_key}"},
+    )
     try:
         r.raise_for_status()
         council = r.json()

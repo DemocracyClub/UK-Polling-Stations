@@ -92,7 +92,7 @@ class HandlerTests(TestCase):
         region = "eu-west-1"
         os.environ["GITHUB_REPO"] = self.repo
         os.environ["GITHUB_API_KEY"] = "testing"
-        os.environ["WDIV_API_KEY"] = "testing"
+        os.environ["SUPERUSER_API_AUTH_TOKEN"] = "testing"
         os.environ["FINAL_BUCKET_NAME"] = self.final_bucket
         os.environ["AWS_REGION"] = region
         os.environ["ERROR_REPORT_EMAIL"] = "fred@example.com"
