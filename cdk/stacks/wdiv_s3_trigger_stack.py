@@ -82,8 +82,8 @@ class WDIVS3TriggerStack(Stack):
                 self, "/wdiv_s3_trigger/GITHUB_API_KEY"
             ),
             "WDIV_API_KEY": ssm.StringParameter.value_for_string_parameter(
-                self, "/wdiv_s3_trigger/WDIV_API_KEY"
-            ),
+                self, "SUPERUSER_API_AUTH_TOKENS"
+            ).split(",")[0],
             "ERROR_REPORT_EMAIL": ssm.StringParameter.value_for_string_parameter(
                 self, "/wdiv_s3_trigger/ERROR_REPORT_EMAIL"
             ),

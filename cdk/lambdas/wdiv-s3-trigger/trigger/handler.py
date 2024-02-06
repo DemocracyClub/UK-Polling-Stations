@@ -20,7 +20,7 @@ def register_env():
         "SENTRY_DSN": SENTRY_DSN,
         "GITHUB_REPO": os.getenv("GITHUB_REPO", ""),
         "GITHUB_API_KEY": os.getenv("GITHUB_API_KEY", ""),
-        "WDIV_API_KEY": os.getenv("WDIV_API_KEY", ""),
+        "WDIV_API_KEY": os.getenv("SUPERUSER_API_AUTH_TOKEN", ""),
         "FINAL_BUCKET_NAME": os.getenv("FINAL_BUCKET_NAME", ""),
         "AWS_REGION": os.getenv("AWS_REGION", ""),
         "ERROR_REPORT_EMAIL": os.getenv("ERROR_REPORT_EMAIL", ""),
@@ -47,13 +47,13 @@ def get_file_report(s3, bucket, key):
     return report
 
 
-def get_report(s3, bucket, key):
+def get_report(s3, bucket, key, api_key):
     path = PurePath(key)
     prefix = str(path.parent)
 
     report = {
         "gss": path.parts[0],
-        "council_name": gss_to_council(path.parts[0]),
+        "council_name": gss_to_council(path.parts[0], api_key),
         "timestamp": path.parts[2],
         "election_date": path.parts[1],
         "github_issue": "",
@@ -154,7 +154,7 @@ def main(event, context):
     path = PurePath(key)
     prefix = str(path.parent)
 
-    report = get_report(s3, bucket, key)
+    report = get_report(s3, bucket, key, api_key=CONSTANTS["WDIV_API_KEY"])
     surpress_email = False
 
     if (
