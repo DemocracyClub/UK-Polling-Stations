@@ -8,6 +8,7 @@ class AddressFactory(factory.django.DjangoModelFactory):
 
     uprn = factory.Sequence(lambda n: f"{n}".zfill(9))
     addressbase_postal = "D"
+    location = factory.Faker("geo_point", country_code="GB")
 
 
 class UprnToCouncilFactory(factory.django.DjangoModelFactory):

@@ -14,7 +14,7 @@
             "uprn": "101",
             "address": "2 Foo St, Bar Town",
             "postcode": "BB1 1BB",
-            "location": null,
+            "location": "POINT (0 0)",
             "addressbase_postal": "D"
         },
         "model": "addressbase.address",

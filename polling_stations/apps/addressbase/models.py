@@ -4,7 +4,7 @@ from data_importers.models import DataEvent
 from django.contrib.gis.db import models
 from django.contrib.postgres.indexes import BTreeIndex, GistIndex
 from django.db.models import OuterRef, Subquery
-from pollingstations.models import PollingStation
+from pollingstations.models import PollingStation, VisibilityChoices
 from uk_geo_utils.models import (
     AbstractAddress,
     AbstractOnsudManager,
@@ -66,13 +66,15 @@ class Address(AbstractAddress):
             return station[0]
         return None
 
-    @property
-    def polling_station_with_elections(self):
+    def polling_station_with_elections(self, include_unpublished=False):
         """
         Returns the polling station for this address,
         with the elections field from the most recent data import event
         for the relevant council
         """
+        visibilities = [VisibilityChoices.PUBLISHED]
+        if include_unpublished:
+            visibilities.append(VisibilityChoices.UNPUBLISHED)
         try:
             elections = Subquery(
                 DataEvent.objects.filter(
@@ -82,7 +84,9 @@ class Address(AbstractAddress):
                 .values("election_dates")[:1]
             )
             return PollingStation.objects.annotate(elections=elections).get(
-                internal_council_id=self.polling_station_id, council_id=self.council_id
+                internal_council_id=self.polling_station_id,
+                council_id=self.council_id,
+                visibility__in=visibilities,
             )
         except PollingStation.DoesNotExist:
             return None

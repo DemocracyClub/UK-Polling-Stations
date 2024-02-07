@@ -48,11 +48,17 @@ class LogLookUpMixin(object):
     def log_postcode(self, postcode, context, view_used):
         if view_used != "api":
             # Log to firehose
+            utm_data = {}
+
+            if hasattr(self.request, "session"):
+                utm_data = self.request.session.get("utm_data")
+
             entry = settings.POSTCODE_LOGGER.entry_class(
                 postcode=postcode,
                 dc_product=settings.POSTCODE_LOGGER.dc_product.wdiv,
-                **self.request.session.get("utm_data"),
+                **utm_data,
             )
+
             settings.POSTCODE_LOGGER.log(entry)
 
 
@@ -269,7 +275,7 @@ class AddressView(BasePollingStationView):
         return self.address.council
 
     def get_station(self):
-        return self.address.polling_station_with_elections
+        return self.address.polling_station_with_elections()
 
     def get_ee_wrapper(self, rh=None):
         return EveryElectionWrapper(point=self.address.location)

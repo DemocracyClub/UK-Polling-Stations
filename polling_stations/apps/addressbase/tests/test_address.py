@@ -6,6 +6,7 @@ from councils.tests.factories import CouncilFactory
 from data_importers.event_types import DataEventType
 from data_importers.tests.factories import DataEventFactory
 from django.test import TestCase
+from pollingstations.models import VisibilityChoices
 from pollingstations.tests.factories import PollingStationFactory
 
 
@@ -42,8 +43,32 @@ class TestAddressFactory(TestCase):
             lad=council_foo.identifiers[0], polling_station_id=ps.internal_council_id
         )
         uprn_without_station = UprnToCouncilFactory(lad=council_foo.identifiers[0])
-        ps_with_elections = uprn_with_station.uprn.polling_station_with_elections
+        ps_with_elections = uprn_with_station.uprn.polling_station_with_elections()
         self.assertEqual(
             ps_with_elections.elections, [datetime.date(year=2024, month=5, day=2)]
         )
-        self.assertIsNone(uprn_without_station.uprn.polling_station_with_elections)
+        self.assertIsNone(uprn_without_station.uprn.polling_station_with_elections())
+
+    def test_polling_station_with_elections_unpublished_station(self):
+        council_foo = CouncilFactory(pk="FOO", identifiers=["X012345"])
+        DataEventFactory(
+            council=council_foo,
+            event_type=DataEventType.IMPORT,
+            election_dates=[datetime.date(year=2024, month=5, day=2)],
+        )
+        ps = PollingStationFactory(
+            council=council_foo,
+            visibility=VisibilityChoices.UNPUBLISHED,
+            internal_council_id="UNP",
+        )
+        uprn_with_station = UprnToCouncilFactory(
+            lad=council_foo.identifiers[0], polling_station_id=ps.internal_council_id
+        )
+
+        self.assertIsNone(uprn_with_station.uprn.polling_station_with_elections())
+        self.assertEqual(
+            uprn_with_station.uprn.polling_station_with_elections(
+                include_unpublished=True
+            ).internal_council_id,
+            "UNP",
+        )

@@ -9,6 +9,7 @@ from django.contrib.gis.geos import Point
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
+from pollingstations.models import PollingStation, VisibilityChoices
 from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
 
@@ -72,6 +73,54 @@ class AddressTest(TestCase):
             log=False,
         )
 
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ABC", response.data["council"]["council_id"])
+        self.assertTrue(response.data["polling_station_known"])
+        self.assertTrue("advance_voting_station" in response.data)
+        self.assertEqual(
+            "Foo Street Primary School, Bar Town",
+            response.data["polling_station"]["properties"]["address"],
+        )
+        self.assertEqual(1, len(response.data["addresses"]))
+        self.assertEqual(1, len(response.data["ballots"]))
+
+    def test_station_exists_but_is_unpublished_with_election(self):
+        # Unpublish the station
+        ps = PollingStation.objects.get(council_id="ABC", internal_council_id="2")
+        ps.visibility = VisibilityChoices.UNPUBLISHED
+        ps.save()
+
+        # Do the request
+        response = self.endpoint.retrieve(
+            self.request,
+            "200",
+            "json",
+            geocoder=mock_geocode,
+            log=False,
+        )
+
+        # Check nothing found
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ABC", response.data["council"]["council_id"])
+        self.assertFalse(response.data["polling_station_known"])
+        self.assertEqual(None, response.data["polling_station"])
+        self.assertEqual(1, len(response.data["addresses"]))
+        self.assertEqual(1, len(response.data["ballots"]))
+
+        # Republish the station
+        ps.visibility = VisibilityChoices.PUBLISHED
+        ps.save()
+
+        # Redo the request
+        response = self.endpoint.retrieve(
+            self.request,
+            "200",
+            "json",
+            geocoder=mock_geocode,
+            log=False,
+        )
+
+        # Check something is found
         self.assertEqual(200, response.status_code)
         self.assertEqual("ABC", response.data["council"]["council_id"])
         self.assertTrue(response.data["polling_station_known"])
