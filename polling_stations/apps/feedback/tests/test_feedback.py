@@ -1,7 +1,11 @@
+import datetime
 import json
 
+from data_importers.event_types import DataEventType
+from data_importers.tests.factories import DataEventFactory
 from django.core.management import call_command
 from django.test import TestCase, override_settings
+from django.utils import timezone
 
 from polling_stations.apps.councils.tests.factories import CouncilFactory
 
@@ -19,6 +23,11 @@ class FeedbackTestCase(TestCase):
             identifiers=["X01"],
             geography__geography=None,
         )
+        DataEventFactory(
+            council_id="X01",
+            event_type=DataEventType.IMPORT,
+            election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
+        )
 
         call_command(  # Hack to avoid converting all fixtures to factories
             "loaddata",
@@ -31,9 +40,8 @@ class FeedbackTestCase(TestCase):
         response = self.client.get("/postcode/AA11AA", follow=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.context["we_know_where_you_should_vote"].internal_council_id, "1A"
-        )
+        self.assertTrue(response.context["we_know_where_you_should_vote"])
+        self.assertEqual(response.context["station"].internal_council_id, "1A")
         self.assertTemplateUsed(response, "feedback/feedback_form.html")
 
         self.feedback_form = response.context["feedback_form"]

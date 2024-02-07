@@ -1,10 +1,15 @@
+import datetime
+
 from api.postcode import PostcodeViewSet
 from councils.tests.factories import CouncilFactory
 from data_finder.helpers import PostcodeError
+from data_importers.event_types import DataEventType
+from data_importers.tests.factories import DataEventFactory
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import call_command
+from django.utils import timezone
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.views import APIView
 
@@ -65,6 +70,16 @@ class PostcodeTest(APITestCase):
             council_id="ABC",
             identifiers=["X01000001"],
             geography__geography="MULTIPOLYGON (((-2.83447265625 53.64203274279828,1.549072265625 53.64203274279828,1.549072265625 52.52691653862567,-2.83447265625 52.52691653862567,-2.83447265625 53.64203274279828)))",
+        )
+        DataEventFactory(
+            council_id="ABC",
+            event_type=DataEventType.IMPORT,
+            created=timezone.now() - datetime.timedelta(days=7),
+            election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
+            metadata={
+                "test info": "Import for future election",
+                "Imported": "7 days ago",
+            },
         )
         CouncilFactory(
             council_id="DEF",
@@ -148,6 +163,30 @@ class PostcodeTest(APITestCase):
         self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(0, len(response.data["ballots"]))
+
+    def test_station_found_with_election_but_data_event_for_past_election(self):
+        DataEventFactory(
+            council_id="ABC",
+            event_type=DataEventType.IMPORT,
+            created=timezone.now() - datetime.timedelta(days=3),
+            election_dates=[timezone.now().date() - datetime.timedelta(days=1)],
+            metadata={
+                "test info": "Import for previous election",
+                "Imported": "3 days ago",
+            },
+        )
+        response = self.endpoint.retrieve(
+            self.request, "CC11CC", "json", geocoder=mock_geocode, log=False
+        )
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("ABC", response.data["council"]["council_id"])
+        self.assertFalse(response.data["polling_station_known"])
+        self.assertEqual(None, response.data["polling_station"])
+        self.assertEqual([], response.data["addresses"])
+        self.assertIsNone(response.data["custom_finder"])
+        self.assertIsInstance(response.data["postcode_location"], dict)
+        self.assertEqual(1, len(response.data["ballots"]))
 
     def test_no_council(self):
         response = self.endpoint.retrieve(
