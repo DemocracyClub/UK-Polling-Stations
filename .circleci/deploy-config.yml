@@ -39,7 +39,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
+          key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
 
       - run:
           name: Install node node_modules
@@ -82,7 +82,7 @@ jobs:
             - ./.venv
             - ./node_modules
             - ./home/circleci/.cache
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
+          key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
 
       - run:
           name: Install HTML Tidy
@@ -133,7 +133,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
+          key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
       - aws-cli/setup
       - run:
           name: Check and run new import scripts.
@@ -248,7 +248,7 @@ jobs:
     steps:
     - checkout
     - restore_cache:
-        key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
+        key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
     - run:
         name: "Code Deploy: Create deployment group"
         command: |
@@ -291,7 +291,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
+          key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
       - aws-cli/setup
       - run:
           name: Check and run new import scripts after a deploy.
