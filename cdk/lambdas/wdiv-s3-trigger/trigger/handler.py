@@ -20,7 +20,7 @@ def register_env():
         "SENTRY_DSN": SENTRY_DSN,
         "GITHUB_REPO": os.getenv("GITHUB_REPO", ""),
         "GITHUB_API_KEY": os.getenv("GITHUB_API_KEY", ""),
-        "WDIV_API_KEY": os.getenv("SUPERUSER_API_AUTH_TOKEN", ""),
+        "WDIV_API_KEY": os.getenv("WDIV_API_KEY", ""),
         "FINAL_BUCKET_NAME": os.getenv("FINAL_BUCKET_NAME", ""),
         "AWS_REGION": os.getenv("AWS_REGION", ""),
         "ERROR_REPORT_EMAIL": os.getenv("ERROR_REPORT_EMAIL", ""),
