@@ -1,6 +1,15 @@
+import datetime
+
+from addressbase.tests.factories import UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
+from data_finder.views import polling_station_current
+from data_importers.event_types import DataEventType
+from data_importers.tests.factories import DataEventFactory
 from django.core.management import call_command
 from django.test import TestCase
+from django.utils import timezone
+from pollingstations.models import PollingStation
+from pollingstations.tests.factories import PollingStationFactory
 
 
 class LogTestMixin:
@@ -75,6 +84,11 @@ class PostCodeViewTestCase(TestCase, LogTestMixin):
             council_id="X01",
             identifiers=["X01"],
             geography__geography=None,
+        )
+        DataEventFactory(
+            council_id="X01",
+            event_type=DataEventType.IMPORT,
+            election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
         )
 
         for fixture in [
@@ -242,3 +256,56 @@ class WeDontknowViewTestCase(TestCase):
         )
         self.assertContains(response, "Foo Council")
         self.assertContains(response, "Bar Borough")
+
+
+class PollingStationCurrentTestCase(TestCase):
+    def setUp(self):
+        self.council = CouncilFactory()
+        self.station = PollingStationFactory(council=self.council)
+        self.uprn = UprnToCouncilFactory(
+            lad=self.council.geography.gss,
+            polling_station_id=self.station.internal_council_id,
+        )
+
+    def test_station_is_current_future_election(self):
+        DataEventFactory(
+            council=self.council,
+            event_type=DataEventType.IMPORT,
+            created=timezone.now() - datetime.timedelta(days=3),
+            election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
+        )
+        self.assertTrue(
+            polling_station_current(self.uprn.uprn.polling_station_with_elections)
+        )
+
+    def test_station_is_current_today_election(self):
+        DataEventFactory(
+            council=self.council,
+            event_type=DataEventType.IMPORT,
+            created=timezone.now() - datetime.timedelta(days=3),
+            election_dates=[timezone.now().date()],
+        )
+        self.assertTrue(
+            polling_station_current(self.uprn.uprn.polling_station_with_elections)
+        )
+
+    def test_station_is_not_current_past_election(self):
+        DataEventFactory(
+            council=self.council,
+            event_type=DataEventType.IMPORT,
+            created=timezone.now() - datetime.timedelta(days=3),
+            election_dates=[timezone.now().date() - datetime.timedelta(days=1)],
+        )
+        self.assertFalse(
+            polling_station_current(self.uprn.uprn.polling_station_with_elections)
+        )
+
+    def test_station_elections_are_strings_not_dates(self):
+        """This shouldn't happen because the db field on DataEvent is an array of dates"""
+        ps = PollingStation.objects.all().first()
+        ps.elections = ["foo"]
+        self.assertFalse(polling_station_current(ps))
+
+    def test_station_has_no_elections_attribute(self):
+        ps = PollingStation.objects.all().first()
+        self.assertFalse(polling_station_current(ps))

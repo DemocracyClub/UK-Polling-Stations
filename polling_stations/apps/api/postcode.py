@@ -6,7 +6,7 @@ from data_finder.helpers import (
     get_council,
 )
 from data_finder.helpers.every_election import EmptyEveryElectionWrapper
-from data_finder.views import LogLookUpMixin
+from data_finder.views import LogLookUpMixin, polling_station_current
 from django.core.exceptions import ObjectDoesNotExist
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
@@ -35,7 +35,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
 
     def generate_polling_station(self, routing_helper):
         if routing_helper.route_type == "single_address":
-            return routing_helper.addresses[0].polling_station
+            return routing_helper.addresses[0].polling_station_with_elections
         return None
 
     def generate_custom_finder(self, geocoder, postcode):
@@ -116,7 +116,10 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             ret["polling_station_known"] = False
             ret["polling_station"] = self.generate_polling_station(rh)
             if ret["polling_station"]:
-                ret["polling_station_known"] = True
+                if polling_station_current(ret["polling_station"]):
+                    ret["polling_station_known"] = True
+                else:
+                    ret["polling_station"] = None
             if ret["polling_station"] and not ret["council"]:
                 ret["council"] = ret["polling_station"].council
 

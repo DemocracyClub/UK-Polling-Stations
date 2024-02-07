@@ -27,6 +27,23 @@ from .helpers import (
 from .helpers.every_election import EmptyEveryElectionWrapper
 
 
+def polling_station_current(station):
+    """
+    Should pass in station object annotated with 'elections' - an array containing election dates.
+    """
+    if not station:
+        return False
+    if not getattr(station, "elections", None):
+        return False
+    try:
+        latest_election_date = max(station.elections)
+        if latest_election_date >= timezone.now().date():
+            return True
+    except TypeError:
+        return False
+    return False
+
+
 class LogLookUpMixin(object):
     def log_postcode(self, postcode, context, view_used):
         if view_used != "api":
@@ -143,6 +160,9 @@ class BasePollingStationView(
             )
         return None
 
+    def we_know_where_you_should_vote(self):
+        return polling_station_current(self.get_station())
+
     def get_context_data(self, **context):
         context["tile_layer"] = settings.TILE_LAYER
         context["mq_key"] = settings.MQ_KEY
@@ -177,7 +197,7 @@ class BasePollingStationView(
         context["council"] = self.council
         context["station"] = self.station
         context["directions"] = self.directions
-        context["we_know_where_you_should_vote"] = self.station
+        context["we_know_where_you_should_vote"] = self.we_know_where_you_should_vote()
         context["noindex"] = True
         context["territory"] = self.postcode.territory
         if not context["we_know_where_you_should_vote"]:
@@ -234,7 +254,9 @@ class PostcodeView(BasePollingStationView):
 
 class AddressView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
-        self.address = get_object_or_404(Address, uprn=self.kwargs["uprn"])
+        self.address = get_object_or_404(
+            Address.objects.select_related("uprntocouncil"), uprn=self.kwargs["uprn"]
+        )
         self.postcode = Postcode(self.address.postcode)
         context = self.get_context_data(**kwargs)
 
@@ -247,7 +269,7 @@ class AddressView(BasePollingStationView):
         return self.address.council
 
     def get_station(self):
-        return self.address.polling_station
+        return self.address.polling_station_with_elections
 
     def get_ee_wrapper(self, rh=None):
         return EveryElectionWrapper(point=self.address.location)
@@ -276,13 +298,15 @@ class ExamplePostcodeView(BasePollingStationView):
         return Council.objects.get(pk="BST")
 
     def get_station(self):
-        return PollingStation(
+        ps = PollingStation(
             internal_council_id="BREF",
             postcode="BS4 4NZ",
             address="St Peters Methodist Church\nAllison Road\nBrislington",
             location=Point(-2.5417780465622686, 51.440043287399604),
             council_id="BST",
         )
+        ps.elections = [timezone.now().date()]
+        return ps
 
     def get_context_data(self, **kwargs):
         self.postcode = Postcode(

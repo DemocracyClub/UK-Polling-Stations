@@ -1,7 +1,11 @@
+import datetime
 import os
 
 import pytest
+from data_importers.event_types import DataEventType
+from data_importers.tests.factories import DataEventFactory
 from django.core.management import call_command
+from django.utils import timezone
 
 from polling_stations.apps.councils.tests.factories import CouncilFactory
 
@@ -55,6 +59,16 @@ def setup_data():
             "electoral_services_address": "",
             "identifiers": ["N09000003"],
         }
+    )
+    DataEventFactory(
+        council_id="FOO",
+        event_type=DataEventType.IMPORT,
+        election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
+    )
+    DataEventFactory(
+        council_id="NWP",
+        event_type=DataEventType.IMPORT,
+        election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
     )
 
     with open(os.devnull, "w") as f:

@@ -6,7 +6,7 @@ from data_finder.helpers import (
     PostcodeError,
     geocode_point_only,
 )
-from data_finder.views import LogLookUpMixin
+from data_finder.views import LogLookUpMixin, polling_station_current
 from django.core.exceptions import ObjectDoesNotExist
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
@@ -179,8 +179,8 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         # An address might have an election but we might not know the polling station.
         if has_election and address.polling_station_id:
             # get polling station if there is an election in this area
-            polling_station = address.polling_station
-            if polling_station:
+            polling_station = address.polling_station_with_elections
+            if polling_station and polling_station_current(polling_station):
                 ret["polling_station"] = polling_station
                 ret["polling_station_known"] = True
 
