@@ -4,33 +4,26 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KIR"
     addresses_name = (
-        "2023-05-04/2023-02-23T07:24:43.333519/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-07T16:49:27.870935/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-02-23T07:24:43.333519/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-07T16:49:27.870935/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # Cleckheaton Methodist Church, Greenside Cleckheaton
-        if record.polling_place_id == "16365":
+        if record.polling_place_id == "17890":
             record = record._replace(polling_place_easting="")
             record = record._replace(polling_place_northing="")
 
         # Roberttown Community Centre - Entrance is on Church Rd
-        if record.polling_place_id == "16722":
+        if record.polling_place_id == "18240":
             record = record._replace(polling_place_easting="419480")
             record = record._replace(polling_place_northing="422649")
 
-        # Council Correction
-        if (
-            record.polling_place_id == "16504"
-        ):  # U.C.H.M (Former YMCA) ->The Tree of Life Centre
-            record = record._replace(
-                polling_place_name="The Tree of Life Centre (Formerly UCHM)",
-            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -45,12 +38,26 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "83124543",  # 153 LINFIT LANE, KIRKBURTON, HUDDERSFIELD
             "83170159",  # TOPPIT COTTAGE, BAGDEN LANE, CLAYTON WEST, HUDDERSFIELD
             "83190068",  # 5 MOOR TOP FARM, MOOR TOP LANE, FLOCKTON MOOR, WAKEFIELD
-            "83197513",  # 310 BOG GREEN LANE, HUDDERSFIELD
+            "83183588",  # 1 HARE PARK LANE, LIVERSEDGE
+            "83108387",  # GROVE LODGE, SHIRLEY VILLAS, RAWFOLDS, CLECKHEATON
+            "83146894",  # 15 PARK GATE, SKELMANTHORPE, HUDDERSFIELD
+            "83146906",  # THE BARN, PARK GATE, SKELMANTHORPE, HUDDERSFIELD
+            "83157946",  # HIGHBRIDGE LODGE, HIGHBRIDGE, SCISSETT, HUDDERSFIELD
+            "83189002",  # CAUSEWAY FOOT, OUTLANE, HUDDERSFIELD
+            "83234731",  # 2A SOUTHLANDS DRIVE, FIXBY, HUDDERSFIELD
         ]:
             return None
 
         if record.addressline6 in [
-            "HD9 7EH",
+            # split
+            "HD8 9ZD",
+            "HD5 8EE",
+            # suspect
+            "WF15 6JS",
+            "WF14 8EB",
+            "HD4 7BD",
+            "HD2 2NH",
+            "HD8 0LQ",
         ]:
             return None
 
