@@ -24,7 +24,7 @@ parameters:
 jobs:
   build_and_test:
     docker:
-      - image: cimg/python:3.10.8-browsers
+      - image: cimg/python:3.10.13-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
