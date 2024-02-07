@@ -1,15 +1,17 @@
 import datetime
 
-from addressbase.tests.factories import UprnToCouncilFactory
+from addressbase.models import Address
+from addressbase.tests.factories import AddressFactory, UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
-from data_finder.views import polling_station_current
+from data_finder.views import AddressView, polling_station_current
 from data_importers.event_types import DataEventType
 from data_importers.tests.factories import DataEventFactory
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.utils import timezone
-from pollingstations.models import PollingStation
+from pollingstations.models import PollingStation, VisibilityChoices
 from pollingstations.tests.factories import PollingStationFactory
+from uk_geo_utils.helpers import Postcode
 
 
 class LogTestMixin:
@@ -109,6 +111,84 @@ class PostCodeViewTestCase(TestCase, LogTestMixin):
         )
         self.assertEqual(302, response.status_code)
         self.assertEqual(response["Location"], "/address_select/DD11DD/?utm_source=foo")
+
+    def test_station_known(self):
+        response = self.client.get(
+            "/postcode/AA11AA/?utm_source=foo&something=other", follow=False
+        )
+        self.assertEqual(302, response.status_code)
+        self.assertEqual(response["Location"], "/address/100/?utm_source=foo")
+
+
+class AddressViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="X01",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+        DataEventFactory(
+            council_id="X01",
+            event_type=DataEventType.IMPORT,
+            election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
+        )
+        for fixture in [
+            "test_single_address_single_polling_station.json",
+            "test_single_address_blank_polling_station.json",
+        ]:
+            call_command(  # Hack to avoid converting all fixtures to factories
+                "loaddata",
+                fixture,
+                verbosity=0,
+            )
+
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_station_known_response(self):
+        response = self.client.get("/address/100/", follow=False)
+        self.assertEqual(200, response.status_code)
+
+    def test_get_station_station_known(self):
+        request = self.factory.get("/address/100/")
+        view = AddressView()
+        view.setup(request)
+        view.address = Address.objects.select_related("uprntocouncil").get(uprn="100")
+        view.postcode = Postcode("AA11AA")
+        context = view.get_context_data()
+        self.assertTrue(context["we_know_where_you_should_vote"])
+        self.assertEqual(context["station"].internal_council_id, "1A")
+
+    def test_get_station_station_unknown(self):
+        request = self.factory.get("/address/101/")
+        view = AddressView()
+        view.setup(request)
+        view.address = Address.objects.select_related("uprntocouncil").get(uprn="101")
+        view.postcode = Postcode("BB11BB")
+        context = view.get_context_data()
+        self.assertFalse(context["we_know_where_you_should_vote"])
+        self.assertIsNone(context["station"])
+
+    def test_get_station_station_known_unpublished(self):
+        PollingStationFactory(
+            council_id="X01",
+            internal_council_id="BAD",
+            visibility=VisibilityChoices.UNPUBLISHED,
+        )
+        address = AddressFactory(uprn="1234", postcode="TE1 1ST")
+        UprnToCouncilFactory(
+            uprn=address,
+            lad="X01",
+        )
+        request = self.factory.get("/address/1234/")
+        view = AddressView()
+        view.setup(request)
+        view.address = Address.objects.select_related("uprntocouncil").get(uprn="1234")
+        view.postcode = Postcode("TE11ST")
+        context = view.get_context_data()
+        self.assertFalse(context["we_know_where_you_should_vote"])
+        self.assertIsNone(context["station"])
 
 
 class PostCodeViewNoStationTestCase(TestCase, LogTestMixin):
@@ -275,7 +355,7 @@ class PollingStationCurrentTestCase(TestCase):
             election_dates=[timezone.now().date() + datetime.timedelta(days=1)],
         )
         self.assertTrue(
-            polling_station_current(self.uprn.uprn.polling_station_with_elections)
+            polling_station_current(self.uprn.uprn.polling_station_with_elections())
         )
 
     def test_station_is_current_today_election(self):
@@ -286,7 +366,7 @@ class PollingStationCurrentTestCase(TestCase):
             election_dates=[timezone.now().date()],
         )
         self.assertTrue(
-            polling_station_current(self.uprn.uprn.polling_station_with_elections)
+            polling_station_current(self.uprn.uprn.polling_station_with_elections())
         )
 
     def test_station_is_not_current_past_election(self):
@@ -297,7 +377,7 @@ class PollingStationCurrentTestCase(TestCase):
             election_dates=[timezone.now().date() - datetime.timedelta(days=1)],
         )
         self.assertFalse(
-            polling_station_current(self.uprn.uprn.polling_station_with_elections)
+            polling_station_current(self.uprn.uprn.polling_station_with_elections())
         )
 
     def test_station_elections_are_strings_not_dates(self):
