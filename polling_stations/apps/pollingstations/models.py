@@ -35,6 +35,13 @@ class PollingDistrict(models.Model):
         return "%s (%s)" % (name, self.council)
 
 
+class VisibilityChoices(models.TextChoices):
+    # Visible on website and in API.
+    PUBLISHED = "PUBLISHED", "Published"
+    # Only visible to upload user and admin. I.e. not on website or API.
+    UNPUBLISHED = "UNPUBLISHED", "Unpublished"
+
+
 class PollingStation(models.Model):
     council = models.ForeignKey(
         Council, null=True, db_index=True, on_delete=models.CASCADE
@@ -46,6 +53,9 @@ class PollingStation(models.Model):
     # This is NOT a FK, as we might not have the polling district at
     # the point of import
     polling_district_id = models.CharField(blank=True, max_length=255)
+    visibility = models.CharField(
+        choices=VisibilityChoices.choices, default=VisibilityChoices.PUBLISHED
+    )
 
     class Meta:
         unique_together = ("council", "internal_council_id")
