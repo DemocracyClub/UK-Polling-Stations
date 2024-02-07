@@ -384,6 +384,8 @@ if os.environ.get("DC_ENVIRONMENT"):
         }
     }
 
+DEBUG_TOOLBAR = False
+
 # import application constants
 from .constants.councils import *  # noqa
 from .constants.db import *  # noqa
@@ -407,6 +409,9 @@ except ImportError:
 
 if not os.environ.get("DC_ENVIRONMENT"):
     INSTALLED_APPS += ("dashboard",)
+    if DEBUG_TOOLBAR:
+        INSTALLED_APPS += ("debug_toolbar",)
+        MIDDLEWARE = ("debug_toolbar.middleware.DebugToolbarMiddleware",) + MIDDLEWARE
 
 if os.environ.get("CIRCLECI"):
     from .ci import *  # noqa

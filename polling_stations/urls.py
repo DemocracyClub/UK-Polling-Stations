@@ -97,6 +97,11 @@ if getattr(settings, "ENABLE_API_DOCS", False):
         ),
     ]
 
+if "debug_toolbar" in settings.INSTALLED_APPS:
+    extra_patterns.append(
+        path("__debug__/", include("debug_toolbar.urls")),
+    )
+
 PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:
     extra_patterns += [re_path(r"^%s/" % EMBED, include("whitelabel.urls"))]
