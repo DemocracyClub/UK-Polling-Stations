@@ -25,6 +25,7 @@ from django.views.generic import DetailView, FormView, ListView, TemplateView
 from file_uploads.forms import CouncilLoginForm
 from marshmallow import Schema, fields, validate
 from marshmallow import ValidationError as MarshmallowValidationError
+from pollingstations.models import VisibilityChoices
 from sentry_sdk import capture_message
 from sesame.utils import get_query_string, get_user
 
@@ -260,7 +261,6 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
         station_to_example_uprn_map = get_station_to_example_uprn_map(
             council_from_default_db
         )
-
         for station in council_from_default_db.pollingstation_set.all():
             context["STATIONS"].append(
                 {
@@ -273,8 +273,11 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                     "example_postcode": station_to_example_uprn_map.get(
                         station.internal_council_id
                     )["postcode"],
+                    "visibility": VisibilityChoices[station.visibility].label,
+                    "pk": station.id,
                 }
             )
+        context["STATIONS"].sort(key=lambda d: d["address"])
         context["live_upload"] = council.live_upload
         context["events"] = council.dataevent_set.all().order_by("-created")
         return context
