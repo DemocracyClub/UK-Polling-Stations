@@ -162,7 +162,23 @@
                     {% for station in STATIONS %}
                         {% if station.example_uprn %}
                             <tr>
-                                <td>{{ station.address }}</td>
+                                <td>
+                                    {% if user.is_superuser %}
+                                        <a href="{% url "admin:pollingstations_pollingstation_change" object_id=station.pk %}">
+                                            {{ station.address }}
+                                        </a>
+                                    {% else %}
+                                        {{ station.address }}
+                                    {% endif %}
+                                    <br>
+                                    <small><cite>
+                                        {%  if station.visibility == 'Unpublished' %}
+                                            <b>⚠️ {{ station.visibility }}</b>
+                                        {% else %}
+                                            {{ station.visibility }}
+                                        {% endif %}
+                                    </cite></small>
+                                </td>
                                 <td>{{ station.postcode }}</td>
                                 <td>{{ station.location }} </td>
                                 <td>
