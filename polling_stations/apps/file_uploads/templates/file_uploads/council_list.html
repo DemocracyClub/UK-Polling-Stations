@@ -45,7 +45,7 @@
                     <td>
                         {{ council.upload_set.future.latest.status_emoji }}
                     </td>
-                    {% if council.council_id in COUNCILS_WITH_STATIONS  %}
+                    {% if council in COUNCILS_WITH_STATIONS  %}
                         <td>✔️</td>
                     {% else %}
                         <td>❌</td>
