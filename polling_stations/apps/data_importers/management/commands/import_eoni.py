@@ -1,4 +1,5 @@
 import csv
+import datetime
 from pathlib import Path
 
 from addressbase.models import Address, UprnToCouncil
@@ -6,6 +7,8 @@ from councils.models import Council
 from data_importers.base_importers import BaseStationsImporter, CsvMixin
 from data_importers.data_types import StationSet
 from data_importers.event_helpers import record_teardown_event
+from data_importers.event_types import DataEventType
+from data_importers.models import DataEvent
 from django.contrib.gis.geos import Point
 from django.db import connections, transaction
 from pollingstations.models import CustomFinder, PollingStation
@@ -72,6 +75,21 @@ class Command(BaseStationsImporter, CsvMixin):
         super().handle(*args, **options)
         if options.get("cleanup"):
             [path.unlink() for path in self.paths.values() if path.exists()]
+
+    def record_import_event(self):
+        election_dates = []
+        if hasattr(self, "elections"):
+            election_dates = [
+                datetime.datetime.strptime(date_string, "%Y-%m-%d")
+                for date_string in self.elections
+            ]
+        for council_id in NIR_IDS:
+            DataEvent.objects.create(
+                council=self.get_council(council_id),
+                upload=self.get_upload(),
+                event_type=DataEventType.IMPORT,
+                election_dates=election_dates,
+            )
 
     def teardown(self, council):
         # Only remove old polling stations, as the UPRN to Council table
