@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from commitment import GitHubClient, GitHubCredentials
-from councils.models import Council
 from data_importers.import_script import ImportScript
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -41,7 +40,7 @@ class UploadQuerySet(models.QuerySet):
 
 class Upload(models.Model):
     gss = models.ForeignKey(
-        Council,
+        "councils.Council",
         null=True,
         db_constraint=False,
         on_delete=models.DO_NOTHING,

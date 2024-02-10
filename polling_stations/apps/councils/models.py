@@ -7,8 +7,9 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import Count, JSONField
+from django.db.models import Count, JSONField, OuterRef, Subquery
 from django.utils.translation import get_language
+from file_uploads.models import File, Upload
 
 from polling_stations.i18n.cy import WelshNameMutationMixin
 
@@ -19,6 +20,21 @@ class CouncilQueryset(models.QuerySet):
             self.using(DEFAULT_DB_ALIAS)
             .annotate(ps_count=Count("pollingstation"))
             .exclude(pollingstation=None)
+        )
+
+    def with_ems_from_uploads(self):
+        latest_ems_subquery = (
+            File.objects.filter(upload=OuterRef("pk")).values("ems").distinct("ems")
+        )
+        upload_subquery = (
+            Upload.objects.filter(gss=OuterRef("council_id"))
+            .annotate(ems=latest_ems_subquery)
+            .order_by("-timestamp")
+        )
+
+        return self.using(DEFAULT_DB_ALIAS).annotate(
+            latest_ems=Subquery(upload_subquery.values("ems")[:1]),
+            latest_upload_id=(upload_subquery.values("id")[:1]),
         )
 
 
