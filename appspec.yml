@@ -82,6 +82,9 @@ hooks:
     - location: deploy/hooks/afterinstall/write_envfile.py
       timeout: 300
       runas: polling_stations
+    - location: deploy/hooks/afterinstall/write_global_sentry_dsn.py
+      timeout: 300
+      runas: root
     - location: deploy/hooks/afterinstall/system_files.sh
       timeout: 300
       runas: root
@@ -106,6 +109,9 @@ hooks:
     - location: deploy/hooks/afterinstall/ee_init_db.sh
       timeout: 300
       runas: polling_stations
+    - location: deploy/hooks/afterinstall/restart_ee.sh
+      timeout: 300
+      runas: root
     - location: deploy/hooks/afterinstall/touchclean.sh
       timeout: 300
       runas: polling_stations
