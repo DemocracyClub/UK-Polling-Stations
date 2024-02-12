@@ -13,6 +13,7 @@ class DataEvent(TimeStampedModel):
     event_type = models.CharField(choices=DataEventType.choices)
     election_dates = ArrayField(models.DateField(), default=list)
     metadata = models.JSONField(default=dict)
+    payload = models.JSONField(default=dict)
 
 
 class DataQuality(models.Model):
