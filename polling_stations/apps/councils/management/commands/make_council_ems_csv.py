@@ -92,7 +92,7 @@ class Command(BaseCommand):
                 row_dict["EMS"] = get_ems_from_import_script(council)
                 row_dict["EMS Source"] = f"import script ({timezone.now().date()})"
             data.append(row_dict)
-            if not row_dict["ems"]:
+            if not row_dict["EMS"]:
                 self.stdout.write(
                     f"No EMS found for {council.name} ({council.council_id})"
                 )
