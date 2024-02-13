@@ -1,22 +1,21 @@
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseXpressWebLookupCsvImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseXpressWebLookupCsvImporter):
     council_id = "HAO"
-    addresses_name = "2023-05-04/2023-04-13T08:40:37.550756/Democracy_Club__04May2023 Harborough DC 31UD.tsv"
-    stations_name = "2023-05-04/2023-04-13T08:40:37.550756/Democracy_Club__04May2023 Harborough DC 31UD.tsv"
-    elections = ["2023-05-04"]
+    addresses_name = "2024-05-02/2024-02-13T10:54:19.565887/PropertyPostCodePollingStationWebLookup-2024-02-13.TSV"
+    stations_name = "2024-05-02/2024-02-13T10:54:19.565887/PropertyPostCodePollingStationWebLookup-2024-02-13.TSV"
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
+            "10094812143",  # 5 LEAS CLOSE, ULLESTHORPE, LUTTERWORTH
             "200001042689",  # THE WELL HOUSE, LUTTERWORTH ROAD, DUNTON BASSETT, LUTTERWORTH
             "200001043348",  # TURNERS BARN FARM, KIBWORTH ROAD, THREE GATES, BILLESDON, LEICESTER
-            "10093551160",  # 1D OAKHAM ROAD, TILTON ON THE HILL, LEICESTER
             "10002645475",  # 11 HARBOROUGH ROAD, BILLESDON, LEICESTER
-            "200003741786",  # NEWTON GRANGE, TILTON LANE, BILLESDON, LEICESTER
             "200003738208",  # LAUNDE ABBEY, LAUNDE ROAD, LAUNDE, LEICESTER
             "200003741962",  # WILD MEADOW FARM, BOWDEN LANE, WELHAM, MARKET HARBOROUGH
             "10094809283",  # 119 HARVEST ROAD, MARKET HARBOROUGH
@@ -30,12 +29,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
 
-        if record.addressline6 in [
+        if record.postcode in [
             # split
             "LE8 0JX",
+            "LE17 5LE",
             "LE16 9PZ",
             "LE17 6AX",
-            "LE17 5LE",
         ]:
             return None
 
@@ -44,12 +43,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # Kibworth Grammar School Hall - Lounge, School Road, Kibworth Beauchamp, Leicestershire, LE8 OEW
         # Postcode mistype, should be a number "0" instead of letter "O"
-        if record.polling_place_id == "6240":
-            record = record._replace(polling_place_postcode="LE8 0EW")
+        if record.pollingplaceid in ["7348", "7596"]:
+            record = record._replace(pollingplaceaddress7="LE8 0EW")
 
         # Billesdon Coplow Centre, Uppingham Road, Billesdon, Leicester, LE7 9ER
         # Proposed postcode correction: LE7 9FL
-        if record.polling_place_id == "6139":
-            record = record._replace(polling_place_postcode="")
+        if record.pollingplaceid == "7501":
+            record = record._replace(pollingplaceaddress7="")
 
         return super().station_record_to_dict(record)
