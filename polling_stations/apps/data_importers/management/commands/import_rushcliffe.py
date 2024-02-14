@@ -3,30 +3,42 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RUS"
-    addresses_name = "2023-05-04/2023-03-17T17:04:03.550393/Democracy_Club__04May2023_Rushcliffe BC.CSV"
-    stations_name = "2023-05-04/2023-03-17T17:04:03.550393/Democracy_Club__04May2023_Rushcliffe BC.CSV"
-    elections = ["2023-05-04"]
+    addresses_name = (
+        "2024-05-02/2024-02-14T11:48:41.864356/Democracy_Club__02May2024.CSV"
+    )
+    stations_name = (
+        "2024-05-02/2024-02-14T11:48:41.864356/Democracy_Club__02May2024.CSV"
+    )
+    elections = ["2024-05-02"]
 
     def station_record_to_dict(self, record):
         # Bingham Methodist Centre, Union Street, Bingham, Nottingham
-        if record.polling_place_id == "6000":
+        if record.polling_place_id == "6285":
             record = record._replace(polling_place_easting="470360")
 
         # Edwalton Church Hall, Vicarage Green, Edwalton
-        if record.polling_place_id == "5924":
+        if record.polling_place_id == "6145":
             record = record._replace(polling_place_easting="459770")
 
         # West Bridgford Baptist Church, Melton Road, West Bridgford
-        if record.polling_place_id == "5846":
+        if record.polling_place_id == "6290":
             record = record._replace(polling_place_easting="458380")
 
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "3040046674"  # WATERS EDGE, ZOUCH FARM, MAIN STREET, ZOUCH, LOUGHBOROUGH
+        ]:
+            return None
+
         if record.addressline6 in [
             # split
-            "NG2 5JT",
             "NG13 8GP",
+            "NG2 5JT",
+            "NG13 8DT",
         ]:
             return None
 
