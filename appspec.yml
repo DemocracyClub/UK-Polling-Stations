@@ -82,7 +82,7 @@ hooks:
     - location: deploy/hooks/afterinstall/write_envfile.py
       timeout: 300
       runas: polling_stations
-    - location: deploy/hooks/afterinstall/write_global_sentry_dsn.py
+    - location: deploy/hooks/afterinstall/write_global_env_vars.py
       timeout: 300
       runas: root
     - location: deploy/hooks/afterinstall/system_files.sh
