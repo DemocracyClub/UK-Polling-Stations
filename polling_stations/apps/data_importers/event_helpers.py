@@ -15,6 +15,27 @@ def record_teardown_event(council_id):
     )
 
 
+def record_set_station_visibility_event(station, visibility_choice, metadata=None):
+    if metadata is None:
+        metadata = {}
+    council = station.council
+    last_import = council.latest_data_event(DataEventType.IMPORT)
+    election_dates = last_import.election_dates
+    upload = council.live_upload
+    DataEvent.objects.create(
+        council=council,
+        event_type=DataEventType.SET_STATION_VISIBILITY,
+        upload=upload,
+        election_dates=election_dates,
+        payload={
+            "internal_council_id": station.internal_council_id,
+            "visibility": visibility_choice,
+            "payload_version": 1,
+        },
+        metadata=metadata,
+    )
+
+
 def set_station_visibility(event):
     payload = event.payload
     if not (visibility := payload.get("visibility", None)):
