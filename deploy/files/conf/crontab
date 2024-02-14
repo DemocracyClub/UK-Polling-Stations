@@ -5,4 +5,4 @@ MAILTO=developers@democracyclub.org.uk
 # Import councils from EC hourly
 1 * * * * /usr/bin/manage-py-command import_councils --only-contact-details --database default
 # Sync elections from EE
-0 3 * * * ee-manage-py-command sync_elections
+*/5 * * * * ee-manage-py-command sync_elections
