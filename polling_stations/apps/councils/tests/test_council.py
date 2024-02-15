@@ -3,7 +3,7 @@ import datetime
 from councils.models import Council
 from councils.tests.factories import CouncilFactory
 from data_importers.event_types import DataEventType
-from data_importers.models import DataEvent
+from data_importers.models import DataEvent, DataQuality
 from data_importers.tests.factories import DataEventFactory
 from django.test import TestCase
 from django.utils import timezone
@@ -123,3 +123,14 @@ class CouncilTest(TestCase):
         )
         PollingStationFactory(council=just_teardown_council)
         self.assertIsNone(just_teardown_council.live_upload)
+
+    def test_dataquality_report_created_on_council_creation(self):
+        with self.assertRaises(DataQuality.DoesNotExist):
+            DataQuality.objects.get(council_id="XYZ")
+        council = CouncilFactory(council_id="XYZ")
+        self.assertEqual(DataQuality.objects.get(council_id="XYZ").num_addresses, 0)
+        DataQuality.objects.filter(council_id="XYZ").update(num_addresses=10)
+        council.name = "changed"
+        council.save()
+        self.assertEqual(1, len(DataQuality.objects.filter(council_id="XYZ")))
+        self.assertEqual(DataQuality.objects.get(council_id="XYZ").num_addresses, 10)

@@ -2,11 +2,12 @@ import re
 from pathlib import Path
 
 from data_importers.event_types import DataEventType
+from data_importers.models import DataQuality
 from django.apps import apps
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.db import DEFAULT_DB_ALIAS
+from django.db import DEFAULT_DB_ALIAS, transaction
 from django.db.models import Count, JSONField, OuterRef, Subquery
 from django.utils.translation import get_language
 from file_uploads.models import File, Upload
@@ -74,6 +75,21 @@ class Council(WelshNameMutationMixin, models.Model):
 
     class Meta:
         ordering = ("name",)
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        with transaction.atomic():
+            new = self._state.adding
+            super().save(
+                force_insert=force_insert,
+                force_update=force_update,
+                using=using,
+                update_fields=update_fields,
+            )
+            if new:
+                # model has just been created, so create corresponding DataQuality object.
+                DataQuality.objects.get_or_create(council_id=self.council_id)
 
     @property
     def nation(self):
