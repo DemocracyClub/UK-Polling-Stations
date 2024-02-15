@@ -1,32 +1,36 @@
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TUN"
-    elections = ["2023-05-04"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-TunbridgeWells"
-    geom_type = "geojson"
+    addresses_name = (
+        "2024-05-02/2024-02-15T10:01:51.457411/Democracy_Club__02May2024 (1).tsv"
+    )
+    stations_name = (
+        "2024-05-02/2024-02-15T10:01:51.457411/Democracy_Club__02May2024 (1).tsv"
+    )
+    elections = ["2024-05-02"]
+    csv_delimiter = "\t"
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-        return {
-            "internal_council_id": record["Letter"],
-            "name": record["Polling_Di"],
-            "area": poly,
-            "polling_station_id": record["Letter"],
-        }
+        if uprn in [
+            "100062544084",  # COURTYARD FLAT, COLEBROOKE, PEMBURY ROAD, TONBRIDGE
+            "100062543933",  # COLEBROOKE HOUSE, PEMBURY ROAD, TONBRIDGE
+            "100061193913",  # HUNTERS LODGE, PEMBURY ROAD, TONBRIDGE
+        ]:
+            return None
 
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
+        if record.addressline6 in [
+            # split
+            "TN2 5FT",
+            "TN4 0AB",
+            "TN3 0HX",
+            # suspect
+            "TN11 0PG",
+            "TN18 5AH",
+        ]:
+            return None
 
-        return {
-            "internal_council_id": record["Polling_le"],
-            "address": record["ADDRESS"],
-            "postcode": "",
-            "location": location,
-        }
+        return super().address_record_to_dict(record)
