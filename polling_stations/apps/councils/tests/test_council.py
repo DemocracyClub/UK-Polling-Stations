@@ -8,6 +8,7 @@ from data_importers.tests.factories import DataEventFactory
 from django.test import TestCase
 from django.utils import timezone
 from file_uploads.tests.factories import UploadFactory
+from pollingstations.models import PollingStation, VisibilityChoices
 from pollingstations.tests.factories import PollingStationFactory
 
 
@@ -134,3 +135,235 @@ class CouncilTest(TestCase):
         council.save()
         self.assertEqual(1, len(DataQuality.objects.filter(council_id="XYZ")))
         self.assertEqual(DataQuality.objects.get(council_id="XYZ").num_addresses, 10)
+
+    def test_update_station_visibility_from_events_unpublished_no_election_dates(self):
+        council = CouncilFactory()
+        for i, event_type in enumerate([DataEventType.TEARDOWN, DataEventType.IMPORT]):
+            DataEventFactory(
+                council=council,
+                event_type=event_type,
+            )
+        ps = PollingStationFactory(
+            council=council, visibility=VisibilityChoices.PUBLISHED
+        )
+        for visibility_status in [
+            VisibilityChoices.UNPUBLISHED,
+            VisibilityChoices.PUBLISHED,
+            VisibilityChoices.UNPUBLISHED,
+        ]:
+            DataEventFactory(
+                council=council,
+                event_type=DataEventType.SET_STATION_VISIBILITY,
+                payload={
+                    "internal_council_id": ps.internal_council_id,
+                    "visibility": visibility_status,
+                    "payload_version": 1,
+                },
+            )
+
+        council.update_station_visibility_from_events(ps)
+        ps.refresh_from_db()
+        self.assertEqual(ps.visibility, VisibilityChoices.UNPUBLISHED)
+
+    def test_update_station_visibility_from_events_published_no_election_dates(self):
+        council = CouncilFactory()
+
+        ps = PollingStationFactory(
+            council=council, visibility=VisibilityChoices.PUBLISHED
+        )
+        for visibility_status in [
+            VisibilityChoices.UNPUBLISHED,
+            VisibilityChoices.PUBLISHED,
+        ]:
+            DataEventFactory(
+                council=council,
+                event_type=DataEventType.SET_STATION_VISIBILITY,
+                payload={
+                    "internal_council_id": ps.internal_council_id,
+                    "visibility": visibility_status,
+                    "payload_version": 1,
+                },
+            )
+        council.update_station_visibility_from_events(ps)
+        ps.refresh_from_db()
+        self.assertEqual(ps.visibility, VisibilityChoices.PUBLISHED)
+
+    def test_update_station_visibility_from_events_unpublished_election_date(self):
+        """
+        Station is created with unpublished and published event from 2023-05-04, and an unpublish event from 2024-05-02
+        Method called with 2024 date
+        Should be unpublished
+        """
+        council = CouncilFactory()
+        for i, event_type in enumerate([DataEventType.TEARDOWN, DataEventType.IMPORT]):
+            DataEventFactory(
+                council=council,
+                event_type=event_type,
+            )
+        ps = PollingStationFactory(
+            council=council, visibility=VisibilityChoices.PUBLISHED
+        )
+        for visibility_status, date in [
+            (VisibilityChoices.UNPUBLISHED, "2023-05-04"),
+            (VisibilityChoices.PUBLISHED, "2023-05-04"),
+            (VisibilityChoices.UNPUBLISHED, "2024-05-02"),
+        ]:
+            DataEventFactory(
+                council=council,
+                event_type=DataEventType.SET_STATION_VISIBILITY,
+                election_dates=[date],
+                payload={
+                    "internal_council_id": ps.internal_council_id,
+                    "visibility": visibility_status,
+                    "payload_version": 1,
+                },
+            )
+
+        council.update_station_visibility_from_events(ps, election_dates=["2024-05-02"])
+        ps.refresh_from_db()
+        self.assertEqual(ps.visibility, VisibilityChoices.UNPUBLISHED)
+
+    def test_update_station_visibility_from_events_not_unpublished_election_date(self):
+        """
+        Station is created with unpublished and published event from 2023-05-04, and an unpublish event from 2024-05-02
+        Method called with 2023 date
+        Should be published
+        """
+        council = CouncilFactory()
+        for i, event_type in enumerate([DataEventType.TEARDOWN, DataEventType.IMPORT]):
+            DataEventFactory(
+                council=council,
+                event_type=event_type,
+            )
+        ps = PollingStationFactory(
+            council=council, visibility=VisibilityChoices.PUBLISHED
+        )
+        for visibility_status, date in [
+            (VisibilityChoices.UNPUBLISHED, "2023-05-04"),
+            (VisibilityChoices.PUBLISHED, "2023-05-04"),
+            (VisibilityChoices.UNPUBLISHED, "2024-05-02"),
+        ]:
+            DataEventFactory(
+                council=council,
+                event_type=DataEventType.SET_STATION_VISIBILITY,
+                election_dates=[date],
+                payload={
+                    "internal_council_id": ps.internal_council_id,
+                    "visibility": visibility_status,
+                    "payload_version": 1,
+                },
+            )
+
+        council.update_station_visibility_from_events(ps, election_dates=["2023-05-04"])
+        ps.refresh_from_db()
+        self.assertEqual(ps.visibility, VisibilityChoices.PUBLISHED)
+
+    def test_update_station_visibility_from_events_not_unpublished_future_election_date(
+        self,
+    ):
+        """
+        Station is created with unpublished and published event from 2023-05-04, and an unpublish event from 2024-05-02
+        Method called with 2025 date
+        Should be published
+        """
+        council = CouncilFactory()
+        for i, event_type in enumerate([DataEventType.TEARDOWN, DataEventType.IMPORT]):
+            DataEventFactory(
+                council=council,
+                event_type=event_type,
+            )
+        ps = PollingStationFactory(
+            council=council, visibility=VisibilityChoices.PUBLISHED
+        )
+        for visibility_status, date in [
+            (VisibilityChoices.UNPUBLISHED, "2023-05-04"),
+            (VisibilityChoices.PUBLISHED, "2023-05-04"),
+            (VisibilityChoices.UNPUBLISHED, "2024-05-02"),
+        ]:
+            DataEventFactory(
+                council=council,
+                event_type=DataEventType.SET_STATION_VISIBILITY,
+                election_dates=[date],
+                payload={
+                    "internal_council_id": ps.internal_council_id,
+                    "visibility": visibility_status,
+                    "payload_version": 1,
+                },
+            )
+
+        council.update_station_visibility_from_events(ps, election_dates=["2025-05-01"])
+        ps.refresh_from_db()
+        self.assertEqual(ps.visibility, VisibilityChoices.PUBLISHED)
+
+    def test_update_station_visibility_from_events_unpublished_election_dates(
+        self,
+    ):
+        """
+        DataEvent and Station both have list of dates with intersect
+        """
+        council = CouncilFactory()
+        for i, event_type in enumerate([DataEventType.TEARDOWN, DataEventType.IMPORT]):
+            DataEventFactory(
+                council=council,
+                event_type=event_type,
+            )
+        ps = PollingStationFactory(
+            council=council, visibility=VisibilityChoices.PUBLISHED
+        )
+
+        DataEventFactory(
+            council=council,
+            event_type=DataEventType.SET_STATION_VISIBILITY,
+            election_dates=["2024-05-15", "2024-05-02"],
+            payload={
+                "internal_council_id": ps.internal_council_id,
+                "visibility": VisibilityChoices.UNPUBLISHED,
+                "payload_version": 1,
+            },
+        )
+
+        council.update_station_visibility_from_events(
+            ps,
+            election_dates=["2024-05-02", "2024-06-06"],
+        )
+        ps.refresh_from_db()
+        self.assertEqual(ps.visibility, VisibilityChoices.UNPUBLISHED)
+
+    def test_update_all_station_visibilities_from_events(self):
+        council = CouncilFactory()
+        for i, event_type in enumerate([DataEventType.TEARDOWN, DataEventType.IMPORT]):
+            DataEventFactory(
+                council=council,
+                event_type=event_type,
+            )
+        PollingStationFactory.create_batch(
+            4, council=council, visibility=VisibilityChoices.PUBLISHED
+        )
+        for station in PollingStation.objects.filter(council=council)[:3]:
+            DataEventFactory(
+                council=council,
+                event_type=DataEventType.SET_STATION_VISIBILITY,
+                payload={
+                    "internal_council_id": station.internal_council_id,
+                    "visibility": VisibilityChoices.UNPUBLISHED,
+                    "payload_version": 1,
+                },
+            )
+
+        self.assertEqual(
+            len(
+                PollingStation.objects.filter(
+                    council=council, visibility=VisibilityChoices.UNPUBLISHED
+                )
+            ),
+            0,
+        )
+        council.update_all_station_visibilities_from_events()
+        self.assertEqual(
+            len(
+                PollingStation.objects.filter(
+                    council=council, visibility=VisibilityChoices.UNPUBLISHED
+                )
+            ),
+            3,
+        )

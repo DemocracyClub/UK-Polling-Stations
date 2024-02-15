@@ -1,14 +1,15 @@
 import re
 from pathlib import Path
+from typing import Optional
 
 from data_importers.event_types import DataEventType
-from data_importers.models import DataQuality
+from data_importers.models import DataEvent, DataQuality
 from django.apps import apps
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.db import DEFAULT_DB_ALIAS, transaction
-from django.db.models import Count, JSONField, OuterRef, Subquery
+from django.db.models import Count, JSONField, OuterRef, Q, Subquery
 from django.utils.translation import get_language
 from file_uploads.models import File, Upload
 
@@ -203,6 +204,33 @@ class Council(WelshNameMutationMixin, models.Model):
         if latest_import and not latest_teardown and latest_import.upload:
             return latest_import.upload
         return None
+
+    def update_all_station_visibilities_from_events(
+        self, election_dates: Optional[list] = None
+    ):
+        for station in self.pollingstation_set.all():
+            self.update_station_visibility_from_events(station, election_dates)
+
+    def update_station_visibility_from_events(self, station, election_dates=None):
+        query = Q(
+            council=self,
+            event_type=DataEventType.SET_STATION_VISIBILITY,
+            payload__internal_council_id=station.internal_council_id,
+        )
+        if election_dates:
+            election_query = Q(election_dates__contains=[election_dates[0]])
+            for date in election_dates[1:]:
+                election_query |= Q(election_dates__contains=[date])
+            query &= election_query
+        try:
+            latest_visibility_event_for_station = DataEvent.objects.filter(
+                query
+            ).latest()
+            visibility = latest_visibility_event_for_station.payload["visibility"]
+            station.visibility = visibility
+            station.save()
+        except DataEvent.DoesNotExist:
+            pass
 
 
 class CouncilGeography(models.Model):
