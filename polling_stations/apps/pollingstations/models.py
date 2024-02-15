@@ -6,7 +6,6 @@ from datetime import datetime
 from itertools import groupby
 
 from core.opening_times import OpeningTimes
-from councils.models import Council
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import JSONField
@@ -17,7 +16,7 @@ from uk_geo_utils.helpers import Postcode
 
 class PollingDistrict(models.Model):
     name = models.CharField(blank=True, null=True, max_length=255)
-    council = models.ForeignKey(Council, null=True, on_delete=models.CASCADE)
+    council = models.ForeignKey("councils.Council", null=True, on_delete=models.CASCADE)
     internal_council_id = models.CharField(blank=True, max_length=100)
     extra_id = models.CharField(blank=True, null=True, max_length=100)
     area = models.MultiPolygonField(null=True, blank=True)
@@ -44,7 +43,7 @@ class VisibilityChoices(models.TextChoices):
 
 class PollingStation(models.Model):
     council = models.ForeignKey(
-        Council, null=True, db_index=True, on_delete=models.CASCADE
+        "councils.Council", null=True, db_index=True, on_delete=models.CASCADE
     )
     internal_council_id = models.CharField(blank=True, max_length=100, db_index=True)
     postcode = models.CharField(blank=True, null=True, max_length=100)
@@ -167,7 +166,7 @@ class AdvanceVotingStation(models.Model):
     address = models.TextField(blank=True, null=True)
     location = models.PointField(null=True, blank=True)
     opening_times = JSONField(null=True)
-    council = models.ForeignKey(Council, null=True, on_delete=models.CASCADE)
+    council = models.ForeignKey("councils.Council", null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name} ({self.postcode})"

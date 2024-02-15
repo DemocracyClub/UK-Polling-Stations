@@ -1,8 +1,8 @@
 import abc
 
+from councils.models import Council
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from pollingstations.models import Council
 from uk_geo_utils.geocoders import (
     AddressBaseGeocoder,
     CodesNotFoundException,
