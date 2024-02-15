@@ -80,6 +80,16 @@ class CsvHelperTests(TestCase):
         self.assertEqual("windows-1252", report["csv_encoding"])
         self.assertEqual("Xpress DC", report["ems"])
 
+    def test_valid_utf_16le(self):
+        report = get_csv_report(
+            get_fixture("democracy-counts-utf-16le.csv", "text/tab-separated-values"),
+            "democracy-counts-utf-16le.csv",
+        )
+        self.assertTrue(report["csv_valid"])
+        self.assertEqual(35, report["csv_rows"])
+        self.assertEqual("utf-16le", report["csv_encoding"])
+        self.assertEqual("Democracy Counts", report["ems"])
+
     def test_edgecase_csv_with_tsv_ext(self):
         report = get_csv_report(
             get_fixture("ext-csv-with-tsv-ext.tsv", "text/tab-separated-values"),
