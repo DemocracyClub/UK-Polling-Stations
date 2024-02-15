@@ -12,6 +12,7 @@ from django.db import DEFAULT_DB_ALIAS, transaction
 from django.db.models import Count, JSONField, OuterRef, Q, Subquery
 from django.utils.translation import get_language
 from file_uploads.models import File, Upload
+from pollingstations.models import PollingStation
 
 from polling_stations.i18n.cy import WelshNameMutationMixin
 
@@ -181,7 +182,7 @@ class Council(WelshNameMutationMixin, models.Model):
             return True
         return False
 
-    def latest_data_event(self, event_type):
+    def latest_data_event(self, event_type: DataEventType):
         data_event_model = apps.get_model("data_importers", "DataEvent")
         try:
             return self.dataevent_set.filter(event_type=event_type).latest()
@@ -211,7 +212,9 @@ class Council(WelshNameMutationMixin, models.Model):
         for station in self.pollingstation_set.all():
             self.update_station_visibility_from_events(station, election_dates)
 
-    def update_station_visibility_from_events(self, station, election_dates=None):
+    def update_station_visibility_from_events(
+        self, station: PollingStation, election_dates: Optional[list] = None
+    ):
         query = Q(
             council=self,
             event_type=DataEventType.SET_STATION_VISIBILITY,

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from councils.models import Council
 from data_importers.event_types import DataEventType
 from data_importers.models import DataEvent
@@ -8,14 +10,18 @@ class EventValidationError(Exception):
     pass
 
 
-def record_teardown_event(council_id):
+def record_teardown_event(council_id: str):
     DataEvent.objects.create(
         council=Council.objects.get(council_id=council_id),
         event_type=DataEventType.TEARDOWN,
     )
 
 
-def record_set_station_visibility_event(station, visibility_choice, metadata=None):
+def record_set_station_visibility_event(
+    station: PollingStation,
+    visibility_choice: VisibilityChoices,
+    metadata: Optional[dict] = None,
+):
     if metadata is None:
         metadata = {}
     council = station.council
@@ -36,7 +42,7 @@ def record_set_station_visibility_event(station, visibility_choice, metadata=Non
     )
 
 
-def set_station_visibility(event):
+def set_station_visibility(event: DataEvent):
     payload = event.payload
     if not (visibility := payload.get("visibility", None)):
         raise EventValidationError(f"{event} payload missing visibility.")
