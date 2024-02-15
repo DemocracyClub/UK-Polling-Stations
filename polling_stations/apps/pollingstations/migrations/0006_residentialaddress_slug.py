@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 import datetime
+from datetime import timezone
 
 from django.db import migrations, models
-from django.utils.timezone import utc
 
 
 class Migration(migrations.Migration):
@@ -16,7 +16,9 @@ class Migration(migrations.Migration):
             name="slug",
             field=models.SlugField(
                 max_length=255,
-                default=datetime.datetime(2016, 4, 1, 21, 41, 16, 842753, tzinfo=utc),
+                default=datetime.datetime(
+                    2016, 4, 1, 21, 41, 16, 842753, tzinfo=timezone.utc
+                ),
                 unique=True,
             ),
             preserve_default=False,

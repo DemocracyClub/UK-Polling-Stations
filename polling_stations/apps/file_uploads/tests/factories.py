@@ -1,7 +1,6 @@
-from datetime import datetime
-
 import factory
 from councils.tests.factories import CouncilFactory
+from django.utils import timezone
 from file_uploads.models import File, Upload
 
 
@@ -10,7 +9,7 @@ class UploadFactory(factory.django.DjangoModelFactory):
         model = Upload
 
     gss = factory.SubFactory(CouncilFactory)
-    timestamp = factory.LazyFunction(datetime.now)
+    timestamp = factory.LazyFunction(timezone.now)
 
 
 class FileFactory(factory.django.DjangoModelFactory):
