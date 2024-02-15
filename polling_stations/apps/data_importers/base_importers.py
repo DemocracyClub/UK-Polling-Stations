@@ -233,18 +233,21 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         pass
 
     def record_import_event(self):
-        election_dates = []
-        if hasattr(self, "elections"):
-            election_dates = [
-                datetime.datetime.strptime(date_string, "%Y-%m-%d")
-                for date_string in self.elections
-            ]
         DataEvent.objects.create(
             council=self.get_council(self.council_id),
             upload=self.get_upload(),
             event_type=DataEventType.IMPORT,
-            election_dates=election_dates,
+            election_dates=self.election_dates,
         )
+
+    @property
+    def election_dates(self):
+        if hasattr(self, "elections"):
+            return [
+                datetime.datetime.strptime(date_string, "%Y-%m-%d")
+                for date_string in self.elections
+            ]
+        return []
 
     def handle(self, *args, **kwargs):
         """
@@ -295,6 +298,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         with transaction.atomic():
             self.import_data()
             self.record_import_event()
+        self.council.update_all_station_visibilities_from_events(self.election_dates)
 
         # Optional step for post import tasks
         self.post_import()
