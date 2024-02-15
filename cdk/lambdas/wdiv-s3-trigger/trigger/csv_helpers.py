@@ -1,6 +1,8 @@
 import csv
 from csv import excel
 
+import chardet
+
 
 def detect_ems(header):
     first_col = header[0].lower()
@@ -16,6 +18,10 @@ def detect_ems(header):
 
 
 def attempt_decode(body):
+    detection = chardet.detect(body)
+    encoding = detection["encoding"]
+    if encoding == "utf-16le":
+        return body.decode(encoding), encoding
     encodings = ["utf-8", "windows-1252", "latin-1"]
     for encoding in encodings:
         try:
