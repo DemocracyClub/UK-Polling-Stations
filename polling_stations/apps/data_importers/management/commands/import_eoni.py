@@ -11,6 +11,7 @@ from data_importers.event_types import DataEventType
 from data_importers.models import DataEvent
 from django.contrib.gis.geos import Point
 from django.db import connections, transaction
+from django.db.models import Q
 from pollingstations.models import CustomFinder, PollingStation
 
 from polling_stations.db_routers import get_principal_db_name
@@ -42,7 +43,7 @@ class Command(BaseStationsImporter, CsvMixin):
     elections = ["2023-05-18"]
 
     def add_arguments(self, parser):
-        super().add_argument(parser)
+        super().add_arguments(parser)
         parser.add_argument("eoni_csv", help="The path to the EONI export csv")
         parser.add_argument(
             "--stations-only",
@@ -90,6 +91,9 @@ class Command(BaseStationsImporter, CsvMixin):
                 event_type=DataEventType.IMPORT,
                 election_dates=election_dates,
             )
+
+    def get_upload(self):
+        return None
 
     def teardown(self, council):
         # Only remove old polling stations, as the UPRN to Council table
@@ -236,6 +240,25 @@ class Command(BaseStationsImporter, CsvMixin):
                 .filter(uprn__location__within=council.geography.geography)
             )
             uprns_in_council.update(lad=council.geography.gss)
+        self.assign_or_remove_left_over_addresses()
+
+    def assign_or_remove_left_over_addresses(self):
+        for address in Address.objects.filter(uprntocouncil__lad="EONI"):
+            others_in_postcode = (
+                Address.objects.filter(postcode=address.postcode)
+                .exclude(Q(Q(uprntocouncil__lad="EONI") | Q(uprn=address.uprn)))
+                .distinct("uprntocouncil__lad")
+            )
+            if len(others_in_postcode) == 1:
+                council = others_in_postcode[0].council
+                self.stdout.write(
+                    f"Updating UprnToCouncil record for {address.uprn} with gss {council.geography.gss}"
+                )
+                address.uprntocouncil.gss = council.geography.gss
+            else:
+                self.stdout.write(f"Council ambiguous for {address.uprn}, deleting")
+                address.uprntocouncil.delete()
+                address.delete()
 
     def station_record_to_dict(self, record):
         if record.sample_uprn not in UPRN_TO_COUNCIL_CACHE:
