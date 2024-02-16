@@ -43,9 +43,6 @@ class UploadSerializer(serializers.ModelSerializer):
         if len(validated_data["file_set"]) > len(existing_files):
             # Only overwrite the old data with the new report
             # if the new one has more stuff in it
-            capture_message(
-                "Overwriting 'existing_files' with 'validated_data'", level="info"
-            )
             existing_files.delete()
             upload = update_file_set(validated_data)
         else:
@@ -54,11 +51,9 @@ class UploadSerializer(serializers.ModelSerializer):
             # than the new one we're trying to write, assume an
             # out-of-order delivery has happened (entirely possible)
             # and leave the existing data in place.
-            capture_message("Using existing_upload as is", level="info")
             upload = existing_upload
 
         file_set = upload.file_set
-        capture_message(f"{file_set =}", level="info")
 
         if file_set.exists():
             if (
@@ -66,12 +61,9 @@ class UploadSerializer(serializers.ModelSerializer):
             ) or file_set.first().ems != "Democracy Counts":
                 upload.github_issue = validated_data["github_issue"]
                 upload.save()
-                capture_message(f"Making pull request with {upload}", level="info")
                 upload.make_pull_request()
                 upload.send_confirmation_email()
         else:
-            capture_message("Sending Error Email", level="info")
-
             upload.send_error_email()
         return upload
 

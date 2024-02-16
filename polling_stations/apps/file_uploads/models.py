@@ -205,7 +205,6 @@ class Upload(models.Model):
     def make_pull_request(self):
         if getattr(settings, "RUNNING_TESTS", False):
             return
-        capture_message(f"Attempting to create PR for {self.branch_name}", level="info")
         creds = GitHubCredentials(
             repo=settings.GITHUB_REPO,
             name=settings.GITHUB_USERNAME,
