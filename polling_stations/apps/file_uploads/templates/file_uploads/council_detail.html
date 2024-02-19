@@ -154,10 +154,10 @@
                 <table>
                     <caption>Imported Polling Stations</caption>
                     <tr>
-                        <th>Address</th>
-                        <th>Postcode</th>
+                        <th>Station Address</th>
+                        <th>Station Postcode</th>
                         <th>Has Location</th>
-                        <th>Example</th>
+                        <th>Examples</th>
                     </tr>
                     {% for station in STATIONS %}
                         {% if station.example_uprn %}
@@ -165,7 +165,13 @@
                                 <td>{{ station.address }}</td>
                                 <td>{{ station.postcode }}</td>
                                 <td>{{ station.location }} </td>
-                                <td><a href={%  url "address_view" station.example_uprn %}>Example page</a></td>
+                                <td>
+                                    <a href={%  url "address_view" station.example_uprn %}>Example page</a>
+                                    <br>
+                                    <small><cite>
+                                        {{ station.example_postcode.0 }}
+                                    </cite></small>
+                                </td>
                             </tr>
                         {% endif %}
                     {% endfor %}

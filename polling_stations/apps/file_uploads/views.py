@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 
 import boto3
-from addressbase.models import UprnToCouncil
+from addressbase.models import Address, UprnToCouncil
 from boto.pyami.config import Config
 from botocore.exceptions import ClientError
 from councils.models import Council
@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import Max, Prefetch
+from django.db.models import Max, Prefetch, Subquery
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -229,6 +229,23 @@ class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
         return super().get(request, *args, **kwargs)
 
 
+def get_station_to_example_uprn_map(council: Council) -> dict[str, dict[str, str]]:
+    sample_uprn_per_station = (
+        UprnToCouncil.objects.filter(lad=council.geography.gss)
+        .exclude(polling_station_id="")
+        .values("polling_station_id")
+        .annotate(max_uprn=Max("uprn"))
+    )
+    address_list = Address.objects.filter(
+        uprn__in=Subquery(sample_uprn_per_station.values("max_uprn"))
+    ).values_list(
+        "uprntocouncil__polling_station_id",
+        "uprn",
+        "postcode",
+    )
+    return {a[0]: {"uprn": a[1], "postcode": [a[2]]} for a in address_list}
+
+
 class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
     template_name = "file_uploads/council_detail.html"
 
@@ -240,11 +257,8 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
             council_id=council.council_id
         )
         context["STATIONS"] = []
-        example_uprn_map = dict(
-            UprnToCouncil.objects.filter(lad=council_from_default_db.geography.gss)
-            .values("polling_station_id")
-            .annotate(uprn=Max("uprn__uprn"))
-            .values_list("polling_station_id", "uprn")
+        station_to_example_uprn_map = get_station_to_example_uprn_map(
+            council_from_default_db
         )
 
         for station in council_from_default_db.pollingstation_set.all():
@@ -253,7 +267,12 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                     "address": station.address,
                     "postcode": station.postcode,
                     "location": "✔️" if station.location else "❌",
-                    "example_uprn": example_uprn_map.get(station.internal_council_id),
+                    "example_uprn": station_to_example_uprn_map.get(
+                        station.internal_council_id
+                    )["uprn"],
+                    "example_postcode": station_to_example_uprn_map.get(
+                        station.internal_council_id
+                    )["postcode"],
                 }
             )
         context["live_upload"] = council.live_upload
