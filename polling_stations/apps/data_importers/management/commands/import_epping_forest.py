@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "EPP"
     addresses_name = (
-        "2023-05-04/2023-03-02T09:52:57.892038/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-20T15:33:21.896325/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-02T09:52:57.892038/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-20T15:33:21.896325/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -19,15 +19,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10012157511",  # WALLED GARDEN HOUSE, EPPING
             "10012157510",  # TIMBER LODGE, EPPING
             "100091477396",  # SCHOOL HOUSE, KING HAROLD SCHOOL, BROOMSTICK HALL ROAD, WALTHAM ABBEY
-            "100091478068",  # INNER LODGE, DOWDING WAY, WALTHAM ABBEY
-            "10012158424",  # WALTHAM COMMON LOCK HOUSE, WINDMILL LANE, CHESHUNT, WALTHAM CROSS
             "100091249452",  # SHONKS FARM, MILL STREET, HARLOW
+            "100091251326",  # THE PANTILES, DUNMOW ROAD, FYFIELD, ONGAR
+            "100091251152",  # THATCHED COTTAGE, BIRDS GREEN, WILLINGALE, ONGAR
+            "10022857710",  # BLUNTS FARMHOUSE COOPERSALE LANE, THEYDON BOIS, EPPING
+            "100091247388",  # BROOKSIDE, GRAVEL LANE, CHIGWELL
+            "10022857825",  # CARAVAN 2 MOSS NURSERY SEDGE GREEN, ROYDON, HARLOW
         ]:
             return None
 
         if record.addressline6 in [
             # splits
             "CM16 6JA",
+            # suspect
+            "CM5 0HP",
         ]:
             return None
 
