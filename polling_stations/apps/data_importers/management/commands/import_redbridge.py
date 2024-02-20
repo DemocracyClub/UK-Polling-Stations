@@ -4,32 +4,17 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RDB"
     addresses_name = (
-        "2022-05-05/2022-03-22T12:48:17.017593/Democracy_Club__05May2022.CSV"
+        "2024-05-02/2024-02-20T16:50:55.903244/Democracy_Club__02May2024.CSV"
     )
     stations_name = (
-        "2022-05-05/2022-03-22T12:48:17.017593/Democracy_Club__05May2022.CSV"
+        "2024-05-02/2024-02-20T16:50:55.903244/Democracy_Club__02May2024.CSV"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if uprn in [
-            "10093036996",  # 40A STANLEY ROAD, ILFORD
-            "10094819765",  # 5 PORTLAND TERRACE, ILFORD
-            "10094820912",  # 6 PORTLAND TERRACE, ILFORD
-            "10094821357",  # FLAT 1, 705B HIGH ROAD, ILFORD
-            "10094821358",  # FLAT 2, 705B HIGH ROAD, ILFORD
-            "10094821359",  # 705C HIGH ROAD, ILFORD
-        ]:
-            return None
         if record.addressline6 in [
-            "IG5 0FF",  # embedded in another area
-            "IG6 3FA",  # embedded in another area
             # split
-            "IG1 2FP",
-            "IG1 4SS",
-            "IG5 0QA",
+            "IG5 0FF",
         ]:
             return None
 
