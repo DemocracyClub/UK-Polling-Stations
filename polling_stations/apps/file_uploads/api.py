@@ -20,10 +20,6 @@ class UploadSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        from sentry_sdk import capture_message
-
-        capture_message(f"{validated_data =}", level="info")
-
         def update_file_set(validated_data):
             upload = Upload.objects.get(
                 gss=validated_data["gss"],
