@@ -59,7 +59,9 @@ def get_report(s3, bucket, key, api_key):
         "github_issue": "",
         "file_set": [],
     }
+    from sentry_sdk import capture_message
 
+    capture_message(f"{path =}\n{report =}", level="info")
     objects = s3.list_objects_v2(Bucket=bucket, Prefix=prefix)
 
     files = [
