@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SST"
     addresses_name = (
-        "2023-05-04/2023-04-03T14:58:59.354138/Democracy_Club__04May2023v.2.tsv"
+        "2024-05-02/2024-02-22T16:03:52.815068/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-04-03T14:58:59.354138/Democracy_Club__04May2023v.2.tsv"
+        "2024-05-02/2024-02-22T16:03:52.815068/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -27,30 +27,29 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200004526134",  # 135 RODBASTON, PENKRIDGE, STAFFORD
             "200004528062",  # AMBLESIDE, WOLVERHAMPTON ROAD, PENKRIDGE, STAFFORD
             "10003692787",  # 7B SANDYFIELDS ROAD, DUDLEY
-            "100032230221",  # UNIT 14 WOMBOURNE ENTERPRISE PARK BRIDGNORTH ROAD, WOMBOURNE
             "10003693861",  # WILD WOOD, COUNTY LANE, ALBRIGHTON, WOLVERHAMPTON
+            "10003693386",  # M S J HEALTHCARE, KARTER FARM, NEW ROAD, SWINDON, DUDLEY
         ]:
             return None
 
         if record.addressline6 in [
             # splits
-            "ST19 9AG",
-            "DY7 5HL",
-            "WV9 5BW",
+            "ST19 9AB",
             "WV11 2DN",
-            "ST19 9LX",  # SHUTT GREEN, BREWOOD, STAFFORD
+            "ST19 9AG",
+            "WV9 5BW",
+            # suspect
+            "WV5 8EX",
+            "WV11 2RD",
+            "ST19 9LX",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Following warnings were checked, no correction needed:
-        # WARNING: Polling station Hyde Lea Village Hall (4779) is in Stafford Borough Council (STA)
-        # WARNING: Polling station St Bartholomew's Church Hall (4757) is in Wolverhampton City Council (WLV)
-
         # St Bartholomew's Church Hall, Vicarage Road, Penn, Wolverhampton
-        if record.polling_place_id == "4757":
+        if record.polling_place_id == "5362":
             record = record._replace(
                 polling_place_easting="389364", polling_place_northing="295314"
             )
