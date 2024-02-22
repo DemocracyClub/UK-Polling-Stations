@@ -19,7 +19,7 @@ class PollingStationAdmin(admin.ModelAdmin):
     ]
 
     # Filter on published status or council name
-    list_filter = ["visibility", "council__name"]
+    list_filter = ["visibility", ("council", admin.RelatedOnlyFieldListFilter)]
 
     # Human-readable name for list view
     list_display = [
