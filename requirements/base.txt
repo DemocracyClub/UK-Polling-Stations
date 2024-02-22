@@ -188,8 +188,8 @@ dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/t
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.4.0.zip \
-    --hash=sha256:8e008a5e058f4997f542e6e0541ddc0f80749c4c9983a463e3a7ab76cf681ab4
+dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.5.0.zip \
+    --hash=sha256:4a45fd84919e8cd2c40e84096d81ee221b34bba91b7bb6c3944817bf315f97b9
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -221,6 +221,7 @@ django==4.2.10 \
     #   django-basicauth
     #   django-cors-headers
     #   django-extensions
+    #   django-filter
     #   django-localflavor
     #   django-sesame
     #   djangorestframework
@@ -247,6 +248,12 @@ django-dotenv==1.4.2 \
 django-extensions==3.2.3 \
     --hash=sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a \
     --hash=sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.in
+django-filter==23.5 \
+    --hash=sha256:67583aa43b91fe8c49f74a832d95f4d8442be628fd4c6d65e9f811f5153a4e5c \
+    --hash=sha256:99122a201d83860aef4fe77758b69dda913e874cc5e0eaa50a86b0b18d708400
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
