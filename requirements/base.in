@@ -3,6 +3,7 @@ commitment<4.0.0
 dj-database-url
 django-basicauth
 django-extensions
+django-filter
 django-localflavor
 markdown
 Django<4.3
@@ -30,7 +31,7 @@ uk-geo-utils
 freezegun
 
 https://github.com/DemocracyClub/design-system/archive/refs/tags/0.3.0.zip
-https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.4.0.zip
+https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.5.0.zip
 https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.0.1.zip
 
 
