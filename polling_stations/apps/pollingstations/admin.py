@@ -42,6 +42,19 @@ class PollingStationAdmin(admin.ModelAdmin):
     # Use OSM basemap
     formfield_overrides = {models.PointField: {"widget": OSMWidget}}
 
+    def get_fields(self, request, obj=None):
+        fields = (
+            "visibility",
+            "council",
+            "internal_council_id",
+            "postcode",
+            "address",
+            "polling_district_id",
+        )
+        if obj.location:
+            fields += ("location",)
+        return fields
+
     def save_model(self, request, obj, form, change):
         if not change:
             return super().save_model(request, obj, form, change)
