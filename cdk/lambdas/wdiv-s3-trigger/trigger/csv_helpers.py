@@ -17,8 +17,22 @@ def detect_ems(header):
     return "unknown"
 
 
-def attempt_decode(body):
-    detection = chardet.detect(body)
+def get_body_sample(body: bytes):
+    if b"\r\n" in body:
+        line_sep = b"\r\n"
+    elif b"\n" in body:
+        line_sep = b"\n"
+    else:
+        return body
+    lines = body.split(line_sep)
+    if len(lines) > 20:
+        return line_sep.join(lines[:20])
+    return line_sep.join(lines)
+
+
+def attempt_decode(body: bytes):
+    sample = get_body_sample(body)
+    detection = chardet.detect(sample)
     encoding = detection["encoding"]
     if encoding == "utf-16le":
         return body.decode(encoding), encoding
