@@ -1,7 +1,7 @@
 from pathlib import Path
 from unittest import TestCase
 
-from trigger.csv_helpers import get_csv_report
+from trigger.csv_helpers import get_body_sample, get_csv_report
 
 FIXTURES_PATH = Path(__file__).parent / "fixtures"
 
@@ -151,3 +151,25 @@ class CsvHelperTests(TestCase):
         self.assertEqual(
             "Failed to parse body -> line 1: line contains NUL", report["errors"][0]
         )
+
+    def test_get_body_sample_windows(self):
+        latin1_longbody = b"\r\n".join(
+            [f"foo-{x}".encode("latin-1") for x in range(30)]
+        )
+        latin1_longbody_sample = get_body_sample(latin1_longbody)
+        self.assertEqual(len(latin1_longbody_sample.split(b"\r\n")), 20)
+
+        latin1_shortbody = b"\r\n".join(
+            [f"foo-{x}".encode("latin-1") for x in range(5)]
+        )
+        latin1_shortbody_sample = get_body_sample(latin1_shortbody)
+        self.assertEqual(len(latin1_shortbody_sample.split(b"\r\n")), 5)
+
+    def test_get_body_sample_linux(self):
+        utf8_longbody = b"\n".join([f"foo-{x}".encode("utf-8") for x in range(30)])
+        utf8_longbody_sample = get_body_sample(utf8_longbody)
+        self.assertEqual(len(utf8_longbody_sample.split(b"\n")), 20)
+
+        utf8_shortbody = b"\n".join([f"foo-{x}".encode("utf-8") for x in range(5)])
+        utf8_shortbody_sample = get_body_sample(utf8_shortbody)
+        self.assertEqual(len(utf8_shortbody_sample.split(b"\n")), 5)
