@@ -1,35 +1,17 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TOB"
     addresses_name = (
-        "2023-05-04/2023-03-09T14:38:36.777783/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-26T17:17:18.102038/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-09T14:38:36.777783/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-26T17:17:18.102038/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # Paignton SNU Spiritualist Church Hall Manor Corner Torquay Road Paignton TQ3 1JB
-        if record.polling_place_id == "9121":
-            record = record._replace(polling_place_postcode="TQ3 2JB")
-
-        # St Annes Hall Babbacombe Road Torquay TQ1 3UH
-        if record.polling_place_id == "9157":
-            record = record._replace(polling_place_postcode="")
-
-        rec = super().station_record_to_dict(record)
-
-        # Mobile Station at DFS Car Park Willows Retail Park Nicholson Road Torquay TQ2 7TD
-        if record.polling_place_id == "9014":
-            rec["location"] = Point(-3.556830, 50.488924, srid=4326)
-
-        return rec
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -38,10 +20,65 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100040529632",  # 16 OLD TORQUAY ROAD, PAIGNTON
             "10024003083",  # 30 SHORTON ROAD, PAIGNTON
             "100040532454",  # 28 SHORTON ROAD, PAIGNTON
+            "100040513377",  # MILTON ORCHARD, MILTON STREET, BRIXHAM
+            "100040515861",  # REDWELLS, SOUTHDOWN HILL, BRIXHAM
+            "100040513359",  # BEL-OMBRE, MILTON STREET, BRIXHAM
+            "10024001656",  # GATEHOUSE COTTAGE MUDSTONE LANE, BRIXHAM
+            "10093140000",  # 11 REA BARN ROAD, BRIXHAM
+            "100040509069",  # 89 BOLTON STREET, BRIXHAM
+            "100040509951",  # 64 COPYTHORNE ROAD, BRIXHAM
+            "100040509950",  # 62 COPYTHORNE ROAD, BRIXHAM
+            "100040509722",  # 1A CHURCH HILL EAST, BRIXHAM
+            "100040514040",  # 110 NORTH BOUNDARY ROAD, BRIXHAM
+            "100040534758",  # 187 TOTNES ROAD, PAIGNTON
+            "100040512567",  # 48 LICHFIELD DRIVE, BRIXHAM
+            "100040510175",  # THE STATION GUEST HOUSE, DARTMOUTH ROAD, CHURSTON FERRERS, BRIXHAM
+            "100040534883",  # ZOO AND GARDENS NORTH LODGE TOTNES ROAD, PAIGNTON
+            "10000010093",  # CROWN & ANCHOR COTTAGE, CROWN & ANCHOR WAY, PAIGNTON
+            "100040536537",  # 114 WINNER STREET, PAIGNTON
+            "100040534320",  # 133 TORQUAY ROAD, PAIGNTON
+            "10093142379",  # 73A BLATCHCOMBE ROAD, PAIGNTON
+            "100040532457",  # 32 SHORTON ROAD, PRESTON, PAIGNTON
+            "100040532460",  # 36 SHORTON ROAD, PRESTON, PAIGNTON
+            "10094527862",  # BAY VISTA, COCKINGTON LANE, PRESTON, PAIGNTON
+            "100040525248",  # 42 HEADLAND PARK ROAD, PAIGNTON
+            "100040552641",  # 1 PENNYS COTTAGE, PENNYS HILL, TORQUAY
+            "100040543734",  # 53 FOREST ROAD, TORQUAY
+            "10024003109",  # 22B LOWER SHIRBURN ROAD, TORQUAY
+            "100040557811",  # 36 STUDLEY ROAD, TORQUAY
+            "200001110813",  # WALDERLEA, CARY PARK, TORQUAY
+            "10093141340",  # FLAT 2 ODDICOMBE HALL BABBACOMBE DOWNS ROAD, TORQUAY
+            "100040537792",  # 44A BABBACOMBE ROAD, TORQUAY
+            "100040537793",  # 44B BABBACOMBE ROAD, TORQUAY
+            "100040541181",  # 34 CHURCH ROAD, ST. MARYCHURCH, TORQUAY
+            "10093141957",  # FLAT 2, CORNERSTONE HOUSE, TEIGNMOUTH ROAD, TORQUAY
+            "100040538271",  # 1 BARCHINGTON AVENUE, TORQUAY
+            "100041199418",  # OLD SCHOOL HOUSE, ALSTON LANE, CHURSTON FERRERS, BRIXHAM
+            "200002083269",  # PONTOON ADJ PRINCESS PIER, PONTOON ADJ PRINCESS PIER TORBAY ROAD, TORQUAY
+            "100040548281",  # HATLEY ST. GEORGE, LINCOMBE DRIVE, TORQUAY
+            "100041187861",  # THE COTTAGE, LOWER ERITH ROAD, TORQUAY
+            "10094526711",  # BARWOOD MEWS, LOWER WARBERRY ROAD, TORQUAY
+            "100040538743",  # DOWNSVIEW CORNER, BEDFORD ROAD, TORQUAY
+            "100040551304",  # 91 NUT BUSH LANE, TORQUAY
+            "100040551303",  # 89 NUT BUSH LANE, TORQUAY
+            "100040537642",  # HIGH VIEW LODGE, AVENUE ROAD, TORQUAY
+            "100040549481",  # 1D MAGDALENE ROAD, TORQUAY
+            "100041198763",  # 308 DARTMOUTH ROAD, PAIGNTON
+            "100040541253",  # CHERRY BLOSSOM FARM, CLADDON LANE, MAIDENCOMBE, TORQUAY
+            "100040554887",  # PROTEA, SEAWAY LANE, TORQUAY
         ]:
             return None
 
-        if record.addressline6 in ["TQ1 4QZ"]:
+        if record.addressline6 in [
+            # looks wrong
+            "TQ1 4QZ",
+            "TQ5 8EJ",
+            "TQ5 8AW",
+            "TQ5 0LB",
+            "TQ3 3QG",
+            "TQ3 3QE",
+            "TQ2 5BU",
+        ]:
             return None
 
         return super().address_record_to_dict(record)
