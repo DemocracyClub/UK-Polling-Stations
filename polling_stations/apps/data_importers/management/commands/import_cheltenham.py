@@ -3,36 +3,29 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CHT"
-    addresses_name = (
-        "2022-05-05/2022-02-25T12:48:35.558843/polling_station_export-2022-02-25.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-02-25T12:48:35.558843/polling_station_export-2022-02-25.csv"
-    )
-    elections = ["2022-05-05"]
+    addresses_name = "2024-05-02/2024-03-15T09:36:32.391996/Eros_SQL_Output009.csv"
+    stations_name = "2024-05-02/2024-03-15T09:36:32.391996/Eros_SQL_Output009.csv"
+    elections = ["2024-05-02"]
 
     def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
+
+        if uprn in [
+            "100121229562",  # THE MEWS, BACK MONTPELLIER TERRACE, CHELTENHAM
+            "200002684616",  # 49A BACK MONTPELLIER TERRACE, CHELTENHAM
+            "100120413433",  # FLAT, 19 SUFFOLK ROAD, CHELTENHAM
+            "100120399951",  # FARROW & BALL, 15-17 SUFFOLK ROAD, CHELTENHAM
+        ]:
+            return None
+
         if record.housepostcode in [
-            "GL50 2RF",
-            "GL52 6RN",
-            "GL52 2ES",
-            "GL53 7AJ",
+            # split
             "GL50 3RB",
+            "GL52 2ES",
+            "GL52 6RN",
             "GL53 0HL",
-            "GL50 2DZ",
+            "GL50 2RF",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # ST. PHILIP & ST. JAMES PARISH CHURCH CENTRE
-        # name duplicated
-        if record.pollingstationnumber == "191":
-            record = record._replace(pollingstationaddress_1="")
-
-        # ST NICOLAS CHURCH HALL SWINDON LANE CHELTENHAM, GL50 4PF
-        if record.pollingstationnumber == "182":
-            record = record._replace(pollingstationpostcode="GL50 4PA")
-
-        return super().station_record_to_dict(record)
