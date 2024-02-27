@@ -115,7 +115,7 @@ class HandlerTests(TestCase):
         responses.start()
         responses.add(
             responses.GET,
-            "https://wheredoivote.co.uk/api/beta/councils/X01000000.json",
+            "https://wheredoivote.co.uk/api/beta/councils/X01000000.json/?auth_token=testing",
             status=200,
             body=json.dumps({"name": "Piddleton Parish Council"}),
         )
