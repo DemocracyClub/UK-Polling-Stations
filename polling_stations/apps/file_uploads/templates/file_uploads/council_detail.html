@@ -214,24 +214,68 @@
                         <th>Event Type</th>
                         <th>Election Dates</th>
                         <th>Upload</th>
+                        <th>Payload</th>
+                        <th>Metadata</th>
                     </tr>
                     {% for event in events %}
                         <tr>
-                            <td>{{ event.created }}</td>
+                            <td style="white-space: nowrap">{{ event.created|date:"Y-m-d H:i" }}</td>
                             <td>{{ event.event_type }}</td>
-                            <td>{{ event.election_dates }}</td>
+                            <td style="white-space: nowrap">
+                                <ul>
+                                    {%  for date in event.election_dates %}
+                                        <li>{{ date | date }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
                             <td>
                                 {% if event.event_type == 'IMPORT' %}
                                     {{ event.upload }}
-                                {% elif event.event_type == 'TEARDOWN'  %}
-                                    N/A
                                 {% else %}
-                                    Missing
+                                    N/A
                                 {% endif %}
+                            </td>
+                            <td>
+                                {% for key, value in event.payload.items %}
+                                    <small style="white-space: nowrap">{{ key }}: {{ value }}</small>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for key, value in event.metadata.items %}
+                                    <small style="white-space: nowrap">{{ key }}: {{ value }}</small>
+                                {% endfor %}
                             </td>
                         </tr>
                     {% endfor %}
                 </table>
+            </div>
+            <br>
+            <div class="ds-bordered ds-padded">
+                <h5>Data Event Type Key</h5>
+                <br>
+                <ul class="ds-details">
+                    <li>
+                        <details>
+                            <summary>IMPORT</summary>
+                            <p>Event logging the creation and assignment of polling stations to those addresses supplied by the council</p>
+                        </details>
+                    </li>
+
+                    <li>
+                        <details>
+                            <summary>TEARDOWN</summary>
+                            <p>Event logging removal of station from addresses and deletion of all polling stations supplied by the council</p>
+                        </details>
+                    </li>
+
+                    <li>
+                        <details>
+                            <summary>SET_VISIBILITY_EVENT</summary>
+                            <p>Event logging a change in visibility for a station</p>
+                        </details>
+                    </li>
+
+                </ul>
             </div>
         </div>
     {% endif %}
