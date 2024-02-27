@@ -14,6 +14,7 @@ class UploadAdmin(ReadOnlyModelAdminMixin, admin.ModelAdmin):
         "election_date",
         "github_issue",
         "timestamp",
+        "gss__name",
     ]
 
 
