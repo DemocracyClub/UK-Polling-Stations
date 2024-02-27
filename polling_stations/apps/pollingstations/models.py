@@ -45,7 +45,12 @@ class PollingStation(models.Model):
     council = models.ForeignKey(
         "councils.Council", null=True, db_index=True, on_delete=models.CASCADE
     )
-    internal_council_id = models.CharField(blank=True, max_length=100, db_index=True)
+    internal_council_id = models.CharField(
+        blank=True,
+        max_length=100,
+        db_index=True,
+        help_text="An id used by the council that is not persistent between elections",
+    )
     postcode = models.CharField(blank=True, null=True, max_length=100)
     address = models.TextField(blank=True, null=True)
     location = models.PointField(null=True, blank=True)
@@ -53,7 +58,15 @@ class PollingStation(models.Model):
     # the point of import
     polling_district_id = models.CharField(blank=True, max_length=255)
     visibility = models.CharField(
-        choices=VisibilityChoices.choices, default=VisibilityChoices.PUBLISHED
+        choices=VisibilityChoices.choices,
+        default=VisibilityChoices.PUBLISHED,
+        help_text="""
+            Determines visibility level of a station.<br>
+            Whatever this value is set to will persist when an import script is rerun, as long as there isn't a new file
+            from the council.<br>
+            If there has been a new file, then all stations in that file will default to 'published'.<br>
+            This means you need to remember if you want a station to be republished or stay unpublished.
+        """,
     )
 
     class Meta:
