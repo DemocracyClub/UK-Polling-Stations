@@ -16,13 +16,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # Cleckheaton Methodist Church, Greenside Cleckheaton
         if record.polling_place_id == "17890":
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
+            record = record._replace(polling_place_easting="419000")
+            record = record._replace(polling_place_northing="425200")
 
         # Roberttown Community Centre - Entrance is on Church Rd
         if record.polling_place_id == "18240":
             record = record._replace(polling_place_easting="419480")
             record = record._replace(polling_place_northing="422649")
+
+        # fix from council:
+        # OLD: Dewsbury Town Hall, Ground Floor Registrar Communal Area, Wakefield Old Road, Dewsbury
+        # NEW: Dewsbury Town Hall, Ground Floor (main reception), Wakefield Old Road, Dewsbury
+        if record.polling_place_id == "19028":
+            record = record._replace(
+                polling_place_address_1="Ground Floor (main reception)"
+            )
 
         return super().station_record_to_dict(record)
 
