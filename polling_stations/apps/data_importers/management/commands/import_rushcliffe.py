@@ -14,15 +14,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # Bingham Methodist Centre, Union Street, Bingham, Nottingham
         if record.polling_place_id == "6285":
-            record = record._replace(polling_place_easting="470360")
+            record = record._replace(polling_place_postcode="NG13 8AD")
+            record = record._replace(polling_place_easting="470368")
 
         # Edwalton Church Hall, Vicarage Green, Edwalton
         if record.polling_place_id == "6145":
+            record = record._replace(polling_place_postcode="NG12 4AP")
             record = record._replace(polling_place_easting="459770")
 
         # West Bridgford Baptist Church, Melton Road, West Bridgford
         if record.polling_place_id == "6290":
-            record = record._replace(polling_place_easting="458380")
+            record = record._replace(polling_place_easting="458385")
 
         return super().station_record_to_dict(record)
 
