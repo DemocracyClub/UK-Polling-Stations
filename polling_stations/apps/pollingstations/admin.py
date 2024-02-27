@@ -8,6 +8,9 @@ from pollingstations.models import PollingStation, VisibilityChoices
 
 
 class PollingStationAdmin(admin.ModelAdmin):
+    class UnmodfiableOSMWidget(OSMWidget):
+        template_name = "admin/pollingstations/openlayers.html"
+
     actions = ["unpublish", "publish"]
 
     search_fields = [
@@ -37,10 +40,8 @@ class PollingStationAdmin(admin.ModelAdmin):
         "address",
         "polling_district_id",
     ]
-    # Make the map Uneditable
-    modifiable = False
-    # Use OSM basemap
-    formfield_overrides = {models.PointField: {"widget": OSMWidget}}
+    # Use OSM basemap but make it unmodifiable
+    formfield_overrides = {models.PointField: {"widget": UnmodfiableOSMWidget}}
 
     def get_fields(self, request, obj=None):
         fields = (
