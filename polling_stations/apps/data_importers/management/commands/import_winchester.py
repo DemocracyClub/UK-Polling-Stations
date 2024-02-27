@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WIN"
-    addresses_name = "2023-05-04/2023-03-30T13:36:19.020481/ems_exports_combined.tsv"
-    stations_name = "2023-05-04/2023-03-30T13:36:19.020481/ems_exports_combined.tsv"
-    elections = ["2023-05-04"]
+    addresses_name = (
+        "2024-05-02/2024-02-27T09:17:51.992347/Democracy_Club__02May2024.tsv"
+    )
+    stations_name = (
+        "2024-05-02/2024-02-27T09:17:51.992347/Democracy_Club__02May2024.tsv"
+    )
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -15,6 +19,37 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200000182939",  # CARAVAN 1 POINTERS PADDOCK SHEARDLEY LANE, DROXFORD
             "200000179695",  # CARAVAN 2 POINTERS PADDOCK SHEARDLEY LANE, DROXFORD
             "10094862207",  # 3 CAMPION ROAD, CURBRIDGE
+            "100062013522",  # SPRING FARM, HAMBLEDON, WATERLOOVILLE
+            "10034500599",  # THE FLAT HORSE AND JOCKEY HIPLEY FAREHAM ROAD, HAMBLEDON
+            "10000835251",  # WOODSIDE, BOTLEY ROAD, CURBRIDGE, SOUTHAMPTON
+            "200000182727",  # BRIDGE LODGE BRIDGE FARM BOTLEY ROAD, CURBRIDGE
+            "10034499812",  # PENNY ACRES, CLEWERS HILL, WALTHAM CHASE, SOUTHAMPTON
+            "200000179800",  # NORTH LODGE, WINCHESTER ROAD, DURLEY, SOUTHAMPTON
+            "100062518967",  # 16 LIME CLOSE, COLDEN COMMON, WINCHESTER
+            "100060605297",  # 18 LIME CLOSE, COLDEN COMMON, WINCHESTER
+            "10090843819",  # 41 SPRING LANE, COLDEN COMMON, WINCHESTER
+            "10090843820",  # 41A SPRING LANE, COLDEN COMMON, WINCHESTER
+            "100060607429",  # NORTHWOOD LODGE, NORTHWOOD PARK, SPARSHOLT, WINCHESTER
+            "100060611152",  # OVERCOMBE, ST, CROSS ROAD, WINCHESTER
+            "10090845084",  # FLAT 8, 4 ST, CROSS ROAD, WINCHESTER
+            "100060612001",  # SILWOOD LODGE, STOCKBRIDGE ROAD, WINCHESTER
+            "10094862719",  # 18 BURSTALL GARDENS, WINCHESTER
+            "100060612522",  # 2 TAPLINGS ROAD, WINCHESTER
+            "100060614468",  # 1 WESTMAN ROAD, WINCHESTER
+            "10034499070",  # 105 WESLEY ROAD, KINGS WORTHY, WINCHESTER
+            "10034499071",  # 106 WESLEY ROAD, KINGS WORTHY, WINCHESTER
+            "100062011695",  # THE OLD TOLL HOUSE, THE AVENUE, ALRESFORD
+            "100062527476",  # THE WILLOWS, HAMBLEDON LANE, SOBERTON, SOUTHAMPTON
+            "100060590943",  # WESTWOOD COTTAGE, DROXFORD ROAD, SWANMORE, SOUTHAMPTON
+            "100062526475",  # WOODMANS COTTAGE, BIDDENFIELD LANE, SHEDFIELD, SOUTHAMPTON
+            "100062526472",  # SPRING COTTAGE, BIDDENFIELD LANE, SHEDFIELD, SOUTHAMPTON
+            "100060587033",  # FERNDALE HOUSE, POUND HILL, ALRESFORD
+            "200000179223",  # PADDOCK HOUSE GALLEY DOWN FARM, DUNDRIDGE LANE, BISHOPS WALTHAM, SOUTHAMPTON
+            "100062525886",  # GALLEY DOWN FARM, DUNDRIDGE LANE, BISHOPS WALTHAM, SOUTHAMPTON
+            "200000184195",  # BROCKBRIDGE COTTAGE, BROCKBRIDGE, DROXFORD, SOUTHAMPTON
+            "200000179662",  # SWANMORE BARN FARM, PARK LANE, SWANMORE, SOUTHAMPTON
+            "200000179475",  # PAPER MILL COTTAGE, WARNFORD, SOUTHAMPTON
+            "200000184731",  # LOWER PEAKE, WARNFORD, SOUTHAMPTON
         ]:
             return None
         if record.addressline6 in [
@@ -22,14 +57,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "SO24 9HZ",
             "SO32 1HP",
             "SO32 3PJ",
+            # looks wrong
+            "SO30 2DP",
         ]:
             return None
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Upham New Millennium Village Hall (Cttee Room)
-        if record.polling_place_id == "10504":
+        # more accurate point for: Upham New Millennium Village Hall (Cttee Room), Mortimers Lane, Lower Upham, SO32 1HF
+        if record.polling_place_id == "11087":
             record = record._replace(polling_place_easting="452220")
             record = record._replace(polling_place_northing="119570")
+
+        # postcode correction for: Community Lounge, King Harold Court, Christchurch Road, Winchester, SO23 9TR
+        if record.polling_place_id == "11159":
+            record = record._replace(polling_place_postcode="SO23 9SA")
 
         return super().station_record_to_dict(record)
