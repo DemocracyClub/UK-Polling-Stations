@@ -346,7 +346,10 @@ class AuthenticateView(TemplateView):
         their profile page. Renders an error message if django-sesame fails to
         get a user from the request.
         """
-        user = get_user(self.request.GET.get("login_token"))
+        token = self.request.GET.get("login_token")
+        if not token:
+            return redirect(reverse("file_uploads:council_login_view"))
+        user = get_user(token)
         if not user:
             return super().get(request, *args, **kwargs)
         login(request, user, backend="sesame.backends.ModelBackend")
