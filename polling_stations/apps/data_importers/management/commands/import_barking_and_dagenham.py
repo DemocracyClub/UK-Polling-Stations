@@ -4,36 +4,35 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BDG"
     addresses_name = (
-        "2022-05-05/2022-04-11T14:50:24.315074/Democracy_Club__05May2022.CSV"
+        "2024-05-02/2024-02-28T16:35:51.758530/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-04-11T14:50:24.315074/Democracy_Club__05May2022.CSV"
+        "2024-05-02/2024-02-28T16:35:51.758530/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10091590964",  # 563 WOOD LANE, DAGENHAM
-            "10091590961",  # 557 WOOD LANE, DAGENHAM
-            "10091590971",  # 577 WOOD LANE, DAGENHAM
-            "10091590976",  # 587 WOOD LANE, DAGENHAM
-            "10091590978",  # 591 WOOD LANE, DAGENHAM
-            "10091590974",  # 583 WOOD LANE, DAGENHAM
+            "100048739",  # 13 STANLEY AVENUE, BARKING
+            "100092520",  # SHIP AND SHOVEL RIPPLE ROAD, BARKING
+            "10023598442",  # 36A WHALEBONE LANE SOUTH, DAGENHAM
+            "10023592360",  # 32A WHALEBONE LANE SOUTH, DAGENHAM
+            "10023598812",  # 8A ROYAL PARADE, CHURCH STREET, DAGENHAM
         ]:
             return None
 
         if record.addressline6 in [
-            "RM8 1DF",
+            # splits
+            "IG11 7EX",
+            "RM9 6GP",
             "IG11 7XS",
-            "IG11 9BW",
-            # "RM10 7TD", Don't exclude this one Council have requested.
-            "IG11 9EA",
-            "RM6 6DJ",
-            "RM9 4DS",
-            "RM9 4QR",
-            "RM10 8BX",
+            "RM8 3PT",
+            # looks wrong
+            "RM9 6GJ",
+            "IG11 0SR",
         ]:
             return None
 
