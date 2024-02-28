@@ -23,10 +23,10 @@ workflows:
           # The regex should match whatever is in run_new_imports.py.
           # It can probably be robustified by sticking all the council imports in their own subdir.
           mapping: |
-            polling_stations/apps/data_importers/management/commands/misc_fixes\.py imports-changed true
-            polling_stations/apps/data_importers/management/commands/import_[^eoni].+\.py imports-changed true
-            (?!polling_stations/apps/data_importers/management/commands/import_.+\.py).* application-changed true
-            polling_stations/apps/data_importers/management/commands/import_eoni.py eoni-changed true
+            polling_stations\/apps\/data_importers\/management\/commands\/misc_fixes\.py imports-changed true
+            polling_stations\/apps\/data_importers\/management\/commands\/import_(?!eoni).+\.py imports-changed true
+            (?!polling_stations\/apps\/data_importers\/management\/commands\/import_.+\.py).* application-changed true
+            polling_stations\/apps\/data_importers\/management\/commands\/import_eoni.py eoni-changed true
           base-revision: master
           tag: 3.10.8
           # this is the path of the configuration we should trigger once
