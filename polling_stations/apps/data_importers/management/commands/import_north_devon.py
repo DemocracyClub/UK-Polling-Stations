@@ -37,7 +37,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "EX32 0AP",
             "EX33 2BW",
             "EX33 2NT",
-            "EX33 1HW"
+            "EX33 1HW",
         ]:
             return None
 
