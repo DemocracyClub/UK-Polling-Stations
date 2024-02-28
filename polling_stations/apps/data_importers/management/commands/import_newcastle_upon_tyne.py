@@ -1,5 +1,4 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
