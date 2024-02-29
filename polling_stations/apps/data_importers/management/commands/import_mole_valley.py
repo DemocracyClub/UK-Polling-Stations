@@ -4,26 +4,14 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MOL"
     addresses_name = (
-        "2023-05-04/2023-03-09T15:06:43.238353/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-29T08:45:21.525256/Democracy_Club__02May2024 (2).tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-09T15:06:43.238353/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-02-29T08:45:21.525256/Democracy_Club__02May2024 (2).tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # Fairfield Centre - council address correction
-        if record.polling_place_id == "5488":
-            record = record._replace(
-                polling_place_address_1="34 Swan Court",
-                polling_place_address_2="High Street",
-                polling_place_address_3="Leatherhead",
-                polling_place_address_4="Surrey",
-                polling_place_postcode="KT22 8AH",
-            )
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -31,14 +19,26 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "200000162928",  # 2 BLACKBROOK FARM COTTAGES, BLACKBROOK ROAD, DORKING
             "200000162927",  # 1 BLACKBROOK FARM COTTAGES, BLACKBROOK ROAD, DORKING
-            "100061426266",  # 5 RIDGEWAY CLOSE, DORKING
             "10000829965",  # 2 STABLE COTTAGE RUSPER ROAD, CAPEL
             "10000829964",  # 1 STABLE COTTAGE RUSPER ROAD, CAPEL
             "10000828494",  # ARNWOOD FARM COTTAGE RUSPER ROAD, NEWDIGATE
+            "200000168361",  # THE CARAVAN PACHESHAM FARM RANDALLS ROAD, LEATHERHEAD
+            "200000160843",  # ROARING HOUSE FARM, FETCHAM DOWNS, FETCHAM, LEATHERHEAD
+            "100062137867",  # EAST STANDON LODGE, STANE STREET, OCKLEY, DORKING
+            "100062495967",  # THE TOWER, RUSPER ROAD, CAPEL, DORKING
+            "100062137505",  # SOUTH LODGE DENBIES, RANMORE ROAD, DORKING
+            "10000824831",  # RIVENDALE FARM RUSPER ROAD, CAPEL
+            "100061426171",  # KEEPERS COTTAGE, RANMORE COMMON ROAD, WESTHUMBLE, DORKING
         ]:
             return None
 
-        if record.addressline6 in ["RH5 4QY", "KT21 2LY"]:  # splits
+        if record.addressline6 in [
+            # splits
+            "KT21 2LY",
+            # looks wrong
+            "KT22 9BP",
+            "RH5 4DW",
+        ]:
             return None
 
         return super().address_record_to_dict(record)
