@@ -13,6 +13,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "5061":
             record = record._replace(polling_place_northing="215414")
 
+        # coordinate correction from council:
+        # Park Hall, Leyton Road, Harpenden, AL5 2LX
+        if record.polling_place_id == "5084":
+            record = record._replace(polling_place_northing="214003")
+            record = record._replace(polling_place_easting="513471")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
