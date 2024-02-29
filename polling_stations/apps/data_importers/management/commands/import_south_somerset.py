@@ -3,20 +3,38 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SSO"
-    addresses_name = "2023-07-20/2023-06-26T14:14:30/Eros_SQL_Output001_SSO.csv"
-    stations_name = "2023-07-20/2023-06-26T14:14:30/Eros_SQL_Output001_SSO.csv"
-    elections = ["2023-07-20"]
+    addresses_name = "2024-05-02/2024-02-29T14:44:57.333133/Eros_SQL_Output002 (1).csv"
+    stations_name = "2024-05-02/2024-02-29T14:44:57.333133/Eros_SQL_Output002 (1).csv"
+    elections = ["2024-05-02"]
+
+    def station_record_to_dict(self, record):
+        # OAKLANDS PRIMARY SCHOOL, PRESTON GROVE, YEOVIL BA20 2DY
+        if (record.pollingstationnumber, record.pollingstationname) == (
+            "79",
+            "OAKLANDS PRIMARY SCHOOL",
+        ):
+            record = record._replace(pollingstationpostcode="")
+        # MARTOCK UNITED REFORMED CHURCH HALL, BOWER HINTON, MARTOCK, SOMERSET TA12 6JN
+        if (record.pollingstationnumber, record.pollingstationname) == (
+            "93",
+            "MARTOCK UNITED REFORMED CHURCH HALL",
+        ):
+            record = record._replace(pollingstationpostcode="")
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         if record.housepostcode in [
+            # split
+            "TA20 2NJ",
             "BA10 0BU",
-            "TA10 0DL",
-            "TA10 0HF",
-            "TA3 6RP",
             "BA9 9NZ",
-            "TA10 0QH",
+            "TA20 2BE",
+            "TA10 0HF",
+            "BA22 8NT",
+            "TA3 6RP",
             "TA10 0PJ",
+            "TA10 0QH",
         ]:
             return None
-
         return super().address_record_to_dict(record)
