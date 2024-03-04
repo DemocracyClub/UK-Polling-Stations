@@ -62,6 +62,17 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode == "B38":
             record = record._replace(postcode="IP7 6DF")
 
+        # Change from council:
+        # Old station: Raydon Village Hall, Hadleigh Road, Raydon IP7 5LH
+        # New station: King George's Field and Sports Pavilion, The Street, Raydon IP7 5LT
+        if record.stationcode == "B14":
+            record = record._replace(
+                placename="King George's Field and Sports Pavilion",
+                add1="The Street",
+                postcode="IP7 5LT",
+                xordinate="",
+                yordinate="",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
