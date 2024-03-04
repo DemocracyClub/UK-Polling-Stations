@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MIK"
     addresses_name = (
-        "2023-05-04/2023-03-29T14:16:27.878954/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-04T09:26:46.650554/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-29T14:16:27.878954/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-04T09:26:46.650554/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -17,10 +17,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "25107493",  # MAYA LOFT AYLESBURY STREET, WOLVERTON
             "25091328",  # BROUGHTON MANOR, BROUGHTON, MILTON KEYNES
             "25092373",  # COOKSOE FARM, CHICHELEY, NEWPORT PAGNELL
-            "25093788",  # CARAVAN 1 BLACK HORSE LODGE WOLVERTON ROAD, GREAT LINFORD, MILTON KEYNES
             "10023651529",  # FLAT AT THE BLACK HORSE WOLVERTON ROAD, GREAT LINFORD, MILTON KEYNES
             "25096256",  # 26B STRATFORD ROAD, WOLVERTON, MILTON KEYNES
             "25041362",  # CAFE BUNGALOW, WATLING STREET, ELFIELD PARK, MILTON KEYNES
@@ -29,44 +27,29 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10093919687",  # FLAT 403, SOLSTICE APARTMENTS, 801 SILBURY BOULEVARD, MILTON KEYNES
             "10093919604",  # FLAT 104, SOLSTICE APARTMENTS, 801 SILBURY BOULEVARD, MILTON KEYNES
             "10093919616",  # FLAT 116, SOLSTICE APARTMENTS, 801 SILBURY BOULEVARD, MILTON KEYNES
+            "10096063970",  # FLAT WESTBURY FARM FOXCOVERT ROAD, SHENLEY WOOD, MILTON KEYNES
+            "25016686",  # ADDERSEY END, EAKLEY LANES, STOKE GOLDINGTON, NEWPORT PAGNELL
         ]:
             return None
 
         if record.addressline6 in [
-            "MK13 7NH",
-            "MK14 6DL",
+            # splits
             "MK4 4EL",
-            "MK46 5AF",
-            "MK46 4JS",
             "MK4 4AG",
-            "MK4 4AU",
+            "MK46 5AF",
+            "MK17 8NB",
             "MK13 9DZ",
-            "MK15 0DW",  # CAMPBELL WHARF MARINA, FROBISHER GATE, NEWLANDS, MILTON KEYNES
+            "MK14 6DL",
+            "MK13 7NH",
+            "MK4 4AU",
+            "MK46 4JS",
+            # looks wrong
+            "MK15 0DW",
+            "MK17 8WS",
+            "MK17 8WU",
+            "MK17 8WT",
+            "MK9 2HS",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Stony Stratford Library, 5-7 Church Street, Stony Stratford, Milton Keynes, MK11 1BD
-        if record.polling_place_id == "10279":
-            record = record._replace(
-                polling_place_easting="478676",
-                polling_place_northing="240427",
-            )
-
-        # Moorlands Family Centre, Dodkin Beanhill, MK6 4LP
-        if record.polling_place_id == "10605":
-            record = record._replace(
-                polling_place_easting="486874",
-                polling_place_northing="236273",
-            )
-
-        # St Mary`s Church, Newport Road, Woughton on the Green, Milton Keynes, MK6 3BE
-        if record.polling_place_id == "10465":
-            record = record._replace(
-                polling_place_easting="487690",
-                polling_place_northing="237598",
-            )
-
-        return super().station_record_to_dict(record)
