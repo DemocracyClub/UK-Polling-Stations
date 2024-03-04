@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "OLD"
     addresses_name = (
-        "2023-05-04/2023-03-15T13:49:24.368809/Democracy_Club__04May2023 Oldham.CSV"
+        "2024-05-02/2024-03-04T11:11:13.643147/Democracy_Club__02May2024.CSV"
     )
     stations_name = (
-        "2023-05-04/2023-03-15T13:49:24.368809/Democracy_Club__04May2023 Oldham.CSV"
+        "2024-05-02/2024-03-04T11:11:13.643147/Democracy_Club__02May2024.CSV"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -29,7 +29,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "422000102588",  # FLAT 2 76-78 MILNROW ROAD, SHAW
             "422000102589",  # FLAT 1 76-78 MILNROW ROAD, SHAW
             "422000107838",  # 16 CORBETT WAY, DENSHAW, OLDHAM
-            "422000119217",  # 1 FITTON STREET, ROYTON, OLDHAM
             "422000120352",  # FLAT 1 THE BUNGALOW 43 GRAINS ROAD, DELPH
             "422000120353",  # FLAT 2 THE BUNGALOW 43 GRAINS ROAD, DELPH
             "422000120354",  # FLAT 3 THE BUNGALOW 43 GRAINS ROAD, DELPH
@@ -44,19 +43,29 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100011210754",  # 41 DERBY STREET, OLDHAM
             "100011210748",  # 35 DERBY STREET, OLDHAM
             "422000071141",  # GREAVES ARMS HOTEL 13 YORKSHIRE STREET, OLDHAM
+            "422000069248",  # 131 UNION STREET, OLDHAM
+            "422000125981",  # 100A UNION STREET, OLDHAM
+            "422000130808",  # FLAT OVER 567 CHAMBER ROAD, OLDHAM
+            "422000107067",  # WHITFIELD HOUSE, WHITFIELD, SHAW, OLDHAM
+            "422000109909",  # GRAINS BAR FARM, GRAINS BAR, OLDHAM
+            "422000113488",  # SETT STONES, THURSTON CLOUGH ROAD, DOBCROSS, OLDHAM
         ]:
             return None
 
         if record.addressline6 in [
             # splits
-            "OL2 8TN",
-            "OL9 6BB",
-            "M35 9JU",
-            "OL8 3SF",
-            "OL2 8DF",
             "OL8 2NE",
+            "OL9 6BB",
+            "OL8 3SF",
             "OL2 8DT",
-            "OL8 3HP",  # SUTHERLAND CLOSE, OLDHAM
+            "OL2 8TN",
+            # looks wrong
+            "OL8 3HP",
+            "OL1 1TD",
+            "OL1 1SJ",
+            "OL1 1AP",
+            "OL1 3EU",
+            "OL4 2QH",
         ]:
             return None
 
@@ -65,8 +74,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        # Waterhead Academy Sports Campus, Counthill Road, Moorside, Oldham
-        if rec["internal_council_id"] == "10040":
+        # postcode and point correction for: Waterhead Academy Sports Campus, Counthill Road, Moorside, Oldham, OL4 2PY
+        if rec["internal_council_id"] == "11047":
             rec["postcode"] = "OL4 2PZ"
             rec["location"] = Point(-2.076175, 53.556648, srid=4326)
 
