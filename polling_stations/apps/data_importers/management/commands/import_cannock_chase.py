@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CAN"
     addresses_name = (
-        "2023-05-04/2023-03-16T12:03:23.219491/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-05T13:32:37.943021/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-16T12:03:23.219491/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-05T13:32:37.943021/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -17,16 +17,29 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "100032224228",  # 179 HEDNESFORD ROAD, HEATH HAYES, CANNOCK
+            "100031633729",  # 398 RUGELEY ROAD, HEDNESFORD, CANNOCK
+            "100031616437",  # 90 BRADBURY LANE, HEDNESFORD, CANNOCK
+            "100031629543",  # 31 MILTON ROAD, CANNOCK
+            "10008161077",  # 85A CANNOCK ROAD, CANNOCK
+            "100031620076",  # SECOND FLOOR FLAT 23 CHURCH STREET, BRIDGTOWN, CANNOCK
+            "10008161654",  # 10B WOLVERHAMPTON ROAD, CANNOCK
+            "100032222352",  # 10A WOLVERHAMPTON ROAD, CANNOCK
+            "100031628198",  # 174 LONGFORD ROAD, CANNOCK
+            "100031617493",  # 22 BROWNHILLS ROAD, NORTON CANES, CANNOCK
+            "10014216147",  # 121 WOOD LANE, HEDNESFORD, CANNOCK
+            "10014217362",  # FLAT 7, 28 HORSE FAIR, RUGELEY
+            "100032223990",  # 57 BRINDLEY HEATH ROAD, HEDNESFORD, CANNOCK
+            "100032223991",  # 58 BRINDLEY HEATH ROAD, HEDNESFORD, CANNOCK
         ]:
             return None
 
         if record.addressline6 in [
-            # split
+            # splits
             "WS12 3YG",
             "WS11 9NW",
             # look wrong
             "WS11 1LF",
-            "WS12 1RB",
+            "WS11 9AD",
         ]:
             return None
 
