@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHI"
     addresses_name = (
-        "2023-05-04/2023-03-09T13:52:01.572585/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-05T12:44:32.311080/Democracy_Club__02May2024.CSV"
     )
     stations_name = (
-        "2023-05-04/2023-03-09T13:52:01.572585/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-05T12:44:32.311080/Democracy_Club__02May2024.CSV"
     )
-    elections = ["2023-05-04"]
-    csv_delimiter = "\t"
+    elections = ["2024-05-02"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -21,23 +20,27 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10008884574",  # PADDOCK HOUSE, PLAISTOW ROAD, LOXWOOD, BILLINGSHURST
             "10002469404",  # NEWLANDS COTTAGE, LINCHMERE, HASLEMERE
             "10008887597",  # THE GRANARY UPWALTHAM HOUSE FARM CHURCH FARM LANE, UPWALTHAM
+            "200001740959",  # BADGERS, BORDER CLOSE, HILL BROW, LISS
+            "10002467828",  # PALFREY FARM, LONDON ROAD, PETWORTH
+            "10014107960",  # HORSESHOE HOUSE, HENLEY HILL, HENLEY, HASLEMERE
+            "100061753348",  # GIG HOUSE, STUBCROFT LANE, EAST WITTERING, CHICHESTER
         ]:
             return None
 
         if record.addressline6 in [
             # split
-            "PO20 9AD",
-            "RH20 1PW",
-            "PO19 3PX",
             "PO18 0PR",
-            "PO18 8QG",
-            "PO19 7QL",
+            "PO19 3PX",
             "GU28 9LY",
+            "PO18 8QG",
+            "RH20 1PW",
             "GU29 9QT",
             "GU28 0LD",
-            # wrong
-            "PO18 9AE",
-            "PO18 9AF",
+            "PO20 9AD",
+            "PO19 7QL",
+            # suspect
+            "PO20 8NX",
+            "PO20 8SP",
         ]:
             return None
 
