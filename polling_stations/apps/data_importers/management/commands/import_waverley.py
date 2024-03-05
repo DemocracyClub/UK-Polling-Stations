@@ -4,21 +4,35 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WAE"
     addresses_name = (
-        "2023-05-04/2023-03-06T13:52:11.644072/Democracy_Club__04May2023.CSV"
+        "2024-05-02/2024-03-05T14:50:24.206449/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-06T13:52:11.644072/Democracy_Club__04May2023.CSV"
+        "2024-05-02/2024-03-05T14:50:24.206449/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "100061602142",  # 3 FARNBOROUGH ROAD, FARNHAM
+            "100062350984",  # 25 HIGH STREET, CRANLEIGH
+            "200002335818",  # WHITE PLACE, 19 HIGH STREET, CRANLEIGH
+            "100062339000",  # EASEDALE, WHITMORE VALE ROAD, HINDHEAD
+            "200001293824",  # TRUXFORD STREAM THURSLEY ROAD, ELSTEAD, GODALMING
+            "100061618397",  # HANDON COTTAGE, MARKWICK LANE, LOXHILL, GODALMING
+            "100061618401",  # SHENTONS COTTAGE, MARKWICK LANE, LOXHILL, GODALMING
+        ]:
+            return None
+
         if record.addressline6 in [
-            "GU8 5TE",
+            # splits
             "GU9 0NZ",
-            "GU10 4BT",
-            "GU9 8EU",
             "GU9 9JT",
-            "RH12 3ZD",
+            # looks wrong
+            "RH12 3BQ",
+            "GU6 8EJ",
         ]:
             return None
 
