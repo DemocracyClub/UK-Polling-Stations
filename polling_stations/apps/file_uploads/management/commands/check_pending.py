@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
-from file_uploads.models import UploadQuerySet
+from file_uploads.models import Upload
 
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
-        qs = UploadQuerySet.pending_upload_qs(self)
+        qs = Upload.objects.pending_upload_qs()
         if len(qs) == 0:
             pass
         else:
