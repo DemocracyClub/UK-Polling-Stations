@@ -5,9 +5,12 @@ from data_importers.import_script import ImportScript
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
+from django.contrib.postgres.aggregates import StringAgg
 from django.core.mail import EmailMessage
 from django.db import transaction
+from django.db.models import Case, Exists, Func, OuterRef, Q, Value, When
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.timezone import now
 from requests import HTTPError
 from sentry_sdk import capture_message
@@ -19,6 +22,17 @@ status_map = {
     "Error One File": "❌ only one file uploaded",
     "OK": "✔️",
 }
+
+
+class UploadStatusChoices(models.TextChoices):
+    OK = "OK", "✔️"
+    ERROR = "ERROR", "❌"
+    PENDING = "PENDING", "⌛"
+    WAITING_SECOND_FILE = "WAITING", "⌛ waiting for second file"
+    ERROR_ONE_FILE = (
+        "ERROR_ONE_FILE",
+        "❌ only one file uploaded",
+    )
 
 
 def status_to_emoji(status):
@@ -33,8 +47,39 @@ class UploadQuerySet(models.QuerySet):
 
     def pending_upload_qs(self):
         from_time = now() - timedelta(minutes=20)
-        return Upload.objects.filter(
-            timestamp__lte=from_time, warning_about_pending_sent=False
+        return self.filter(timestamp__lte=from_time, warning_about_pending_sent=False)
+
+    def with_status(self):
+        file_subquery = File.objects.filter(upload_id=OuterRef("pk"))
+        file_errors_subquery = (
+            File.objects.filter(upload_id=OuterRef("pk"))
+            .values("upload_id")
+            .annotate(errors_agg=StringAgg("errors", delimiter=",", distinct=True))
+            .values("errors_agg")
+        )
+        files_valid_subquery = (
+            File.objects.filter(upload_id=OuterRef("pk"))
+            .annotate(all_valid=Func("csv_valid", function="BOOL_AND"))
+            .values("all_valid")
+        )
+        return self.annotate(
+            file_errors=file_errors_subquery, all_files_valid=files_valid_subquery
+        ).annotate(
+            upload_status=Case(
+                When(all_files_valid=True, then=Value(UploadStatusChoices.OK)),
+                When(~Exists(file_subquery), then=Value(UploadStatusChoices.PENDING)),
+                When(
+                    Q(file_errors__contains="Expected 2 files, found 1")
+                    & Q(timestamp__gte=timezone.now() - timedelta(seconds=180)),
+                    then=Value(UploadStatusChoices.WAITING_SECOND_FILE),
+                ),
+                When(
+                    Q(file_errors__contains="Expected 2 files, found 1")
+                    & Q(timestamp__lt=timezone.now() - timedelta(seconds=180)),
+                    then=Value(UploadStatusChoices.ERROR_ONE_FILE),
+                ),
+                When(all_files_valid=False, then=Value(UploadStatusChoices.ERROR)),
+            )
         )
 
 
@@ -48,10 +93,10 @@ class Upload(models.Model):
     timestamp = models.DateTimeField()
     election_date = models.DateField(null=True)
     github_issue = models.CharField(blank=True, max_length=100)
-
-    objects = UploadQuerySet.as_manager()
     warning_about_pending_sent = models.BooleanField(default=False)
     upload_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    objects = UploadQuerySet.as_manager()
 
     class Meta:
         get_latest_by = "timestamp"
