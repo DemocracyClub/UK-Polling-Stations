@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
-from django.db.models import Max, Prefetch, Subquery
+from django.db.models import Count, Max, Subquery
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
@@ -29,6 +29,7 @@ from pollingstations.models import VisibilityChoices
 from sentry_sdk import capture_message
 from sesame.utils import get_query_string, get_user
 
+from .filters import CouncilListUploadFilter
 from .models import File, Upload
 from .utils import assign_councils_to_user, get_domain
 
@@ -186,13 +187,11 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
 
 class CouncilView:
     def get_queryset(self):
-        uploads = Upload.objects.all().order_by("-timestamp")
         qs = (
-            Council.objects.all()
+            Council.objects.with_future_upload_details()
             .exclude(council_id__startswith="N09")
+            .annotate(ps_count=Count("pollingstation"))
             .order_by("name")
-            .prefetch_related(Prefetch("upload_set", uploads))
-            .prefetch_related("upload_set__file_set")
         )
         if not self.request.user.is_staff:
             qs = qs.filter(usercouncils__user=self.request.user)
@@ -200,9 +199,6 @@ class CouncilView:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context[
-            "COUNCILS_WITH_STATIONS"
-        ] = Council.objects.with_polling_stations_in_db()
 
         if self.kwargs.get("pk"):
             upcoming_election_dates = EveryElectionWrapper(
@@ -216,6 +212,17 @@ class CouncilView:
 
 class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
     template_name = "file_uploads/council_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filter = CouncilListUploadFilter(self.request.GET, queryset=queryset)
+        return self.filter.qs
+
+    def get_context_data(self, **kwargs):
+        # Add the filter to the context
+        context = super().get_context_data(**kwargs)
+        context["filter"] = self.filter
+        return context
 
     def get(self, request, *args, **kwargs):
         user_councils = self.get_queryset()
