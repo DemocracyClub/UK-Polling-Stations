@@ -226,8 +226,7 @@ class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
 
     def get(self, request, *args, **kwargs):
         user_councils = self.get_queryset()
-
-        if user_councils.count() == 1:
+        if user_councils.count() == 1 and not request.user.is_staff:
             return redirect(
                 reverse(
                     "file_uploads:councils_detail",
