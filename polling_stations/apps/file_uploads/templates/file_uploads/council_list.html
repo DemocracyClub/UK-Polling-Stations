@@ -1,5 +1,7 @@
 {% extends "file_uploads/council_user_base.html" %}
 {% load i18n %}
+{% load upload_status_emoji %}
+
 
 {% block page_title %}{% trans "Uploads" %}{% endblock page_title %}
 {% block title %}Upload{% endblock %}
@@ -43,7 +45,7 @@
                     </td>
                     {% endif %}
                     <td>
-                        {{ council.upload_set.future.latest.status_emoji }}
+                        {{ council.upload_set.future.with_status.latest.status | upload_status_emoji }}
                     </td>
                     {% if council in COUNCILS_WITH_STATIONS  %}
                         <td>✔️</td>

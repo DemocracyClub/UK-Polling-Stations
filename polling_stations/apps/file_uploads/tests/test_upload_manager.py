@@ -16,7 +16,7 @@ class UploadManagerWithStatus(TestCase):
             upload_id=ok_upload_one_file.id,
         )
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status, UploadStatusChoices.OK
+            Upload.objects.with_status().first().status, UploadStatusChoices.OK
         )
 
     def test_ok_two_files(self):
@@ -29,7 +29,7 @@ class UploadManagerWithStatus(TestCase):
             upload_id=ok_upload_two_file.id,
         )
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status, UploadStatusChoices.OK
+            Upload.objects.with_status().first().status, UploadStatusChoices.OK
         )
 
     def test_error_upload_one_invalid_file(self):
@@ -39,7 +39,7 @@ class UploadManagerWithStatus(TestCase):
         )
         FileFactory(upload_id=error_upload_one_invalid_file.id, csv_valid=False)
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status,
+            Upload.objects.with_status().first().status,
             UploadStatusChoices.ERROR,
         )
 
@@ -52,7 +52,7 @@ class UploadManagerWithStatus(TestCase):
             2, upload_id=error_upload_two_invalid_files.id, csv_valid=False
         )
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status,
+            Upload.objects.with_status().first().status,
             UploadStatusChoices.ERROR,
         )
 
@@ -66,7 +66,7 @@ class UploadManagerWithStatus(TestCase):
         )
         FileFactory(upload_id=error_upload_one_valid_one_invalid.id, csv_valid=False)
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status,
+            Upload.objects.with_status().first().status,
             UploadStatusChoices.ERROR,
         )
 
@@ -81,7 +81,7 @@ class UploadManagerWithStatus(TestCase):
             errors="Expected 2 files, found 1",
         )
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status,
+            Upload.objects.with_status().first().status,
             UploadStatusChoices.ERROR_ONE_FILE,
         )
 
@@ -96,7 +96,7 @@ class UploadManagerWithStatus(TestCase):
             errors="Expected 2 files, found 1",
         )
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status,
+            Upload.objects.with_status().first().status,
             UploadStatusChoices.WAITING_SECOND_FILE,
         )
 
@@ -110,6 +110,6 @@ class UploadManagerWithStatus(TestCase):
         )
 
         self.assertEqual(
-            Upload.objects.with_status().first().upload_status,
+            Upload.objects.with_status().first().status,
             UploadStatusChoices.PENDING,
         )
