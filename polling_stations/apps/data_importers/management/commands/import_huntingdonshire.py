@@ -4,33 +4,30 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HUN"
     addresses_name = (
-        "2022-05-05/2022-04-08T13:56:19.938577/UPDATED Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-05T14:28:58.853244/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-04-08T13:56:19.938577/UPDATED Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-05T14:28:58.853244/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "10091593436",  # 26D ALEXANDRA HOUSE HINCHINGBROOKE HOSPITAL HINCHINGBROOKE PARK ROAD, HUNTINGDON
-        ]:
+        if uprn in []:
             return None
 
         if record.addressline6 in [
+            # split
             "PE19 1HW",
+            "PE28 2QG",
             "PE27 6DT",
+            # suspect
+            "PE29 1NY",
+            "PE28 4NS",
+            "PE28 4EW",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Berkley Street Methodist Church, Berkley Street, Eynesbury, St. Neots, PE19 2HD
-        if record.polling_place_id == "8397":
-            record = record._replace(polling_place_postcode="PE19 2NB")
-
-        return super().station_record_to_dict(record)
