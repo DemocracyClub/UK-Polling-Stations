@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TWH"
     addresses_name = (
-        "2022-05-05/2022-02-28T09:31:35.482745/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-05T12:58:52.915950/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-02-28T09:31:35.482745/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-05T12:58:52.915950/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -19,12 +19,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "6141280",  # FLAT 3 28 CANNON STREET ROAD, LONDON
             "6146893",  # 80B BRUCE ROAD, LONDON
+            "6141280",  # FLAT 3 28 CANNON STREET ROAD, LONDON
+            "6141279",  # FLAT 2 28 CANNON STREET ROAD, LONDON
+            "6141278",  # FLAT 1 28 CANNON STREET ROAD, LONDON
+            "6653815",  # ROOM 733 7A WEST INDIA DOCK ROAD, LONDON
+            "6653812",  # ROOM 722 7A WEST INDIA DOCK ROAD, LONDON
+            "6653816",  # ROOM 721 7A WEST INDIA DOCK ROAD, LONDON
+            "6653813",  # ROOM 731 7A WEST INDIA DOCK ROAD, LONDON
+            "6653814",  # ROOM 732 7A WEST INDIA DOCK ROAD, LONDON
+            "6739342",  # 98 ROSEBANK GARDENS NORTH, LONDON
+            "6036970",  # 7B PORTMAN PLACE, LONDON
         ]:
             return None
         if record.addressline6 in [
-            "E14 0XP",
-            "E1 0BH",
-            "E14 8EZ",
+            # suspect
+            "E1 6QZ",
         ]:
             return None
 
