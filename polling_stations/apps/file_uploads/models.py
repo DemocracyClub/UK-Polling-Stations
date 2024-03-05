@@ -65,7 +65,7 @@ class UploadQuerySet(models.QuerySet):
         return self.annotate(
             file_errors=file_errors_subquery, all_files_valid=files_valid_subquery
         ).annotate(
-            upload_status=Case(
+            status=Case(
                 When(all_files_valid=True, then=Value(UploadStatusChoices.OK)),
                 When(~Exists(file_subquery), then=Value(UploadStatusChoices.PENDING)),
                 When(
@@ -103,28 +103,6 @@ class Upload(models.Model):
 
     def __str__(self):
         return f"{self.timestamp}: {self.gss}"
-
-    @property
-    def status(self):
-        if not self.file_set.all():
-            return "Pending"
-        for f in self.file_set.all():
-            if ("Expected 2 files, found 1" in f.errors) and (
-                self.timestamp + timedelta(seconds=180) > now()
-            ):
-                return "Waiting"
-            if ("Expected 2 files, found 1" in f.errors) and (
-                self.timestamp + timedelta(seconds=180) < now()
-            ):
-                return "Error One File"
-
-            if not f.csv_valid:
-                return "Error"
-        return "OK"
-
-    @property
-    def status_emoji(self):
-        return status_to_emoji(self.status)
 
     @property
     def import_script(self):

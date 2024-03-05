@@ -1,6 +1,7 @@
 {% extends "file_uploads/council_user_base.html" %}
 {% load humanize %}
 {% load i18n %}
+{% load upload_status_emoji %}
 
 {% block page_title %}{{ object.name }} - {% trans "Uploads" %}{% endblock page_title %}
 {% block title %}{{ object.name }} - {% trans "Uploads" %}{% endblock title %}
@@ -11,7 +12,7 @@
     <h2>Uploads</h2>
     {% if HAS_UPCOMING_ELECTIONS %}
 
-        {% if object.upload_set.future.exists %}
+        {% if object.upload_set.with_status.future.exists %}
             <table class="ds-table">
                 <th>Election Date</th>
                 <th>Uploaded</th>
@@ -19,7 +20,7 @@
                 <th>File upload status</th>
                 <th>Data live?</th>
 
-                {% for upload in object.upload_set.future %}
+                {% for upload in object.upload_set.with_status.future %}
 
                     <tr>
                         <td>
@@ -46,8 +47,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            {{ upload.status_emoji }}
-                            {% if upload.status == "Pending" or upload.status == "Waiting" %}
+                            {{ upload.status | upload_status_emoji }}
+                            {% if upload.status == "PENDING" or upload.status == "WAITING" %}
                                 <br><small>(Refresh page to update)</small>
                             {% endif %}
                         </td>

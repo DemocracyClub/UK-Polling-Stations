@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.db import DEFAULT_DB_ALIAS, transaction
-from django.db.models import Count, JSONField, OuterRef, Q, Subquery
+from django.db.models import Count, JSONField, OuterRef, Q
 from django.utils.translation import get_language
 from file_uploads.models import File, Upload
 from pollingstations.models import PollingStation
@@ -25,10 +25,23 @@ class CouncilQueryset(models.QuerySet):
             .exclude(pollingstation=None)
         )
 
+    def with_future_upload_details(self):
+        upload_subquery = (
+            Upload.objects.future()
+            .with_status()
+            .filter(gss=OuterRef("council_id"))
+            .order_by("-timestamp")
+        )
+        return self.using(DEFAULT_DB_ALIAS).annotate(
+            latest_upload_id=(upload_subquery.values("id")[:1]),
+            latest_upload_status=(upload_subquery.values("status")[:1]),
+        )
+
     def with_ems_from_uploads(self):
         latest_ems_subquery = (
             File.objects.filter(upload=OuterRef("pk")).values("ems").distinct("ems")
         )
+
         upload_subquery = (
             Upload.objects.filter(gss=OuterRef("council_id"))
             .annotate(ems=latest_ems_subquery)
@@ -36,8 +49,8 @@ class CouncilQueryset(models.QuerySet):
         )
 
         return self.using(DEFAULT_DB_ALIAS).annotate(
-            latest_ems=Subquery(upload_subquery.values("ems")[:1]),
             latest_upload_id=(upload_subquery.values("id")[:1]),
+            latest_ems=(upload_subquery.values("ems")[:1]),
         )
 
 
@@ -201,9 +214,9 @@ class Council(WelshNameMutationMixin, models.Model):
             and (latest_import.created > latest_teardown.created)
             and latest_import.upload
         ):
-            return latest_import.upload
+            return Upload.objects.with_status().get(id=latest_import.upload_id)
         if latest_import and not latest_teardown and latest_import.upload:
-            return latest_import.upload
+            return Upload.objects.with_status().get(id=latest_import.upload_id)
         return None
 
     def update_all_station_visibilities_from_events(

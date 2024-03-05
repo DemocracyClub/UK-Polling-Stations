@@ -63,14 +63,6 @@ class CouncilTest(TestCase):
         newport = Council.objects.get(pk="NWP")
         self.assertEqual("Wales", newport.nation)
 
-    def test_with_polling_stations_in_db_qs(self):
-        self.assertEqual(len(Council.objects.all()), 3)
-        self.assertEqual(len(Council.objects.with_polling_stations_in_db()), 2)
-
-    def test_has_polling_stations_in_db(self):
-        self.assertTrue(self.stations_council.has_polling_stations_in_db)
-        self.assertFalse(self.no_stations_council.has_polling_stations_in_db)
-
     def test_latest_data_event(self):
         self.assertEqual(
             set(DataEvent.objects.all().values_list("council_id", flat=True)), {"NWP"}

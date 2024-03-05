@@ -398,7 +398,7 @@ class AddressTest(APITestCase):
         self.assertEqual(201, resp.status_code)
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(1, len(File.objects.all()))
-        self.assertEqual(Upload.objects.all()[0].status, "Waiting")
+        self.assertEqual(Upload.objects.with_status().all()[0].status, "WAITING")
 
     @freeze_time("2020-01-10 15:26:55")
     # If the first file is uploaded, but it takes the second file
@@ -435,7 +435,7 @@ class AddressTest(APITestCase):
         self.assertEqual(201, resp.status_code)
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(1, len(File.objects.all()))
-        self.assertEqual(Upload.objects.all()[0].status, "Error One File")
+        self.assertEqual(Upload.objects.with_status().all()[0].status, "ERROR_ONE_FILE")
 
     def test_deleted_upload_user(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
