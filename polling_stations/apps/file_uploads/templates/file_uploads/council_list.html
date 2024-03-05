@@ -11,12 +11,29 @@
         Welcome to Democracy Club’s polling station data uploader. Select a council to upload a file.
         If you experience any problems, please contact <a href="mailto:pollingstations@democracyclub.org.uk">pollingstations@democracyclub.org.uk</a>.
     </p>
-    <h1>{% if request.user.is_staff %}
-        All councils
+    {% if request.user.is_staff %}
+        <h1>All councils</h1>
+        <aside class="ds-filter" aria-labelledby="filter-label">
+            <details open>
+                <summary>Filters</summary>
+                <form>
+                    <div class="ds-filter-cluster">
+                        {% for field in filter.form %}
+                            <ul aria-labelledby="filter-label-{{ forloop.counter }}">
+                                <li id="filter-label-{{ forloop.counter }}" class="ds-filter-label" aria-hidden="true">
+                                    {{ field.label }}:
+                                </li>
+                                {{ field }}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </form>
+            </details>
+        </aside>
     {% else %}
-        Your councils
+        <h1>Your councils</h1>
     {% endif %}
-    </h1>
+
     {% if object_list %}
         <table class="ds-table">
             <tr>
@@ -38,21 +55,21 @@
                     {% if request.user.is_staff %}
                         <td><a href="mailto:{{ council.electoral_services_email }}">{{ council.electoral_services_email }}</a></td>
                     {% endif %}
-                    {% if request.user.is_staff %}<td>
-                        <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
-                            upload
-                        </a>
-                    </td>
+                    {% if request.user.is_staff %}
+                        <td>
+                            <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
+                                upload
+                            </a>
+                        </td>
                     {% endif %}
                     <td>
                         {{ council.upload_set.future.with_status.latest.status | upload_status_emoji }}
                     </td>
-                    {% if council in COUNCILS_WITH_STATIONS  %}
-                        <td>✔️</td>
+                    {% if council.ps_count  %}
+                        <td>✔️ <cite><small>({{ council.ps_count }})</small></cite></td>
                     {% else %}
                         <td>❌</td>
                     {% endif %}
-
                 </tr>
 
             {% endfor %}
