@@ -4,45 +4,54 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SWD"
     addresses_name = (
-        "2023-05-04/2023-03-09T15:11:04.745110/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-06T09:43:29.103018/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-09T15:11:04.745110/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-06T09:43:29.103018/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10090042967",  # 2 COMET WAY, WROUGHTON, SWINDON
             "200002920576",  # 549A CRICKLADE ROAD, SWINDON
             "10004837907",  # 47 VICTORIA ROAD, SWINDON
             "10004842282",  # 15B VICTORIA ROAD, SWINDON
             "10004837805",  # 15A VICTORIA ROAD, SWINDON
             "10009420836",  # HILLIER FUNERAL SERVICE LTD, KINGSHILL HOUSE, KENT ROAD, SWINDON
             "200001616306",  # ANDY WRAIGHT TEACHING STUDIOS, 105 RODBOURNE ROAD, SWINDON
-            "10008541750",  # 1 BOUNDARY COTTAGES, WROUGHTON, SWINDON
-            "10008541749",  # 2 BOUNDARY COTTAGES, WROUGHTON, SWINDON
+            "200002926617",  # 14 LECHLADE ROAD, HIGHWORTH, SWINDON
+            "200002926616",  # 13 LECHLADE ROAD, HIGHWORTH, SWINDON
+            "10026656923",  # 12A 12 LECHLADE ROAD, HIGHWORTH, SWINDON
+            "10010430974",  # 12 LECHLADE ROAD, HIGHWORTH, SWINDON
+            "10022785691",  # 10 LECHLADE ROAD, HIGHWORTH, SWINDON
+            "10008546617",  # INALA, LECHLADE ROAD, HIGHWORTH, SWINDON
+            "10090044451",  # JOURNEYS END, LECHLADE ROAD, HIGHWORTH, SWINDON
+            "10008546728",  # FOURWINDS, LECHLADE ROAD, HIGHWORTH, SWINDON
+            "100121128471",  # ROYAL OAK, 24 DEVIZES ROAD, SWINDON
+            "100121128472",  # 25 DEVIZES ROAD, SWINDON
+            "10026656296",  # 29B SAVERNAKE STREET, SWINDON
+            "10026656295",  # 29A SAVERNAKE STREET, SWINDON
+            "10004845458",  # FLAT 16 VICTORIA ROAD, OLD TOWN, SWINDON
+            "200002920837",  # 597 CRICKLADE ROAD, SWINDON
+            "10090041392",  # 340A CRICKLADE ROAD, SWINDON
+            "10004837797",  # 26 VICTORIA ROAD, SWINDON
+            "200001618187",  # 198 MARLBOROUGH ROAD, SWINDON
         ]:
             return None
 
         if record.addressline6 in [
             # splits
             "SN25 3LR",
-            "SN25 3EN",
             "SN6 7JY",
-            "SN3 5EP",
             "SN25 2TN",
+            # looks wrong
+            "SN6 7DG",
+            "SN3 1BB",
+            "SN1 3FP",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # The Nythe Centre, The Drive, Swindon, SN3 3RR
-        if record.polling_place_id == "11659":
-            record = record._replace(polling_place_postcode="SN3 3QA")
-
-        return super().station_record_to_dict(record)
