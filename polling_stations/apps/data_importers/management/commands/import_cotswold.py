@@ -1,16 +1,15 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "COT"
     addresses_name = (
-        "2023-05-04/2023-03-20T13:32:23.846470/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-06T16:49:21.283228/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-20T13:32:23.846470/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-06T16:49:21.283228/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -28,58 +27,66 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10013392804",  # WOODLANDS FARM, WHITTINGTON, CHELTENHAM
             "10013886740",  # THE STABLE FLAT HARTLEY FARM HARTLEY LANE, LECKHAMPTON HILL, COBERLEY
             "10013886813",  # HARTLEY FARM, HARTLEY LANE, LECKHAMPTON HILL, CHELTENHAM
-            "100120433798",  # STARVEALL COTTAGE, STROUD ROAD, BIRDLIP, GLOUCESTER
-            "100121238347",  # HEATH HOUSE, GLOUCESTER ROAD, CIRENCESTER
             "10095337476",  # 1 ROOKERY FIELD, WOODMANCOTE, CIRENCESTER
             "10095337477",  # 2 ROOKERY FIELD, WOODMANCOTE, CIRENCESTER
             "10095337478",  # 3 ROOKERY FIELD, WOODMANCOTE, CIRENCESTER
+            "10013883801",  # THE STABLES, SOUTH HILL FARM, STATION ROAD, STOW ON THE WOLD, CHELTENHAM
+            "10013397276",  # BEDWELL HOUSE, LONDON ROAD, NORTHLEACH, CHELTENHAM
+            "10013397991",  # 1 HATHEROP, CIRENCESTER
+            "10022834932",  # MANOR FARM, THORNHILL, LECHLADE
+            "10022842658",  # SHOOTERS HILL HOUSE ROAD FROM SPRATSGATE LANE TO WEST OF THE BYRE, EWEN
+            "10022839178",  # JACKAMENTS FARM, RODMARTON, CIRENCESTER
+            "10022839173",  # JACKAMENTS BARN, RODMARTON, CIRENCESTER
+            "10022838052",  # THE OLD FORGE, WESTONBIRT, TETBURY
+            "10022838048",  # THE BOTHY, WESTONBIRT, TETBURY
+            "10024444000",  # BREWERS HOUSE, UPPER RECTORY FARM, DAGLINGWORTH, CIRENCESTER
+            "10013397285",  # BEDWELL BARN, LONDON ROAD, NORTHLEACH, CHELTENHAM
+            "10024443650",  # BRAMBLE MERE, WHELFORD ROAD, FAIRFORD
+            "10093271128",  # DAIRY STORE, TETBURY ROAD, CIRENCESTER
+            "100120433154",  # DAIRY COTTAGE, TETBURY ROAD, CIRENCESTER
+            "10093268937",  # MOBILE HOME AT WINTER BROOK MAIN ROAD THROUGH LONG NEWNTON, LONG NEWNTON
+            "10023476199",  # WINTER BROOK, LONG NEWNTON, TETBURY
+            "10095336792",  # HINCHWICK HILL BARN, OLD HINCHWICK, CONDICOTE, CHELTENHAM
+            "10006841182",  # ASTON HALE FARM, STRATFORD ROAD, MORETON-IN-MARSH
+            "10023478480",  # FIVE ACRE FARM, PEGGLESWORTH, ANDOVERSFORD, CHELTENHAM
+            "10022838042",  # EAST LODGE, WESTONBIRT, TETBURY
             "10013392569",  # LYDE COTTAGE, UPPER COBERLEY, CHELTENHAM
+            "10022851137",  # PINSWELL ROUND HOUSE A435 COLESBOURNE JUNCTION TO COTT PLANTATION JUNCTION, COLESBOURNE
+            "10013397361",  # 1 SPRINGHILL COTTAGES, SPRINGHILL, MORETON-IN-MARSH
         ]:
             return None
 
         if record.addressline6 in [
-            "GL7 5RA",
+            # splits
             "GL7 3PR",
-            "GL54 5US",
-            "GL54 1LT",
+            "GL54 3ER",
+            "GL7 5RA",
             "GL55 6LW",
             "GL56 9NF",
-            "GL54 3ER",
+            "GL54 1LT",
+            "GL54 5US",
             "GL54 3LX",
+            "GL8 8RY",
+            # looks wrong
+            "GL54 3QB",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Leighterton Primary School, Leighterton, GL8 8UH
-        # correction from council
-        if record.polling_place_id == "21286":
+        # add point for: St Mary Magdalene Church, Downs Way, Baunton, Cirencester, GL7 7DH
+        if record.polling_place_id == "25961":
             record = record._replace(
-                polling_place_easting="382121",
-                polling_place_northing="191316",
+                polling_place_easting="402181",
+                polling_place_northing="204691",
             )
 
-        # Bingham Hall, Bingham Hall, King Street, Cirencester, GL7 1JT
-        # correction from council
-        if record.polling_place_id == "23487":
+        # addd point for: St Mary`s Church, Meysey Hampton, GL7 5JS
+        if record.polling_place_id == "26137":
             record = record._replace(
-                polling_place_easting="402792",
-                polling_place_northing="201385",
+                polling_place_easting="411692",
+                polling_place_northing="200044",
             )
 
-        # Tetbury Goods Shed Arts Centre, GL8 8EY
-        # correction from council
-        if record.polling_place_id == "21417":
-            record = record._replace(
-                polling_place_easting="389331",
-                polling_place_northing="193235",
-            )
-
-        rec = super().station_record_to_dict(record)
-
-        # St Mary`s Church, Meysey Hampton, GL7 5JS
-        if rec["internal_council_id"] == "23508":
-            rec["location"] = Point(-1.831982, 51.699177, srid=4326)
-
-        return rec
+        return super().station_record_to_dict(record)
