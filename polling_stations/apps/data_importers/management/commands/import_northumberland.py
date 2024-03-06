@@ -3,64 +3,144 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NBL"
-    addresses_name = "2021-03-25T12:14:50.419215/Democracy_Club__06May2021.tsv"
-    stations_name = "2021-03-25T12:14:50.419215/Democracy_Club__06May2021.tsv"
-    elections = ["2021-05-06"]
-    csv_delimiter = "\t"
+    addresses_name = (
+        "2024-05-02/2024-03-06T11:18:48.952006/Democracy_Club__02May2024.csv"
+    )
+    stations_name = (
+        "2024-05-02/2024-03-06T11:18:48.952006/Democracy_Club__02May2024.csv"
+    )
+    elections = ["2024-05-02"]
 
     def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10096301305",  # 4 MARINA WEST, AMBLE, MORPETH
+            "10096301304",  # 5 MARINA WEST, AMBLE, MORPETH
+            "200002823696",  # ST. AIDANS PRIMARY SCHOOL HOUSE, MOORHOUSE LANE, ASHINGTON
+            "10094015954",  # 7 HARRISON CRESCENT, ESSENDENE RISE, NORTH SEATON, ASHINGTON
+            "10012421608",  # LANE END FARM, NEWBIGGIN ROAD, NORTH SEATON, ASHINGTON
+            "10032938120",  # THE BIRCHES, RED ROW DRIVE, BEDLINGTON
+            "10000843358",  # EBENEEZER, CARRSHIELD, HEXHAM
+            "10000844527",  # EAST HOT BANK FARM, BARDON MILL, HEXHAM
+            "200000923540",  # GRINDON HILL BUNGALOW, HAYDON BRIDGE, HEXHAM
+            "10001018037",  # COALSFIELD HOUSE, ELSDON, NEWCASTLE UPON TYNE
+            "200000919007",  # FARGLOW FARM, GREENHEAD, BRAMPTON
+        ]:
+            return None
+
         if record.addressline6 in [
-            "NE61 3FF",
+            # splits
             "NE61 6JD",
-            "NE63 0FD",
-            "NE48 1HR",
-            "NE47 7AQ",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if record.polling_place_id in [
-            "3488",  # Thropton War Memorial Hall, Thropton, Morpeth, Northumberland NE65 7LR
-            "3519",  # Hadston Druridge Bay Community Centre, Hadston Precinct, Hadston, Morpeth, Northumberland NE65 9SR
-            "3541",  # Ingram Village Hall, Ingram, Powburn, Alnwick, Northumberland NE66 4LU
-            "3578",  # North Sunderland & Seahouses Sports & Community Centre, Seahouses, Northumberland NE68 7TP
-            "3502",  # Felton Village Hall, Felton, Morpeth, Northumberland NE65 9PT
-            "3650",  # Alnwick Lindisfarne Sports Centre, Victoria Crescent, Alnwick, Northumberland NE66 1AX
-            "3784",  # Seaton Delaval United Reformed/Methodist Church Hall, Elsdon Avenue, Seaton Delaval, Northumberland NE25 0BW
-            "3620",  # Netherwitton Village Hall, Netherwitton, Morpeth, Northumberland NE61 4NW
-            "3635",  # Craster Memorial Hall, Craster, Alnwick, Northumberland NE66 3TP
-            "3719",  # Holy Island Crossman Village Hall, Holy Island, Berwick-Upon-Tweed TD15 2ST
-            "3764",  # Cramlington Nelson Village Welfare Community Centre, 55 Nelson Avenue, Nelson Village, Cramlington, Northumberland NE23 1HG
-            "3799",  # Blyth Briardale House Youth and Community Project, Briardale Road, Cowpen Estate, Blyth, Northumberland NE24 5AN
-            "3660",  # Powburn Breamish Hall, Powburn, Alnwick, Northumberland NE66 4HL
-            "3664",  # Boulmer Memorial Hall, Boulmer, Alnwick, Northumberland NE66 0RA
-            "3592",  # Berwick St Cuthberts Parish Centre, Walkergate, Berwick Upon Tweed TD15 1DS
-            "3713",  # Etal Village Hall, Etal, Berwick Upon Tweed TD12 4TN
-            "3816",  # Blyth Neptune Hq, Scout Building, Fulmar Drive, South Beach, Blyth NE24 3RJ
-            "3566",  # Bamburgh Pavilion, Bamburgh, Northumberland NE69 7BP
-            "3850",  # Horsley Village & Wi Hall, Horsley, Newcastle Upon Tyne NE15 0NS
-            "3936",  # Hexham West End Methodist Church Hall, Shaftoe Leazes, Hexham, Northumberland NE46 3DF
-            "3985",  # Ponteland United Reformed Church, Broadway, Ponteland, Newcastle Upon Tyne NE20 9PP
-            "3991",  # Stamfordham Village Hall, Stamfordham, Newcastle Upon Tyne NE18 0NA
-            "4015",  # Allenheads Heritage Centre, Allenheads, Northumberland NE47 9HN
-            "3898",  # Bellingham Town Hall, Front Street, Bellingham, Hexham, Northumberland NE48 2AA
-            "3956",  # Wall Village Hall, Wall, Hexham, Northumberland NE46 4DX
-            "3879",  # Featherstone Village Hall, Featherstone, Northumberland NE49 0JG
-            "4028",  # Slaley Commemoration Hall, Main Street, Slaley, Hexham, Northumberland NE47 0AA
-            "4061",  # Byrness Village Hall, Byrness, Northumberland NE19 1TT
-            "4019",  # Catton Village Hall, Catton, Northumberland NE47 9QH
-            "4136",  # Cambois Camera Club, Ridley Terrace, Cambois, Northumberland NE24 1QS
-            "4153",  # Bedlington Doctor Pit Pavilion, Doctor Pit Park, Park Road, Bedlington, Northumberland NE22 5DA
-            "4126",  # Newbiggin Elizabethan Hall, Hepple Road, Newbiggin By the Sea, Northumberland NE64 6SR
-            "4080",  # Hepscott Parish Hall, Hepscott, Morpeth, Northumberland NE61 6LT
-            "4082",  # Mitford Community Centre, Fontside, Mitford, Morpeth, Northumberland NE61 3PS
-        ]:
-            record = record._replace(polling_place_postcode="")
+        # 'The Lindisfarne Centre, Lindisfarne Road, Alnwick, NE66 1AX' (id: 8235)
+        # postcode provided by the council, ignore the warning
 
-        # Guide Post Scouts Hut, Olympia Avenue, Guide Post, Choppington, Northumberland, NE62 5DF
-        if record.polling_place_id == "4066":
-            record = record._replace(polling_place_uprn="")
+        # 'Bamburgh Pavilion, Bamburgh, NE69 7BP' (id: 8144)
+        # postcode provided by the council, ignore the warning
+        if record.polling_place_id == "8144":
+            record = record._replace(polling_place_postcode="NE69 7DB")
+
+        # 'St Cuthberts Parish Centre, Walkergate, Berwick upon Tweed, TD15 1DS' (id: 8176)
+        # postcode provided by the council, ignore the warning
+        if record.polling_place_id == "8176":
+            record = record._replace(polling_place_postcode="TD15 2SB")
+
+        # 'Netherwitton Village Hall, Netherwitton, Morpeth, NE61 4NW' (id: 8204)
+        # postcode provided by the council, ignore the warning
+
+        # 'Felton Village Hall, Felton, Morpeth, NE65 9PT' (id: 8076)
+        if record.polling_place_id == "8076":
+            record = record._replace(polling_place_postcode="NE65 9NH")
+
+        # 'Ellingham Village Hall, Ellingham, NE67 5HA' (id: 8236)
+        # postcode provided by the council, ignore the warning
+
+        # 'Boulmer Memorial Hall, Boulmer, Alnwick, NE66 0RA' (id: 8248)
+        if record.polling_place_id == "8248":
+            record = record._replace(polling_place_postcode="NE66 3BP")
+
+        # 'Etal Village Hall, Etal, Berwick upon Tweed, TD12 4TN' (id: 8306)
+        if record.polling_place_id == "8306":
+            record = record._replace(polling_place_postcode="TD12 4TL")
+
+        # 'Holy Island Crossman Village Hall, Holy Island, Berwick upon Tweed, TD15 2ST' (id: 8314)
+        # postcode provided by the council, ignore the warning
+        if record.polling_place_id == "8314":
+            record = record._replace(polling_place_postcode="TD15 2RX")
+
+        # 'Ingram Village Hall, Ingram, Powburn, Alnwick, NE66 4LU' (id: 8117)
+        # postcode provided by the council, ignore the warning
+
+        # 'Nelson Village Welfare Community Centre, 55 Nelson Avenue, Nelson Village, Cramlington, NE23 1HG' (id: 8362)
+        # postcode provided by the council, ignore the warning
+
+        # 'Seaton Delaval United Reformed/Methodist Church Hall, Elsdon Avenue, Seaton Delaval, NE25 0BW' (id: 8386)
+        # postcode provided by the council, ignore the warning
+
+        # 'Blyth Briardale House Youth and Community Project, Briardale Road, Cowpen Estate, Blyth, NE24 5AN' (id: 8399)
+        # postcode provided by the council, ignore the warning
+
+        # 'Blyth Saint Benedicts Church, Devonworth Place, Blyth, NE24 5AD' (id: 8397)
+        # postcode provided by the council, ignore the warning
+        if record.polling_place_id == "8397":
+            record = record._replace(polling_place_postcode="NE24 5AU")
+
+        # 'Bellingham Town Hall, Front Street, Bellingham, Hexham, NE48 2AA' (id: 8509)
+        # postcode provided by the council, ignore the warning
+        if record.polling_place_id == "8509":
+            record = record._replace(polling_place_postcode="NE48 2AH")
+
+        # 'Byrness Village Hall, Byrness, NE19 1TT' (id: 8699)
+        # postcode provided by the council, ignore the warning
+
+        # 'Horsley Village Hall Trust, Horsley, NE15 0NS' (id: 8457)
+        if record.polling_place_id == "8457":
+            record = record._replace(polling_place_postcode="NE15 0NT")
+
+        # 'Featherstone Village Hall, Featherstone, NE49 0JG' (id: 8488)
+        if record.polling_place_id == "8488":
+            record = record._replace(polling_place_postcode="NE49 0JE")
+
+        # 'Hexham West End Methodist Church Hall, Shaftoe Leazes, Hexham, NE46 3DF' (id: 8547)
+        # postcode provided by the council, ignore the warning
+
+        # 'Wall Village Hall, Wall, Hexham, NE46 4DX' (id: 8570)
+        if record.polling_place_id == "8570":
+            record = record._replace(polling_place_postcode="NE46 4DU")
+
+        # 'Matfen Village Hall, Matfen, NE20 0RP' (id: 8609)
+        # postcode provided by the council, ignore the warning
+
+        # 'Stamfordham Village Hall, Stamfordham, NE18 0NA' (id: 8613)
+        # postcode provided by the council, ignore the warning
+
+        # 'Catton Village Hall, Catton, NE47 9QH' (id: 8648)
+        # postcode provided by the council, ignore the warning
+
+        # 'Blanchland Village Hall, Derwent View, Blanchland, Consett, DH8 9UA' (id: 8655)
+        # postcode provided by the council, ignore the warning
+
+        # 'Slaley Commemoration Hall, Main Street, Slaley, Hexham, NE47 0AA' (id: 8659)
+        if record.polling_place_id == "8659":
+            record = record._replace(polling_place_postcode="NE47 0BQ")
+
+        # 'Scouts Hut, Olympia Avenue, Guide Post, Choppington, NE62 5DF' (id: 8705)
+        # postcode provided by the council, ignore the warning
+
+        # 'Hepscott Parish Hall, Hepscott, Morpeth, NE61 6LT' (id: 8722)
+        if record.polling_place_id == "8722":
+            record = record._replace(polling_place_postcode="NE61 6LN")
+
+        # 'Mitford Community Centre, Fontside, Mitford, Morpeth, NE61 3PS' (id: 8724)
+        # postcode provided by the council, ignore the warning
+
+        # 'Cambois Camera Club, Ridley Terrace, Cambois, NE24 1QS' (id: 8783)
+        # postcode provided by the council, ignore the warning
 
         return super().station_record_to_dict(record)
