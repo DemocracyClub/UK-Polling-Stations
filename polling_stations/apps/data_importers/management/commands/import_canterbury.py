@@ -1,75 +1,47 @@
-from data_importers.data_types import StationSet
-from data_importers.github_importer import BaseGitHubImporter
-from django.contrib.gis.geos import MultiPoint, Point
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CAT"
-    elections = ["2023-05-04"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Canterbury"
-    geom_type = "geojson"
+    addresses_name = (
+        "2024-05-02/2024-03-06T14:08:58.739559/Democracy_Club__02May2024.tsv"
+    )
+    stations_name = (
+        "2024-05-02/2024-03-06T14:08:58.739559/Democracy_Club__02May2024.tsv"
+    )
+    elections = ["2024-05-02"]
+    csv_encoding = "windows-1252"
+    csv_delimiter = "\t"
 
-    # Canterbury embed the station addresses in the districts file
-    # The stations endpoint only serves up the geo data
-    # (it doesn't include the station addresses)
-    station_addresses = {}
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        code = record["ID"].strip()
-        address = record["POLLING_PL"].strip()
+        if uprn in [
+            "100060835439",  # 22 MICKLEBURGH HILL, HERNE BAY
+            "10094583530",  # SHIRE COTTAGE, FORD, HOATH, CANTERBURY
+            "200000690267",  # DO BURRIDGE & SON, THRUXTED FARM, PENNY POT LANE, MYSTOLE, CANTERBURY
+            "10090316068",  # 11B BEACONSFIELD ROAD, CANTERBURY
+            "100060808344",  # 11A BEACONSFIELD ROAD, CANTERBURY
+            "100060808340",  # 7 BEACONSFIELD ROAD, CANTERBURY
+            "100060808342",  # 9 BEACONSFIELD ROAD, CANTERBURY
+            "100060808345",  # 11 BEACONSFIELD ROAD, CANTERBURY
+            "100060808347",  # 13 BEACONSFIELD ROAD, CANTERBURY
+            "100060808349",  # 15 BEACONSFIELD ROAD, CANTERBURY
+            "100060808351",  # 17 BEACONSFIELD ROAD, CANTERBURY
+            "100060816786",  # HOLMLEA, MANDEVILLE ROAD, CANTERBURY
+            "200000675476",  # WHITEHALL FARM, WHITEHALL ROAD, CANTERBURY
+            "100062280306",  # 57 NUNNERY FIELDS, CANTERBURY
+            "200000696793",  # HOWLETTS WILD ANIMAL PARK, BEKESBOURNE ROAD, BEKESBOURNE, CANTERBURY
+            "100060829891",  # 69A BROOMFIELD ROAD, HERNE BAY
+            "100060829893",  # 71 BROOMFIELD ROAD, HERNE BAY
+            "10033155183",  # THE BUNGALOW, PALMSTEAD, UPPER HARDRES, CANTERBURY
+        ]:
+            return None
 
-        if code in self.station_addresses and self.station_addresses[code] != address:
-            raise ValueError(
-                "District code appears twice with 2 different station addresses"
-            )
+        if record.addressline6 in [
+            # splits
+            "CT1 3ZE"
+        ]:
+            return None
 
-        self.station_addresses[code] = address
-
-        return {
-            "internal_council_id": code,
-            "name": record["NAME"].strip() + " - " + code,
-            "area": poly,
-            "polling_station_id": code,
-        }
-
-    def station_record_to_dict(self, record):
-        code = record["Polling_di"].strip()
-        address = self.station_addresses[code]
-        del self.station_addresses[code]  # remove station addresses as we use them
-
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        if isinstance(location, MultiPoint) and len(location) == 1:
-            location = location[0]
-
-        # point supplied is bang on the building
-        # but causes google directions API to give us a strange route
-        if code == "CWE2" and address.startswith("St Dunstan"):
-            location = Point(1.070064, 51.283614, srid=4326)
-
-        return {
-            "internal_council_id": code,
-            "postcode": "",
-            "address": address,
-            "location": location,
-        }
-
-    def post_import(self):
-        # mop up any districts where we have a station address
-        # attached to a district code but no point
-        self.stations = StationSet()
-        for code in self.station_addresses:
-            self.add_polling_station(
-                {
-                    "internal_council_id": code,
-                    "postcode": "",
-                    "address": self.station_addresses[code],
-                    "location": None,
-                    "council": self.council,
-                }
-            )
-        self.stations.save()
+        return super().address_record_to_dict(record)
