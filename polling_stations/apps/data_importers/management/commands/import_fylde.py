@@ -5,22 +5,18 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "FYL"
     addresses_name = (
-        "2023-05-04/2023-03-27T16:54:29.854985/Democracy_Club__04May2023 (R).tsv"
+        "2024-05-02/2024-03-08T16:02:17.131780/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-27T16:54:29.854985/Democracy_Club__04May2023 (R).tsv"
+        "2024-05-02/2024-03-08T16:02:17.131780/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100010421120",  # 12 STATION ROAD, WESHAM, PRESTON
-            "100010421118",  # 10 STATION ROAD, WESHAM, PRESTON
-            "100010421126",  # 17 STATION ROAD, WESHAM, PRESTON
-            "100010421149",  # 53 STATION ROAD, KIRKHAM
             "200001880578",  # FLAT C, 55 ST. ANNES ROAD WEST, LYTHAM ST. ANNES
             "200001880577",  # FLAT B, 55 ST. ANNES ROAD WEST, LYTHAM ST. ANNES
             "100012389926",  # COPPICE FARM HOUSE, WEST MOSS LANE, LYTHAM ST. ANNES
@@ -38,38 +34,42 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10023481816",  # 10 WYRE STREET, ST. ANNES, LYTHAM ST. ANNES
             "100012753789",  # 50 SEA VIEW RESIDENTIAL PARK BANK LANE, BRYNING WITH WARTON
             "10091661148",  # 21B LYTHAM ROAD, FRECKLETON, PRESTON
-            "100012390106",  # POINTER HOUSE FARM, FLEETWOOD ROAD, SINGLETON, POULTON-LE-FYLDE
             "10091661257",  # THE OLD SHIPPON BACK LANE, WEETON WITH PREESE
+            "100010409981",  # 43 SOUTH WARTON STREET, LYTHAM ST. ANNES
+            "10023484394",  # THE OLD SAWMILL, BLACKPOOL ROAD, LYTHAM ST. ANNES
+            "100010413647",  # FLAT 1-3, WOODLANDS HOUSE, 74 WOODLANDS ROAD, LYTHAM ST. ANNES
+            "100010410533",  # 126 ST ANDREWS ROAD SOUTH, LYTHAM ST ANNES
+            "100012390106",  # POINTER HOUSE FARM, FLEETWOOD ROAD, SINGLETON, POULTON-LE-FYLDE
         ]:
             return None
 
         if record.addressline6 in [
             # splits
-            "FY8 2LY",
-            "FY8 2AW",
             "PR4 1PN",
-            "PR4 3DJ",
-            "PR4 2JN",
-            "FY8 2DS",
-            "FY8 1JU",
-            "PR4 2RY",
-            "PR4 2JW",
             "PR4 3AR",
+            "FY8 1JU",
+            "PR4 2JW",
+            "FY8 2AW",
+            "PR4 2RY",
+            "PR4 2JN",
+            "PR4 0YP",
+            "PR4 3DJ",
+            "FY8 2LY",
             "FY8 2BS",
+            "FY8 2DS",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Below warning checked and no correction needed:
+        # WARNING: Polling station Princess Alexandra House (3419) is in Blackpool Borough Council
+
         rec = super().station_record_to_dict(record)
 
-        # St Thomas Parish Centre (Function Room), St Thomas Road, Lytham St Annes
-        if rec["internal_council_id"] == "3190":
-            rec["location"] = Point(-3.024416, 53.747426, srid=4326)
-
-        # St Thomas Parish Centre (The Hall), St Thomas Road, Lytham St Annes
-        if rec["internal_council_id"] == "3046":
+        # more accurate point for: St Thomas Parish Centre, St Thomas Road, Lytham St Annes
+        if rec["internal_council_id"] in ["3409", "3405"]:
             rec["location"] = Point(-3.024416, 53.747426, srid=4326)
 
         return rec
