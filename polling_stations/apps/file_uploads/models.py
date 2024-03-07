@@ -5,7 +5,7 @@ from data_importers.import_script import ImportScript
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
-from django.contrib.postgres.aggregates import StringAgg
+from django.contrib.postgres.aggregates import BoolAnd, StringAgg
 from django.core.mail import EmailMessage
 from django.db import transaction
 from django.db.models import Case, Exists, Func, OuterRef, Q, Value, When
@@ -105,8 +105,18 @@ class Upload(models.Model):
         return f"{self.timestamp}: {self.gss}"
 
     @property
+    def fileset_valid(self):
+        if self.file_set.exists():
+            return (
+                self.file_set.all()
+                .aggregate(fileset_valid=BoolAnd("csv_valid"))
+                .get("fileset_valid")
+            )
+        return False
+
+    @property
     def import_script(self):
-        if self.status != "OK":
+        if not self.fileset_valid:
             return None
 
         elections = [str(self.election_date)]
