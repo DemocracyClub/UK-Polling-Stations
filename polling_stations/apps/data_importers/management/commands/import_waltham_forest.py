@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WFT"
     addresses_name = (
-        "2022-05-05/2022-03-09T16:58:40.436212/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-12T11:46:31.713315/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-09T16:58:40.436212/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-12T11:46:31.713315/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -19,28 +19,37 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10009149436",  # 24 PENNANT TERRACE, LONDON
             "10024418210",  # 5A ELY ROAD, LONDON
             "10024421904",  # FLAT B 372-374 HIGH ROAD LEYTON, LEYTON, E10 6QE
-            "200001425453",  # 112 FARMILO ROAD, LONDON
-            "200001425453",  # GROUND FLOOR FLAT 1 27 QUEENS ROAD, LEYTONSTONE
-            "100022517750",  # 316C LEA BRIDGE ROAD, LONDON
-            "100023696171",  # 3 OAKLANDS, 37 WEST AVENUE, LONDON
-            "10009143272",  # FLAT 1, 58 BORTHWICK ROAD, LONDON
-            "100022597338",  # FLAT 5 85 WHIPPS CROSS ROAD, LEYTONSTONE
+            "100022981619",  # 27 PENNANT TERRACE, LONDON
+            "200001416768",  # 24B COURTENAY ROAD, LEYTONSTONE
+            "200001448154",  # SECOND FLOOR FLAT 7A ST JAMES STREET, WALTHAMSTOW
+            "10091184386",  # SECOND FLOOR FLAT 32 ST JAMES STREET, WALTHAMSTOW
+            "10091184385",  # FIRST FLOOR REAR FLAT 32 ST JAMES STREET, WALTHAMSTOW
+            "10091184384",  # FIRST FLOOR FRONT FLAT 32 ST JAMES STREET, WALTHAMSTOW
+            "100022580513",  # 41 RINGWOOD ROAD, LONDON
+            "100022962188",  # COMMUNITY BASED HOUSING ASSOCIATION, 433-443 HIGH ROAD LEYTONSTONE, LONDON
+            "100022961205",  # 1A SELBY ROAD, LEYTONSTONE
+            "100022961206",  # 1B SELBY ROAD, LEYTONSTONE
+            "200001418558",  # 2 FOREST ROAD, LONDON
+            "100022590251",  # 1A THE RIDGEWAY, LONDON
+            "100022590253",  # 1C THE RIDGEWAY, LONDON
+            "100022590252",  # 1B THE RIDGEWAY, LONDON
+            "200001433409",  # 22 MANSFIELD HILL, LONDON
         ]:
             return None
 
         if record.addressline6 in [
+            # splits
+            "E4 9DP",
             "E17 7EA",
-            "E17 6HT",
-            "E17 3DU",
             "E17 4ED",
-            "E17 4PE",
+            "E11 3DT",
             "E17 5JY",
             "E17 3NL",
-            "E11 3DT",
-            "E4 9DP",
             "E17 3DA",
-            "E11 3PY",
-            "E10 5PW",
+            "E17 3DU",
+            # looks wrong
+            "E17 6QA",
+            "E10 6ES",
             "E11 1LJ",
         ]:
             return None
@@ -48,9 +57,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Mission Grove (South Site) 108 Edinburgh Road Walthamstow London E17 7QB
-        if record.polling_place_id == "5968":
+        # more accurate point for: Mission Grove (South Site), Edinburgh Road, Walthamstow, London, E17 8QB
+        if record.polling_place_id == "6393":
             record = record._replace(polling_place_easting="536937")
             record = record._replace(polling_place_northing="188842")
+
+        # adding postcode for: YMCA, 642 Forest Road, Walthamstow, London
+        if record.polling_place_id == "6299":
+            record = record._replace(polling_place_postcode="E17 3EF")
 
         return super().station_record_to_dict(record)
