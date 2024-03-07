@@ -108,12 +108,21 @@ class Command(BaseCommand):
                 self.stdout.write(line[1])
 
     def update_last_import_sha_on_ssm(self, to_sha):
+        self.stdout.write("Updating LAST_IMPORT_SHA on ssm...")
         try:
             ssm_client = boto3.client("ssm")
             ssm_client.put_parameter(
                 Name="LAST_IMPORT_SHA", Value=to_sha, Overwrite=True
             )
+            self.stdout.write("...updated LAST_IMPORT_SHA.")
+            self.summary.append(
+                (
+                    "INFO",
+                    f"Updated LAST_IMPORT_SHA to: {to_sha}",
+                )
+            )
         except botocore.exceptions.ClientError as e:
+            self.stdout.write("...Failed to update LAST_IMPORT_SHA on ssm.")
             self.summary.append(
                 (
                     "WARNING",
@@ -121,6 +130,7 @@ class Command(BaseCommand):
                 )
             )
         except botocore.exceptions.NoCredentialsError as e:
+            self.stdout.write("...Failed to update LAST_IMPORT_SHA on ssm.")
             self.summary.append(
                 (
                     "WARNING",
@@ -165,7 +175,6 @@ class Command(BaseCommand):
             self.stdout.write("Running import scripts\n")
             self.run_scripts(changed_scripts, cmd_opts)
             self.run_misc_fixes()
-            self.stdout.write("updating LAST_IMPORT_SHA on ssm")
             self.update_last_import_sha_on_ssm(to_sha)
         elif has_imports and has_application and is_post_deploy:
             self.stdout.write("App has deployed. OK to run import scripts")
