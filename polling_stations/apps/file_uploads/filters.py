@@ -47,5 +47,4 @@ class CouncilListUploadFilter(django_filters.FilterSet):
         return queryset
 
     def filter_upload(self, queryset, name, value):
-        queryset = Council.objects.with_future_upload_details()
         return queryset.filter(latest_upload_status=value)
