@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "EHA"
-    addresses_name = "2023-05-04/2023-03-07T10:50:00.297753/Democracy_Club__04May2023 East Hampshire.TSV"
-    stations_name = "2023-05-04/2023-03-07T10:50:00.297753/Democracy_Club__04May2023 East Hampshire.TSV"
-    elections = ["2023-05-04"]
+    addresses_name = (
+        "2024-05-02/2024-03-07T15:45:57.741886/Democracy_Club__02May2024.tsv"
+    )
+    stations_name = (
+        "2024-05-02/2024-03-07T15:45:57.741886/Democracy_Club__02May2024.tsv"
+    )
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -16,18 +20,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10094122558",  # THE LITTLE BARN, WOODSIDE FARM, GOSPORT ROAD, PRIVETT, ALTON
             "10032905833",  # ANNEXE THE HOPKILN FRITH END ROAD, FRITH END, BORDON
             "10094123612",  # WATERCRESS COTTAGE, STATION ROAD, BENTLEY, FARNHAM
-            "10094123611",  # TWEENWAYS STATION ROAD, BENTLEY, FARNHAM
             "10094121538",  # THE STABLES, COLDREY FARM, LOWER FROYLE, ALTON
-            "10094121960",  # DUNSTON HOUSE, GREEN BARN FARM, SELBORNE ROAD, ALTON
-            "10094121961",  # GRAFTON HOUSE, GREEN BARN FARM, SELBORNE ROAD, ALTON
-            "10094121962",  # HARDWICKE HOUSE, GREEN BARN FARM, SELBORNE ROAD, ALTON
-            "1710038033",  # KILN COTTAGE, HONEY LANE, SELBORNE, ALTON
-            "1710037987",  # AJAX, HONEY LANE, SELBORNE, ALTON
             "10009812215",  # THE LITTLE BARN, WOODSIDE FARM, GOSPORT ROAD, PRIVETT, ALTON
             "10094122454",  # LUMBRY BARN, SELBORNE ROAD, ALTON
             "10094121982",  # TREESIDE VIEW, THE SHRAVE, FOUR MARKS, ALTON
             "10094122454",  # LUMBRY BARN, SELBORNE ROAD, ALTON
             "10094123735",  # OAK LODGE, SELBORNE ROAD, ALTON
+            "1710105096",  # 21 WINCHESTER ROAD, ALTON
+            "10032905135",  # HALF ACRE, HAWKLEY ROAD, LISS
+            "10009812211",  # THE COTTAGE, LOWER BORDEAN, BORDEAN, PETERSFIELD
         ]:
             return None
 
@@ -36,6 +37,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "GU33 7BB",
             "GU30 7QL",
             "PO8 0QR",
+            # looks wrong
+            "PO8 0QA",
         ]:
             return None
 
