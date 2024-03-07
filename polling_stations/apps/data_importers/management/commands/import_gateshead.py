@@ -4,30 +4,41 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "GAT"
     addresses_name = (
-        "2023-05-04/2023-03-14T11:30:54.886338/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-07T13:36:42.094784/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-14T11:30:54.886338/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-07T13:36:42.094784/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10093489937",  # 1B SPLIT CROW ROAD, HIGH FELLING, GATESHEAD
-            "100000029999",  # 125 ELLISON ROAD, GATESHEAD
+            "100000002781",  # RIDING CHASE, NORMANS RIDING POULTRY FARM, BLAYDON-ON-TYNE
+            "10024187494",  # UNIT A2 CONTRACT HOUSE WELLINGTON ROAD, DUNSTON, GATESHEAD
+            "100000017168",  # 74 BENSHAM ROAD, GATESHEAD
+            "100000017167",  # 72 BENSHAM ROAD, GATESHEAD
+            "100000017169",  # 76 BENSHAM ROAD, GATESHEAD
+            "100000034744",  # 6 HAMBLETON GREEN, GATESHEAD
+            "10022984423",  # HIGH EIGHTON FARM HOUSE BLACK LANE, HARLOW GREEN, GATESHEAD
+            "10022993225",  # NO WORRYS ST CUTHBERTS MEWS SIDMOUTH ROAD, CHOWDENE, GATESHEAD
+            "10093488362",  # 16 BIRCH CRESCENT, BIRTLEY, CHESTER LE STREET
+            "10093488193",  # 10 BIRCH CRESCENT, BIRTLEY, CHESTER LE STREET
+            "10093487880",  # 5 MAPLE AVENUE, BIRTLEY, CHESTER LE STREET
+            "100000074532",  # CHEVVY CHASE, PENNYFINE ROAD, SUNNISIDE, NEWCASTLE UPON TYNE
+            "100000074529",  # 130 PENNYFINE ROAD, SUNNISIDE, NEWCASTLE UPON TYNE
         ]:
             return None
 
         if record.addressline6 in [
-            # split
+            # splits
             "NE9 5XP",
             "NE9 6JR",
-            # wrong
+            # looks wrong
             "NE39 2EA",
-            "NE17 7BQ",
+            "NE10 9HL",
         ]:
             return None
 
