@@ -75,6 +75,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_address_1="Blacknor Road",
                 polling_place_postcode="DT5 2HU",
             )
+
+        # Stations change from counciL:
+        # old station: The Forum Centre, Blandford Camp, DT11 8BJ
+        # new station: Co-Working Club, Blandford Camp, DT11 8BJ
+        if record.polling_place_id == "55240":
+            record = record._replace(polling_place_name="Co-Working Club")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
