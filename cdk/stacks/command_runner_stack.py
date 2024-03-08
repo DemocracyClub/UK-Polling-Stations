@@ -59,6 +59,12 @@ class WDIVOncePerTagCommandRunner(Stack):
                 "cron(30 1 * * ? *)",
                 "runuser -l polling_stations -c '/var/www/polling_stations/import_eoni_from_s3.sh'",
             )
+        if dc_environment in ["development", "staging", "production"]:
+            self.add_job(
+                "run_once_custom_metrics",
+                "rate(5 minutes)",
+                "/var/www/polling_stations/run_once_custom_metrics.sh",
+            )
 
     def add_job(
         self,
