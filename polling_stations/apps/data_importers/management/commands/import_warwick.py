@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WAW"
     addresses_name = (
-        "2023-05-04/2023-03-28T16:20:27.419644/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-08T08:46:27.720510/Democracy_Club__02May2024 (12).tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-28T16:20:27.419644/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-08T08:46:27.720510/Democracy_Club__02May2024 (12).tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -25,33 +25,29 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10094931337",  # 28 SANDPIT BOULEVARD, WARWICK
             "10013183598",  # THE FLAT THE WATERSIDE INN QUEENSWAY, LEAMINGTON SPA
             "100071511638",  # THE COTTAGE SHREWLEY COMMON, SHREWLEY
+            "10003785246",  # QUAIL COTTAGE, CHASE LANE, KENILWORTH
         ]:
             return None
 
         if record.addressline6 in [
-            "CV32 7AW",
-            "CV31 1BN",
-            "CV32 5TA",
+            # split
             "CV32 6AN",
+            "CV32 5TA",
             "CV34 5BY",
             "CV8 2FE",
+            "CV32 7AW",
+            "CV31 1BN",
+            # suspect
             "CV34 8BP",  # UPPERFIELD ROAD, WARWICK
+            "CV8 1DX",  # OAKS FARM, FARM ROAD
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Warnings below checked, no correction needed:
-        # Polling station Chadwick End Village Hall (11908) is in Solihull Metropolitan Borough Council (SOL)
-        # Polling station The Ramphal Building (11888) is in Coventry City Council (COV)
-
-        # St. Paul's Church Hall STATION B, Leicester Street, Royal Leamington Spa
-        if record.polling_place_id == "11626":
-            record = record._replace(polling_place_postcode="CV32 4TE")
-
         # Temporary Building, (Grassed area), Fusiliers Way, Warwick
-        if record.polling_place_id == "11919":
+        if record.polling_place_id == "13100":
             record = record._replace(polling_place_postcode="CV34 8AG")
 
         return super().station_record_to_dict(record)
