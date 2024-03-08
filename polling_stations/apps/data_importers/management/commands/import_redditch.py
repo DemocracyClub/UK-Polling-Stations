@@ -4,17 +4,19 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RED"
     addresses_name = (
-        "2023-05-04/2023-04-05T11:22:08.304289/Redditch Democracy_Club__04May2023.CSV"
+        "2024-05-02/2024-03-08T10:45:07.238107/Redditch Democracy_Club__02May2024.CSV"
     )
     stations_name = (
-        "2023-05-04/2023-04-05T11:22:08.304289/Redditch Democracy_Club__04May2023.CSV"
+        "2024-05-02/2024-03-08T10:45:07.238107/Redditch Democracy_Club__02May2024.CSV"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
 
-    def station_record_to_dict(self, record):
-        # Matchborough Meeting Rooms Clifton Close Off Breaches Lane Redditch
-        if record.polling_place_id == "7688":
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
 
-        return super().station_record_to_dict(record)
+        if uprn in [
+            "100120639304",  # PARKLANDS CARE HOME, CALLOW HILL LANE, CALLOW HILL, REDDITCH
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
