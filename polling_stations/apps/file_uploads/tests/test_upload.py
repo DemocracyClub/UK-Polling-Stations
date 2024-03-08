@@ -8,10 +8,13 @@ from file_uploads.tests.factories import FileFactory, UploadFactory
 
 
 class UploadManagerWithStatus(TestCase):
+    election_date = timezone.now().date() + datetime.timedelta(weeks=4)
+    last_week = timezone.now().date() - datetime.timedelta(weeks=1)
+
     def test_import_script_ok(self):
         upload = UploadFactory(
-            election_date=timezone.now().date() + datetime.timedelta(weeks=4),
-            timestamp=timezone.now() - datetime.timedelta(weeks=1),
+            election_date=self.election_date,
+            timestamp=self.last_week,
             gss=CouncilFactory(council_id="FOO"),
         )
         FileFactory(
@@ -23,7 +26,7 @@ class UploadManagerWithStatus(TestCase):
         self.assertEqual(
             upload.import_script,
             textwrap.dedent(
-                """\
+                f"""\
             from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
@@ -31,7 +34,7 @@ class UploadManagerWithStatus(TestCase):
                 council_id = "FOO"
                 addresses_name = "xyx/data.csv"
                 stations_name = "xyx/data.csv"
-                elections = ["2024-04-04"]
+                elections = ["{self.election_date.strftime('%Y-%m-%d')}"]
                 csv_encoding = ""
                 """
             ),
@@ -39,8 +42,8 @@ class UploadManagerWithStatus(TestCase):
 
     def test_import_script_ok_two_files(self):
         upload = UploadFactory(
-            election_date=timezone.now().date() + datetime.timedelta(weeks=4),
-            timestamp=timezone.now() - datetime.timedelta(weeks=1),
+            election_date=self.election_date,
+            timestamp=self.last_week,
             gss=CouncilFactory(council_id="FOO"),
         )
         FileFactory(
@@ -59,7 +62,7 @@ class UploadManagerWithStatus(TestCase):
         self.assertEqual(
             upload.import_script,
             textwrap.dedent(
-                """\
+                f"""\
             from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
@@ -67,7 +70,7 @@ class UploadManagerWithStatus(TestCase):
                 council_id = "FOO"
                 addresses_name = "xyx/data_districts.csv"
                 stations_name = "xyx/data_stations.csv"
-                elections = ["2024-04-04"]
+                elections = ["{self.election_date.strftime('%Y-%m-%d')}"]
                 csv_encoding = ""
                 """
             ),
@@ -75,8 +78,8 @@ class UploadManagerWithStatus(TestCase):
 
     def test_import_script_one_invalid_two_files(self):
         upload = UploadFactory(
-            election_date=timezone.now().date() + datetime.timedelta(weeks=4),
-            timestamp=timezone.now() - datetime.timedelta(weeks=1),
+            election_date=self.election_date,
+            timestamp=self.last_week,
             gss=CouncilFactory(council_id="FOO"),
         )
         FileFactory(
@@ -97,8 +100,8 @@ class UploadManagerWithStatus(TestCase):
 
     def test_import_script_two_invalid_two_files(self):
         upload = UploadFactory(
-            election_date=timezone.now().date() + datetime.timedelta(weeks=4),
-            timestamp=timezone.now() - datetime.timedelta(weeks=1),
+            election_date=self.election_date,
+            timestamp=self.last_week,
             gss=CouncilFactory(council_id="FOO"),
         )
         FileFactory(
@@ -120,8 +123,8 @@ class UploadManagerWithStatus(TestCase):
 
     def test_import_script_no_files(self):
         upload = UploadFactory(
-            election_date=timezone.now().date() + datetime.timedelta(weeks=4),
-            timestamp=timezone.now() - datetime.timedelta(weeks=1),
+            election_date=self.election_date,
+            timestamp=self.last_week,
             gss=CouncilFactory(council_id="FOO"),
         )
 
