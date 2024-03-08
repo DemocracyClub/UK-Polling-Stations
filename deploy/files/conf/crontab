@@ -3,8 +3,8 @@
 # If you want to have a command run only once per env / once globally, use SSM Run Command
 MAILTO=developers@democracyclub.org.uk
 # Import councils from EC hourly
-1 * * * * /usr/bin/manage-py-command import_councils --only-contact-details --database default
+1 * * * * polling_stations /usr/bin/manage-py-command import_councils --only-contact-details --database default
 # Sync elections from EE
-*/5 * * * * ee-manage-py-command sync_elections
+*/5 * * * * every_election /usr/local/bin/ee-manage-py-command sync_elections
 # Per instance cloudwatch custom metrics
-*/5  * * * * /var/www/polling_stations/per_instance_custom_metrics.sh
+*/5  * * * * polling_stations /var/www/polling_stations/per_instance_custom_metrics.sh
