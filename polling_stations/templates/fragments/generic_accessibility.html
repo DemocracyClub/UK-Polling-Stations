@@ -1,0 +1,65 @@
+{% load i18n_with_welsh %}
+<div class="ds-card">
+    <div class="ds-card-body">
+        <h3>
+            <span aria-hidden="true">✏️</span>
+            {% trans "You are entitled to support to help you cast your vote." %}
+        </h3>
+        <p>
+            {% blocktrans trimmed %}
+                Each polling place is selected to ensure that everyone can access it.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                Every polling station will have a wheelchair accessible polling booth.
+                Pencils, magnifiers and large print ballot papers will be available.
+                You can take your phone into the polling booth to use a magnifier or text-to-speech app.
+                There will be a place to sit, if needed.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% trans "https://www.electoralcommission.org.uk/i-am-a/voter/voting-person" as ec_url %}
+            {% trans "Electoral Commission website" as electoral_commission_website %}
+            {% blocktrans trimmed %}
+                If you need help to complete your ballot paper, you can ask a member of staff at the station.
+                You can also take a friend or relative to the polling station to help you.
+                However, there are different rules for this depending on the election type and which UK nation
+                live in. Visit the <a href="{{ ec_url }}">{{  electoral_commission_website }}</a> for further information.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                Your vote is yours alone, and you are entitled to secrecy.
+                Do not allow anyone else to mark your ballot paper against your wishes.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                If you aren't sure what to do, ask a member of staff at your polling station.
+                They are there to help.
+            {% endblocktrans %}
+        </p>
+        <h3>
+            <span aria-hidden="true">👉</span>
+            {% trans "Useful links" %}
+        </h3>
+        <ul>
+            <li>
+                <a href="https://www.electoralcommission.org.uk/i-am-a/voter/voting-person">
+                    {% trans "Voting at a polling station (Electoral Commission)." %}
+                </a>
+            </li>
+            <li>
+                <a href="https://www.rnib.org.uk/living-with-sight-loss/independent-living/voting-and-elections-what-you-need-to-know/">
+                    {% trans "Voting with sight loss (RNIB)." %}
+                </a>
+            </li>
+            <li>
+                <a href="https://www.myvotemyvoice.org.uk/voting/">
+                    {% trans "Voting with learning disabilities or autism (My Vote My Voice)." %}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

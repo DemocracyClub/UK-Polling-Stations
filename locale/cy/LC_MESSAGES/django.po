@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-15 15:35+0000\n"
+"POT-Creation-Date: 2024-03-12 16:08+0000\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -27,12 +27,12 @@ msgstr ""
 msgid "Description"
 msgstr "Disgrifiad"
 
-#: polling_stations/apps/bug_reports/models.py:15
+#: polling_stations/apps/bug_reports/models.py:14
 msgid "Provide information about the problem to help us improve our service:"
 msgstr ""
 "Darparwch wybodaeth am y broblem er mwyn ein helpu i wella ein gwasanaeth:"
 
-#: polling_stations/apps/bug_reports/models.py:23
+#: polling_stations/apps/bug_reports/models.py:22
 msgid "(Optional) Email address:"
 msgstr "Cyfeiriad e-bost (dewisol):"
 
@@ -66,12 +66,12 @@ msgstr "Dangosfwrdd"
 msgid "Postcode:"
 msgstr "Cod post:"
 
-#: polling_stations/apps/data_finder/forms.py:8
+#: polling_stations/apps/data_finder/forms.py:7
 msgid "Enter your postcode"
 msgstr "Rhowch eich cod post"
 
 #: polling_stations/apps/feedback/forms.py:19
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:11
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:21
 msgid "Did you find this useful?"
 msgstr "A oedd hwn yn ddefnyddiol i chi?"
 
@@ -79,37 +79,37 @@ msgstr "A oedd hwn yn ddefnyddiol i chi?"
 msgid "Comments"
 msgstr "Sylwadau"
 
+#: polling_stations/apps/feedback/models.py:5
 #: polling_stations/apps/feedback/models.py:6
-#: polling_stations/apps/feedback/models.py:7
 msgid "Yes"
 msgstr "Oedd"
 
+#: polling_stations/apps/feedback/models.py:5
 #: polling_stations/apps/feedback/models.py:6
-#: polling_stations/apps/feedback/models.py:7
 msgid "No"
 msgstr "Nac oedd"
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:22
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:32
 msgid "Has this information made you more likely to vote?"
 msgstr ""
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:31
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:41
 msgid "Can you tell us anything more?"
 msgstr "Allwch chi ddweud rhagor i ni?"
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:33
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:43
 msgid "Send feedback"
 msgstr "Anfon adborth"
 
-#: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:5
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:6
-#: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:4
+#: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:7
+#: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:6
 msgid "Uploads"
 msgstr "Uwchlwythiadau"
 
-#: polling_stations/settings/base.py:272
+#: polling_stations/settings/base.py:281
 #: polling_stations/templates/base.html:68
-#: polling_stations/templates/base.html:102
+#: polling_stations/templates/base.html:99
 msgid "Where Do I Vote?"
 msgstr "Ble Ydw i'n Pleidleisio?"
 
@@ -120,6 +120,10 @@ msgstr "Dewiswch eich Cyfeiriad"
 #: polling_stations/templates/address_select.html:18
 msgid "Find my Polling Station"
 msgstr "Dod o hyd i fy Ngorsaf Bleidleisio"
+
+#: polling_stations/templates/admin/pollingstations/openlayers.html:6
+msgid "Debugging window (serialized value)"
+msgstr ""
 
 #: polling_stations/templates/base.html:19
 msgctxt "not shown to general public"
@@ -187,22 +191,22 @@ msgctxt "link to Democracy Club GitHub page"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: polling_stations/templates/base.html:99
+#: polling_stations/templates/base.html:96
 msgid "democracy"
 msgstr ""
 
-#: polling_stations/templates/base.html:99
+#: polling_stations/templates/base.html:96
 msgid "club"
 msgstr ""
 
-#: polling_stations/templates/base.html:108
+#: polling_stations/templates/base.html:105
 #, python-format
 msgid "Contains OS data © Crown copyright and database right %(current_year)s"
 msgstr ""
 "Yn cynnwys data Arolwg Ordnans © Hawlfraint a hawliau cronfa ddata'r Goron "
 "%(current_year)s"
 
-#: polling_stations/templates/base.html:109
+#: polling_stations/templates/base.html:106
 #, python-format
 msgid ""
 "Contains Royal Mail data © Royal Mail copyright and database right "
@@ -211,7 +215,7 @@ msgstr ""
 "Yn cynnwys data'r Post Brenhinol © Hawlfraint a hawliau cronfa ddata'r Post "
 "Brenhinol %(current_year)s"
 
-#: polling_stations/templates/base.html:110
+#: polling_stations/templates/base.html:107
 #, python-format
 msgid ""
 "Contains National Statistics data © Crown copyright and database right "
@@ -220,7 +224,7 @@ msgstr ""
 "Yn cynnwys data Ystadegau Gwladol © Hawlfraint a hawliau cronfa ddata'r "
 "Goron %(current_year)s"
 
-#: polling_stations/templates/base.html:113
+#: polling_stations/templates/base.html:110
 #, fuzzy, python-format
 #| msgid ""
 #| "Copyright ©\n"
@@ -290,11 +294,11 @@ msgid ""
 "this advance voting station\""
 msgstr ""
 
-#: polling_stations/templates/fragments/cancelled_election.html:5
+#: polling_stations/templates/fragments/cancelled_election.html:6
 msgid "Cancelled Election"
 msgstr "Etholiad wedi'i Ganslo"
 
-#: polling_stations/templates/fragments/cancelled_election.html:10
+#: polling_stations/templates/fragments/cancelled_election.html:11
 #, python-format
 msgid ""
 "The poll for <strong>%(cancelled_election_name)s</strong> has been "
@@ -304,12 +308,12 @@ msgstr ""
 "cael ei aildrefnu."
 
 #. Translators: 'it' is a postponed election
-#: polling_stations/templates/fragments/cancelled_election.html:12
+#: polling_stations/templates/fragments/cancelled_election.html:13
 #, python-format
 msgid "It will now take place on %(cancelled_election_rescheduled_date)s."
 msgstr "Bydd bellach yn digwydd ar %(cancelled_election_rescheduled_date)s."
 
-#: polling_stations/templates/fragments/cancelled_election.html:14
+#: polling_stations/templates/fragments/cancelled_election.html:15
 #, python-format
 msgid ""
 "The poll for <strong>%(cancelled_election_name)s</strong> has been cancelled."
@@ -391,6 +395,87 @@ msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 #: polling_stations/templates/fragments/feedback_js.html:34
 msgid "Report a problem with this page"
 msgstr "Rhoi gwybod am broblem gyda'r dudalen hon"
+
+#: polling_stations/templates/fragments/generic_accessibility.html:6
+msgid "You are entitled to support to help you cast your vote."
+msgstr "Mae gennych hawl i gymorth i'ch helpu i fwrw eich pleidlais."
+
+#: polling_stations/templates/fragments/generic_accessibility.html:9
+msgid "Each polling place is selected to ensure that everyone can access it."
+msgstr ""
+"Mae pob man pleidleisio yn cael ei ddewis i sicrhau bod pawb yn gallu cael "
+"mynediad iddo."
+
+#: polling_stations/templates/fragments/generic_accessibility.html:14
+msgid ""
+"Every polling station will have a wheelchair accessible polling booth. "
+"Pencils, magnifiers and large print ballot papers will be available. You can "
+"take your phone into the polling booth to use a magnifier or text-to-speech "
+"app. There will be a place to sit, if needed."
+msgstr ""
+"Bydd gan bob gorsaf bleidleisio fwth pleidleisio hygyrch i gadeiriau olwyn. "
+"Bydd pensiliau, chwyddwydrau a phapurau pleidleisio print bras ar gael. "
+"Gallwch fynd â'ch ffôn i mewn i'r bwth pleidleisio i ddefnyddio chwyddwydr "
+"neu ap testun-i-leferydd. Bydd lle i eistedd, os oes angen."
+
+#: polling_stations/templates/fragments/generic_accessibility.html:22
+msgid "https://www.electoralcommission.org.uk/i-am-a/voter/voting-person"
+msgstr "https://www.electoralcommission.org.uk/i-am-a/voter/voting-person"
+
+#: polling_stations/templates/fragments/generic_accessibility.html:23
+msgid "Electoral Commission website"
+msgstr "wefan y Comisiwn Etholiadol"
+
+#: polling_stations/templates/fragments/generic_accessibility.html:24
+#, python-format
+msgid ""
+"If you need help to complete your ballot paper, you can ask a member of "
+"staff at the station. You can also take a friend or relative to the polling "
+"station to help you. However, there are different rules for this depending "
+"on the election type and which UK nation live in. Visit the <a "
+"href=\"%(ec_url)s\">%(electoral_commission_website)s</a> for further "
+"information."
+msgstr ""
+"Os oes angen help arnoch i gwblhau eich papur pleidleisio, gallwch ofyn i "
+"aelod o staff yn yr orsaf. Gallwch hefyd fynd â ffrind neu berthynas i'r "
+"orsaf bleidleisio i'ch helpu. Fodd bynnag, mae rheolau gwahanol ar gyfer hyn "
+"yn ddibynnol ar y math o etholiad ac ym mha wlad yn y DU yr ydych yn byw. "
+"Ewch i <a href\"%(ec_url)s\">%(electoral_commission_website)s</a> am ragor o "
+"wybodaeth."
+
+
+#: polling_stations/templates/fragments/generic_accessibility.html:32
+msgid ""
+"Your vote is yours alone, and you are entitled to secrecy. Do not allow "
+"anyone else to mark your ballot paper against your wishes."
+msgstr ""
+"Eich pleidlais chi yn unig yw eich pleidlais, ac mae gennych hawl i "
+"gyfrinachedd. Peidiwch â gadael i unrhyw un arall farcio eich papur "
+"pleidleisio yn groes i’ch dymuniad chi."
+
+#: polling_stations/templates/fragments/generic_accessibility.html:38
+msgid ""
+"If you aren't sure what to do, ask a member of staff at your polling "
+"station. They are there to help."
+msgstr ""
+"Os nad ydych yn siŵr beth i'w wneud, gofynnwch i aelod o staff yn eich "
+"gorsaf bleidleisio. Maen nhw yno i helpu."
+
+#: polling_stations/templates/fragments/generic_accessibility.html:45
+msgid "Useful links"
+msgstr "Dolenni defnyddiol"
+
+#: polling_stations/templates/fragments/generic_accessibility.html:50
+msgid "Voting at a polling station (Electoral Commission)."
+msgstr "Pleidleisio mewn gorsaf bleidleisio (Electoral Commission)."
+
+#: polling_stations/templates/fragments/generic_accessibility.html:55
+msgid "Voting with sight loss (RNIB)."
+msgstr "Pleidleisio gyda cholled golwg (RNIB)."
+
+#: polling_stations/templates/fragments/generic_accessibility.html:60
+msgid "Voting with learning disabilities or autism (My Vote My Voice)."
+msgstr "Pleidleisio ag anableddau dysgu neu awtistiaeth (My Vote My Voice)."
 
 #: polling_stations/templates/fragments/help_your_council.html:6
 msgid "Your election (might) need you!"
@@ -667,13 +752,13 @@ msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 msgid " on %(NEXT_CHARISMATIC_ELECTION_DATE)s"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:85
+#: polling_stations/templates/fragments/polling_station_known.html:86
 msgid ""
 "If you have a postal vote, you can hand it in at this polling station on "
 "election day up to 10pm"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:97
+#: polling_stations/templates/fragments/polling_station_known.html:99
 msgid ""
 "\n"
 "                <h3>Advance voting trial</h3>\n"
@@ -846,17 +931,17 @@ msgstr ""
 msgid "You do not need photo ID to vote by post."
 msgstr "Nid oes angen eich cerdyn pleidleisio arnoch i bleidleisio."
 
-#: polling_stations/templates/home.html:48
+#: polling_stations/templates/home.html:47
 #, python-format
 msgid "%(election_date)s Elections"
 msgstr "Etholiadau %(election_date)s"
 
-#: polling_stations/templates/home.html:51
+#: polling_stations/templates/home.html:50
 msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
 msgstr ""
 "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh <strong>heddiw</strong>."
 
-#: polling_stations/templates/home.html:54
+#: polling_stations/templates/home.html:53
 #, python-format
 msgctxt ""
 "day_of_week  and election_date are localised, e.g. 'Dydd Lau' and '6 Mai "
