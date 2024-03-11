@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SHF"
-    addresses_name = "2023-05-04/2023-03-20T15:52:31.211109/Eros_SQL_Output009.csv"
-    stations_name = "2023-05-04/2023-03-20T15:52:31.211109/Eros_SQL_Output009.csv"
-    elections = ["2023-05-04"]
+    addresses_name = "2024-05-02/2024-03-11T17:21:00.252746/Eros_SQL_Output001.csv"
+    stations_name = "2024-05-02/2024-03-11T17:21:00.252746/Eros_SQL_Output001.csv"
+    elections = ["2024-05-02"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -27,17 +27,45 @@ class Command(BaseHalaroseCsvImporter):
             "100051088863",  # KNOWLE HILL, STREETFIELDS, HALFWAY, SHEFFIELD
             "10003573833",  # GROUNDS PLUS, UNIT 6 LONG ACRE WAY, SHEFFIELD
             "10023151677",  # 8A SOUTHEY GREEN ROAD, SHEFFIELD
+            "100050944918",  # 1 COLLINGBOURNE DRIVE, SOTHALL, SHEFFIELD
+            "100051021259",  # MOOR HOUSE FARM, STOCKSBRIDGE, SHEFFIELD
+            "10013554418",  # WIND HILL FARM, STOCKSBRIDGE, SHEFFIELD
+            "100051111037",  # 647 WHITLEY LANE, GRENOSIDE, SHEFFIELD
+            "100051111039",  # SYCAMORE FARM, WHITLEY LANE, GRENOSIDE, SHEFFIELD
+            "10091127976",  # OLD CROWN INN, MANAGERS ACCOMMODATION 710 PENISTONE ROAD, OWLERTON, SHEFFIELD
+            "10013159771",  # CRAWSHAW FARM, UGHILL, BRADFIELD, SHEFFIELD
+            "10091733736",  # 386A STANNINGTON ROAD, SHEFFIELD
+            "10093467393",  # 5 WOOD STREET, SHEFFIELD
+            "100050912255",  # 800 BARNSLEY ROAD, SHEFFIELD
+            "100051016622",  # 101A LONDON ROAD, SHEFFIELD
+            "10003574282",  # 79A LONDON ROAD, SHEFFIELD
+            "10091129534",  # THE ALBION, MANAGERS ACCOMMODATION 71-75 LONDON ROAD, SHEFFIELD
+            "10091129582",  # THE CLUBHOUSE, MANAGERS ACCOMMODATION 13 LONDON ROAD, SHEFFIELD
+            "100051058537",  # 55 RAVENCARR ROAD, SHEFFIELD
+            "100051058539",  # 59 RAVENCARR ROAD, SHEFFIELD
+            "100051058536",  # 53 RAVENCARR ROAD, SHEFFIELD
+            "100051058538",  # 57 RAVENCARR ROAD, SHEFFIELD
+            "100050920075",  # 101 BIRLEY SPA LANE, SHEFFIELD
+            "200003021647",  # WHITE LODGE FARM, HIGH BRADFIELD, BRADFIELD, SHEFFIELD
         ]:
             return None
 
         if record.housepostcode in [
             # split
-            "S8 0PL",
-            "S10 3GW",
-            "S36 2QF",
             "S1 4TA",
-            "S10 3LG",
+            "S8 0PL",
             "S35 9XS",
+            "S10 3LG",
+            "S10 3GW",
+            # suspect
+            "S35 2TQ",
+            "S35 2WW",
+            "S6 2BH",
+            "S6 3ED",
+            "S7 1FF",
+            "S7 1FH",
+            "S2 1BP",
+            "S13 7EQ",
         ]:
             return None
 
