@@ -43,6 +43,7 @@
     {% if has_election %}
         {% include "fragments/you_dont_need_poll_card.html" %}
         {% include "fragments/info_on_your_candidates.html" %}
+        {% include "fragments/generic_accessibility.html" %}
     {% endif %}
 
     {% if council.electoral_services_address or council.electoral_services_postcode or council.electoral_services_phone_numbers or council.electoral_services_email %}

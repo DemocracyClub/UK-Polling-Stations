@@ -23,7 +23,7 @@ def test_valid_station_id(page, live_server):
         with page.expect_navigation():
             page.query_selector("#submit-address").click()
         expect(page).to_have_url(f"{live_server.url}/address/05/")
-        expect(page.locator("text=Your polling station")).not_to_be_empty()
+        expect(page.locator('h2:has-text("Your polling station")')).not_to_be_empty()
         expect(page.locator("text=walking/driving directions")).not_to_be_empty()
 
 
@@ -60,7 +60,7 @@ def test_postcode_without_address_picker(page, live_server):
         with page.expect_navigation():
             page.query_selector("#submit-postcode").click()
         expect(page).to_have_url(f"{live_server.url}/address/10/")
-        expect(page.locator("text=Your polling station")).not_to_be_empty()
+        expect(page.locator('h2:has-text("Your polling station")')).not_to_be_empty()
         expect(page.locator("text=walking/driving directions")).not_to_be_empty()
 
 
