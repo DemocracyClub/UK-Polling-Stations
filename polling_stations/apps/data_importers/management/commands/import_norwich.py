@@ -3,18 +3,17 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "NOW"
-    addresses_name = (
-        "2023-05-04/2023-04-21T13:20:24.756727/DC - Polling districts export.csv"
-    )
-    stations_name = (
-        "2023-05-04/2023-04-21T13:20:24.756727/DC - Polling stations export.csv"
-    )
-    elections = ["2023-05-04"]
+    addresses_name = "2024-05-02/2024-03-18T08:50:17.047358/Democracy Club - Polling Districts export.csv"
+    stations_name = "2024-05-02/2024-03-18T08:50:17.047358/Democracy Club - 2024 Polling Stations export 4.csv"
+    elections = ["2024-05-02"]
 
-    def station_record_to_dict(self, record):
-        # ST THOMAS PARISH HALL
-        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/576/change/
-        if record.stationcode == "33NE2":
-            record = record._replace(xordinate="", yordinate="")
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
 
-        return super().station_record_to_dict(record)
+        if uprn in [
+            "10024023874",  # LIVING ACCOMMODATION THE MARSH HARRIER IPSWICH ROAD, NORWICH
+            "200004349456",  # 14A IPSWICH ROAD, NORWICH
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
