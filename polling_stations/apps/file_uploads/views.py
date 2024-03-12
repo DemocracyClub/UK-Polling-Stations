@@ -253,6 +253,22 @@ def get_station_to_example_uprn_map(council: Council) -> dict[str, dict[str, str
     return {a[0]: {"uprn": a[1], "postcode": [a[2]]} for a in address_list}
 
 
+def get_example_uprn(station, station_to_example_uprn_map):
+    if station.internal_council_id in station_to_example_uprn_map:
+        return station_to_example_uprn_map.get(station.internal_council_id).get(
+            "uprn", None
+        )
+    return None
+
+
+def get_example_postcode(station, station_to_example_uprn_map):
+    if station.internal_council_id in station_to_example_uprn_map:
+        return station_to_example_uprn_map.get(station.internal_council_id).get(
+            "postcode", None
+        )
+    return None
+
+
 class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
     template_name = "file_uploads/council_detail.html"
 
@@ -273,12 +289,12 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                     "address": station.address,
                     "postcode": station.postcode,
                     "location": "✔️" if station.location else "❌",
-                    "example_uprn": station_to_example_uprn_map.get(
-                        station.internal_council_id
-                    )["uprn"],
-                    "example_postcode": station_to_example_uprn_map.get(
-                        station.internal_council_id
-                    )["postcode"],
+                    "example_uprn": get_example_uprn(
+                        station, station_to_example_uprn_map
+                    ),
+                    "example_postcode": get_example_postcode(
+                        station, station_to_example_uprn_map
+                    ),
                     "visibility": VisibilityChoices[station.visibility].label,
                     "pk": station.id,
                 }
