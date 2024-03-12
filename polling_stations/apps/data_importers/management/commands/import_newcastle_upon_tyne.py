@@ -84,6 +84,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Council has asked us not to show polling station locations
+        record = record._replace(
+            polling_place_uprn="", polling_place_easting="", polling_place_northing=""
+        )
+
         # All postcodes below are provided by the council:
 
         # St Aidan`s Community Centre, Princes Road, Brunton Park, Gosforth
