@@ -4,28 +4,21 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KIN"
     addresses_name = (
-        "2023-05-04/2023-03-13T16:05:14.621201/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-13T08:58:12.052675/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-13T16:05:14.621201/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-13T08:58:12.052675/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # Council station change
-        # Family Entertainment Centre, Blue Bull Cafe Bar being replaced by
-        # Library, Burnthouse Drove, PE33 9NJ
-        if record.polling_place_id == "23301":
+        # King`s Lynn Town Football Club, The Walks, Tennyson Avenue, KING`S LYNN PE30 5PB
+        if record.polling_place_id == "27162":
             record = record._replace(
-                polling_place_name="Library",
-                polling_place_address_1="Burnthouse Drove",
-                polling_place_address_2="",
-                polling_place_address_3="Upper Marham",
-                polling_place_address_4="KING`S LYNN",
-                polling_place_postcode="PE33 9NJ",
+                polling_place_easting="562582",
+                polling_place_northing="319608",
             )
-
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -33,12 +26,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "10000033946",  # 81B HIGH STREET, KING'S LYNN
+            "10090917704",  # 199 STATION ROAD, WATLINGTON, KING'S LYNN
+            "10013001170",  # WHITE DYKE BUNGALOW, BLACK DYKE ROAD, HOCKWOLD, THETFORD
         ]:
             return None
         if record.addressline6 in [
             # split
-            "PE34 3BJ",
-            "PE31 6HJ",
+            "PE30 5BD",
             # look wrong
             "PE30 1JG",
         ]:
