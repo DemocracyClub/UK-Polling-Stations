@@ -87,4 +87,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "8954":
             record = record._replace(polling_place_postcode="LL12 8PA")
 
+        # postcode correction for: Gwersyllt Congregational Church, 3 Dodds Lane, Gwersyllt, Wrexham, LL11 4LG
+        # requested by the council
+        if record.polling_place_id == "8992":
+            record = record._replace(polling_place_postcode="LL11 4NT")
+
+        # council request to replace old station: St Mary`s School Community Room, Park Street, Ruabon, Wrexham, LL14 6LE
+        # with new: St Mary’s Church Hall, 3 Church Street, Ruabon, Wrexham, LL14 6DS
+        if record.polling_place_id == "9100":
+            record = record._replace(polling_place_name="St Mary’s Church Hall")
+            record = record._replace(polling_place_address_1="3 Church Street")
+            record = record._replace(polling_place_address_2="Ruabon")
+            record = record._replace(polling_place_address_3="Wrexham")
+            record = record._replace(polling_place_postcode="LL14 6DS")
+
         return super().station_record_to_dict(record)
