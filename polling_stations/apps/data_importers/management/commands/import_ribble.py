@@ -1,49 +1,43 @@
-from data_importers.base_importers import BaseStationsDistrictsImporter
-from django.contrib.gis.geos import Point
+import re
+
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseStationsDistrictsImporter):
-    srid = 27700
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RIB"
-    elections = ["2023-05-04"]
-    districts_name = "2023-05-04/2023-03-29T13:51:45/PD.geojson"
-    stations_name = "2023-05-04/2023-03-29T13:51:45/PS.geojson"
-    stations_filetype = "geojson"
-    districts_filetype = "geojson"
+    addresses_name = (
+        "2024-05-02/2024-03-13T10:03:27.884984/Democracy_Club__02May2024.tsv"
+    )
+    stations_name = (
+        "2024-05-02/2024-03-13T10:03:27.884984/Democracy_Club__02May2024.tsv"
+    )
+    elections = ["2024-05-02"]
+    csv_delimiter = "\t"
 
+    # Most station postcodes are hidden in a different addressline than usual.
+    # This finds the postcode so that the addresses will be nicely formatted on the frontend.
     def station_record_to_dict(self, record):
-        stations = []
-        codes = (
-            c.strip()
-            for c in (
-                record["properties"]["CODE"],
-                record["properties"]["CODE 2"],
-                record["properties"]["CODE 3"],
-            )
-            if c
-        )
-        name = record["properties"]["Name"].strip()
-        address = record["properties"]["Address"].strip()
-        postcode = record["properties"]["Postcode"].strip()
-        location = Point(
-            record["properties"]["longitude"],
-            record["properties"]["latitude"],
-            srid=4326,
-        )
-        for code in codes:
-            stations.append(
-                {
-                    "internal_council_id": code,
-                    "address": f"{name}\n{address}",
-                    "postcode": postcode,
-                    "polling_district_id": code,
-                    "location": location,
-                }
-            )
-        return stations
+        simple_regex = r"^.*([A-Z]{2}[0-9]{1,2}\s*[0-9][A-Z]{2})$"
 
-    def district_record_to_dict(self, record):
-        return {
-            "internal_council_id": record["properties"]["CODE"].strip(),
-            "name": record["properties"]["NAME"],
-        }
+        rec = super().station_record_to_dict(record)
+        last_line = rec["address"].split("\n")[-1]
+        if m := re.match(simple_regex, last_line):
+            rec["address"] = rec["address"].replace(m.group(1), "")
+            rec["postcode"] = m.group(1)
+        return rec
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10093891716",  # 44 HACKINGS CARAVAN PARK ELKER LANE, BILLINGTON
+            "10093893136",  # BROCKTHRON LAITHE, WIGGLESWORTH ROAD, TOSSIDE, SKIPTON
+        ]:
+            return None
+        if record.addressline6 in [
+            # split
+            "BB7 9GL",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
