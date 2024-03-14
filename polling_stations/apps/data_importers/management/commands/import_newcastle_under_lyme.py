@@ -4,23 +4,19 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NEC"
     addresses_name = (
-        "2022-05-05/2022-03-23T13:32:11.842979/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-14T17:42:31.686074/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-23T13:32:11.842979/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-03-14T17:42:31.686074/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # Higherland Methodist Church Hall Higherland Newcastle Staffs ST5 2TF
-        if record.polling_place_id == "2633":
+        if record.polling_place_id == "3190":
             record = record._replace(polling_place_easting="384574")
             record = record._replace(polling_place_northing="345703")
-
-        # Salvation Army, Heathcote Street, Kidsgrove, Stoke on Trent
-        if record.polling_place_id == "2752":
-            record = record._replace(polling_place_postcode="ST7 4AA")
 
         return super().station_record_to_dict(record)
 
@@ -28,23 +24,28 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100032219337",  # ARDENNE THE AVENUE, KIDSGROVE
-            "10024255961",  # 4B WARWICK CLOSE, KIDSGROVE, STOKE-ON-TRENT
-            "10024255960",  # 4A WARWICK CLOSE, KIDSGROVE, STOKE-ON-TRENT
             "200002872601",  # 125A LIVERPOOL ROAD, NEWCASTLE
             "100032216255",  # CROSS HEATH NEWS, 121 LIVERPOOL ROAD, NEWCASTLE
-            "200004612280",  # CARAVAN RED STREET STABLES TALKE ROAD, BRADWELL, NEWCASTLE UNDER LYME
             "10024252556",  # BRIERYHURST FARM HOUSE, MOW LANE, MOW COP, STOKE-ON-TRENT
             "10002238961",  # 2 BRIERYHURST FARM BUNGALOW THE HOLLOW, MOW COP
+            "10094839598",  # BRIERY VIEW, MOW LANE, MOW COP, STOKE-ON-TRENT
+            "10002237282",  # WILLOUGHBRIDGE WELLS LODGE, WILLOUGHBRIDGE, MARKET DRAYTON
+            "100031723127",  # 7 DEANS LANE, NEWCASTLE
+            "100031723126",  # 6 DEANS LANE, NEWCASTLE
+            "100031723129",  # STARBOROUGH HOUSE, DEANS LANE, NEWCASTLE
+            "100031723128",  # 8 DEANS LANE, NEWCASTLE
         ]:
             return None
 
         if record.addressline6 in [
-            "ST5 2TP",
+            # split
             "ST5 4DU",
-            "ST5 6JY",
-            "ST5 8DS",
+            "ST5 8QG",
             "ST7 1DY",
+            "TF9 4PW",
+            "TF9 4PN",
+            # suspect
+            "ST5 6BS",
         ]:
             return None
 
