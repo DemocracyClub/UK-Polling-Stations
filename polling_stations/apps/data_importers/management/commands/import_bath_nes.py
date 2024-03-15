@@ -3,28 +3,27 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "BAS"
-    addresses_name = "2023-05-04/2023-03-20T14:03:01.811295/Eros_SQL_Output001.csv"
-    stations_name = "2023-05-04/2023-03-20T14:03:01.811295/Eros_SQL_Output001.csv"
-    elections = ["2023-05-04"]
-
-    # Note: these warning has been checked and all looks fine.
-    # > WARNING: Polling stations 'Welton Vale Community Room 9 Welton Vale' and
-    # > 'The Salvation Army Radstock Road / Stones Cross' are at approximately the same
-    # > location
-    #
-    # The centroid is outside, but the polling place is within.
-    # > WARNING: Polling station Prattens Westfield Amateur Sports Club is in Mendip
-    # > District Council (MEN) but target council is Bath & North East Somerset Council
-    # > (BAS) - manual check recommended
+    addresses_name = "2024-05-02/2024-03-15T16:30:23.414487/Bath&NESomerset.csv"
+    stations_name = "2024-05-02/2024-03-15T16:30:23.414487/Bath&NESomerset.csv"
+    elections = ["2024-05-02"]
 
     def address_record_to_dict(self, record):
-        if record.housepostcode in [
-            # split
-            "BA2 2RZ",
-            "BA2 6DR",
-            "BA2 5AD",
-            "BS31 2GF",
+        uprn = record.uprn.strip().lstrip("0")
+
+        if uprn in [
+            "10094952037",  # KINGSHILL FARM, BRISTOL ROAD, COMPTON MARTIN, BRISTOL
+            "100120029109",  # 15 UPPER BLOOMFIELD ROAD, BATH
+            "10093714965",  # THE STABLE, GIBBET LANE, BRISTOL
         ]:
             return None
 
+        if record.housepostcode in [
+            # split
+            "BA2 6DR",
+            "BA2 5AD",
+            "BA2 2RZ",
+            # suspect
+            "BA3 5SF",
+        ]:
+            return None
         return super().address_record_to_dict(record)
