@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 
 from commitment import GitHubClient, GitHubCredentials
@@ -255,12 +256,25 @@ class Upload(models.Model):
             else:
                 raise e
 
-        client.push_file(
-            content=self.import_script,
-            filename=self.gss.import_script_path,
-            message=self.pr_title,
-            branch=self.branch_name,
-        )
+        try:
+            client.push_file(
+                content=self.import_script,
+                filename=self.gss.import_script_path,
+                message=self.pr_title,
+                branch=self.branch_name,
+            )
+        except HTTPError as e:
+            status_code = e.response.status_code
+            if status_code == 409:
+                time.sleep(10)
+                client.push_file(
+                    content=self.import_script,
+                    filename=self.gss.import_script_path,
+                    message=self.pr_title,
+                    branch=self.branch_name,
+                )
+            else:
+                raise e
 
         try:
             client.open_pull_request(
