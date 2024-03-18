@@ -93,4 +93,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="363533")
             record = record._replace(polling_place_northing="204434")
 
+        # Coordinate fixes from council:
+        # Newent Community Centre, Ross Road, Newent
+        if record.polling_place_id == "3217":
+            record = record._replace(polling_place_easting="372004")
+            record = record._replace(polling_place_northing="226228")
+        # Swan Community Hub Staunton, Ledbury Road, Staunton, Gloucester
+        if record.polling_place_id == "2857":
+            record = record._replace(polling_place_easting="379206")
+            record = record._replace(polling_place_northing="229383")
+
         return super().station_record_to_dict(record)
