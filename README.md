@@ -39,22 +39,36 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/
 
 ### Install python dependencies
 
-- Local Dev without CDK libs
+For a full install (includes CDK libs):
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+pip install \
+-r requirements/base.txt \
+-r requirements/testing.txt \
+-r requirements/local.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt \
+-r requirements/cdk.txt
+```
+For local development (does not include CDK libs):
+```
+pip install \
+-r requirements/base.txt \
+-r requirements/testing.txt \
+-r requirements/local.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+```
+For test-running only:
+```
+pip install \
+-r requirements/base.txt \
+-r requirements/testing.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 ```
 
-- Local Dev with CDK libs
-```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
-```
+To update requirements:
 
-- Just Running Tests
-```
-pip install -r requirements/base.txt -r requirements/testing.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
-```
-
-- Update requirements
 Bump version in relevant requirements file, e.g. ```base.in``` then run ```python -m invoke requirements --upgrade```.
 
 ### Install front-end dependencies
