@@ -4,19 +4,23 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KHL"
     addresses_name = (
-        "2023-05-04/2023-03-16T11:46:29.845477/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:03:31.181206/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-16T11:46:29.845477/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:03:31.181206/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "21130823",  # MANAGERS FLAT THE OLD ZOOLOGICAL PUBLIC HOUSE PRINCES AVENUE, KINGSTON UPON HULL
+            "21133711",  # FLAT OVER 19 18-19 WITHAM, KINGSTON UPON HULL
+            "21133712",  # FLAT OVER 121 121-127 WITHAM, KINGSTON UPON HULL
+            "10093952515",  # 321A BEVERLEY ROAD, HULL
+            "10093952516",  # 323A BEVERLEY ROAD, HULL
+            "21051039",  # 86 HOWDALE ROAD, HULL
         ]:
             return None
 
