@@ -72,6 +72,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # fix from council:
+        # old address: Canterbury Hall, Holy Family Community Centre, Lord Lane, Failsworth M35 0GQ
+        # new address: York Hall, Holy Family Community Centre, Lord Lane, Failsworth M35 0GQ
+        if record.polling_place_id == "10830":
+            record = record._replace(polling_place_name="York Hall")
+
         rec = super().station_record_to_dict(record)
 
         # postcode and point correction for: Waterhead Academy Sports Campus, Counthill Road, Moorside, Oldham, OL4 2PY
