@@ -1,24 +1,20 @@
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "BIR"
-    addresses_name = (
-        "2022-05-05/2022-04-07T15:09:46.475260/polling_station_export-2022-04-07.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-04-07T15:09:46.475260/polling_station_export-2022-04-07.csv"
-    )
-    elections = ["2022-05-05"]
+    addresses_name = "2024-05-02/2024-03-18T17:12:50.103093/Eros_SQL_Output070.csv"
+    stations_name = "2024-05-02/2024-03-18T17:12:50.103093/Eros_SQL_Output070.csv"
+    elections = ["2024-05-02"]
 
     def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
+        # postcode correction for: St Mary and Ambrose Church Hall, Pershore Road, B5 7RL
+        if record.pollingstationnumber in ["123", "124"]:
+            record = record._replace(pollingstationpostcode="B5 7RA")
 
-        # Carried forward
-        if record.pollingstationname == "St Mary and Ambrose Church Hall":
-            rec["postcode"] = "B5 7RA"
-            rec["location"] = Point(-1.904365, 52.458623, srid=4326)
+        # postcode correction for: The Good Shepherd Hall, R/O St Andrews Church, Slack Lane, B20 9RE
+        if record.pollingstationnumber in ["180", "181"]:
+            record = record._replace(pollingstationpostcode="B21 9RE")
 
         return super().station_record_to_dict(record)
 
@@ -26,45 +22,54 @@ class Command(BaseHalaroseCsvImporter):
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
-            "100071441677",  # ST. EDMUND CAMPION RC SCHOOL, SUTTON ROAD, BIRMINGHAM
             "10024448607",  # 71 PAGET ROAD, BIRMINGHAM
             "10023295371",  # 10A GROSVENOR ROAD, QUINTON, BIRMINGHAM
-            "100071294188",  # HAZELWELL, PINEAPPLE ROAD, BIRMINGHAM
-            "10093329674",  # 35D OLTON BOULEVARD EAST, BIRMINGHAM
             "100070549934",  # 10 LENCHS CLOSE, BIRMINGHAM
-            "10023509817",
-            "10090246839",
+            "10023509817",  # 1 MOAT DRIVE, BUCKLAND END, BIRMINGHAM
+            "100070549936",  # 12 LENCHS CLOSE, BIRMINGHAM
+            "100070549938",  # 14 LENCHS CLOSE, BIRMINGHAM
+            "100070549940",  # 16 LENCHS CLOSE, BIRMINGHAM
+            "100070549942",  # 18 LENCHS CLOSE, BIRMINGHAM
+            "100070607561",  # 2B WHITE FARM ROAD, SUTTON COLDFIELD
+            "100070607560",  # 2A WHITE FARM ROAD, SUTTON COLDFIELD
+            "100071313853",  # THE BUNGALOW, WALMLEY ASH LANE, MINWORTH, SUTTON COLDFIELD
+            "100070510807",  # 4 SHERBOURNE ROAD, ACOCKS GREEN, BIRMINGHAM
+            "100070558277",  # 163 WEST HEATH ROAD, NORTHFIELD, BIRMINGHAM
+            "100070414537",  # 5 ICKNIELD PORT ROAD, BIRMINGHAM
+            "100070414534",  # 2 ICKNIELD PORT ROAD, BIRMINGHAM
+            "100070414533",  # 1 ICKNIELD PORT ROAD, BIRMINGHAM
+            "100070414535",  # 3 ICKNIELD PORT ROAD, BIRMINGHAM
+            "100070414536",  # 4 ICKNIELD PORT ROAD, BIRMINGHAM
         ]:
             return None
 
         if record.housepostcode in [
-            "B13 9UA",
-            "B20 3QT",
-            "B23 5AL",
-            "B23 7XE",
-            "B28 9QL",
-            "B29 7ES",
-            "B30 1TH",
-            "B31 1AE",
-            "B31 2AD",
+            # splits
             "B31 2AE",
-            "B31 2FL",
-            "B31 3JE",
-            "B31 5BG",
-            "B31 5NH",
-            "B33 9QD",
-            "B34 6HN",
-            "B34 6NE",
-            "B7 5LD",
-            "B75 5NE",
             "B75 5QB",
-        ]:  # Split
-            return None
-
-        if record.housepostcode in [
-            "B13 9EY",
+            "B34 6NE",
+            "B23 5AL",
+            "B34 6HN",
+            "B75 5NE",
+            "B31 5NH",
+            "B26 3HH",
+            "B31 3JE",
+            "B10 9JS",
+            "B20 3QT",
+            "B32 2NT",
+            "B31 1AE",
+            "B13 9UA",
+            "B31 2FL",
+            "B28 9QL",
+            "B24 9HX",
+            "B23 7XE",
+            "B18 5BU",
+            "B33 9QD",
+            # looks wrong
             "B32 3QY",
-        ]:  # appear wrong
+            "B33 0AW",
+            "B20 2RW",
+        ]:
             return None
 
         return super().address_record_to_dict(record)
