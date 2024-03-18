@@ -12,6 +12,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # coordinate fix from council:
+        # Bilton Hall Community Trust, Low Simonside Community Centre, Taunton Avenue, Jarrow, NE32 3RT
+        if record.polling_place_id == "5403":
+            record = record._replace(
+                polling_place_easting="434136",
+                polling_place_northing="564254",
+            )
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
