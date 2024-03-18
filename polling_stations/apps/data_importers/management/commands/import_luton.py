@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "LUT"
     addresses_name = (
-        "2024-05-02/2024-02-27T18:23:10.452598/Democracy Club - Polling Districts.csv"
+        "2024-05-02/2024-03-18T14:04:57.346774/Democracy Club - Polling Districts.csv"
     )
     stations_name = (
-        "2024-05-02/2024-02-27T18:23:10.452598/Democracy Club - Polling Stations.csv"
+        "2024-05-02/2024-03-18T14:04:57.346774/Democracy Club - Polling Stations.csv"
     )
     elections = ["2024-05-02"]
     csv_encoding = "utf-16le"
@@ -19,12 +19,15 @@ class Command(BaseDemocracyCountsCsvImporter):
             "100080141870",  # 169 DEWSBURY ROAD, LUTON
             "100080163617",  # 117 NEVILLE ROAD, LUTON
             "100080124758",  # 166 ALEXANDRA AVENUE, LUTON
+            "10095334110",  # 654A DENBIGH ROAD, LUTON
         ]:
             return None
 
         if record.postcode in [
+            # splits
+            "LU1 3XD",
             # looks wrong
-            "LU2 8PE"
+            "LU2 8PE",
         ]:
             return None
 
