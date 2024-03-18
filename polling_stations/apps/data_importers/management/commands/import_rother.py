@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ROH"
     addresses_name = (
-        "2023-05-04/2023-03-15T15:43:21.335525/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:59:53.401843/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-15T15:43:21.335525/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:59:53.401843/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -20,17 +20,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10002656457",  # THE CARAVAN, THREE GATES FARM, PASHLEY ROAD, TICEHURST, WADHURST
             "10002651849",  # THREE GATES FARM, PASHLEY ROAD, TICEHURST, WADHURST
             "10002668563",  # HOME FARM BARN, ETCHINGHAM
-            "10002660230",  # THE PUMP HOUSE, BREADSELL LANE, ST. LEONARDS-ON-SEA
             "100060097122",  # BOARZWOOD, LONDON ROAD, HURST GREEN, ETCHINGHAM
             "100062553811",  # BOARSDEN, LONDON ROAD, HURST GREEN, ETCHINGHAM
             "100061937222",  # BOUNDARY FARM, LONDON ROAD, HURST GREEN, ETCHINGHAM
             "10002651836",  # LUDPIT COTTAGE, LUDPIT LANE, ETCHINGHAM
-            "100062569487",  # KEEPERS COTTAGE, BRIGHTLING ROAD, ROBERTSBRIDGE
-        ]:
-            return None
-
-        if record.addressline6 in [
-            "TN32 5RA",  # BODIAM, ROBERTSBRIDGE
+            "10002668412",  # COWFIELD COTTAGE, BODIAM, ROBERTSBRIDGE
+            "10090508857",  # 2 OCKHAM MEWS, BODIAM, ROBERTSBRIDGE
+            "10090507447",  # 1 OCKHAM MEWS, BODIAM, ROBERTSBRIDGE
+            "10002662323",  # DYKES FARM, EWHURST GREEN, ROBERTSBRIDGE
+            "100060089232",  # 49 ELLERSLIE LANE, BEXHILL-ON-SEA
+            "100062584403",  # HIGHWOODS GOLF CLUB LTD, 47 ELLERSLIE LANE, BEXHILL-ON-SEA
         ]:
             return None
 
