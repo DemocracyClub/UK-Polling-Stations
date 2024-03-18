@@ -41,4 +41,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "9796":
             record = record._replace(polling_place_postcode="SG8 9LB")
 
+        # station change from council:
+        # old: Wymondley Baptist Church, Stevenage Road, Little Wymondley, SG4 7JA
+        # new: Great Wymondley Village Hall, Great Wymondley, SG4 7ET
+        if record.polling_place_id == "9834":
+            record = record._replace(
+                polling_place_name="Great Wymondley Village Hall",
+                polling_place_address_1="",
+                polling_place_address_4="Great Wymondley",
+                polling_place_postcode="SG4 7ET",
+            )
+
         return super().station_record_to_dict(record)
