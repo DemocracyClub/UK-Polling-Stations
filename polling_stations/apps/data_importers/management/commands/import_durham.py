@@ -3,10 +3,14 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DUR"
-    addresses_name = "2021-04-14T17:38:11.589300/Democracy_Club__06May2021_Durham County Council_Update.CSV"
-    stations_name = "2021-04-14T17:38:11.589300/Democracy_Club__06May2021_Durham County Council_Update.CSV"
-    elections = ["2021-05-06"]
-    csv_delimiter = ","
+    addresses_name = (
+        "2024-05-02/2024-03-18T10:27:47.936658/Democracy_Club__02May2024.tsv"
+    )
+    stations_name = (
+        "2024-05-02/2024-03-18T10:27:47.936658/Democracy_Club__02May2024.tsv"
+    )
+    elections = ["2024-05-02"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -15,24 +19,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200002975735",  # 2 HIGH BRADLEY, WOLSINGHAM, BISHOP AUCKLAND
             "200002975734",  # 1 HIGH BRADLEY, WOLSINGHAM, BISHOP AUCKLAND
             "10070414854",  # HIGH STONECHESTER FARM, HAMSTERLEY, BISHOP AUCKLAND
-            "100110519859",  # 2 REGENT STREET, ELDON LANE, BISHOP AUCKLAND
             "10091173970",  # BARNSIDE COTTAGE, BOWES ROAD, BARNARD CASTLE
-            "10014554487",  # 65A COCKTON HILL ROAD, BISHOP AUCKLAND
-            "100110483833",  # 58 SHAFTO WAY, NEWTON AYCLIFFE
-            "100110483832",  # 56 SHAFTO WAY, NEWTON AYCLIFFE
-            "100110483831",  # 54 SHAFTO WAY, NEWTON AYCLIFFE
-            "100110483830",  # 52 SHAFTO WAY, NEWTON AYCLIFFE
-            "100110483829",  # 50 SHAFTO WAY, NEWTON AYCLIFFE
-            "100110748946",  # 53A CHEAPSIDE, SPENNYMOOR
-            "10093427172",  # THE STABLES, BENT HOUSE LANE, DURHAM
-            "10001010514",  # BLUE BARN, OLD CASSOP, DURHAM
-            "10001010513",  # STRAWBERRY HILL BARN, OLD CASSOP, DURHAM
-            "10001010515",  # SWALLOW RIDGE BARN, OLD CASSOP, DURHAM
-            "10014561118",  # OAK TREE BARN, SALTERS LANE, TRIMDON, TRIMDON STATION
             "10093427357",  # 100B SUNDERLAND ROAD, HORDEN
             "10013609644",  # 100 SUNDERLAND ROAD, HORDEN
-            "100110772913",  # FLAT CRAGSIDE HOUSE SEASIDE LANE, EASINGTON COLLIERY
-            "10013609554",  # GUPTA HOUSE 14 SEASIDE LANE, EASINGTON COLLIERY
             "100110527067",  # 1 FOUNDRY FIELDS, CROOK
             "200002973264",  # FURZEDOWN, LOW JOBS HILL, CROOK
             "100110709958",  # ENDOR, DARLINGTON ROAD, DURHAM
@@ -43,50 +32,60 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200003837208",  # GREENBANK HOUSE, WOODSTONE VILLAGE, HOUGHTON LE SPRING
             "200003837203",  # WILLOW FARM STOVES, WILLOW FARM, WOODSTONE VILLAGE, HOUGHTON LE SPRING
             "100110741309",  # SUMMERHILL, PETH BANK, LANCHESTER, DURHAM
-            "200002821450",  # JOHNSON HALL WYNDWAYS DRIVE, DIPTON
             "10014567760",  # FINES HOUSE QUEENS PARADE (SIDE), ANNFIELD PLAIN
             "10094019851",  # OLD FIELD HOUSE, ANNFIELD PLAIN, STANLEY
-            "100110707417",  # EAST LODGE, THE HERMITAGE, CHESTER LE STREET
+            "100110476290",  # 2 AUCKLAND PLACE, NEWTON AYCLIFFE
+            "100110712083",  # FLAT WEST VIEW STOCKTON ROAD, SEAHAM
+            "10013058536",  # WOODLANDS FARM, SOUTH HETTON, DURHAM
+            "100110712020",  # AVELDA, SHOTTON ROAD, HORDEN, PETERLEE
+            "100110711512",  # ST, JOSEPHS PRESBYTERY, COAST ROAD, BLACKHALL COLLIERY, HARTLEPOOL
+            "10094020519",  # 1A IVATT WALK, SHILDON
+            "10012053828",  # THINFORD HOUSE THINFORD LANE, THINFORD
+            "10094407025",  # 47 EDISON DRIVE, SPENNYMOOR
+            "10012055410",  # CLEARWATER CREEK, DURHAM ROAD, COATHAM MUNDEVILLE, DARLINGTON
+            "10094404921",  # THE STABLES, DURHAM ROAD, COATHAM MUNDEVILLE, DARLINGTON
+            "10093429956",  # THE HAYLOFT, HILTON, DARLINGTON
+            "10014553352",  # CRONKLEY, FOREST IN TEESDALE, BARNARD CASTLE
+            "200002973260",  # TREVIAN HOUSE, LOW JOBS HILL, CROOK
+            "10001010491",  # BROADGATE FARM, ESH WINNING, DURHAM
+            "10000808114",  # PHILLIPPA ROSS & CO, ALLERCLEUGH, WEARHEAD, BISHOP AUCKLAND
+            "200002976292",  # ROSE COTTAGE, WESTGATE, BISHOP AUCKLAND
+            "100110376637",  # 23A NELSON STREET, CONSETT
+            "100110708593",  # THE STABLES BLACKFYNE FARM DURHAM ROAD, BLACKHILL
+            "10093043495",  # LUMLEY PARK HOUSE COTTAGE FORGE LANE, CASTLE DENE
+            "10013259154",  # FLAT AT PROSPECT BUILDINGS COAST ROAD, HORDEN
+            "200003644244",  # 7 HOLBORN STREET, SPENNYMOOR
+            "200003645831",  # 39 KEMBLE GREEN EAST, NEWTON AYCLIFFE
+            "10014556760",  # LONGFIELD BARNARD CASTLE SCHOOL NEWGATE, BARNARD CASTLE
+            "10093043991",  # 1 FRONT STREET FLEMING FIELD TRACK TO NORTH MOOR FARM, HASWELL
+            "200003218251",  # 1 THE GATEHOUSE KEPIER FARM KEPIER LANE, GILESGATE
+            "100110710484",  # ANNFIELD HOUSE, NEWHOUSE ROAD, ESH WINNING, DURHAM
         ]:
             return None
 
         if record.addressline6 in [
-            "SR7 7NE",
-            "DL12 9UR",
-            "DL4 1DN",
-            "SR7 9BS",
-            "SR7 7HX",
-            "DH8 8HN",
+            # splits
             "DL16 6AJ",
-            "DL14 6PP",
-            "DL13 1ND",
-            "DH2 2BL",
-            "DL13 4NQ",
+            "DL12 9UR",
+            "SR7 9BS",
+            "DH9 9JQ",
             "DL13 2AB",
+            "SR7 7NE",
+            "DH2 2BL",
+            "DL13 1ND",
+            "DL13 4NQ",
+            "DL4 1DN",
+            "DH8 8HN",
+            # looks wrong
+            "DL5 5QS",
+            "DH9 6SA",
+            "DH2 2FL",
+            "DH7 6NY",
+            "DH7 7RD",
+            "DH1 4DX",
             "DL5 5AH",
             "DL16 6XF",
-            "DH7 7RD",
-            "DL13 5RX",
-            "DH6 4BU",
-            "DL16 6JW",
-            "DH9 0RG",
-            "DL16 7PG",
-            "DL13 4NN",
-            "DH1 2JR",
-            "DH8 0TZ",
-            "DH9 9EF",
-            "DL14 8BB",
-            "DL13 2RF",
-            "DH8 0TN",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Forest-of-Teesdale Primary School (2410) Forest in Teesdale Barnard Castle DL12 0HA
-        if record.polling_place_id == "52093":
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
-
-        return super().station_record_to_dict(record)
