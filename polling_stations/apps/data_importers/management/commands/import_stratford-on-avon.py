@@ -5,20 +5,18 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STR"
     addresses_name = (
-        "2023-05-04/2023-03-07T09:03:03.694104/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:53:02.626241/Democracy_Club__02May2024 (20).tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-07T09:03:03.694104/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:53:02.626241/Democracy_Club__02May2024 (20).tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10024063650",  # THE STUDIO, CUTLERS FARM, EDSTONE, WOOTTON WAWEN, HENLEY-IN-ARDEN
-            "100071249390",  # KINGSTON HOLT FARM, BANBURY ROAD, LIGHTHORNE, WARWICK
             "100071512710",  # DARLINGSCOTT HILL, DARLINGSCOTE ROAD, SHIPSTON-ON-STOUR
             "100071244138",  # WIL HAVEN, DARLINGSCOTE ROAD, SHIPSTON-ON-STOUR
             "10023584621",  # DITCHFORD FRIARY MANOR, TIDMINGTON, SHIPSTON-ON-STOUR
@@ -40,41 +38,31 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10023580629",  # OX HOUSE FARM, COMBROOK, WARWICK
             "100071241494",  # BATTLE LODGE, CAMP LANE, WARMINGTON, BANBURY
             "100071241504",  # YENTON, CAMP LANE, WARMINGTON, BANBURY
+            "100071491317",  # HENLEY HOTEL, TANWORTH LANE, HENLEY-IN-ARDEN
+            "10094567022",  # 32 LANCASTER WAY, SHACKLETON VILLAGE
+            "10023387972",  # AVON BANK HOUSE, CHURCH BANK, BINTON ROAD, WELFORD ON AVON, STRATFORD-UPON-AVON
         ]:
             return None
 
         if record.addressline6 in [
-            "CV36 4DY",  # HIGH SCHOOL BUNGALOW & LOW FURLONG, DARLINGSCOTE ROAD, SHIPSTON-ON-STOUR
+            # splits
+            "CV37 8LT",
+            # looks wrong
+            "CV37 5AF",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Chaser Suite, Stratford-upon-Avon Racecourse, Luddington Road
-        if record.polling_place_id == "10305":
-            record = record._replace(
-                polling_place_easting="0", polling_place_northing="0"
-            )
-
         rec = super().station_record_to_dict(record)
 
-        # Alcester Methodist Church, Priory Road, Alcester
-        if rec["internal_council_id"] == "10403":
-            rec["location"] = Point(-1.871973, 52.214217, srid=4326)
+        # more accurate point for: Alcester Guide and Scout Centre, 28 Moorfield Road, Alcester, B49 5DA
+        if rec["internal_council_id"] == "11550":
+            rec["location"] = Point(-1.5998000, 52.191589, srid=4326)
 
-        # Alcester Guide and Scout Centre, 28 Moorfield Road, Alcester
-        if rec["internal_council_id"] == "10410":
-            rec["location"] = Point(-1.871852, 52.216259, srid=4326)
-
-        # Station change from Council
-        if rec["internal_council_id"] == "10556":
-            rec["postcode"] = "CV35 9RU"
-            rec["address"] = (
-                "Wellesbourne Sports and Community Centre\n"
-                "Loxley Close\n"
-                "Wellesbourne"
-            )
-            rec["location"] = None
+        # more accurate point for: Wellesbourne Sports and Community Centre, Loxley Close, Wellesbourne, CV35 9RU
+        if rec["internal_council_id"] == "11607":
+            rec["location"] = Point(-1.871989, 52.216317, srid=4326)
 
         return rec
