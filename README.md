@@ -76,11 +76,6 @@ Bump version in relevant requirements file, e.g. ```base.in``` then run ```pytho
 npm install
 ```
 
-### Install testing python dependencies
-```
-pip install -r requirements/testing.txt
-```
-
 ### Install testing system dependencies
 We have a suite of end-to-end integration tests. We use [Playwright](https://playwright.dev/python/)
 with `pytest` to run these.
