@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BLA"
     addresses_name = (
-        "2023-05-04/2023-03-02T14:37:46.931832/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:05:30.765773/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-03-02T14:37:46.931832/Democracy_Club__04May2023.tsv"
+        "2024-05-02/2024-03-18T15:05:30.765773/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -25,27 +25,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         if record.addressline6 in [
-            "LE19 1SJ",  # MANAGERS, ASSISTANT FLATS
+            # looks wrong
+            "LE19 1SJ",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Millfield Community Nursery, Millfield L.E.A.D. Academy, Hat Road, Braunstone Town, Leicester
-        if record.polling_place_id == "3878":
-            record = record._replace(
-                polling_place_easting="", polling_place_northing=""
-            )
+        # Below warnings checked and no correction needed:
+        # WARNING: Polling station Parkland Primary School (4281) is in Oadby & Wigston Borough Council (OAD)
+        # WARNING: Polling station Riverside Football Pavilion (4314) is in Leicester City Council (LCE)
 
-        # Stafford Leys Community Centre - Station 2, Stafford Leys Primary School, Stafford Leys
-        if record.polling_place_id == "3849":
+        # Millfield Community Nursery, Millfield L.E.A.D. Academy, Hat Road, Braunstone Town, Leicester, LE3 2WF
+        if record.polling_place_id == "4304":
             record = record._replace(
-                polling_place_easting="452960", polling_place_northing="302987"
+                polling_place_easting="455360", polling_place_northing="301508"
             )
-
-        # Springwell, Whetstone Baptist Church, Dog and Gun Lane, Whetstone, Leicester
-        if record.polling_place_id == "3923":
-            record = record._replace(polling_place_postcode="LE8 6LJ")
 
         return super().station_record_to_dict(record)
