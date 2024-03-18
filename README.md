@@ -95,9 +95,11 @@ cp polling_stations/settings/local.example.py polling_stations/settings/local.py
 ```
 
 ### Create database
+On Linux, the testing suite will try to connect to the database as the current user so make sure that username of the postgres user you create in the following commands matches the name of the Linux user that will be running the test suite.
+
 ```
 sudo -u postgres createdb polling_stations
-sudo -u postgres createuser dc -P -s
+sudo -u postgres createuser username -P -s
 sudo -u postgres psql polling_stations
 psql (9.3.6)
 Type "help" for help.
