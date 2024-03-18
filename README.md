@@ -81,7 +81,7 @@ We have a suite of end-to-end integration tests. We use [Playwright](https://pla
 with `pytest` to run these.
 
 To set up playwright, after running `pip install -r requirements/testing.txt`,
-run `playwright install`. This will download the browser biniaries required
+run `playwright install`. This will download the browser binaries required
 for your system.
 
 The Playwright tests will run in a headless browser as part of a normal `pytest` run.
