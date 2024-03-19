@@ -3,14 +3,18 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "FEN"
-    addresses_name = "2023-05-04/2023-04-30T20:24:10.048671/Democracy Club FDC Polling Districts May 2023.csv"
-    stations_name = "2023-05-04/2023-04-30T20:24:10.048671/Democracy Club FDC Polling Stations May 2023.csv"
-    elections = ["2023-05-04"]
+    addresses_name = (
+        "2024-05-02/2024-03-19T11:49:39.152620/Dem Club Polling Districts May 2024.csv"
+    )
+    stations_name = (
+        "2024-05-02/2024-03-19T11:49:39.152620/Dem Club Polling Stations May 2024.csv"
+    )
+    elections = ["2024-05-02"]
+    csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
         if record.postcode in [
-            # split
-            "PE14 0LF",
+            "PE14 0LF",  # split
         ]:
             return None
 
