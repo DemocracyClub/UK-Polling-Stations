@@ -44,8 +44,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Old station: The Spire, St Mark`s Chapel, Eastern Road, Brighton, BN2 5JN (id: 15585)
         # Replaced by: T.S.Nautilus, 39A Chesham Road, BN2 1NB
         if record.polling_place_id == "15585":
-            record = record._replace(polling_place_address_1="T.S. Nautilus")
-            record = record._replace(polling_place_address_2="39A Chesham Road")
+            record = record._replace(polling_place_name="T.S. Nautilus")
+            record = record._replace(polling_place_address_1="39A Chesham Road")
+            record = record._replace(polling_place_address_2="")
             record = record._replace(polling_place_address_3="")
             record = record._replace(polling_place_address_4="")
             record = record._replace(polling_place_postcode="BN2 1NB")
