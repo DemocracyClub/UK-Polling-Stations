@@ -41,6 +41,9 @@
                 {{ object.status_emoji }}
                 {% if object.csv_valid %}OK{% else %}{{ object.errors | linebreaksbr }}{% endif %}
             </dd>
+
+            <dt><strong>Rows</strong></dt>
+            <dd>{{ object.csv_rows}}</dd>
         </dl>
 
     </section>
