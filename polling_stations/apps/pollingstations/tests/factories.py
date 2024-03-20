@@ -2,7 +2,12 @@ import factory
 from councils.tests.factories import CouncilFactory
 from django.contrib.gis.geos import Point
 from faker.providers import BaseProvider
-from pollingstations.models import AdvanceVotingStation, PollingDistrict, PollingStation
+from pollingstations.models import (
+    AccessibilityInformation,
+    AdvanceVotingStation,
+    PollingDistrict,
+    PollingStation,
+)
 
 
 class DjangoGeoPointProvider(BaseProvider):
@@ -23,6 +28,13 @@ class PollingStationFactory(factory.django.DjangoModelFactory):
 
     council = factory.SubFactory(CouncilFactory)
     internal_council_id = factory.Sequence(lambda n: f"PS-{n}")
+
+
+class AccessibilityInformationFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = AccessibilityInformation
+
+    polling_station = factory.SubFactory(PollingStationFactory)
 
 
 class PollingDistrictFactory(factory.django.DjangoModelFactory):

@@ -8,9 +8,10 @@ from itertools import groupby
 from core.opening_times import OpeningTimes
 from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import JSONField
+from django.db.models import CheckConstraint, JSONField, Q
 from django.utils.functional import cached_property
 from django.utils.translation import gettext as _
+from django_extensions.db.models import TimeStampedModel
 from uk_geo_utils.helpers import Postcode
 
 
@@ -84,6 +85,31 @@ class PollingStation(models.Model):
         if not self.address:
             return None
         return "\n".join([x[0].strip() for x in groupby(self.address.split(","))])
+
+
+class AccessibilityInformation(TimeStampedModel):
+    polling_station = models.OneToOneField(
+        PollingStation,
+        on_delete=models.CASCADE,
+        related_name="accessibility_information",
+    )
+    is_temporary = models.BooleanField(null=True)
+    nearby_parking = models.BooleanField(null=True)
+    disabled_parking = models.BooleanField(null=True)
+    level_access = models.BooleanField(null=True)
+    temporary_ramp = models.BooleanField(null=True)
+    hearing_loop = models.BooleanField(null=True)
+    public_toilets = models.BooleanField(null=True)
+    getting_to_the_station = models.TextField(blank=True, null=True)
+    at_the_station = models.TextField(blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            CheckConstraint(
+                name="no_ramp_if_access_level",
+                check=~Q(Q(level_access=True) & Q(temporary_ramp=True)),
+            )
+        ]
 
 
 class CustomFinderManager(models.Manager):
