@@ -376,9 +376,7 @@ class WDIVStack(Stack):
             "FQDN",
         )
 
-        cf_domains = [fqdn]
-        if self.dc_environment == "production":
-            cf_domains.append(f"www.{fqdn}")
+        cf_domains = [fqdn, f"www.{fqdn}"]
 
         www_redirect_function = cloudfront.Function(
             self,
