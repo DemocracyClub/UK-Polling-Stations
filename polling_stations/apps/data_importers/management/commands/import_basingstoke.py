@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BAN"
     addresses_name = (
-        "2024-05-02/2024-03-05T15:01:57.398078/Democracy_Club__02May2024.csv"
+        "2024-05-02/2024-03-20T17:06:06.547142/Democracy_Club__02May2024.csv"
     )
     stations_name = (
-        "2024-05-02/2024-03-05T15:01:57.398078/Democracy_Club__02May2024.csv"
+        "2024-05-02/2024-03-20T17:06:06.547142/Democracy_Club__02May2024.csv"
     )
     elections = ["2024-05-02"]
 
