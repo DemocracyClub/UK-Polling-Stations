@@ -380,6 +380,15 @@ class WDIVStack(Stack):
         if self.dc_environment == "production":
             cf_domains.append(f"www.{fqdn}")
 
+        www_redirect_function = cloudfront.Function(
+            self,
+            "Function",
+            code=cloudfront.FunctionCode.from_file(
+                file_path="cdk/stacks/cloudfront_functions/remove-www.js"
+            ),
+            runtime=cloudfront.FunctionRuntime.JS_2_0,
+        )
+
         cloudfront_dist = cloudfront.Distribution(
             self,
             "WDIVCloudFront_id",
@@ -413,6 +422,12 @@ class WDIVStack(Stack):
                         "Referer",
                     ),
                 ),
+                function_associations=[
+                    cloudfront.FunctionAssociation(
+                        function=www_redirect_function,
+                        event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
+                    )
+                ],
             ),
             additional_behaviors={
                 "/static/*": cloudfront.BehaviorOptions(
