@@ -4,12 +4,23 @@ from django.contrib import admin
 from django.contrib.gis.db import models
 from django.contrib.gis.forms import OSMWidget
 from django.db import transaction
-from pollingstations.models import PollingStation, VisibilityChoices
+from pollingstations.models import (
+    AccessibilityInformation,
+    PollingStation,
+    VisibilityChoices,
+)
+
+
+class AccessibilityInformationInline(admin.StackedInline):
+    model = AccessibilityInformation
+    # extra = 0
 
 
 class PollingStationAdmin(admin.ModelAdmin):
     class UnmodfiableOSMWidget(OSMWidget):
         template_name = "admin/pollingstations/openlayers.html"
+
+    inlines = [AccessibilityInformationInline]
 
     actions = ["unpublish", "publish"]
 
