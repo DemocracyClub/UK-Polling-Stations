@@ -362,7 +362,7 @@ class WDIVStack(Stack):
         # with the placeholder values the SSM interface produces :(
         cert_arns = {
             "development": "arn:aws:acm:us-east-1:356853674636:certificate/76fa51b0-3d7b-4345-9976-c79729a7c67e",
-            "staging": "arn:aws:acm:us-east-1:047316047231:certificate/622bd46c-30ec-45ca-8860-5af5b7d7f9c5",
+            "staging": "arn:aws:acm:us-east-1:047316047231:certificate/fc3f103e-8280-421f-b40e-a907c6be9ece",
             "production": "arn:aws:acm:us-east-1:864930021230:certificate/8e2df750-10ed-437f-8f24-b8393d12f788",
         }
         cert = acm.Certificate.from_certificate_arn(
