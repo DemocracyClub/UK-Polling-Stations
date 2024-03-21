@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CAN"
     addresses_name = (
-        "2024-05-02/2024-03-05T13:32:37.943021/Democracy_Club__02May2024.tsv"
+        "2024-05-02/2024-04-02T10:28:11.535414/Democracy_Club__02May2024-edited.csv"
     )
     stations_name = (
-        "2024-05-02/2024-03-05T13:32:37.943021/Democracy_Club__02May2024.tsv"
+        "2024-05-02/2024-04-02T10:28:11.535414/Democracy_Club__02May2024-edited.csv"
     )
     elections = ["2024-05-02"]
     csv_delimiter = "\t"
@@ -27,7 +27,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100031628198",  # 174 LONGFORD ROAD, CANNOCK
             "100031617493",  # 22 BROWNHILLS ROAD, NORTON CANES, CANNOCK
             "10014216147",  # 121 WOOD LANE, HEDNESFORD, CANNOCK
-            "10014217362",  # FLAT 7, 28 HORSE FAIR, RUGELEY
             "100032223990",  # 57 BRINDLEY HEATH ROAD, HEDNESFORD, CANNOCK
             "100032223991",  # 58 BRINDLEY HEATH ROAD, HEDNESFORD, CANNOCK
         ]:
