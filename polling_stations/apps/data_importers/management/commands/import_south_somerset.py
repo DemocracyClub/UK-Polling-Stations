@@ -13,13 +13,13 @@ class Command(BaseHalaroseCsvImporter):
             "79",
             "OAKLANDS PRIMARY SCHOOL",
         ):
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(pollingstationpostcode="BA20 2DU")
         # MARTOCK UNITED REFORMED CHURCH HALL, BOWER HINTON, MARTOCK, SOMERSET TA12 6JN
         if (record.pollingstationnumber, record.pollingstationname) == (
             "93",
             "MARTOCK UNITED REFORMED CHURCH HALL",
         ):
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(pollingstationpostcode="TA12 6LA")
 
         return super().station_record_to_dict(record)
 
