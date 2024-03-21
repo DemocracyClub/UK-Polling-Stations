@@ -43,3 +43,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Change requested by the council
+        # Old station: The Coachman, Burnthouse Lane, Whickham, Newcastle Upon Tyne, NE16 5AW (id: 10253)
+        # Replaced by: Fellside Methodist Church, Ancaster Road, Whickham, Newcastle Upon Tyne, NE16 5BJ
+        if record.polling_place_id == "10253":
+            record = record._replace(
+                polling_place_name="Fellside Methodist Church",
+                polling_place_address_1="Ancaster Road",
+                polling_place_address_2="",
+                polling_place_address_3="Whickham",
+                polling_place_address_4="Newcastle Upon Tyne",
+                polling_place_postcode="NE16 5BJ",
+                polling_place_easting="",
+                polling_place_northing="",
+            )
+
+        return super().station_record_to_dict(record)
