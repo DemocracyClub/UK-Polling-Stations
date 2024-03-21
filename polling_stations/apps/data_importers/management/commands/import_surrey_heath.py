@@ -4,13 +4,9 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SUR"
-    addresses_name = (
-        "2023-05-04/2023-03-28T10:19:10.360312/Democracy_Club__04May2023.tsv"
-    )
-    stations_name = (
-        "2023-05-04/2023-03-28T10:19:10.360312/Democracy_Club__04May2023.tsv"
-    )
-    elections = ["2023-05-04"]
+    addresses_name = "2024-05-02/2024-03-21T20:01:29.277910/Democracy_Club__02May2024 Surrey Heath.tsv"
+    stations_name = "2024-05-02/2024-03-21T20:01:29.277910/Democracy_Club__02May2024 Surrey Heath.tsv"
+    elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -21,15 +17,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10002683262",  # CARAVAN 82 GUILDFORD ROAD, BAGSHOT
             "10002683024",  # 82 GUILDFORD ROAD, BAGSHOT
             "100061549494",  # FRIMLEY LODGE, GUILDFORD ROAD, FRIMLEY GREEN, CAMBERLEY
-            "100062328000",  # WITWOOD, PARK STREET, CAMBERLEY
-            "200001494828",  # ARMY TRAINING ESTATES, DERA THE MAULTWAY, CAMBERLEY
-            "10002684465",  # FLAT THE FROG MINDENHURST ROAD, DEEPCUT, CAMBERLEY
-            "100061546252",  # CRABTREE CORNER, CRABTREE ROAD, CAMBERLEY
-            "10002672927",  # THE OAKS, WHITMOOR ROAD, BAGSHOT
+            "10002685033",  # CORNERWAYS FRIMLEY ROAD, FRIMLEY, CAMBERLEY
         ]:
             return None
 
         if record.addressline6 in [
+            # split
             "GU19 5ES",
             "GU18 5QY",
             "GU15 3RD",
@@ -42,7 +35,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
         # Heatherside Community Centre, Martindale Avenue, Camberley, Surrey, GU15 1BB
-        if rec["internal_council_id"] == "2746":
+        if rec["internal_council_id"] == "2835":
             rec["location"] = Point(-0.702364, 51.329003, srid=4326)
 
         return rec
