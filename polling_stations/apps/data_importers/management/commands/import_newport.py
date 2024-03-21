@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NWP"
     addresses_name = (
-        "2024-05-02/2024-03-08T12:48:14.169180/Democracy_Club__02May2024.tsv"
+        "2024-05-02/2024-03-21T16:27:18.566958/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-08T12:48:14.169180/Democracy_Club__02May2024.tsv"
+        "2024-05-02/2024-03-21T16:27:18.566958/Democracy_Club__02May2024.tsv"
     )
     elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
@@ -36,6 +36,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10002153746",  # SEYMOUR COTTAGE, PENHOW, CALDICOT
             "10002153749",  # GROES WEN COTTAGE, PENHOW, CALDICOT
             "10014125572",  # MANAGERS ACCOMMODATION GROES WEN INN CHEPSTOW ROAD, NEWPORT
+            "10093295775",  # THE OLD GARDEN, PONTYMASON LANE, ROGERSTONE, NEWPORT
+            "100100654808",  # FIRST FLOOR FLAT 193 CARDIFF ROAD, NEWPORT
         ]:
             return None
 
@@ -47,30 +49,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "NP20 1HY",
             "NP20 7DY",
             "NP19 8AY",
+            "NP20 3AF",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Maesglas Community Centre, Bideford Road, Newport
-        if record.polling_place_id == "13060":
-            record = record._replace(polling_place_postcode="NP20 3XT")
-
-        # East Hub, 282 Ringland Circle, Newport
-        if record.polling_place_id == "13173":
-            record = record._replace(polling_place_postcode="NP19 9PS")
-
-        # Shaftesbury Community Centre, Side entrance off Hoskins Street, Newport
-        if record.polling_place_id == "13343":
-            record = record._replace(polling_place_postcode="NP20 5LD")
-
         # Just Dance, Locke Street Community Centre, 8 Queens Hill, Newport, NP20 5HJ
         if record.polling_place_id == "13269":
             record = record._replace(polling_place_postcode="NP20 5HL")
-
-        # Maindee Library, 79 Chepstow Road, Newport, NP18 8BY
-        if record.polling_place_id == "13243":
-            record = record._replace(polling_place_postcode="NP19 8BY")
 
         return super().station_record_to_dict(record)
