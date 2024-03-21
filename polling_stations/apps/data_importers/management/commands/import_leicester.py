@@ -6,12 +6,12 @@ from data_importers.management.commands import (
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "LCE"
     addresses_name = (
-        "2023-05-04/2023-04-08T10:03:21.739775/Democracy_Club__04May2023 08-04-2023.tsv"
+        "2024-05-02/2024-03-21T08:36:01.342545/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2023-05-04/2023-04-08T10:03:21.739775/Democracy_Club__04May2023 08-04-2023.tsv"
+        "2024-05-02/2024-03-21T08:36:01.342545/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -23,13 +23,18 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     ]
 
     def address_record_to_dict(self, record):
-        if len(record.addressline6) == 3:
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "2465215460",  # 1A SACHEVERELL ROAD, LEICESTER
+        ]:
             return None
         if record.addressline6 in [
             # split
             "LE1 7GT",
-            "LE3 0FP",
+            "LE4",
+            # suspect
+            "LE4 2RD",
         ]:
             return None
-
         return super().address_record_to_dict(record)
