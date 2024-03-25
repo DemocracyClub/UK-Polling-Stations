@@ -60,62 +60,34 @@
     {% block page_content %}
     {% endblock page_content %}
 {% endblock content %}
+{% block mailing_list %}{% endblock mailing_list %}
+{% block footer_menu %}
+    <div class="ds-cluster-center">
+        <p class="ds-h4">{% trans "Where Do I Vote?"%}</p>
+        <ul class="ds-padded" style="list-style:none;">
+            <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+            <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About Where Do I Vote?" %}</a></li>
+            <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
+            <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
+            <li><a href="https://democracyclub.org.uk/contact">{% trans "Contact Us" %}</a></li>
+            <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+            <li><a href="https://twitter.com/democlub/">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
+            <li><a href="https://facebook.com/DemocracyClub/">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
+            <li><a href="https://github.com/DemocracyClub/">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
+        </ul>
+    </div>
+{% endblock footer_menu %}
+{% block extra_footer_text %}
+    {% now "Y" as current_year %}
+    <div class="ds-copyright">
+        <p>
+            {% blocktrans %}Contains OS data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
+            {% blocktrans %}Contains Royal Mail data © Royal Mail copyright and database right {{ current_year }}{% endblocktrans %}<br>
+            {% blocktrans %}Contains National Statistics data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
+        </p>
+    </div>
+{% endblock extra_footer_text %}
 
-{% block footer_base %}
-    <footer class="ds-footer">
-        <div class="ds-block-centered ds-text-centered ds-stack">
-            <div class="ds-cluster-center">
-                <p class="ds-h4">{% trans "Where Do I Vote?"%}</p>
-                <ul class="ds-padded" style="list-style:none;">
-                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-                    <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About" %}</a></li>
-                    <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
-                    <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
-                    <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact" %}</a></li>
-                </ul>
-
-                <p class="ds-padded ds-h4">{% trans "Made by Democracy Club" %}</p>
-                <span class="ds-padded">
-                    {% trans "Democracy Club is a UK based Community Interest Company that builds the digital infrastructure needed for a 21st century democracy." %}
-                </span>
-                <ul class="ds-padded" style="list-style:none;">
-                    <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
-                    <li><a href="https://democracyclub.org.uk/contact/">{% trans "Contact Us" %}</a></li>
-                    <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
-                    <li><a href="https://twitter.com/democlub">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
-                    <li><a href="https://facebook.com/DemocracyClub">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
-                    <li><a href="https://github.com/DemocracyClub">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
-                </ul>
-            </div>
-
-            <div class="ds-copyright">
-                <div class="ds-cluster-center">
-                    <a class="ds-logo" href="/">
-                        <img src="{% static "images/logo_icon.svg" %}" alt="" />
-                        <span class="ds-text-left">
-                            {% trans "democracy" %}<br>{% trans "club" %}
-                            {% get_current_language as LANGUAGE_CODE %}
-                            {% if LANGUAGE_CODE != "en" %}
-                                <em lang="cy">{% language "cy" %}{% trans "Where Do I Vote?" %}{% endlanguage %}</em>
-                            {% endif %}
-                        </span>
-                    </a>
-                    {% now "Y" as current_year %}
-                    <p>
-                        {% blocktrans %}Contains OS data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
-                        {% blocktrans %}Contains Royal Mail data © Royal Mail copyright and database right {{ current_year }}{% endblocktrans %}<br>
-                        {% blocktrans %}Contains National Statistics data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
-                    </p>
-                    <p>
-                        {% blocktrans with company_number="09461226" companies_house_url="https://beta.companieshouse.gov.uk/company/09461226" %}Copyright ©
-                            {{ current_year }} Democracy Club Community Interest Company Company No: <a href="{{ companies_house_url }}">{{ company_number }}</a>{% endblocktrans %}
-                    </p>
-
-                </div>
-            </div>
-        </div>
-    </footer>
-{% endblock footer_base %}
 
 {% block extra_site_js %}
     {% block extra_javascript %}
