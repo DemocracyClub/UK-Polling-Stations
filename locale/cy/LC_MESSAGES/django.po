@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-12 16:08+0000\n"
+"POT-Creation-Date: 2024-03-25 14:03+0000\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -108,8 +108,7 @@ msgid "Uploads"
 msgstr "Uwchlwythiadau"
 
 #: polling_stations/settings/base.py:281
-#: polling_stations/templates/base.html:68
-#: polling_stations/templates/base.html:99
+#: polling_stations/templates/base.html:66
 msgid "Where Do I Vote?"
 msgstr "Ble Ydw i'n Pleidleisio?"
 
@@ -134,79 +133,53 @@ msgstr "Safle Llwyfannu yw hwn."
 msgid "Language:"
 msgstr "Iaith:"
 
-#: polling_stations/templates/base.html:70
+#: polling_stations/templates/base.html:68
 msgid "Home"
 msgstr "Hafan"
 
-#: polling_stations/templates/base.html:71
-msgid "About"
-msgstr "Amdanom ni"
+#: polling_stations/templates/base.html:69
+msgid "About Where Do I Vote?"
+msgstr "Ynglŷn â Ble Ydw i'n Pleidleisio?"
 
-#: polling_stations/templates/base.html:72
+#: polling_stations/templates/base.html:70
+msgid "About Democracy Club"
+msgstr "Ynglŷn â <span lang=\"en\">Democracy Club</span>"
+
+#: polling_stations/templates/base.html:71
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
+#: polling_stations/templates/base.html:72
+msgid "Contact Us"
+msgstr "Cysylltu â Ni"
+
 #: polling_stations/templates/base.html:73
-#: polling_stations/templates/base.html:84
 msgid "Blog"
 msgstr "Blog"
 
 #: polling_stations/templates/base.html:74
-msgid "Contact"
-msgstr "Cyswllt"
-
-#: polling_stations/templates/base.html:77
-msgid "Made by Democracy Club"
-msgstr "Gwnaed gan <span lang=\"en\">Democracy Club</span>"
-
-#: polling_stations/templates/base.html:79
-msgid ""
-"Democracy Club is a UK based Community Interest Company that builds the "
-"digital infrastructure needed for a 21st century democracy."
-msgstr ""
-"Cwmni Buddiannau Cymunedol yn y DU yw <span lang=\"en\">Democracy Club</"
-"span> sy'n adeiladu'r isadeiledd digidol sydd ei angen ar gyfer "
-"democratiaeth y 21ain ganrif."
-
-#: polling_stations/templates/base.html:82
-msgid "About Democracy Club"
-msgstr "Ynglŷn â <span lang=\"en\">Democracy Club</span>"
-
-#: polling_stations/templates/base.html:83
-msgid "Contact Us"
-msgstr "Cysylltu â Ni"
-
-#: polling_stations/templates/base.html:85
 msgctxt "link to Democracy Club Twitter page"
 msgid "Twitter"
 msgstr "Twitter"
 
-#: polling_stations/templates/base.html:86
+#: polling_stations/templates/base.html:75
 msgctxt "link to Democracy Club Facebook page"
 msgid "Facebook"
 msgstr "Facebook"
 
-#: polling_stations/templates/base.html:87
+#: polling_stations/templates/base.html:76
 msgctxt "link to Democracy Club GitHub page"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: polling_stations/templates/base.html:96
-msgid "democracy"
-msgstr ""
-
-#: polling_stations/templates/base.html:96
-msgid "club"
-msgstr ""
-
-#: polling_stations/templates/base.html:105
+#: polling_stations/templates/base.html:84
 #, python-format
 msgid "Contains OS data © Crown copyright and database right %(current_year)s"
 msgstr ""
 "Yn cynnwys data Arolwg Ordnans © Hawlfraint a hawliau cronfa ddata'r Goron "
 "%(current_year)s"
 
-#: polling_stations/templates/base.html:106
+#: polling_stations/templates/base.html:85
 #, python-format
 msgid ""
 "Contains Royal Mail data © Royal Mail copyright and database right "
@@ -215,7 +188,7 @@ msgstr ""
 "Yn cynnwys data'r Post Brenhinol © Hawlfraint a hawliau cronfa ddata'r Post "
 "Brenhinol %(current_year)s"
 
-#: polling_stations/templates/base.html:107
+#: polling_stations/templates/base.html:86
 #, python-format
 msgid ""
 "Contains National Statistics data © Crown copyright and database right "
@@ -223,23 +196,6 @@ msgid ""
 msgstr ""
 "Yn cynnwys data Ystadegau Gwladol © Hawlfraint a hawliau cronfa ddata'r "
 "Goron %(current_year)s"
-
-#: polling_stations/templates/base.html:110
-#, fuzzy, python-format
-#| msgid ""
-#| "Copyright ©\n"
-#| "        %(current_year)s Democracy Club Community Interest Company "
-#| "Company No: <a href=\"%(companies_house_url)s\">%(company_number)s</a>"
-msgid ""
-"Copyright ©\n"
-"                            %(current_year)s Democracy Club Community "
-"Interest Company Company No: <a "
-"href=\"%(companies_house_url)s\">%(company_number)s</a>"
-msgstr ""
-"Hawlfraint ©\n"
-"        %(current_year)s <span lang=\"en\">Democracy Club</span> Cwmni "
-"Buddiannau Cymunedol Rhif: <a "
-"href=\"%(companies_house_url)s\">%(company_number)s</a>"
 
 #: polling_stations/templates/base_embed.html:14
 msgid "Democracy Club logo"
@@ -442,7 +398,6 @@ msgstr ""
 "yn ddibynnol ar y math o etholiad ac ym mha wlad yn y DU yr ydych yn byw. "
 "Ewch i <a href\"%(ec_url)s\">%(electoral_commission_website)s</a> am ragor o "
 "wybodaeth."
-
 
 #: polling_stations/templates/fragments/generic_accessibility.html:32
 msgid ""
@@ -970,6 +925,39 @@ msgid ""
 msgstr ""
 "Neu, mae angen i chi gysylltu â'ch cyngor. Mae'n bosib bod trigolion yn "
 "%(postcode)s yn un o'r ardaloedd cyngor canlynol:"
+
+#~ msgid "About"
+#~ msgstr "Amdanom ni"
+
+#~ msgid "Contact"
+#~ msgstr "Cyswllt"
+
+#~ msgid "Made by Democracy Club"
+#~ msgstr "Gwnaed gan <span lang=\"en\">Democracy Club</span>"
+
+#~ msgid ""
+#~ "Democracy Club is a UK based Community Interest Company that builds the "
+#~ "digital infrastructure needed for a 21st century democracy."
+#~ msgstr ""
+#~ "Cwmni Buddiannau Cymunedol yn y DU yw <span lang=\"en\">Democracy Club</"
+#~ "span> sy'n adeiladu'r isadeiledd digidol sydd ei angen ar gyfer "
+#~ "democratiaeth y 21ain ganrif."
+
+#, fuzzy, python-format
+#~| msgid ""
+#~| "Copyright ©\n"
+#~| "        %(current_year)s Democracy Club Community Interest Company "
+#~| "Company No: <a href=\"%(companies_house_url)s\">%(company_number)s</a>"
+#~ msgid ""
+#~ "Copyright ©\n"
+#~ "                            %(current_year)s Democracy Club Community "
+#~ "Interest Company Company No: <a "
+#~ "href=\"%(companies_house_url)s\">%(company_number)s</a>"
+#~ msgstr ""
+#~ "Hawlfraint ©\n"
+#~ "        %(current_year)s <span lang=\"en\">Democracy Club</span> Cwmni "
+#~ "Buddiannau Cymunedol Rhif: <a "
+#~ "href=\"%(companies_house_url)s\">%(company_number)s</a>"
 
 #~ msgid "You don't need your poll card to vote."
 #~ msgstr "Nid oes angen eich cerdyn pleidleisio arnoch i bleidleisio."
