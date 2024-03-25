@@ -7,7 +7,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
 from django.core.management.base import BaseCommand
-from django.db import DEFAULT_DB_ALIAS
+from django.db import DEFAULT_DB_ALIAS, transaction
 from requests.exceptions import HTTPError
 from retry import retry
 
@@ -22,6 +22,18 @@ def union_areas(a1, a2):
     if not a1:
         return a2
     return MultiPolygon(a1.union(a2))
+
+
+OLD_BOUNDARY_URL = "https://s3.eu-west-2.amazonaws.com/pollingstations.public.data/ons/boundaries/Local_Authority_Districts_May_2022_UK_BFE_V3.geojson"
+OLD_BOUNDARIES_GSS_CODES = [
+    "E07000187",  # MEN Mendip
+    "E07000188",  # SEG Sedgemoor
+    "E07000246",  # SWT Somerset West & Taunton
+    "E07000189",  # SSO South Somerset
+    "E07000031",  # SLA South Lakeland
+    "E07000030",  # EDN Eden
+    "E07000027",  # BAR Barrow
+]
 
 
 class Command(BaseCommand):
@@ -47,7 +59,7 @@ class Command(BaseCommand):
             "-u",
             "--alt-url",
             required=False,
-            help="<Optional> Alternative url to override settings.BOUNDARIES_URL",
+            help="<Optional> Alternative url to override settings.https://s3.eu-west-2.amazonaws.com/pollingstations.public.data/ons/boundaries/Local_Authority_Districts_May_2023_UK_BFE_V2.geojson",
         )
         parser.add_argument(
             "--only-contact-details",
@@ -59,6 +71,13 @@ class Command(BaseCommand):
             "--database",
             default=DEFAULT_DB_ALIAS,
             help='Nominates a database to import in to. Defaults to the "default" database.',
+        )
+        parser.add_argument(
+            "--import-old-boundaries",
+            required=False,
+            action="store_true",
+            default=False,
+            help="<Optional> Import the old boundaries",
         )
 
     def feature_to_multipolygon(self, feature):
@@ -121,6 +140,41 @@ class Command(BaseCommand):
             council_geography.gss = gss_code
             council_geography.geography = self.feature_to_multipolygon(feature)
             council_geography.save()
+
+    def import_old_boundaries(self):
+        """
+        Fetch Somerset council's boundary from a different source and attach it
+        to the existing Somerset council object
+
+        :param url: The URL of the geoJSON file containing Somerset council boundaries
+        :return:
+        """
+        url = OLD_BOUNDARY_URL
+        self.stdout.write("Downloading old boundaries from %s..." % (url))
+        feature_collection = self.get_ons_boundary_json(url)
+
+        for feature in feature_collection["features"]:
+            gss_code = feature["properties"]["LAD22CD"]
+            if gss_code in OLD_BOUNDARIES_GSS_CODES:
+                try:
+                    council = Council.objects.using(self.database).get(
+                        identifiers__contains=[gss_code]
+                    )
+                    self.stdout.write(
+                        "Found old boundary for %s: %s" % (gss_code, council.name)
+                    )
+                except Council.DoesNotExist:
+                    self.stderr.write(
+                        "No old council object with GSS {} found".format(gss_code)
+                    )
+                    continue
+
+                council_geography, _ = CouncilGeography.objects.using(
+                    self.database
+                ).get_or_create(council=council)
+                council_geography.gss = gss_code
+                council_geography.geography = self.feature_to_multipolygon(feature)
+                council_geography.save()
 
     def load_contact_details(self):
         return requests.get(settings.EC_COUNCIL_CONTACT_DETAILS_API_URL).json()
@@ -186,6 +240,7 @@ class Command(BaseCommand):
 
             council.save()
 
+    @transaction.atomic
     def handle(self, **options):
         """
         Manually run system checks for the
@@ -210,6 +265,8 @@ class Command(BaseCommand):
 
         if not options["only_contact_details"]:
             self.attach_boundaries(options.get("alt_url"))
+            if options.get("import_old_boundaries", None):
+                self.import_old_boundaries()
 
         # Clean up old councils that we've not seen in the EC data
         Council.objects.using(self.database).exclude(
