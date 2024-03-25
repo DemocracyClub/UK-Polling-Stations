@@ -12,6 +12,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # fix from council:
+        # old: Abide Church Ithacus Christian Fellowship, 145 Park Road, Crouch End, London
+        # new: Abide Church Ichthus Christian Fellowship, 145 Park Road, Crouch End, London
+        if record.polling_place_id == "11333":
+            record = record._replace(
+                polling_place_name="Abide Church Ichthus Christian Fellowship",
+            )
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
