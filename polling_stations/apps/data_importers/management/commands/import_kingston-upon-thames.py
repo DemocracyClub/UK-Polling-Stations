@@ -20,7 +20,11 @@ class Command(BaseDemocracyCountsCsvImporter):
         # old address: St. John's Parish Hall, Grove Lane, Kingston upon Thames KT1 2SU
         # new address: St. John's Parish Hall, Grove Lane, Kingston upon Thames KT1 2ST
         if record.stationcode == "KTC":
-            record = record._replace(postcode="KT1 2ST")
+            record = record._replace(
+                postcode="KT1 2ST",
+                xordinate="518406",
+                yordinate="168420",
+            )
 
         # fix from council:
         # old address: Catholic Church of St. Pius X, The Triangle, Kingston Upon Thames, Surrey KT1 3SB
