@@ -183,8 +183,8 @@ commitment==3.0.1 \
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.3.0.zip \
-    --hash=sha256:55757bd7742669dd63dc9064a2ced4cbc603c8ec79117f03e047092db272c8f9
+dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.6.zip \
+    --hash=sha256:21512c334938738eea1cca5807c0f40acf82cc8554eb211831cc04eb9d887d17
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
