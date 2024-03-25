@@ -1,47 +1,8 @@
-import re
-
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseHalaroseCsvImporter):
     council_id = "PEM"
-    elections = ["2022-05-05"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Pembrokeshire"
-    geom_type = "geojson"
-    seen_stations = set()
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        return {
-            "internal_council_id": record["DistrictRef"],
-            "name": record["DistrictName"],
-            "area": poly,
-        }
-
-    def station_record_to_dict(self, record):
-        if record["County"] == "Carmarthenshire":
-            return None
-
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        codes = re.findall("[A-Z]{2}[0-9][A-Z]?", record["DistricttRef"])
-        stations = []
-        for code in codes:
-            if code not in self.seen_stations:
-                self.seen_stations.add(code)
-                stations.append(
-                    {
-                        "internal_council_id": code,
-                        "postcode": "",
-                        "address": record["StationName"],
-                        "location": location,
-                        "polling_district_id": code,
-                    }
-                )
-            else:
-                print(f"Discarding duplicate station for code {code}")
-
-        return stations
+    addresses_name = "2024-05-02/2024-03-25T14:51:07.747895/Eros_SQL_Output001.csv"
+    stations_name = "2024-05-02/2024-03-25T14:51:07.747895/Eros_SQL_Output001.csv"
+    elections = ["2024-05-02"]
