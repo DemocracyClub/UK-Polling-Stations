@@ -233,3 +233,7 @@ input[type="radio"] {
 //  centers the error for the postcode lookup
     margin: 1rem auto;
 }
+
+footer .ds-cluster-center ul li:nth-child(3) a span {
+    color: inherit;
+}
