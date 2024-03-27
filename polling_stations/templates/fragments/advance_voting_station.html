@@ -15,12 +15,12 @@
 
         {% endif %}
 
-        <p>
+        {% comment %} <p>
             {% blocktrans trimmed %}
                 You can deliver postal votes to this advance station during opening hours.
                 If you are acting as a proxy for someone, you can cast your proxy vote at this advance voting station"
             {% endblocktrans %}
-        </p>
+        </p> {% endcomment %}
     </div>
     {% if advance_voting_station.location %}
         <div id="advance_voting_station_map" class="ds-card-image"></div>
