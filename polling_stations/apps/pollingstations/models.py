@@ -111,6 +111,33 @@ class AccessibilityInformation(TimeStampedModel):
             )
         ]
 
+    @property
+    def has_at_station_info(self):
+        return any(
+            [
+                self.is_temporary,
+                self.nearby_parking,
+                self.disabled_parking,
+                self.level_access,
+                self.temporary_ramp,
+                self.hearing_loop,
+                self.public_toilets,
+                self.at_the_station,
+            ]
+        )
+
+    @cached_property
+    def level_access_text(self):
+        if self.level_access is None:
+            return None
+        if self.level_access:
+            return "Has level access."
+        if not self.level_access and self.temporary_ramp:
+            return "Has a temporary ramp for access."
+        if not self.level_access and not self.temporary_ramp:
+            return "Has a ramp for access"
+        return None
+
 
 class CustomFinderManager(models.Manager):
     def get_custom_finder(self, geocoder, postcode):

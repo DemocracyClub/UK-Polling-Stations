@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<div id="directions">
+    {% if directions.mode == "walk" %}
+        <p>
+            {% blocktrans trimmed with distance_in_miles=directions.distance_in_miles|floatformat:"1" time_in_minutes=directions.time_in_minutes %}
+                It's about {{ distance_in_miles }} miles away or a {{ time_in_minutes }} minute walk from {{ postcode }}.
+            {% endblocktrans %}
+        </p>
+    {% elif directions.mode == "drive" %}
+        <p>
+            {% blocktrans trimmed with distance_in_miles=directions.distance_in_miles|floatformat:"1" time_in_minutes=directions.time_in_minutes %}
+                It's about {{ distance_in_miles }} miles away or a {{ time_in_minutes }} minute drive from {{ postcode }}.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+
+    <p>
+        {% blocktrans trimmed with google_maps_url=directions.google_maps_url cyclestreets_url=directions.cyclestreets_url %}
+            Get <a href="{{ google_maps_url }}" target="_top">walking/driving directions from Google</a> or <a href="{{ cyclestreets_url }}" target="_top">cycling directions from CycleStreets</a>.
+        {% endblocktrans %}
+    </p>
+</div>

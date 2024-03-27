@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<h3>
+    <span aria-hidden="true">🚶️</span>️ {% trans "Getting there" %}
+</h3>
+{% if directions.time %}
+    {% include "fragments/travel_time.html" %}
+{% endif %}
+{% if station.accessibility_information.getting_to_the_station %}
+    <p>
+        {{ council.name }} have added a note about getting to this station:
+    </p>
+    <p>
+        {{ station.accessibility_information.getting_to_the_station }}
+    </p>
+{% endif %}
