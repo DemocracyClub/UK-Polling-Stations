@@ -83,10 +83,14 @@ class Address(AbstractAddress):
                 .order_by("-created")
                 .values("election_dates")[:1]
             )
-            return PollingStation.objects.annotate(elections=elections).get(
-                internal_council_id=self.polling_station_id,
-                council_id=self.council_id,
-                visibility__in=visibilities,
+            return (
+                PollingStation.objects.annotate(elections=elections)
+                .select_related("accessibility_information")
+                .get(
+                    internal_council_id=self.polling_station_id,
+                    council_id=self.council_id,
+                    visibility__in=visibilities,
+                )
             )
         except PollingStation.DoesNotExist:
             return None
