@@ -69,15 +69,21 @@
         {% else %}
             <p>We've not received any data for future elections yet.</p>
         {% endif %}
-        <p>
-            <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue">
+        <div class="ds-cluster">
+            <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
                 Upload
                 {% if object.upload_set.exists %}
                     an updated
                 {% endif %}
                 EMS export
             </a>
-        </p>
+            {% if live_upload  and user.is_superuser %}
+
+                <a href="{% url 'file_uploads:accessibility_upload' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                    Upload Accessibility CSV
+                </a>
+            {% endif %}
+        </div>
     {% else %}
         <p>
             We don't know about any upcoming elections administered by {{ object.name }}.

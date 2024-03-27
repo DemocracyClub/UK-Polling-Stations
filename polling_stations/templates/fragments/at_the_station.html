@@ -1,0 +1,56 @@
+{% load i18n %}
+
+<div>
+    <p>This polling station:</p>
+    <ul style="list-style: none;">
+        {% if station.accessibility_information.is_temporary %}
+            <li>
+                <span aria-hidden="true">🚌</span>️
+                Is a temporary structure.
+            </li>
+        {% endif %}
+
+        {% if station.accessibility_information.nearby_parking %}
+            <li>
+                <span aria-hidden="true">🅿️</span>️
+                Has nearby parking.
+            </li>
+        {% endif %}
+
+        {%  if station.accessibility_information.disabled_parking %}
+            <li>
+                <span aria-hidden="true">⛍️</span>️
+                Has disabled parking.
+            </li>
+        {% endif %}
+
+        {% if station.accessibility_information.level_access_text %}
+            <li>
+                <span aria-hidden="true">♿</span>️
+                {{  station.accessibility_information.level_access_text }}
+            </li>
+        {% endif %}
+
+        {% if station.accessibility_information.hearing_loop %}
+            <li>
+                <span aria-hidden="true">🦻</span>️
+                Has a hearing loop installed.
+            </li>
+        {% endif %}
+
+        {% if station.accessibility_information.public_toilets %}
+            <li>
+                <span aria-hidden="true">🚻</span>️
+                Has publicly accessible toilets.
+            </li>
+        {% endif %}
+    </ul>
+    {% if station.accessibility_information.at_the_station %}
+        <p>
+            {{ council.name }} have added a note about this station:
+        </p>
+        <p>
+            {{ station.accessibility_information.at_the_station }}
+        </p>
+    {% endif %}
+</div>
