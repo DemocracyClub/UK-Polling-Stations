@@ -10,7 +10,11 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone, translation
 from django.views.generic import FormView, TemplateView
-from pollingstations.models import CustomFinder, PollingStation
+from pollingstations.models import (
+    AccessibilityInformation,
+    CustomFinder,
+    PollingStation,
+)
 from uk_geo_utils.geocoders import MultipleCodesException
 from uk_geo_utils.helpers import AddressSorter, Postcode
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
@@ -188,6 +192,14 @@ class BasePollingStationView(
 
         self.council = self.get_council(loc)
         self.station = self.get_station()
+        context["has_at_station_info"] = False
+        if self.station:
+            access_info: AccessibilityInformation = getattr(
+                self.station, "accessibility_information", None
+            )
+            if access_info:
+                context["has_at_station_info"] = access_info.has_at_station_info
+
         self.directions = self.get_directions()
 
         ee = self.get_ee_wrapper(context.get("rh"))

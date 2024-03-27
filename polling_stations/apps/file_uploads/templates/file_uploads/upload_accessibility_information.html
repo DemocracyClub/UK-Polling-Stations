@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Upload Accessibility Information</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Accessibility CSV</legend>
+            <p>
+                Please upload the accessibility information provided by the council.
+                The accepted file types are CSV or TSV.
+            </p>
+            <div class="ds-field">
+                <label for="id_csv_file">Accessibility Info</label>
+                <input type="file" required id="id_csv_file" name="csv_file" accept=".csv,.tsv"  />
+                <progress id="progressBar0" value="0" max="100"></progress>
+            </div>
+        </fieldset>
+        <button type="submit" class="ds-button" id="submit">Upload</button>
+    </form>
+{% endblock content %}
