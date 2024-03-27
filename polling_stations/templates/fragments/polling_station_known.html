@@ -81,11 +81,11 @@
         <p><strong>
             {% blocktrans %}Polling stations are open from 7am to 10pm{% endblocktrans %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans %} on {{ NEXT_CHARISMATIC_ELECTION_DATE }}{% endblocktrans %}{% endif %}.
         </strong></p>
-        {% if territory != 'NI' %}
+        {% comment %} {% if territory != 'NI' %}
             <p>
                 {% blocktrans %}If you have a postal vote, you can hand it in at this polling station on election day up to 10pm{% endblocktrans %}
             </p>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
     </div>
     {% if station.location %}
