@@ -39,3 +39,7 @@ class CouncilLoginForm(forms.Form):
         """
         email = self.cleaned_data["email"]
         return User.objects.normalize_email(email)
+
+
+class CSVUploadForm(forms.Form):
+    csv_file = forms.FileField()
