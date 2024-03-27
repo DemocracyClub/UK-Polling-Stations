@@ -17,8 +17,7 @@ from moto.s3 import responses as moto_s3_responses
 from moto.ses import ses_backends
 from trigger.handler import main
 
-trigger_payload = json.loads(
-    """{
+trigger_payload_str = """{
   "Records": [
     {
       "eventVersion": "2.0",
@@ -56,7 +55,9 @@ trigger_payload = json.loads(
     }
   ]
 }"""
-)
+trigger_payload = json.loads(trigger_payload_str)
+
+ios_payload = json.loads(trigger_payload_str.replace("X01000000", "IOS"))
 
 os.environ["AWS_DEFAULT_REGION"] = moto_s3_responses.DEFAULT_REGION_NAME = "eu-west-1"
 
@@ -121,6 +122,12 @@ class HandlerTests(TestCase):
         )
         responses.add(
             responses.GET,
+            "https://wheredoivote.co.uk/api/beta/councils/IOS.json/?auth_token=testing",
+            status=200,
+            body=json.dumps({"name": "Isle of Wight Council"}),
+        )
+        responses.add(
+            responses.GET,
             f"https://api.github.com/repos/{self.repo}/issues?state=open&labels=Data%20Import",
             json=[],
             status=200,
@@ -142,6 +149,11 @@ class HandlerTests(TestCase):
                 "council_id": "X01000000",
             }
         )
+        CouncilFactory(
+            **{
+                "council_id": "IOS",
+            }
+        )
 
         sys.stdout = io.StringIO()
 
@@ -152,7 +164,9 @@ class HandlerTests(TestCase):
         self.sesmock.stop()
         sys.stdout = sys.__stdout__
 
-    def load_fixture(self, filename, key="data.csv", mimetype=None):
+    def load_fixture(
+        self, filename, key="data.csv", mimetype=None, council_id="X01000000"
+    ):
         # load a fixture into our pretend S3 bucket
         def guess_content_type(filename):
             return (
@@ -167,7 +181,7 @@ class HandlerTests(TestCase):
         fixture = fixture_path.open().read()
         self.conn.put_object(
             Bucket=self.upload_bucket,
-            Key=f"X01000000/2019-12-12/2019-09-30T17:00:02.396833/{key}",
+            Key=f"{council_id}/2019-12-12/2019-09-30T17:00:02.396833/{key}",
             Body=fixture,
             ContentType=mimetype,
         )
@@ -266,6 +280,116 @@ class HandlerTests(TestCase):
         resp = self.conn.get_object(
             Bucket=self.final_bucket,
             Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
+        )
+        self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
+        ses_backend = ses_backends[moto.core.DEFAULT_ACCOUNT_ID][
+            os.environ.get("AWS_DEFAULT_REGION")
+        ]
+        self.assertEqual(0, len(ses_backend.sent_messages))
+
+    def test_democracy_counts_small(self):
+        self.load_fixture(
+            "ems-dcounts-stations-small.csv", "ems-dcounts-stations-small.csv"
+        )
+        self.load_fixture("ems-dcounts-districts.csv", "ems-dcounts-districts.csv")
+
+        main(trigger_payload, None)
+
+        self.assertEqual(2, len(responses.calls))
+
+        expected_dict = {
+            "github_issue": "",
+            "gss": "X01000000",
+            "council_name": "Piddleton Parish Council",
+            "timestamp": "2019-09-30T17:00:02.396833",
+            "election_date": "2019-12-12",
+            "file_set": [
+                {
+                    "key": "X01000000/2019-12-12/2019-09-30T17:00:02.396833/ems-dcounts-districts.csv",
+                    "csv_valid": True,
+                    "csv_rows": 20,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                },
+                {
+                    "key": "X01000000/2019-12-12/2019-09-30T17:00:02.396833/ems-dcounts-stations-small.csv",
+                    "csv_valid": False,
+                    "csv_rows": 0,
+                    "csv_encoding": "",
+                    "ems": "unknown",
+                    "errors": "Expected file to be at least 1KB",
+                },
+            ],
+        }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
+        self.assertDictEqual(expected_dict, json.loads(responses.calls[1].request.body))
+        with self.assertRaises(ClientError):
+            self.conn.get_object(
+                Bucket=self.final_bucket,
+                Key="X01000000/2019-09-30T17:00:02.396833/report.json",
+            )
+        ses_backend = ses_backends[moto.core.DEFAULT_ACCOUNT_ID][
+            os.environ.get("AWS_DEFAULT_REGION")
+        ]
+        self.assertEqual(1, len(ses_backend.sent_messages))
+
+    def test_valid_democracy_counts_small(self):
+        self.load_fixture(
+            "ems-dcounts-stations.csv",
+            "ems-dcounts-stations-small.csv",
+            council_id="IOS",
+        )
+        self.load_fixture(
+            "ems-dcounts-districts.csv", "ems-dcounts-districts.csv", council_id="IOS"
+        )
+        main(ios_payload, None)
+
+        self.assertEqual(4, len(responses.calls))
+        self.assertEqual(
+            f"https://api.github.com/repos/{self.repo}/issues",
+            responses.calls[2].request.url,
+        )
+        self.assertEqual(
+            "https://wheredoivote.co.uk/api/beta/uploads/",
+            responses.calls[3].request.url,
+        )
+        expected_dict = {
+            "github_issue": f"https://github.com/{self.repo}/issues/1",
+            "gss": "IOS",
+            "council_name": "Isle of Wight Council",
+            "timestamp": "2019-09-30T17:00:02.396833",
+            "election_date": "2019-12-12",
+            "file_set": [
+                {
+                    "key": "IOS/2019-12-12/2019-09-30T17:00:02.396833/ems-dcounts-districts.csv",
+                    "csv_valid": True,
+                    "csv_rows": 20,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                },
+                {
+                    "key": "IOS/2019-12-12/2019-09-30T17:00:02.396833/ems-dcounts-stations-small.csv",
+                    "csv_valid": True,
+                    "csv_rows": 20,
+                    "csv_encoding": "utf-8",
+                    "ems": "Democracy Counts",
+                    "errors": "",
+                },
+            ],
+        }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
+        self.assertDictEqual(expected_dict, json.loads(responses.calls[3].request.body))
+        resp = self.conn.get_object(
+            Bucket=self.final_bucket,
+            Key="IOS/2019-12-12/2019-09-30T17:00:02.396833/report.json",
         )
         self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
         ses_backend = ses_backends[moto.core.DEFAULT_ACCOUNT_ID][
