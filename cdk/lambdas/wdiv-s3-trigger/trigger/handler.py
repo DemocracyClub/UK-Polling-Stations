@@ -28,7 +28,7 @@ def register_env():
     }
 
 
-def get_file_report(s3, bucket, key):
+def get_file_report(s3, bucket, key, council_id):
     report = {
         "csv_valid": False,
         "csv_rows": 0,
@@ -39,7 +39,7 @@ def get_file_report(s3, bucket, key):
     }
 
     obj = s3.get_object(Bucket=bucket, Key=key)
-    report = {**report, **get_object_report(obj)}
+    report = {**report, **get_object_report(obj, council_id)}
 
     if not report["errors"]:
         report = {**report, **get_csv_report(obj, key)}
@@ -70,7 +70,7 @@ def get_report(s3, bucket, key, api_key):
     ]
 
     for f in files:
-        report["file_set"].append(get_file_report(s3, bucket, f))
+        report["file_set"].append(get_file_report(s3, bucket, f, report["gss"]))
 
     return report
 

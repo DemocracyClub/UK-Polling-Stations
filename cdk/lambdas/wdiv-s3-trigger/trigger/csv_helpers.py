@@ -114,8 +114,8 @@ def get_csv_report(response, key):
         return report
 
 
-def get_object_report(response):
-    if response["ContentLength"] < 1024:
+def get_object_report(response, council_id):
+    if response["ContentLength"] < 1024 and council_id != "IOS":
         return {"errors": ["Expected file to be at least 1KB"]}
     if response["ContentLength"] > 150_000_000:
         return {"errors": ["Expected file to be under 150MB"]}
