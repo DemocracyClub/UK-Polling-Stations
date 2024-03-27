@@ -77,7 +77,7 @@
                 {% endif %}
                 EMS export
             </a>
-            {% if live_upload  and user.is_superuser %}
+            {% if live_upload  and user.is_staff %}
 
                 <a href="{% url 'file_uploads:accessibility_upload' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
                     Upload Accessibility CSV
@@ -170,7 +170,7 @@
                         {% if station.example_uprn %}
                             <tr>
                                 <td>
-                                    {% if user.is_superuser %}
+                                    {% if user.is_staff %}
                                         <a href="{% url "admin:pollingstations_pollingstation_change" object_id=station.pk %}">
                                             {{ station.address }}
                                         </a>
@@ -203,7 +203,7 @@
         </div>
     {%  endif %}
 
-    {% if user.is_superuser %}
+    {% if user.is_staff %}
         <div class="ds-card ds-padded">
             <h2>Data Events</h2>
             <p>
