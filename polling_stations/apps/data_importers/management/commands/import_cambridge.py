@@ -1,4 +1,5 @@
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseHalaroseCsvImporter):
@@ -37,3 +38,17 @@ class Command(BaseHalaroseCsvImporter):
             record = record._replace(pollingstationpostcode="CB1 2BD")
 
         return super().station_record_to_dict(record)
+
+    # Workaround to use coordinate data in Halarose file for mapping
+    def get_station_point(self, record):
+        x_coord = float(record.pollingstationeasting)
+        y_coord = float(record.pollingstationnorthing)
+
+        if x_coord > 0 and y_coord > 0:
+            return Point(
+                x_coord,
+                y_coord,
+                srid=27700,
+            )
+
+        return super().get_station_point(record)
