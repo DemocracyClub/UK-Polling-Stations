@@ -2,6 +2,7 @@ from django.urls import path, re_path, reverse_lazy
 from django.views.generic import RedirectView, TemplateView
 
 from .views import (
+    AccessibilityInformationUploadView,
     AuthenticateView,
     CouncilDetailView,
     CouncilListView,
@@ -41,4 +42,9 @@ urlpatterns = [
         name="logout_confirm",
     ),
     path("authenticate/", AuthenticateView.as_view(), name="council_authenticate"),
+    re_path(
+        "^upload_accessibility_info/(?P<council_id>.+)/$",
+        AccessibilityInformationUploadView.as_view(),
+        name="accessibility_upload",
+    ),
 ]

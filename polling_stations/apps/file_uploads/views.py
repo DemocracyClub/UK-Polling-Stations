@@ -1,6 +1,9 @@
+import csv
 import json
 import logging
+import sys
 from datetime import datetime
+from typing import Optional
 
 import boto3
 from addressbase.models import Address, UprnToCouncil
@@ -13,7 +16,8 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
-from django.db import DEFAULT_DB_ALIAS
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db import DEFAULT_DB_ALIAS, transaction
 from django.db.models import Count, Max, Subquery
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
@@ -22,10 +26,14 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.views.generic import DetailView, FormView, ListView, TemplateView
-from file_uploads.forms import CouncilLoginForm
+from file_uploads.forms import CouncilLoginForm, CSVUploadForm
 from marshmallow import Schema, fields, validate
 from marshmallow import ValidationError as MarshmallowValidationError
-from pollingstations.models import VisibilityChoices
+from pollingstations.models import (
+    AccessibilityInformation,
+    PollingStation,
+    VisibilityChoices,
+)
 from sentry_sdk import capture_message
 from sesame.utils import get_query_string, get_user
 
@@ -377,3 +385,88 @@ class AuthenticateView(TemplateView):
         login(request, user, backend="sesame.backends.ModelBackend")
         assign_councils_to_user(user)
         return redirect("file_uploads:councils_list")
+
+
+class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
+    template_name = "file_uploads/upload_accessibility_information.html"
+    form_class = CSVUploadForm
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.council = None
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
+        return super().get(self, request, *args, **kwargs)
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def form_valid(self, form):
+        self.council: Council = Council.objects.get(
+            council_id=self.kwargs["council_id"]
+        )
+        csv_file = self.request.FILES["csv_file"]
+        self.handle_file(csv_file)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            "file_uploads:councils_detail", kwargs={"pk": self.council.council_id}
+        )
+
+    @transaction.atomic
+    def handle_file(
+        self,
+        file: InMemoryUploadedFile,
+    ):
+        AccessibilityInformation.objects.filter(
+            polling_station__council=self.council
+        ).delete()
+        seen = set()
+        csv_contents = file.file.read().decode("utf-8")
+        fieldnames = csv_contents.split("\n")[0].split(",")
+        rows = csv_contents.split("\n")[1:]
+        reader = csv.DictReader(rows, fieldnames=fieldnames)
+        for row in reader:
+            if row["internal_council_id"] in seen:
+                sys.stdout.write(
+                    f"\nAlready processed accessibility information for {row['internal_council_id']}"
+                )
+                continue
+            self.handle_row(row)
+            seen.add(row["internal_council_id"])
+
+    def handle_row(
+        self,
+        row: dict,
+    ):
+        def to_bool(val: str) -> Optional[bool]:
+            if val.lower() in ("yes", "y"):
+                return True
+            if val.lower() in ("no", "n"):
+                return False
+            return None
+
+        bool_fields = (
+            "is_temporary",
+            "nearby_parking",
+            "disabled_parking",
+            "level_access",
+            "temporary_ramp",
+            "hearing_loop",
+            "public_toilets",
+        )
+        text_fields = (
+            "getting_to_the_station",
+            "at_the_station",
+        )
+
+        accessibility_information = {k: to_bool(row[k]) for k in bool_fields}
+        accessibility_information.update({k: row[k] for k in text_fields})
+        accessibility_information["polling_station"] = PollingStation.objects.get(
+            internal_council_id=row["internal_council_id"], council=self.council
+        )
+
+        AccessibilityInformation.objects.create(**accessibility_information)
