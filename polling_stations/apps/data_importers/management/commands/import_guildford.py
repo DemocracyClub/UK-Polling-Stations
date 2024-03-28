@@ -1,5 +1,7 @@
+from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
 from django.contrib.gis.geos import Point
+from django.core.exceptions import ObjectDoesNotExist
 
 WANBOROUGH_VILLAGE_HALL = {
     "pollingstationname": "Wanborough Village Hall",
@@ -65,3 +67,12 @@ class Command(BaseHalaroseCsvImporter):
             record = record._replace(**WANBOROUGH_VILLAGE_HALL)
 
         return super().address_record_to_dict(record)
+
+    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
+    def get_station_point(self, record):
+        uprn = record.pollingvenueuprn.strip().lstrip("0")
+        try:
+            ab_rec = Address.objects.get(uprn=uprn)
+            return ab_rec.location
+        except ObjectDoesNotExist:
+            return None
