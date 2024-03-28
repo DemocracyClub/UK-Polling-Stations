@@ -25,7 +25,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode == "28":
             record = record._replace(
                 xordinate="621844",
-                yordinate="140755",
+                yordinate="140818",
                 postcode="CT18 7UA",
                 placename="Hawkinge Pavilion and Sports Ground",
                 add1="Pavilion Road",
