@@ -92,9 +92,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "-i",
             "--include-past-elections",
-            help(
-                "<optional> Include scripts that don't have current (i.e. future) elections"
-            ),
+            help="<optional> Include scripts that don't have current (i.e. future) elections",
             action="store_false",
             required=False,
             default=False,

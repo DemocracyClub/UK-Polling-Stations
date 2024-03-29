@@ -2,7 +2,7 @@ import json
 from html import unescape
 
 import requests
-from councils.models import Council, CouncilGeography
+from councils.models import Council, CouncilGeography, UnsafeToDeleteCouncil
 from django.apps import apps
 from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon, WKTWriter
@@ -258,10 +258,17 @@ class Command(BaseCommand):
         self.database = options["database"]
 
         if options["teardown"]:
-            self.stdout.write("Clearing councils table..")
-            Council.objects.using(self.database).all().delete()
-            self.stdout.write("Clearing councils_geography table..")
-            CouncilGeography.objects.using(self.database).all().delete()
+            try:
+                self.stdout.write("Clearing councils table..")
+                Council.objects.using(self.database).all().delete()
+                self.stdout.write("Clearing councils_geography table..")
+                CouncilGeography.objects.using(self.database).all().delete()
+            except UnsafeToDeleteCouncil:
+                self.stdout.write(
+                    "Can't delete councils there are polling stations attached. "
+                    "Please run manage.py teardown --all first if you want to delete them."
+                )
+                return
 
         self.seen_ids = set()
         self.import_councils_from_ec()

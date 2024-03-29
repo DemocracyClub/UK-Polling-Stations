@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 from pathlib import Path
 from typing import Optional
 
@@ -17,7 +18,25 @@ from pollingstations.models import PollingStation
 from polling_stations.i18n.cy import WelshNameMutationMixin
 
 
+class UnsafeToDeleteCouncil(Exception):
+    pass
+
+
 class CouncilQueryset(models.QuerySet):
+    @transaction.atomic
+    def delete(self, force_cascade=False):
+        if force_cascade:
+            return super().delete()
+
+        deleted_sum = 0
+        deleted_counter = Counter()
+        for council in self._chain():
+            s, d = council.delete()
+            deleted_sum += s
+            deleted_counter += Counter(d)
+
+        return deleted_sum, dict(deleted_counter)
+
     def with_polling_stations_in_db(self):
         return (
             self.using(DEFAULT_DB_ALIAS)
@@ -105,6 +124,13 @@ class Council(WelshNameMutationMixin, models.Model):
             if new:
                 # model has just been created, so create corresponding DataQuality object.
                 DataQuality.objects.get_or_create(council_id=self.council_id)
+
+    def delete(self, using=None, keep_parents=False, force_cascade=False):
+        if (not force_cascade) and self.pollingstation_set.exists():
+            raise UnsafeToDeleteCouncil(
+                f"Can't delete {self.name} ({self.council_id}), there are polling stations attached"
+            )
+        return super().delete(using=using, keep_parents=keep_parents)
 
     @property
     def nation(self):

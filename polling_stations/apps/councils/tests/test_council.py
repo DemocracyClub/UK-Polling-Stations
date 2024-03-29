@@ -1,6 +1,6 @@
 import datetime
 
-from councils.models import Council
+from councils.models import Council, UnsafeToDeleteCouncil
 from councils.tests.factories import CouncilFactory
 from data_importers.event_types import DataEventType
 from data_importers.models import DataEvent, DataQuality
@@ -359,3 +359,105 @@ class CouncilTest(TestCase):
             ),
             3,
         )
+
+
+class CouncilSafeDeleteTest(TestCase):
+    def test_delete_single_council(self):
+        council: Council = CouncilFactory(council_id="AAA")
+        self.assertEqual(1, Council.objects.count())
+        self.assertFalse(council.pollingstation_set.exists())
+        council.delete()
+        self.assertEqual(0, Council.objects.count())
+
+    def test_delete_single_council_with_polling_stations(self):
+        # make a council and some polling stations
+        council: Council = CouncilFactory(council_id="AAA")
+        PollingStationFactory.create_batch(4, council=council)
+
+        # Assert they're connected and exist
+        self.assertEqual(1, Council.objects.count())
+        self.assertEqual(4, PollingStation.objects.count())
+        self.assertTrue(council.pollingstation_set.exists())
+
+        # Try to delete
+        with self.assertRaises(UnsafeToDeleteCouncil):
+            council.delete()
+
+        # it hasn't worked
+        self.assertEqual(1, Council.objects.count())
+        self.assertEqual(4, PollingStation.objects.count())
+
+        # delete with force_cascade
+        summ, dic = council.delete(force_cascade=True)
+
+        self.assertEqual(7, summ)
+        self.assertEqual(
+            {
+                "councils.CouncilGeography": 1,
+                "councils.Council": 1,
+                "data_importers.DataQuality": 1,
+                "pollingstations.PollingStation": 4,
+            },
+            dic,
+        )
+
+        # check it's worked - i.e. empty db
+        self.assertEqual(0, Council.objects.count())
+        self.assertEqual(0, PollingStation.objects.count())
+
+    def test_delete_qs_no_stations(self):
+        for i in "ABCD":
+            CouncilFactory.create(council_id=f"{i * 3}")
+
+        self.assertEqual(4, Council.objects.count())
+
+        summ, dic = Council.objects.all().delete()
+
+        self.assertEqual(12, summ)
+        self.assertEqual(
+            {
+                "councils.CouncilGeography": 4,
+                "councils.Council": 4,
+                "data_importers.DataQuality": 4,
+            },
+            dic,
+        )
+
+        # check it's worked - i.e. empty db
+        self.assertEqual(0, Council.objects.count())
+
+    def test_delete_qs_with_stations(self):
+        for i in "ABCD":
+            CouncilFactory.create(council_id=f"{i * 3}")
+        PollingStationFactory.create_batch(
+            4, council=Council.objects.get(council_id="AAA")
+        )
+        PollingStationFactory.create_batch(
+            2, council=Council.objects.get(council_id="BBB")
+        )
+
+        self.assertEqual(4, Council.objects.count())
+        self.assertEqual(6, PollingStation.objects.count())
+
+        # Try to delete
+        with self.assertRaises(UnsafeToDeleteCouncil):
+            Council.objects.all().delete()
+
+        self.assertEqual(4, Council.objects.count())
+        self.assertEqual(6, PollingStation.objects.count())
+
+        summ, dic = Council.objects.all().delete(force_cascade=True)
+
+        self.assertEqual(18, summ)
+        self.assertEqual(
+            {
+                "councils.CouncilGeography": 4,
+                "councils.Council": 4,
+                "data_importers.DataQuality": 4,
+                "pollingstations.PollingStation": 6,
+            },
+            dic,
+        )
+
+        # check it's worked - i.e. empty db
+        self.assertEqual(0, Council.objects.count())
