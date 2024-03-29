@@ -5,7 +5,7 @@ import requests
 from councils.models import Council, CouncilGeography
 from django.apps import apps
 from django.conf import settings
-from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon
+from django.contrib.gis.geos import GEOSGeometry, MultiPolygon, Polygon, WKTWriter
 from django.core.management.base import BaseCommand
 from django.db import DEFAULT_DB_ALIAS, transaction
 from requests.exceptions import HTTPError
@@ -33,6 +33,21 @@ OLD_BOUNDARIES_GSS_CODES = [
     "E07000031",  # SLA South Lakeland
     "E07000030",  # EDN Eden
     "E07000027",  # BAR Barrow
+]
+
+NI_BOUNDARY_URL = "https://s3.eu-west-2.amazonaws.com/pollingstations.public.data/osni/OSNI_Open_Data_-_Largescale_Boundaries_-_Local_Government_Districts_2012.geojson"
+NI_BOUNDARY_GSS_CODES = [
+    "N09000001",  # ANN Antrim and Newtownabbey
+    "N09000002",  # ABC Armagh City, Banbridge and Craigavon
+    "N09000003",  # BFS Belfast
+    "N09000004",  # CCG Causeway Coast and Glens
+    "N09000005",  # DRS Derry City and Strabane
+    "N09000006",  # FMO Fermanagh and Omagh
+    "N09000007",  # LBC Lisburn and Castlereagh
+    "N09000008",  # MEA Mid and East Antrim
+    "N09000009",  # MUL Mid Ulster
+    "N09000010",  # NMD Newry, Mourne and Down
+    "N09000011",  # AND Ards and North Down
 ]
 
 
@@ -79,9 +94,21 @@ class Command(BaseCommand):
             default=False,
             help="<Optional> Import the old boundaries",
         )
+        parser.add_argument(
+            "--use-osni",
+            required=False,
+            action="store_true",
+            default=False,
+            help="<Optional> Import the NI boundaries from OSNI",
+        )
 
     def feature_to_multipolygon(self, feature):
         geometry = GEOSGeometry(json.dumps(feature["geometry"]), srid=4326)
+        if geometry.hasz:
+            wkt_w = WKTWriter()
+            wkt_w.outdim = 2
+            temp_wkt = wkt_w.write(geometry)
+            geometry = GEOSGeometry(temp_wkt)
         if isinstance(geometry, Polygon):
             return MultiPolygon(geometry)
         return geometry
@@ -105,22 +132,30 @@ class Command(BaseCommand):
             raise HTTPError("202 Accepted", response=r)
         return r.json()
 
-    def attach_boundaries(self, url=None, id_field=COUNCIL_ID_FIELD):
+    def attach_boundaries(
+        self, url=None, id_field=COUNCIL_ID_FIELD, include=None, exclude=None
+    ):
         """
-        Fetch each council's boundary from ONS and attach it to an existing
+        Fetch each council's boundary from geojson at 'url' and attach it to an existing
         council object
 
         :param url: The URL of the geoJSON file containing council boundaries
         :param id_field: The name of the feature properties field containing
-                         the council ID
+                         the council GSS code
+        :param include: A list of codes to get boundaries for. If None then attempt all.
+        :param exclude: A list of codes not to attempt to get boundaries for. If None then attempt all.
         :return:
         """
         if not url:
             url = settings.BOUNDARIES_URL
-        self.stdout.write("Downloading ONS boundaries from %s..." % (url))
+        self.stdout.write("Downloading boundaries from %s..." % (url))
         feature_collection = self.get_ons_boundary_json(url)
         for feature in feature_collection["features"]:
             gss_code = feature["properties"][id_field]
+            if include and gss_code not in include:
+                continue
+            if exclude and gss_code in exclude:
+                continue
             try:
                 council = Council.objects.using(self.database).get(
                     identifiers__contains=[gss_code]
@@ -134,47 +169,15 @@ class Command(BaseCommand):
                 )
                 continue
 
-            council_geography, _ = CouncilGeography.objects.using(
-                self.database
-            ).get_or_create(council=council)
-            council_geography.gss = gss_code
-            council_geography.geography = self.feature_to_multipolygon(feature)
-            council_geography.save()
+            self.attach_council_geography(council, feature, gss_code)
 
-    def import_old_boundaries(self):
-        """
-        Fetch Somerset council's boundary from a different source and attach it
-        to the existing Somerset council object
-
-        :param url: The URL of the geoJSON file containing Somerset council boundaries
-        :return:
-        """
-        url = OLD_BOUNDARY_URL
-        self.stdout.write("Downloading old boundaries from %s..." % (url))
-        feature_collection = self.get_ons_boundary_json(url)
-
-        for feature in feature_collection["features"]:
-            gss_code = feature["properties"]["LAD22CD"]
-            if gss_code in OLD_BOUNDARIES_GSS_CODES:
-                try:
-                    council = Council.objects.using(self.database).get(
-                        identifiers__contains=[gss_code]
-                    )
-                    self.stdout.write(
-                        "Found old boundary for %s: %s" % (gss_code, council.name)
-                    )
-                except Council.DoesNotExist:
-                    self.stderr.write(
-                        "No old council object with GSS {} found".format(gss_code)
-                    )
-                    continue
-
-                council_geography, _ = CouncilGeography.objects.using(
-                    self.database
-                ).get_or_create(council=council)
-                council_geography.gss = gss_code
-                council_geography.geography = self.feature_to_multipolygon(feature)
-                council_geography.save()
+    def attach_council_geography(self, council: Council, feature: dict, gss_code: str):
+        council_geography, _ = CouncilGeography.objects.using(
+            self.database
+        ).get_or_create(council=council)
+        council_geography.gss = gss_code
+        council_geography.geography = self.feature_to_multipolygon(feature)
+        council_geography.save()
 
     def load_contact_details(self):
         return requests.get(settings.EC_COUNCIL_CONTACT_DETAILS_API_URL).json()
@@ -264,9 +267,26 @@ class Command(BaseCommand):
         self.import_councils_from_ec()
 
         if not options["only_contact_details"]:
-            self.attach_boundaries(options.get("alt_url"))
+            self.attach_boundaries(
+                options.get("alt_url"),
+                exclude=NI_BOUNDARY_GSS_CODES
+                + [
+                    "E06000064",  # Westmorland and Furness
+                    "E06000066",  # Somerset
+                ],
+            )
+
+            if options.get("use_osni", None):
+                self.attach_boundaries(
+                    NI_BOUNDARY_URL, id_field="LGDCode", include=NI_BOUNDARY_GSS_CODES
+                )
+
             if options.get("import_old_boundaries", None):
-                self.import_old_boundaries()
+                self.attach_boundaries(
+                    OLD_BOUNDARY_URL,
+                    id_field="LAD22CD",
+                    include=OLD_BOUNDARIES_GSS_CODES,
+                )
 
         # Clean up old councils that we've not seen in the EC data
         Council.objects.using(self.database).exclude(
