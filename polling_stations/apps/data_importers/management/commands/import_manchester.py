@@ -23,6 +23,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "14080":
             record = record._replace(polling_place_easting="384958")
             record = record._replace(polling_place_northing="389941")
+        # The following two coordinate changes are from the council:
+        # NEW POLLING STATION, Temporary Building, Sun in September Car Park, 588 Burnage Lane, Burnage M19 1NA
+        if record.polling_place_id == "13482":
+            record = record._replace(polling_place_easting="386076")
+            record = record._replace(polling_place_northing="391679")
+        # NEW POLLING STATION, Temporary Building, Corner of Royal Oak Road / Spark Street, Manchester M23 1FB
+        if record.polling_place_id == "13413":
+            record = record._replace(polling_place_easting="381014")
+            record = record._replace(polling_place_northing="389164")
 
         return super().station_record_to_dict(record)
 
