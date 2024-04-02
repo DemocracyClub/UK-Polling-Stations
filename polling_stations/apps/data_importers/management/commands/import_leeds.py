@@ -89,5 +89,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "LS11 7PQ",
         ]:
             return None
+        # Change from the council:
+        if record.addressline6 in [
+            "LS6 3RG",  # Chapel Fold
+        ]:
+            record = record._replace(
+                polling_place_name="Headingley Parish Hall",
+                polling_place_id="19259",
+                polling_place_address_1="(The Sugden Room)",
+                polling_place_address_2="St Michael`s Road",
+                polling_place_postcode="LS6 3AW",
+                polling_place_easting="427918",
+                polling_place_northing="435945",
+                polling_place_uprn="72194772",
+                default_polling_place_id="19258",
+            )
 
         return super().address_record_to_dict(record)
