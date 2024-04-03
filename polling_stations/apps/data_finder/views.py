@@ -193,12 +193,14 @@ class BasePollingStationView(
         self.council = self.get_council(loc)
         self.station = self.get_station()
         context["has_at_station_info"] = False
+        context["station_is_temporary"] = False
         if self.station:
             access_info: AccessibilityInformation = getattr(
                 self.station, "accessibility_information", None
             )
             if access_info:
                 context["has_at_station_info"] = access_info.has_at_station_info
+                context["station_is_temporary"] = access_info.is_temporary
 
         self.directions = self.get_directions()
 

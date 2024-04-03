@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-25 14:03+0000\n"
+"POT-Creation-Date: 2024-04-05 12:18+0100\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -106,6 +106,18 @@ msgstr "Anfon adborth"
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:6
 msgid "Uploads"
 msgstr "Uwchlwythiadau"
+
+#: polling_stations/apps/pollingstations/models.py:137
+msgid "level access"
+msgstr ""
+
+#: polling_stations/apps/pollingstations/models.py:139
+msgid "a temporary ramp for access"
+msgstr ""
+
+#: polling_stations/apps/pollingstations/models.py:141
+msgid "a ramp for access"
+msgstr ""
 
 #: polling_stations/settings/base.py:281
 #: polling_stations/templates/base.html:66
@@ -243,11 +255,30 @@ msgstr ""
 msgid "Opening times"
 msgstr ""
 
-#: polling_stations/templates/fragments/advance_voting_station.html:19
-msgid ""
-"You can deliver postal votes to this advance station during opening hours. "
-"If you are acting as a proxy for someone, you can cast your proxy vote at "
-"this advance voting station\""
+#: polling_stations/templates/fragments/at_the_station.html:5
+#, fuzzy
+#| msgid "Find your polling station"
+msgid "At the polling station"
+msgstr "Dod o hyd i'ch gorsaf bleidleisio"
+
+#: polling_stations/templates/fragments/at_the_station.html:12
+msgid "nearby parking"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:19
+msgid "disabled parking"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:33
+msgid "a hearing loop installed"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:40
+msgid "publicly accessible toilets"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:46
+msgid "The electoral services team have added a note about this station:"
 msgstr ""
 
 #: polling_stations/templates/fragments/cancelled_election.html:6
@@ -431,6 +462,15 @@ msgstr "Pleidleisio gyda cholled golwg (RNIB)."
 #: polling_stations/templates/fragments/generic_accessibility.html:60
 msgid "Voting with learning disabilities or autism (My Vote My Voice)."
 msgstr "Pleidleisio ag anableddau dysgu neu awtistiaeth (My Vote My Voice)."
+
+#: polling_stations/templates/fragments/getting_to_the_station.html:4
+msgid "Getting there"
+msgstr ""
+
+#: polling_stations/templates/fragments/getting_to_the_station.html:14
+msgid ""
+"The electoral services team have added a note about getting to this station:"
+msgstr ""
 
 #: polling_stations/templates/fragments/help_your_council.html:6
 msgid "Your election (might) need you!"
@@ -667,53 +707,18 @@ msgstr ""
 msgid "You can vote in person at:"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:60
-#, python-format
-msgid ""
-"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
-"walk from %(postcode)s."
-msgstr ""
-"Mae tua %(distance_in_miles)s milltir i ffwrdd neu %(time_in_minutes)s o "
-"funudau ar droed o %(postcode)s."
-
-#: polling_stations/templates/fragments/polling_station_known.html:66
-#, python-format
-msgid ""
-"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
-"drive from %(postcode)s."
-msgstr ""
-"Mae tua %(distance_in_miles)s milltir i ffwrdd neu %(time_in_minutes)s o "
-"funudau yn y car o %(postcode)s."
-
-#: polling_stations/templates/fragments/polling_station_known.html:73
-#, python-format
-msgid ""
-"Get <a href=\"%(google_maps_url)s\" target=\"_top\">walking/driving "
-"directions from Google</a> or <a href=\"%(cyclestreets_url)s\" "
-"target=\"_top\">cycling directions from CycleStreets</a>."
-msgstr ""
-"Cael <a href=\"%(google_maps_url)s\" target=\"_top\">cyfarwyddiadau cerdded/"
-"gyrru ar Google</a> neu <a href=\"%(cyclestreets_url)s\" "
-"target=\"_top\">gyfarwyddiadau seiclo ar CycleStreets</a>."
-
-#: polling_stations/templates/fragments/polling_station_known.html:82
+#: polling_stations/templates/fragments/polling_station_known.html:57
 #, fuzzy
 #| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgid "Polling stations are open from 7am to 10pm"
 msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 
-#: polling_stations/templates/fragments/polling_station_known.html:82
+#: polling_stations/templates/fragments/polling_station_known.html:57
 #, python-format
 msgid " on %(NEXT_CHARISMATIC_ELECTION_DATE)s"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:86
-msgid ""
-"If you have a postal vote, you can hand it in at this polling station on "
-"election day up to 10pm"
-msgstr ""
-
-#: polling_stations/templates/fragments/polling_station_known.html:99
+#: polling_stations/templates/fragments/polling_station_known.html:85
 msgid ""
 "\n"
 "                <h3>Advance voting trial</h3>\n"
@@ -802,6 +807,35 @@ msgid ""
 msgstr ""
 "Nid oes angen i chi gofrestru eto os ydych chi eisoes wedi cofrestru yn eich "
 "cyfeiriad cyfredol."
+
+#: polling_stations/templates/fragments/travel_time.html:6
+#, python-format
+msgid ""
+"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
+"walk from %(postcode)s."
+msgstr ""
+"Mae tua %(distance_in_miles)s milltir i ffwrdd neu %(time_in_minutes)s o "
+"funudau ar droed o %(postcode)s."
+
+#: polling_stations/templates/fragments/travel_time.html:12
+#, python-format
+msgid ""
+"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
+"drive from %(postcode)s."
+msgstr ""
+"Mae tua %(distance_in_miles)s milltir i ffwrdd neu %(time_in_minutes)s o "
+"funudau yn y car o %(postcode)s."
+
+#: polling_stations/templates/fragments/travel_time.html:19
+#, python-format
+msgid ""
+"Get <a href=\"%(google_maps_url)s\" target=\"_top\">walking/driving "
+"directions from Google</a> or <a href=\"%(cyclestreets_url)s\" "
+"target=\"_top\">cycling directions from CycleStreets</a>."
+msgstr ""
+"Cael <a href=\"%(google_maps_url)s\" target=\"_top\">cyfarwyddiadau cerdded/"
+"gyrru ar Google</a> neu <a href=\"%(cyclestreets_url)s\" "
+"target=\"_top\">gyfarwyddiadau seiclo ar CycleStreets</a>."
 
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:7
 msgid ""
