@@ -354,8 +354,20 @@ class AccessibilityInformationHandlerTest(TestCase):
         handler.import_accessibility_info(data)
 
         self.assertEqual(2, AccessibilityInformation.objects.count())
-        self.assertEqual([], handler.infos)
-        self.assertEqual([], handler.errors)
+        self.assertListEqual([], handler.infos)
+        self.assertListEqual([], handler.errors)
+
+    def test_check_row_count_vs_station_count(self):
+        handler = AccessibilityInformationHandler(
+            council=Council.objects.get(council_id="FOO")
+        )
+        self.assertListEqual([], handler.infos)
+        self.assertListEqual([], handler.errors)
+        handler.check_row_count_vs_station_count(3)
+        self.assertListEqual(
+            ["File has 3 rows, but there are 1 stations."], handler.infos
+        )
+        self.assertListEqual([], handler.errors)
 
     def test_import_accessibility_info_duplicate_id(self):
         PollingStation.objects.all().delete()
@@ -383,7 +395,7 @@ class AccessibilityInformationHandlerTest(TestCase):
             AccessibilityInformation.objects.all().first().polling_station.pk,
         )
         self.assertEqual(
-            ["Already processed accessibility information for station id: '20336'"],
+            ["There was more than one row containing the following ids: 20336"],
             handler.infos,
         )
         self.assertEqual([], handler.errors)

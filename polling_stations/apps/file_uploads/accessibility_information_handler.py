@@ -64,14 +64,18 @@ class AccessibilityInformationHandler:
             sys.stdout.write("\n".join(self.errors))
             return
 
-        sys.stdout.write("Clearing existing accessibility information")
+        sys.stdout.write("Clearing existing accessibility information\n")
         self.delete_existing_info()
 
-        sys.stdout.write("Importing new accessibility information")
+        sys.stdout.write("Importing new accessibility information\n")
         self.import_accessibility_info(data)
 
-        sys.stdout.write("\n".join(self.infos))
-        sys.stdout.write("\n".join(self.errors))
+        if self.infos:
+            sys.stdout.write("\n".join(self.infos))
+            sys.stdout.write("\n")
+        if self.errors:
+            sys.stdout.write("\n".join(self.errors))
+            sys.stdout.write("\n")
 
     def delete_existing_info(self):
         AccessibilityInformation.objects.filter(
@@ -80,14 +84,18 @@ class AccessibilityInformationHandler:
 
     def import_accessibility_info(self, data: csv.DictReader):
         seen = set()
+        duplicate_ids = set()
         for row in data:
             if row["internal_council_id"] in seen:
-                self.infos.append(
-                    f"Already processed accessibility information for station id: '{row['internal_council_id']}'"
-                )
+                duplicate_ids.add(row["internal_council_id"])
                 continue
             self.handle_row(row)
             seen.add(row["internal_council_id"])
+
+        if duplicate_ids:
+            self.infos.append(
+                f"There was more than one row containing the following ids: {','.join(duplicate_ids)}"
+            )
 
     def handle_row(self, row: dict):
         def to_bool(val: str) -> Optional[bool]:
@@ -160,7 +168,7 @@ class AccessibilityInformationHandler:
         station_count = self.council.pollingstation_set.count()
         if row_count != station_count:
             self.infos.append(
-                f"File only has {row_count} rows, but there are {station_count} stations."
+                f"File has {row_count} rows, but there are {station_count} stations."
             )
 
     def check_all_rows_have_ids(self, reader):
