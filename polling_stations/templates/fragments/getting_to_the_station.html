@@ -1,16 +1,18 @@
 {% load i18n %}
 
 <h3>
-    <span aria-hidden="true">🚶️</span>️ {% trans "Getting there" %}
+    <span aria-hidden="true">🧭️</span>️ {% trans "Getting there" %}
 </h3>
+{% if station_is_temporary %}
+    <p>Your polling station is a <strong>temporary structure</strong>. Please look for signage directing you to the station.</p>
+{% endif %}
 {% if directions.time %}
     {% include "fragments/travel_time.html" %}
 {% endif %}
 {% if station.accessibility_information.getting_to_the_station %}
     <p>
-        {{ council.name }} have added a note about getting to this station:
+        <strong>{% trans "The electoral services team have added a note about getting to this station:" %}</strong>
     </p>
-    <p>
-        {{ station.accessibility_information.getting_to_the_station_text }}
-    </p>
+    <blockquote>{{ station.accessibility_information.getting_to_the_station_text }}</blockquote>
 {% endif %}
+{% if has_at_station_info %}<br>{% endif %}

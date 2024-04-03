@@ -69,13 +69,9 @@
 </div>
 <div class="ds-card" id="station-info">
     <div class="ds-card-body">
-        {% if directions.time or  station.accessibility_information.getting_to_the_station %}
+        {% if directions.time or  station.accessibility_information.getting_to_the_station or station_is_temporary %}
             {% include "fragments/getting_to_the_station.html" %}
         {% endif %}
-        <h3>
-            <span aria-hidden="true">🗳</span>️
-            {% trans "At the polling station" %}
-        </h3>
         {%  if has_at_station_info  %}
             {% include "fragments/at_the_station.html" %}
         {% endif %}

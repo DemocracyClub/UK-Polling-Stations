@@ -134,11 +134,11 @@ class AccessibilityInformation(TimeStampedModel):
         if self.level_access is None:
             return None
         if self.level_access:
-            return "Has level access."
+            return _("level access")
         if not self.level_access and self.temporary_ramp:
-            return "Has a temporary ramp for access."
+            return _("a temporary ramp for access")
         if not self.level_access and not self.temporary_ramp:
-            return "Has a ramp for access"
+            return _("a ramp for access")
         return None
 
     @cached_property
