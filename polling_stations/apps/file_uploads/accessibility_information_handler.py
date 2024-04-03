@@ -22,14 +22,15 @@ class AccessibilityInformationHandler:
             "hearing_loop",
             "public_toilets",
         )
-        self.text_fields = (
+        self.english_text_fields = (
             "getting_to_the_station",
             "at_the_station",
         )
         self.welsh_text_fields = (
-            "getting_to_the_station_welsh",
-            "at_the_station_welsh",
+            "getting_to_the_station_cy",
+            "at_the_station_cy",
         )
+        self.text_fields = self.english_text_fields + self.welsh_text_fields
         self.polling_station_fields = (
             "internal_council_id",
             "polling_station_address",
