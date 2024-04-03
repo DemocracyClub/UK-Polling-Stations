@@ -32,9 +32,9 @@ class AccessibilityInformationHandlerTest(TestCase):
             "hearing_loop",
             "public_toilets",
             "getting_to_the_station",
-            "getting_to_the_station_welsh",
+            "getting_to_the_station_cy",
             "at_the_station",
-            "at_the_station_welsh",
+            "at_the_station_cy",
         ]
 
     def test_handle_row(self):
@@ -131,7 +131,7 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         reader = csv.reader(
             [
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
                 ",,,,,,,,,,,,,,,",
             ],
@@ -148,7 +148,7 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         reader = csv.reader(
             [
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,',
             ],
         )
@@ -167,7 +167,7 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         reader = csv.reader(
             [
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
             ],
         )
@@ -175,6 +175,27 @@ class AccessibilityInformationHandlerTest(TestCase):
         handler.check_all_rows_have_ids(reader)
         self.assertListEqual(
             [],
+            handler.errors,
+        )
+
+    def test_check_all_rows_have_ids_header_missing_id_field(self):
+        handler = AccessibilityInformationHandler(
+            council=Council.objects.get(council_id="FOO")
+        )
+        header = self.valid_header
+        header.remove("internal_council_id")
+        handler.header = header
+        reader = csv.reader(
+            [
+                """"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
+                '"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
+            ],
+        )
+
+        handler.check_all_rows_have_ids(reader)
+
+        self.assertListEqual(
+            ["Field: 'internal_council_id' missing from header"],
             handler.errors,
         )
 
@@ -186,7 +207,7 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         reader = csv.reader(
             [
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 ',"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
             ],
         )
@@ -201,8 +222,8 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         data = handler.parse_data(
             [
-                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_welsh,at_the_station,at_the_station_welsh",
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_cy,at_the_station,at_the_station_cy",
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
             ],
         )
@@ -237,9 +258,9 @@ class AccessibilityInformationHandlerTest(TestCase):
             "hearing_loop": "yes",
             "public_toilets": "No",
             "getting_to_the_station": "foo",
-            "getting_to_the_station_welsh": "bar",
+            "getting_to_the_station_cy": "bar",
             "at_the_station": "",
-            "at_the_station_welsh": "",
+            "at_the_station_cy": "",
         }
         handler.handle_row(row)
 
@@ -251,8 +272,10 @@ class AccessibilityInformationHandlerTest(TestCase):
         self.assertDictEqual(
             {
                 "at_the_station": "",
+                "at_the_station_cy": "",
                 "disabled_parking": False,
                 "getting_to_the_station": "foo",
+                "getting_to_the_station_cy": "bar",
                 "hearing_loop": True,
                 "is_temporary": False,
                 "level_access": True,
@@ -297,9 +320,9 @@ class AccessibilityInformationHandlerTest(TestCase):
             "hearing_loop": "yes",
             "public_toilets": "No",
             "getting_to_the_station": "foo",
-            "getting_to_the_station_welsh": "bar",
+            "getting_to_the_station_cy": "bar",
             "at_the_station": "",
-            "at_the_station_welsh": "",
+            "at_the_station_cy": "",
         }
         handler.handle_row(row)
 
@@ -322,8 +345,8 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         data = handler.parse_data(
             [
-                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_welsh,at_the_station,at_the_station_welsh",
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_cy,at_the_station,at_the_station_cy",
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
             ],
         )
@@ -346,8 +369,8 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         data = handler.parse_data(
             [
-                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_welsh,at_the_station,at_the_station_welsh",
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_cy,at_the_station,at_the_station_cy",
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 '20336,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
             ],
         )
@@ -376,8 +399,8 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         handler.handle(
             [
-                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_welsh,at_the_station,at_the_station_welsh",
-                '20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,,,,',
+                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_cy,at_the_station,at_the_station_cy",
+                """20336,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
                 '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
             ],
         )

@@ -10,6 +10,7 @@ from django.contrib.gis.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import CheckConstraint, JSONField, Q
 from django.utils.functional import cached_property
+from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 from django_extensions.db.models import TimeStampedModel
 from uk_geo_utils.helpers import Postcode
@@ -101,7 +102,9 @@ class AccessibilityInformation(TimeStampedModel):
     hearing_loop = models.BooleanField(null=True)
     public_toilets = models.BooleanField(null=True)
     getting_to_the_station = models.TextField(blank=True, null=True)
+    getting_to_the_station_cy = models.TextField(blank=True, null=True)
     at_the_station = models.TextField(blank=True, null=True)
+    at_the_station_cy = models.TextField(blank=True, null=True)
 
     class Meta:
         constraints = [
@@ -137,6 +140,18 @@ class AccessibilityInformation(TimeStampedModel):
         if not self.level_access and not self.temporary_ramp:
             return "Has a ramp for access"
         return None
+
+    @cached_property
+    def at_the_station_text(self):
+        if get_language() == "cy":
+            return self.at_the_station_cy
+        return self.at_the_station
+
+    @cached_property
+    def getting_to_the_station_text(self):
+        if get_language() == "cy":
+            return self.getting_to_the_station_cy
+        return self.getting_to_the_station
 
 
 class CustomFinderManager(models.Manager):
