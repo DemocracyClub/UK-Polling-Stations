@@ -15,7 +15,7 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         # ROMILLY BOWLING CLUB, ROMILLY PARK ROAD, BARRY, VALE OF GLAMORGAN CF62 6RB
         if (record.stationcode, record.placename) == ("2", "ROMILLY BOWLING CLUB"):
-            record = record._replace(postcode="")
+            record = record._replace(postcode="CF62 6RN")
 
         return super().station_record_to_dict(record)
 
