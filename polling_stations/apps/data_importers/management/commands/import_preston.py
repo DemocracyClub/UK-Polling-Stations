@@ -75,13 +75,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Millennium Hall, Neapsands Close, Fulwood, Preston, PR2 9AQ
         if record.polling_place_id == "4642":
             record = record._replace(
-                polling_place_easting="", polling_place_northing=""
+                polling_place_easting="355831", polling_place_northing="432404"
             )
 
         # Goosnargh Village Hall, Church Lane, Goosnargh, Preston, PR3 2BH
         if record.polling_place_id == "4700":
             record = record._replace(
-                polling_place_easting="", polling_place_northing=""
+                polling_place_easting="355833", polling_place_northing="436735"
             )
 
         return super().station_record_to_dict(record)
