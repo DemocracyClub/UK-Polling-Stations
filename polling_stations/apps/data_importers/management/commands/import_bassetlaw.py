@@ -53,6 +53,10 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # postcode correction from council for: Manton Parish Hall, 2a Cavendish Road, Worksop S80 2PG
+        if record.polling_place_id == "13051":
+            record = record._replace(polling_place_postcode="S80 2ST")
+
         # postcode correction for: Carlton Youth Centre, Lawn Road, Costhorpe, Worksop, S81 9RJ
         if record.polling_place_id == "12787":
             record = record._replace(polling_place_postcode="S81 9LB")
