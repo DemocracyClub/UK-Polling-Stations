@@ -71,6 +71,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "GL54 3QB",
         ]:
             return None
+        # Correction from conuncil:
+        # "All the electors who would have voted at Upper Slaughter Village Hall, will now go to Naunton Village Hall"
+        if record.polling_place_id == "26133":
+            record = record._replace(
+                polling_place_id="26153",
+                polling_place_name="Naunton Village Hall",
+                polling_place_address_1="Naunton",
+                polling_place_postcode="GL54 3AS",
+                polling_place_easting="411551",
+                polling_place_northing="223451",
+                default_polling_place_id="292",
+            )
 
         return super().address_record_to_dict(record)
 
@@ -82,11 +94,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="204691",
             )
 
-        # addd point for: St Mary`s Church, Meysey Hampton, GL7 5JS
+        # add point for: St Mary`s Church, Meysey Hampton, GL7 5JS
         if record.polling_place_id == "26137":
             record = record._replace(
                 polling_place_easting="411692",
                 polling_place_northing="200044",
             )
+        # Correction from council: removing Upper Slaughter Village Hall
+        if record.polling_place_id == "26133":
+            return None
 
         return super().station_record_to_dict(record)
