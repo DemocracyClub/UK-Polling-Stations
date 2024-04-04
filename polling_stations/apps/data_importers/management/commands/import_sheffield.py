@@ -1,4 +1,13 @@
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from django.contrib.gis.geos import Point
+
+THE_CLUBHOUSE = {
+    "pollingstationname": "The Clubhouse",
+    "pollingstationaddress_1": "Stocksbridge Rugby Club Grounds",
+    "pollingstationaddress_2": "36 Coal Pit Lane",
+    "pollingstationaddress_3": "Stocksbridge",
+    "pollingstationaddress_4": "Sheffield",
+}
 
 
 class Command(BaseHalaroseCsvImporter):
@@ -6,6 +15,15 @@ class Command(BaseHalaroseCsvImporter):
     addresses_name = "2024-05-02/2024-03-11T17:21:00.252746/Eros_SQL_Output001.csv"
     stations_name = "2024-05-02/2024-03-11T17:21:00.252746/Eros_SQL_Output001.csv"
     elections = ["2024-05-02"]
+
+    def station_record_to_dict(self, record):
+        if record.pollingstationnumber == "194":
+            record = record._replace(**THE_CLUBHOUSE)
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(426960, 397383, srid=27700)
+            return rec
+
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -68,5 +86,11 @@ class Command(BaseHalaroseCsvImporter):
             "S13 7EQ",
         ]:
             return None
+
+        if (record.pollingstationnumber, record.pollingstationname) == (
+            "194",
+            "Stocksbridge Rugby Club Pitches",
+        ):
+            record = record._replace(**THE_CLUBHOUSE)
 
         return super().address_record_to_dict(record)
