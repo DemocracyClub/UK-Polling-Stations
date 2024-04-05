@@ -12,6 +12,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # station change from council:
+        # old: Little Paxton Village Hall, Little Paxton, PE19 6EY
+        # new: St James’ Church, High Street, Little Paxton, PE19 6NF
+        if record.polling_place_id == "8945":
+            record = record._replace(
+                polling_place_name="St James’ Church",
+                polling_place_address_1="High Street",
+                polling_place_address_2="Little Paxton",
+                polling_place_postcode="PE19 6NF",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
