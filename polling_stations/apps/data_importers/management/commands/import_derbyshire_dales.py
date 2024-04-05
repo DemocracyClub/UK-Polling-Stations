@@ -12,6 +12,15 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2024-05-02"]
     csv_encoding = "utf-16le"
 
+    def station_record_to_dict(self, record):
+        # Removes polling stations name duplication in addresses
+        record = record._replace(add1="")
+        # fix from council: removes electors address from Bradbourne Church Hall polling station
+        if record.pollingstationid == "2904":
+            record = record._replace(add2="MILL LANE", postcode="DE6 1PA")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
