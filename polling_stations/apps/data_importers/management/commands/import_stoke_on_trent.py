@@ -99,4 +99,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if rec["internal_council_id"] == "16948":
             rec["location"] = Point(-2.150279, 52.965307, srid=4326)
 
+        # Station change from council:
+        if record.polling_place_id == "16862":
+            record = record._replace(
+                polling_place_name="Wheatsheaf Hotel",
+                polling_place_address_1="Sheaf Street",
+                polling_place_address_2="Shelton",
+                polling_place_address_3="",
+                polling_place_address_4="Stoke-on-Trent",
+                polling_place_postcode="ST1 4LW",
+            )
+
         return rec
