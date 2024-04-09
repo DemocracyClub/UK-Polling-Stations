@@ -32,18 +32,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "14757":
             record = record._replace(polling_place_uprn="10023432417")
 
-        # Removing suspect postcode and coordinates
+        # Amendments from council:
 
         # The Victory Hall St Francis Road Indian Queens St Columb TR9 6JR TR9 6JR
         if record.polling_place_id == "14315":
             record = record._replace(
-                polling_place_postcode="",
+                polling_place_postcode="TR9 6QN",
             )
         # The Conference Room, Tregawn Farm, Michaelstow, Bodmin PL30 3PB
         if record.polling_place_id == "15166":
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
+                polling_place_easting="207303",
+                polling_place_northing="78823",
             )
         return super().station_record_to_dict(record)
 
