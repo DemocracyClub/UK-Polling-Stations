@@ -16,7 +16,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # St Michaels & All Angels Church Hall - Scarborough, Filey Road, Scarborough, YO11 3JG
         if record.polling_place_id == "80279":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="YO11 3AA")
         # Low Row and Feetham Literary Institute, Low Row DL10 6NA
         if record.polling_place_id == "79859":
             record = record._replace(polling_place_postcode="DL11 6NA")
