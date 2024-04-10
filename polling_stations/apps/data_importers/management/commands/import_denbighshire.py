@@ -4,14 +4,20 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DEN"
     addresses_name = (
-        "2022-05-05/2022-03-23T09:46:47.855229/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-04-10T10:59:19.045149/Democracy_Club__02May2024.tsv"
     )
     stations_name = (
-        "2022-05-05/2022-03-23T09:46:47.855229/Democracy_Club__05May2022.tsv"
+        "2024-05-02/2024-04-10T10:59:19.045149/Democracy_Club__02May2024.tsv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
-    # 200004299740 (YR HEN FELIN, LLANNEFYDD ROAD, HENLLAN, DENBIGH) looks
-    # fine, as it's on the other side of an administrative boundary.
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "200004298031",  # AELWYD UCHA, RHUALLT, ST. ASAPH
+        ]:
+            return None
+        return super().address_record_to_dict(record)
