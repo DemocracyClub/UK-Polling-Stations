@@ -32,10 +32,24 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "BN1 8NF",
             "BN2 9PA",
             "BN1 3AE",
-            "BN1 9BW",  # 1 DENMAN PLACE, BRIGHTON
             "BN4 12PL",  # MILE OAK ROAD, PORTSLADE, BRIGHTON
         ]:
             return None
+        # Fix from council for incorrectly assigned postcode:
+        if record.addressline6 == "BN1 9BW":
+            record = record._replace(
+                polling_place_id="15784",
+                polling_place_name="St Mary Magdalen Church Hall",
+                polling_place_address_1="Coldean Lane",
+                polling_place_address_2="",
+                polling_place_address_3="Coldean",
+                polling_place_address_4="Brighton",
+                polling_place_postcode="BN1 9GS",
+                polling_place_easting="533065",
+                polling_place_northing="108834",
+                polling_place_uprn="",
+                default_polling_place_id="4523",
+            )
 
         return super().address_record_to_dict(record)
 
