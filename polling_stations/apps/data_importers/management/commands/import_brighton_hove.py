@@ -32,10 +32,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "BN1 8NF",
             "BN2 9PA",
             "BN1 3AE",
-            "BN1 9BW",  # 1 DENMAN PLACE, BRIGHTON
             "BN4 12PL",  # MILE OAK ROAD, PORTSLADE, BRIGHTON
         ]:
             return None
+
+        # council correction
+        if record.addressline6 == "BN1 9BW":
+            rec = super().address_record_to_dict(record)
+            rec["polling_station_id"] = "15784"
+            return rec
 
         return super().address_record_to_dict(record)
 
