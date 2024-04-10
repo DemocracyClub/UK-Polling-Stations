@@ -47,3 +47,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        record = record._replace(placename="")
+        return super().station_record_to_dict(record)
