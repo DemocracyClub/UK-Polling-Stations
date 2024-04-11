@@ -29,6 +29,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="444266")
             record = record._replace(polling_place_northing="102155")
 
+        # station change from council:
+        # old station: Fountain Court Hotel, Frost Lane, Hythe, SO45 3NE
+        # new station: Waterside Primary School, Ashford Crescent, SO45 6ET
+        if record.polling_place_id == "9118":
+            record = record._replace(
+                polling_place_name="Waterside Primary School",
+                polling_place_address_1="Ashford Crescent",
+                polling_place_postcode="SO45 6ET",
+                polling_place_easting="",
+                polling_place_northing="",
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
