@@ -74,5 +74,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(
                 polling_place_easting="414506", polling_place_northing="279399"
             )
+        # The following are coordinates from the council:
+        # Portacabin (Elmdon Park Car Park), Opposite 124-140 Tanhouse Farm Road, Elmdon, Solihull B92 9EY
+        if record.polling_place_id == "10380":
+            record = record._replace(
+                polling_place_easting="415703",
+                polling_place_northing="282642",
+            )
+        # Marston Green Parish Hall, Elmdon Road, Marston Green B37 7BT
+        if record.polling_place_id == "10213":
+            record = record._replace(
+                polling_place_easting="417418",
+                polling_place_northing="285182",
+                polling_place_uprn="200003830088",
+            )
 
         return super().station_record_to_dict(record)
