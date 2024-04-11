@@ -91,7 +91,7 @@ msgstr "Nac oedd"
 
 #: polling_stations/apps/feedback/templates/feedback/feedback_form.html:32
 msgid "Has this information made you more likely to vote?"
-msgstr ""
+msgstr "A yw'r wybodaeth hon wedi eich gwneud yn fwy tebygol o bleidleisio?"
 
 #: polling_stations/apps/feedback/templates/feedback/feedback_form.html:41
 msgid "Can you tell us anything more?"
@@ -109,15 +109,15 @@ msgstr "Uwchlwythiadau"
 
 #: polling_stations/apps/pollingstations/models.py:137
 msgid "level access"
-msgstr ""
+msgstr "mynediad gwastad"
 
 #: polling_stations/apps/pollingstations/models.py:139
 msgid "a temporary ramp for access"
-msgstr ""
+msgstr "ramp dros dro ar gyfer mynediad"
 
 #: polling_stations/apps/pollingstations/models.py:141
 msgid "a ramp for access"
-msgstr ""
+msgstr "ramp ar gyfer mynediad"
 
 #: polling_stations/settings/base.py:281
 #: polling_stations/templates/base.html:66
@@ -263,23 +263,23 @@ msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
 #: polling_stations/templates/fragments/at_the_station.html:12
 msgid "nearby parking"
-msgstr ""
+msgstr "lle parcio gerllaw"
 
 #: polling_stations/templates/fragments/at_the_station.html:19
 msgid "disabled parking"
-msgstr ""
+msgstr "parcio i'r anabl"
 
 #: polling_stations/templates/fragments/at_the_station.html:33
 msgid "a hearing loop installed"
-msgstr ""
+msgstr "mae dolen glyw wedi'i gosod"
 
 #: polling_stations/templates/fragments/at_the_station.html:40
 msgid "publicly accessible toilets"
-msgstr ""
+msgstr "toiledau cyhoeddus"
 
 #: polling_stations/templates/fragments/at_the_station.html:46
 msgid "The electoral services team have added a note about this station:"
-msgstr ""
+msgstr "Mae'r tîm gwasanaethau etholiadol wedi ychwanegu nodyn am yr orsaf hon:"
 
 #: polling_stations/templates/fragments/cancelled_election.html:6
 msgid "Cancelled Election"
@@ -465,12 +465,13 @@ msgstr "Pleidleisio ag anableddau dysgu neu awtistiaeth (My Vote My Voice)."
 
 #: polling_stations/templates/fragments/getting_to_the_station.html:4
 msgid "Getting there"
-msgstr ""
+msgstr "Cyrraedd yno"
 
 #: polling_stations/templates/fragments/getting_to_the_station.html:14
 msgid ""
 "The electoral services team have added a note about getting to this station:"
 msgstr ""
+"Mae'r tîm gwasanaethau etholiadol wedi ychwanegu nodyn am gyrraedd yr orsaf hon:"
 
 #: polling_stations/templates/fragments/help_your_council.html:6
 msgid "Your election (might) need you!"
@@ -697,15 +698,15 @@ msgstr ""
 #: polling_stations/templates/fragments/polling_station_known.html:36
 #, python-format
 msgid "Vote on %(polling_day)s"
-msgstr ""
+msgstr "Pleidleisiwch ar %(polling_day)s"
 
 #: polling_stations/templates/fragments/polling_station_known.html:38
 msgid "Vote on polling day"
-msgstr ""
+msgstr "Pleidleisiwch ar y diwrnod pleidleisio"
 
 #: polling_stations/templates/fragments/polling_station_known.html:42
 msgid "You can vote in person at:"
-msgstr ""
+msgstr "Gallwch bleidleisio yn y cnawd yn:"
 
 #: polling_stations/templates/fragments/polling_station_known.html:57
 #, fuzzy
@@ -891,6 +892,9 @@ msgid ""
 "elections, and parliamentary elections across the UK, on and after 4 May "
 "2023."
 msgstr ""
+"ydd angen dull adnabod ffotograffig i bleidleisio mewn etholiadau "
+"lleol yn Lloegr, ac etholiadau seneddol ar draws y DU, ar ac ar ôl "
+"4 Mai 2023."
 
 #: polling_stations/templates/home.html:37
 #: polling_stations/templates/home.html:60
@@ -898,21 +902,25 @@ msgid ""
 "Learn more about photographic identification for voters on the website of "
 "the Electoral Commission."
 msgstr ""
+"Dysgwch fwy am ddulliau adnabod ffotograffig ar gyfer pleidleiswyr ar wefan "
+"y Comisiwn Etholiadol."
 
 #: polling_stations/templates/home.html:37
 #: polling_stations/templates/home.html:60
 msgid "Learn more on the website of the Electoral Commission."
-msgstr ""
+msgstr "Dysgwch fwy ar wefan y Comisiwn Etholiadol."
 
 #: polling_stations/templates/home.html:39
 msgid ""
 "You can apply for a free 'Voter Authority Certificate' if you do not already "
 "possess a valid ID."
-msgstr ""
+msgstr  ""
+"Gallwch wneud cais am 'Dystysgrif Awdurdod Pleidleiswyr' am ddim os nad ydych "
+"yn gwneud yn barod"
 
 #: polling_stations/templates/home.html:40
 msgid "Apply for free voter ID."
-msgstr ""
+msgstr "Gwnewch gais am ID pleidleisio am ddim."
 
 #: polling_stations/templates/home.html:41
 #, fuzzy
