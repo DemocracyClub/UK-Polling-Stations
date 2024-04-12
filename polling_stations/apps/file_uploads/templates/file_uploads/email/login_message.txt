@@ -1,4 +1,6 @@
-Use the following URL to log in and upload polling station data to Democracy Club: {{ authenticate_url }}.
+Use the following URL to log in and upload polling station data to Democracy Club: 
+
+{{ authenticate_url }}
 
 This is a one-time link which will expire as soon as it is used.
 To login on future occasions please visit https://wheredoivote.co.uk/uploads/login/ to request a new link.
