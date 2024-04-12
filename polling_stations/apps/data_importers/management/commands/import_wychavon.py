@@ -5,10 +5,10 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WYC"
     addresses_name = (
-        "2024-05-02/2024-02-13T14:01:52.087758/Democracy_Club__02May2024.tsv"
+        "2024-05-02/2024-04-12T10:41:41.223808/Democracy_Club__02May2024v2.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-13T14:01:52.087758/Democracy_Club__02May2024.tsv"
+        "2024-05-02/2024-04-12T10:41:41.223808/Democracy_Club__02May2024v2.tsv"
     )
     elections = ["2024-05-02"]
     csv_delimiter = "\t"
