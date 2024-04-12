@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load static %}
 
 <h3>
     <span aria-hidden="true">🗳</span>️
@@ -15,7 +16,7 @@
 
     {%  if station.accessibility_information.disabled_parking %}
         <li>
-            <span aria-hidden="true">⛍️</span>️
+            <span aria-hidden="true"><img src="{% static 'images/accessibility_icons/disabled-parking.svg' %}" alt="disabled parking icon"></span>️
             {% trans "disabled parking" %}
         </li>
     {% endif %}
