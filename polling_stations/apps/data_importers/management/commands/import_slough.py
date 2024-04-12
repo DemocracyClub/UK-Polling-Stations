@@ -4,24 +4,24 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SLG"
     addresses_name = (
-        "2023-05-04/2023-04-21T14:19:22.418906/Democracy_Club__04May2023_Slough.CSV"
+        "2024-05-02/2024-04-12T11:24:40.557900/Democracy_Club__02May2024 (24).tsv"
     )
     stations_name = (
-        "2023-05-04/2023-04-21T14:19:22.418906/Democracy_Club__04May2023_Slough.CSV"
+        "2024-05-02/2024-04-12T11:24:40.557900/Democracy_Club__02May2024 (24).tsv"
     )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "200001911252",  # FLAT 35, PRIORY HEIGHTS, BUCKINGHAM AVENUE, SLOUGH
-        ]:
+        if uprn in []:
             return None
 
         if record.addressline6 in [
             # splits
             "SL1 2LT",
+            "SL1 1LU",
         ]:
             return None
 
@@ -30,7 +30,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # The Centre, Farnham Road, Slough, SL1 4UT
         # postcode in a wrong column, just moving it to the right place
-        if record.polling_place_id == "2305":
+        if record.polling_place_id == "2567":
             record = record._replace(polling_place_postcode="SL1 4UT")
 
         return super().station_record_to_dict(record)
