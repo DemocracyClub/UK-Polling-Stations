@@ -5,7 +5,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "DNC"
-    elections = ["2022-05-05"]
+    elections = ["2024-05-02"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Doncaster"
     geom_type = "geojson"
 
