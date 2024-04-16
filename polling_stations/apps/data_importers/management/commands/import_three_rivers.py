@@ -13,12 +13,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
-    def station_record_to_dict(self, record):
-        # 'Coates Way School, Coates Way, Garston, Watford, WD25 9NW' (id: 5242)
-        if record.polling_place_id == "5242":
-            record = record._replace(polling_place_postcode="")
-        return super().station_record_to_dict(record)
-
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
         if uprn in [
