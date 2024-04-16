@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseFcsDemocracyClubApiImporter
 
 class Command(BaseFcsDemocracyClubApiImporter):
     council_id = "THA"
-    elections = ["2023-05-04"]
-    fcs_election_id = 74
+    elections = ["2024-05-02"]
+    fcs_election_id = 92
 
     def address_record_to_dict(self, record):
         if record["addressPostCode"] in [
