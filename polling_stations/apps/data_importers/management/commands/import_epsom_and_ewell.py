@@ -5,7 +5,7 @@ class Command(BaseGitHubImporter):
     srid = 27700
     districts_srid = 27700
     council_id = "EPS"
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-EpsomAndEwell"
     geom_type = "gml"
     seen = set()
@@ -26,6 +26,8 @@ class Command(BaseGitHubImporter):
 
     def station_record_to_dict(self, record):
         postcode = " ".join(record["address"].split(" ")[-2:])
+        if len(postcode) > 8:
+            postcode = ""
         point = self.extract_geometry(record, self.geom_type, self.get_srid())
 
         if (record["district"], postcode) in self.seen:
