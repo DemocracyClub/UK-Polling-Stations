@@ -12,6 +12,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # street name changes from council:
+
+        # old: Community Centre on Dudley Fields, Central Drive/Sneyd Hall Road, Walsall, WS3 2NP
+        # new: Community Centre on Dudley Fields, Sneyd Hall Road, Walsall, WS3 2NP
+        if record.polling_place_id == "3253":
+            record = record._replace(polling_place_address_1="Sneyd Hall Road")
+
+        # old: Palfrey Junior School (former Community Centre) , Dale Street, Walsall, WS1 4AH
+        # new: Palfrey Junior School (former Community Centre) , Entrance Milton Street, Walsall, WS1 4AH
+        if record.polling_place_id == "3500":
+            record = record._replace(polling_place_address_1="Entrance Milton Street")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
