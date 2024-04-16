@@ -53,7 +53,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # Ashmanhaugh Preston Rooms, Neatishead Road, Ashmanhaugh, Wroxham NR12 8LB
         if record.polling_place_id == "18819":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="NR12 8YN")
 
         rec = super().station_record_to_dict(record)
 
