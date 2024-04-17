@@ -9,7 +9,7 @@ class Command(BaseDemocracyCountsCsvImporter):
     csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
-        uprn = record.uprn.strip.lstrip("0")
+        uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
             "10093602661",  # APARTMENT 26, ROGERSON COURT, SCAIFE GARTH, POCKLINGTON, YORK
