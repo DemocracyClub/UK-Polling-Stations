@@ -23,7 +23,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "14080":
             record = record._replace(polling_place_easting="384958")
             record = record._replace(polling_place_northing="389941")
+
         # The following two coordinate changes are from the council:
+
         # NEW POLLING STATION, Temporary Building, Sun in September Car Park, 588 Burnage Lane, Burnage M19 1NA
         if record.polling_place_id == "13482":
             record = record._replace(polling_place_easting="386076")
@@ -32,6 +34,24 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "13413":
             record = record._replace(polling_place_easting="381014")
             record = record._replace(polling_place_northing="389164")
+
+        # The following is station change from the council:
+        # old: Sandilands Primary School, Infant Department, Wendover Road, Brooklands, Manchester M23 9JX
+        # new (existing): Church of the Nazarene, Wendover Road, Brooklands, Manchester M23 9FN
+        if record.polling_place_id == "13457":
+            record = record._replace(
+                polling_place_id="13470",
+                polling_place_name="Church of the Nazarene",
+                polling_place_address_1="Wendover Road",
+                polling_place_address_2="",
+                polling_place_address_3="Brooklands",
+                polling_place_address_4="Manchester",
+                polling_place_postcode="M23 9FN",
+                polling_place_easting="379820",
+                polling_place_northing="389788",
+                polling_place_uprn="",
+                default_polling_place_id="614",
+            )
 
         return super().station_record_to_dict(record)
 
