@@ -109,17 +109,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="358540",
             )
 
-        # The following are suspect postcodes:
+        # The following are postcode corrections from the council:
 
         # Foxt Village Hall, Foxt Road, Foxt, Stoke on Trent ST10 2HY
         if record.polling_place_id == "8901":
             record = record._replace(
-                polling_place_postcode="",
+                polling_place_postcode="ST10 2HN",
             )
 
         # Cauldon Lowe Village Hall, Cauldon Lowe, Nr Waterhouses, Stoke on Trent ST10 3HW
         if record.polling_place_id == "8858":
             record = record._replace(
-                polling_place_postcode="",
+                polling_place_postcode="ST10 3EX",
             )
         return super().station_record_to_dict(record)
