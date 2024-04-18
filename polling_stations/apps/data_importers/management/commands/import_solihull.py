@@ -84,8 +84,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Marston Green Parish Hall, Elmdon Road, Marston Green B37 7BT
         if record.polling_place_id == "10213":
             record = record._replace(
-                polling_place_easting="417418",
-                polling_place_northing="285182",
+                polling_place_easting="417392",
+                polling_place_northing="285238",
                 polling_place_uprn="200003830088",
             )
 
