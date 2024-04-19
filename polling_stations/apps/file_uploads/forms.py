@@ -11,7 +11,7 @@ User = get_user_model()
 
 class CouncilEmailValidator(EmailValidator):
     domain_regex = _lazy_re_compile(
-        r"^(electoralcommission\.org\.uk|democracyclub\.org\.uk|.*\.gov\.uk|publicagroup\.uk)$",
+        r"^(electoralcommission\.org\.uk|democracyclub\.org\.uk|.*\.gov\.uk|publicagroup\.uk|\.llyw\.cymru)$",
         re.IGNORECASE,
     )
     message = "Please enter an email address for a UK council or VJB"
