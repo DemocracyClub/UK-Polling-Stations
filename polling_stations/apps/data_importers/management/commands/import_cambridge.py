@@ -37,6 +37,12 @@ class Command(BaseHalaroseCsvImporter):
         if record.pollingstationnumber == "36":
             record = record._replace(pollingstationpostcode="CB1 2BD")
 
+        # coords correction for: St. Andrew's Hall,97 St. Andrew's Road, Cambridge, CB4 1DH
+        if record.pollingstationnumber == "21":
+            record = record._replace(
+                pollingstationeasting="546314", pollingstationnorthing="259588"
+            )
+
         return super().station_record_to_dict(record)
 
     # Workaround to use coordinate data in Halarose file for mapping
