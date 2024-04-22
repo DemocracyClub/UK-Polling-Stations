@@ -23,7 +23,7 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         # more accurate point for: Old Wesleyan Chapel, Old Wesleyan Chapel (rear entrance), Garrison Lane, St Mary's, Isles of Scilly, TR21 0JD
         if record.pollingstationid == "36":
-            record = record._replace(xordinate="")
-            record = record._replace(yordinate="")
+            record = record._replace(xordinate="090208")
+            record = record._replace(yordinate="010539")
 
         return super().station_record_to_dict(record)
