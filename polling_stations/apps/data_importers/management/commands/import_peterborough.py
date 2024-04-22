@@ -35,6 +35,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # postcode correction for: Copeland Community Centre, 37 Copeland, Bretton, Peterborough, PE3 9YJ
         if record.polling_place_id == "10083":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="PE3 6YJ")
 
         return super().station_record_to_dict(record)
