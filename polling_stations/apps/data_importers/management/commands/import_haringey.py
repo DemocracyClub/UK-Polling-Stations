@@ -52,3 +52,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station change requested by council
+        # OLD: Earlsmead Primary School, Wakefield Road Entrance, Broad Lane, London, N15 4PW
+        # NEW: Earlsmead Primary School, Walton Road Entrance, Broad Lane, London, N15 4PW
+        if record.polling_place_id == "11433":
+            record = record._replace(polling_place_address_1="Walton Road Entrance")
+
+        return super().station_record_to_dict(record)
