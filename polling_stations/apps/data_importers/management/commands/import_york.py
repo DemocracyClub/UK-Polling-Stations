@@ -1,24 +1,41 @@
-from data_importers.management.commands import BaseDemocracyCountsCsvImporter
+import re
+
+from data_importers.github_importer import BaseGitHubImporter
 
 
-class Command(BaseDemocracyCountsCsvImporter):
+class Command(BaseGitHubImporter):
+    srid = 4326
+    districts_srid = 4326
     council_id = "YOR"
-    addresses_name = (
-        "2023-05-04/2023-05-04T11:51:02.449124/DemocracyClub_PollingDistricts.csv"
-    )
-    stations_name = (
-        "2023-05-04/2023-05-04T11:51:02.449124/DemocracyClub_PollingStations.csv"
-    )
-    elections = ["2023-05-04"]
+    elections = ["2024-05-02"]
+    scraper_name = "wdiv-scrapers/DC-PollingStations-York"
+    geom_type = "geojson"
 
-    def address_record_to_dict(self, record):
-        if record.postcode in [
-            # split
-            "YO19 6BG",
-        ]:
-            return None
-        if record.uprn in [
-            "",
-        ]:
-            return None
-        return super().address_record_to_dict(record)
+    def district_record_to_dict(self, record):
+        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+        code = record["Code"].replace("/", "")
+        return {
+            "internal_council_id": code,
+            "name": "%s - %s" % (record["Ward"], record["Code"]),
+            "area": poly,
+        }
+
+    def station_record_to_dict(self, record):
+        location = self.extract_geometry(
+            record, self.geom_type, self.get_srid("stations")
+        )
+        codes = re.split("[, ]", record["PollingDistrict"])
+        codes = [code.strip() for code in codes if code.strip()]
+        # codes = [code.strip() for code in record["PollingDistrict"].split("/")]
+        stations = []
+        for code in codes:
+            stations.append(
+                {
+                    "internal_council_id": code.strip(),
+                    "postcode": "",
+                    "address": f'{record["PlaceName"]}/{record["Address"]}',
+                    "location": location,
+                    "polling_district_id": code.strip(),
+                }
+            )
+        return stations
