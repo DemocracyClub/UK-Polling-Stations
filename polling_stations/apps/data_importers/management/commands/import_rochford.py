@@ -41,9 +41,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # Rayleigh Vineyard Church, London Road, Rayleigh, Essex SS6 9AY
         if record.polling_place_id == "6100":
-            record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
-            )
+            record = record._replace(polling_place_northing="191478")
 
         return super().station_record_to_dict(record)
