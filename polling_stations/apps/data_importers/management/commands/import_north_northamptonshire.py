@@ -55,26 +55,25 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Postcode corrections from council:
+
         # Hope Methodist Church, Linnet Way Entrance, 19 High Street, Higham Ferrers NN10 0RW
-        # postcode looks wrong
         if record.polling_place_id == "30649":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="NN10 8DD")
 
-        # The following stations have UPRNs that don't match their postcode:
-
-        # 'The Autumn Centre, Counts Farm Road, Corby, NN18 8BH' (id: 30448)
+        # The Autumn Centre, Counts Farm Road, Corby, NN18 8BH' (id: 30448)
         if record.polling_place_id == "30448":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="NN18 8BJ")
 
-        # 'Cottingham/Middleton Village Hall, Berryfield Road, Cottingham, Market Harborough, LE16 8XD' (id: 30517)
+        # Cottingham/Middleton Village Hall, Berryfield Road, Cottingham, Market Harborough, LE16 8XD
         if record.polling_place_id == "30517":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="LE16 8XB")
 
-        # 'Stanion Village Hall, Brigstock Road, Stanion, Kettering, NN14 1BX' (id: 30502)
+        # Stanion Village Hall, Brigstock Road, Stanion, Kettering, NN14 1BX
         if record.polling_place_id == "30502":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="NN14 1BU")
 
-        # 'East Carlton Cricket Club, East Carlton Park, East Carlton, Market Harborough, LE16 8YD' (id: 30524)
+        # East Carlton Cricket Club, East Carlton Park, East Carlton, Market Harborough, LE16 8YD
         if record.polling_place_id == "30524":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="LE16 8YF")
         return super().station_record_to_dict(record)
