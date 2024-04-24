@@ -13,6 +13,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # Correction from council:
+        # old: Una Marson Library 64 Thurlow Street SE17 2JA
+        # new: Una Marson Library, 62 Thurlow Street, London, SE17 2GN
+        if record.polling_place_id == "16824":
+            record = record._replace(
+                polling_place_address_1="62 Thurlow Street",
+                polling_place_address_2="London",
+                polling_place_postcode="SE17 2GN",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
