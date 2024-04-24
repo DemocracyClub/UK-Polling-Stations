@@ -55,6 +55,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Station name change requested by council
+        # OLD: The Avenue Club, Avenue Farm, Stratford-upon-Avon, CV37 0HR
+        # NEW: Venture House, Avenue Farm, Birmingham Road, Stratford-upon-Avon, CV37 0HR
+        if record.polling_place_id == "11601":
+            record = record._replace(
+                polling_place_name="Venture House",
+                polling_place_address_1="Avenue Farm",
+                polling_place_address_2="Birmingham Road",
+                polling_place_address_3="",
+                polling_place_address_4="Stratford-upon-Avon",
+                polling_place_postcode="CV37 0HR",
+            )
+
         rec = super().station_record_to_dict(record)
 
         # more accurate point for: Alcester Guide and Scout Centre, 28 Moorfield Road, Alcester, B49 5DA
