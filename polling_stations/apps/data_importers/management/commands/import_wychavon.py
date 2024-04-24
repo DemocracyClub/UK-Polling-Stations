@@ -20,6 +20,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-1.942675, 52.090313, srid=4326)
             return rec
+        # Coord correction to fix map for council:
+
+        if record.polling_place_id == "8205":
+            record = record._replace(
+                polling_place_easting="390412",
+                polling_place_northing="261303",
+            )
 
         return super().station_record_to_dict(record)
 
