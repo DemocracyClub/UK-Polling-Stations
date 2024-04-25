@@ -1543,9 +1543,9 @@ s3transfer==0.10.0 \
     --hash=sha256:3cdb40f5cfa6966e812209d0994f2a4709b561c88e90cf00c2696d2df4e56b2e \
     --hash=sha256:d0c8bbf672d5eebbe4e57945e23b972d963f07d82f661cabf678a5c88831595b
     # via boto3
-selenium==4.17.2 \
-    --hash=sha256:5aee79026c07985dc1b0c909f34084aa996dfe5b307602de9016d7a621a473f2 \
-    --hash=sha256:d43d6972e516855fb242ef9ce4ce759057b115070e702e7b1c1032fe7b38d87b
+selenium==4.20.0 \
+    --hash=sha256:0bd564ee166980d419a8aaf4ac00289bc152afcf2eadca5efe8c8e36711853fd \
+    --hash=sha256:b1d0c33b38ca27d0499183e48e1dd09ff26973481f5d3ef2983073813ae6588d
     # via -r requirements/testing.in
 sentry-sdk==1.40.1 \
     --hash=sha256:1bb9cf4ac317906d20787693b5e7f3e42160a90e8bbf1fc544f91c52fa76b68f \
