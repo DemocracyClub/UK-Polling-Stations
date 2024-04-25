@@ -1,4 +1,6 @@
+from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
@@ -15,6 +17,53 @@ class Command(BaseHalaroseCsvImporter):
         # postcode correction for: The Good Shepherd Hall, R/O St Andrews Church, Slack Lane, B20 9RE
         if record.pollingstationnumber in ["180", "181"]:
             record = record._replace(pollingstationpostcode="B21 9RE")
+
+        # Removing wrong UPRNs:
+
+        # Birchfield Primary School, Trinity Road B6 6AJ
+        # suggested UPRN: 100071470999
+        if self.get_station_hash(record) == "30-birchfield-primary-school":
+            record = record._replace(pollingvenueuprn="")
+
+        # George Dixon Primary School, City Road B17 8LE
+        # suggested UPRN: 100071411446
+        if self.get_station_hash(record) in (
+            "276-george-dixon-primary-school",
+            "277-george-dixon-primary-school",
+        ):
+            record = record._replace(pollingvenueuprn="")
+
+        # St Mary's Catholic Primary School, Vivian Road B17 0DN
+        # suggested UPRN: 100071417689
+        if self.get_station_hash(record) in (
+            "173-st-marys-catholic-primary-school",
+            "172-st-marys-catholic-primary-school",
+        ):
+            record = record._replace(pollingvenueuprn="")
+
+        # Grove Hall, Grove Lane B17 0QB
+        # suggested UPRN: can't find in addressbase, postcode might be wrong?
+        if self.get_station_hash(record) in (
+            "174-grove-hall",
+            "175-grove-hall",
+        ):
+            record = record._replace(pollingvenueuprn="")
+
+        # Wattville Primary School, Wattville Road B21 0DP
+        # suggested UPRN: 100071440040
+        if self.get_station_hash(record) in (
+            "211-wattville-primary-school",
+            "210-wattville-primary-school",
+        ):
+            record = record._replace(pollingvenueuprn="")
+
+        # Shenley Lane Community Association & Sports Centre, 472 Shenley Lane B29 4HZ
+        # suggested UPRN: 100070510240
+        if (
+            self.get_station_hash(record)
+            == "15-shenley-lane-community-association-sports-centre"
+        ):
+            record = record._replace(pollingvenueuprn="")
 
         return super().station_record_to_dict(record)
 
@@ -73,3 +122,12 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
+    def get_station_point(self, record):
+        uprn = record.pollingvenueuprn.strip().lstrip("0")
+        try:
+            ab_rec = Address.objects.get(uprn=uprn)
+            return ab_rec.location
+        except ObjectDoesNotExist:
+            return super().get_station_point(record)
