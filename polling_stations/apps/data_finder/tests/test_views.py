@@ -1,9 +1,10 @@
 import datetime
+from unittest.mock import patch
 
 from addressbase.models import Address
 from addressbase.tests.factories import AddressFactory, UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
-from data_finder.views import AddressView, polling_station_current
+from data_finder.views import AddressView, get_date_context, polling_station_current
 from data_importers.event_types import DataEventType
 from data_importers.tests.factories import DataEventFactory
 from django.core.management import call_command
@@ -12,6 +13,7 @@ from django.utils import timezone
 from pollingstations.models import PollingStation, VisibilityChoices
 from pollingstations.tests.factories import PollingStationFactory
 from uk_geo_utils.helpers import Postcode
+from zoneinfo import ZoneInfo
 
 
 class LogTestMixin:
@@ -75,6 +77,53 @@ class HomeViewTestCase(TestCase):
         # The query string isn't preserved, because they've come from the home page, and it could be either uprn
         # for the postcode given (hence the [23])
         self.assertRegex(response["Location"], r"/address/10[23]/")
+
+    def test_get_date_context(self):
+        self.assertDictEqual({"show_polls_open_card": False}, get_date_context(None))
+
+        six_am_election_day = datetime.datetime(
+            2024, 5, 2, 6, tzinfo=ZoneInfo("Europe/London")
+        )
+        midday_election_day = datetime.datetime(
+            2024, 5, 2, 12, tzinfo=ZoneInfo("Europe/London")
+        )
+        after_polls_close_election_day = datetime.datetime(
+            2024, 5, 2, 22, 10, tzinfo=ZoneInfo("Europe/London")
+        )
+
+        with patch.object(timezone, "now", return_value=six_am_election_day):
+            self.assertDictEqual(
+                {
+                    "election_date": datetime.datetime(
+                        2024, 5, 2, 0, 0, tzinfo=ZoneInfo(key="Europe/London")
+                    ),
+                    "election_date_is_today": True,
+                    "show_polls_open_card": True,
+                },
+                get_date_context("2024-05-02"),
+            )
+        with patch.object(timezone, "now", return_value=midday_election_day):
+            self.assertDictEqual(
+                {
+                    "election_date": datetime.datetime(
+                        2024, 5, 2, 0, 0, tzinfo=ZoneInfo(key="Europe/London")
+                    ),
+                    "election_date_is_today": True,
+                    "show_polls_open_card": True,
+                },
+                get_date_context("2024-05-02"),
+            )
+        with patch.object(timezone, "now", return_value=after_polls_close_election_day):
+            self.assertDictEqual(
+                {
+                    "election_date": datetime.datetime(
+                        2024, 5, 2, 0, 0, tzinfo=ZoneInfo(key="Europe/London")
+                    ),
+                    "election_date_is_today": True,
+                    "show_polls_open_card": False,
+                },
+                get_date_context("2024-05-02"),
+            )
 
 
 class PostCodeViewTestCase(TestCase, LogTestMixin):
