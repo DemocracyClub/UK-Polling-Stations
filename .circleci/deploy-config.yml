@@ -436,7 +436,7 @@ workflows:
         dc-environment: production
         min-size: 1
         max-size: 30
-        desired-capacity: 2
+        desired-capacity: 10
     - run_new_imports_post_deploy:
         # NB if no imports have changed this is a no-op
         name: "Production: Run New Imports Post Deploy"
