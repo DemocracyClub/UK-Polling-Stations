@@ -34,3 +34,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station change requested by council
+        # OLD: Plaistow SDA Church, 97 St. Antony's Road, Forest Gate, London, E7 9QB
+        # NEW: Elmhurst School, Upton Park Road, Forest Gate, London, E7 9PG
+        if record.polling_place_id == "7633":
+            record = record._replace(
+                polling_place_name="Elmhurst School",
+                polling_place_address_1="Upton Park Road",
+                polling_place_address_2="Forest Gate",
+                polling_place_address_3="London",
+                polling_place_address_4="",
+                polling_place_postcode="E7 9PG",
+                polling_place_easting="",
+                polling_place_northing="",
+            )
+
+        return super().station_record_to_dict(record)
