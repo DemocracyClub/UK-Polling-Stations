@@ -13,6 +13,11 @@ class Command(BaseDemocracyCountsCsvImporter):
     csv_encoding = "utf-16le"
 
     def station_record_to_dict(self, record):
+        # Station coordinates change requested by council
+        # MATLOCK - FARMERS VIEW, WITHIN HURST FARM SOCIAL CLUB, HAZEL GROVE, MATLOCK, DERBYSHIRE, DE4 3ED
+        if record.pollingstationid == "2919":
+            record = record._replace(xordinate="430853", yordinate="360507")
+
         # Removes polling stations name duplication in addresses
         record = record._replace(add1="")
         # fix from council: removes electors address from Bradbourne Church Hall polling station
