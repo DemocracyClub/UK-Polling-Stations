@@ -19,8 +19,9 @@ class Command(BaseHalaroseCsvImporter):
             return super().get_station_point(record)
 
     def station_record_to_dict(self, record):
+        # UPRN update from council:
         # Greenhithe Masonic Lodge, 218 London Road, Greenhithe, Dartford DA9 9JF
         if self.get_station_hash(record) == "43-greenhithe-masonic-lodge":
-            record = record._replace(pollingvenueuprn="")
+            record = record._replace(pollingvenueuprn="200000534103")
 
         return super().station_record_to_dict(record)
