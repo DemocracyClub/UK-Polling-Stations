@@ -18,6 +18,7 @@ class Command(BaseGitHubImporter):
             "internal_council_id": record["DIS_CODE_NEW"],
             "name": record["WARD"] + " - " + record["DIS_CODE_NEW"],
             "area": poly,
+            "polling_station_id": record["STA_CODE_1"],
         }
 
     def station_record_to_dict(self, record):
@@ -35,7 +36,6 @@ class Command(BaseGitHubImporter):
                     "address": record["ADDRESS"],
                     "postcode": record["POSTCODE"],
                     "location": location,
-                    "polling_district_id": code,
                 }
             )
         return stations
