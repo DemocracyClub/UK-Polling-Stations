@@ -8,6 +8,16 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2024-05-02"]
     csv_encoding = "utf-16le"
 
+    def station_record_to_dict(self, record):
+        # Coordinate change from council for:
+        # The Fromus Community Centre, Saxmundham Hub, Street Farm Road, Saxmundham
+        if record.pollingstationid == "4794":
+            record = record._replace(
+                xordinate="638713",
+                yordinate="263352",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
