@@ -53,6 +53,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # bugreport #627
+        # coords change for: Dereham Town Football Club, Aldiss Park, Norwich Road, Dereham, NR20 3PX
+        if record.polling_place_id == "12585":
+            record = record._replace(
+                polling_place_easting="601036", polling_place_northing="313508"
+            )
+
         if record.polling_place_id in [
             "12323",  # Rocklands Village Hall The Street Rocklands
             "12460",  # Ovington Village Hall Church Road Ovington
