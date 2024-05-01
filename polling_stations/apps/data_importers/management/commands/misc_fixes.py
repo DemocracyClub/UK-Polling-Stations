@@ -151,4 +151,8 @@ class Command(BaseCommand):
 
         print("..done")
 
+        # http://wheredoivote.co.uk/admin/feedback/feedback/83100/change/
+        print("Removing point for Otley Social Club")
+        update_station_point("LDS", "18998", None)
+
         print("*** ...finished applying misc fixes. ***")
