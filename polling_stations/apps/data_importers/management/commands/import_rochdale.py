@@ -63,4 +63,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "5515",
         ):
             record = record._replace(polling_place_postcode="OL12 7JG")
+
+        # Station change from council:
+        # old: Mobile Unit on the Car Park of Ogden Baptist Church, Cedar Lane, Newhey  OL16 4LD
+        # new: Mobile Unit on the Car Park of Elm Grove, OL16 4LH
+        if record.polling_place_id == "5422":
+            record = record._replace(
+                polling_place_address_1="Elm Grove",
+                polling_place_address_2="",
+                polling_place_postcode="OL16 4LH",
+            )
+
         return super().station_record_to_dict(record)
