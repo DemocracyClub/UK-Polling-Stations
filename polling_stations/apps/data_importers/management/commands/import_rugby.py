@@ -20,3 +20,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station postcode change requested by council
+        # Benn Hall, Newbold Road, Rugby, CV21 1BF
+        if record.polling_place_id == "10549":
+            record = record._replace(polling_place_postcode="CV21 2LN")
+
+        return super().station_record_to_dict(record)
