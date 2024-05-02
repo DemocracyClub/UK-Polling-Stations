@@ -43,6 +43,13 @@ class Command(BaseHalaroseCsvImporter):
                 pollingstationeasting="546314", pollingstationnorthing="259588"
             )
 
+        # User reported issue (freshdesk ticket 24429):
+        # Removing map for: The Salvation Army Community Centre, 104, Mill Road, Cambridge, CB1 2DB
+        rec = super().station_record_to_dict(record)
+        if rec["internal_council_id"] == "36-the-salvation-army-community-centre":
+            rec["location"] = None
+            return rec
+
         return super().station_record_to_dict(record)
 
     # Workaround to use coordinate data in Halarose file for mapping
