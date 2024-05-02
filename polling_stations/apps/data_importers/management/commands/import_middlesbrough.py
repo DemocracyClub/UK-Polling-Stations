@@ -61,4 +61,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="449587")
             record = record._replace(polling_place_northing="517743")
 
+        # Corrections from council:
+        # old: Mobile Station - Northern Road, Northern Road, Middlesbrough, TS5 4NS
+        # new: Mobile Station - Junction of Northern Road and Acklam Road, Northern Road, Middlesbrough, TS5 4NS
+        if record.polling_place_id == "9569":
+            record = record._replace(
+                polling_place_name="Mobile Station - Junction of Northern Road and Acklam Road",
+                polling_place_easting="448012",
+                polling_place_northing="518686",
+            )
+
         return super().station_record_to_dict(record)
