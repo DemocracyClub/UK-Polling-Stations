@@ -34,6 +34,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # bugreport #648
+        # postcode correction for: St.Mary`s Church Parish Hall, St Mary`s Road, Liverpool, L19 0PW
+        if record.polling_place_id == "10526":
+            record = record._replace(polling_place_postcode="L19 0NE")
+
         rec = super().station_record_to_dict(record)
 
         # Warning about Fazakerley Social Club (10542) consulted, no correction needed.
