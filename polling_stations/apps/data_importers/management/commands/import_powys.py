@@ -57,56 +57,78 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
+        record = self.apply_council_changes(record)
+
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        record = self.apply_council_changes(record)
+        return super().station_record_to_dict(record)
+
+    def apply_council_changes(self, record):
         # Station changes  requested by council:
         # OLD: BRECON PRIORY SCHOOL PENDRE - N0.1 STATION, Priory C in W School, BRECON, LD3 9EU
         # NEW: BRECON ST JOHN'S CENTRE - Station No. 1, BRECON
-        if record.pollingstationnumber == "34":
+        if (
+            record.pollingstationnumber == "34"
+            and record.pollingstationname
+            == "BRECON PRIORY SCHOOL, PENDRE -  NO.1 STATION"
+        ):
             record = record._replace(
                 pollingstationname="BRECON ST JOHN'S CENTRE - Station No. 1",
-                pollingstationaddress_1="",
-                pollingstationaddress_2="",
+                pollingstationaddress_1="PENDRE",
+                pollingstationaddress_2="BRECON",
                 pollingstationaddress_3="",
                 pollingstationaddress_4="",
-                pollingstationpostcode="",
+                pollingstationpostcode="LD3 9EA",
             )
 
         # OLD: BRECON PRIORY SCHOOL PENDRE - N0.2 STATION, Priory C in W School, BRECON, LD3 9EU
         # NEW: BRECON ST JOHN'S CENTRE - Station No. 2, BRECON
-        if record.pollingstationnumber == "35":
+        if (
+            record.pollingstationnumber == "35"
+            and record.pollingstationname
+            == "BRECON PRIORY SCHOOL, PENDRE -  NO.2 STATION"
+        ):
             record = record._replace(
                 pollingstationname="BRECON ST JOHN'S CENTRE - Station No. 2",
-                pollingstationaddress_1="",
-                pollingstationaddress_2="",
+                pollingstationaddress_1="PENDRE",
+                pollingstationaddress_2="BRECON",
                 pollingstationaddress_3="",
                 pollingstationaddress_4="",
-                pollingstationpostcode="",
+                pollingstationpostcode="LD3 9EA",
             )
 
         # OLD: NEWTOWN EVANGELICAL CHURCH - STATION NO. 1, Newtown Evangelical Church, Llanidloes Road, NEWTOWN, SY16 1HL
         # NEW: NEWTOWN MALDWYN LEISURE CENTRE - STATION 1
-        if record.pollingstationnumber == "155":
+        if (
+            record.pollingstationnumber == "155"
+            and record.pollingstationname
+            == "NEWTOWN EVANGELICAL CHURCH - STATION NO. 1"
+        ):
             record = record._replace(
                 pollingstationname="NEWTOWN MALDWYN LEISURE CENTRE - STATION 1",
-                pollingstationaddress_1="",
-                pollingstationaddress_2="",
+                pollingstationaddress_1="PLANTATION LANE",
+                pollingstationaddress_2="NEWTOWN",
                 pollingstationaddress_3="",
                 pollingstationaddress_4="",
-                pollingstationpostcode="",
+                pollingstationpostcode="SY16 1LH",
             )
 
         # OLD: NEWTOWN EVANGELICAL CHURCH - STATION NO. 2, Newtown Evangelical Church, Llanidloes Road, NEWTOWN, SY16 1HL
         # NEW: NEWTOWN MALDWYN LEISURE CENTRE - STATION 2
-        if record.pollingstationnumber == "157":
+        if (
+            record.pollingstationnumber == "157"
+            and record.pollingstationname
+            == "NEWTOWN EVANGELICAL CHURCH - STATION NO. 2"
+        ):
             record = record._replace(
                 pollingstationname="NEWTOWN MALDWYN LEISURE CENTRE - STATION 2",
-                pollingstationaddress_1="",
-                pollingstationaddress_2="",
+                pollingstationaddress_1="PLANTATION LANE",
+                pollingstationaddress_2="NEWTOWN",
                 pollingstationaddress_3="",
                 pollingstationaddress_4="",
-                pollingstationpostcode="",
+                pollingstationpostcode="SY16 1LH",
             )
 
-        return super().station_record_to_dict(record)
+        return record
