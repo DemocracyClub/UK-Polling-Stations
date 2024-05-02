@@ -25,6 +25,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10022857710",  # BLUNTS FARMHOUSE COOPERSALE LANE, THEYDON BOIS, EPPING
             "100091247388",  # BROOKSIDE, GRAVEL LANE, CHIGWELL
             "10022857825",  # CARAVAN 2 MOSS NURSERY SEDGE GREEN, ROYDON, HARLOW
+            "200002755166",  # GARDEN COTTAGE, NURSERY ROAD, LOUGHTON
         ]:
             return None
 
@@ -37,3 +38,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        rec = super().station_record_to_dict(record)
+        # WCIVF bug report:
+        # Removes map for: High Beach Village Hall, Avey Lane, High Beach, Loughton
+        if rec["internal_council_id"] == "3468":
+            rec["location"] = None
+
+        return rec
