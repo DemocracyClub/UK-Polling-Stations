@@ -14,6 +14,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
+        # bugreport #645
+        # coords correction for: Droitwich Spa Community (Main) Hall, Heritage Way, DROITWICH SPA, WR9 8RF
+        if record.polling_place_id == "8042":
+            record = record._replace(
+                polling_place_easting="389734",
+                polling_place_northing="263143",
+            )
+
         # user issue report #197
         # Northwick Arms Hotel (Monroe Suite), Waterside, Evesham
         if record.polling_place_id == "7982":
