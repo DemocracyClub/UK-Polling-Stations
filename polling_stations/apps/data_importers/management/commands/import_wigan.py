@@ -52,4 +52,11 @@ class Command(BaseXpressWebLookupCsvImporter):
             record = record._replace(
                 pollingplaceeasting="366257", pollingplacenorthing="399402"
             )
+
+        # User feedback, removes map of:
+        # Ince Independent Methodist Church, Keble Street - Stopford Street Entrance, Ince, Wigan
+        rec = super().station_record_to_dict(record)
+        if rec["internal_council_id"] == "10025":
+            rec["location"] = None
+            return rec
         return super().station_record_to_dict(record)
