@@ -71,6 +71,11 @@ class Command(BaseDemocracyCountsCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # bugreport #647
+        # remove point for: COOPERS SCHOOL OF PERFORMING ARTS, Wade Street, Barnsley, S75 2DY
+        if record.pollingstationid in ["2853", "2854"]:
+            record = record._replace(xordinate="", yordinate="")
+
         # more accurate point for: TEMPORARY BUILDING - WOOLLEY COLLIERY, Woolley Colliery Road, Darton
         if record.pollingstationid == "2828":
             record = record._replace(xordinate="431231")
