@@ -136,4 +136,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="107336",
             )
 
+        # Waterlooville Community Centre
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/656/change/
+        if record.polling_place_id == "7872":
+            record = record._replace(
+                polling_place_uprn="",
+                polling_place_easting="",
+                polling_place_northing="",
+            )
         return super().station_record_to_dict(record)
