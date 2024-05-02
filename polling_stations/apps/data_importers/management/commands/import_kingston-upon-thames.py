@@ -3,14 +3,10 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "KTT"
-    addresses_name = (
-        "2024-05-02/2024-03-05T11:00:16.877806/RBK Polling Districts List.csv"
-    )
-    stations_name = (
-        "2024-05-02/2024-03-05T11:00:16.877806/RBK Polling Stations List.csv"
-    )
+    addresses_name = "2024-05-02/2024-05-02T10:14:35.750636/RBK Polling districts.csv"
+    stations_name = "2024-05-02/2024-05-02T10:14:35.750636/RBK Polling stations.csv"
     elections = ["2024-05-02"]
-    csv_encoding = "latin-1"
+    csv_encoding = "utf-16le"
 
     # Following warnings checked and no correction needed
     # WARNING: Polling station Oak Hall, Maple Lodge (MPC) is in London Borough of Sutton (STN)
@@ -51,5 +47,8 @@ class Command(BaseDemocracyCountsCsvImporter):
             "128007539",  # MAXGATE, GEORGE ROAD, KINGSTON UPON THAMES
         ]:
             return None
-
+        if record.postcode in [
+            "KT2 7DA",  # split
+        ]:
+            return None
         return super().address_record_to_dict(record)
