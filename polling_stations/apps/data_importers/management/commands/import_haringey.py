@@ -54,6 +54,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # bugreport #631
+        # remove incorrect coords for: St John Vianney School, Stanley Road, London, N15 3HD
+        if record.polling_place_id == "11399":
+            record = record._replace(
+                polling_place_easting="", polling_place_northing=""
+            )
+
         # Station change requested by council
         # OLD: Earlsmead Primary School, Wakefield Road Entrance, Broad Lane, London, N15 4PW
         # NEW: Earlsmead Primary School, Walton Road Entrance, Broad Lane, London, N15 4PW
