@@ -45,5 +45,11 @@ class Command(BaseXpressWebLookupCsvImporter):
             record = record._replace(
                 pollingplaceeasting="356374", pollingplacenorthing="410043"
             )
-
+        # User bug report #634
+        # Moving point closer to access road for:
+        # The Community Centre Hope Carr Road, Siddow Common, Leigh WN7 3ET
+        if record.pollingplaceid == "9664":
+            record = record._replace(
+                pollingplaceeasting="366257", pollingplacenorthing="399402"
+            )
         return super().station_record_to_dict(record)
