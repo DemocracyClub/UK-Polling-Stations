@@ -58,3 +58,55 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station changes  requested by council:
+        # OLD: BRECON PRIORY SCHOOL PENDRE - N0.1 STATION, Priory C in W School, BRECON, LD3 9EU
+        # NEW: BRECON ST JOHN'S CENTRE - Station No. 1, BRECON
+        if record.pollingstationnumber == "34":
+            record = record._replace(
+                pollingstationname="BRECON ST JOHN'S CENTRE - Station No. 1",
+                pollingstationaddress_1="",
+                pollingstationaddress_2="",
+                pollingstationaddress_3="",
+                pollingstationaddress_4="",
+                pollingstationpostcode="",
+            )
+
+        # OLD: BRECON PRIORY SCHOOL PENDRE - N0.2 STATION, Priory C in W School, BRECON, LD3 9EU
+        # NEW: BRECON ST JOHN'S CENTRE - Station No. 2, BRECON
+        if record.pollingstationnumber == "35":
+            record = record._replace(
+                pollingstationname="BRECON ST JOHN'S CENTRE - Station No. 2",
+                pollingstationaddress_1="",
+                pollingstationaddress_2="",
+                pollingstationaddress_3="",
+                pollingstationaddress_4="",
+                pollingstationpostcode="",
+            )
+
+        # OLD: NEWTOWN EVANGELICAL CHURCH - STATION NO. 1, Newtown Evangelical Church, Llanidloes Road, NEWTOWN, SY16 1HL
+        # NEW: NEWTOWN MALDWYN LEISURE CENTRE - STATION 1
+        if record.pollingstationnumber == "155":
+            record = record._replace(
+                pollingstationname="NEWTOWN MALDWYN LEISURE CENTRE - STATION 1",
+                pollingstationaddress_1="",
+                pollingstationaddress_2="",
+                pollingstationaddress_3="",
+                pollingstationaddress_4="",
+                pollingstationpostcode="",
+            )
+
+        # OLD: NEWTOWN EVANGELICAL CHURCH - STATION NO. 2, Newtown Evangelical Church, Llanidloes Road, NEWTOWN, SY16 1HL
+        # NEW: NEWTOWN MALDWYN LEISURE CENTRE - STATION 2
+        if record.pollingstationnumber == "157":
+            record = record._replace(
+                pollingstationname="NEWTOWN MALDWYN LEISURE CENTRE - STATION 2",
+                pollingstationaddress_1="",
+                pollingstationaddress_2="",
+                pollingstationaddress_3="",
+                pollingstationaddress_4="",
+                pollingstationpostcode="",
+            )
+
+        return super().station_record_to_dict(record)
