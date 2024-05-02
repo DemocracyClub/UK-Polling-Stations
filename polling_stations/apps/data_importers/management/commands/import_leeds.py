@@ -8,6 +8,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2024-05-02"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # http://wheredoivote.co.uk/admin/feedback/feedback/83100/change/
+        # Remove point for Otley Social Club
+        if record.polling_place_id == "18998":
+            record = record._replace(
+                polling_place_easting="",
+                polling_place_northing="",
+                polling_place_uprn="",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
