@@ -500,6 +500,12 @@ class BaseDemocracyCountsCsvImporter(
             "uprn": uprn,
         }
 
+    def get_station_address(self, record):
+        return format_polling_station_address(
+            [getattr(record, self.station_name_field)]
+            + [getattr(record, field) for field in self.address_fields]
+        )
+
     def get_station_point(self, record):
         location = None
 
@@ -527,11 +533,7 @@ class BaseDemocracyCountsCsvImporter(
         return location
 
     def station_record_to_dict(self, record):
-        address = format_polling_station_address(
-            [getattr(record, self.station_name_field)]
-            + [getattr(record, field) for field in self.address_fields]
-        )
-
+        address = self.get_station_address(record)
         location = self.get_station_point(record)
 
         return {
