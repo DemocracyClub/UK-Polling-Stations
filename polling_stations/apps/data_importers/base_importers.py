@@ -13,7 +13,7 @@ import urllib.request
 from typing import Callable, List
 
 import rtree
-from addressbase.models import UprnToCouncil
+from addressbase.models import Address, UprnToCouncil
 from councils.models import Council
 from data_importers.contexthelpers import Dwellings
 from data_importers.data_quality_report import (
@@ -36,6 +36,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from file_uploads.models import File, Upload
 from pollingstations.models import PollingDistrict, PollingStation
+from uk_geo_utils.helpers import Postcode
 
 
 class CsvMixin:
@@ -998,6 +999,31 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
 
     stations_filetype = "csv"
     addresses_filetype = "csv"
+
+    def get_station_postcode(self, record):
+        return getattr(record, self.station_postcode_field).strip()
+
+    def geocode_from_uprn(self, record):
+        uprn = getattr(record, self.station_uprn_field).strip().lstrip("0")
+        ab_rec = Address.objects.get(uprn=uprn)
+        ab_postcode = Postcode(ab_rec.postcode)
+        station_postcode = Postcode(self.get_station_postcode(record))
+        if ab_postcode != station_postcode:
+            ab_address = ab_rec.address
+            rec_address = self.get_station_address(record).replace(os.linesep, ", ")
+            station_id = getattr(record, self.station_id_field)
+            message = "\n".join(
+                [
+                    "Geocoding with UPRN. Station record postcode does not match addressbase postcode.",
+                    f"Station address: '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
+                    f"Addressbase: '{ab_address}, {ab_postcode.with_space}'",
+                    "SUGGESTION:",
+                    f"        # '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
+                    f"        if record.{self.station_id_field} == '{station_id}': record = record._replace({self.station_postcode_field}='{ab_postcode.with_space}')",
+                ]
+            )
+            self.logger.log_message(logging.WARNING, message + "\n")
+        return ab_rec.location
 
 
 class BaseShpStationsCsvAddressesImporter(
