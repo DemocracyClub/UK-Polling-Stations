@@ -458,6 +458,22 @@ class DataQualityReportBuilder:
 
         return table
 
+    def get_csv_coverage(self, station_ids):
+        return round(100 * station_ids / self.csv_rows, 1)
+
+    def get_csv_coverage_row_color(self, station_ids):
+        row_color = None
+        csv_coverage = self.get_csv_coverage(station_ids)
+
+        if csv_coverage >= 95:
+            row_color = "green"
+        elif csv_coverage >= 75:
+            row_color = "yellow"
+        else:
+            row_color = "red"
+
+        return row_color
+
     def build_address_report(self):
         table = Table(title="ADDRESSES", show_header=False, min_width=50)
         table.add_column("Caption")
@@ -470,6 +486,14 @@ class DataQualityReportBuilder:
         addresses_imported = address_report.get_addresses_with_station_id()
         station_ids = address_report.get_addresses_with_station_id()
         if addresses_imported > 0:
+            valid_station_ids = address_report.get_addresses_with_valid_station_id_ref()
+            invalid_station_ids = (
+                address_report.get_addresses_with_invalid_station_id_ref()
+            )
+            invalid_station_ids_row_color = (
+                "green" if invalid_station_ids == 0 else "red"
+            )
+
             table.add_row(
                 "UPRNS ASSIGNED STATION ID",
                 str(station_ids),
@@ -482,19 +506,24 @@ class DataQualityReportBuilder:
                 f"{round(100 * station_ids / uprns_in_council_area, 1)}%",
             )
             if self.csv_rows:
+                csv_coverage = self.get_csv_coverage(station_ids)
+                csv_coverage_row_color = self.get_csv_coverage_row_color(station_ids)
+
                 table.add_row(
                     " - As % of distinct records in council csv",
-                    f"{round(100 * station_ids / self.csv_rows, 1)}%",
+                    f"{csv_coverage}%",
+                    style=csv_coverage_row_color,
                 )
+
             table.add_row(
                 " - valid station id refs",
-                str(address_report.get_addresses_with_valid_station_id_ref()),
+                str(valid_station_ids),
                 style="green",
             )
             table.add_row(
                 " - invalid station id refs",
-                str(address_report.get_addresses_with_invalid_station_id_ref()),
-                style="yellow",
+                str(invalid_station_ids),
+                style=invalid_station_ids_row_color,
             )
         else:
             table.add_row(
