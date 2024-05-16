@@ -999,6 +999,11 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
     stations_filetype = "csv"
     addresses_filetype = "csv"
 
+    def should_ignore_uprns(self, record, *uprns_to_ignore):
+        record_uprn = getattr(record, self.residential_uprn_field).strip().lstrip("0")
+
+        return record_uprn in uprns_to_ignore
+
 
 class BaseShpStationsCsvAddressesImporter(
     BaseStationsAddressesImporter, CsvMixin, ShpMixin
