@@ -1000,6 +1000,11 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
     stations_filetype = "csv"
     addresses_filetype = "csv"
 
+    def should_ignore_uprns(self, record, *uprns_to_ignore):
+        record_uprn = getattr(record, self.residential_uprn_field).strip().lstrip("0")
+
+        return record_uprn in uprns_to_ignore
+
     def get_station_postcode(self, record):
         return getattr(record, self.station_postcode_field).strip()
 
