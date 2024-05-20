@@ -1005,6 +1005,14 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
 
         return record_uprn in uprns_to_ignore
 
+    def should_ignore_postcode(self, record, postcodes_to_ignore):
+        record_postcode = (
+            getattr(record, self.residential_postcode_field)
+            .strip()
+            .replace("\xa0", " ")
+        )
+        return record_postcode in postcodes_to_ignore
+
     def get_station_postcode(self, record):
         return getattr(record, self.station_postcode_field).strip()
 
