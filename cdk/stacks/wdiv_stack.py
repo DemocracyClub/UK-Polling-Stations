@@ -135,8 +135,8 @@ class WDIVStack(Stack):
         instance_types_per_env = {
             "development": "t3a.large",
             "staging": "t3a.large",
-            "production": "t3a.large",
-            # "production": "c6a.2xlarge",
+            # "production": "t3a.large",
+            "production": "c6a.2xlarge",
         }
         return ec2.LaunchTemplate(
             self,
