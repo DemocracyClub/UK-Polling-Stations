@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "EST"
     addresses_name = (
-        "2024-05-02/2024-02-22T10:25:21.333127/Democracy Club Polling Districts.csv"
+        "2024-07-04/2024-05-23T14:54:17.745822/Democracy Club - Polling Districts.csv"
     )
     stations_name = (
-        "2024-05-02/2024-02-22T10:25:21.333127/Democracy Club Polling Stations.csv"
+        "2024-07-04/2024-05-23T14:54:17.745822/Democracy Club Polling Stations.csv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
@@ -67,12 +67,8 @@ class Command(BaseDemocracyCountsCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Shobnall Primary School, Shobnall Road, Burton upon Trent, Staffordshire
-        if record.pollingstationid == "4331":
-            record = record._replace(postcode="DE14 2BB")
-
         # St Giles Church, Croxden Lane, Croxden ,Uttoxeter, Staffordshire
-        if record.pollingstationid == "4297":
+        if record.pollingstationid == "4383":
             record = record._replace(xordinate="406486")
             record = record._replace(yordinate="339871")
 
