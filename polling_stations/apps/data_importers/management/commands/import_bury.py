@@ -4,28 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BUR"
     addresses_name = (
-        "2024-05-02/2024-02-14T16:35:28.213398/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-23T17:32:53.988362/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-02-14T16:35:28.213398/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-23T17:32:53.988362/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
-    csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # Greenmount Cricket Club, Brandlesholme Road, Bury
-        if record.polling_place_id == "4977":
-            record = record._replace(polling_place_postcode="BL8 4DX")
-
-        # Tottington Library, Market Street, Tottington
-        if record.polling_place_id == "4988":
-            record = record._replace(polling_place_postcode="BL8 3LL")
-
-        # Sunnybank Community Centre, 248 Sunnybank Road, Unsworth, Bury
-        if record.polling_place_id == "5082":
-            record = record._replace(polling_place_postcode="BL9 8EH")
-
-        return super().station_record_to_dict(record)
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -38,13 +22,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # split
-            "M25 1JW",
-            "BL9 8JW",
-            "BL8 2HH",
-            "BL9 9JW",
-            "BL9 8JJ",
-            "BL9 9PQ",
             "M25 1ED",
+            "BL9 8JJ",
+            "M25 1JW",
+            "BL9 9PQ",
+            "BL9 8JW",
+            "BL9 9JW",
+            "BL8 2HH",
             # suspect
             "BL8 1TF",
             "M26 1RZ",
