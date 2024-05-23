@@ -4,13 +4,11 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BAB"
-    addresses_name = (
-        "2024-05-02/2024-02-27T18:05:23.830024/BMSDC Polling Districts extract.csv"
-    )
+    addresses_name = "2024-07-04/2024-05-24T12:37:03.753159/BMSDC PD Code data.csv"
     stations_name = (
-        "2024-05-02/2024-02-27T18:05:23.830024/BMSDC Polling Station extract.csv"
+        "2024-07-04/2024-05-24T12:37:03.753159/BMSDC Polling station data.csv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
     def pre_import(self):
@@ -37,42 +35,12 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
-        # Polstead Village Hall, Polstead Green CO6 5AN
-        if record.stationcode == "B13":
-            record = record._replace(xordinate="599265")
-            record = record._replace(yordinate="238341")
-            record = record._replace(postcode="CO6 5AL")
 
-        # Belstead Brook Muthu Hotel, Belstead Road, Ipswich IP2 9HB
-        if record.stationcode == "B70":
-            record = record._replace(xordinate="614333")
-            record = record._replace(yordinate="242067")
+        # Burstall Village Hall, The Street, Burstall IP8 3DY
+        # Looks like it has been assigned the wrong polling district so removing it entirely for now
+        if record.stationcode == "SS27":
+            return None
 
-        # Address: Stoke by Nayland Village Hall, Church Street, Stoke By Nayland CO6 4QP
-        if record.stationcode == "B17":
-            record = record._replace(xordinate="598791")
-            record = record._replace(yordinate="236256")
-
-        # Polstead Village Hall, Polstead Green CO6 5AN
-        if record.stationcode == "B30":
-            record = record._replace(xordinate="610047")
-            record = record._replace(yordinate="234752")
-
-        # The Pavillion, Hadleigh Cricket Club, Friars Road, Hadleigh IP7 5BH
-        if record.stationcode == "B38":
-            record = record._replace(postcode="IP7 6DF")
-
-        # Change from council:
-        # Old station: Raydon Village Hall, Hadleigh Road, Raydon IP7 5LH
-        # New station: King George's Field and Sports Pavilion, The Street, Raydon IP7 5LT
-        if record.stationcode == "B14":
-            record = record._replace(
-                placename="King George's Field and Sports Pavilion",
-                add1="The Street",
-                postcode="IP7 5LT",
-                xordinate="",
-                yordinate="",
-            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -90,9 +58,35 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         if record.postcode in [
-            "CO10 9LN",  # split
-            "CO10 2PQ",  # suspect
+            # split
+            "CO10 9LN",
+            # suspect
+            "CO10 2PQ",
+            # the following look wrongly assigned:
+            "IP8 3EB",
+            "IP8 3EA",
+            "IP8 3DY",
+            "IP8 3DS",
+            "IP8 3DU",
+            "IP8 3ER",
+            "IP8 3DW",
+            "IP8 3DR",
+            "IP8 3DT",
+            "IP8 3EQ",
+            "IP8 3DL",
+            "IP8 3ES",
+            "IP8 3DP",
+            "IP8 3ED",
+            "IP8 3DZ",
+            "IP8 3DX",
+            "IP8 3EE",
+            "IP8 3EG",
+            "IP8 3DN",
         ]:
+            return None
+
+        # Burstall Village Hall, The Street, Burstall IP8 3DY
+        if record.stationcode == "SS27":
             return None
 
         return super().address_record_to_dict(record)
