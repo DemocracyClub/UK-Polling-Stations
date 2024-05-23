@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NWA"
     addresses_name = (
-        "2024-05-02/2024-02-07T08:53:01.197969/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-23T21:11:22.991963/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-07T08:53:01.197969/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-23T21:11:22.991963/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -34,12 +34,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # fix from council:
-        # old: Austrey Village Hall, 15 Bishops Cleeve, Austrey, CV9 3EB
-        # new: Austrey Village Hall, Main Road, Austrey, CV9 3EB
-        if record.polling_place_id == "4388":
-            record = record._replace(polling_place_address_1="Main Road")
-
-        return super().station_record_to_dict(record)
