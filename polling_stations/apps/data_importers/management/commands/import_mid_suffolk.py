@@ -4,13 +4,11 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "MSU"
-    addresses_name = (
-        "2024-05-02/2024-02-27T18:06:31.069614/BMSDC Polling Districts extract.csv"
-    )
+    addresses_name = "2024-07-04/2024-05-24T13:28:32.606427/BMSDC PD Code data.csv"
     stations_name = (
-        "2024-05-02/2024-02-27T18:06:31.069614/BMSDC Polling Station extract.csv"
+        "2024-07-04/2024-05-24T13:28:32.606427/BMSDC Polling station data.csv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
     def pre_import(self):
@@ -31,22 +29,6 @@ class Command(BaseDemocracyCountsCsvImporter):
             if record.uprn in council_uprns:
                 self.COUNCIL_STATIONS.add(record.stationcode)
 
-    def station_record_to_dict(self, record):
-        if record.stationcode not in self.COUNCIL_STATIONS:
-            return None
-
-        # All Saints Church Beyton, Church Road, Beyton, Bury Saint Edmunds IP30 9AL
-        if record.stationcode == "M94":
-            record = record._replace(xordinate="593395")
-            record = record._replace(yordinate="262775")
-
-        # Wetheringsett Village Hall, Church Street, Wetheringsett IP14 5PJ
-        if record.stationcode == "M56":
-            record = record._replace(xordinate="612591")
-            record = record._replace(yordinate="266691")
-
-        return super().station_record_to_dict(record)
-
     def address_record_to_dict(self, record):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
@@ -56,14 +38,16 @@ class Command(BaseDemocracyCountsCsvImporter):
             "200003810799",  # GABLES BARN, GOSBECK ROAD, HELMINGHAM, STOWMARKET
             "10094151033",  # GABLES BARN, GOSBECK ROAD, HELMINGHAM, STOWMARKET
             "10094151030",  # 10 SKIPPER CLOSE, THURSTON, BURY ST. EDMUNDS
+            "200003806873",  # BADLEY COTTAGE, LITTLE LONDON, COMBS, STOWMARKET
         ]:
             return None
 
         if record.postcode in [
             # split
-            "IP14 5LN",
+            "IP30 9NY",
             "IP14 5PE",
             "IP14 6ET",
+            "IP14 5LN",
             # suspect
             "IP14 4FW",
             "IP31 3FL",
