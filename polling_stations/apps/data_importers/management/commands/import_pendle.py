@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PEN"
     addresses_name = (
-        "2024-05-02/2024-02-19T13:04:13.385326/Democracy_Club__02May2024 (2).tsv"
+        "2024-07-04/2024-05-24T16:52:43.349129/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-02-19T13:04:13.385326/Democracy_Club__02May2024 (2).tsv"
+        "2024-07-04/2024-05-24T16:52:43.349129/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
-    csv_delimiter = "\t"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
