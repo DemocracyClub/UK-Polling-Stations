@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HRY"
-    addresses_name = (
-        "2024-05-02/2024-04-09T12:59:07.947391/Democracy_Club__02May2024v2.tsv"
-    )
-    stations_name = (
-        "2024-05-02/2024-04-09T12:59:07.947391/Democracy_Club__02May2024v2.tsv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-05-27T11:12:38.270971/haringey_combined.tsv"
+    stations_name = "2024-07-04/2024-05-27T11:12:38.270971/haringey_combined.tsv"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -22,6 +18,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10022939227",  # 398A WEST GREEN ROAD, LONDON
             "100021171953",  # 16 DALBYS CRESCENT, SELBY ROAD, LONDON
             "100023165900",  # 861 HIGH ROAD, TOTTENHAM, LONDON
+            "100021190559",  # 107 HIGH ROAD, LONDON
+            "100021214509",  # 9 PORTLAND ROAD, LONDON
             # The following UPRNs seem to have the wrong geocoding:
             "100021195610",  # FLAT B 41 LANGHAM ROAD, TOTTENHAM, LONDON
             "100021195611",  # FLAT C 41 LANGHAM ROAD, TOTTENHAM, LONDON
@@ -45,9 +43,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
         if record.addressline6 in [
             # split
-            "N22 8ET",
             "N17 7AT",
             "N17 6LE",
+            "N22 8ET",
         ]:
             return None
 
@@ -60,11 +58,5 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(
                 polling_place_easting="", polling_place_northing=""
             )
-
-        # Station change requested by council
-        # OLD: Earlsmead Primary School, Wakefield Road Entrance, Broad Lane, London, N15 4PW
-        # NEW: Earlsmead Primary School, Walton Road Entrance, Broad Lane, London, N15 4PW
-        if record.polling_place_id == "11433":
-            record = record._replace(polling_place_address_1="Walton Road Entrance")
 
         return super().station_record_to_dict(record)
