@@ -40,7 +40,7 @@ class Command(BaseStationsImporter, CsvMixin):
     csv_encoding = "utf-8"
     eoni_csv_encoding = "latin-1"
     additional_report_councils = NIR_IDS
-    elections = ["2023-05-18"]
+    elections = ["2024-07-04"]
 
     def add_arguments(self, parser):
         super().add_arguments(parser)
