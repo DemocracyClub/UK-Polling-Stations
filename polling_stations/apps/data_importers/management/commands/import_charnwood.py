@@ -4,9 +4,13 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHA"
-    addresses_name = "2024-05-02/2024-02-22T12:52:09.139310/Democracy_Club__02May2024 - Charnwood Borough Council.tsv"
-    stations_name = "2024-05-02/2024-02-22T12:52:09.139310/Democracy_Club__02May2024 - Charnwood Borough Council.tsv"
-    elections = ["2024-05-02"]
+    addresses_name = (
+        "2024-07-04/2024-05-26T17:49:37.162266/Democracy_Club__04July2024.tsv"
+    )
+    stations_name = (
+        "2024-07-04/2024-05-26T17:49:37.162266/Democracy_Club__04July2024.tsv"
+    )
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -46,6 +50,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             # splits
             "LE11 5EB",
             "LE11 5JQ",
+            # suspect
             "LE7 7GA",  # BRADGATE ROAD, CROPSTON, LEICESTER
             "LE11 5FJ",  # COTTON WAY, LOUGHBOROUGH
             "LE12 7SF",  # HOBBS WICK, SILEBY, LOUGHBOROUGH
@@ -57,7 +62,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().station_record_to_dict(record)
 
         # more accurate point for St Theresas Church Hall, 53 Front Street, Birstall, LE4 4DQ
-        if rec["internal_council_id"] == "11072":
+        if rec["internal_council_id"] == "12349":
             rec["location"] = Point(-1.1182210, 52.675904, srid=4326)
 
         return rec
