@@ -3,21 +3,15 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "LDS"
-    addresses_name = "2024-05-02/2024-03-19T14:32:27.465948/leeds_deduplicated.tsv"
-    stations_name = "2024-05-02/2024-03-19T14:32:27.465948/leeds_deduplicated.tsv"
-    elections = ["2024-05-02"]
+    addresses_name = (
+        "2024-07-04/2024-05-27T09:04:29.196802/Democracy_Club__04July2024.tsv"
+    )
+    stations_name = (
+        "2024-07-04/2024-05-27T09:04:29.196802/Democracy_Club__04July2024.tsv"
+    )
+    elections = ["2024-07-04"]
+    csv_encoding = "windows-1252"
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # http://wheredoivote.co.uk/admin/feedback/feedback/83100/change/
-        # Remove point for Otley Social Club
-        if record.polling_place_id == "18998":
-            record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
-                polling_place_uprn="",
-            )
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -62,29 +56,30 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "72288079",  # 62 INTAKE ROAD, PUDSEY
             "72288080",  # 64 INTAKE ROAD, PUDSEY
             "72288081",  # 66 INTAKE ROAD, PUDSEY
+            "72541820",  # FORMER SITE OF BARN COTTAGE STATION ROAD, METHLEY, LEEDS
         ]:
             return None
 
         if record.addressline6 in [
             # SPLIT
-            "LS10 4BD",
-            "LS7 2HN",
+            "WF3 2GL",
+            "LS9 6LP",
+            "LS17 9ED",
+            "LS13 3DX",
+            "LS25 1AX",
             "WF3 2GN",
+            "LS15 0LG",
+            "WF3 1TB",
             "LS10 4AZ",
             "LS12 2BN",
-            "LS25 1AX",
-            "WF3 1TB",
-            "LS9 6LP",
-            "LS15 8JZ",
-            "LS13 3DX",
-            "WF3 2GL",
-            "LS15 0LG",
+            "LS7 2HN",
             "WF3 1GQ",
-            "LS17 9ED",
-            "LS16 7SU",
-            "WF3 1FX",
-            "LS18 5HN",
             "LS8 2QG",
+            "WF3 1FX",
+            "LS10 4BD",
+            "LS15 8JZ",
+            "LS16 7SU",
+            "LS18 5HN",
             # WRONG
             "LS2 7DJ",
             "LS9 8DU",
@@ -98,22 +93,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "LS15 8RG",
             "WF3 3LS",
             "LS11 7PQ",
+            "LS15 7RE",
         ]:
             return None
-        # Change from the council:
-        if record.addressline6 in [
-            "LS6 3RG",  # Chapel Fold
-        ]:
-            record = record._replace(
-                polling_place_name="Headingley Parish Hall",
-                polling_place_id="19259",
-                polling_place_address_1="(The Sugden Room)",
-                polling_place_address_2="St Michael`s Road",
-                polling_place_postcode="LS6 3AW",
-                polling_place_easting="427918",
-                polling_place_northing="435945",
-                polling_place_uprn="72194772",
-                default_polling_place_id="19258",
-            )
-
         return super().address_record_to_dict(record)
