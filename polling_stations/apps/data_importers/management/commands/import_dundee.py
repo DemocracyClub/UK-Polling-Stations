@@ -1,36 +1,41 @@
-from data_importers.geo_utils import fix_bad_polygons
-from data_importers.github_importer import BaseGitHubImporter
-from django.utils.text import slugify
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 27700
-    districts_srid = 27700
+class Command(BaseHalaroseCsvImporter):
     council_id = "DND"
-    elections = ["2022-05-05"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Dundee"
-    geom_type = "geojson"
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-
-        return {
-            "internal_council_id": record["POLLING_DISTRICT"],
-            "name": record["POLLING_DISTRICT"],
-            "area": poly,
-        }
+    addresses_name = "2024-07-04/2024-05-28T10:15:27.215621/dundee_combined.csv"
+    stations_name = "2024-07-04/2024-05-28T10:15:27.215621/dundee_combined.csv"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        return {
-            "internal_council_id": f'{slugify(record["WARD"])}-{record["POLLINGSTATIONID"]}',
-            "address": f'{record["POLLINGSTATIONNAME"]}, {record["PS_ADDRESS"]}',
-            "postcode": "",
-            "location": location,
-            "polling_district_id": record["POLLINGDISTRICTREFERENCE"],
-        }
+        # 'Wellgate Sheltered Housing, 8 King Street, Dundee, DD1 2JB' (id: 78)
+        if record.pollingvenueid == "78":
+            record = record._replace(pollingstationpostcode="")
 
-    def post_import(self):
-        fix_bad_polygons()
+        # 'Marryat Hall, City Square, Dundee, DD1 3BG' (id: 79)
+        if record.pollingvenueid == "79":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Foula Terrace Sheltered, Housing Communal Lounge, Foula Terrace, Dundee, DD4 9SS' (id: 5)
+        if record.pollingvenueid == "5":
+            record = record._replace(pollingstationpostcode="")
+        return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        if record.housepostcode in [
+            # split
+            "DD4 0FD",
+            "DD4 9ET",
+            "DD4 6JU",
+            "DD1 1JS",
+            "DD4 0TQ",
+            "DD4 8RX",
+            "DD2 1DJ",
+            "DD3 6AU",
+            "DD2 2LR",
+            "DD3 0JG",
+            # suspect
+            "DD2 1RT",
+        ]:
+            return None
+        return super().address_record_to_dict(record)
