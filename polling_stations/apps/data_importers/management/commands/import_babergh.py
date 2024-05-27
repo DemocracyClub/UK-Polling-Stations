@@ -4,9 +4,11 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BAB"
-    addresses_name = "2024-07-04/2024-05-24T12:37:03.753159/BMSDC PD Code data.csv"
+    addresses_name = (
+        "2024-07-04/2024-05-27T10:31:55.894833/BMSDC PD Code data 270524.csv"
+    )
     stations_name = (
-        "2024-07-04/2024-05-24T12:37:03.753159/BMSDC Polling station data.csv"
+        "2024-07-04/2024-05-27T10:31:55.894833/BMSDC Polling station data 270524.csv"
     )
     elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
@@ -36,11 +38,6 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
 
-        # Burstall Village Hall, The Street, Burstall IP8 3DY
-        # Looks like it has been assigned the wrong polling district so removing it entirely for now
-        if record.stationcode == "SS27":
-            return None
-
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -62,31 +59,7 @@ class Command(BaseDemocracyCountsCsvImporter):
             "CO10 9LN",
             # suspect
             "CO10 2PQ",
-            # the following look wrongly assigned:
-            "IP8 3EB",
-            "IP8 3EA",
-            "IP8 3DY",
-            "IP8 3DS",
-            "IP8 3DU",
-            "IP8 3ER",
-            "IP8 3DW",
-            "IP8 3DR",
-            "IP8 3DT",
-            "IP8 3EQ",
-            "IP8 3DL",
-            "IP8 3ES",
-            "IP8 3DP",
-            "IP8 3ED",
-            "IP8 3DZ",
-            "IP8 3DX",
-            "IP8 3EE",
-            "IP8 3EG",
-            "IP8 3DN",
         ]:
-            return None
-
-        # Burstall Village Hall, The Street, Burstall IP8 3DY
-        if record.stationcode == "SS27":
             return None
 
         return super().address_record_to_dict(record)
