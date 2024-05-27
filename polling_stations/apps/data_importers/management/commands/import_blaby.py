@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BLA"
     addresses_name = (
-        "2024-07-04/2024-05-27T09:34:43.036185/Democracy_Club__04July2024.tsv"
+        "2024-07-04/2024-05-27T15:58:42.972617/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-27T09:34:43.036185/Democracy_Club__04July2024.tsv"
+        "2024-07-04/2024-05-27T15:58:42.972617/Democracy_Club__04July2024.tsv"
     )
     elections = ["2024-07-04"]
     csv_delimiter = "\t"
@@ -30,11 +30,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
 
-        # obv wrong station, removing until council responds
-        # Sapcote Pavilion Sapcote Recreation Ground Hinckley Road Sapcote Leicester LE9 4JF
-        if record.polling_place_id == "4395":
-            return None
-
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
@@ -47,8 +42,5 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(
                 polling_place_easting="455360", polling_place_northing="301508"
             )
-        # obv wrong station, removing until council responds
-        # Sapcote Pavilion Sapcote Recreation Ground Hinckley Road Sapcote Leicester LE9 4JF
-        if record.polling_place_id == "4395":
-            return None
+
         return super().station_record_to_dict(record)
