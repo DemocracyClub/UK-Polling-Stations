@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STE"
     addresses_name = (
-        "2024-05-02/2024-02-22T12:38:40.665753/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-27T11:29:35.130923/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-22T12:38:40.665753/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-27T11:29:35.130923/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -54,20 +54,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "3455096633",  # 1 TRANTER ROAD, STOKE-ON-TRENT
             "3455056927",  # 1 KYFFIN ROAD, STOKE-ON-TRENT
             "3455000175",  # 16 ABBEY STREET, STOKE-ON-TRENT
+            "3455129953",  # 3B KINGS TERRACE, BASFORD, STOKE-ON-TRENT
         ]:
             return None
 
         if record.addressline6 in [
             # splits
+            "ST3 5PX",
+            "ST3 6DU",
+            "ST3 7HT",
+            "ST4 2JY",
+            "ST6 7DG",
+            "ST3 2QX",
+            "ST4 2LE",
             "ST4 8ND",
             "ST3 4HU",
-            "ST4 2JY",
-            "ST3 5PX",
-            "ST4 2LE",
-            "ST3 7HT",
-            "ST3 2QX",
-            "ST6 7DG",
-            "ST3 6DU",
             # looks wrong
             "ST3 6AU",
             "ST3 6EE",
@@ -85,29 +86,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Station change from council:
-        if record.polling_place_id == "16862":
-            record = record._replace(
-                polling_place_name="Wheatsheaf Hotel",
-                polling_place_address_1="Sheaf Street",
-                polling_place_address_2="Shelton",
-                polling_place_address_3="",
-                polling_place_address_4="Stoke-on-Trent",
-                polling_place_postcode="ST1 4LW",
-            )
-
         rec = super().station_record_to_dict(record)
 
         # more accurate point for: Penkhull Village Hall Trent Valley Road Penkhull, ST4 7LG
-        if rec["internal_council_id"] == "16905":
+        if rec["internal_council_id"] == "17806":
             rec["location"] = Point(-2.196169, 52.999991, srid=4326)
+            return rec
 
         # more accurate point for: St John`s Community Church Baptist Street Burslem, ST6 3JY
-        if rec["internal_council_id"] == "16830":
+        if rec["internal_council_id"] == "17701":
             rec["location"] = Point(-2.196136, 53.042620, srid=4326)
+            return rec
 
-        # more accurate point for: The Cuckoo Barleston Road Stoke On Trent, ST3 3LD
-        if rec["internal_council_id"] == "16948":
-            rec["location"] = Point(-2.150279, 52.965307, srid=4326)
+        # Horn & Trumpet (Mobile Unit), Daisy Bank Bridge, Stoke-on- Trent
+        # postcode looks wrong, confirming with council
+        if record.polling_place_id == "17654":
+            record = record._replace(polling_place_postcode="")
 
-        return rec
+        return super().station_record_to_dict(record)
