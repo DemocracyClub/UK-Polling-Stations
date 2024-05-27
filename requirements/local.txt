@@ -4,9 +4,9 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/local.txt --strip-extras requirements/local-constrained.in
 #
-asgiref==3.7.2 \
-    --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
-    --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
+asgiref==3.8.1 \
+    --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
+    --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
     # via
     #   -c requirements/constraints.txt
     #   django
@@ -35,9 +35,9 @@ distlib==0.3.8 \
     # via
     #   -c requirements/constraints.txt
     #   virtualenv
-django==4.2.10 \
-    --hash=sha256:a2d4c4d4ea0b6f0895acde632071aff6400bfc331228fc978b05452a0ff3e9f1 \
-    --hash=sha256:b1260ed381b10a11753c73444408e19869f3241fc45c985cd55a30177c789d13
+django==4.2.13 \
+    --hash=sha256:837e3cf1f6c31347a1396a3f6b65688f2b4bb4a11c580dcb628b5afe527b68a5 \
+    --hash=sha256:a17fcba2aad3fc7d46fdb23215095dbbd64e6174bf4589171e732b18b07e426a
     # via
     #   -c requirements/constraints.txt
     #   django-debug-toolbar
@@ -52,9 +52,9 @@ djhtml==3.0.6 \
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.in
-exceptiongroup==1.2.0 \
-    --hash=sha256:4bfd3996ac73b41e9b9628b04e079f193850720ea5945fc96a08633c66912f14 \
-    --hash=sha256:91f5c769735f051a4290d52edd0858999b57e5876e9f85937691bd4c9fa3ed68
+exceptiongroup==1.2.1 \
+    --hash=sha256:5258b9ed329c5bbdd31a309f53cbfb0b155341807f6ff7606a1e801a891b29ad \
+    --hash=sha256:a4785e48b045528f5bfe627b6ad554ff32def154f42372786903b7abcfe1aa16
     # via
     #   -c requirements/constraints.txt
     #   ipython
@@ -64,15 +64,15 @@ executing==2.0.1 \
     # via
     #   -c requirements/constraints.txt
     #   stack-data
-filelock==3.13.1 \
-    --hash=sha256:521f5f56c50f8426f5e03ad3b281b490a87ef15bc6c526f168290f0c7148d44e \
-    --hash=sha256:57dbda9b35157b05fb3e58ee91448612eb674172fab98ee235ccb0b5bee19a1c
+filelock==3.14.0 \
+    --hash=sha256:43339835842f110ca7ae60f1e1c160714c5a6afd15a2873419ab185334975c0f \
+    --hash=sha256:6ea72da3be9b8c82afd3edcf99f2fffbb5076335a5ae4d03248bb5b6c3eae78a
     # via
     #   -c requirements/constraints.txt
     #   virtualenv
-identify==2.5.33 \
-    --hash=sha256:161558f9fe4559e1557e1bff323e8631f6a0e4837f7497767c1782832f16b62d \
-    --hash=sha256:d40ce5fcd762817627670da8a7d8d8e65f24342d14539c59488dc603bf662e34
+identify==2.5.36 \
+    --hash=sha256:37d93f380f4de590500d9dba7db359d0d3da95ffe7f9de1753faa159e71e7dfa \
+    --hash=sha256:e5e00f54165f9047fbebeb4a560f9acfb8af4c88232be60a488e9b68d122745d
     # via
     #   -c requirements/constraints.txt
     #   pre-commit
@@ -88,9 +88,9 @@ ipdb==0.13.13 \
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.in
-ipython==8.21.0 \
-    --hash=sha256:1050a3ab8473488d7eee163796b02e511d0735cf43a04ba2a8348bd0f2eaf8a5 \
-    --hash=sha256:48fbc236fbe0e138b88773fa0437751f14c3645fb483f1d4c5dee58b37e5ce73
+ipython==8.24.0 \
+    --hash=sha256:010db3f8a728a578bb641fdd06c063b9fb8e96a9464c63aec6310fbcb5e80501 \
+    --hash=sha256:d7bf2f6c4314984e3e02393213bab8703cf163ede39672ce5918c51fe253a2a3
     # via
     #   -c requirements/constraints.txt
     #   ipdb
@@ -100,9 +100,9 @@ jedi==0.19.1 \
     # via
     #   -c requirements/constraints.txt
     #   ipython
-matplotlib-inline==0.1.6 \
-    --hash=sha256:f1f41aab5328aa5aaea9b16d083b128102f8712542f819fe7e6a420ff581b311 \
-    --hash=sha256:f887e5f10ba98e8d2b150ddcf4702c1e5f8b3a20005eb0f74bfdbd360ee6f304
+matplotlib-inline==0.1.7 \
+    --hash=sha256:8423b23ec666be3d16e16b60bdd8ac4e86e840ebd1dd11a30b9f117f2fa0ab90 \
+    --hash=sha256:df192d39a4ff8f21b1895d72e6a13f5fcc5099f00fa84384e0ea28c2cc0653ca
     # via
     #   -c requirements/constraints.txt
     #   ipython
@@ -112,9 +112,9 @@ nodeenv==1.8.0 \
     # via
     #   -c requirements/constraints.txt
     #   pre-commit
-parso==0.8.3 \
-    --hash=sha256:8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0 \
-    --hash=sha256:c001d4636cd3aecdaf33cbb40aebb59b094be2a74c556778ef5576c175e19e75
+parso==0.8.4 \
+    --hash=sha256:a418670a20291dacd2dddc80c377c5c3791378ee1e8d12bffc35420643d43f18 \
+    --hash=sha256:eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d
     # via
     #   -c requirements/constraints.txt
     #   jedi
@@ -124,15 +124,15 @@ pexpect==4.9.0 \
     # via
     #   -c requirements/constraints.txt
     #   ipython
-platformdirs==4.2.0 \
-    --hash=sha256:0614df2a2f37e1a662acbd8e2b25b92ccf8632929bc6d43467e17fe89c75e068 \
-    --hash=sha256:ef0cc731df711022c174543cb70a9b5bd22e5a9337c8624ef2c2ceb8ddad8768
+platformdirs==4.2.1 \
+    --hash=sha256:031cd18d4ec63ec53e82dceaac0417d218a6863f7745dfcc9efe7793b7039bdf \
+    --hash=sha256:17d5a1161b3fd67b390023cb2d3b026bbd40abde6fdb052dfbd3a29c3ba22ee1
     # via
     #   -c requirements/constraints.txt
     #   virtualenv
-pre-commit==3.6.0 \
-    --hash=sha256:c255039ef399049a5544b6ce13d135caba8f2c28c3b4033277a788f434308376 \
-    --hash=sha256:d30bad9abf165f7785c15a21a1f46da7d0677cb00ee7ff4c579fd38922efe15d
+pre-commit==3.7.0 \
+    --hash=sha256:5eae9e10c2b5ac51577c3452ec0a490455c45a0533f7960f993a0d01e59decab \
+    --hash=sha256:e209d61b8acdcf742404408531f0c37d49d2c734fd7cff2d6076083d191cb060
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/local.in
@@ -154,9 +154,9 @@ pure-eval==0.2.2 \
     # via
     #   -c requirements/constraints.txt
     #   stack-data
-pygments==2.17.2 \
-    --hash=sha256:b27c2826c47d0f3219f29554824c30c5e8945175d888647acd804ddd04af846c \
-    --hash=sha256:da46cec9fd2de5be3a8a784f434e4c4ab670b4ff54d605c4c2717e9d49c4c367
+pygments==2.18.0 \
+    --hash=sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199 \
+    --hash=sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a
     # via
     #   -c requirements/constraints.txt
     #   ipython
@@ -221,9 +221,9 @@ six==1.16.0 \
     # via
     #   -c requirements/constraints.txt
     #   asttokens
-sqlparse==0.4.4 \
-    --hash=sha256:5430a4fe2ac7d0f93e66f1efc6e1338a41884b7ddf2a350cedd20ccc4d9d28f3 \
-    --hash=sha256:d446183e84b8349fa3061f0fe7f06ca94ba65b426946ffebe6e3e8295332420c
+sqlparse==0.5.0 \
+    --hash=sha256:714d0a4932c059d16189f58ef5411ec2287a4360f17cdd0edd2d09d4c5087c93 \
+    --hash=sha256:c204494cd97479d0e39f28c93d46c0b2d5959c7b9ab904762ea6c7af211c8663
     # via
     #   -c requirements/constraints.txt
     #   django
@@ -240,22 +240,23 @@ tomli==2.0.1 \
     # via
     #   -c requirements/constraints.txt
     #   ipdb
-traitlets==5.14.1 \
-    --hash=sha256:2e5a030e6eff91737c643231bfcf04a65b0132078dad75e4936700b213652e74 \
-    --hash=sha256:8585105b371a04b8316a43d5ce29c098575c2e477850b62b848b964f1444527e
+traitlets==5.14.3 \
+    --hash=sha256:9ed0579d3502c94b4b3732ac120375cda96f923114522847de4b3bb98b96b6b7 \
+    --hash=sha256:b74e89e397b1ed28cc831db7aea759ba6640cb3de13090ca145426688ff1ac4f
     # via
     #   -c requirements/constraints.txt
     #   ipython
     #   matplotlib-inline
-typing-extensions==4.9.0 \
-    --hash=sha256:23478f88c37f27d76ac8aee6c905017a143b0b1b886c3c9f66bc2fd94f9f5783 \
-    --hash=sha256:af72aea155e91adfc61c3ae9e0e342dbc0cba726d6cba4b6c72c1f34e47291cd
+typing-extensions==4.11.0 \
+    --hash=sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0 \
+    --hash=sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a
     # via
     #   -c requirements/constraints.txt
     #   asgiref
-virtualenv==20.25.0 \
-    --hash=sha256:4238949c5ffe6876362d9c0180fc6c3a824a7b12b80604eeb8085f2ed7460de3 \
-    --hash=sha256:bf51c0d9c7dd63ea8e44086fa1e4fb1093a31e963b86959257378aef020e1f1b
+    #   ipython
+virtualenv==20.26.1 \
+    --hash=sha256:604bfdceaeece392802e6ae48e69cec49168b9c5f4a44e483963f9242eb0e78b \
+    --hash=sha256:7aa9982a728ae5892558bff6a2839c00b9ed145523ece2274fad6f414690ae75
     # via
     #   -c requirements/constraints.txt
     #   pre-commit
@@ -267,9 +268,9 @@ wcwidth==0.2.13 \
     #   prompt-toolkit
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==69.0.3 \
-    --hash=sha256:385eb4edd9c9d5c17540511303e39a147ce2fc04bc55289c322b9e5904fe2c05 \
-    --hash=sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
+setuptools==69.5.1 \
+    --hash=sha256:6c1fccdac05a97e598fb0ae3bbed5904ccb317337a51139dcd51453611bbb987 \
+    --hash=sha256:c636ac361bc47580504644275c9ad802c50415c7522212252c033bd15f301f32
     # via
     #   -c requirements/constraints.txt
     #   nodeenv

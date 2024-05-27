@@ -157,10 +157,11 @@ coverage==6.5.0 \
     --hash=sha256:fc2af30ed0d5ae0b1abdb4ebdce598eafd5b35397d4d75deb341a614d333d987
     # via
     #   -c requirements/constraints.txt
+    #   coverage
     #   coveralls
-coveralls==3.3.1 \
-    --hash=sha256:b32a8bb5d2df585207c119d6c01567b81fba690c9c10a753bfe27a335bfc43ea \
-    --hash=sha256:f42015f31d386b351d4226389b387ae173207058832fbf5c8ec4b40e27b16026
+coveralls==4.0.0 \
+    --hash=sha256:401715d244a27d5da03eb1ac614aa585cc7e4dd5b0d4c035113b6349da4e6161 \
+    --hash=sha256:9486f353176d309066053d38edbade3aad6346c5eb8a5edde7090d3116219414
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/ci.in
@@ -169,9 +170,9 @@ docopt==0.6.2 \
     # via
     #   -c requirements/constraints.txt
     #   coveralls
-idna==3.6 \
-    --hash=sha256:9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca \
-    --hash=sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
+idna==3.7 \
+    --hash=sha256:028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc \
+    --hash=sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0
     # via
     #   -c requirements/constraints.txt
     #   requests
@@ -181,15 +182,21 @@ requests==2.31.0 \
     # via
     #   -c requirements/constraints.txt
     #   coveralls
+tomli==2.0.1 \
+    --hash=sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc \
+    --hash=sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f
+    # via
+    #   -c requirements/constraints.txt
+    #   coverage
 urllib3==1.26.18 \
     --hash=sha256:34b97092d7e0a3a8cf7cd10e386f401b3737364026c45e622aa02903dffe0f07 \
     --hash=sha256:f8ecc1bba5667413457c529ab955bf8c67b45db799d159066261719e328580a0
     # via
     #   -c requirements/constraints.txt
     #   requests
-wheel==0.42.0 \
-    --hash=sha256:177f9c9b0d45c47873b619f5b650346d632cdc35fb5e4d25058e09c9e581433d \
-    --hash=sha256:c45be39f7882c9d34243236f2d63cbd58039e360f85d0913425fbd7ceea617a8
+wheel==0.43.0 \
+    --hash=sha256:465ef92c69fa5c5da2d1cf8ac40559a8c940886afcef87dcf14b9470862f1d85 \
+    --hash=sha256:55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/ci.in

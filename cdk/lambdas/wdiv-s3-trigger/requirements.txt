@@ -111,9 +111,9 @@ charset-normalizer==3.3.2 \
     # via
     #   -c cdk/lambdas/wdiv-s3-trigger/requirements/../../../../requirements/constraints.txt
     #   requests
-idna==3.6 \
-    --hash=sha256:9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca \
-    --hash=sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
+idna==3.7 \
+    --hash=sha256:028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc \
+    --hash=sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0
     # via
     #   -c cdk/lambdas/wdiv-s3-trigger/requirements/../../../../requirements/constraints.txt
     #   requests
@@ -129,9 +129,9 @@ requests-paginator==0.2.0 \
     # via
     #   -c cdk/lambdas/wdiv-s3-trigger/requirements/../../../../requirements/constraints.txt
     #   -r cdk/lambdas/wdiv-s3-trigger/requirements/base.in
-sentry-sdk==1.40.1 \
-    --hash=sha256:1bb9cf4ac317906d20787693b5e7f3e42160a90e8bbf1fc544f91c52fa76b68f \
-    --hash=sha256:69fc5e7512371547207821d801485f45e3c62db629f02f56f58431a10864ac34
+sentry-sdk==2.1.1 \
+    --hash=sha256:95d8c0bb41c8b0bc37ab202c2c4a295bb84398ee05f4cdce55051cd75b926ec1 \
+    --hash=sha256:99aeb78fb76771513bd3b2829d12613130152620768d00cd3e45ac00cb17950f
     # via
     #   -c cdk/lambdas/wdiv-s3-trigger/requirements/../../../../requirements/constraints.txt
     #   -r cdk/lambdas/wdiv-s3-trigger/requirements/base.in

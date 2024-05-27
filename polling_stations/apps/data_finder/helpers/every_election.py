@@ -311,3 +311,117 @@ class EmptyEveryElectionWrapper:
     @staticmethod
     def get_all_ballots() -> List:
         return []
+
+
+class StaticElectionsAPIElectionWrapper:
+    def __init__(self, elections_response):
+        self.elections_response = elections_response
+        self.ballots = []
+        for date in self.elections_response["dates"]:
+            for ballot in date["ballots"]:
+                # We rename this somewhere between EE->YNR->WCIVF->BallotCacheWriter,
+                # so rename it back to what EE calls it
+                ballot["election_title"] = ballot["election_name"]
+                self.ballots.append(ballot)
+        ...
+
+    def has_election(self, future_only=True):
+        if not self.elections_response["dates"]:
+            return False
+
+        if future_only:
+            for ballot in self.ballots:
+                if parse(ballot["poll_open_date"]).date() >= datetime.date.today():
+                    return True
+        return False
+
+    @property
+    def multiple_elections(self):
+        if self.has_election:
+            uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
+            return len(uncancelled_ballots) > 1
+        return False
+
+    def get_explanations(self):
+        # TODO: This currently isn't in the static JSON so we can't get it without
+        #       calling EE. Either call EE (seems silly given where we are) or add
+        #       to the JSON (easier and more useful?)
+        return []
+
+    @property
+    def all_ballots_cancelled(self):
+        return all(b["cancelled"] for b in self.ballots)
+
+    def get_cancelled_election_info(self):
+        rec = {
+            "cancelled": None,
+            "name": None,
+            "rescheduled_date": None,
+            "metadata": None,
+        }
+
+        # What we care about here is if _all_
+        # applicable ballot objects are cancelled.
+        rec["cancelled"] = self.all_ballots_cancelled
+
+        if not rec["cancelled"]:
+            return rec
+
+        cancelled_ballot = self.cancelled_ballots[0]
+        if len(self.cancelled_ballots) == 1:
+            rec["name"] = cancelled_ballot["election_title"]
+        rec["metadata"] = cancelled_ballot["metadata"]
+        return rec
+
+    def get_voter_id_status(self) -> Optional[str]:
+        """
+        For a given election, determine whether any ballots require photo ID
+        If yes, return the stub value (e.g. EA-2022)
+        If no, return None
+        """
+        ballot_with_id = next(
+            (
+                ballot
+                for ballot in self.ballots
+                if ballot.get("requires_voter_id") and not ballot.get("cancelled")
+            ),
+            {},
+        )
+        return ballot_with_id.get("requires_voter_id")
+
+    def get_metadata(self):
+        cancelled = self.get_cancelled_election_info()
+        if cancelled["cancelled"]:
+            return {"cancelled_election": cancelled["metadata"]}
+
+        return None
+
+    def get_ballots_for_next_date(self):
+        if len(self.ballots) == 0:
+            return []
+        next_election_date = self._get_next_election_date()
+        return [b for b in self.ballots if b["poll_open_date"] == next_election_date]
+
+    def _get_next_election_date(self):
+        # if no ballots, return early
+        if len(self.ballots) == 0:
+            return None
+        next_charismatic_election_dates = getattr(
+            settings, "NEXT_CHARISMATIC_ELECTION_DATES", []
+        )
+        next_charismatic_election_dates.sort()
+        dates = [b["poll_open_date"] for b in self.ballots]
+        dates.sort()
+
+        if next_charismatic_election_dates:
+            # If we have some dates return the first one that is in NEXT_CHARISMATIC_ELECTION_DATES
+            for date in dates:
+                if date in next_charismatic_election_dates:
+                    return date
+            # If none of them are in NEXT_CHARISMATIC_ELECTION_DATES,
+            # return the earliest charismatic election date
+            return next_charismatic_election_dates[0]
+
+        # If we haven't set NEXT_CHARISMATIC_ELECTION_DATES,
+        # return the earliest election
+        return dates[0]

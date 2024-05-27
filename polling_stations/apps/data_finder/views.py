@@ -29,7 +29,10 @@ from .helpers import (
     geocode,
     get_council,
 )
-from .helpers.every_election import EmptyEveryElectionWrapper
+from .helpers.every_election import (
+    EmptyEveryElectionWrapper,
+    StaticElectionsAPIElectionWrapper,
+)
 
 
 def polling_station_current(station):
@@ -154,9 +157,11 @@ class BasePollingStationView(
             return self.address.uprntocouncil.advance_voting_station
         return None
 
-    def get_ee_wrapper(self, rh):
+    def get_ee_wrapper(self, rh: RoutingHelper):
         if rh and rh.route_type == "multiple_addresses":
             return EmptyEveryElectionWrapper()
+        if rh.elections_response:
+            return StaticElectionsAPIElectionWrapper(rh.elections_response)
         if not self.location or self.location.tuple == (0.0, 0.0):
             return EveryElectionWrapper(postcode=self.postcode)
         return EveryElectionWrapper(point=self.location)
