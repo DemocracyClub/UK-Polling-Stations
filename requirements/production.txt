@@ -4,9 +4,9 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/production.txt --strip-extras requirements/production-constrained.in
 #
-asgiref==3.7.2 \
-    --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
-    --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
+asgiref==3.8.1 \
+    --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
+    --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
     # via
     #   -c requirements/constraints.txt
     #   django
@@ -16,23 +16,23 @@ boto==2.49.0 \
     # via
     #   -c requirements/constraints.txt
     #   ec2-tag-conditional
-boto3==1.34.35 \
-    --hash=sha256:4052031f9ac18924e94be7c30a5f0af5843a4752b8c8cb9034cd978be252b61b \
-    --hash=sha256:53897701ab4f307fbcfdade673eae809dfc5eabb6102053c84907aa27de66e53
+boto3==1.34.101 \
+    --hash=sha256:1d854b5880e185db546b4c759fcb664bf3326275064d2b44229cc217e8be9d7e \
+    --hash=sha256:79b93f3370ea96ce838042bc2eac0c996aee204b01e7e6452eb77abcbe697d6a
     # via
     #   -c requirements/constraints.txt
     #   django-dynamodb-cache
-botocore==1.34.35 \
-    --hash=sha256:8a2b53ab772584a5f7e2fe1e4a59028b0602cfef8e39d622db7c6b670e4b1ee6 \
-    --hash=sha256:b67b8c865973202dc655a493317ae14b33d115e49ed6960874eb05d950167b37
+botocore==1.34.101 \
+    --hash=sha256:01f3802d25558dd7945d83884bf6885e2f84e1ff27f90b5f09614966fe18c18f \
+    --hash=sha256:f145e8b4b8fc9968f5eb695bdc2fcc8e675df7fbc3c56102dc1f5471be6baf35
     # via
     #   -c requirements/constraints.txt
     #   boto3
     #   django-dynamodb-cache
     #   s3transfer
-django==4.2.10 \
-    --hash=sha256:a2d4c4d4ea0b6f0895acde632071aff6400bfc331228fc978b05452a0ff3e9f1 \
-    --hash=sha256:b1260ed381b10a11753c73444408e19869f3241fc45c985cd55a30177c789d13
+django==4.2.13 \
+    --hash=sha256:837e3cf1f6c31347a1396a3f6b65688f2b4bb4a11c580dcb628b5afe527b68a5 \
+    --hash=sha256:a17fcba2aad3fc7d46fdb23215095dbbd64e6174bf4589171e732b18b07e426a
     # via
     #   -c requirements/constraints.txt
     #   django-dynamodb-cache
@@ -60,15 +60,21 @@ jmespath==1.0.1 \
     #   -c requirements/constraints.txt
     #   boto3
     #   botocore
-python-dateutil==2.8.2 \
-    --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
-    --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
+packaging==24.0 \
+    --hash=sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5 \
+    --hash=sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9
+    # via
+    #   -c requirements/constraints.txt
+    #   gunicorn
+python-dateutil==2.9.0.post0 \
+    --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
+    --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
     # via
     #   -c requirements/constraints.txt
     #   botocore
-s3transfer==0.10.0 \
-    --hash=sha256:3cdb40f5cfa6966e812209d0994f2a4709b561c88e90cf00c2696d2df4e56b2e \
-    --hash=sha256:d0c8bbf672d5eebbe4e57945e23b972d963f07d82f661cabf678a5c88831595b
+s3transfer==0.10.1 \
+    --hash=sha256:5683916b4c724f799e600f41dd9e10a9ff19871bf87623cc8f491cb4f5fa0a19 \
+    --hash=sha256:ceb252b11bcf87080fb7850a224fb6e05c8a776bab8f2b64b7f25b969464839d
     # via
     #   -c requirements/constraints.txt
     #   boto3
@@ -78,15 +84,15 @@ six==1.16.0 \
     # via
     #   -c requirements/constraints.txt
     #   python-dateutil
-sqlparse==0.4.4 \
-    --hash=sha256:5430a4fe2ac7d0f93e66f1efc6e1338a41884b7ddf2a350cedd20ccc4d9d28f3 \
-    --hash=sha256:d446183e84b8349fa3061f0fe7f06ca94ba65b426946ffebe6e3e8295332420c
+sqlparse==0.5.0 \
+    --hash=sha256:714d0a4932c059d16189f58ef5411ec2287a4360f17cdd0edd2d09d4c5087c93 \
+    --hash=sha256:c204494cd97479d0e39f28c93d46c0b2d5959c7b9ab904762ea6c7af211c8663
     # via
     #   -c requirements/constraints.txt
     #   django
-typing-extensions==4.9.0 \
-    --hash=sha256:23478f88c37f27d76ac8aee6c905017a143b0b1b886c3c9f66bc2fd94f9f5783 \
-    --hash=sha256:af72aea155e91adfc61c3ae9e0e342dbc0cba726d6cba4b6c72c1f34e47291cd
+typing-extensions==4.11.0 \
+    --hash=sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0 \
+    --hash=sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a
     # via
     #   -c requirements/constraints.txt
     #   asgiref
@@ -96,11 +102,3 @@ urllib3==1.26.18 \
     # via
     #   -c requirements/constraints.txt
     #   botocore
-
-# The following packages are considered to be unsafe in a requirements file:
-setuptools==69.0.3 \
-    --hash=sha256:385eb4edd9c9d5c17540511303e39a147ce2fc04bc55289c322b9e5904fe2c05 \
-    --hash=sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78
-    # via
-    #   -c requirements/constraints.txt
-    #   gunicorn

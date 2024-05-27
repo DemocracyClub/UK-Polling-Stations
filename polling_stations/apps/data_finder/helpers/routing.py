@@ -4,6 +4,7 @@ from addressbase.models import Address
 
 # use a postcode to decide which endpoint the user should be directed to
 from councils.models import CouncilGeography
+from data_finder.helpers.baked_data_helper import BakedElectionsHelper
 from django.urls import reverse
 from django.utils.functional import cached_property
 from uk_geo_utils.helpers import Postcode
@@ -20,6 +21,7 @@ class RoutingHelper:
     def __init__(self, postcode):
         self.postcode = Postcode(postcode)
         self.addresses = self.get_addresses()
+        self.elections_response = None
 
     def get_addresses(self):
         return Address.objects.filter(postcode=self.postcode.with_space).select_related(
@@ -80,6 +82,19 @@ class RoutingHelper:
             return bool(list(self.polling_stations)[0])
         return False
 
+    def lookup_elections(self):
+        helper = BakedElectionsHelper()
+        self.elections_response = helper.strategy.get_response_for_postcode(
+            self.postcode
+        )
+        return self.elections_response
+
+    @property
+    def split_elections(self):
+        if self.elections_response.get("address_picker"):
+            return True
+        return False
+
     @cached_property
     def route_type(self):
         if not self.has_addresses:
@@ -87,6 +102,11 @@ class RoutingHelper:
             return "postcode"
         if self.councils and self.no_stations:
             # multiple councils and no stations for any address in postcode
+            return "multiple_addresses"
+
+        self.lookup_elections()
+
+        if self.split_elections:
             return "multiple_addresses"
         if self.no_stations:
             # We don't have any station information for this address

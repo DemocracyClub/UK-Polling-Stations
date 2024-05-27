@@ -29,6 +29,7 @@ boto>2.0,<3.0
 boto3>1.0.0,<2.0.0
 uk-geo-utils
 freezegun
+polars
 
 https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.6.zip
 https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/2.6.0.zip
