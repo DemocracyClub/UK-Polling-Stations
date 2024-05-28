@@ -5,27 +5,27 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "LEW"
     addresses_name = (
-        "2024-05-02/2024-03-19T12:31:27.328534/Democracy_Club__02May2024 - Lewisham.tsv"
+        "2024-07-04/2024-05-28T12:56:57.336874/Democracy_Club__04July2024. LEWISHAM.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-19T12:31:27.328534/Democracy_Club__02May2024 - Lewisham.tsv"
+        "2024-07-04/2024-05-28T12:56:57.336874/Democracy_Club__04July2024. LEWISHAM.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # Beecroft Garden Primary School, Children`s Centre, Dalrymple Road, London SE4 2HB
-        if record.polling_place_id == "21955":
+        if record.polling_place_id == "23168":
             record = record._replace(polling_place_postcode="SE4 2BH")
 
         # All Saints Community Centre
-        if record.polling_place_id == "22028":
+        if record.polling_place_id == "23047":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-0.048807, 51.476468, srid=4326)
             return rec
 
         # Catford Wanderers Sports Club Beckenham Hill Road (Homebase entrance) London SE6 2NU
-        if record.polling_place_id == "22332":
+        if record.polling_place_id == "23418":
             record = record._replace(polling_place_postcode="SE6 3NU")
 
         return super().station_record_to_dict(record)
