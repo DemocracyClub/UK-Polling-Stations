@@ -4,12 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "IPS"
     addresses_name = (
-        "2024-05-02/2024-04-12T10:31:42.332438/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-05-28T16:02:04.832403/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-12T10:31:42.332438/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-05-28T16:02:04.832403/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -30,35 +31,35 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # Sikh Temple, Guru Nanak Gurdwara, 719 Bramford Road, Ipswich, IP1 5BD
-        if record.polling_place_id == "8691":
+        if record.polling_place_id == "8762":
             record = record._replace(
                 polling_place_easting="613488",
                 polling_place_northing="245784",
             )
 
         # Castle Hill United Reformed Church, Dryden Road, Ipswich, IP1 6QF
-        if record.polling_place_id == "8673":
+        if record.polling_place_id == "8744":
             record = record._replace(
                 polling_place_easting="615235",
                 polling_place_northing="247231",
             )
 
         # Stoke Green Baptist Church Hall, Halifax Road, Ipswich, IP2 8RE
-        if record.polling_place_id == "8718":
+        if record.polling_place_id == "8988":
             record = record._replace(
                 polling_place_easting="615857",
                 polling_place_northing="242747",
             )
 
         # Ascension Hall, Larchcroft Road, Ipswich, IP1 6AN
-        if record.polling_place_id == "8604":
+        if record.polling_place_id == "8772":
             record = record._replace(
                 polling_place_easting="615625",
                 polling_place_northing="246829",
             )
 
         # Broomhill Library, Sherrington Road, Ipswich, IP1 4HT
-        if record.polling_place_id == "8608":
+        if record.polling_place_id == "8776":
             record = record._replace(
                 polling_place_easting="615423",
                 polling_place_northing="245891",
@@ -66,8 +67,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # Belstead Arms Public House, Radcliffe Drive, Ipswich, IP2 9QA
         if record.polling_place_id in [
-            "8470",
-            "9039",
+            "8968",
+            "9076",
         ]:
             record = record._replace(
                 polling_place_postcode="IP2 9QU",
