@@ -5,17 +5,17 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WRL"
     addresses_name = (
-        "2024-05-02/2024-02-19T13:46:05.384042/Democracy_Club__02May2024 Wirral.tsv"
+        "2024-07-04/2024-05-28T14:48:08.007072/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-19T13:46:05.384042/Democracy_Club__02May2024 Wirral.tsv"
+        "2024-07-04/2024-05-28T14:48:08.007072/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # Marlowe Road URC Hall
-        if record.polling_place_id in ["10899", "10901"]:
+        # point correction for: Marlowe Road URC Hall (Station A and B), Marlowe Road, Wallasey, Wirral, CH44 3DG
+        if record.polling_place_id in ["11911", "11913"]:
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-3.050648, 53.417306, srid=4326)
             return rec
@@ -69,12 +69,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
+            "CH49 2SE",
             "CH49 3PG",
-            "CH62 8AB",
-            "CH41 4BY",  # GRANGE HOUSE, 1 GRANGE ROAD WEST, BIRKENHEAD
-            "CH46 8AE",  # GUILDFORD PLACE, WIRRAL
-            "CH46 8AN",  # RUNNYMEDE AVENUE, WIRRAL
-            "CH6 11DG",  # STATION ROAD, BARNSTON, WIRRAL
+            # wrong
+            "CH41 4BY",
+            "CH46 8AE",
+            "CH46 8AN",
         ]:
             return None
 
