@@ -4,22 +4,21 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DAC"
     addresses_name = (
-        "2024-05-02/2024-03-08T09:14:29.199753/Democracy_Club__02May2024 (13).tsv"
+        "2024-07-04/2024-05-28T14:30:36.619251/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-03-08T09:14:29.199753/Democracy_Club__02May2024 (13).tsv"
+        "2024-07-04/2024-05-28T14:30:36.619251/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
-    csv_delimiter = "\t"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
         # more accurate point for: Nash Mills Village Hall, 4 Lower Road, Nash Mills, HP3 8RU
-        if record.polling_place_id == "2764":
+        if record.polling_place_id == "3036":
             record = record._replace(polling_place_easting="507211")
             record = record._replace(polling_place_northing="204366")
 
         # address correction for: St Pauls Church Hall, 39 Meadow Road, Hemel Hempstead, HP3 8AJ
-        if record.polling_place_id == "2675":
+        if record.polling_place_id == "2947":
             record = record._replace(polling_place_name="St Paul's Church")
             record = record._replace(polling_place_address_1="Solway")
             record = record._replace(polling_place_address_4="Hemel Hempstead")
