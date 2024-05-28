@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BNS"
-    addresses_name = (
-        "2024-05-02/2024-02-28T14:43:06.389877/Democracy Club - Polling Districts.csv"
-    )
-    stations_name = (
-        "2024-05-02/2024-02-28T14:43:06.389877/Democracy Club - Polling Stations.csv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-05T12:06:26.198262/BNS_PD_combined_deduped.csv"
+    stations_name = "2024-07-04/2024-06-05T12:06:26.198262/BNS_PS_combined_deduped.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -56,6 +52,7 @@ class Command(BaseDemocracyCountsCsvImporter):
             "100050629142",  # 50 HIGH STREET, ROYSTON, BARNSLEY
             "100050610816",  # WILLOW COTTAGE, CARLTON ROAD, BARNSLEY
             "10032786368",  # HOLLINS WOOD, HERMIT HILL, WORTLEY, SHEFFIELD
+            "2007026375",  # 16 BILLINGLEY VIEW, BOLTON-UPON-DEARNE, ROTHERHAM
         ]:
             return None
 
@@ -71,19 +68,28 @@ class Command(BaseDemocracyCountsCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # bugreport #647
+        # bugreport #647 (from local elections)
         # remove point for: COOPERS SCHOOL OF PERFORMING ARTS, Wade Street, Barnsley, S75 2DY
-        if record.pollingstationid in ["2853", "2854"]:
+        if record.pollingstationid in ["3176", "3225"]:
             record = record._replace(xordinate="", yordinate="")
 
         # more accurate point for: TEMPORARY BUILDING - WOOLLEY COLLIERY, Woolley Colliery Road, Darton
-        if record.pollingstationid == "2828":
+        if record.pollingstationid == "3126":
             record = record._replace(xordinate="431231")
             record = record._replace(yordinate="410976")
 
         # more accurate point for: TEMPORARY BUILDING AT GRASMERE CRESCENT, Grasmere Crescent, Staincross
-        if record.pollingstationid == "2824":
+        if record.pollingstationid == "3122":
             record = record._replace(xordinate="432314")
             record = record._replace(yordinate="410992")
 
+        # removing the following stations because they look like they've been assigned the wrong polling districts:
+        if record.pollingstationid in [
+            "3119",  # HOUGHTON MAIN WELFARE AND SPORTS CLUB LTD, Sports Ground, Middllecliffe Lane, Middlecliffe, Barnsley
+            "3117",  # ST MICHAEL'S R.C. J & I SCHOOL, Stonyford Road, Wombwell, Barnsley
+            "3118",  # BROOMHILL POLLING STATION - FORMER POST OFFICE, 162 Everill Gate Lane, Wombwell, Barnsley
+            "3116",  # BILLINGLEY VILLAGE HALL, Back Lane, Billingley, Barnsley
+            "3219",  # Sportsman Inn, 7 Pitt Street, Darfield, Barnsley
+        ]:
+            return None
         return super().station_record_to_dict(record)
