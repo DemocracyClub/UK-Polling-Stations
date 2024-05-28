@@ -6,12 +6,12 @@ from data_importers.management.commands import (
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "LCE"
     addresses_name = (
-        "2024-05-02/2024-03-21T08:36:01.342545/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-28T18:47:14.468886/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-21T08:36:01.342545/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-28T18:47:14.468886/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -27,6 +27,8 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
 
         if uprn in [
             "2465215460",  # 1A SACHEVERELL ROAD, LEICESTER
+            "2465012816",  # 23 HOLMWOOD DRIVE, LEICESTER
+            "2465161135",  # THE NEW WYCLIFFE HOME, 111 GLENEAGLES AVENUE, LEICESTER
         ]:
             return None
         if record.addressline6 in [
