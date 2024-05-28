@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WOI"
     addresses_name = (
-        "2024-05-02/2024-02-25T13:24:35.080186/Democracy_Club__02May2024.tsv - WBC.tsv"
+        "2024-07-04/2024-05-28T18:55:42.997031/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-02-25T13:24:35.080186/Democracy_Club__02May2024.tsv - WBC.tsv"
+        "2024-07-04/2024-05-28T18:55:42.997031/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
-    csv_delimiter = "\t"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -38,7 +37,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # postcode correction for: Horsell Evangelical Church High Street Horsell Woking GU21 3SZ
-        if record.polling_place_id == "5299":
+        if record.polling_place_id == "5531":
             record = record._replace(polling_place_postcode="GU21 4SZ")
 
         return super().station_record_to_dict(record)
