@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MDB"
     addresses_name = (
-        "2024-05-02/2024-03-07T15:17:39.494958/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-28T09:46:41.092607/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-07T15:17:39.494958/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-28T09:46:41.092607/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -46,25 +46,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # adding point for: Mobile Station - Hemlington Grange Way, Junction of Ravengill Road, Middlesbrough, TS8 9FX
-        if record.polling_place_id == "9713":
-            record = record._replace(polling_place_easting="450225")
-            record = record._replace(polling_place_northing="514104")
-
-        # adding point for: Mobile Station - Medina Gardens, Junction of Medina Gardens and Acklam Road, TS5 8BN
-        if record.polling_place_id == "9694":
-            record = record._replace(polling_place_easting="449116")
-            record = record._replace(polling_place_northing="515625")
-
         # adding point for: St. Chad`s Church Hall, Keith Road, Middlesbrough, TS5 7QW
-        if record.polling_place_id == "9804":
+        if record.polling_place_id == "10001":
             record = record._replace(polling_place_easting="449587")
             record = record._replace(polling_place_northing="517743")
 
         # Corrections from council:
         # old: Mobile Station - Northern Road, Northern Road, Middlesbrough, TS5 4NS
         # new: Mobile Station - Junction of Northern Road and Acklam Road, Northern Road, Middlesbrough, TS5 4NS
-        if record.polling_place_id == "9569":
+        if record.polling_place_id == "9912":
             record = record._replace(
                 polling_place_name="Mobile Station - Junction of Northern Road and Acklam Road",
                 polling_place_easting="448012",
