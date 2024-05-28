@@ -98,9 +98,4 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["location"] = Point(-2.196136, 53.042620, srid=4326)
             return rec
 
-        # Horn & Trumpet (Mobile Unit), Daisy Bank Bridge, Stoke-on- Trent
-        # postcode looks wrong, confirming with council
-        if record.polling_place_id == "17654":
-            record = record._replace(polling_place_postcode="")
-
         return super().station_record_to_dict(record)
