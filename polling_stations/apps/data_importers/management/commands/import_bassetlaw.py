@@ -7,12 +7,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
     council_id = "BAE"
     addresses_name = (
-        "2024-05-02/2024-02-28T19:57:25.344833/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-28T20:50:04.895065/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-28T19:57:25.344833/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-28T20:50:04.895065/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -53,34 +53,30 @@ class Command(BaseXpressDCCsvInconsistentPostcodesImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # postcode correction from council for: Manton Parish Hall, 2a Cavendish Road, Worksop S80 2PG
-        if record.polling_place_id == "13051":
-            record = record._replace(polling_place_postcode="S80 2ST")
-
         # postcode correction for: Carlton Youth Centre, Lawn Road, Costhorpe, Worksop, S81 9RJ
-        if record.polling_place_id == "12787":
+        if record.polling_place_id == "14241":
             record = record._replace(polling_place_postcode="S81 9LB")
 
         # added postcode for: Lound Village Hall, Town Street, Lound, Retford, Notts
-        if record.polling_place_id == "12941":
+        if record.polling_place_id == "14298":
             record = record._replace(polling_place_postcode="DN22 8RX")
 
         # added postcode for: Barnby Moor Village Hall, Kennel Drive, Barnby Moor, Retford, Notts
-        if record.polling_place_id == "12939":
+        if record.polling_place_id == "14198":
             record = record._replace(polling_place_postcode="DN22 8QU")
 
         # added postcode for: Harworth & Bircotes Town Hall, Scrooby Road, Harworth, Doncaster
-        if record.polling_place_id == "12892":
+        if record.polling_place_id == "14295":
             record = record._replace(polling_place_postcode="DN11 8JP")
 
         # postcode correction for: Walks of Life Museum, 33 Lincoln Road, Tuxford, NG22 OHR
-        if record.polling_place_id == "13126":
+        if record.polling_place_id == "14480":
             record = record._replace(polling_place_postcode="NG22 0HR")
 
         rec = super().station_record_to_dict(record)
 
         # correction brought forward from locals: Manton Parish Hall, 2a Cavendish Road, S80 2PG
-        if record.polling_place_id == "13051":
+        if record.polling_place_id == "14253":
             rec["location"] = Point(-1.1105063, 53.2957291, srid=4326)
 
         return rec
