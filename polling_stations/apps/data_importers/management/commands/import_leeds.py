@@ -97,3 +97,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station change from council:
+        # old: Alder Tree Primary Academy, Potternewton Mount, LS7 2DR
+        # new: Scott Hall Leisure Centre, (Sports Hall), Scott Hall Road, Leeds, LS7 3DT
+        if record.polling_place_id == "24732":
+            record = record._replace(
+                polling_place_name="Scott Hall Leisure Centre",
+                polling_place_address_1="(Sports Hall)",
+                polling_place_address_2="Scott Hall Road",
+                polling_place_postcode="LS7 3DT",
+                polling_place_easting="429980",
+                polling_place_northing="436740",
+            )
+        return super().station_record_to_dict(record)
