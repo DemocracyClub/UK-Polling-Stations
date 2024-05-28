@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BNH"
-    addresses_name = (
-        "2024-05-02/2024-02-19T10:29:56.065905/Democracy_Club__02May2024.tsv"
-    )
-    stations_name = (
-        "2024-05-02/2024-02-19T10:29:56.065905/Democracy_Club__02May2024.tsv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-05-28T14:03:04.608768/Brighton & Hove Democracy_Club__04July2024.tsv"
+    stations_name = "2024-07-04/2024-05-28T14:03:04.608768/Brighton & Hove Democracy_Club__04July2024.tsv"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -29,35 +25,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # split
-            "BN1 8NF",
             "BN2 9PA",
+            "BN2 7AB",
+            "BN1 8NF",
             "BN1 3AE",
+            # suspect
             "BN4 12PL",  # MILE OAK ROAD, PORTSLADE, BRIGHTON
         ]:
             return None
 
-        # council correction
-        if record.addressline6 == "BN1 9BW":
-            rec = super().address_record_to_dict(record)
-            rec["polling_station_id"] = "15784"
-            return rec
-
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Change requested by the council
-        # Old station: The Spire, St Mark`s Chapel, Eastern Road, Brighton, BN2 5JN (id: 15585)
-        # Replaced by: T.S.Nautilus, 39A Chesham Road, BN2 1NB
-        if record.polling_place_id == "15585":
-            record = record._replace(
-                polling_place_name="T.S. Nautilus",
-                polling_place_address_1="39A Chesham Road",
-                polling_place_address_2="",
-                polling_place_address_3="",
-                polling_place_address_4="",
-                polling_place_postcode="BN2 1NB",
-                polling_place_easting="533010",
-                polling_place_northing="103609",
-            )
-
-        return super().station_record_to_dict(record)
