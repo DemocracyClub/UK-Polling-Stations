@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "HER"
-    addresses_name = "2024-05-02/2024-03-01T17:12:19.134525/Eros_SQL_Output005.csv"
-    stations_name = "2024-05-02/2024-03-01T17:12:19.134525/Eros_SQL_Output005.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-05-29T18:04:32.927620/Eros_SQL_Output006.csv"
+    stations_name = "2024-07-04/2024-05-29T18:04:32.927620/Eros_SQL_Output006.csv"
+    elections = ["2024-07-04"]
 
     # Following warnings checked and no need for correction:
     # WARNING: Polling station MERIDEN COMMUNITY CENTRE (18-meriden-community-centre) is in Watford Borough Council (WAT)
