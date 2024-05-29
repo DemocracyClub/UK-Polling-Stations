@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SOL"
-    addresses_name = (
-        "2024-05-02/2024-03-19T17:43:13.860805/Democracy_Club__02May2024.tsv"
-    )
-    stations_name = (
-        "2024-05-02/2024-03-19T17:43:13.860805/Democracy_Club__02May2024.tsv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-03T11:13:12.735398/SOL_combined.tsv"
+    stations_name = "2024-07-04/2024-06-03T11:13:12.735398/SOL_combined.tsv"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -50,39 +46,39 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # Info from council - x/y from UPRN. 5th Solihull Scouts (UPRN is 010008212576)
-        if record.polling_place_id == "10243":
+        if record.polling_place_id == "10961":
             record = record._replace(
                 polling_place_easting="412782", polling_place_northing="279167"
             )
         # Info from council - x/y from UPRN. Elmwood Place (UPRN is 010090947819)
-        if record.polling_place_id == "10127":
+        if record.polling_place_id == "11158":
             record = record._replace(
                 polling_place_easting="417106", polling_place_northing="289542"
             )
         # Info from council - x/y from UPRN. The Pavilion, Hockley Heath Recreation Ground (UPRN is 010008211687)
-        if record.polling_place_id == "10206":
+        if record.polling_place_id == "11054":
             record = record._replace(
                 polling_place_easting="415489", polling_place_northing="272625"
             )
         # Info from council - x/y from UPRN. The Pavilion (Castle Bromwich Parish Council) (UPRN should be 100071459690)
-        if record.polling_place_id == "10156":
+        if record.polling_place_id == "11143":
             record = record._replace(
                 polling_place_easting="415430", polling_place_northing="289942"
             )
         # Info from council - x/y from UPRN. Tudor Grange Leisure Centre (UPRN is 010023646733)
-        if record.polling_place_id == "10304":
+        if record.polling_place_id == "10947":
             record = record._replace(
                 polling_place_easting="414506", polling_place_northing="279399"
             )
         # The following are coordinates from the council:
         # Portacabin (Elmdon Park Car Park), Opposite 124-140 Tanhouse Farm Road, Elmdon, Solihull B92 9EY
-        if record.polling_place_id == "10380":
+        if record.polling_place_id == "11169":
             record = record._replace(
                 polling_place_easting="415703",
                 polling_place_northing="282642",
             )
         # Marston Green Parish Hall, Elmdon Road, Marston Green B37 7BT
-        if record.polling_place_id == "10213":
+        if record.polling_place_id == "11004":
             record = record._replace(
                 polling_place_easting="417392",
                 polling_place_northing="285238",
