@@ -73,6 +73,9 @@ hooks:
     - location: deploy/hooks/beforeinstall/reload_ee_db.sh
       timeout: 300
       runas: root
+    - location: deploy/files/scripts/user_scripts/sync_baked_elections_parquet.sh
+      timeout: 300
+      runas: polling_stations
 # During the AfterInstall deployment lifecycle event, run the commands
 #   in the script specified in "location".
   AfterInstall:

@@ -8,3 +8,4 @@ MAILTO=developers@democracyclub.org.uk
 */5 * * * * every_election /usr/local/bin/ee-manage-py-command sync_elections
 # Per instance cloudwatch custom metrics
 */5  * * * * polling_stations /var/www/polling_stations/per_instance_custom_metrics.sh
+*/30  * * * * polling_stations sync_baked_elections_parquet.sh
