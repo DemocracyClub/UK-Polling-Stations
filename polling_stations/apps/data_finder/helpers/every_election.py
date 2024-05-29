@@ -1,4 +1,5 @@
 import datetime
+from functools import cached_property
 from typing import List, Optional
 from urllib.parse import urlencode, urljoin
 
@@ -312,6 +313,19 @@ class EmptyEveryElectionWrapper:
     def get_all_ballots() -> List:
         return []
 
+    @staticmethod
+    def multiple_elections():
+        return False
+
+    def get_explanations(self):
+        return None
+
+    def get_voter_id_status(self):
+        return None
+
+    def get_cancelled_election_info(self):
+        return {}
+
 
 class StaticElectionsAPIElectionWrapper:
     def __init__(self, elections_response):
@@ -323,7 +337,6 @@ class StaticElectionsAPIElectionWrapper:
                 # so rename it back to what EE calls it
                 ballot["election_title"] = ballot["election_name"]
                 self.ballots.append(ballot)
-        ...
 
     def has_election(self, future_only=True):
         if not self.elections_response["dates"]:
@@ -367,11 +380,17 @@ class StaticElectionsAPIElectionWrapper:
         if not rec["cancelled"]:
             return rec
 
-        cancelled_ballot = self.cancelled_ballots[0]
-        if len(self.cancelled_ballots) == 1:
-            rec["name"] = cancelled_ballot["election_title"]
-        rec["metadata"] = cancelled_ballot["metadata"]
+        cancelled_ballots = self.cancelled_ballots
+        if cancelled_ballots:
+            cancelled_ballot = cancelled_ballots[0]
+            if len(cancelled_ballots) == 1:
+                rec["name"] = cancelled_ballot["election_title"]
+            rec["metadata"] = cancelled_ballot["metadata"]
         return rec
+
+    @cached_property
+    def cancelled_ballots(self):
+        return [b for b in self.ballots if b["cancelled"]]
 
     def get_voter_id_status(self) -> Optional[str]:
         """

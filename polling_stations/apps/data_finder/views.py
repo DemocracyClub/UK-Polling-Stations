@@ -300,7 +300,6 @@ class AddressView(BasePollingStationView):
 
 
 class ExamplePostcodeView(BasePollingStationView):
-
     """
     This class presents a hard-coded example of what our website does
     without having to worry about having any data imported
@@ -308,6 +307,7 @@ class ExamplePostcodeView(BasePollingStationView):
     """
 
     def get(self, request, *args, **kwargs):
+        kwargs["rh"] = RoutingHelper("BS4 4NL")
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
 
@@ -357,6 +357,7 @@ class WeDontKnowView(PostcodeView):
                     kwargs={"postcode": self.postcode.without_space},
                 )
             )
+        kwargs["rh"] = rh
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
 

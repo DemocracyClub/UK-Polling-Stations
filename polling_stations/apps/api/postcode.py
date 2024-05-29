@@ -1,5 +1,4 @@
 from data_finder.helpers import (
-    EveryElectionWrapper,
     PostcodeError,
     RoutingHelper,
     geocode,
@@ -7,7 +6,6 @@ from data_finder.helpers import (
 )
 from data_finder.helpers.every_election import (
     EmptyEveryElectionWrapper,
-    StaticElectionsAPIElectionWrapper,
 )
 from data_finder.views import LogLookUpMixin, polling_station_current
 from django.core.exceptions import ObjectDoesNotExist
@@ -61,12 +59,12 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         if rh.route_type == "multiple_addresses":
             return EmptyEveryElectionWrapper()
         if rh.elections_response:
-            return StaticElectionsAPIElectionWrapper(rh.elections_response)
+            return rh.elections_backend.ee_wrapper(rh.elections_response)
         kwargs = {}
         query_params = parse_qs_to_python(query_params)
         if include_current := query_params.get("include_current", False):
             kwargs["include_current"] = any(include_current)
-        return EveryElectionWrapper(postcode, **kwargs)
+        return rh.elections_backend.ee_wrapper(postcode, **kwargs)
 
     @extend_schema(
         parameters=[

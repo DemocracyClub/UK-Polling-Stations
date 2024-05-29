@@ -1,10 +1,12 @@
 import abc
 import enum
 from pathlib import Path
-from typing import List, Optional, Tuple, Type
+from typing import List, Tuple
 from urllib.parse import urljoin
 
 import polars
+from data_finder.helpers import EveryElectionWrapper
+from data_finder.helpers.every_election import StaticElectionsAPIElectionWrapper
 from django.conf import settings
 from requests import Session
 from uk_geo_utils.helpers import Postcode
@@ -25,7 +27,7 @@ def ballot_paper_id_to_static_url(ballot_paper_id):
     return urljoin(settings.WCIVF_BALLOT_CACHE_URL, path)
 
 
-class BaseBakedElectionsStrategy(abc.ABC):
+class BaseBakedElectionsHelper(abc.ABC):
     def __init__(self, **kwargs):
         ...
 
@@ -34,25 +36,23 @@ class BaseBakedElectionsStrategy(abc.ABC):
         raise NotImplementedError
 
 
-class RemoteBakedElectionsStrategy(BaseBakedElectionsStrategy):
-    def __init__(self, api_key=None, **kwargs):
-        self.api_key = api_key or getattr(settings, "DEVS_DC_API_KEY", None)
-        if not self.api_key:
-            raise ValueError("API key required for remote backend")
-        super().__init__(**kwargs)
+class NoOpElectionsHelper(BaseBakedElectionsHelper):
+    """
+    Just returns nothing, causing the app to use EE as it previously did.
+
+    This maintains the previous default behaviour for looking up elections
+
+    """
+
+    ee_wrapper = EveryElectionWrapper
 
     def get_response_for_postcode(self, postcode: Postcode):
-        # TODO: pull into a constant
-        devs_dc_base = "https://developers.democracyclub.org.uk"
-        req = session.get(
-            urljoin(devs_dc_base, f"/api/v1/elections/postcode/{postcode.with_space}/"),
-            params={"auth_token": self.api_key},
-        )
-        req.raise_for_status()
-        return req.json()
+        return {}
 
 
-class LocalParquetElectionsStrategy(BaseBakedElectionsStrategy):
+class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
+    ee_wrapper = StaticElectionsAPIElectionWrapper
+
     def __init__(self, elections_parquet_path: Path = None, **kwargs):
         self.elections_parquet_path = elections_parquet_path or getattr(
             settings, "ELECTION_PARQUET_DATA_PATH", None
@@ -144,27 +144,20 @@ class LocalParquetElectionsStrategy(BaseBakedElectionsStrategy):
         return is_split, df["current_elections"][0].split(",")
 
 
-class BakedElectionsHelper:
-    """
-    Helper to get election data from "baked" data: a cut of EveryElection that's been
-    joined with AddressBase and stored in parquet files.
+class RemoteBakedElectionsHelper(BaseBakedElectionsHelper):
+    def __init__(self, api_key=None, **kwargs):
+        self.api_key = api_key or getattr(settings, "DEVS_DC_API_KEY", None)
+        if not self.api_key:
+            raise ValueError("API key required for remote backend")
+        super().__init__(**kwargs)
 
-    We host these files and proxy them via an API.
-
-    This helper allows us to consume the data either via parquet files or the API
-
-    """
-
-    def __init__(
-        self,
-        strategy: Optional[
-            Type[BaseBakedElectionsStrategy]
-        ] = LocalParquetElectionsStrategy,
-        **kwargs,
-    ):
-        self.strategy = strategy(**kwargs)
-
-
-if __name__ == "__main__":
-    helper = BakedElectionsHelper(strategy=None, api_key="asd")
-    helper.strategy.get_response_for_postcode(Postcode("GL5 1NA"))
+    def get_response_for_postcode(self, postcode: Postcode):
+        req = session.get(
+            urljoin(
+                settings.DEVS_DC_BASE,
+                f"/api/v1/elections/postcode/{postcode.with_space}/",
+            ),
+            params={"auth_token": self.api_key},
+        )
+        req.raise_for_status()
+        return req.json()
