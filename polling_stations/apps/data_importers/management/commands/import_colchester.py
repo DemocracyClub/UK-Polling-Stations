@@ -4,13 +4,16 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "COL"
     addresses_name = (
-        "2024-05-02/2024-03-01T11:57:47.053594/Democracy_Club__02May2024 (7).tsv"
+        "2024-07-04/2024-05-30T09:02:47.772850/Democracy_Club__02May2024 (7).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-01T11:57:47.053594/Democracy_Club__02May2024 (7).tsv"
+        "2024-07-04/2024-05-30T09:02:47.772850/Democracy_Club__02May2024 (7).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
+
+    # Council has said there are no changes from the previous election so we are using
+    # the previous file has been reuploaded were using the old script
 
     def station_record_to_dict(self, record):
         # Old Heath Community Centre, D'Arcy Road, Old Heath, Colchester, CO2 8BB
