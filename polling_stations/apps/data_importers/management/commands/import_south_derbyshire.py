@@ -4,16 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SDE"
     addresses_name = (
-        "2024-05-02/2024-03-11T11:14:15.537926/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T11:57:54.622014/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-11T11:14:15.537926/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T11:57:54.622014/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
-
-    # Checked and no action required, it is a mobile station close to the council border
-    # WARNING: Polling station Mobile Unit (8706) is in Derby City Council (DER)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -57,6 +54,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "DE11 7FL",
             "DE11 9NT",
             "DE6 5JF",
+            "DE3 0AX",
             # reported to council, they will review after the elections in May '24
             "DE73 8JA",
             "DE24 5BL",
