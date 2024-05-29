@@ -4,26 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BAI"
     addresses_name = (
-        "2024-05-02/2024-02-09T08:21:20.078163/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T11:06:33.058529/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-02-09T08:21:20.078163/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T11:06:33.058529/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
-    csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # The Nevendon Centre, Nevendon Road, Wickford, Essex
-        if record.polling_place_id == "7191":
-            record = record._replace(polling_place_easting="574486")
-            record = record._replace(polling_place_northing="193177")
-
-        # Laindon Library, 5-7 New Century Road, Laindon, Basildon, SS15 6AG
-        if record.polling_place_id == "7098":
-            record = record._replace(polling_place_easting="567896")
-            record = record._replace(polling_place_northing="188830")
-
-        return super().station_record_to_dict(record)
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -39,12 +25,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # split
             "SS15 5GX",
-            "CM11 2AD",
-            "SS15 6PF",
             "CM11 2JX",
-            "SS15 5NZ",
-            "SS16 6PH",
+            "SS15 6PF",
             "CM11 2RU",
+            "SS12 0AU",
+            "CM11 2AD",
+            "CM11 2LH",
+            "SS16 6PH",
+            "SS15 5NZ",
             # suspect
             "SS13 3RL",
         ]:
