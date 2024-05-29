@@ -1,13 +1,11 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "HEF"
-    addresses_name = "2024-05-02/2024-02-28T13:29:48.569126/Democracy Club polling station export.csv"
-    stations_name = "2024-05-02/2024-02-28T13:29:48.569126/Democracy Club polling station export.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-05-29T16:16:45.928888/Eros_SQL_Output003.csv"
+    stations_name = "2024-07-04/2024-05-29T16:16:45.928888/Eros_SQL_Output003.csv"
+    elections = ["2024-07-04"]
 
     # Following warning checked and no need for correction:
     # WARNING: Polling station Richards Castle Village Hall (15-richards-castle-village-hall) is in Shropshire Council (SHR)
@@ -79,11 +77,42 @@ class Command(BaseHalaroseCsvImporter):
 
         return super().address_record_to_dict(record)
 
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
+    def station_record_to_dict(self, record):
+        # The following stations have postcodes that don't match addressbase:
+        # 'St Weonards Village Hall, (Main Hall), St Weonards, Hereford, HR2 8NU' (id: 47)
+        if record.pollingvenueid == "47":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Ewyas Harold Memorial Hall, (Main Hall), Ewyas Harold, Hereford, HR2 0EL' (id: 17)
+        if record.pollingvenueid == "17":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Vowchurch & Turnastone Memorial Hall, (Main Hall), Vowchurch, Hereford, HR2 0RB' (id: 19)
+        if record.pollingvenueid == "19":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Holme Lacy Village Hall, (Main Hall), Holme Lacy, Hereford, HR2 6LT' (id: 23)
+        if record.pollingvenueid == "23":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Pembridge Parish Hall, (Main Hall), Bearwood Lane, Pembridge, HR6 9EA' (id: 148)
+        if record.pollingvenueid == "148":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Norton Canon Village Hall, (Main Hall), Kitty's Lane, Norton Canon, HR4 7BL' (id: 99)
+        if record.pollingvenueid == "99":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Pudleston Village Hall, (Main Hall), Pudleston, Leominster, HR6 0QY' (id: 118)
+        if record.pollingvenueid == "118":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Humber Village Hall, (Main Hall), Risbury, Leominster, HR6 0NQ' (id: 121)
+        if record.pollingvenueid == "121":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Holmer Church Parish Centre, (Main Hall), Holmer, Hereford, HR4 9RG' (id: 92)
+        if record.pollingvenueid == "92":
+            record = record._replace(pollingstationpostcode="")
+
+        return super().station_record_to_dict(record)
