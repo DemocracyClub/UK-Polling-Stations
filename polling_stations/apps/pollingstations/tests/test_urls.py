@@ -6,7 +6,7 @@ from django_extensions.management.commands.show_urls import Command
 
 class UrlTests(TestCase):
     def is_exception(self, url):
-        exceptions = [".txt", ".ics", ".geojson"]
+        exceptions = [".txt", ".ics", ".geojson", "<drf_format_suffix:format>"]
         return any(exception in url for exception in exceptions)
 
     def test_trailing_slashes(self):
