@@ -4,22 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KIN"
     addresses_name = (
-        "2024-05-02/2024-03-13T08:58:12.052675/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T08:55:20.820012/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-13T08:58:12.052675/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T08:55:20.820012/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # King`s Lynn Town Football Club, The Walks, Tennyson Avenue, KING`S LYNN PE30 5PB
-        if record.polling_place_id == "27162":
-            record = record._replace(
-                polling_place_easting="562582",
-                polling_place_northing="319608",
-            )
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
