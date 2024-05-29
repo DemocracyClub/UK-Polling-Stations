@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NHE"
     addresses_name = (
-        "2024-05-02/2024-02-27T10:50:57.357829/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T12:03:29.474027/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-27T10:50:57.357829/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-29T12:03:29.474027/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -30,26 +30,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "SG8 8AD",
             # looks wrong
             "LU2 8NH",
+            "SG5 1ET",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # postcode correction for: Market Hill Rooms, Fish Hill, Royston, SG8 9JL
-        # Council requested to use below postcode
-        if record.polling_place_id == "9796":
-            record = record._replace(polling_place_postcode="SG8 9LB")
-
-        # station change from council:
-        # old: Wymondley Baptist Church, Stevenage Road, Little Wymondley, SG4 7JA
-        # new: Great Wymondley Village Hall, Great Wymondley, SG4 7ET
-        if record.polling_place_id == "9834":
-            record = record._replace(
-                polling_place_name="Great Wymondley Village Hall",
-                polling_place_address_1="",
-                polling_place_address_4="Great Wymondley",
-                polling_place_postcode="SG4 7ET",
-            )
-
-        return super().station_record_to_dict(record)
