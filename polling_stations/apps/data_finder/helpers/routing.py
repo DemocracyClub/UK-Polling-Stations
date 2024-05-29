@@ -4,7 +4,11 @@ from addressbase.models import Address
 
 # use a postcode to decide which endpoint the user should be directed to
 from councils.models import CouncilGeography
-from data_finder.helpers.baked_data_helper import BakedElectionsHelper
+from data_finder.helpers.baked_data_helper import (
+    LocalParquetElectionsHelper,
+    NoOpElectionsHelper,
+)
+from django.conf import settings
 from django.urls import reverse
 from django.utils.functional import cached_property
 from uk_geo_utils.helpers import Postcode
@@ -21,7 +25,13 @@ class RoutingHelper:
     def __init__(self, postcode):
         self.postcode = Postcode(postcode)
         self.addresses = self.get_addresses()
-        self.elections_response = None
+        self.elections_backend = self.get_elections_backend()
+        self._elections_response = None
+
+    def get_elections_backend(self):
+        if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
+            return LocalParquetElectionsHelper
+        return NoOpElectionsHelper
 
     def get_addresses(self):
         return Address.objects.filter(postcode=self.postcode.with_space).select_related(
@@ -82,12 +92,17 @@ class RoutingHelper:
             return bool(list(self.polling_stations)[0])
         return False
 
+    @property
+    def elections_response(self):
+        if not self._elections_response:
+            self.lookup_elections()
+        return self._elections_response
+
     def lookup_elections(self):
-        helper = BakedElectionsHelper()
-        self.elections_response = helper.strategy.get_response_for_postcode(
+        self._elections_response = self.elections_backend().get_response_for_postcode(
             self.postcode
         )
-        return self.elections_response
+        return self._elections_response
 
     @property
     def split_elections(self):
