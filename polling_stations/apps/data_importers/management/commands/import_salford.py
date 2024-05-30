@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SLF"
-    addresses_name = "2024-05-02/2024-03-18T14:49:18.888261/Democracy_Club__02May2024 - Salford City Council.tsv"
-    stations_name = "2024-05-02/2024-03-18T14:49:18.888261/Democracy_Club__02May2024 - Salford City Council.tsv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-05-30T15:14:43.775851/Democracy_Club__04July2024 - Salford City Council.tsv"
+    stations_name = "2024-07-04/2024-05-30T15:14:43.775851/Democracy_Club__04July2024 - Salford City Council.tsv"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -48,7 +48,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # more accurate point for: The Boundary Stone, Bridgewater Road, Worsley, M28 1AD
         # fixing warning: WARNING: Polling station The Boundary Stone (7196) is in Wigan Metropolitan Borough Council
-        if record.polling_place_id == "7196":
+        if record.polling_place_id == "8083":
             record = record._replace(
                 polling_place_easting="372564",
                 polling_place_northing="401679",
