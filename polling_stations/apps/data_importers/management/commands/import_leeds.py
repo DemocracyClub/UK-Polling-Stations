@@ -111,4 +111,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="429980",
                 polling_place_northing="436740",
             )
+        # Station change from council:
+        # old: Bramley Christian Church, Main Hall, Snowden Crescent, LS13 2TP
+        # new: St Peter’s Church, (St Margaret’s Room) (Desk B) Hough Lane, LS13 3JF
+        if record.polling_place_id == "23945":
+            record = record._replace(
+                polling_place_name=" St Peter’s Church",
+                polling_place_address_1="(St Margaret’s Room) (Desk B)",
+                polling_place_address_2="Hough Lane",
+                polling_place_address_3="",
+                polling_place_postcode="LS13 3JF",
+                polling_place_easting="",
+                polling_place_northing="",
+                polling_place_uprn="",
+            )
         return super().station_record_to_dict(record)
