@@ -444,3 +444,15 @@ class StaticElectionsAPIElectionWrapper:
         # If we haven't set NEXT_CHARISMATIC_ELECTION_DATES,
         # return the earliest election
         return dates[0]
+
+    def get_all_ballots(self):
+        ballots = [
+            b.copy()
+            for b in self.ballots
+            if b["ballot_paper_id"] not in settings.ELECTION_BLACKLIST
+        ]
+        # EE uses election ID, this data uses both election_id and ballot_paper_id.
+        # We want the ballot_id, so we need to re-map it.
+        for ballot in ballots:
+            ballot["election_id"] = ballot["ballot_paper_id"]
+        return sorted(ballots, key=lambda k: k["poll_open_date"])
