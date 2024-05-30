@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WOX"
     addresses_name = (
-        "2024-05-02/2024-03-06T11:23:22.326044/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T14:04:29.414902/Democracy_Club__04July2024 (23).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-06T11:23:22.326044/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T14:04:29.414902/Democracy_Club__04July2024 (23).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -24,16 +24,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10024177121",  # 1 TIMBER YARD, BRADWELL GROVE, BURFORD
             "10024177122",  # 2 TIMBER YARD, BRADWELL GROVE, BURFORD
             "10024177123",  # 3 TIMBER YARD, BRADWELL GROVE, BURFORD
+            "10093356610",  # ANNEXE AT COLDSTONE HOUSE 50 SHIPTON ROAD, ASCOTT UNDER WYCHWOOD
+            "100120966699",  # JOHNSONS FARM, SHILTON ROAD, BURFORD
+            "10093354734",  # ANNEXE JOHNSONS FARM SHILTON ROAD, BURFORD
         ]:
             return None
 
         if record.addressline6 in [
             # split
-            "OX20 1RZ",
             "OX18 1PU",
-            "OX28 6DH",
             "OX18 3NU",
+            "OX20 1RZ",
+            "OX28 6DH",
             "OX7 4BJ",
+            "OX7 5YE",
             # suspect
             "OX7 6UQ",
             "OX7 6WJ",
