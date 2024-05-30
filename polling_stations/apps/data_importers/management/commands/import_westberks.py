@@ -4,18 +4,19 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WBK"
     addresses_name = (
-        "2024-05-02/2024-03-19T11:25:52.770139/Democracy_Club__02May2024v2.CSV"
+        "2024-07-04/2024-06-05T14:00:09.100507/Democracy_Club__04July2024A.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-19T11:25:52.770139/Democracy_Club__02May2024v2.CSV"
+        "2024-07-04/2024-06-05T14:00:09.100507/Democracy_Club__04July2024A.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # Peasemore Village Hall Peasemore RG20 7JE
-        if record.polling_place_id == "8390":
+        # extract postcode from address for: Peasemore Village Hall Peasemore, RG20 7JE
+        if record.polling_place_id == "9312":
             record = record._replace(
-                polling_place_postcode="RG20 7JE ",
+                polling_place_postcode="RG20 7JE",
                 polling_place_address_2="",
             )
 
@@ -32,6 +33,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100081027875",  # COLEY FARM, COLEY, STONEY LANE, ASHMORE GREEN, THATCHAM
             "100080242019",  # 2 JAMES LANE, BURGHFIELD, READING
             "100080242018",  # 1 JAMES LANE, BURGHFIELD, READING
+            "200001867765",  # 75 FIFTH ROAD, NEWBURY
+            "100081026787",  # BRAMLEY HOUSE, BURNT HILL, YATTENDON, THATCHAM
+            "10009201450",  # RUSSETT HOUSE, BURNT HILL, YATTENDON, THATCHAM
         ]:
             return None
 
