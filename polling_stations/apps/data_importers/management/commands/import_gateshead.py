@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "GAT"
     addresses_name = (
-        "2024-05-02/2024-03-07T13:36:42.094784/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T12:47:09.508645/Democracy_Club__04July2024 (20).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-07T13:36:42.094784/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T12:47:09.508645/Democracy_Club__04July2024 (20).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -43,21 +43,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Change requested by the council
-        # Old station: The Coachman, Burnthouse Lane, Whickham, Newcastle Upon Tyne, NE16 5AW (id: 10253)
-        # Replaced by: Fellside Methodist Church, Ancaster Road, Whickham, Newcastle Upon Tyne, NE16 5BJ
-        if record.polling_place_id == "10253":
-            record = record._replace(
-                polling_place_name="Fellside Methodist Church",
-                polling_place_address_1="Ancaster Road",
-                polling_place_address_2="",
-                polling_place_address_3="Whickham",
-                polling_place_address_4="Newcastle Upon Tyne",
-                polling_place_postcode="NE16 5BJ",
-                polling_place_easting="",
-                polling_place_northing="",
-            )
-
-        return super().station_record_to_dict(record)
