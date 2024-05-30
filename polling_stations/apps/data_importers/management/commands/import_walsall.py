@@ -4,28 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WLL"
     addresses_name = (
-        "2024-05-02/2024-03-13T13:07:56.064490/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-30T10:48:52.727524/Democracy_Club__04July2024 (1).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-13T13:07:56.064490/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-30T10:48:52.727524/Democracy_Club__04July2024 (1).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # street name changes from council:
-
-        # old: Community Centre on Dudley Fields, Central Drive/Sneyd Hall Road, Walsall, WS3 2NP
-        # new: Community Centre on Dudley Fields, Sneyd Hall Road, Walsall, WS3 2NP
-        if record.polling_place_id == "3253":
-            record = record._replace(polling_place_address_1="Sneyd Hall Road")
-
-        # old: Palfrey Junior School (former Community Centre) , Dale Street, Walsall, WS1 4AH
-        # new: Palfrey Junior School (former Community Centre) , Entrance Milton Street, Walsall, WS1 4AH
-        if record.polling_place_id == "3500":
-            record = record._replace(polling_place_address_1="Entrance Milton Street")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -39,21 +24,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100071062221",  # 242 INGRAM ROAD, WALSALL
             "200003317397",  # CHRIST CHURCH RECTORY, BLAKENALL HEATH, WALSALL
             "10013664575",  # 52 MATTESLEY COURT, CRESSWELL CRESCENT, WALSALL
-            "200003317043",  # 103 SNEYD LANE, ESSINGTON, WOLVERHAMPTON
-            "200003317044",  # 105 SNEYD LANE, ESSINGTON, WOLVERHAMPTON
-            "200003317045",  # 107 SNEYD LANE, ESSINGTON, WOLVERHAMPTON
-            "200003317046",  # 109 SNEYD LANE, ESSINGTON, WOLVERHAMPTON
         ]:
             return None
 
         if record.addressline6 in [
             # splits
+            "WV12 4BZ",
+            "WS1 3LD",
             "WS3 2DX",
             # look wrong
-            "WS10 7TG",
             "WS2 0HS",
             "WS3 4NX",
             "WS3 4NT",
+            "WS10 7TG",
+            "WV13 2BG",
         ]:
             return None
 
