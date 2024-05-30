@@ -8,7 +8,6 @@ EC_COUNCIL_CONTACT_DETAILS_API_URL = (
     "https://electoralcommission.org.uk/api/v1/data/local-authorities.json"
 )
 
-
 OLD_TO_NEW_MAP = {}
 
 NEW_COUNCILS = []
@@ -38,7 +37,6 @@ WELSH_COUNCIL_NAMES = {
     "WRX": "Cyngor Bwrdeistref Sirol Wrecsam",  # Wrexham County Borough Council
 }
 
-
 NIR_IDS = [
     "ABC",
     "AND",
@@ -52,3 +50,14 @@ NIR_IDS = [
     "MUL",
     "NMD",
 ]
+
+PARL_24_ID_TO_CONTACT_DETAILS = {
+    "parl.edinburgh-east-and-musselburgh.2024-07-04": {
+        "name": "City of Edinburgh Council",
+        "electoral_services_email": "elections@edinburgh.gov.uk",
+        "electoral_services_website": "https://www.edinburgh.gov.uk",
+        "electoral_services_postcode": "EH1 1YJ",
+        "electoral_services_address": "City Chambers\nHigh Street\nEdinburgh\nEH1 1YJ",
+        "electoral_services_phone_numbers": ["0131 200 2315"],
+    }
+}

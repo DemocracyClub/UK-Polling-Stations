@@ -16,7 +16,7 @@
                 or <strong><a href="{{ council_website }}">visit their website</a></strong>.
             {% endblocktrans %}
         {% else %}
-            {% trans "If you don't have a poll card, you need to contact your local council." %}
+            {% trans "If you don't have a poll card, you need to contact your appropriate electoral services team." %}
             {% blocktrans trimmed with council.electoral_services_phone_numbers.0 as council_phone and council.electoral_services_website as council_website %}
                 You can call {{ council }} on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>
                 or <strong><a href="{{ council_website }}">visit their website</a></strong>.
