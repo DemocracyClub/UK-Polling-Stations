@@ -3,10 +3,14 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CMN"
-    addresses_name = "2024-05-02/2024-02-22T09:38:19.926469/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-02-22T09:38:19.926469/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-05T13:06:51.093400/Eros_SQL_Output001.csv"
+    stations_name = "2024-07-04/2024-06-05T13:06:51.093400/Eros_SQL_Output001.csv"
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
+
+    def station_record_to_dict(self, record):
+        record = record._replace(pollingvenueuprn="")
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         if record.uprn in [
@@ -20,35 +24,34 @@ class Command(BaseHalaroseCsvImporter):
 
         if record.housepostcode in [
             # split
-            "SA18 3DZ",
-            "SA44 5YB",
-            "SA33 5DH",
-            "SA39 9EU",
-            "SA16 0PP",
-            "SA14 8TP",
-            "SA34 0HX",
-            "SA15 1HP",
-            "SA39 9EJ",
-            "SA15 5LP",
-            "SA16 0LE",
-            "SA32 7AS",
-            "SA19 7YE",
             "SA19 8TA",
-            "SA32 8BX",
-            "SA34 0XA",
-            "SA14 8JA",
-            "SA14 8AY",
+            "SA15 5LP",
+            "SA32 7AS",
+            "SA16 0PP",
+            "SA44 5YB",
             "SA31 3JJ",
+            "SA19 7SG",
+            "SA39 9EU",
+            "SA19 7YE",
+            "SA33 5DH",
+            "SA15 1HP",
+            "SA14 8TP",
+            "SA14 8AY",
+            "SA18 3DZ",
+            "SA16 0LE",
+            "SA18 3NB",
+            "SA32 8BX",
             "SA32 7QJ",
-            "SA19 8BR",
-            "SA14 8BZ",
-            "SA20 0EY",
+            "SA14 8JA",
             "SA18 3TB",
             "SA17 5US",
-            "SA19 7SG",
-            "SA18 3NB",
-            "SA17 4NF",
+            "SA34 0HX",
+            "SA14 8BZ",
             "SA19 9AS",
+            "SA39 9EJ",
+            "SA19 8BR",
+            "SA17 4NF",
+            "SA20 0EY",
             # suspect
             "SA18 2ET",
             "SA15 1JE",
