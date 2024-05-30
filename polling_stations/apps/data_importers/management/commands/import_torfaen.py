@@ -1,23 +1,18 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "TOF"
-    addresses_name = (
-        "2024-05-02/2024-03-08T13:10:09.629993/Export From Query for Caroline v4.csv"
-    )
-    stations_name = (
-        "2024-05-02/2024-03-08T13:10:09.629993/Export From Query for Caroline v4.csv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-04T15:57:58.919976/Democracy Club Converted - 2024-05-30 noBOM.csv"
+    stations_name = "2024-07-04/2024-06-04T15:57:58.919976/Democracy Club Converted - 2024-05-30 noBOM.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
             "200002953910",  # PARK HOUSE FARM, GRAIG ROAD, UPPER CWMBRAN, CWMBRAN
+            "10013477141",  # GELLI FAWR FARM, HENLLYS, CWMBRAN
         ]:
             return None
 
@@ -35,11 +30,43 @@ class Command(BaseHalaroseCsvImporter):
 
         return super().address_record_to_dict(record)
 
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
+    def station_record_to_dict(self, record):
+        # The following stations have postcodes that don't match their postcode in addressbase:
+        # They're only off by one letter so I've commented them out until the council responds
+
+        # # 'GARNDIFFAITH MILLENNIUM HALL, TOP ROAD, GARNDIFFAITH, PONTYPOOL, TORFAEN, NP4 7LT' (id: 54)
+        # if record.pollingvenueid == "54":
+        #     record = record._replace(pollingstationpostcode="NP4 7LY")
+
+        # # 'VICTORIA VILLAGE COMMUNITY HALL, CWMAVON ROAD, VICTORIA VILLAGE, ABERSYCHAN, TORFAEN, NP4 8PT' (id: 76)
+        # if record.pollingvenueid == "76":
+        #     record = record._replace(pollingstationpostcode="NP4 8PL")
+
+        # # 'TRINITY METHODIST CHAPEL, HIGH STREET, ABERSYCHAN, PONTYPOOL, TORFAEN, NP4 7AE' (id: 6)
+        # if record.pollingvenueid == "6":
+        #     record = record._replace(pollingstationpostcode="NP4 7AZ")
+
+        # # 'PONTNEWYNYDD EBENEZER CHAPEL HALL, CHAPEL ROAD, PONTNEWYNYDD, PONTYPOOL, TORFAEN, NP4 6QR' (id: 14)
+        # if record.pollingvenueid == "14":
+        #     record = record._replace(pollingstationpostcode="NP4 6QN")
+
+        # # 'PONTYMOILE UNDENOMINATIONAL MISSION, ROCKHILL ROAD, PONTYMOILE, PONTYPOOL, TORFAEN, NP4 8AR' (id: 50)
+        # if record.pollingvenueid == "50":
+        #     record = record._replace(pollingstationpostcode="NP4 8AN")
+
+        # # 'ST OSWALDS CHURCH, WERN ROAD, SEBASTOPOL, PONTYPOOL, TORFAEN, NP4 5DS' (id: 82)
+        # if record.pollingvenueid == "82":
+        #     record = record._replace(pollingstationpostcode="NP4 5DU")
+
+        # # 'NURSERY NEW INN PRIMARY SCHOOL, ENTRANCE VIA GOLF ROAD, NEW INN, PONTYPOOL, TORFAEN, NP4 0PR' (id: 26)
+        # if record.pollingvenueid == "26":
+        #     record = record._replace(pollingstationpostcode="NP4 0NG")
+
+        # # 'NEW INN COMMUNITY HALL, NEW ROAD, NEW INN, PONTYPOOL, TORFAEN, NP4 0PZ' (id: 85)
+        # if record.pollingvenueid == "85":
+        #     record = record._replace(pollingstationpostcode="NP4 0TN")
+
+        # # 'GLASLYN COMMUNITY CENTRE, GLASLYN COURT, CROESYCEILIOG, CWMBRAN, TORFAEN, NP44 2JE' (id: 45)
+        # if record.pollingvenueid == "45":
+        #     record = record._replace(pollingstationpostcode="NP44 2JH")
+        return super().station_record_to_dict(record)
