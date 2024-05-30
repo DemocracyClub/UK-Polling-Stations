@@ -85,7 +85,7 @@ class Command(BaseStationsImporter, CsvMixin):
                 for date_string in self.elections
             ]
         for council_id in NIR_IDS:
-            DataEvent.objects.create(
+            DataEvent.objects.using(DB_NAME).create(
                 council=self.get_council(council_id),
                 upload=self.get_upload(),
                 event_type=DataEventType.IMPORT,
@@ -239,26 +239,33 @@ class Command(BaseStationsImporter, CsvMixin):
                 .filter(lad="EONI")
                 .filter(uprn__location__within=council.geography.geography)
             )
-            uprns_in_council.update(lad=council.geography.gss)
+            uprns_in_council.using(DB_NAME).update(lad=council.geography.gss)
+
         self.assign_or_remove_left_over_addresses()
 
     def assign_or_remove_left_over_addresses(self):
-        for address in Address.objects.filter(uprntocouncil__lad="EONI"):
+        for address in Address.objects.using(DB_NAME).filter(uprntocouncil__lad="EONI"):
             others_in_postcode = (
-                Address.objects.filter(postcode=address.postcode)
+                Address.objects.using(DB_NAME)
+                .filter(postcode=address.postcode)
                 .exclude(Q(Q(uprntocouncil__lad="EONI") | Q(uprn=address.uprn)))
                 .distinct("uprntocouncil__lad")
             )
             if len(others_in_postcode) == 1:
-                council = others_in_postcode[0].council
+                other_address = others_in_postcode[0]
+                other_uprn = other_address.uprntocouncil
+                other_uprn.refresh_from_db(using=DB_NAME)
                 self.stdout.write(
-                    f"Updating UprnToCouncil record for {address.uprn} with gss {council.geography.gss}"
+                    f"Updating UprnToCouncil record for {address.uprn} with gss {other_uprn.lad}"
                 )
-                address.uprntocouncil.gss = council.geography.gss
+                address_uprn = address.uprntocouncil
+                address_uprn.lad = other_uprn.lad
+                address_uprn.save(using=DB_NAME)
+
             else:
                 self.stdout.write(f"Council ambiguous for {address.uprn}, deleting")
-                address.uprntocouncil.delete()
-                address.delete()
+                address.uprntocouncil.delete(using=DB_NAME)
+                address.delete(using=DB_NAME)
 
     def station_record_to_dict(self, record):
         if record.sample_uprn not in UPRN_TO_COUNCIL_CACHE:
