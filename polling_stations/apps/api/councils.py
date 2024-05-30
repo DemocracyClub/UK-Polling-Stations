@@ -1,4 +1,5 @@
 from councils.models import Council
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.http import Http404, HttpResponsePermanentRedirect
@@ -172,3 +173,12 @@ class CouncilCSVViewSet(ReadOnlyModelViewSet):
         .order_by("council_id")
         .annotate(stations=Count("pollingstation"))
     )
+
+
+def tmp_fix_parl_24_scotland_details(council, ee_wrapper):
+    for ballot in getattr(ee_wrapper, "ballots", []):
+        if details := settings.PARL_24_ID_TO_CONTACT_DETAILS.get(ballot["election_id"]):
+            for k, v in details.items():
+                setattr(council, k, v)
+            return council
+    return council
