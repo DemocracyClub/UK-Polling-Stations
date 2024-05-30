@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WNT"
     addresses_name = (
-        "2024-05-02/2024-03-14T13:11:30.963898/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-05-30T19:31:15.536348/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-03-14T13:11:30.963898/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-05-30T19:31:15.536348/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -56,13 +56,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "15126528",  # 103B ST. ANDREWS ROAD, NORTHAMPTON
             "15089445",  # 103A ST, ANDREWS ROAD, NORTHAMPTON
             "10013088753",  # FLAT VERSION FARM TURWESTON ROAD, TURWESTON
+            "28047695",  # WESTCOMBE FARM, FAWSLEY, DAVENTRY
+            "28021613",  # SYBOLE FARM, SOUTH KILWORTH ROAD, WELFORD, NORTHAMPTON
+            "28032688",  # STARRS LODGE, CLIPSTON ROAD, MARSTON TRUSSELL, MARKET HARBOROUGH
+            "200001816977",  # PEAS FURLONG COTTAGE, CULWORTH, BANBURY
         ]:
             return None
 
         if record.addressline6 in [
             # splits
             "NN2 7EL",
-            "NN1 5FA",
             "NN6 9HG",
             "NN11 6YH",
             # looks wrong
@@ -73,47 +76,28 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "NN1 2FE",
             "NN5 7EE",
             "NN3 3EW",
+            "NN7 4LB",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # postcode correction for: St Nicholas Church, Main Street, Marston Trussell, Market Harborough, LE19 9TY
-        if record.polling_place_id == "43196":
-            record = record._replace(polling_place_postcode="LE16 9TY")
-
-        # adding postcode for: Aston Le Walls Village Hall, Main Street, Aston Le Walls, Daventry
-        if record.polling_place_id == "39411":
-            record = record._replace(polling_place_postcode="NN11 6UF")
-
-        # adding postcode for: Farthinghoe Village Hall, Cockley Road, Farthinghoe, Brackley
-        if record.polling_place_id == "39507":
+        # adding postcode for: Farthinghoe Village Hall, Cockley Road, Farthinghoe, Brackley, NN13 6UF
+        if record.polling_place_id == "42886":
             record = record._replace(polling_place_postcode="NN13 5PD")
 
         # adding postcode for: Stoke Bruerne Village Hall, Church Lane, Stoke Bruerne, Towcester
-        if record.polling_place_id == "39647":
+        if record.polling_place_id == "43019":
             record = record._replace(polling_place_postcode="NN12 7SG")
 
-        # adding postcode for: Blisworth Village Hall, 19 Stoke Road, Blisworth, Northampton
-        if record.polling_place_id == "39430":
-            record = record._replace(polling_place_postcode="NN7 3BZ")
-
-        # adding postcode for: Cold Higham Parish Hall, Banbury Lane, Cold Higham, Towcester
-        if record.polling_place_id == "39468":
-            record = record._replace(polling_place_postcode="NN12 8LR")
-
-        # adding postcode for: Whitfield Village Hall, The Avenue,Whitfield, Brackley
-        if record.polling_place_id == "39679":
-            record = record._replace(polling_place_postcode="NN13 5TE")
-
-        # adding postcode for: Sargeant Memorial Hall, Church Lane, Brafield on the Green, Northampton
-        if record.polling_place_id == "39445":
-            record = record._replace(polling_place_postcode="NN7 1BA")
-
         # point correction for: Mobile Unit, Local Centre Car Park, Bordeaux Close, Off Weggs Farm Road, Alsace Park, Northampton, NN5 6YR
-        if record.polling_place_id == "39283":
+        if record.polling_place_id == "42721":
             record = record._replace(polling_place_easting="470877")
             record = record._replace(polling_place_northing="262278")
+
+        # adding postcode for: Brackley Recreation Centre, Sports Hall, Springfield Way, Brackley
+        if record.polling_place_id == "43074":
+            record = record._replace(polling_place_postcode="NN13 6JJ")
 
         return super().station_record_to_dict(record)
