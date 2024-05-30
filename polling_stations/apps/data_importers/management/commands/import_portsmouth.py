@@ -4,10 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "POR"
     addresses_name = (
-        "2024-05-02/2024-02-23T14:57:35.343217/DemocracyClub__02May2024.tsv"
+        "2024-07-04/2024-05-30T11:07:34.792700/Democracy_Club__04July2024.tsv"
     )
-    stations_name = "2024-05-02/2024-02-23T14:57:35.343217/DemocracyClub__02May2024.tsv"
-    elections = ["2024-05-02"]
+    stations_name = (
+        "2024-07-04/2024-05-30T11:07:34.792700/Democracy_Club__04July2024.tsv"
+    )
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -52,14 +54,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # Import warnings, but no correction needed (checked with the council):
-        # Portsmouth Methodist Church (Eastney), Highland Road, Southsea, PO4 9NJ
         # John Pounds Centre, Queen Street, Portsmouth, PO1 3HN
-        # Highslopes Community Centre (6235) is in Fareham Borough Council (FAR) but target council is Portsmouth City Council (POR)
+        # Highslopes Community Centre (6404) is in Fareham Borough Council (FAR) but target council is Portsmouth City Council (POR)
         # St Peter & St Paul Hall, Old Wymering Lane, Wymering, PO6 3NH
         # Portacabin on north side of green, Fairfield Square/Hythe Road, Portsmouth, PO6 3JS
-
-        # postcode correction for: Church of the Ascension, Stubbington Avenue, Portsmouth, PO2 0JG
-        if record.polling_place_id == "6210":
-            record = record._replace(polling_place_postcode="PO2 0JW")
 
         return super().station_record_to_dict(record)
