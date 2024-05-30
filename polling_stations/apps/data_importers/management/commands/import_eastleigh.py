@@ -4,23 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "EAT"
     addresses_name = (
-        "2024-05-02/2024-02-16T09:55:38.323809/Democracy_Club__02May2024 (1).tsv"
+        "2024-07-04/2024-05-30T17:35:45.611401/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-16T09:55:38.323809/Democracy_Club__02May2024 (1).tsv"
+        "2024-07-04/2024-05-30T17:35:45.611401/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # Abbey Hall Victoria Road Netley Abbey Southampton SO31 5FA
-        if record.polling_place_id == "5850":
-            record = record._replace(polling_place_northing="108734")
-            record = record._replace(
-                polling_place_easting="445235",
-            )
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
