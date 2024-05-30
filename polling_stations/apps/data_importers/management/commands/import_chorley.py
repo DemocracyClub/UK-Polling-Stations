@@ -1,18 +1,27 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CHO"
-    addresses_name = "2024-05-02/2024-02-26T15:25:45.636629/Eros_SQL_Output017.csv"
-    stations_name = "2024-05-02/2024-02-26T15:25:45.636629/Eros_SQL_Output017.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-04T09:29:17.473081/CHO_combined.csv"
+    stations_name = "2024-07-04/2024-06-04T09:29:17.473081/CHO_combined.csv"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
         # TEMPORARY MOBILE STATION, WHITE HORSE CAR PARK, RAWLINSON LANE, HEATH CHARNOCK, CHORLEY, LANCS PR6 9LJ
         if record.pollingstationnumber == "35":
             record = record._replace(pollingstationpostcode="PR6 9JS")
+        # The following stations have postcodes that do not match addressbase:
+
+        # BUCKSHAW ROF SCOUT GROUP, MILE STONE MEADOW, EUXTON, CHORLEY, PR7 6FX (id: 97)
+        # AB postcode: PR6 7FD
+        if record.pollingvenueid == "97":
+            record = record._replace(pollingstationpostcode="")
+
+        # LANCASTER WAY COMMUNITY CENTRE, LANCASTER WAY (OFF ORDINANCE ROAD), BUCKSHAW VILLAGE, CHORLEY, PR7 7GA (id: 95)
+        # AB postcode: PR7 7LJ
+        if record.pollingvenueid == "95":
+            record = record._replace(pollingstationpostcode="")
 
         return super().station_record_to_dict(record)
 
@@ -21,6 +30,7 @@ class Command(BaseHalaroseCsvImporter):
 
         if uprn in [
             "100010387618",  # MILLSTONE HOUSE, THE GREEN, ECCLESTON, CHORLEY
+            "10094693572",  # 64B MARKET STREET, CHORLEY
         ]:
             return None
 
@@ -34,12 +44,3 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
