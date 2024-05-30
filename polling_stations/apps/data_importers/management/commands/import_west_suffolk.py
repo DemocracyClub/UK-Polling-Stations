@@ -3,9 +3,14 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WSK"
-    addresses_name = "2024-05-02/2024-03-12T11:27:04.893028/West Suffolk Council - Data for Democracy Club - 2 May 2024.CSV"
-    stations_name = "2024-05-02/2024-03-12T11:27:04.893028/West Suffolk Council - Data for Democracy Club - 2 May 2024.CSV"
-    elections = ["2024-05-02"]
+    addresses_name = (
+        "2024-07-04/2024-05-30T14:06:54.881649/Democracy_Club__04July2024 (3).tsv"
+    )
+    stations_name = (
+        "2024-07-04/2024-05-30T14:06:54.881649/Democracy_Club__04July2024 (3).tsv"
+    )
+    elections = ["2024-07-04"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -37,13 +42,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # postcode correction and more accurate point for:
         # East Town Park Visitor Centre, Coupals Road, Haverhill, CB9 9QF
-        if record.polling_place_id == "18895":
-            record = record._replace(polling_place_postcode="CB9 7UW")
+        if record.polling_place_id == "19524":
             record = record._replace(polling_place_easting="568610")
             record = record._replace(polling_place_northing="244831")
-
-        # postcode correction for: Army Cadet Centre, Withersfield Road, Haverhill, CB9 1JB
-        if record.polling_place_id == "18887":
-            record = record._replace(polling_place_postcode="CB9 9HG")
 
         return super().station_record_to_dict(record)
