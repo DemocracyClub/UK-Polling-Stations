@@ -1,4 +1,5 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
@@ -41,9 +42,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
-        # WCIVF bug report:
-        # Removes map for: High Beach Village Hall, Avey Lane, High Beach, Loughton
+        # Coord fix from council for: High Beach Village Hall, Avey Lane, High Beach, Loughton
         if rec["internal_council_id"] == "3596":
-            rec["location"] = None
+            rec["location"] = Point(0.02918, 51.66369, srid=4326)
 
         return rec
