@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NET"
     addresses_name = (
-        "2024-05-02/2024-02-15T14:54:37.515993/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-31T11:08:38.640289/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-15T14:54:37.515993/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-31T11:08:38.640289/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -64,6 +64,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "NE5 1QF",
             "NE4 9NQ",
             "NE5 2AZ",
+            # suspect
             "NE15 9FD",  # GOLDCREST ROAD, NEWCASTLE UPON TYNE
             "NE6 4AZ",  # HADRIANS DRIVE, NEWCASTLE UPON TYNE
             "NE5 2BR",  # SANDRINGHAM ROAD, EAST DENTON, NEWCASTLE UPON TYNE
@@ -92,27 +93,27 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # All postcodes below are provided by the council:
 
         # St Aidan`s Community Centre, Princes Road, Brunton Park, Gosforth
-        if record.polling_place_id == "14486":
+        if record.polling_place_id == "15165":
             record = record._replace(polling_place_postcode="NE3 5NJ")
 
         # Throckley Community Hall, Back Victoria Terrace, Throckley, Newcastle upon Tyne, NE15 9EL
-        if record.polling_place_id == "14253":
+        if record.polling_place_id == "15188":
             record = record._replace(polling_place_postcode="NE15 9AA")
 
         # Westerhope Bowling Club, Bowls Recreation Pavilion, West Avenue, Newcastle upon Tyne, NE5 5JH
-        if record.polling_place_id == "14334":
+        if record.polling_place_id == "15286":
             record = record._replace(polling_place_postcode="NE5 2LL")
 
         # Blucher Methodist Church, Blucher Terrace, Newcastle upon Tyne, NE15 9SD
-        if record.polling_place_id == "14443":
+        if record.polling_place_id == "15328":
             record = record._replace(polling_place_postcode="NE15 9SH")
 
         # St James` and St Basil`s Church Hall, Wingrove Road North, Fenham, Newcastle upon Tyne, NE4 9UB
-        if record.polling_place_id == "14557":
+        if record.polling_place_id == "15361":
             record = record._replace(polling_place_postcode="NE4 9EJ")
 
         # Station address: 'Trinity Community Centre, Freeman Road, Newcastle upon Tyne, NE3 1SS
-        if record.polling_place_id == "14311":
+        if record.polling_place_id == "15096":
             record = record._replace(polling_place_postcode="NE3 1SX")
 
         # Heaton Baptist Church, Heaton Road, Mundella Terrace, Heaton, NE6 5HN
