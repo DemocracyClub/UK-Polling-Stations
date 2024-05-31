@@ -27,6 +27,11 @@ def ballot_paper_id_to_static_url(ballot_paper_id):
     return urljoin(settings.WCIVF_BALLOT_CACHE_URL, path)
 
 
+def ballot_paper_id_to_ee_url(ballot_paper_id):
+    path = f"/api/elections/{ballot_paper_id}/"
+    return urljoin(settings.EE_BASE, path)
+
+
 class BaseBakedElectionsHelper(abc.ABC):
     def __init__(self, **kwargs):
         ...
@@ -81,7 +86,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         result = []
         for ballot in ballot_data:
             ballot_id = ballot["ballot_paper_id"]
-            url = ballot_paper_id_to_static_url(ballot_id)
+            url = ballot_paper_id_to_ee_url(ballot_id)
             req = session.get(url)
             result.append(req.json())
         return result
@@ -92,7 +97,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
 
         ballots_by_date = {}
         for ballot in ballot_data:
-            ballot_date = ballot["ballot_paper_id"].rsplit(".", 1)[-1]
+            ballot_date = ballot["election_id"].rsplit(".", 1)[-1]
             if ballot_date not in ballots_by_date:
                 ballots_by_date[ballot_date] = []
             ballots_by_date[ballot_date].append(ballot)

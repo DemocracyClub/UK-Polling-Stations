@@ -333,9 +333,6 @@ class StaticElectionsAPIElectionWrapper:
         self.ballots = []
         for date in self.elections_response["dates"]:
             for ballot in date["ballots"]:
-                # We rename this somewhere between EE->YNR->WCIVF->BallotCacheWriter,
-                # so rename it back to what EE calls it
-                ballot["election_title"] = ballot["election_name"]
                 self.ballots.append(ballot)
 
     def has_election(self, future_only=True):
@@ -447,12 +444,8 @@ class StaticElectionsAPIElectionWrapper:
 
     def get_all_ballots(self):
         ballots = [
-            b.copy()
+            b
             for b in self.ballots
-            if b["ballot_paper_id"] not in settings.ELECTION_BLACKLIST
+            if b["election_id"] not in settings.ELECTION_BLACKLIST
         ]
-        # EE uses election ID, this data uses both election_id and ballot_paper_id.
-        # We want the ballot_id, so we need to re-map it.
-        for ballot in ballots:
-            ballot["election_id"] = ballot["ballot_paper_id"]
         return sorted(ballots, key=lambda k: k["poll_open_date"])
