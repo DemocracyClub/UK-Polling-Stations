@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WFT"
     addresses_name = (
-        "2024-05-02/2024-03-12T11:46:31.713315/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-31T16:39:55.594385/Democracy_Club__04July2024 (11).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-12T11:46:31.713315/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-31T16:39:55.594385/Democracy_Club__04July2024 (11).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -34,6 +34,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100022590253",  # 1C THE RIDGEWAY, LONDON
             "100022590252",  # 1B THE RIDGEWAY, LONDON
             "200001433409",  # 22 MANSFIELD HILL, LONDON
+            "100022517750",  # 63C BARCLAY ROAD, LONDON
+            "100023696171",  # 63B BARCLAY ROAD, LONDON
         ]:
             return None
 
@@ -58,12 +60,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # more accurate point for: Mission Grove (South Site), Edinburgh Road, Walthamstow, London, E17 8QB
-        if record.polling_place_id == "6393":
+        if record.polling_place_id == "6930":
             record = record._replace(polling_place_easting="536937")
             record = record._replace(polling_place_northing="188842")
 
         # adding postcode for: YMCA, 642 Forest Road, Walthamstow, London
-        if record.polling_place_id == "6299":
+        if record.polling_place_id in [
+            "6933",
+            "6902",
+        ]:
             record = record._replace(polling_place_postcode="E17 3EF")
 
         return super().station_record_to_dict(record)
