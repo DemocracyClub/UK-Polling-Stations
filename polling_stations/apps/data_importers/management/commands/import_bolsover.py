@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BOS"
     addresses_name = (
-        "2024-05-02/2024-02-27T09:50:16.683811/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-31T15:19:45.804642/Democracy_Club__04July2024 (10).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-27T09:50:16.683811/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-05-31T15:19:45.804642/Democracy_Club__04July2024 (10).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -36,18 +36,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # Mobile Unit, Whaley Common Adjacent Henton Memorial Hall, Whaley Common, Langwith, Mansfield
-        if record.polling_place_id == "5340":
+        if record.polling_place_id == "5816":
             record = record._replace(polling_place_postcode="NG20 9HU")
 
         # Whaley Thorns and Langwith Village Hall, Portland Road, Langwith, Mansfield, NG20 9EZ
-        if record.polling_place_id == "5368":
+        if record.polling_place_id == "5846":
             record = record._replace(
                 polling_place_easting="453287",
                 polling_place_northing="371077",
             )
 
         # Bolsover Parish Rooms, Hornscroft Road, Bolsover, Chesterfield, S44 6HG
-        if record.polling_place_id == "5337":
+        if record.polling_place_id == "5812":
             record = record._replace(
                 polling_place_easting="447491",
                 polling_place_northing="370263",
