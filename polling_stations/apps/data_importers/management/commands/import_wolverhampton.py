@@ -1,41 +1,24 @@
-import re
-
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
-    districts_srid = 4326
+class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WLV"
-    elections = ["2024-05-02"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Wolverhampton"
-    geom_type = "geojson"
+    addresses_name = "2024-07-04/2024-05-31T11:56:01.424909/Wolverhampton polling stations - Democracy Club.tsv"
+    stations_name = "2024-07-04/2024-05-31T11:56:01.424909/Wolverhampton polling stations - Democracy Club.tsv"
+    elections = ["2024-07-04"]
+    csv_delimiter = "\t"
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-
-        return {
-            "internal_council_id": record["DIS_CODE_NEW"],
-            "name": record["WARD"] + " - " + record["DIS_CODE_NEW"],
-            "area": poly,
-            "polling_station_id": record["STA_CODE_1"],
-        }
+    def address_record_to_dict(self, record):
+        if record.addressline6 in [
+            # split
+            "WV2 2BF",
+            "WV3 9AY",
+        ]:
+            return None
+        return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        codes = re.split("[, ]", record["STA_CODE"])
-        codes = [code.strip() for code in codes if code.strip()]
-
-        stations = []
-        for code in codes:
-            stations.append(
-                {
-                    "internal_council_id": code,
-                    "address": record["ADDRESS"],
-                    "postcode": record["POSTCODE"],
-                    "location": location,
-                }
-            )
-        return stations
+        # St Joseph`s Church Hall, Coalway Road, Wolverhampton WV3 7LF
+        if record.polling_place_id == "31519":
+            record = record._replace(polling_place_postcode="")
+        return super().station_record_to_dict(record)
