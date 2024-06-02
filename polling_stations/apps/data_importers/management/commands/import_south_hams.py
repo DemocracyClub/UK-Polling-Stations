@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SHA"
     addresses_name = (
-        "2024-05-02/2024-02-26T10:23:30.414409/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-02T17:46:43.083674/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-26T10:23:30.414409/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-02T17:46:43.083674/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -50,12 +50,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        # more accurate point for: Sherford Community Hub, Hercules Road, Sherford, Plymouth, PL9 8FA
-        if rec["internal_council_id"] == "12344":
-            rec["location"] = Point(-4.051082, 50.367181, srid=4326)
-
         # more accurate point for: South Brent Village Hall, Station Approach, South Brent, TQ10 9JL
-        if rec["internal_council_id"] == "12266":
+        if rec["internal_council_id"] == "13005":
             rec["location"] = Point(-3.835664, 50.428691, srid=4326)
+
+        # Council sent incomplete file so I'm commenting out the following change in case we receive data for this station in the future:
+
+        # # more accurate point for: Sherford Community Hub, Hercules Road, Sherford, Plymouth, PL9 8FA
+        # if rec["internal_council_id"] == "12344":
+        #     rec["location"] = Point(-4.051082, 50.367181, srid=4326)
 
         return rec
