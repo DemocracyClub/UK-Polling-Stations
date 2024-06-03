@@ -3,35 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "KTT"
-    addresses_name = "2024-05-02/2024-05-02T10:14:35.750636/RBK Polling districts.csv"
-    stations_name = "2024-05-02/2024-05-02T10:14:35.750636/RBK Polling stations.csv"
-    elections = ["2024-05-02"]
-    csv_encoding = "utf-16le"
-
-    # Following warnings checked and no correction needed
-    # WARNING: Polling station Oak Hall, Maple Lodge (MPC) is in London Borough of Sutton (STN)
-
-    def station_record_to_dict(self, record):
-        # fix from council:
-        # old address: St. John's Parish Hall, Grove Lane, Kingston upon Thames KT1 2SU
-        # new address: St. John's Parish Hall, Grove Lane, Kingston upon Thames KT1 2ST
-        if record.stationcode == "KTC":
-            record = record._replace(
-                postcode="KT1 2ST",
-                xordinate="518406",
-                yordinate="168420",
-            )
-
-        # fix from council:
-        # old address: Catholic Church of St. Pius X, The Triangle, Kingston Upon Thames, Surrey KT1 3SB
-        # new address: Temporary station side of St Pius X Catholic Church, The Triangle, Kingston Upon Thames, Surrey KT1 3RU
-        if record.stationcode == "CVD":
-            record = record._replace(
-                placename="Temporary station side of St Pius X Catholic Church",
-                postcode="KT1 3RU",
-            )
-
-        return super().station_record_to_dict(record)
+    addresses_name = "2024-07-04/2024-06-10T11:19:58.273691/ktt-districts-combined.csv"
+    stations_name = "2024-07-04/2024-06-10T11:19:58.273691/ktt-stations-combined.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
