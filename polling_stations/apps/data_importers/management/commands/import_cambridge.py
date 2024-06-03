@@ -4,9 +4,9 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CAB"
-    addresses_name = "2024-05-02/2024-03-18T15:24:22.305713/Eros_SQL_Output015.csv"
-    stations_name = "2024-05-02/2024-03-18T15:24:22.305713/Eros_SQL_Output015.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-03T13:42:38.623302/Eros_SQL_Output008.csv"
+    stations_name = "2024-07-04/2024-06-03T13:42:38.623302/Eros_SQL_Output008.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -33,22 +33,24 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # postcode correction for: The Salvation Army Community Centre, 104, Mill Road, Cambridge, CB1 2DB
-        if record.pollingstationnumber == "36":
-            record = record._replace(pollingstationpostcode="CB1 2BD")
+        # council has supplied incomplete file so commenting these unused changes for now:
 
-        # coords correction for: St. Andrew's Hall,97 St. Andrew's Road, Cambridge, CB4 1DH
-        if record.pollingstationnumber == "21":
-            record = record._replace(
-                pollingstationeasting="546314", pollingstationnorthing="259588"
-            )
+        # # postcode correction for: The Salvation Army Community Centre, 104, Mill Road, Cambridge, CB1 2DB
+        # if record.pollingstationnumber == "36":
+        #     record = record._replace(pollingstationpostcode="CB1 2BD")
 
-        # User reported issue (freshdesk ticket 24429):
-        # Removing map for: The Salvation Army Community Centre, 104, Mill Road, Cambridge, CB1 2DB
-        rec = super().station_record_to_dict(record)
-        if rec["internal_council_id"] == "36-the-salvation-army-community-centre":
-            rec["location"] = None
-            return rec
+        # # coords correction for: St. Andrew's Hall,97 St. Andrew's Road, Cambridge, CB4 1DH
+        # if record.pollingstationnumber == "21":
+        #     record = record._replace(
+        #         pollingstationeasting="546314", pollingstationnorthing="259588"
+        #     )
+
+        # # User reported issue (freshdesk ticket 24429):
+        # # Removing map for: The Salvation Army Community Centre, 104, Mill Road, Cambridge, CB1 2DB
+        # rec = super().station_record_to_dict(record)
+        # if rec["internal_council_id"] == "36-the-salvation-army-community-centre":
+        #     rec["location"] = None
+        #     return rec
 
         return super().station_record_to_dict(record)
 
