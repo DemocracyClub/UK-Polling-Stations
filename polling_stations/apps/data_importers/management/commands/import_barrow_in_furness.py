@@ -1,13 +1,12 @@
-from addressbase.models import Address, UprnToCouncil
+from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "BAR"
-    addresses_name = "2024-05-02/2024-04-04T12:11:27.455274/Eros_SQL_Output003.csv"
-    stations_name = "2024-05-02/2024-04-04T12:11:27.455274/Eros_SQL_Output003.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-03T14:37:33.938121/WandF_3_in_1.csv"
+    stations_name = "2024-07-04/2024-06-03T14:37:33.938121/WandF_3_in_1.csv"
+    elections = ["2024-07-04"]
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
@@ -25,11 +24,13 @@ class Command(BaseHalaroseCsvImporter):
 
         for record in data:
             if record.uprn in council_uprns:
-                self.COUNCIL_STATIONS.add(record.pollingstationnumber)
+                station_hash = self.get_station_hash(record)
+                self.COUNCIL_STATIONS.add(station_hash)
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
-        if record.pollingstationnumber not in self.COUNCIL_STATIONS:
+        station_hash = self.get_station_hash(record)
+        if station_hash not in self.COUNCIL_STATIONS:
             return None
 
         if uprn in [
@@ -46,15 +47,7 @@ class Command(BaseHalaroseCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if record.pollingstationnumber not in self.COUNCIL_STATIONS:
+        station_hash = self.get_station_hash(record)
+        if station_hash not in self.COUNCIL_STATIONS:
             return None
         return super().station_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
