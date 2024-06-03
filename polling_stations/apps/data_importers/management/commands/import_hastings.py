@@ -4,17 +4,17 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HAS"
     addresses_name = (
-        "2024-05-02/2024-03-11T15:12:57.201058/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T10:19:06.526538/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-11T15:12:57.201058/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T10:19:06.526538/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # Bannatyne Spa Hotel (Montgomerie Suite), Battle Road, St Leonards on Sea, East Sussex
-        if record.polling_place_id == "1154":
+        if record.polling_place_id == "1290":
             # postcode was out-of-area
             record = record._replace(
                 polling_place_postcode="TN38 8EZ", polling_place_uprn="10070602485"
