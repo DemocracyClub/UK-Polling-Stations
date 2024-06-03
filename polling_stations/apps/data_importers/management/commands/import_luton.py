@@ -3,12 +3,8 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "LUT"
-    addresses_name = (
-        "2024-07-04/2024-05-28T16:47:53.627930/Democracy Club - Polling Districts.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-05-28T16:47:53.627930/Democracy Club - Polling Stations.csv"
-    )
+    addresses_name = "2024-07-04/2024-06-07T10:26:05.054644/Democracy Club - Polling Districts (1).csv"
+    stations_name = "2024-07-04/2024-06-07T10:26:05.054644/Democracy Club - Polling Stations (1).csv"
     elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
@@ -32,3 +28,20 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        if record.stationcode in (
+            "101",  # Billington Village Hall (CBF)
+            "102",  # Eaton Bray Village Hall (CBF)
+            "93",  # Heathfield Site (CBF)
+            "94",  # Heathfield Site (CBF)
+            "96",  # Kaisho Academy of Martial Arts Hall (CBF)
+            "97",  # Kensworth Village Hall (CBF)
+            "95",  # Lyons Community Centre (CBF)
+            "98",  # Slip End Village Hall (CBF)
+            "103",  # St Giles Church Hall (CBF)
+            "99",  # Studham Village Hall (CBF)
+            "100",  # Whipsnade Village Hall (CBF)
+        ):
+            return None
+        return super().station_record_to_dict(record)
