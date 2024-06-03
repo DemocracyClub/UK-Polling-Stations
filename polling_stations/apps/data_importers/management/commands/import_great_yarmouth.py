@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "GRY"
-    addresses_name = "2024-05-02/2024-02-20T16:34:00.297777/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-02-20T16:34:00.297777/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-03T16:20:22.300699/Eros_SQL_Output002.csv"
+    stations_name = "2024-07-04/2024-06-03T16:20:22.300699/Eros_SQL_Output002.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -43,6 +43,8 @@ class Command(BaseHalaroseCsvImporter):
             "NR31 9UP",
             "NR30 5JU",
             "NR31 6SY",
+            "NR31 8BZ",
+            # suspect
             "NR31 9AQ",  # WOODFARM COTTAGES, WOODFARM LANE, GORLESTON, GREAT YARMOUTH
             "NR31 8DH",  # ARCHES COURT, BECCLES ROAD, BRADWELL, GREAT YARMOUTH
             "NR29 4FF",  # REPPS MILL BARNS, MILL LANE, MARTHAM, GREAT YARMOUTH
