@@ -1,19 +1,15 @@
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseXpressWebLookupCsvImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseXpressWebLookupCsvImporter):
     council_id = "WAE"
-    addresses_name = (
-        "2024-05-02/2024-03-05T14:50:24.206449/Democracy_Club__02May2024.tsv"
-    )
-    stations_name = (
-        "2024-05-02/2024-03-05T14:50:24.206449/Democracy_Club__02May2024.tsv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-11T16:14:05.131641/WAE_combined.tsv"
+    stations_name = "2024-07-04/2024-06-11T16:14:05.131641/WAE_combined.tsv"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
             "100061602142",  # 3 FARNBOROUGH ROAD, FARNHAM
@@ -26,7 +22,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
 
-        if record.addressline6 in [
+        if record.postcode in [
             # splits
             "GU9 0NZ",
             "GU9 9JT",
