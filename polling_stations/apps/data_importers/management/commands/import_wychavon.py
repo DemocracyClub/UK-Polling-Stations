@@ -5,18 +5,18 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WYC"
     addresses_name = (
-        "2024-05-02/2024-04-12T10:41:41.223808/Democracy_Club__02May2024v2.tsv"
+        "2024-07-04/2024-06-03T17:16:49.585397/Democracy_Club__04July2024 (15).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-12T10:41:41.223808/Democracy_Club__02May2024v2.tsv"
+        "2024-07-04/2024-06-03T17:16:49.585397/Democracy_Club__04July2024 (15).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # bugreport #645
         # coords correction for: Droitwich Spa Community (Main) Hall, Heritage Way, DROITWICH SPA, WR9 8RF
-        if record.polling_place_id == "8042":
+        if record.polling_place_id == "8392":
             record = record._replace(
                 polling_place_easting="389734",
                 polling_place_northing="263143",
@@ -24,13 +24,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         # user issue report #197
         # Northwick Arms Hotel (Monroe Suite), Waterside, Evesham
-        if record.polling_place_id == "7982":
+        if record.polling_place_id == "8364":
             rec = super().station_record_to_dict(record)
             rec["location"] = Point(-1.942675, 52.090313, srid=4326)
             return rec
         # Coord correction to fix map for council:
-
-        if record.polling_place_id == "8205":
+        # Woodland View Care Home, Woodland Way, DROITWICH SPA
+        if record.polling_place_id == "8409":
             record = record._replace(
                 polling_place_easting="390412",
                 polling_place_northing="261303",
@@ -54,8 +54,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             # split
             "WR11 7UQ",
             "WR11 8PZ",
+            "WR11 7UQ",
             "WR10 3HG",
-            "WR9 7TD",
             "WR7 4PB",
         ]:
             return None
