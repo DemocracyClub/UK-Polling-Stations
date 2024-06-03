@@ -4,32 +4,32 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CRF"
     addresses_name = (
-        "2024-05-02/2024-02-28T12:41:47.011342/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T15:41:51.453065/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-28T12:41:47.011342/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T15:41:51.453065/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # Community Suite, Llanishen Leisure Centre, Ty Glas Avenue, Llanishen, Cardiff
-        if record.polling_place_id == "20459":
+        if record.polling_place_id == "21256":
             # geocode was a way off, postcode was right, but found the building so here it is anyway
             record = record._replace(polling_place_uprn="10002526454")
 
         # Canolfan Beulah, (Church Community Centre), Beulah Crossroads, Rhiwbina, Cardiff, CF14 6AX
-        if record.polling_place_id == "20483":
+        if record.polling_place_id == "21192":
             record = record._replace(polling_place_postcode="CF14 6LT")
 
         # The Church Hall, Kelston Road, Whitchurch, Cardiff
-        if record.polling_place_id == "20496":
+        if record.polling_place_id == "21205":
             record = record._replace(polling_place_uprn="200001850852")
 
         # St Mary`s Church Hall, Church Road, Cardiff, CF14 2ED
         # Council request to use below postcode, ignore the warning
-        if record.polling_place_id == "20499":
+        if record.polling_place_id == "21208":
             record = record._replace(
                 polling_place_postcode="CF14 2DX", polling_place_uprn="10008903814"
             )
