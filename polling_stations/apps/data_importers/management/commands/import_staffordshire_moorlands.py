@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STF"
     addresses_name = (
-        "2024-05-02/2024-04-10T15:59:38.268252/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T11:06:55.323891/Democracy_Club__04July2024 (14).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-10T15:59:38.268252/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T11:06:55.323891/Democracy_Club__04July2024 (14).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -38,88 +38,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "ST9 9DQ",
-            "ST13 5DP",
             "ST13 8BS",
-            "ST13 7QX",
-            "ST10 1LT",
             "ST13 6BU",
             "ST8 7JW",
-            "SK17 0QT",
+            "ST10 1LT",
+            "ST9 9DQ",
             "ST10 1UB",
-            "ST10 2PR",  # RICHMOOR HILL, DILHORNE, STOKE-ON-TRENT
+            "SK17 0QT",
+            "ST13 5DP",
+            "ST13 7QX",
+            # suspect
+            "ST10 2PR",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Quarnford Village Hall, Flash, Buxton, SK17 OSW
-        # Postcode mistype, should be a number "0" instead of letter "O"
-        # Easting and northing correction as location on the map is still quite off
-        if record.polling_place_id == "8873":
-            record = record._replace(
-                polling_place_postcode="SK17 0SW",
-                polling_place_easting="402802",
-                polling_place_northing="367332",
-            )
-        # Hollinsclough Chapel Hall Hollinsclough, Longnor, Nr Buxton, SK17 ORH
-        # Postcode mistype, should be a number "0" instead of letter "O"
-        # Easting and northing correction as location on the map is still quite off
-        if record.polling_place_id == "8774":
-            record = record._replace(
-                polling_place_postcode="SK17 0RH",
-                polling_place_easting="406497",
-                polling_place_northing="366542",
-            )
-
-        # St. Bartholomew`s School, Buxton Road, Longnor, Buxton, SK17 ONZ
-        # Postcode mistype, should be a number "0" instead of letter "O"
-        if record.polling_place_id == "8764":
-            record = record._replace(
-                polling_place_postcode="SK17 0NZ",
-            )
-
-        # Sheen Village Hall, Sheen, Buxton, SK17 OES
-        # Postcode mistype, should be a number "0" instead of letter "O"
-        # Easting and northing correction as location on the map is still quite off
-        if record.polling_place_id == "8905":
-            record = record._replace(
-                polling_place_postcode="SK17 0ES",
-                polling_place_easting="411301",
-                polling_place_northing="361466",
-            )
-
-        # Werrington Village Hall, Ash Bank Road, Werrington, Stoke-on-Trent, ST9 1JS
-        # Easting and northing correction as location on the map is still quite off
-        if record.polling_place_id == "8778":
-            record = record._replace(
-                polling_place_postcode="ST9 0JS",
-                polling_place_easting="393754",
-                polling_place_northing="347218",
-            )
-
-        # Warslow Village Hall, Cheadle Road, Warslow, Near Buxton, Derbyshire, SK17 OJJ
-        # Postcode mistype, should be a number "0" instead of letter "O"
-        # Easting and northing correction as location on the map is still quite off
-        if record.polling_place_id == "8924":
-            record = record._replace(
-                polling_place_postcode="SK17 0JJ",
-                polling_place_easting="408601",
-                polling_place_northing="358540",
-            )
-
-        # The following are postcode corrections from the council:
-
-        # Foxt Village Hall, Foxt Road, Foxt, Stoke on Trent ST10 2HY
-        if record.polling_place_id == "8901":
-            record = record._replace(
-                polling_place_postcode="ST10 2HN",
-            )
-
-        # Cauldon Lowe Village Hall, Cauldon Lowe, Nr Waterhouses, Stoke on Trent ST10 3HW
-        if record.polling_place_id == "8858":
-            record = record._replace(
-                polling_place_postcode="ST10 3EX",
-            )
-        return super().station_record_to_dict(record)
