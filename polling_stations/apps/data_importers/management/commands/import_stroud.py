@@ -4,33 +4,23 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STO"
     addresses_name = (
-        "2024-05-02/2024-03-11T16:41:31.315330/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T18:22:54.893996/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-11T16:41:31.315330/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-03T18:22:54.893996/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # more accurate point for: Arthur S Winterbotham Memorial Hall High Street Cam
-        if record.polling_place_id == "19839":
-            record = record._replace(polling_place_easting="374915")
-            record = record._replace(polling_place_northing="200440")
-
         # add point for: Pavillion in the Park, Victory Park, Cashes Green, GL5 4JE
-        if record.polling_place_id == "19632":
+        if record.polling_place_id == "20293":
             record = record._replace(polling_place_easting="382911")
             record = record._replace(polling_place_northing="204929")
 
-        # add point for: France Lynch Church Rooms, Lynch Road, Chalford Hill, Stroud, GL6 8LL
-        if record.polling_place_id == "19652":
-            record = record._replace(polling_place_easting="390069")
-            record = record._replace(polling_place_northing="203122")
-
         # add point for: Stone Village Hall, Lower Stone Lane, Stone, GL13 9LE
-        if record.polling_place_id == "19602":
+        if record.polling_place_id == "20344":
             record = record._replace(polling_place_easting="368339")
             record = record._replace(polling_place_northing="195210")
 
