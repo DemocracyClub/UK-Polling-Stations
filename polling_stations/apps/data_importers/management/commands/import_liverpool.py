@@ -1,13 +1,15 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "LIV"
-    addresses_name = "2024-05-02/2024-02-15T11:42:39.094891/liverpool_deduped.tsv"
-    stations_name = "2024-05-02/2024-02-15T11:42:39.094891/liverpool_deduped.tsv"
-    elections = ["2024-05-02"]
-    csv_delimiter = "\t"
+    addresses_name = (
+        "2024-07-04/2024-06-03T17:22:44.406254/Democracy_Club__04July2024.CSV"
+    )
+    stations_name = (
+        "2024-07-04/2024-06-03T17:22:44.406254/Democracy_Club__04July2024.CSV"
+    )
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -25,7 +27,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
+            "L3 6LH",
+            "L13 4AU",
             "L11 4TD",
+            # suspect
             "L16 0JW",  # CHILDWALL ABBEY ROAD, LIVERPOOL
             "L9 9EN",  # LONGMOOR LANE, LIVERPOOL
         ]:
@@ -36,20 +41,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # bugreport #648
         # postcode correction for: St.Mary`s Church Parish Hall, St Mary`s Road, Liverpool, L19 0PW
-        if record.polling_place_id == "10526":
+        if record.polling_place_id == "11514":
             record = record._replace(polling_place_postcode="L19 0NE")
 
-        rec = super().station_record_to_dict(record)
-
-        # Warning about Fazakerley Social Club (10542) consulted, no correction needed.
-        # https://trello.com/c/iOOgAPjR/640-liverpool
-
-        # Longmoor Lane Social Club, Longmoor Lane, Liverpool
-        if rec["internal_council_id"] == "10561":
-            rec["location"] = Point(-2.943939, 53.468756, srid=4326)
-
-        # Knotty Ash Primary School, Thomas Lane, Liverpool
-        if rec["internal_council_id"] == "10898":
-            rec["location"] = Point(-2.891686, 53.417275, srid=4326)
-
-        return rec
+        return super().station_record_to_dict(record)
