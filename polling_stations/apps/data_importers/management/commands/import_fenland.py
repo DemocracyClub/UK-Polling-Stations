@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "FEN"
-    addresses_name = (
-        "2024-05-02/2024-03-19T11:49:39.152620/Dem Club Polling Districts May 2024.csv"
-    )
-    stations_name = (
-        "2024-05-02/2024-03-19T11:49:39.152620/Dem Club Polling Stations May 2024.csv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-03T09:57:53.342984/Democracy Club FDC Polling Districts June 2024.csv"
+    stations_name = "2024-07-04/2024-06-03T09:57:53.342984/Democracy Club FDC Polling Stations June 2024.csv"
+    elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
