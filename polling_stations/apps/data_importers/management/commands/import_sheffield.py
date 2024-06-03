@@ -1,31 +1,11 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.contrib.gis.geos import Point
-from django.core.exceptions import ObjectDoesNotExist
-
-THE_CLUBHOUSE = {
-    "pollingstationname": "The Clubhouse",
-    "pollingstationaddress_1": "Stocksbridge Rugby Club Grounds",
-    "pollingstationaddress_2": "36 Coal Pit Lane",
-    "pollingstationaddress_3": "Stocksbridge",
-    "pollingstationaddress_4": "Sheffield",
-}
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SHF"
-    addresses_name = "2024-05-02/2024-03-11T17:21:00.252746/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-03-11T17:21:00.252746/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
-
-    def station_record_to_dict(self, record):
-        if record.pollingstationnumber == "194":
-            record = record._replace(**THE_CLUBHOUSE)
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(426960, 397383, srid=27700)
-            return rec
-
-        return super().station_record_to_dict(record)
+    addresses_name = "2024-07-04/2024-06-03T10:21:10.582196/Eros_SQL_Output001.csv"
+    stations_name = "2024-07-04/2024-06-03T10:21:10.582196/Eros_SQL_Output001.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -89,19 +69,4 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
-        if (record.pollingstationnumber, record.pollingstationname) == (
-            "194",
-            "Stocksbridge Rugby Club Pitches",
-        ):
-            record = record._replace(**THE_CLUBHOUSE)
-
         return super().address_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
