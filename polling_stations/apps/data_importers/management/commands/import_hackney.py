@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HCK"
     addresses_name = (
-        "2024-05-02/2024-03-04T14:37:16.630995/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-04T11:31:20.456227/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-03-04T14:37:16.630995/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-04T11:31:20.456227/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -34,7 +34,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "N1 6RH",
             "E5 9UF",
             # suspect
-            "N16 5TU",  # Stamford Hill, Manor Parade
+            "N16 5TU",
         ]:
             return None
         return super().address_record_to_dict(record)
