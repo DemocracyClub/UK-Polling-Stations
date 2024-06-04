@@ -4,13 +4,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "FAL"
-    addresses_name = (
-        "2022-05-05/2022-03-17T11:45:51.431104/polling_station_export-2022-03-15.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-03-17T11:45:51.431104/polling_station_export-2022-03-15.csv"
-    )
-    elections = ["2022-05-05"]
+    addresses_name = "2024-07-04/2024-06-12T16:02:16.691182/FAL_combined_v2.csv"
+    stations_name = "2024-07-04/2024-06-12T16:02:16.691182/FAL_combined_v2.csv"
+    elections = ["2024-07-04"]
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
@@ -30,19 +26,20 @@ class Command(BaseHalaroseCsvImporter):
             if record.uprn in council_uprns:
                 self.COUNCIL_STATIONS.add(self.get_station_hash(record))
 
+    def station_record_to_dict(self, record):
+        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+            return None
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
+
         if record.housepostcode in [
-            "FK6 5EP",
+            # split
             "FK2 7FG",
             "FK2 7YN",
         ]:
             return None
+
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
-            return None
-
-        return super().station_record_to_dict(record)
