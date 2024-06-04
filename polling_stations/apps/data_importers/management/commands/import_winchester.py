@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WIN"
     addresses_name = (
-        "2024-05-02/2024-02-27T09:17:51.992347/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T05:40:31.473736/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-27T09:17:51.992347/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T05:40:31.473736/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -50,6 +50,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200000179662",  # SWANMORE BARN FARM, PARK LANE, SWANMORE, SOUTHAMPTON
             "200000179475",  # PAPER MILL COTTAGE, WARNFORD, SOUTHAMPTON
             "200000184731",  # LOWER PEAKE, WARNFORD, SOUTHAMPTON
+            "10094862089",  # 9 MONKS BROOK ROAD, CURBRIDGE, SOUTHAMPTON
         ]:
             return None
         if record.addressline6 in [
@@ -57,20 +58,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "SO24 9HZ",
             "SO32 1HP",
             "SO32 3PJ",
-            # looks wrong
-            "SO30 2DP",
         ]:
             return None
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
         # more accurate point for: Upham New Millennium Village Hall (Cttee Room), Mortimers Lane, Lower Upham, SO32 1HF
-        if record.polling_place_id == "11087":
+        if record.polling_place_id == "11486":
             record = record._replace(polling_place_easting="452220")
             record = record._replace(polling_place_northing="119570")
-
-        # postcode correction for: Community Lounge, King Harold Court, Christchurch Road, Winchester, SO23 9TR
-        if record.polling_place_id == "11159":
-            record = record._replace(polling_place_postcode="SO23 9SA")
 
         return super().station_record_to_dict(record)
