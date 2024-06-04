@@ -4,13 +4,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CLK"
-    addresses_name = (
-        "2022-05-05/2022-03-17T11:32:16.703214/polling_station_export-2022-03-15.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-03-17T11:32:16.703214/polling_station_export-2022-03-15.csv"
-    )
-    elections = ["2022-05-05"]
+    addresses_name = "2024-07-04/2024-06-13T09:32:21.733682/CLK_combined.csv"
+    stations_name = "2024-07-04/2024-06-13T09:32:21.733682/CLK_combined.csv"
+    elections = ["2024-07-04"]
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
@@ -30,17 +26,14 @@ class Command(BaseHalaroseCsvImporter):
             if record.uprn in council_uprns:
                 self.COUNCIL_STATIONS.add(self.get_station_hash(record))
 
-    def address_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
-            return None
-        if record.housepostcode in [
-            "FK14 7NQ",
-        ]:
-            return None
-        return super().address_record_to_dict(record)
-
     def station_record_to_dict(self, record):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
 
         return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+            return None
+
+        return super().address_record_to_dict(record)
