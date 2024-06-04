@@ -3,10 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHR"
-    addresses_name = "2024-05-02/2024-03-18T10:37:12.510808/Cherwell DC - Democracy_Club__02May2024.tsv"
-    stations_name = "2024-05-02/2024-03-18T10:37:12.510808/Cherwell DC - Democracy_Club__02May2024.tsv"
-    elections = ["2024-05-02"]
-    csv_encoding = "windows-1252"
+    addresses_name = "2024-07-04/2024-06-10T14:52:42.069384/combined.tsv"
+    stations_name = "2024-07-04/2024-06-10T14:52:42.069384/combined.tsv"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -37,13 +36,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # correct point for: The Church of St John the Baptist, Broadway, Kidlington, Oxon
-        if record.polling_place_id == "28492":
-            record = record._replace(polling_place_easting="449651")
-            record = record._replace(polling_place_northing="212578")
-
         # add missing postcode for: Heyford Park Community Centre, Brice Road, Upper Heyford
-        if record.polling_place_id == "28530":
+        if record.polling_place_id == "30098":
             record = record._replace(polling_place_postcode="OX25 5TF")
 
         return super().station_record_to_dict(record)
