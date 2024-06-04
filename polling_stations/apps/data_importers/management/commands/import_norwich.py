@@ -3,17 +3,17 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "NOW"
-    addresses_name = "2024-05-02/2024-03-18T08:50:17.047358/Democracy Club - Polling Districts export.csv"
-    stations_name = "2024-05-02/2024-03-18T08:50:17.047358/Democracy Club - 2024 Polling Stations export 4.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-12T10:48:23.075732/NOW_districts_combined.csv"
+    stations_name = "2024-07-04/2024-06-12T10:48:23.075732/Democracy Club Polling Stations Norwich 20240604.csv"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
-        # Coordinate change from council for: ST ALBAN'S CHURCH HALL, GROVE WALK, NORWICH
-        if record.stationcode in ("48TO5", "46TO3"):
-            record = record._replace(
-                xordinate="622820",
-                yordinate="307543",
-            )
+        # Removing the following stations because they are outside of the council boundaries and have no addresses assigned:
+        if record.stationcode in [
+            "NS42",
+            "NS41",
+        ]:
+            return None
 
         return super().station_record_to_dict(record)
 
