@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HAL"
     addresses_name = (
-        "2024-05-02/2024-03-14T12:58:05.232800/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T15:31:51.125269/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-14T12:58:05.232800/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T15:31:51.125269/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
@@ -17,33 +17,33 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         record = record._replace(polling_place_name=name)
 
         # point correction for: Holy Trinity Church Trinity Street Runcorn WA7 1BJ
-        if record.polling_place_id == "3797":
+        if record.polling_place_id == "5453":
             record = record._replace(polling_place_easting="351595")
             record = record._replace(polling_place_northing="383048")
 
         # User issue #572
         # point correction for: St Michael's Catholic Church, St Michael's Road, Widnes, WA8 8TF
-        if record.polling_place_id == "3838":
+        if record.polling_place_id == "5427":
             record = record._replace(polling_place_easting="349445")
             record = record._replace(polling_place_northing="385338")
 
         # point correction for: St Johns Church, 134 Greenway Road, Widnes, WA8 6HA
-        if record.polling_place_id == "3732":
+        if record.polling_place_id == "5315":
             record = record._replace(polling_place_easting="351638")
             record = record._replace(polling_place_northing="386586")
 
         # point correction for: Mobile Polling Station Galway Ave. Widnes
-        if record.polling_place_id == "3788":
+        if record.polling_place_id == "5358":
             record = record._replace(polling_place_easting="350203")
             record = record._replace(polling_place_northing="387149")
 
         # point correction for: Beechwood Community Centre, Beechwood Avenue, Runcorn, WA7 3HB
-        if record.polling_place_id == "3778":
+        if record.polling_place_id == "5442":
             record = record._replace(polling_place_easting="353075")
             record = record._replace(polling_place_northing="380317")
 
         # point correction for: Prescot Road Changing Rooms, Hough Green Road, Widnes, WA8 7PD
-        if record.polling_place_id == "3921":
+        if record.polling_place_id == "5424":
             record = record._replace(polling_place_easting="349493")
             record = record._replace(polling_place_northing="387054")
 
@@ -66,8 +66,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "WA7 1BH",
             "WA8 7TF",
             "WA8 7TB",
-            # looks wrong
-            "WA4 4AZ",
         ]:
             return None
 
