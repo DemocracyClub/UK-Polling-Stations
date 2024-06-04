@@ -5,13 +5,9 @@ from django.template.defaultfilters import slugify
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "NLK"
-    addresses_name = (
-        "2022-05-05/2022-04-04T10:47:03.448532/polling_station_export-2022-03-23 2.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-04-04T10:47:03.448532/polling_station_export-2022-03-23 2.csv"
-    )
-    elections = ["2022-05-05"]
+    addresses_name = "2024-07-04/2024-06-12T11:58:06.789209/NLK_combined.csv"
+    stations_name = "2024-07-04/2024-06-12T11:58:06.789209/NLK_combined.csv"
+    elections = ["2024-07-04"]
 
     def get_station_hash(self, record):
         # Otherwise the masonic halls in Coatbridge get confused with each other
@@ -43,46 +39,69 @@ class Command(BaseHalaroseCsvImporter):
             if record.uprn in council_uprns:
                 self.COUNCIL_STATIONS.add(self.get_station_hash(record))
 
-    def address_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
-            return None
-
-        if record.housepostcode in [
-            "ML1 3JW",
-            "ML4 1RF",
-            "ML1 1NQ",
-            "G68 9DB",
-            "ML4 2RE",
-            "ML5 5QH",
-            "G65 9NG",
-            "ML1 2TD",
-            "G67 2AG",
-            "ML1 3GE",
-            "G67 2DL",
-            "ML6 8HQ",
-            "ML6 8QN",
-            "G69 8AA",
-            "ML5 4FE",
-            "G69 8BW",
-            "G69 9JF",
-            "ML2 9NG",
-            "ML6 8LW",
-            "ML6 9BA",
-            "ML1 4TU",
-            "ML6 7SE",
-        ]:
-            return None
-
-        return super().address_record_to_dict(record)
-
     def station_record_to_dict(self, record):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
 
+        # COMMUNITY EDUCATION CENTRE, 2 CLARK STREET, AIRDRIE ML6 6DQ
         if (
             self.get_station_hash(record)
             == "1-community-education-centre-2-clark-street-airdrie-"
         ):
             record = record._replace(pollingstationpostcode="")
-
         return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+            return None
+
+        uprn = record.uprn.strip().lstrip("0")
+
+        if uprn in [
+            "118047509",  # 2 GYLE PLACE, WISHAW
+            "118047511",  # 4 GYLE PLACE, WISHAW
+            "118047512",  # 6 GYLE PLACE, WISHAW
+        ]:
+            return None
+
+        if record.housepostcode in [
+            # split
+            "ML4 1RF",
+            "ML1 3FD",
+            "G67 2DL",
+            "ML6 8HQ",
+            "ML1 3GE",
+            "ML1 3JW",
+            "ML5 5QH",
+            "ML1 2TD",
+            "ML1 4TU",
+            "ML6 9BA",
+            "G69 8BW",
+            "ML6 8QN",
+            "G65 9NG",
+            "ML4 2RE",
+            "G33 6GN",
+            "ML1 2BP",
+            "ML6 7SE",
+            "ML2 9NG",
+            "G69 9JF",
+            "G67 2AG",
+            "ML6 8LW",
+            "G68 9DB",
+            "ML6 8JE",
+            # suspect
+            "ML6 7SR",  # DYKEHEAD ROAD, RIGGEND, AIRDRIE
+            "G67 1JE",
+            "G67 1JQ",
+            "G67 1JB",
+            "G67 1JG",
+            "G67 1JJ",
+            "G67 1JN",
+            "G67 1JF",
+            "G67 1JL",
+            "G67 1JH",
+            "G67 1JD",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
