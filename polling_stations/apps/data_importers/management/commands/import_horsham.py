@@ -4,12 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HOR"
     addresses_name = (
-        "2024-05-02/2024-04-11T15:05:44.639720/Democracy_Club__02May2024 (1).CSV"
+        "2024-07-04/2024-06-04T11:08:23.996540/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-11T15:05:44.639720/Democracy_Club__02May2024 (1).CSV"
+        "2024-07-04/2024-06-04T11:08:23.996540/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -54,21 +55,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # more accurate point for: Billingshurst Centre, Roman Way, Billingshurst, RH14 9QW
-        if record.polling_place_id == "4166":
+        if record.polling_place_id == "4592":
             record = record._replace(
                 polling_place_easting="508896",
                 polling_place_northing="126249",
             )
 
         # more accurate point for: Ravenscroft Guide & Community Centre, Browns Lane, Storrington, RH20 4LQ
-        if record.polling_place_id == "4306":
+        if record.polling_place_id == "4763":
             record = record._replace(
                 polling_place_easting="508805",
                 polling_place_northing="114119",
             )
 
         # more accurate point for: Thakeham Village Hall, 1 Abingworth Crescent, Thakeham, RH20 3GW
-        if record.polling_place_id == "4314":
+        if record.polling_place_id == "4771":
             record = record._replace(
                 polling_place_easting="510436",
                 polling_place_northing="116834",
