@@ -4,25 +4,14 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "FLN"
     addresses_name = (
-        "2024-05-02/2024-03-14T09:23:24.751789/Democracy_Club__02May2024 (16).tsv"
+        "2024-07-04/2024-06-04T10:04:48.599321/Democracy_Club__04July2024 (18).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-14T09:23:24.751789/Democracy_Club__02May2024 (16).tsv"
+        "2024-07-04/2024-06-04T10:04:48.599321/Democracy_Club__04July2024 (18).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        #  Village Hall/Neuadd Y Pentref, Pantymwyn CH7 3EH
-        if record.polling_place_id == "7221":
-            record = record._replace(polling_place_postcode="CH7 5EH")
-
-        #  Address: Community Centre/Canolfan Gymunedol, Cymau, Nr. Wrexham/Nr. Wrecsam LL11 5EN
-        if record.polling_place_id == "7276":
-            record = record._replace(polling_place_postcode="LL11 5EU")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -31,7 +20,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10013716442",  # TY NANT BARN, WHITFORD ROAD, WHITFORD, HOLYWELL
             "10013704303",  # NANT Y BI, DOWNING ROAD, WHITFORD, HOLYWELL
             "10013706023",  # BRYN CADW, LLWYN IFOR LANE, WHITFORD, HOLYWELL
-            "10093282336",  # BRYN CADW (2) ACCESS ROAD TO CAE COCH FARM, WHITFORD
             "10090462571",  # PLYMOUTH COPSE, BABELL, HOLYWELL
             "10013705239",  # DYFFRYN AUR, BABELL, HOLYWELL
             "10013716952",  # NANT Y FUWCH, PENTRE HALKYN, HOLYWELL
@@ -46,34 +34,36 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10013707814",  # OLD ORCHARD, OLD LONDON ROAD, BAGILLT
             "100100209552",  # WOODVILLE, HIGH STREET, BAGILLT
             "10023843516",  # ELM HOUSE, HIGH STREET, BAGILLT
+            "200002942099",  # FLAT 2 WELL STREET, HOLYWELL
+            "100100939330",  # ROCK COTTAGE, CYMAU ROAD, FFRITH, WREXHAM
         ]:
             return None
         if record.addressline6 in [
             # split
-            "CH7 2JR",
+            "CH8 8NF",
             "CH4 0PE",
-            "CH5 1PD",
-            "CH5 1QR",
-            "CH8 7ED",
-            "CH7 3DG",
             "CH8 8LR",
             "CH7 6YX",
-            "CH7 2JP",
-            "CH7 6BA",
-            "CH8 8JY",
             "CH5 3EF",
-            "CH7 6TH",
-            "CH7 6EH",
-            "CH7 6SD",
-            "LL12 9HN",
+            "CH5 1QR",
+            "CH7 2JR",
             "CH6 5TP",
-            "CH8 8NF",
-            "CH7 6PA",
-            "CH8 9NY",
             "CH8 8NY",
-            "LL12 9DU",
-            "CH7 6AH",
+            "CH5 1PD",
+            "CH8 8JY",
+            "CH7 6BA",
+            "CH8 7ED",
+            "CH8 9NY",
+            "CH7 3DG",
+            "CH7 6SD",
+            "CH7 6PA",
+            "LL12 9HN",
+            "CH7 6EH",
             "CH8 7PQ",
+            "CH7 6AH",
+            "LL12 9DU",
+            "CH7 2JP",
+            "CH7 6TH",
             # suspect
             "CH8 7AX",
             "CH8 7LS",
@@ -81,6 +71,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "CH8 7EY",
             "CH6 6ES",
             "CH5 4XL",
+            "CH4 0QN",
         ]:
             return None
         return super().address_record_to_dict(record)
