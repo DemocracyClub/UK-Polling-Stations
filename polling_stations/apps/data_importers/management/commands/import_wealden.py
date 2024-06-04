@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WEA"
     addresses_name = (
-        "2024-05-02/2024-03-14T15:02:24.482231/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T15:05:04.859578/Democracy_Club__04July2024 Xpress.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-14T15:02:24.482231/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-04T15:05:04.859578/Democracy_Club__04July2024 Xpress.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -40,6 +40,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "TN22 5TR",
             # looks wrong
             "BN8 6BA",
+            "BN27 1DQ",
         ]:
             return None
 
@@ -50,7 +51,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # WARNING: Polling station Ashurst Wood Village Centre (9329) is in Mid Sussex District Council (MSS)
 
         # postcode correction for: Rose Room, Forest Row Community Centre, Hartfield Road, Forest Row, RH18
-        if record.polling_place_id == "9464":
+        if record.polling_place_id == "9728":
             record = record._replace(polling_place_postcode="RH18 5DZ")
 
         return super().station_record_to_dict(record)
