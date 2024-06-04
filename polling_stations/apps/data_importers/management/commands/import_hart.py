@@ -33,3 +33,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # coords from council:
+        # Yateley Industries, Mill Lane, Yateley, GU46 7TF
+        if record.polling_place_id == "4703":
+            record = record._replace(
+                polling_place_easting="481895",
+                polling_place_northing="161045",
+            )
+        return super().station_record_to_dict(record)
