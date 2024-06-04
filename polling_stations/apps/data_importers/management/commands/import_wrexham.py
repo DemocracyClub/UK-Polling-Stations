@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WRX"
-    addresses_name = "2024-05-02/2024-02-22T15:49:07.126386/Wrexham Xpress export Democracy_Club__02May2024 (1).tsv"
-    stations_name = "2024-05-02/2024-02-22T15:49:07.126386/Wrexham Xpress export Democracy_Club__02May2024 (1).tsv"
-    elections = ["2024-05-02"]
+    addresses_name = (
+        "2024-07-04/2024-06-04T08:31:31.215041/Democracy_Club__04July2024 (16).tsv"
+    )
+    stations_name = (
+        "2024-07-04/2024-06-04T08:31:31.215041/Democracy_Club__04July2024 (16).tsv"
+    )
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -46,7 +50,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100100856052",  # STONE HOUSE, QUARRY ROAD, BRYNTEG, WREXHAM
             "10004522764",  # THE BUNGALOW, CROSS LANE, PENTRE BROUGHTON, WREXHAM
             "200002943992",  # VENARD, CROSS LANE, PENTRE BROUGHTON, WREXHAM
-            "100100855073",  # 3A CROSS LANE, PENTRE BROUGHTON, WREXHAM
             "10004523439",  # MAES HEULOG, CHAPEL STREET, PONCIAU, WREXHAM
             "10004526374",  # MERLYS, RUABON ROAD, RUABON, WREXHAM
             "1000452133",  # WITHY GROVE, ELLESMERE ROAD, BRONINGTON, WHITCHURCH
@@ -56,21 +59,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
+            "LL13 8US",
             "LL20 7HJ",
-            "LL13 9EN",
-            "LL13 0YU",
             "LL13 0JW",
             "LL12 8DH",
-            "LL13 8US",
-            "SY13 3BU",
-            "LL11 4UY",
             "LL12 0RY",
+            "LL13 9EN",
+            "LL13 0YU",
+            "LL11 4UY",
+            "SY13 3BU",
             # looks wrong
-            "LL12 0HE",
             "LL11 3EZ",
             "LL14 5BG",
-            "LL12 0DF",
-            "LL139US",
             "LL11 6AF",
             "LL11 4TT",
         ]:
@@ -79,26 +79,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # postcode correction for: Friends Meeting House, Holt Road, Wrexham
-        if record.polling_place_id == "9110":
-            record = record._replace(polling_place_postcode="LL13 8HN")
-
-        # postcode correction for: Gresford Methodist Church Hall, Chester Road, Gresford, Wrexham
-        if record.polling_place_id == "8954":
+        # postcode correction for: Gresford Methodist Church Hall, Chester Road, Gresford, Wrexham, LL12 8YY
+        if record.polling_place_id == "10314":
             record = record._replace(polling_place_postcode="LL12 8PA")
 
         # postcode correction for: Gwersyllt Congregational Church, 3 Dodds Lane, Gwersyllt, Wrexham, LL11 4LG
         # requested by the council
-        if record.polling_place_id == "8992":
+        if record.polling_place_id == "10345":
             record = record._replace(polling_place_postcode="LL11 4NT")
-
-        # council request to replace old station: St Mary`s School Community Room, Park Street, Ruabon, Wrexham, LL14 6LE
-        # with new: St Mary’s Church Hall, 3 Church Street, Ruabon, Wrexham, LL14 6DS
-        if record.polling_place_id == "9100":
-            record = record._replace(polling_place_name="St Mary’s Church Hall")
-            record = record._replace(polling_place_address_1="3 Church Street")
-            record = record._replace(polling_place_address_2="Ruabon")
-            record = record._replace(polling_place_address_3="Wrexham")
-            record = record._replace(polling_place_postcode="LL14 6DS")
 
         return super().station_record_to_dict(record)
