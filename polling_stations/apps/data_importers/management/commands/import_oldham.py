@@ -5,12 +5,13 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "OLD"
     addresses_name = (
-        "2024-05-02/2024-03-04T11:11:13.643147/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-04T08:55:04.244061/Democracy_Club__04July2024 (17).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-04T11:11:13.643147/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-04T08:55:04.244061/Democracy_Club__04July2024 (17).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -72,16 +73,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # fix from council:
-        # old address: Canterbury Hall, Holy Family Community Centre, Lord Lane, Failsworth M35 0GQ
-        # new address: York Hall, Holy Family Community Centre, Lord Lane, Failsworth M35 0GQ
-        if record.polling_place_id == "10830":
-            record = record._replace(polling_place_name="York Hall")
-
         rec = super().station_record_to_dict(record)
 
         # postcode and point correction for: Waterhead Academy Sports Campus, Counthill Road, Moorside, Oldham, OL4 2PY
-        if rec["internal_council_id"] == "11047":
+        if rec["internal_council_id"] == "11495":
             rec["postcode"] = "OL4 2PZ"
             rec["location"] = Point(-2.076175, 53.556648, srid=4326)
 
