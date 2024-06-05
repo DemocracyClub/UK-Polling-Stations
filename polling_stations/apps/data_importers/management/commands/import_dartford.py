@@ -1,27 +1,18 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "DAR"
-    addresses_name = "2024-05-02/2024-03-08T15:19:40.671473/Eros_SQL_Output002.csv"
-    stations_name = "2024-05-02/2024-03-08T15:19:40.671473/Eros_SQL_Output002.csv"
-    elections = ["2024-05-02"]
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
+    addresses_name = "2024-07-04/2024-06-05T15:57:04.146018/Eros_SQL_Output003.csv"
+    stations_name = "2024-07-04/2024-06-05T15:57:04.146018/Eros_SQL_Output003.csv"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
-        # UPRN update from council:
-        # Greenhithe Masonic Lodge, 218 London Road, Greenhithe, Dartford DA9 9JF
-        if self.get_station_hash(record) == "43-greenhithe-masonic-lodge":
-            record = record._replace(pollingvenueuprn="200000534103")
+        # Below stations are throwing a warning about different postcode in the addressbase, but council requested to keep them.
+        # Wentworth Primary School, Entrance via James Road, Wentworth Drive, Dartford, Kent, DA1 3NF
+        # Temple Hill Community Centre, Temple Hill Square, Dartford, Kent, DA1 5HX
+        # The Gateway Primary Academy (SHO1), Milestone Road, Dartford, Kent, DA2 6PL
+        # St Albans Church, St Albans Road, Dartford, Kent, DA1 1TE
+        # Oakfield Primary Academy (PRI5), Oakfield Lane, Dartford, Kent, DA1 2SW
 
         return super().station_record_to_dict(record)
