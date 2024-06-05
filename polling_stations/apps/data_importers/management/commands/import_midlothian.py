@@ -1,54 +1,32 @@
-from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "MLN"
-    addresses_name = (
-        "2022-05-05/2022-03-09T09:55:31.236684/polling_station_export-2022-03-02 2.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-03-09T09:55:31.236684/polling_station_export-2022-03-02 2.csv"
-    )
-    elections = ["2022-05-05"]
-
-    def pre_import(self):
-        # We need to consider rows that don't have a uprn when importing data.
-        # However there are lots of rows for other councils in this file.
-        # So build a list of stations from rows that do have UPRNS
-        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
-
-        council_uprns = set(
-            UprnToCouncil.objects.filter(lad=self.council.geography.gss).values_list(
-                "uprn", flat=True
-            )
-        )
-        self.COUNCIL_STATIONS = set()
-        data = self.get_addresses()
-
-        for record in data:
-            if record.uprn in council_uprns:
-                self.COUNCIL_STATIONS.add(self.get_station_hash(record))
+    addresses_name = "2024-07-04/2024-06-05T12:20:21.126261/Eros_SQL_Output005.csv"
+    stations_name = "2024-07-04/2024-06-05T12:20:21.126261/Eros_SQL_Output005.csv"
+    elections = ["2024-07-04"]
+    csv_encoding = "windows-1252"
 
     def address_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
-            return None
+        uprn = record.uprn.strip().lstrip("0")
 
-        if record.housepostcode in [
-            "EH22 2EE",
-            "EH20 9AA",
-            "EH22 5TH",
-            "EH22 1SY",
-            "EH22 5BG",
-            "EH23 4QA",
-            "EH20 9QA",
+        if uprn in [
+            "120037867",  # DALHOUSIE MAINS DAIRY, DALKEITH
+            "120035855",  # WEST LODGE, MELVILLE ESTATE, LASSWADE
         ]:
             return None
-
-        return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+        if record.housepostcode in [
+            # split
+            "EH26 9AX",
+            "EH22 2EE",
+            "EH22 5TH",
+            "EH23 4QA",
+            "EH26 9AY",
+            "EH20 9QA",
+            "EH20 9AA",
+            "EH22 5BG",
+            "EH22 1SY",
+        ]:
             return None
-
-        return super().station_record_to_dict(record)
+        return super().address_record_to_dict(record)
