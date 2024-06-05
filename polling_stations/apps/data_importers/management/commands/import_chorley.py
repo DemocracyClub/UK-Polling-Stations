@@ -11,17 +11,13 @@ class Command(BaseHalaroseCsvImporter):
         # TEMPORARY MOBILE STATION, WHITE HORSE CAR PARK, RAWLINSON LANE, HEATH CHARNOCK, CHORLEY, LANCS PR6 9LJ
         if record.pollingstationnumber == "35":
             record = record._replace(pollingstationpostcode="PR6 9JS")
-        # The following stations have postcodes that do not match addressbase:
-
-        # BUCKSHAW ROF SCOUT GROUP, MILE STONE MEADOW, EUXTON, CHORLEY, PR7 6FX (id: 97)
-        # AB postcode: PR6 7FD
-        if record.pollingvenueid == "97":
-            record = record._replace(pollingstationpostcode="")
 
         # LANCASTER WAY COMMUNITY CENTRE, LANCASTER WAY (OFF ORDINANCE ROAD), BUCKSHAW VILLAGE, CHORLEY, PR7 7GA (id: 95)
-        # AB postcode: PR7 7LJ
         if record.pollingvenueid == "95":
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(pollingstationpostcode="PR7 7LJ")
+
+        # The following station's postcode has been confirmed by the council:
+        # BUCKSHAW ROF SCOUT GROUP, MILE STONE MEADOW, EUXTON, CHORLEY, PR7 6FX (id: 97)
 
         return super().station_record_to_dict(record)
 
