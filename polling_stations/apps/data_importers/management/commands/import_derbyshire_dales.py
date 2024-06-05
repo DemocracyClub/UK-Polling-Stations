@@ -4,25 +4,28 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "DEB"
     addresses_name = (
-        "2024-05-02/2024-02-22T12:08:18.459885/Democracy Club - Polling Districts.csv"
+        "2024-07-04/2024-06-13T15:32:42.310608/Democracy Club - Polling Districts.csv"
     )
     stations_name = (
-        "2024-05-02/2024-02-22T12:08:18.459885/Democracy Club - Polling Stations.csv"
+        "2024-07-04/2024-06-13T15:32:42.310608/Democracy Club - Polling Stations.csv"
     )
-    elections = ["2024-05-02"]
-    csv_encoding = "utf-16le"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
         # Station coordinates change requested by council
         # MATLOCK - FARMERS VIEW, WITHIN HURST FARM SOCIAL CLUB, HAZEL GROVE, MATLOCK, DERBYSHIRE, DE4 3ED
-        if record.pollingstationid == "2919":
+        if record.pollingstationid == "3026":
             record = record._replace(xordinate="430853", yordinate="360507")
 
         # Removes polling stations name duplication in addresses
         record = record._replace(add1="")
-        # fix from council: removes electors address from Bradbourne Church Hall polling station
-        if record.pollingstationid == "2904":
-            record = record._replace(add2="MILL LANE", postcode="DE6 1PA")
+
+        # Removes empty stations from cross-boundary constituencies
+        try:
+            if int(record.stationcode) >= 89:
+                return None
+        except ValueError:
+            pass
 
         return super().station_record_to_dict(record)
 
@@ -62,6 +65,8 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         if record.postcode in [
+            "DE6 2AR",  # split
+            # suspect
             "DE6 1AR",  # MAYFIELD ROAD, ASHBOURNE
             "DE4 51JQ",  # ASHBOURNE ROAD, MONYASH, BAKEWELL
             "DE6 5PE",  # SOMERSAL HERBERT, ASHBOURNE
