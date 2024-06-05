@@ -4,14 +4,17 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RCH"
     addresses_name = (
-        "2024-05-02/2024-03-27T10:00:00.966473/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-05T12:19:57.871196/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-27T10:00:00.966473/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-05T12:19:57.871196/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
+
+    # Checked and no correction needed
+    # WARNING: Polling station Room At Rear of St James Church (6165) is in Oldham Metropolitan Borough Council (OLD)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -26,52 +29,36 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10094358283",  # 61J QUEEN VICTORIA STREET, ROCHDALE
             "23040672",  # NADEN HOUSE, WOODHOUSE LANE, ROCHDALE
             "10096505235",  # HELLIWELL HOUSE, BUCKLEY HILL LANE, MILNROW, ROCHDALE
+            "23108010",  # HIGHER ASHWORTH FARM, MEADOW HEAD LANE, ROCHDALE
+            "23026616",  # 1220 EDENFIELD ROAD, ROCHDALE
+            "23040679",  # BROWN HILL FARM, WOODHOUSE LANE, ROCHDALE
         ]:
             return None
         if record.addressline6.replace("\xa0", " ") in [
             # split
-            "OL16 2SD",
+            "OL12 0RE",
             "OL10 1FH",
+            "OL16 2SD",
+            "OL10 4DG",
+            "OL10 3BJ",
+            "OL11 3AE",
+            "M24 2PR",
             "OL16 4XF",
             "M24 1LG",
-            "OL10 4DG",
-            "OL15 9LY",
-            "OL15 0JH",
-            "OL10 3BJ",
-            "OL10 2JP",
-            "OL16 1FD",
-            "M24 2PR",
-            "OL11 3AE",
             "OL10 3LW",
+            "OL15 0JH",
+            "OL15 9LY",
+            "OL10 2JP",
             "M24 6UE",
+            "OL16 1FD",
             "OL16 4RF",
             "M24 5BP",
-            "OL12 0RE",
             # suspect
             "OL12 6GP",
             "OL12 9QA",
             "OL12 6GR",
             "OL12 0NU",
+            "OL10 1FU",
         ]:
             return None
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Mobile Unit at The Black Dog Pub, On the corner of Redfearn Wood & Rooley Moor Road, Rochdale OL12 6JZ (2 polling stations)
-        if record.polling_place_id in (
-            "5442",
-            "5515",
-        ):
-            record = record._replace(polling_place_postcode="OL12 7JG")
-
-        # Station change from council:
-        # old: Mobile Unit on the Car Park of Ogden Baptist Church, Cedar Lane, Newhey  OL16 4LD
-        # new: Mobile Unit on the Car Park of Elm Grove, OL16 4LH
-        if record.polling_place_id == "5422":
-            record = record._replace(
-                polling_place_address_1="Elm Grove",
-                polling_place_address_2="",
-                polling_place_postcode="OL16 4LH",
-            )
-
-        return super().station_record_to_dict(record)
