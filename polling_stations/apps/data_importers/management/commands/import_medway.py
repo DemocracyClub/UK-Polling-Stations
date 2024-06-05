@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "MDW"
-    addresses_name = "2024-05-02/2024-03-21T14:40:57.823024/Eros_SQL_Output010.csv"
-    stations_name = "2024-05-02/2024-03-21T14:40:57.823024/Eros_SQL_Output010.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-05T18:33:15.401473/Eros_SQL_Output012.csv"
+    stations_name = "2024-07-04/2024-06-05T18:33:15.401473/Eros_SQL_Output012.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -16,10 +16,18 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         if record.housepostcode in [
-            "ME8 8DB",  # split
+            # split
+            "ME8 8DB",
             # suspect
             "ME1 2EZ",
             "ME1 2FD",
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # postcode correction for: Main Hall, Gillingham Baptist Church, Green Street, MR7 5TJ
+        if self.get_station_hash(record) == "27-main-hall-gillingham-baptist-church":
+            record = record._replace(pollingstationpostcode="")
+
+        return super().station_record_to_dict(record)
