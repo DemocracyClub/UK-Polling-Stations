@@ -29,3 +29,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Markfield Community and Sports Centre - Small Hall, Mayflower Close, Markfield, Leics
+        if record.polling_place_id == "4943":
+            record = record._replace(
+                polling_place_easting="449061", polling_place_northing="309845"
+            )
+        return super().station_record_to_dict(record)
