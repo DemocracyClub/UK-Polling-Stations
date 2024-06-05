@@ -1,13 +1,11 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CBD"
-    addresses_name = "2024-05-02/2024-04-17T07:02:46.229815/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-04-17T07:02:46.229815/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-13T13:09:28.906626/CBD_combined.csv"
+    stations_name = "2024-07-04/2024-06-13T13:09:28.906626/CBD_combined.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -54,18 +52,19 @@ class Command(BaseHalaroseCsvImporter):
 
         if record.housepostcode in [
             # splits
-            "CA15 7RL",
-            "CA22 2TD",
-            "CA25 5LN",
-            "CA2 7LS",
-            "CA2 4RE",
             "CA25 5JE",
-            "CA7 0EG",
             "CA26 3RU",
-            "CA28 6TU",
-            "CA5 6JS",
             "CA6 4LF",
+            "CA28 6TU",
+            "CA25 5LN",
+            "CA22 2TD",
+            "CA2 7LS",
+            "CA13 0QZ",
+            "CA2 4RE",
+            "CA5 6JS",
             "CA25 5LH",
+            "CA15 7RL",
+            "CA7 0EG",
             "LA19 5XT",
             # looks wrong
             "CA12 4GN",
@@ -79,28 +78,15 @@ class Command(BaseHalaroseCsvImporter):
 
     def station_record_to_dict(self, record):
         # Postcode in wrong column: Watson Hall, Castle Carrock, Brampton, CA8 9LU
-        if record.pollingstationnumber == "123":
+        if self.get_station_hash(record) == "24-watson-hall":
             record = record._replace(pollingstationpostcode="CA8 9LU")
 
         # Postcode correction for: Portable Cabin, Borrowdale Road, Carlisle, CA2 6RD
-        if record.pollingstationnumber == "180":
+        if self.get_station_hash(record) == "69-portable-cabin":
             record = record._replace(pollingstationpostcode="")
 
         # Postcode correction for: Low Moor Evangelical Church, Low Moor Road, Wigton, Cumbria, CA7 8QP
-        if record.pollingstationnumber == "96":
-            record = record._replace(pollingstationpostcode="")
-
-        # Postcode correction for: Welfare Hall, Little Broughton, Cockermouth, Cumbria, CA13 0ZX
-        if record.pollingstationnumber == "21":
+        if self.get_station_hash(record) == "68-low-moor-evangelical-church":
             record = record._replace(pollingstationpostcode="")
 
         return super().station_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
