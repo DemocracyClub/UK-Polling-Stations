@@ -4,13 +4,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "ELN"
-    addresses_name = (
-        "2022-05-05/2022-03-09T09:53:53.386346/polling_station_export-2022-03-02 2.csv"
-    )
-    stations_name = (
-        "2022-05-05/2022-03-09T09:53:53.386346/polling_station_export-2022-03-02 2.csv"
-    )
-    elections = ["2022-05-05"]
+    addresses_name = "2024-07-04/2024-06-13T12:31:53.064062/ELN_combined_UTF-8.csv"
+    stations_name = "2024-07-04/2024-06-13T12:31:53.064062/ELN_combined_UTF-8.csv"
+    elections = ["2024-07-04"]
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
@@ -27,6 +23,9 @@ class Command(BaseHalaroseCsvImporter):
         data = self.get_addresses()
 
         for record in data:
+            # removes: Summerside Bowling Club 21 Summerside Street
+            if self.get_station_hash(record) == "112-summerside-bowling-club":
+                continue
             if record.uprn in council_uprns:
                 self.COUNCIL_STATIONS.add(self.get_station_hash(record))
 
@@ -34,18 +33,24 @@ class Command(BaseHalaroseCsvImporter):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
 
-        if record.housepostcode in [
-            "EH31 2B",
-            "EH32 0LN",
-            "EH31 2HS",
-            "EH21 8F",
-            "EH35 5ND",
-            "EH32 0F",
-            "EH39 5EY",
-            "EH41 4DQ",
+        uprn = record.uprn.strip().lstrip("0")
+
+        if uprn in [
+            "138068895",  # 22 MEADOWSIDE, ABERLADY, LONGNIDDRY
         ]:
             return None
 
+        if record.housepostcode in [
+            # split
+            "EH41 4DQ",
+            "EH35 5ND",
+            "EH21 8EJ",
+            "EH31 2HS",
+            "EH21 6TB",
+            "EH32 0LN",
+            "EH39 5EY",
+        ]:
+            return None
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
