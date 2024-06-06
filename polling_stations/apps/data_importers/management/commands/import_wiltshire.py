@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WIL"
     addresses_name = (
-        "2024-05-02/2024-04-30T08:22:02.367729/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T17:12:15.477643/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-30T08:22:02.367729/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T17:12:15.477643/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -23,18 +23,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # split
-            "SN10 4AD",
             "SP5 1RN",
-            "SN14 6HT",
-            "SN10 2PA",
-            "SN8 1QB",
-            "SP5 2NL",
             "SP3 6DY",
-            "BA12 7JH",
+            "SN10 4AD",
+            "SP5 2NL",
+            "SN10 2PA",
             "SN8 1HG",
-            "SN15 5JL",
+            "SN8 1QB",
+            "BA12 7JH",
             # suspect
-            "SN16 0HT",
             "BA14 8RA",
             "SN15 4EU",
             "SN15 4EX",
@@ -42,3 +39,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # more accurate point for: King Georges Hall, West Dean, Salisbury, SP5 1JA
+        # slight correction to remove warning: Polling station King Georges Hall (87349) is in Test Valley Borough Council (TES)
+        if record.polling_place_id == "87349":
+            record = record._replace(polling_place_easting="425660")
+            record = record._replace(polling_place_northing="127118")
+
+        return super().station_record_to_dict(record)
