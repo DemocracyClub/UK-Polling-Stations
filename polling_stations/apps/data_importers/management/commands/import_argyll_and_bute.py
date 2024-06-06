@@ -1,47 +1,28 @@
-from data_importers.geo_utils import fix_bad_polygons
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseGitHubImporter):
+class Command(BaseHalaroseCsvImporter):
     council_id = "AGB"
-    elections = ["2022-05-05"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-Wolverhampton"
-    geom_type = "geojson"
-    srid = 4326
-    districts_srid = 4326
+    addresses_name = "2024-07-04/2024-06-06T10:18:55.085692/Eros_SQL_Output003 (3).csv"
+    stations_name = "2024-07-04/2024-06-06T10:18:55.085692/Eros_SQL_Output003 (3).csv"
+    elections = ["2024-07-04"]
 
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
+    def address_record_to_dict(self, record):
+        uprn = record.uprn.strip().lstrip("0")
 
-        return {
-            "internal_council_id": record["CODE"],
-            "name": record["NAME"] + " - " + record["CODE"],
-            "area": poly,
-            "polling_station_id": record["CODE"],
-        }
+        if uprn in [
+            "125056372",  # CRAIGALLAN, ASCOG, ISLE OF BUTE
+            "125084307",  # ROWAN LEA, CRAIGNURE, ISLE OF MULL
+        ]:
+            return None
 
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("stations")
-        )
-        codes = record["CODE"].split(",")
-        codes = [code.strip() for code in codes]
-
-        stations = []
-        for code in codes:
-            station = {
-                "internal_council_id": code,
-                "address": record["ADDRESS"],
-                "postcode": "",
-                "location": location,
-            }
-            if code == "AA19":
-                station[
-                    "address"
-                ] = "Islay Customer Service Point, Jamieson Street, Bowmore, Isle of Islay, PA43 7HP"
-                station["location"] = None
-            stations.append(station)
-        return stations
-
-    def post_import(self):
-        fix_bad_polygons()
+        if record.housepostcode in [
+            # split
+            "PA28 6PX",
+            "PA37 1PE",
+            "PA23 7AL",
+            "PA33 1BX",
+            "G84 7BF",
+        ]:
+            return None
+        return super().address_record_to_dict(record)
