@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "FYL"
     addresses_name = (
-        "2024-05-02/2024-03-08T16:02:17.131780/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T10:44:20.480636/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-08T16:02:17.131780/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T10:44:20.480636/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -40,23 +40,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100010413647",  # FLAT 1-3, WOODLANDS HOUSE, 74 WOODLANDS ROAD, LYTHAM ST. ANNES
             "100010410533",  # 126 ST ANDREWS ROAD SOUTH, LYTHAM ST ANNES
             "100012390106",  # POINTER HOUSE FARM, FLEETWOOD ROAD, SINGLETON, POULTON-LE-FYLDE
+            "100012620477",  # ST. CUTHBERTS VICARAGE, CHURCH ROAD, LYTHAM, LYTHAM ST. ANNES
         ]:
             return None
 
         if record.addressline6 in [
             # splits
-            "PR4 1PN",
-            "PR4 3AR",
-            "FY8 1JU",
-            "PR4 2JW",
             "FY8 2AW",
-            "PR4 2RY",
-            "PR4 2JN",
-            "PR4 0YP",
-            "PR4 3DJ",
             "FY8 2LY",
-            "FY8 2BS",
+            "PR4 3DJ",
+            "PR4 1PN",
+            "PR4 2JN",
+            "FY8 1JU",
+            "PR4 2RY",
             "FY8 2DS",
+            "PR4 2JW",
+            "FY8 2BS",
+            "PR4 3AR",
         ]:
             return None
 
@@ -64,12 +64,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # Below warning checked and no correction needed:
-        # WARNING: Polling station Princess Alexandra House (3419) is in Blackpool Borough Council
+        # WARNING: Polling station Princess Alexandra House (3617) is in Blackpool Borough Council
 
         rec = super().station_record_to_dict(record)
 
         # more accurate point for: St Thomas Parish Centre, St Thomas Road, Lytham St Annes
-        if rec["internal_council_id"] in ["3409", "3405"]:
+        if rec["internal_council_id"] in ["3603", "3607"]:
             rec["location"] = Point(-3.024416, 53.747426, srid=4326)
 
         return rec
