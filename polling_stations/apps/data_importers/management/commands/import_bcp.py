@@ -34,5 +34,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "17399",
             "17425",
         ]:
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="BH15 3EU")
+
+        # coord correction from council for:
+        # Station C - Immanuel Church, 120 Southbourne Road, Bournemouth
+        if record.polling_place_id == "17445":
+            record = record._replace(
+                polling_place_easting="413613", polling_place_northing="91759"
+            )
+
         return super().station_record_to_dict(record)
