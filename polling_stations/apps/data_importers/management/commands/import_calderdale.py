@@ -3,10 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "CLD"
-    addresses_name = "2024-05-02/2024-02-16T15:25:54.920405/2024 02 16 Democracy Club Polling Districts export.csv"
-    stations_name = "2024-05-02/2024-02-16T15:25:54.920405/2024 02 16 Democracy Club Polling Stations export.csv"
-    elections = ["2024-05-02"]
-    csv_encoding = "utf-16le"
+    addresses_name = "2024-07-04/2024-06-06T14:49:45.071526/CMBC_Democracy_Club_PS_Extract_PollingDistricts_UKPGE.csv"
+    stations_name = "2024-07-04/2024-06-06T14:49:45.071526/CMBC_Democracy_Club_PS_Extract_PollingStations_UKPGE.csv"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
         # LEE MOUNT BAPTIST CHURCH, MELBOURNE STREET, LEE MOUNT, HALIFAX, WEST YORKSHIRE HX3 5BQ
