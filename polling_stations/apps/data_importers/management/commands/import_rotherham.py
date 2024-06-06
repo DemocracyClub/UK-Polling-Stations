@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ROT"
     addresses_name = (
-        "2024-05-02/2024-02-22T12:16:06.322718/Rotherham_Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T14:29:03.086004/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-22T12:16:06.322718/Rotherham_Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T14:29:03.086004/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -64,23 +64,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # splits
             "S64 8PG",
-            "S63 7LN",  # SANDYGATE, WATH-UPON-DEARNE, ROTHERHAM
-            "S64 8BD",  # CROSSLAND STREET, SWINTON, MEXBOROUGH
-            "S65 4FP",  # FULLERTON CLOSE, THRYBERGH, ROTHERHAM
-            "S60 1AP",  # 24 WESTGATE, ROTHERHAM
-            "S61 1DL",  # PSALTERS LANE, ROTHERHAM
-            "S26 4XB",  # BAXTER CLOSE, SWALLOWNEST, SHEFFIELD
-            "S60 1TU",  # FLAT, THE STORYTELLER, RETAIL WORLD, LITTLE BRIDGE ROAD, PARKGATE, ROTHERHAM
-            "S25 2DR",  # LODGE LANE, DINNINGTON, ROTHERHAM
+            # suspect
+            "S63 7LN",
+            "S64 8BD",
+            "S65 4FP",
+            "S26 4XB",
+            "S25 2DR",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # postcode drop for: Greasbrough Library, Coach Road, Greasbrough, Rotherham, S61 4ED
-        # no response from the council, ignore the warning
-        if record.polling_place_id == "17653":
-            record = record._replace(polling_place_postcode="")
-
-        return super().station_record_to_dict(record)
