@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "WKF"
-    addresses_name = "2024-05-02/2024-03-14T09:51:32.250794/20240314 Democracy Club Polling Districts.csv"
-    stations_name = "2024-05-02/2024-03-14T09:51:32.250794/20240314 Democracy Club Polling Stations.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-06T14:50:20.339867/Democracy Club - Polling Districts 040724.csv"
+    stations_name = "2024-07-04/2024-06-06T14:50:20.339867/Democracy Club - Polling Stations 040724.csv"
+    elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
@@ -32,6 +32,7 @@ class Command(BaseDemocracyCountsCsvImporter):
             "63059008",  # THE OLD VICARAGE, JACKSONS LANE, WENTBRIDGE, PONTEFRACT
             "63198595",  # CORNER VIEW, HOYLE MILL ROAD, KINSLEY, PONTEFRACT
             "63057162",  # WILLOW TREE FARM, HOYLE MILL ROAD, KINSLEY, PONTEFRACT
+            "63155597",  # HOYLE MILL FARM, HOYLE MILL ROAD, KINSLEY, PONTEFRACT
         ]:
             return None
 
@@ -46,8 +47,53 @@ class Command(BaseDemocracyCountsCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # point correction for: THREE LANE ENDS ACADEMY, Methley Road, Castleford, WF10 1PN
-        if record.stationcode == "23-03PG":
-            record = record._replace(xordinate="441303", yordinate="425532")
+        # Station change reuested by council
+        # OLD: BRACKENHILL COMMUNITY CENTRE, OFF DICKY SYKES LANE, ACKWORTH, PONTEFRACT, WF7 7AR
+        # NEW: ACKWORTH PARISH COUNCIL COMMUNITY CENTRE, BELL LANE, ACKWORTH, WF7 7JH
+        if record.stationcode == "010-01NN":
+            record = record._replace(
+                add1="Bell Lane",
+                add2="Ackworth",
+                add3="",
+                add4="",
+                add5="",
+                add6="",
+                placename="ACKWORTH PARISH COUNCIL COMMUNITY CENTRE",
+                postcode="WF7 7JH",
+                xordinate="443553",
+                yordinate="416345",
+            )
+
+        # Remove stations from Leeds and Kirklees
+        if record.stationcode in [
+            "ODD-132",
+            "ODD-133",
+            "ODD-134",
+            "ODD-135",
+            "ODD-136",
+            "ODD-137",
+            "ODD-138",
+            "ODD-139",
+            "ODD-140",
+            "ODD-141",
+            "ODD-142",
+            "ODD-143",
+            "ODD-144",
+            "ODD-145",
+            "ODD-146",
+            "ODD-147",
+            "ODD-148",
+            "ODD-149",
+            "RL-1",
+            "RL-2",
+            "RL-3",
+            "RL-4",
+            "RL-5",
+            "RL-6",
+            "RL-7",
+            "RL-8",
+            "RL-9",
+        ]:
+            return None
 
         return super().station_record_to_dict(record)
