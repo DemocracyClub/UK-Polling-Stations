@@ -4,17 +4,17 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ELI"
     addresses_name = (
-        "2024-05-02/2024-03-21T11:00:56.741087/Democracy_Club__02May2024 (20) (1).tsv"
+        "2024-07-04/2024-06-06T11:05:09.011311/Democracy_Club__04July2024 (22).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-21T11:00:56.741087/Democracy_Club__02May2024 (20) (1).tsv"
+        "2024-07-04/2024-06-06T11:05:09.011311/Democracy_Club__04July2024 (22).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # more accurate point for: St Marys Church, Church Lane, Fotherby, Louth, LN11 0UJ
-        if record.polling_place_id == "11523":
+        if record.polling_place_id == "12140":
             record = record._replace(polling_place_easting="531703")
             record = record._replace(polling_place_northing="391688")
 
