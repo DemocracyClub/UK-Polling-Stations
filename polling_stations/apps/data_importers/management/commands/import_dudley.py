@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DUD"
     addresses_name = (
-        "2024-05-02/2024-03-13T13:48:07.881298/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T10:13:23.366029/Democracy_Club__04July2024 (21).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-13T13:48:07.881298/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-06T10:13:23.366029/Democracy_Club__04July2024 (21).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -51,7 +51,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
+            "DY1 4AN",
+            "B63 4BN",
             "DY1 3EP",
+            "DY1 3QY",
             "DY6 7LT",
             # looks wrong
             "DY8 4LU",
@@ -61,10 +64,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # postcode correction: Church of Jesus Christ of Latter Day Saints, 61-63 Tipton Road, Woodsetton, Dudley, DY3 1BE
-        if record.polling_place_id == "28791":
-            record = record._replace(polling_place_postcode="DY3 1BZ")
-
-        return super().station_record_to_dict(record)
