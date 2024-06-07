@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STR"
     addresses_name = (
-        "2024-05-02/2024-03-18T15:53:02.626241/Democracy_Club__02May2024 (20).tsv"
+        "2024-07-04/2024-06-07T16:48:33.753603/Democracy_Club__04July2024 (24).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-18T15:53:02.626241/Democracy_Club__02May2024 (20).tsv"
+        "2024-07-04/2024-06-07T16:48:33.753603/Democracy_Club__04July2024 (24).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -55,27 +55,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Station name change requested by council
-        # OLD: The Avenue Club, Avenue Farm, Stratford-upon-Avon, CV37 0HR
-        # NEW: Venture House, Avenue Farm, Birmingham Road, Stratford-upon-Avon, CV37 0HR
-        if record.polling_place_id == "11601":
-            record = record._replace(
-                polling_place_name="Venture House",
-                polling_place_address_1="Avenue Farm",
-                polling_place_address_2="Birmingham Road",
-                polling_place_address_3="",
-                polling_place_address_4="Stratford-upon-Avon",
-                polling_place_postcode="CV37 0HR",
-            )
-
         rec = super().station_record_to_dict(record)
 
-        # more accurate point for: Alcester Guide and Scout Centre, 28 Moorfield Road, Alcester, B49 5DA
-        if rec["internal_council_id"] == "11550":
+        # more accurate point for: Wellesbourne Sports and Community Centre, Loxley Close, Wellesbourne, CV35 9RU
+        if rec["internal_council_id"] == "12241":
             rec["location"] = Point(-1.5998000, 52.191589, srid=4326)
 
-        # more accurate point for: Wellesbourne Sports and Community Centre, Loxley Close, Wellesbourne, CV35 9RU
-        if rec["internal_council_id"] == "11607":
+        # more accurate point for: Alcester Guide and Scout Centre, 28 Moorfield Road, Alcester, B49 5DA
+        if rec["internal_council_id"] == "12293":
             rec["location"] = Point(-1.871989, 52.216317, srid=4326)
 
         return rec
