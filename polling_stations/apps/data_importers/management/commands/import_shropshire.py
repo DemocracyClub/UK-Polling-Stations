@@ -3,15 +3,19 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SHR"
-    addresses_name = "2024-05-02/2024-03-05T14:00:11.410114/Democracy_Club__02May2024_Shropshire as at 5 Mar.tsv"
-    stations_name = "2024-05-02/2024-03-05T14:00:11.410114/Democracy_Club__02May2024_Shropshire as at 5 Mar.tsv"
-    elections = ["2024-05-02"]
+    addresses_name = (
+        "2024-07-04/2024-06-07T13:35:57.112633/Democracy_Club__04July2024.tsv"
+    )
+    stations_name = (
+        "2024-07-04/2024-06-07T13:35:57.112633/Democracy_Club__04July2024.tsv"
+    )
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # more accurate point for: Rhydycroesau Village Hall, Rhydycroesau, Oswestry, SY10 7PS
-        if record.polling_place_id == "33120":
+        if record.polling_place_id == "35251":
             record = record._replace(polling_place_easting=324197)
             record = record._replace(polling_place_northing=330779)
 
@@ -39,15 +43,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10012073467",  # ELM FARM, FISHMORE, LUDLOW
             "10032918109",  # VERNOLDS COMMON CHAPEL RACECOURSE JUNCTION THE CLUB HOUSE TO NORTON JUNCTION ONIBURY ROAD, BROMFIELD
             "10093751437",  # LITTLE DUFFERYN, NEWCASTLE, CRAVEN ARMS
-            "10032918552",  # ARGOED COTTAGE, ARGOED, CLUN, CRAVEN ARMS
             "10032918551",  # NANT ARGOED, ARGOED, CLUN, CRAVEN ARMS
             "10011839605",  # MEADOW CROFT, SNAILBEACH, SHREWSBURY
             "10002207344",  # LITTLE LYTH BARN, LYTH HILL, BAYSTON HILL, SHREWSBURY
             "10014528855",  # BRAMBLE BARN, LYTH HILL, BAYSTON HILL, SHREWSBURY
             "10014533524",  # LIVING ACCOMMODATION THE VAULTS 16 CASTLE GATES, SHREWSBURY
             "100070050670",  # 2 MYTTON OAK ROAD, SHREWSBURY
-            "10014548413",  # 79 SHELTON ROAD, SHREWSBURY
-            "10014542242",  # 53 BLIGNY CRESCENT, BICTON HEATH, SHREWSBURY
             "200000126685",  # HEATH FARM, ROWTON, HALFWAY HOUSE, SHREWSBURY
             "200000126691",  # (CROCKETT), ROCK COTTAGE, ROWTON, HALFWAY HOUSE, SHREWSBURY
             "200001773022",  # SUNNYBANK, ROWTON, HALFWAY HOUSE, SHREWSBURY
@@ -74,38 +75,36 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10013133473",  # BROOKLANDS, NEW MARTON, ST. MARTINS, OSWESTRY
             "10013135347",  # GREEN LANE FARM, WHIXALL, WHITCHURCH
             "10014523638",  # YEW TREE HOUSE, WHIXALL, WHITCHURCH
-            "100071213474",  # WOODCROFT, LYNEAL LANE, WELSHAMPTON, ELLESMERE
-            "10014523913",  # LYNEAL LODGE, LYNEAL LANE, WELSHAMPTON, ELLESMERE
-            "200001723403",  # BROOKFIELD, BROCKTON, MUCH WENLOCK
             "200003849787",  # BEECHLEA, BROCKTON, MUCH WENLOCK
-            "200000127803",  # BROOK VESSONS FARM, GATTEN, PONTESBURY, SHREWSBURY
             "200003845824",  # STONE COTTAGE, APLEY PARK, BRIDGNORTH
+            "10007016042",  # SWISS COTTAGE, MORTON, OSWESTRY
+            "100071220450",  # 1 CANONBURY, SHREWSBURY
         ]:
             return None
 
         if record.addressline6 in [
             # splits
             "SY1 2UG",
-            "TF9 3HE",
-            "TF12 5SH",
-            "SY10 9FQ",
-            "SY11 2LB",
-            "TF9 3RJ",
-            "TF9 3HD",
-            "SY11 4PX",
             "WV15 6BW",
+            "SY10 9FQ",
+            "TF9 3HD",
             "SY6 7HQ",
-            "TF13 6QA",
-            "SY11 3LP",
-            "SY4 5JQ",
-            "TF11 8DN",
-            "SY3 8RE",
+            "SY11 2LB",
+            "TF12 5SH",
+            "SY6 6HN",
+            "TF9 3HE",
             "SY5 9PE",
+            "SY4 5JQ",
+            "SY11 4PX",
+            "SY3 8RE",
+            "TF11 8DN",
+            "TF13 6QA",
             "SY5 0PX",
             "SY8 3JY",
+            "SY11 3LP",
+            "TF9 3RJ",
             # looks wrong
             "SY1 3PB",
-            "SY3 7JD",
             "WV16 4QQ",
             "TF12 5BZ",
             "TF11 9PG",
