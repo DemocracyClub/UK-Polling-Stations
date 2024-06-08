@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TOB"
     addresses_name = (
-        "2024-05-02/2024-02-26T17:17:18.102038/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-08T21:12:24.878118/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-26T17:17:18.102038/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-08T21:12:24.878118/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
-    csv_encoding = "windows-1252"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -21,16 +20,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10024003083",  # 30 SHORTON ROAD, PAIGNTON
             "100040532454",  # 28 SHORTON ROAD, PAIGNTON
             "100040513377",  # MILTON ORCHARD, MILTON STREET, BRIXHAM
-            "100040515861",  # REDWELLS, SOUTHDOWN HILL, BRIXHAM
-            "100040513359",  # BEL-OMBRE, MILTON STREET, BRIXHAM
-            "10024001656",  # GATEHOUSE COTTAGE MUDSTONE LANE, BRIXHAM
-            "10093140000",  # 11 REA BARN ROAD, BRIXHAM
-            "100040509069",  # 89 BOLTON STREET, BRIXHAM
-            "100040509951",  # 64 COPYTHORNE ROAD, BRIXHAM
-            "100040509950",  # 62 COPYTHORNE ROAD, BRIXHAM
-            "100040509722",  # 1A CHURCH HILL EAST, BRIXHAM
-            "100040514040",  # 110 NORTH BOUNDARY ROAD, BRIXHAM
-            "100040534758",  # 187 TOTNES ROAD, PAIGNTON
             "100040512567",  # 48 LICHFIELD DRIVE, BRIXHAM
             "100040510175",  # THE STATION GUEST HOUSE, DARTMOUTH ROAD, CHURSTON FERRERS, BRIXHAM
             "100040534883",  # ZOO AND GARDENS NORTH LODGE TOTNES ROAD, PAIGNTON
@@ -66,15 +55,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100041198763",  # 308 DARTMOUTH ROAD, PAIGNTON
             "100040541253",  # CHERRY BLOSSOM FARM, CLADDON LANE, MAIDENCOMBE, TORQUAY
             "100040554887",  # PROTEA, SEAWAY LANE, TORQUAY
+            "10094529096",  # THE COURTYARD APARTMENT, 306 TORQUAY ROAD, PAIGNTON
         ]:
             return None
 
         if record.addressline6 in [
             # looks wrong
             "TQ1 4QZ",
-            "TQ5 8EJ",
-            "TQ5 8AW",
-            "TQ5 0LB",
             "TQ3 3QG",
             "TQ3 3QE",
             "TQ2 5BU",
