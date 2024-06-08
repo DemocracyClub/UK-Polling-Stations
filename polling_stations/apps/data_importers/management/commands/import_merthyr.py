@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "MTY"
-    addresses_name = "2024-05-02/2024-03-27T11:39:56.682597/Eros_SQL_Output004.csv"
-    stations_name = "2024-05-02/2024-03-27T11:39:56.682597/Eros_SQL_Output004.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-08T12:05:23.815608/Eros_SQL_Output005.csv"
+    stations_name = "2024-07-04/2024-06-08T12:05:23.815608/Eros_SQL_Output005.csv"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
         # PONTSTICILL MEMORIAL HALL, CF48 2UR
@@ -18,6 +18,8 @@ class Command(BaseHalaroseCsvImporter):
         if uprn in [
             "10034658436",  # TRIGG BROS, TY-NEWYDD FARM, TRELEWIS, TREHARRIS
             "200001851107",  # TYN-Y-COEDCAE FARM, SWANSEA ROAD, MERTHYR TYDFIL
+            "200001639936",  # GAVENNY VILLA, HIGH STREET, PENYDARREN, MERTHYR TYDFIL
+            "10034663931",  # HIGH GARDEN, TRAMROAD SIDE SOUTH, MERTHYR TYDFIL
         ]:
             return None
         if record.housepostcode in [
