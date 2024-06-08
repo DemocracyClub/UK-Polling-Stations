@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "ERY"
-    addresses_name = "2024-05-02/2024-03-22T11:00:10.036289/Democracy Club - Polling Districts - PCC.csv"
-    stations_name = "2024-05-02/2024-03-22T11:00:10.036289/Democracy Club - Polling Stations - PCC.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-08T17:09:09.105422/ERYC - Democracy Club - Polling Districts.csv"
+    stations_name = "2024-07-04/2024-06-08T17:09:09.105422/ERYC - Democracy Club - Polling Stations.csv"
+    elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
@@ -13,8 +13,15 @@ class Command(BaseDemocracyCountsCsvImporter):
 
         if uprn in [
             "10093602661",  # APARTMENT 26, ROGERSON COURT, SCAIFE GARTH, POCKLINGTON, YORK
-            "10095943069",  # FLAT 3, 74 HALLGATE, COTTINGHAM
-            "10095943071",  # FLAT 5, 74 HALLGATE, COTTINGHAM
+            "10095588833",  # PROVENCE HOUSE, LAVENDER FIELDS, BARMBY MOOR, YORK
+            "10093602661",  # APARTMENT 26, ROGERSON COURT, SCAIFE GARTH, POCKLINGTON, YORK
         ]:
             return None
+
+        if record.postcode in [
+            # splits
+            "HU18 1EH",
+        ]:
+            return None
+
         return super().address_record_to_dict(record)
