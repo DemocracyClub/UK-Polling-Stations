@@ -84,5 +84,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="285238",
                 polling_place_uprn="200003830088",
             )
+        # St Philip’s Church, Manor Road, Dorridge B93 8DX
+        if record.polling_place_id == "11172":
+            record = record._replace(polling_place_uprn="200003823714")
 
         return super().station_record_to_dict(record)
