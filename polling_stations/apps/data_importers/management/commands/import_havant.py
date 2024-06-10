@@ -28,3 +28,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Amendment from council:
+        # Robins Oak, Mill Road, Waterlooville PO7 7DB
+        if record.polling_place_id == "8139":
+            record = record._replace(
+                polling_place_easting="468127",
+                polling_place_northing="108652",
+                polling_place_uprn="10013682242",
+            )
+
+        return super().station_record_to_dict(record)
