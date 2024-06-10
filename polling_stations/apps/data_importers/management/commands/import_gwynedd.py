@@ -1,16 +1,14 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "GWN"
-    addresses_name = "2024-05-02/2024-04-23T11:09:58.311554/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-04-23T11:09:58.311554/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-10T12:03:25.557144/Eros_SQL_Output002.csv"
+    stations_name = "2024-07-04/2024-06-10T12:03:25.557144/Eros_SQL_Output002.csv"
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
 
-    # > WARNING: Polling station NEUADD BENTREF ABERANGELL (0-neuadd-bentref-aberangell)
+    # > WARNING: Polling station NEUADD BENTREF ABERANGELL (134-neuadd-bentref-aberangell)
     # > is in Powys County Council (POW) but target council is Gwynedd Council (GWN) -
     # > manual check recommended
     #
@@ -19,9 +17,17 @@ class Command(BaseHalaroseCsvImporter):
 
     def station_record_to_dict(self, record):
         # CAPEL HOREB - Gorsaf Newydd/New Polling Station, RHOSTRYFAN, CAERNARFON, GWYNEDD
-        if record.pollingstationnumber == "22":
+        if self.get_station_hash(record) == "22-capel-horeb":
             # Via UPRN 10070271330 (not necessarily the same building, but close enough)
             record = record._replace(pollingstationpostcode="LL54 7LT")  # was LL57 7LT
+
+        # postcode different from addressbase: CANOLFAN EDERN, EDERN, LL53 8YU
+        if self.get_station_hash(record) == "84-canolfan-edern":
+            record = record._replace(pollingstationpostcode="")  # addressbase: LL53 8YS
+
+        # postcode different from addresbase: CANOLFAN GYMDEITHASOL LLANFROTHEN, LLANFROTHEN, LL48 6LJ
+        if self.get_station_hash(record) == "114-canolfan-gymdeithasol-llanfrothen":
+            record = record._replace(pollingstationpostcode="")  # addressbase: LL48 6BQ
 
         return super().station_record_to_dict(record)
 
@@ -45,27 +51,16 @@ class Command(BaseHalaroseCsvImporter):
 
         if record.housepostcode in [
             # splits
-            "LL53 5AG",
             "LL53 7TP",
-            "LL53 5TP",
-            "LL57 4HG",
-            "LL55 2SG",
-            "LL48 6AY",
-            "LL54 7UB",
-            "LL55 2TD",
-            "LL57 3UA",
-            "LL53 8DR",
+            "LL53 5AG",
             "LL53 6SY",
+            "LL53 8DR",
+            "LL54 7UB",
+            "LL48 6AY",
+            "LL53 5TP",
+            "LL55 2TD",
+            "LL55 2SG",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
