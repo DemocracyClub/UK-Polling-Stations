@@ -13,8 +13,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # St. John`s Church Hall, Quakers Hall Lane, Sevenoaks TN13 3NU
         if record.polling_place_id == "9509":
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
+                polling_place_easting="553197",
+                polling_place_northing="156100",
             )
 
         return super().station_record_to_dict(record)
