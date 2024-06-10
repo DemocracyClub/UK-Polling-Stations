@@ -4,12 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KWL"
     addresses_name = (
-        "2024-05-02/2024-03-04T15:30:34.030306/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-10T16:01:11.650798/Democracy_Club__04July2024 (16).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-04T15:30:34.030306/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-10T16:01:11.650798/Democracy_Club__04July2024 (16).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -33,10 +34,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # postcode correction for: Stockbridge Village Neighbourhood Centre, The Withens, Stockbridge Village, Knowsley, Merseyside, L28 1SU
-        if record.polling_place_id == "5789":
-            record = record._replace(polling_place_postcode="L28 1AB")
-
-        return super().station_record_to_dict(record)
