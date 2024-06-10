@@ -4,83 +4,32 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DST"
     addresses_name = (
-        "2024-05-02/2024-02-26T14:55:22.566450/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-10T15:23:30.942184/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-26T14:55:22.566450/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-10T15:23:30.942184/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # 'Beaminster Public Hall, 8 Fleet Street, Beaminster, DT8 3EF'
-        if record.polling_place_id == "54992":
+        if record.polling_place_id == "57550":
             record = record._replace(polling_place_uprn="10023243684")
 
-        # 'Sutton Waldron Village Hall, The Street, Sutton Waldron, Blandford Forum, DT11 8NZ'
-        if record.polling_place_id == "54978":
-            record = record._replace(polling_place_postcode="DT11 8PB")
-
-        # 'Colehill Village Hall - Station 1, Cannon Hill Road, Colehill, Wimborne, BH21 2LS'
-        if record.polling_place_id == "55195":
+        # 'Colehill Village Hall - Station 1, 2, 3, Cannon Hill Road, Colehill, Wimborne, BH21 2LS'
+        if record.polling_place_id in ["58337", "58341", "58389"]:
             record = record._replace(polling_place_postcode="BH21 2LR")
 
-        # 'Colehill Village Hall - Station 2, Cannon Hill Road, Colehill, Wimborne, BH21 2LS'
-        if record.polling_place_id == "55201":
-            record = record._replace(polling_place_postcode="BH21 2LR")
-
-        # 'Colehill Village Hall - Station 3, Cannon Hill Road, Colehill, Wimborne, BH21 2LS'
-        if record.polling_place_id == "55202":
-            record = record._replace(polling_place_postcode="BH21 2LR")
-
-        # 'Edmondsham Village Hall, Edmondsham, Wimborne, BH21 5RE'
-        if record.polling_place_id == "55225":
-            record = record._replace(polling_place_postcode="BH21 5RG")
-
-        # 'St Mary the Virgin CE Primary School, Pheasant Way, Gillingham, SP8 4LP'
-        if record.polling_place_id == "55421":
-            record = record._replace(polling_place_postcode="SP8 4GG")
-
-        # '***NEW LOCATION***Compass Terrace, Atlantic Academy, Maritime House, Southwell Park, Portland, DT5 2NA'
-        if record.polling_place_id == "55578":
-            record = record._replace(polling_place_postcode="DT5 2NP")
-
-        # 'Puddletown Village Hall, High Street, DT2 8RY'
-        if record.polling_place_id == "55585":
-            record = record._replace(polling_place_postcode="DT2 8RX")
-
-        # 'Milton Abbas Reading Room, Milton Abbas, Blandford Forum, DT11 0BW'
-        if record.polling_place_id == "55595":
-            record = record._replace(polling_place_postcode="DT11 0BN")
-
-        # 'Winterborne Kingston Village Hall, West Street, Winterborne Kingston, DT11 9AX'
-        if record.polling_place_id == "55599":
-            record = record._replace(polling_place_postcode="DT11 9AZ")
-
-        # 'All Saints Church Hall, 5 Redcliffe Road, Swanage, BH19 1LZ'
-        if record.polling_place_id == "55803":
-            record = record._replace(polling_place_postcode="BH19 1LL")
-
-        # 'Hinton St Mary Village Hall, Hinton St Mary, Hinton St Mary, Sturminster Newton, DT10 1NB'
-        if record.polling_place_id == "55799":
-            record = record._replace(polling_place_postcode="DT10 1NA")
-
-        # Station change from council:
-        # old station: Weston Community Hall, Weston Road, Portland, DT5 2BZ (UPRN: 100041049367)
-        # new station: Kimberlin Club, Blacknor Road, Portland, DT5 2HU (UPRN: 100041120927)
-        if record.polling_place_id == "55571":
+        # 'Sherborne Scout Hall, Blackberry Lane, Sherborne, DT9 4DE'
+        if record.polling_place_id == "57906":
             record = record._replace(
-                polling_place_uprn="100041120927",
-                polling_place_name="Kimberlin Club",
-                polling_place_address_1="Blacknor Road",
-                polling_place_postcode="DT5 2HU",
-            )
+                polling_place_uprn="100041123477"
+            )  # from addressbase
 
-        # Stations change from counciL:
-        # old station: The Forum Centre, Blandford Camp, DT11 8BJ
-        # new station: Co-Working Club, Blandford Camp, DT11 8BJ
-        if record.polling_place_id == "55240":
-            record = record._replace(polling_place_name="Co-Working Club")
+        # 'Scott Estate Office, South Street, Kingston, BH20 5LL' (id: 57470)
+        if record.polling_place_id == "57470":
+            record = record._replace(polling_place_postcode="")  # addressbase: BH20 5LQ
 
         return super().station_record_to_dict(record)
 
@@ -89,31 +38,31 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6.strip() in [
             # split
-            "BH16 6NE",
-            "DT2 8DX",
-            "BH21 2SJ",
-            "SP8 4FS",
-            "BH31 7BS",
-            "SP7 8RE",
+            "DT2 7AP",
             "DT3 4DF",
-            "DT4 7QN",
+            "SP8 4DG",
             "DT10 1QZ",
+            "BH16 6NE",
+            "SP7 8RE",
+            "BH21 5NP",
             "BH21 2PQ",
             "BH21 4AD",
-            "BH24 2LX",
+            "DT4 7QN",
             "DT3 5FF",
-            "SP8 4DG",
-            "BH20 4BJ",
-            "BH31 6PA",
-            "BH24 2SL",
-            "BH19 2PG",
-            "DT2 7AP",
-            "DT10 1HG",
-            "DT10 1JQ",
-            "BH21 7BG",
-            "BH21 5NP",
+            "BH31 7BS",
+            "BH19 1FN",
             "BH20 5JJ",
             "DT3 6SD",
+            "SP8 4FS",
+            "BH21 2SJ",
+            "BH24 2LX",
+            "BH19 2PG",
+            "BH24 2SL",
+            "BH21 7BG",
+            "BH20 4BJ",
+            "DT2 8DX",
+            "DT10 1JQ",
+            "DT10 1HG",
             # suspect
             "BH19 1DQ",
             "BH19 1BS",
@@ -150,6 +99,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200000767497",  # WEST BARN, WOOTTON FITZPAINE, BRIDPORT
             "10002641794",  # STATION LODGE, HOLYWELL, DORCHESTER
             "10071152307",  # POPPY BANK FARM HIGHER STREET, OKEFORD FITZPAINE
+            "200004818260",  # THE WHITE HOUSE DOREYS FARM ACCESS ROAD TO NEW HALL FARM, WAREHAM
         ]:
             return None
 
