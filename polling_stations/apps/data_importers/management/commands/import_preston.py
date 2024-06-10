@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PRE"
     addresses_name = (
-        "2024-05-02/2024-03-05T09:40:03.014793/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-10T15:09:03.221481/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-05T09:40:03.014793/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-10T15:09:03.221481/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -51,37 +51,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100010538496",  # 1 CEMETERY ROAD, PRESTON
             "100010532131",  # 26-28 ARNO STREET, PRESTON
             "100012746089",  # 119 OXFORD STREET, PRESTON
-            "10093761563",  # HULTON HOUSE, LIGHTFOOT GREEN LANE, LIGHTFOOT GREEN, PRESTON
-            "100012752066",  # LONGVIEW, INGLEWHITE ROAD, GOOSNARGH, PRESTON
         ]:
             return None
 
         if record.addressline6 in [
             # looks wrong
-            "PR4 0FG",
-            "PR4 0EX",
-            "PR4 0PW",
             "PR1 3SG",
             "PR2 5PZ",
-            "PR3 2FW",
-            "PR3 5BZ",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Drop inaccurate coordinates, council requested no changes to be made:
         # Millennium Hall, Neapsands Close, Fulwood, Preston, PR2 9AQ
-        if record.polling_place_id == "4642":
+        if record.polling_place_id == "4812":
             record = record._replace(
                 polling_place_easting="355831", polling_place_northing="432404"
-            )
-
-        # Goosnargh Village Hall, Church Lane, Goosnargh, Preston, PR3 2BH
-        if record.polling_place_id == "4700":
-            record = record._replace(
-                polling_place_easting="355833", polling_place_northing="436735"
             )
 
         return super().station_record_to_dict(record)
