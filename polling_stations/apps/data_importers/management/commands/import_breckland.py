@@ -3,10 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BRE"
-    addresses_name = "2024-05-02/2024-04-03T14:11:22.611445/Democracy_Club__02May2024_Breckland Council.tsv"
-    stations_name = "2024-05-02/2024-04-03T14:11:22.611445/Democracy_Club__02May2024_Breckland Council.tsv"
-    elections = ["2024-05-02"]
-    csv_delimiter = "\t"
+    addresses_name = (
+        "2024-07-04/2024-06-27T11:14:42.791023/Democracy_Club__04July2024.CSV"
+    )
+    stations_name = (
+        "2024-07-04/2024-06-27T11:14:42.791023/Democracy_Club__04July2024.CSV"
+    )
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -35,16 +38,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.post_code in [
             # split
-            "NR17 1JX",
-            "IP25 6QX",
-            "NR19 1PS",
-            "NR19 1EU",
-            "NR19 2LT",
             "NR20 3JS",
             "NR17 1QJ",
-            "NR16 2AE",
-            "IP25 6HD",
+            "NR19 2LT",
+            "NR19 1PS",
+            "NR19 1EU",
+            "NR17 1JX",
             "NR20 3QB",
+            "IP25 6HD",
+            "IP25 6QX",
+            "NR16 2AE",
             # suspect
             "PE37 7JP",  # SEA LORD CLOSE, SWAFFHAM
         ]:
@@ -55,15 +58,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # bugreport #627
         # coords change for: Dereham Town Football Club, Aldiss Park, Norwich Road, Dereham, NR20 3PX
-        if record.polling_place_id == "12585":
+        if record.polling_place_id == "13525":
             record = record._replace(
                 polling_place_easting="601036", polling_place_northing="313508"
             )
 
         if record.polling_place_id in [
-            "12323",  # Rocklands Village Hall The Street Rocklands
-            "12460",  # Ovington Village Hall Church Road Ovington
-            "12581",  # Oxborough Village Hall Swaffham Road Oxborough
+            "13658",  # Rocklands Village Hall The Street Rocklands
+            "13745",  # Ovington Village Hall Church Road Ovington
+            "13893",  # Oxborough Village Hall Swaffham Road Oxborough
         ]:
             # The E/N points are the wrong way round for these 3, perform the ol' switcheroo
             easting = record.polling_place_northing
