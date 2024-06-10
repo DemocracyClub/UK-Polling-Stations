@@ -1,14 +1,11 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SWA"
-    addresses_name = "2024-05-02/2024-02-27T15:04:31.542588/Eros_SQL_Output008.csv"
-    stations_name = "2024-05-02/2024-02-27T15:04:31.542588/Eros_SQL_Output008.csv"
-    elections = ["2024-05-02"]
-    csv_encoding = "windows-1252"
+    addresses_name = "2024-07-04/2024-06-18T11:28:54.964026/SWA_combined.csv"
+    stations_name = "2024-07-04/2024-06-18T11:28:54.964026/SWA_combined.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -39,19 +36,42 @@ class Command(BaseHalaroseCsvImporter):
 
     def station_record_to_dict(self, record):
         # Llangyfelach Church Hall Swansea Road Llangyfelach Swansea
-        if (record.pollingstationnumber, record.pollingstationname) == (
-            "7",
-            "Llangyfelach Church Hall",
-        ):
+        if self.get_station_hash(record) == "7-llangyfelach-church-hall":
             record = record._replace(pollingstationpostcode="SA5 7JD")
 
-        return super().station_record_to_dict(record)
+        # The following stations have postcodes that don't match their postcode in addressbase:
+        # These are only off by one letter so I'm commenting them out until the council responds:
 
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
+        # # 'Bonymaen Community Centre, Bonymaen Road, Bonymaen, Swansea, SA1 7AW' (id: 137)
+        # if record.pollingvenueid == '137': record = record._replace(pollingstationpostcode='SA1 7AT')
+
+        # # 'Christ Well United Reformed Church, 124-136 Manselton Road, Manselton, Swansea, SA5 8PW' (id: 101)
+        # if record.pollingvenueid == '101': record = record._replace(pollingstationpostcode='SA5 8PZ')
+
+        # # 'Sketty Park Community Centre, Heather Crescent, Sketty, Swansea, SA2 8HE' (id: 66)
+        # if record.pollingvenueid == '66': record = record._replace(pollingstationpostcode='SA2 8HS')
+
+        # # 'City Church Swansea, Dyfatty Street, Swansea, SA1 1QG' (id: 89)
+        # if record.pollingvenueid == '89': record = record._replace(pollingstationpostcode='SA1 1QQ')
+
+        # # 'Brynmelyn Community Centre, Park Terrace, Brynmelyn, Swansea, SA1 2BY' (id: 92)
+        # if record.pollingvenueid == '92': record = record._replace(pollingstationpostcode='SA1 2BZ')
+
+        # # 'Salvation Army, 40 Richardson Street, Swansea, SA1 3TE' (id: 85)
+        # if record.pollingvenueid == '85': record = record._replace(pollingstationpostcode='SA1 3TY')
+
+        # These are off by two letters so I'm removing them:
+
+        # 'St. Thomas Church, Lewis Street, St. Thomas, Swansea, SA1 8BP' (id: 138)
+        if record.pollingvenueid == "138":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Mobile Station at land next to Lon Claerwen, Caemawr, Morriston, Swansea, SA6 7EQ' (id: 124)
+        if record.pollingvenueid == "124":
+            record = record._replace(pollingstationpostcode="")
+
+        # 'Swansea Mosque, 159A St Helen's Road, Swansea, SA1 4DQ' (id: 86)
+        if record.pollingvenueid == "86":
+            record = record._replace(pollingstationpostcode="")
+
+        return super().station_record_to_dict(record)
