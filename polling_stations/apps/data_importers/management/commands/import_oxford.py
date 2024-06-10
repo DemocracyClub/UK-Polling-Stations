@@ -4,28 +4,32 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "OXO"
-    addresses_name = "2024-05-02/2024-03-28T11:08:13.289353/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-03-28T11:08:13.289353/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-14T14:48:51.773461/OXO_combined.csv"
+    stations_name = "2024-07-04/2024-06-14T14:48:51.773461/OXO_combined.csv"
+    elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
         # Littlemore Community Centre, Giles Road
-        if record.pollingstationnumber == "49":
+        if self.get_station_hash(record) in [
+            "26-littlemore-community-centre",
+            "25-littlemore-community-centre",
+        ]:
             record = record._replace(pollingstationpostcode="OX4 4NW")
 
         rec = super().station_record_to_dict(record)
 
         # more accurate point for St Alban's Hall
         if rec["internal_council_id"] in (
-            "40-st-albans-hall",
-            "41-st-albans-hall",
+            "14-st-albans-hall",
+            "15-st-albans-hall",
         ):
             rec["location"] = Point(-1.232920, 51.740993, srid=4326)
 
         # and for Oxford Centre for Mission Studies
         if rec["internal_council_id"] in (
-            "14-oxford-centre-for-mission-studies",
-            "15-oxford-centre-for-mission-studies",
+            "53-oxford-centre-for-mission-studies",
+            "54-oxford-centre-for-mission-studies",
+            "55-oxford-centre-for-mission-studies",
         ):
             rec["location"] = Point(-1.264263, 51.764185, srid=4326)
 
