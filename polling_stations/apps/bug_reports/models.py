@@ -1,6 +1,13 @@
+from urllib.parse import urljoin
+
+from django.conf import settings
 from django.db import models
+from django.template.defaultfilters import truncatechars
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
+
+from polling_stations.settings.constants.asana import AsanaReportType
 
 STATUS_CHOICES = (("OPEN", "Open"), ("RESOLVED", "Resolved"))
 
@@ -23,3 +30,24 @@ class BugReport(TimeStampedModel):
     )
     report_type = models.CharField(blank=False, max_length=100, choices=REPORT_TYPES)
     asana_url = models.URLField(blank=True)
+
+    def as_asana_object(self):
+        desc = truncatechars(self.description, 30)
+        return {
+            "name": f"""{self.pk}: "{desc}" """,
+            "projects": [settings.ASANA_PROJECT_ID],
+            "custom_fields": {
+                settings.ASANA_SITE_LINK_FIELD_ID: urljoin(
+                    "https://wheredoivote.co.uk", self.source_url
+                ),
+                settings.ASANA_REPORT_LINK_FIELD_ID: urljoin(
+                    "https://wheredoivote.co.uk",
+                    reverse(
+                        "admin:bug_reports_bugreport_change",
+                        kwargs={"object_id": self.pk},
+                    ),
+                ),
+                settings.ASANA_ISSUE_DESCRIPTION_FIELD_ID: self.description,
+                settings.ASANA_REPORT_TYPE_FIELD_ID: AsanaReportType.WDIV_BUG_REPORT.value,
+            },
+        }
