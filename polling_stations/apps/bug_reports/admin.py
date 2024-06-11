@@ -1,6 +1,7 @@
 import csv
 import datetime
 
+from core.admin_mixins import AsanaUrlExistsFilter, send_to_asana
 from django.contrib import admin
 from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import re_path
@@ -19,13 +20,14 @@ resolve.short_description = "Mark selected issues as Resolved"
 
 class BugReportAdmin(admin.ModelAdmin):
     list_display = ("id", "status", "source_url", "description", "source")
+    list_filter = (AsanaUrlExistsFilter,)
     readonly_fields = [
         f.name
         for f in BugReport._meta.get_fields()
         if f.name not in ["status", "report_type"]
     ] + ["preview_url"]
     ordering = ("status", "-created", "id")
-    actions = [resolve]
+    actions = [resolve, send_to_asana]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
