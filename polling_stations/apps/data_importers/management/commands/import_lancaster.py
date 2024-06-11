@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "LAC"
-    addresses_name = (
-        "2024-05-02/2024-02-22T15:05:14.505186/Democracy_Club__02May2024 (4).tsv"
-    )
-    stations_name = (
-        "2024-05-02/2024-02-22T15:05:14.505186/Democracy_Club__02May2024 (4).tsv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-19T15:00:14.355648/LAC_combined.tsv"
+    stations_name = "2024-07-04/2024-06-19T15:00:14.355648/LAC_combined.tsv"
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -74,6 +70,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "LA2 0AQ",
             "LA2 6AS",
             "LA1 3LY",
+            # suspect
             "LA2 9HW",  # THREE MILE COTTAGE, CROOK O LUNE, LANCASTER
             "LA1 3JW",  # DAISY BANK, LANCASTER
             "LA1 3JJ",  # WYRESDALE ROAD, LANCASTER
