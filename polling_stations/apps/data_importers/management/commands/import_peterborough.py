@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PTE"
     addresses_name = (
-        "2024-05-02/2024-04-12T13:00:19.878088/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T13:38:20.042367/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-12T13:00:19.878088/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T13:38:20.042367/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -33,8 +33,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Below warnings checked and no correction needed:
+        # Polling station Wothorpe Sports Centre (11397) is in South Kesteven District Council (SKE)
+
         # postcode correction for: Copeland Community Centre, 37 Copeland, Bretton, Peterborough, PE3 9YJ
-        if record.polling_place_id == "10083":
+        if record.polling_place_id == "11343":
             record = record._replace(polling_place_postcode="PE3 6YJ")
 
         return super().station_record_to_dict(record)
