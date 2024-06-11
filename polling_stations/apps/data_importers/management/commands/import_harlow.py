@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HAR"
     addresses_name = (
-        "2024-05-02/2024-03-05T12:55:36.532636/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-11T15:09:04.858716/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-03-05T12:55:36.532636/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-11T15:09:04.858716/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -47,7 +47,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().station_record_to_dict(record)
 
         # St Thomas More Church Hall, Hodings Road, Harlow
-        if rec["internal_council_id"] == "4649":
+        if rec["internal_council_id"] == "4820":
             rec["location"] = Point(0.080382, 51.770798, srid=4326)
 
         return rec
