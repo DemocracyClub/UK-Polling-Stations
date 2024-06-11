@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WFT"
     addresses_name = (
-        "2024-07-04/2024-05-31T16:39:55.594385/Democracy_Club__04July2024 (11).tsv"
+        "2024-07-04/2024-06-11T10:17:28.251812/Democracy_Club__04July2024 (17).tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-31T16:39:55.594385/Democracy_Club__04July2024 (11).tsv"
+        "2024-07-04/2024-06-11T10:17:28.251812/Democracy_Club__04July2024 (17).tsv"
     )
     elections = ["2024-07-04"]
     csv_delimiter = "\t"
@@ -34,21 +34,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100022590253",  # 1C THE RIDGEWAY, LONDON
             "100022590252",  # 1B THE RIDGEWAY, LONDON
             "200001433409",  # 22 MANSFIELD HILL, LONDON
-            "100022517750",  # 63C BARCLAY ROAD, LONDON
-            "100023696171",  # 63B BARCLAY ROAD, LONDON
         ]:
             return None
 
         if record.addressline6 in [
             # splits
-            "E4 9DP",
-            "E17 7EA",
-            "E17 4ED",
             "E11 3DT",
-            "E17 5JY",
             "E17 3NL",
-            "E17 3DA",
+            "E17 7EA",
+            "E17 5JY",
             "E17 3DU",
+            "E17 4ED",
+            "E17 3DA",
+            "E4 9DP",
             # looks wrong
             "E17 6QA",
             "E10 6ES",
@@ -63,12 +61,5 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "6930":
             record = record._replace(polling_place_easting="536937")
             record = record._replace(polling_place_northing="188842")
-
-        # adding postcode for: YMCA, 642 Forest Road, Walthamstow, London
-        if record.polling_place_id in [
-            "6933",
-            "6902",
-        ]:
-            record = record._replace(polling_place_postcode="E17 3EF")
 
         return super().station_record_to_dict(record)
