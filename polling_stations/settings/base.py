@@ -389,6 +389,7 @@ if os.environ.get("DC_ENVIRONMENT"):
 DEBUG_TOOLBAR = False
 
 # import application constants
+from .constants.asana import *  # noqa
 from .constants.councils import *  # noqa
 from .constants.db import *  # noqa
 from .constants.directions import *  # noqa

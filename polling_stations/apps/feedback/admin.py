@@ -1,6 +1,7 @@
 import csv
 import datetime
 
+from core.admin_mixins import AsanaUrlExistsFilter, send_to_asana
 from django.contrib import admin
 from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import re_path
@@ -9,10 +10,11 @@ from .models import Feedback
 
 
 class FeedbackAdmin(admin.ModelAdmin):
-    list_filter = ("found_useful",)
+    list_filter = ("found_useful", AsanaUrlExistsFilter)
     list_display = ("id", "found_useful", "vote", "comments", "created")
     readonly_fields = [f.name for f in Feedback._meta.get_fields()]
     ordering = ("-created", "id")
+    actions = [send_to_asana]
 
     def has_delete_permission(self, request, obj=None):
         return False

@@ -1,4 +1,9 @@
+from urllib.parse import urljoin
+
+from django.conf import settings
 from django.db import models
+from django.template.defaultfilters import truncatechars
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
@@ -15,3 +20,24 @@ class Feedback(TimeStampedModel):
     source_url = models.CharField(blank=True, max_length=800)
     token = models.CharField(blank=True, max_length=100, unique=True)
     asana_url = models.URLField(blank=True)
+
+    def as_asana_object(self):
+        desc = truncatechars(self.comments, 30)
+        return {
+            "name": f"""{self.pk}: "{desc}" """,
+            "projects": [settings.ASANA_PROJECT_ID],
+            "custom_fields": {
+                settings.ASANA_SITE_LINK_FIELD_ID: urljoin(
+                    "https://wheredoivote.co.uk", self.source_url
+                ),
+                settings.ASANA_REPORT_LINK_FIELD_ID: urljoin(
+                    "https://wheredoivote.co.uk",
+                    reverse(
+                        "admin:feedback_feedback_change",
+                        kwargs={"object_id": self.pk},
+                    ),
+                ),
+                settings.ASANA_ISSUE_DESCRIPTION_FIELD_ID: self.comments,
+                settings.ASANA_REPORT_TYPE_FIELD_ID: settings.AsanaReportType.WDIV_FEEDBACK.value,
+            },
+        }
