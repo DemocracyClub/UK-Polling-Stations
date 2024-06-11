@@ -22,3 +22,4 @@ class BugReport(TimeStampedModel):
         blank=True, max_length=100, verbose_name=_("(Optional) Email address:")
     )
     report_type = models.CharField(blank=False, max_length=100, choices=REPORT_TYPES)
+    asana_url = models.URLField(blank=True)
