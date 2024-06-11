@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CWY"
     addresses_name = (
-        "2024-05-02/2024-02-22T11:44:56.994639/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T10:50:12.580277/Democracy_Club__04July2024 (19).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-22T11:44:56.994639/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T10:50:12.580277/Democracy_Club__04July2024 (19).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -49,20 +49,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "LL30 1YQ",
-            "LL32 8HW",
+            "LL22 7DT",
             "LL30 1NT",
-            "LL24 0LP",
             "LL26 0YU",
             "LL31 9EQ",
-            "LL22 7DT",
+            "LL30 1YQ",
+            "LL28 4AN",
+            "LL24 0LP",
             "LL21 9PH",
-            "LL22 8FB",  # LON BRYN ABER, ABERGELE
-            "LL30 2DB",  # TAVERNERS COURT, LLOYD STREET WEST, LLANDUDNO
-            "LL30 2NR",  # ST GEORGE'S PLACE, LLANDUDNO
-            "LL29 8YP",  # NEW YORK COTTAGE, GROES ROAD, COLWYN BAY
-            "LL29 9AB",  # ABERGELE ROAD, OLD COLWYN, COLWYN BAY
-            "LL21 0PR",  # NANT Y BLODAU, TY NANT, CORWEN
+            "LL32 8HW",
+            # suspect
+            "LL22 8FB",
+            "LL30 2DB",
+            "LL30 2NR",
+            "LL29 9AB",
+            "LL21 0PR",
         ]:
             return None
 
