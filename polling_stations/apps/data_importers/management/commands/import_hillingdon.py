@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HIL"
     addresses_name = (
-        "2024-05-02/2024-04-02T16:00:10.414240/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T08:46:39.957180/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-02T16:00:10.414240/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T08:46:39.957180/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -24,12 +24,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # split
             "UB4 9QN",
-            "UB8 3QT",
-            "UB3 3PF",
             "UB3 2FH",
+            "UB3 3PF",
+            "UB4 9QN",
+            "UB8 3QT",
+            "UB8 3FE",
             "UB8 3QD",
             "UB7 9GA",
-            "UB8 3FE",
         ]:
             return None
         return super().address_record_to_dict(record)
