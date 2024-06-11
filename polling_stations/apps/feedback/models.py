@@ -14,3 +14,4 @@ class Feedback(TimeStampedModel):
     comments = models.TextField(blank=True)
     source_url = models.CharField(blank=True, max_length=800)
     token = models.CharField(blank=True, max_length=100, unique=True)
+    asana_url = models.URLField(blank=True)
