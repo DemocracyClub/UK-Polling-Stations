@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NNT"
     addresses_name = (
-        "2024-05-02/2024-04-11T10:08:50.273571/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T14:53:16.766847/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-11T10:08:50.273571/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-11T14:53:16.766847/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -26,25 +26,26 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
         if record.addressline6 in [
             # split
-            "NN6 0FT",
-            "NN18 9BD",
-            "NN15 6YF",
-            "NN18 8DZ",
-            "NN15 6GQ",
-            "NN14 1PF",
             "NN10 9NJ",
-            "NN10 6EU",
+            "NN18 8DZ",
+            "NN14 1PF",
             "NN8 1SH",
-            "NN14 4EE",
-            "NN14 3BY",
-            "NN18 8RS",
-            "NN29 7NL",
-            "NN8 4WG",
-            "NN10 9JD",
-            "NN18 8QG",
-            "NN8 3JX",
             "NN17 2HP",
+            "NN6 0FT",
+            "NN8 3JX",
+            "NN29 7NL",
+            "NN10 9JD",
+            "NN8 4WG",
+            "NN18 9BD",
+            "NN15 6GQ",
+            "NN15 6YF",
+            "NN10 6EU",
+            "NN14 4EE",
+            "NN18 8QG",
+            "NN15 5GL",
+            "NN18 8RS",
             "NN14 4AJ",
+            "NN14 3BY",
             # suspect
             "NN9 6US",
             "NN9 6UQ",
@@ -53,27 +54,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Postcode corrections from council:
-
-        # Hope Methodist Church, Linnet Way Entrance, 19 High Street, Higham Ferrers NN10 0RW
-        if record.polling_place_id == "30649":
-            record = record._replace(polling_place_postcode="NN10 8DD")
-
-        # The Autumn Centre, Counts Farm Road, Corby, NN18 8BH' (id: 30448)
-        if record.polling_place_id == "30448":
-            record = record._replace(polling_place_postcode="NN18 8BJ")
-
-        # Cottingham/Middleton Village Hall, Berryfield Road, Cottingham, Market Harborough, LE16 8XD
-        if record.polling_place_id == "30517":
-            record = record._replace(polling_place_postcode="LE16 8XB")
-
-        # Stanion Village Hall, Brigstock Road, Stanion, Kettering, NN14 1BX
-        if record.polling_place_id == "30502":
-            record = record._replace(polling_place_postcode="NN14 1BU")
-
-        # East Carlton Cricket Club, East Carlton Park, East Carlton, Market Harborough, LE16 8YD
-        if record.polling_place_id == "30524":
-            record = record._replace(polling_place_postcode="LE16 8YF")
-        return super().station_record_to_dict(record)
