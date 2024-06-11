@@ -28,6 +28,6 @@ class Command(BaseHalaroseCsvImporter):
     def station_record_to_dict(self, record):
         # postcode correction for: Main Hall, Gillingham Baptist Church, Green Street, MR7 5TJ
         if self.get_station_hash(record) == "27-main-hall-gillingham-baptist-church":
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(pollingstationpostcode="ME7 5TJ")
 
         return super().station_record_to_dict(record)
