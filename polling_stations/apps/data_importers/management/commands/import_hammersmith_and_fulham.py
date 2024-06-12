@@ -1,14 +1,11 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "HMF"
-    addresses_name = "2024-05-02/2024-02-22T12:16:44.125848/Eros_SQL_Output008.csv"
-    stations_name = "2024-05-02/2024-02-22T12:16:44.125848/Eros_SQL_Output008.csv"
-    elections = ["2024-05-02"]
-
+    addresses_name = "2024-07-04/2024-06-12T11:07:00.736021/Eros_SQL_Output009.csv"
+    stations_name = "2024-07-04/2024-06-12T11:07:00.736021/Eros_SQL_Output009.csv"
+    elections = ["2024-07-04"]
     # WARNING: Polling station Edward Woods Community Centre (54-edward-woods-community-centre) is in
     # Royal Borough of Kensington and Chelsea (KEC) but target council is London Borough of Hammersmith and Fulham (HMF)
     # Above warning was checked and no correction is needed
@@ -35,19 +32,11 @@ class Command(BaseHalaroseCsvImporter):
             # splits
             "SW6 7JZ",
             "SW6 7PT",
-            "SW6 2AA",  # BAGLEYS LANE, LONDON
-            "SW6 2TS",  # 123-125 WANDSWORTH BRIDGE ROAD, LONDON
-            "SW6 7HG",  # RYLSTON ROAD, LONDON
+            # suspect
+            "SW6 2AA",
+            "SW6 2TS",
+            "SW6 7HG",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
