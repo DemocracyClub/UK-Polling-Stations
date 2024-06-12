@@ -4,6 +4,12 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/base.txt --strip-extras requirements/base-constrained.in
 #
+asana==5.0.7 \
+    --hash=sha256:2dbe894400db4fc193ca79aef4c319ef9a039d6526fa6c017d77d5e54d836e4f \
+    --hash=sha256:8cf89c2518ba55d1a0132afa0f426966cb1254d55cbea13afd533a278b503ff6
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.in
 asgiref==3.8.1 \
     --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
     --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
@@ -83,6 +89,7 @@ certifi==2024.2.2 \
     --hash=sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
     # via
     #   -c requirements/constraints.txt
+    #   asana
     #   requests
     #   sentry-sdk
 cfgv==3.4.0 \
@@ -883,6 +890,7 @@ python-dateutil==2.9.0.post0 \
     --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
     # via
     #   -c requirements/constraints.txt
+    #   asana
     #   botocore
     #   fastkml
     #   freezegun
@@ -1230,6 +1238,7 @@ six==1.16.0 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
     # via
     #   -c requirements/constraints.txt
+    #   asana
     #   asttokens
     #   python-dateutil
 sqlparse==0.5.0 \
@@ -1291,6 +1300,7 @@ urllib3==1.26.18 \
     --hash=sha256:f8ecc1bba5667413457c529ab955bf8c67b45db799d159066261719e328580a0
     # via
     #   -c requirements/constraints.txt
+    #   asana
     #   botocore
     #   requests
     #   sentry-sdk
