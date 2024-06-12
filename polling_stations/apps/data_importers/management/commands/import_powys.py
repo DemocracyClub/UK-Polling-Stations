@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "POW"
-    addresses_name = (
-        "2024-05-02/2024-02-22T15:03:42.143260/Democracy Club - County of Powys.csv"
-    )
-    stations_name = (
-        "2024-05-02/2024-02-22T15:03:42.143260/Democracy Club - County of Powys.csv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-12T15:13:10.440907/Eros_SQL_Output004.csv"
+    stations_name = "2024-07-04/2024-06-12T15:13:10.440907/Eros_SQL_Output004.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         if record.uprn in [
@@ -21,114 +17,40 @@ class Command(BaseHalaroseCsvImporter):
             "10011797348",  # TY ISAF GLYNGYNWYDD A470T FROM LLANGURIG ROUNDABOUT TO JUNCTION WITH B4518 BY LLANIDLOES, LLANGURIG, LLANIDLOES
             "10011784973",  # HIGH OAK, DOLFOR ROAD, NEWTOWN
             "10011743355",  # TY MAWR C2091 FROM JUNCTION WITH C2001 STATION ROAD TO JUNCTION WITH PRIVATE TRACK LEADING TO TY MAWR, PEN-Y-BONT-FAWR, OSWESTRY
+            "10011741376",  # THE SPRIGGS, CASCOB, PRESTEIGNE
         ]:
             return None
 
         if record.housepostcode in [
             # split
-            "LD1 6UT",
-            "HR3 5JY",
+            "SY20 9NL",
+            "SY22 6DE",
             "LD1 6TY",
-            "SY5 9BT",
-            "SY18 6JD",
             "LD3 0HG",
-            "SY10 0LH",
+            "HR3 5JY",
             "LD3 9EF",
-            "SY16 3DW",
-            "SY21 7QU",
             "SY21 9AP",
-            "SY16 1HG",
-            "SY20 8EX",
+            "SY21 0NG",
             "LD3 7HN",
-            "SY18 6QT",
-            "LD2 3UD",
+            "SY21 0DT",
+            "LD1 6UT",
+            "SY16 3DW",
             "SY16 3DR",
             "SY17 5SA",
-            "SY21 0DT",
-            "SY21 0NG",
-            "SY22 6JG",
+            "SY10 0LH",
+            "SY21 7QU",
             "SY18 6NR",
-            "SY22 6DE",
-            "SY17 5PA",
+            "SY16 1HG",
+            "LD2 3UD",
+            "SY22 6JG",
             "LD1 6SW",
+            "SY18 6JD",
+            "SY17 5PA",
+            "SY18 6QT",
             "SY21 9AY",
-            "SY20 9NL",
             "SY21 9HZ",
+            "SY20 8EX",
         ]:
             return None
 
-        record = self.apply_council_changes(record)
-
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        record = self.apply_council_changes(record)
-        return super().station_record_to_dict(record)
-
-    def apply_council_changes(self, record):
-        # Station changes  requested by council:
-        # OLD: BRECON PRIORY SCHOOL PENDRE - N0.1 STATION, Priory C in W School, BRECON, LD3 9EU
-        # NEW: BRECON ST JOHN'S CENTRE - Station No. 1, BRECON
-        if (
-            record.pollingstationnumber == "34"
-            and record.pollingstationname
-            == "BRECON PRIORY SCHOOL, PENDRE -  NO.1 STATION"
-        ):
-            record = record._replace(
-                pollingstationname="BRECON ST JOHN'S CENTRE - Station No. 1",
-                pollingstationaddress_1="PENDRE",
-                pollingstationaddress_2="BRECON",
-                pollingstationaddress_3="",
-                pollingstationaddress_4="",
-                pollingstationpostcode="LD3 9EA",
-            )
-
-        # OLD: BRECON PRIORY SCHOOL PENDRE - N0.2 STATION, Priory C in W School, BRECON, LD3 9EU
-        # NEW: BRECON ST JOHN'S CENTRE - Station No. 2, BRECON
-        if (
-            record.pollingstationnumber == "35"
-            and record.pollingstationname
-            == "BRECON PRIORY SCHOOL, PENDRE -  NO.2 STATION"
-        ):
-            record = record._replace(
-                pollingstationname="BRECON ST JOHN'S CENTRE - Station No. 2",
-                pollingstationaddress_1="PENDRE",
-                pollingstationaddress_2="BRECON",
-                pollingstationaddress_3="",
-                pollingstationaddress_4="",
-                pollingstationpostcode="LD3 9EA",
-            )
-
-        # OLD: NEWTOWN EVANGELICAL CHURCH - STATION NO. 1, Newtown Evangelical Church, Llanidloes Road, NEWTOWN, SY16 1HL
-        # NEW: NEWTOWN MALDWYN LEISURE CENTRE - STATION 1
-        if (
-            record.pollingstationnumber == "155"
-            and record.pollingstationname
-            == "NEWTOWN EVANGELICAL CHURCH - STATION NO. 1"
-        ):
-            record = record._replace(
-                pollingstationname="NEWTOWN MALDWYN LEISURE CENTRE - STATION 1",
-                pollingstationaddress_1="PLANTATION LANE",
-                pollingstationaddress_2="NEWTOWN",
-                pollingstationaddress_3="",
-                pollingstationaddress_4="",
-                pollingstationpostcode="SY16 1LH",
-            )
-
-        # OLD: NEWTOWN EVANGELICAL CHURCH - STATION NO. 2, Newtown Evangelical Church, Llanidloes Road, NEWTOWN, SY16 1HL
-        # NEW: NEWTOWN MALDWYN LEISURE CENTRE - STATION 2
-        if (
-            record.pollingstationnumber == "157"
-            and record.pollingstationname
-            == "NEWTOWN EVANGELICAL CHURCH - STATION NO. 2"
-        ):
-            record = record._replace(
-                pollingstationname="NEWTOWN MALDWYN LEISURE CENTRE - STATION 2",
-                pollingstationaddress_1="PLANTATION LANE",
-                pollingstationaddress_2="NEWTOWN",
-                pollingstationaddress_3="",
-                pollingstationaddress_4="",
-                pollingstationpostcode="SY16 1LH",
-            )
-
-        return record
