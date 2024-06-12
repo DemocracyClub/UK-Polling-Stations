@@ -4,9 +4,14 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "NAY"
-    addresses_name = "2022-05-05/2022-03-11T15:12:29.287072/Democracy Club Polling Districts Ayrshire.csv"
-    stations_name = "2022-05-05/2022-03-11T15:12:29.287072/Democracy Club Polling Stations Ayrshire.csv"
-    elections = ["2022-05-05"]
+    addresses_name = (
+        "2024-07-04/2024-06-12T17:11:05.868975/Democrcay club polling districts.csv"
+    )
+    stations_name = (
+        "2024-07-04/2024-06-12T17:11:05.868975/Democracy Club polling stations.csv"
+    )
+    elections = ["2024-07-04"]
+    csv_encoding = "utf-16le"
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
@@ -40,8 +45,5 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
-
-        if record.stationcode == "N55":
-            record = record._replace(xordinate="", yordinate="")
 
         return super().station_record_to_dict(record)
