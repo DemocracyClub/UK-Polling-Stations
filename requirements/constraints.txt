@@ -4,6 +4,12 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes --output-file=requirements/constraints.txt --strip-extras requirements/constraints.in
 #
+asana==5.0.7 \
+    --hash=sha256:2dbe894400db4fc193ca79aef4c319ef9a039d6526fa6c017d77d5e54d836e4f \
+    --hash=sha256:8cf89c2518ba55d1a0132afa0f426966cb1254d55cbea13afd533a278b503ff6
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.in
 asgiref==3.8.1 \
     --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
     --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
@@ -108,6 +114,7 @@ certifi==2024.2.2 \
     --hash=sha256:0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f \
     --hash=sha256:dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
     # via
+    #   asana
     #   requests
     #   selenium
     #   sentry-sdk
@@ -1330,6 +1337,7 @@ python-dateutil==2.9.0.post0 \
     --hash=sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3 \
     --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
     # via
+    #   asana
     #   botocore
     #   faker
     #   fastkml
@@ -1683,10 +1691,17 @@ sentry-sdk==2.1.1 \
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
     #   -r requirements/base.in
+setuptools==69.2.0 \
+    --hash=sha256:0ff4183f8f42cd8fa3acea16c45205521a4ef28f73c6391d8a25e92893134f2e \
+    --hash=sha256:c21c49fb1042386df081cb5d86759792ab89efca84cf114889191cd09aacc80c
+    # via
+    #   dc-django-utils
+    #   nodeenv
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
     # via
+    #   asana
     #   asttokens
     #   python-dateutil
 sniffio==1.3.1 \
@@ -1776,6 +1791,7 @@ urllib3==1.26.18 \
     --hash=sha256:f8ecc1bba5667413457c529ab955bf8c67b45db799d159066261719e328580a0
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
+    #   asana
     #   botocore
     #   requests
     #   responses
