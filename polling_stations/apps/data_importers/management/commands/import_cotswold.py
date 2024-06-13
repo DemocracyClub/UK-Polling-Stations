@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "COT"
     addresses_name = (
-        "2024-05-02/2024-03-06T16:49:21.283228/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-13T07:52:47.518892/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-03-06T16:49:21.283228/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-13T07:52:47.518892/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -58,50 +58,35 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "GL7 3PR",
-            "GL54 3ER",
-            "GL7 5RA",
-            "GL55 6LW",
-            "GL56 9NF",
-            "GL54 1LT",
             "GL54 5US",
-            "GL54 3LX",
+            "GL56 9NF",
+            "GL55 6LW",
+            "GL54 1LT",
+            "GL7 3PR",
+            "GL7 2LW",
+            "GL7 5RA",
             "GL8 8RY",
+            "GL54 3ER",
+            "GL54 3LX",
             # looks wrong
             "GL54 3QB",
         ]:
             return None
-        # Correction from conuncil:
-        # "All the electors who would have voted at Upper Slaughter Village Hall, will now go to Naunton Village Hall"
-        if record.polling_place_id == "26133":
-            record = record._replace(
-                polling_place_id="26153",
-                polling_place_name="Naunton Village Hall",
-                polling_place_address_1="Naunton",
-                polling_place_postcode="GL54 3AS",
-                polling_place_easting="411551",
-                polling_place_northing="223451",
-                default_polling_place_id="292",
-            )
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
         # add point for: St Mary Magdalene Church, Downs Way, Baunton, Cirencester, GL7 7DH
-        if record.polling_place_id == "25961":
+        if record.polling_place_id == "27385":
             record = record._replace(
                 polling_place_easting="402181",
                 polling_place_northing="204691",
             )
 
         # add point for: St Mary`s Church, Meysey Hampton, GL7 5JS
-        if record.polling_place_id == "26137":
+        if record.polling_place_id == "27293":
             record = record._replace(
                 polling_place_easting="411692",
                 polling_place_northing="200044",
             )
-        # Correction from council: removing Upper Slaughter Village Hall
-        if record.polling_place_id == "26133":
-            return None
-
         return super().station_record_to_dict(record)
