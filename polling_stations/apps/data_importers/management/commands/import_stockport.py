@@ -4,14 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SKP"
     addresses_name = (
-        "2024-05-02/2024-04-16T14:31:11.067455/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-13T16:35:20.697123/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-04-16T14:31:11.067455/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-13T16:35:20.697123/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
-    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -48,16 +47,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "SK7 2AA",
             "SK7 3DQ",
+            "SK3 9HB",
             "SK6 2BD",
-            "SK8 4BU",
             "SK4 5BS",
+            "SK5 7BJ",
             "SK7 4NX",
             "SK7 1JX",
-            "SK3 9HB",
-            "SK5 7BJ",
             "SK6 6LP",
+            "SK7 2AA",
+            "SK8 4BU",
             # looks wrong
             "SK6 7AY",
             "SK6 5NP",
@@ -68,7 +67,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # more accurate point for: St Chads Church, Church Lane, Romiley, Stockport, SK6 4AA
-        if record.polling_place_id == "14080":
+        if record.polling_place_id == "15100":
             record = record._replace(polling_place_easting="394124")
             record = record._replace(polling_place_northing="390681")
 
