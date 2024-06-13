@@ -31,6 +31,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id not in self.COUNCIL_STATIONS:
             return None
 
+        # Amendment from council for:
+        # old: Committee Room, Sutton Courtenay Village Hall, Hobbyhorse Lane, Sutton Courtenay
+        # new: Sutton Courtenay Village Hall, Hobbyhorse Lane, Sutton Courtenay
+        if record.polling_place_id == "22717":
+            record = record._replace(polling_place_name="Sutton Courtenay Village Hall")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
