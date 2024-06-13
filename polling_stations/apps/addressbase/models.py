@@ -131,8 +131,18 @@ class UprnToCouncil(models.Model):
     )
 
 
-def get_uprn_hash_table(gss_code):
-    addresses = Address.objects.filter(uprntocouncil__lad=gss_code)
+def get_uprn_hash_table(gss_codes: list[str]) -> dict[str, dict[str:str]]:
+    """
+    Takes a list of gss codes and returns a dict with shape:
+    {
+        <uprn>: {
+            "address": <address>,
+            "postcode": <postcode>,
+            "location": <location>
+        }
+    }
+    """
+    addresses = Address.objects.filter(uprntocouncil__lad__in=gss_codes)
     # return result a hash table keyed by UPRN
     return {
         a.uprn: {

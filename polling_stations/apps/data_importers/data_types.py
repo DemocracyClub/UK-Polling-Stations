@@ -7,7 +7,7 @@ import logging
 from collections import namedtuple
 
 from addressbase.models import Address, UprnToCouncil, get_uprn_hash_table
-from councils.models import Council
+from councils.models import Council, CouncilGeography
 from django.db import connection
 from pollingstations.models import PollingDistrict, PollingStation
 from uk_geo_utils.helpers import Postcode
@@ -75,15 +75,9 @@ class AssignPollingStationsMixin(metaclass=abc.ABCMeta):
     def gss_code(self):
         return Council.objects.get(pk=self.council_id).geography.gss
 
+    @abc.abstractmethod
     def update_uprn_to_council_model(self, polling_station_lookup=None):
-        if not polling_station_lookup:
-            polling_station_lookup = self.get_polling_station_lookup()
-
-        uprns_in_council = UprnToCouncil.objects.filter(lad=self.gss_code)
-        for polling_station_id, uprns in polling_station_lookup.items():
-            uprns_in_council.filter(uprn__in=uprns).update(
-                polling_station_id=polling_station_id
-            )
+        pass
 
 
 class DistrictSet(CustomSet, AssignPollingStationsMixin):
@@ -242,9 +236,13 @@ class StationSet(CustomSet):
 
 
 class AddressList(AssignPollingStationsMixin):
-    def __init__(self, logger):
+    def __init__(self, logger, extra_councils=None):
+        if extra_councils is None:
+            extra_councils = []
+
         self.elements = []
         self.logger = logger
+        self.extra_councils = extra_councils
 
     def append(self, address):
         if (
@@ -262,6 +260,16 @@ class AddressList(AssignPollingStationsMixin):
             return
 
         self.elements.append(address)
+
+    @property
+    def council_ids(self) -> list[str]:  # TODO Deal with old_to_new council_ids map
+        return [self.council_id] + self.extra_councils
+
+    @property
+    def gss_codes(self) -> list[str]:
+        return CouncilGeography.objects.filter(
+            council_id__in=self.council_ids
+        ).values_list("gss", flat=True)
 
     def get_uprn_lookup(self):
         # for each address, build a lookup of uprn -> set of station ids
@@ -375,11 +383,72 @@ class AddressList(AssignPollingStationsMixin):
                 pretty=True,
             )
 
+    def update_uprn_to_council_model(self, polling_station_lookup=None):
+        if not polling_station_lookup:
+            polling_station_lookup = self.get_polling_station_lookup()
+
+        uprns_in_council = UprnToCouncil.objects.filter(lad__in=self.gss_codes)
+        for polling_station_id, uprns in polling_station_lookup.items():
+            uprns_assigned_to_station = uprns_in_council.filter(uprn__in=uprns)
+
+            if self.extra_councils:
+                self.set_polling_station_for_extra_councils(
+                    polling_station_id, uprns_assigned_to_station
+                )
+
+            uprns_assigned_to_station.filter(uprn__in=uprns).update(
+                polling_station_id=polling_station_id
+            )
+
+    def set_polling_station_for_extra_councils(
+        self, polling_station_id, uprns_assigned_to_station
+    ):
+        # At this stage we want to know if the station has the right council id.
+        # There are three cases:
+        # 1. All the addresses are in the council named in the import script.
+        #    So the station will have the correct council_id and no action is necessary.
+        # 2. All the addresses are in a different council.
+        #    In this case we need to update the council_id on the polling station in the pollingstations table
+        # 3. The addresses assigned to this station are in different council areas.
+        #    In this case we need to duplicate the station making sure there are a record for each council_id.
+        gss_codes = uprns_assigned_to_station.values_list("lad", flat=True)
+        council_ids = CouncilGeography.objects.filter(gss__in=gss_codes).values_list(
+            "council_id", flat=True
+        )
+        if len(council_ids) == 1 and council_ids[0] == self.council_id:
+            # Case 1 - no-op
+            pass
+        if len(council_ids) == 1 and council_ids[0] != self.council_id:
+            # Case 2 - change council id on station
+            station = PollingStation.objects.get(
+                internal_council_id=polling_station_id,
+                council_id=self.council_id,
+            )
+            station.council_id = council_ids[0]
+            station.save()
+        if len(council_ids) > 1:
+            # Case 3 - create a station for each council
+            for council_id in council_ids:
+                try:
+                    PollingStation.objects.get(
+                        council_id=council_id,
+                        internal_council_id=polling_station_id,
+                    )
+                except PollingStation.DoesNotExist:
+                    existing_station = PollingStation.objects.get(
+                        council_id=self.council_id,
+                        internal_council_id=polling_station_id,
+                    )
+                    existing_station.id = None
+                    existing_station.council_id = council_id
+                    existing_station._state.adding = True
+                    existing_station.save()
+
     def check_records(self):
         split_postcodes = self.get_council_split_postcodes()
         self.remove_records_missing_uprns()
         self.remove_duplicate_uprns()
-        addressbase_data = get_uprn_hash_table(self.gss_code)
+        addressbase_data = get_uprn_hash_table(self.gss_codes)
         self.remove_records_not_in_addressbase(addressbase_data)
         self.remove_records_that_dont_match_addressbase(addressbase_data)
         self.check_split_postcodes_are_split(split_postcodes)

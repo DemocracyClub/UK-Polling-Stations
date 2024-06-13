@@ -175,9 +175,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
             )
         station_report = StationReport(self.council.pk, self.additional_report_councils)
         district_report = DistrictReport(self.council.pk)
-        address_report = AddressReport(
-            self.council.pk, additional_report_councils=self.additional_report_councils
-        )
+        address_report = AddressReport(self.council.pk)
 
         report.build_report()
 
@@ -860,7 +858,10 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
             self.pre_import()
 
         self.stations = StationSet()
-        self.addresses = AddressList(self.logger)
+        self.addresses = AddressList(
+            self.logger, extra_councils=self.additional_report_councils
+        )
+
         self.import_residential_addresses()
         self.import_polling_stations()
         self.addresses.check_records()
