@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-29 14:21+0100\n"
+"POT-Creation-Date: 2024-06-13 09:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,11 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: polling_stations/apps/bug_reports/models.py:15
+#: polling_stations/apps/bug_reports/models.py:14
 msgid "Provide information about the problem to help us improve our service:"
 msgstr ""
 
-#: polling_stations/apps/bug_reports/models.py:23
+#: polling_stations/apps/bug_reports/models.py:22
 msgid "(Optional) Email address:"
 msgstr ""
 
@@ -56,12 +56,12 @@ msgstr ""
 msgid "Postcode:"
 msgstr ""
 
-#: polling_stations/apps/data_finder/forms.py:8
+#: polling_stations/apps/data_finder/forms.py:7
 msgid "Enter your postcode"
 msgstr ""
 
 #: polling_stations/apps/feedback/forms.py:19
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:11
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:21
 msgid "Did you find this useful?"
 msgstr ""
 
@@ -69,39 +69,48 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
+#: polling_stations/apps/feedback/models.py:5
 #: polling_stations/apps/feedback/models.py:6
-#: polling_stations/apps/feedback/models.py:7
 msgid "Yes"
 msgstr ""
 
+#: polling_stations/apps/feedback/models.py:5
 #: polling_stations/apps/feedback/models.py:6
-#: polling_stations/apps/feedback/models.py:7
 msgid "No"
 msgstr ""
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:22
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:32
 msgid "Has this information made you more likely to vote?"
 msgstr ""
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:31
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:41
 msgid "Can you tell us anything more?"
 msgstr ""
 
-#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:33
+#: polling_stations/apps/feedback/templates/feedback/feedback_form.html:43
 msgid "Send feedback"
 msgstr ""
 
-#: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:5
 #: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:6
-#: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:4
+#: polling_stations/apps/file_uploads/templates/file_uploads/council_detail.html:7
+#: polling_stations/apps/file_uploads/templates/file_uploads/council_list.html:6
 msgid "Uploads"
 msgstr ""
 
-#: polling_stations/settings/base.py:277
-#: polling_stations/templates/base.html:46
-#: polling_stations/templates/base.html:87
-#: polling_stations/templates/base.html:110
-#: polling_stations/templates/base.html:145
+#: polling_stations/apps/pollingstations/models.py:137
+msgid "level access"
+msgstr ""
+
+#: polling_stations/apps/pollingstations/models.py:139
+msgid "a temporary ramp for access"
+msgstr ""
+
+#: polling_stations/apps/pollingstations/models.py:141
+msgid "a ramp for access"
+msgstr ""
+
+#: polling_stations/settings/base.py:281
+#: polling_stations/templates/base.html:66
 msgid "Where Do I Vote?"
 msgstr ""
 
@@ -113,121 +122,75 @@ msgstr ""
 msgid "Find my Polling Station"
 msgstr ""
 
-#: polling_stations/templates/base.html:21
+#: polling_stations/templates/admin/pollingstations/openlayers.html:6
+msgid "Debugging window (serialized value)"
+msgstr ""
+
+#: polling_stations/templates/base.html:19
 msgctxt "not shown to general public"
 msgid "This is a staging site."
 msgstr ""
 
-#: polling_stations/templates/base.html:28
-#: polling_stations/templates/base.html:42
-#: polling_stations/templates/base.html:47
-#, python-format
-msgid "Find out where to vote on %(election_date)s"
-msgstr ""
-
-#: polling_stations/templates/base.html:28
-#: polling_stations/templates/base.html:42
-#: polling_stations/templates/base.html:47
-msgid "Find out where to vote"
-msgstr ""
-
-#: polling_stations/templates/base.html:66
+#: polling_stations/templates/base.html:31
 msgid "Language:"
 msgstr ""
 
-#: polling_stations/templates/base.html:112
+#: polling_stations/templates/base.html:68
 msgid "Home"
 msgstr ""
 
-#: polling_stations/templates/base.html:113
-msgid "About"
+#: polling_stations/templates/base.html:69
+msgid "About Where Do I Vote?"
 msgstr ""
 
-#: polling_stations/templates/base.html:114
-msgid "Privacy"
-msgstr ""
-
-#: polling_stations/templates/base.html:115
-msgctxt "Application Programming Interface"
-msgid "API"
-msgstr ""
-
-#: polling_stations/templates/base.html:116
-#: polling_stations/templates/base.html:127
-msgid "Blog"
-msgstr ""
-
-#: polling_stations/templates/base.html:117
-msgid "Contact"
-msgstr ""
-
-#: polling_stations/templates/base.html:120
-msgid "Made by Democracy Club"
-msgstr ""
-
-#: polling_stations/templates/base.html:122
-msgid ""
-"Democracy Club is a UK based Community Interest Company that builds the "
-"digital infrastructure needed for a 21st century democracy."
-msgstr ""
-
-#: polling_stations/templates/base.html:125
+#: polling_stations/templates/base.html:70
 msgid "About Democracy Club"
 msgstr ""
 
-#: polling_stations/templates/base.html:126
+#: polling_stations/templates/base.html:71
+msgid "Privacy"
+msgstr ""
+
+#: polling_stations/templates/base.html:72
 msgid "Contact Us"
 msgstr ""
 
-#: polling_stations/templates/base.html:128
+#: polling_stations/templates/base.html:73
+msgid "Blog"
+msgstr ""
+
+#: polling_stations/templates/base.html:74
 msgctxt "link to Democracy Club Twitter page"
 msgid "Twitter"
 msgstr ""
 
-#: polling_stations/templates/base.html:129
+#: polling_stations/templates/base.html:75
 msgctxt "link to Democracy Club Facebook page"
 msgid "Facebook"
 msgstr ""
 
-#: polling_stations/templates/base.html:130
+#: polling_stations/templates/base.html:76
 msgctxt "link to Democracy Club GitHub page"
 msgid "GitHub"
 msgstr ""
 
-#: polling_stations/templates/base.html:142
-msgid "democracy"
-msgstr ""
-
-#: polling_stations/templates/base.html:142
-msgid "club"
-msgstr ""
-
-#: polling_stations/templates/base.html:151
+#: polling_stations/templates/base.html:84
 #, python-format
 msgid "Contains OS data © Crown copyright and database right %(current_year)s"
 msgstr ""
 
-#: polling_stations/templates/base.html:152
+#: polling_stations/templates/base.html:85
 #, python-format
 msgid ""
 "Contains Royal Mail data © Royal Mail copyright and database right "
 "%(current_year)s"
 msgstr ""
 
-#: polling_stations/templates/base.html:153
+#: polling_stations/templates/base.html:86
 #, python-format
 msgid ""
 "Contains National Statistics data © Crown copyright and database right "
 "%(current_year)s"
-msgstr ""
-
-#: polling_stations/templates/base.html:156
-#, python-format
-msgid ""
-"Copyright ©\n"
-"                                        %(current_year)s Democracy Club "
-"Community Interest Company Company No: <a href=\"%(companies_house_url)s\">"
-"%(company_number)s</a>"
 msgstr ""
 
 #: polling_stations/templates/base_embed.html:14
@@ -237,8 +200,8 @@ msgstr ""
 #: polling_stations/templates/custom_finder.html:4
 #: polling_stations/templates/custom_finder.html:7
 #: polling_stations/templates/home.html:6
-#: polling_stations/templates/home.html:19
-#: polling_stations/templates/home.html:24
+#: polling_stations/templates/home.html:20
+#: polling_stations/templates/home.html:25
 msgid "Find your polling station"
 msgstr ""
 
@@ -268,18 +231,35 @@ msgstr ""
 msgid "Opening times"
 msgstr ""
 
-#: polling_stations/templates/fragments/advance_voting_station.html:19
-msgid ""
-"You can deliver postal votes to this advance station during opening hours. "
-"If you are acting as a proxy for someone, you can cast your proxy vote at "
-"this advance voting station\""
+#: polling_stations/templates/fragments/at_the_station.html:6
+msgid "At the polling station"
 msgstr ""
 
-#: polling_stations/templates/fragments/cancelled_election.html:5
+#: polling_stations/templates/fragments/at_the_station.html:13
+msgid "nearby parking"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:20
+msgid "disabled parking"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:34
+msgid "a hearing loop installed"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:41
+msgid "publicly accessible toilets"
+msgstr ""
+
+#: polling_stations/templates/fragments/at_the_station.html:47
+msgid "The electoral services team have added a note about this station:"
+msgstr ""
+
+#: polling_stations/templates/fragments/cancelled_election.html:6
 msgid "Cancelled Election"
 msgstr ""
 
-#: polling_stations/templates/fragments/cancelled_election.html:10
+#: polling_stations/templates/fragments/cancelled_election.html:11
 #, python-format
 msgid ""
 "The poll for <strong>%(cancelled_election_name)s</strong> has been "
@@ -287,12 +267,12 @@ msgid ""
 msgstr ""
 
 #. Translators: 'it' is a postponed election
-#: polling_stations/templates/fragments/cancelled_election.html:12
+#: polling_stations/templates/fragments/cancelled_election.html:13
 #, python-format
 msgid "It will now take place on %(cancelled_election_rescheduled_date)s."
 msgstr ""
 
-#: polling_stations/templates/fragments/cancelled_election.html:14
+#: polling_stations/templates/fragments/cancelled_election.html:15
 #, python-format
 msgid ""
 "The poll for <strong>%(cancelled_election_name)s</strong> has been cancelled."
@@ -342,14 +322,24 @@ msgctxt "Short for Email:"
 msgid "E:"
 msgstr ""
 
+#: polling_stations/templates/fragments/contact_details.html:30
+msgctxt "abbr title attribute"
+msgid "Website"
+msgstr ""
+
+#: polling_stations/templates/fragments/contact_details.html:30
+msgctxt "Short for Website:"
+msgid "W:"
+msgstr ""
+
 #: polling_stations/templates/fragments/errors.html:5
-#: polling_stations/templates/home.html:14
+#: polling_stations/templates/home.html:15
 #, python-format
 msgid "Sorry, we can't find %(postcode)s"
 msgstr ""
 
 #: polling_stations/templates/fragments/errors.html:6
-#: polling_stations/templates/home.html:15
+#: polling_stations/templates/home.html:16
 msgid "This doesn't appear to be a valid postcode."
 msgstr ""
 
@@ -359,6 +349,78 @@ msgstr ""
 
 #: polling_stations/templates/fragments/feedback_js.html:34
 msgid "Report a problem with this page"
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:6
+msgid "You are entitled to support to help you cast your vote."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:9
+msgid "Each polling place is selected to ensure that everyone can access it."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:14
+msgid ""
+"Every polling station will have a wheelchair accessible polling booth. "
+"Pencils, magnifiers and large print ballot papers will be available. You can "
+"take your phone into the polling booth to use a magnifier or text-to-speech "
+"app. There will be a place to sit, if needed."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:22
+msgid "https://www.electoralcommission.org.uk/i-am-a/voter/voting-person"
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:23
+msgid "Electoral Commission website"
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:24
+#, python-format
+msgid ""
+"If you need help to complete your ballot paper, you can ask a member of "
+"staff at the station. You can also take a friend or relative to the polling "
+"station to help you. However, there are different rules for this depending "
+"on the election type and which UK nation live in. Visit the <a "
+"href=\"%(ec_url)s\">%(electoral_commission_website)s</a> for further "
+"information."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:32
+msgid ""
+"Your vote is yours alone, and you are entitled to secrecy. Do not allow "
+"anyone else to mark your ballot paper against your wishes."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:38
+msgid ""
+"If you aren't sure what to do, ask a member of staff at your polling "
+"station. They are there to help."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:45
+msgid "Useful links"
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:50
+msgid "Voting at a polling station (Electoral Commission)."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:55
+msgid "Voting with sight loss (RNIB)."
+msgstr ""
+
+#: polling_stations/templates/fragments/generic_accessibility.html:60
+msgid "Voting with learning disabilities or autism (My Vote My Voice)."
+msgstr ""
+
+#: polling_stations/templates/fragments/getting_to_the_station.html:4
+msgid "Getting there"
+msgstr ""
+
+#: polling_stations/templates/fragments/getting_to_the_station.html:14
+msgid ""
+"The electoral services team have added a note about getting to this station:"
 msgstr ""
 
 #: polling_stations/templates/fragments/help_your_council.html:6
@@ -380,8 +442,8 @@ msgid ""
 "                You can email them at <strong><a href=\"mailto:"
 "%(council_electoral_services_email)s\">%(council_electoral_services_email)s</"
 "a></strong>\n"
-"                or call them on <strong><a href=\"tel:%(council_phone)s\">"
-"%(council_phone)s</a></strong>.\n"
+"                or call them on <strong><a href=\"tel:"
+"%(council_phone)s\">%(council_phone)s</a></strong>.\n"
 "            "
 msgstr ""
 
@@ -485,10 +547,10 @@ msgstr ""
 #: polling_stations/templates/fragments/no_election.html:10
 #, python-format
 msgid ""
-"If you think there may be elections in your area, check your local <a href="
-"\"%(council_website)s\">council website</a> for more information, or contact "
-"%(council)s on <strong><a href=\"tel:%(council_phone)s\">%(council_phone)s</"
-"a></strong>."
+"If you think there may be elections in your area, check your local <a "
+"href=\"%(council_website)s\">council website</a> for more information, or "
+"contact %(council)s on <strong><a href=\"tel:"
+"%(council_phone)s\">%(council_phone)s</a></strong>."
 msgstr ""
 
 #: polling_stations/templates/fragments/opening_times.html:5
@@ -542,44 +604,16 @@ msgstr ""
 msgid "You can vote in person at:"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:60
-#, python-format
-msgid ""
-"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
-"walk from %(postcode)s."
-msgstr ""
-
-#: polling_stations/templates/fragments/polling_station_known.html:66
-#, python-format
-msgid ""
-"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
-"drive from %(postcode)s."
-msgstr ""
-
-#: polling_stations/templates/fragments/polling_station_known.html:73
-#, python-format
-msgid ""
-"Get <a href=\"%(google_maps_url)s\" target=\"_top\">walking/driving "
-"directions from Google</a> or <a href=\"%(cyclestreets_url)s\" target=\"_top"
-"\">cycling directions from CycleStreets</a>."
-msgstr ""
-
-#: polling_stations/templates/fragments/polling_station_known.html:82
+#: polling_stations/templates/fragments/polling_station_known.html:57
 msgid "Polling stations are open from 7am to 10pm"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:82
+#: polling_stations/templates/fragments/polling_station_known.html:57
 #, python-format
 msgid " on %(NEXT_CHARISMATIC_ELECTION_DATE)s"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:85
-msgid ""
-"If you have a postal vote, you can hand it in at this polling station on "
-"election day up to 10pm"
-msgstr ""
-
-#: polling_stations/templates/fragments/polling_station_known.html:97
+#: polling_stations/templates/fragments/polling_station_known.html:87
 msgid ""
 "\n"
 "                <h3>Advance voting trial</h3>\n"
@@ -613,15 +647,17 @@ msgid ""
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:19
-msgid "If you don't have a poll card, you need to contact your local council."
+msgid ""
+"If you don't have a poll card, you need to contact your appropriate "
+"electoral services team."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:20
 #, python-format
 msgid ""
-"You can call %(council)s on <strong><a href=\"tel:%(council_phone)s\">"
-"%(council_phone)s</a></strong> or <strong><a href=\"%(council_website)s"
-"\">visit their website</a></strong>."
+"You can call %(council)s on <strong><a href=\"tel:"
+"%(council_phone)s\">%(council_phone)s</a></strong> or <strong><a "
+"href=\"%(council_website)s\">visit their website</a></strong>."
 msgstr ""
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:26
@@ -651,50 +687,110 @@ msgid ""
 "current address."
 msgstr ""
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:11
-msgctxt "link text"
-msgid "More information on voter ID pilots in your area"
+#: polling_stations/templates/fragments/travel_time.html:6
+#, python-format
+msgid ""
+"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
+"walk from %(postcode)s."
+msgstr ""
+
+#: polling_stations/templates/fragments/travel_time.html:12
+#, python-format
+msgid ""
+"It's about %(distance_in_miles)s miles away or a %(time_in_minutes)s minute "
+"drive from %(postcode)s."
+msgstr ""
+
+#: polling_stations/templates/fragments/travel_time.html:19
+#, python-format
+msgid ""
+"Get <a href=\"%(google_maps_url)s\" target=\"_top\">walking/driving "
+"directions from Google</a> or <a href=\"%(cyclestreets_url)s\" "
+"target=\"_top\">cycling directions from CycleStreets</a>."
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:7
+msgid ""
+"You will need to take photo ID to vote at a polling station in this election"
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:10
+msgid "You do not need your poll card to vote."
 msgstr ""
 
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:13
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:33
-#: polling_stations/templates/home.html:45
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:38
+#: polling_stations/templates/home.html:62
 msgid "You must vote at your assigned polling station."
 msgstr ""
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:21
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:18
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:42
+msgid "Read more about voting in Northern Ireland"
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:22
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:46
+msgid "Read more about voting in Great Britain"
+msgstr ""
+
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:32
 msgid "You don't need your poll card to vote"
 msgstr ""
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:24
-#: polling_stations/templates/home.html:48
+#: polling_stations/templates/fragments/you_dont_need_poll_card.html:35
+#: polling_stations/templates/home.html:65
 msgid ""
 "If you are registered to vote, but you don't have your poll card, you can go "
 "to the polling station and give them your name and address."
 msgstr ""
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:28
-msgid "You will need photographic identification"
+#: polling_stations/templates/home.html:34
+msgid "Photographic identification"
 msgstr ""
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:37
-msgid "Read more about voting in Northern Ireland"
+#: polling_stations/templates/home.html:36
+msgid ""
+"Photographic identification will be required to vote at a polling station in "
+"the 4 July UK general election."
 msgstr ""
 
-#: polling_stations/templates/fragments/you_dont_need_poll_card.html:41
-msgid "Read more about voting in Great Britain"
+#: polling_stations/templates/home.html:37
+#: polling_stations/templates/home.html:60
+msgid ""
+"Learn more about photographic identification for voters on the website of "
+"the Electoral Commission."
 msgstr ""
 
-#: polling_stations/templates/home.html:31
+#: polling_stations/templates/home.html:37
+#: polling_stations/templates/home.html:60
+msgid "Learn more on the website of the Electoral Commission."
+msgstr ""
+
+#: polling_stations/templates/home.html:39
+msgid ""
+"You can apply for a free 'Voter Authority Certificate' if you do not already "
+"possess a valid ID."
+msgstr ""
+
+#: polling_stations/templates/home.html:40
+msgid "Apply for free voter ID."
+msgstr ""
+
+#: polling_stations/templates/home.html:41
+msgid "You do not need photo ID to vote by post."
+msgstr ""
+
+#: polling_stations/templates/home.html:47
 #, python-format
 msgid "%(election_date)s Elections"
 msgstr ""
 
-#: polling_stations/templates/home.html:34
+#: polling_stations/templates/home.html:50
 msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
 msgstr ""
 
-#: polling_stations/templates/home.html:37
+#: polling_stations/templates/home.html:53
 #, python-format
 msgctxt ""
 "day_of_week  and election_date are localised, e.g. 'Dydd Lau' and '6 Mai "
@@ -704,12 +800,14 @@ msgid ""
 "%(election_date)s</strong>."
 msgstr ""
 
-#: polling_stations/templates/home.html:43
-msgid "You don't need your poll card to vote."
+#: polling_stations/templates/home.html:59
+msgid ""
+"Photographic identification will be required to vote in the 4 July UK "
+"general election."
 msgstr ""
 
 #: polling_stations/templates/multiple_councils.html:6
-#: polling_stations/templates/postcode_view.html:35
+#: polling_stations/templates/postcode_view.html:15
 msgid "Your Polling Station"
 msgstr ""
 
