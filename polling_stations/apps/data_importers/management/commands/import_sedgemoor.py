@@ -1,15 +1,47 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SEG"
-    addresses_name = "2024-05-02/2024-02-22T12:07:00.756391/Polling station data Somerset(Sedgemoor).csv"
-    stations_name = "2024-05-02/2024-02-22T12:07:00.756391/Polling station data Somerset(Sedgemoor).csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-21T16:09:14.537768/SEG_combined.csv"
+    stations_name = "2024-07-04/2024-06-21T16:09:14.537768/SEG_combined.csv"
+    elections = ["2024-07-04"]
+    not_in_sedgemoor_stations = [
+        "501-chewton-mendip-village-hall",
+        "502-croscombe-village-hall",
+        "503-binegar-memorial-hall",
+        "504-godney-village-hall",
+        "505-litton-village-hall",
+        "506-meare-church-rooms",
+        "507-north-wootton-village-hall",
+        "508-pilton-village-hall",
+        "509-priddy-village-hall",
+        "510-draycott-memorial-hall",
+        "511-somerset-council",
+        "512-somerset-council",
+        "513-somerset-council",
+        "514-somerset-council",
+        "515-wells-golf-club",
+        "516-wookey-hole-caves",
+        "517-easton-village-hall",
+        "518-dinder-village-hall",
+        "519-coxley-memorial-hall",
+        "520-ston-easton-village-hall",
+        "521-clapton-village-hall",
+        "522-walton-village-hall",
+        "523-wells-elim-connect-centre",
+        "524-wells-the-portway-annexe",
+        "525-wells-the-portway-annexe",
+        "526-wells-st-thomas-church-hall",
+        "527-wells-st-thomas-church-hall",
+        "528-westbury-sub-mendip-village-hall",
+        "529-wookey-church-hall",
+    ]
 
     def address_record_to_dict(self, record):
+        station_hash = self.get_station_hash(record)
+        if station_hash in self.not_in_sedgemoor_stations:
+            return None
         uprn = record.uprn.strip()
 
         if uprn in [
@@ -54,6 +86,7 @@ class Command(BaseHalaroseCsvImporter):
             "TA6 7BS",
             "TA6 6LR",
             "TA6 6GD",
+            # suspect
             "BS24 0HD",  # BREAN ROAD, LYMPSHAM, WESTON-SUPER-MARE
             "TA7 9AG",  # FORD LODGE, STAWELL, BRIDGWATER
             "TA9 4HP",  # SOUTH VIEW, BRIDGWATER ROAD, EAST BRENT, HIGHBRIDGE
@@ -67,11 +100,9 @@ class Command(BaseHalaroseCsvImporter):
 
         return super().address_record_to_dict(record)
 
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
+    def station_record_to_dict(self, record):
+        station_hash = self.get_station_hash(record)
+        if station_hash in self.not_in_sedgemoor_stations:
+            return None
+
+        return super().station_record_to_dict(record)
