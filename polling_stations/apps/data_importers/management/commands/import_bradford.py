@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BRD"
     addresses_name = (
-        "2024-05-02/2024-02-21T11:10:50.087826/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-14T15:57:51.218542/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-21T11:10:50.087826/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-14T15:57:51.218542/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -88,40 +88,44 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10070064587",  # FLAT ABOVE THE HOCKNEY 3 DALE STREET, SHIPLEY
             "100051164196",  # 213A GAIN LANE, FAGLEY, BRADFORD
             "100051168409",  # 12 GREENWOOD DRIVE, BRADFORD
+            "100051270549",  # HIGHER REDCAR HOUSE, WHITLEY HEAD, STEETON, KEIGHLEY
         ]:
             return None
 
         if record.addressline6 in [
             # splits
-            "BD1 2PJ",
             "LS29 6QJ",
-            "BD7 4RA",
-            "BD10 8LL",
             "BD15 7WB",
-            "BD8 9NW",
             "BD22 7JU",
-            "BD22 0ER",
+            "BD7 4RA",
+            "BD1 2PJ",
+            "BD6 1HP",
             "BD16 1NT",
-            "BD12 8EW",  # WYKE, BRADFORD
-            "BD12 8EY",  # WYKE, BRADFORD
-            "BD13 3SD",  # 1-4 THORNGATE, THORNTON, BRADFORD
-            "BD22 9RQ",  # HAWORTH, KEIGHLEY
-            "BD17 5DH",  # BAILDON, SHIPLEY
-            "BD3 9TY",  # FLAT 1-4 818 LEEDS ROAD, BRADFORD
-            "BD3 8EZ",  # LEEDS ROAD, BRADFORD
-            "BD1 4AB",  # 20-22 MILL STREET, BRADFORD
-            "BD4 0RJ",  # HOLME LANE, TONG, BRADFORD
-            "BD12 0AQ",  # SKIPPYS CLOSE, LOW MOOR, BRADFORD
-            "BD15 7UE",  # FULLBECK CLOSE, ALLERTON, BRADFORD
-            "BD15 7AB",  # ALLERTON ROAD, ALLERTON, BRADFORD
-            "BD15 7SQ",  # GRANGE FOLD, ALLERTON, BRADFORD
-            "BD21 1AX",  # ACORN STREET, KEIGHLEY
-            "BD13 2JR",  # FLEET LANE, QUEENSBURY, BRADFORD
-            "BD4 7PG",  # ESSEX STREET, BRADFORD
-            "BD5 7DP",  # NEWTON STREET, BRADFORD
-            "BD4 7TL",  # BOWLING HALL ROAD, BRADFORD
-            "BD12 9EU",  # BREAKS FOLD, WYKE, BRADFORD
-            "BD8 9NY",  # LINGWOOD GARDENS, BRADFORD
+            "BD10 8FB",
+            "BD10 8LL",
+            "BD22 0ER",
+            "BD8 9NW",
+            # suspect
+            "BD12 8EW",
+            "BD12 8EY",
+            "BD13 3SD",
+            "BD22 9RQ",
+            "BD17 5DH",
+            "BD3 9TY",
+            "BD3 8EZ",
+            "BD1 4AB",
+            "BD4 0RJ",
+            "BD12 0AQ",
+            "BD15 7UE",
+            "BD15 7AB",
+            "BD15 7SQ",
+            "BD21 1AX",
+            "BD13 2JR",
+            "BD4 7PG",
+            "BD5 7DP",
+            "BD4 7TL",
+            "BD12 9EU",
+            "BD8 9NY",
         ]:
             return None
 
