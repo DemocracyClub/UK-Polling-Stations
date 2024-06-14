@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NTY"
-    addresses_name = (
-        "2024-05-02/2024-03-11T10:30:17.403600/Democracy_Club__02May2024.tsv"
-    )
-    stations_name = (
-        "2024-05-02/2024-03-11T10:30:17.403600/Democracy_Club__02May2024.tsv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-14T14:09:24.864672/North Tyneside Council.tsv"
+    stations_name = "2024-07-04/2024-06-14T14:09:24.864672/North Tyneside Council.tsv"
+    elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -34,6 +30,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
+            "NE28 9GF",
             "NE12 8EE",
             # looks wrong
             "NE26 1LX",
@@ -45,10 +42,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # postcode correction for: Fernedene, Threap Gardens, Howdon, NE28 6SL
-        if record.polling_place_id == "2825":
-            record = record._replace(polling_place_postcode="NE28 7HT")
-
-        return super().station_record_to_dict(record)
