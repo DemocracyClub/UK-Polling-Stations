@@ -28,3 +28,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station change from council:
+        # old station: Communal Room, Lincoln Green, Off Chelmsford Drive, Worcester, WR5 1QU
+        # new station: Youth Room, Ronkswood Hub, Canterbury Road, Worcester, WR5 1PJ
+        if record.polling_place_id == "6772":
+            record = record._replace(
+                polling_place_name="Youth Room",
+                polling_place_address_1="Ronkswood Hub",
+                polling_place_address_2="Canterbury Road",
+                polling_place_address_3="",
+                polling_place_address_4="Worcester",
+                polling_place_postcode="WR5 1PJ",
+                polling_place_easting="387019",
+                polling_place_northing="254640",
+                polling_place_uprn="100121275449",
+            )
+
+        return super().station_record_to_dict(record)
