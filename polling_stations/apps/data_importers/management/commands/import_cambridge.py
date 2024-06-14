@@ -4,8 +4,8 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CAB"
-    addresses_name = "2024-07-04/2024-06-03T13:42:38.623302/Eros_SQL_Output008.csv"
-    stations_name = "2024-07-04/2024-06-03T13:42:38.623302/Eros_SQL_Output008.csv"
+    addresses_name = "2024-07-04/2024-06-18T16:13:13.629157/CAB_combined.csv"
+    stations_name = "2024-07-04/2024-06-18T16:13:13.629157/CAB_combined.csv"
     elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
@@ -27,32 +27,11 @@ class Command(BaseHalaroseCsvImporter):
         if record.housepostcode in [
             # splits
             "CB4 1LD",
+            "CB2 4JF",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # council has supplied incomplete file so commenting these unused changes for now:
-
-        # # postcode correction for: The Salvation Army Community Centre, 104, Mill Road, Cambridge, CB1 2DB
-        # if record.pollingstationnumber == "36":
-        #     record = record._replace(pollingstationpostcode="CB1 2BD")
-
-        # # coords correction for: St. Andrew's Hall,97 St. Andrew's Road, Cambridge, CB4 1DH
-        # if record.pollingstationnumber == "21":
-        #     record = record._replace(
-        #         pollingstationeasting="546314", pollingstationnorthing="259588"
-        #     )
-
-        # # User reported issue (freshdesk ticket 24429):
-        # # Removing map for: The Salvation Army Community Centre, 104, Mill Road, Cambridge, CB1 2DB
-        # rec = super().station_record_to_dict(record)
-        # if rec["internal_council_id"] == "36-the-salvation-army-community-centre":
-        #     rec["location"] = None
-        #     return rec
-
-        return super().station_record_to_dict(record)
 
     # Workaround to use coordinate data in Halarose file for mapping
     def get_station_point(self, record):
