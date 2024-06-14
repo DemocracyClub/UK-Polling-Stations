@@ -1,31 +1,37 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SSO"
-    addresses_name = "2024-05-02/2024-02-29T14:44:57.333133/Eros_SQL_Output002 (1).csv"
-    stations_name = "2024-05-02/2024-02-29T14:44:57.333133/Eros_SQL_Output002 (1).csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-21T16:02:50.306102/SSO_combined.csv"
+    stations_name = "2024-07-04/2024-06-21T16:02:50.306102/SSO_combined.csv"
+    elections = ["2024-07-04"]
+    not_in_sso_stations = [
+        "1-glastonbury-town-hall",
+        "10-street-salvation-army-hall",
+        "11-baltonsborough-village-hall",
+        "12-butleigh-church-room",
+        "13-west-lydford-parish-hall",
+        "2-glastonbury-st-edmunds-community-hall",
+        "3-glastonbury-united-reformed-church",
+        "4-glastonbury-town-hall",
+        "5-street-salvation-army-hall",
+        "6-street-united-reformed-church",
+        "7-street-wessex-hotel",
+        "8-street-the-victoria-field-social-club",
+        "9-street-the-victoria-field-social-club",
+    ]
 
     def station_record_to_dict(self, record):
-        # OAKLANDS PRIMARY SCHOOL, PRESTON GROVE, YEOVIL BA20 2DY
-        if (record.pollingstationnumber, record.pollingstationname) == (
-            "79",
-            "OAKLANDS PRIMARY SCHOOL",
-        ):
-            record = record._replace(pollingstationpostcode="BA20 2DU")
-        # MARTOCK UNITED REFORMED CHURCH HALL, BOWER HINTON, MARTOCK, SOMERSET TA12 6JN
-        if (record.pollingstationnumber, record.pollingstationname) == (
-            "93",
-            "MARTOCK UNITED REFORMED CHURCH HALL",
-        ):
-            record = record._replace(pollingstationpostcode="TA12 6LA")
-
+        station_hash = self.get_station_hash(record)
+        if station_hash in self.not_in_sso_stations:
+            return None
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
+        station_hash = self.get_station_hash(record)
+        if station_hash in self.not_in_sso_stations:
+            return None
         if record.housepostcode in [
             # split
             "TA20 2NJ",
@@ -37,15 +43,7 @@ class Command(BaseHalaroseCsvImporter):
             "TA3 6RP",
             "TA10 0PJ",
             "TA10 0QH",
+            "TA18 8BT",
         ]:
             return None
         return super().address_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
