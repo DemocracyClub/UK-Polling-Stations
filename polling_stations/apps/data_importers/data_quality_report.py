@@ -1,5 +1,5 @@
 from addressbase.models import UprnToCouncil
-from councils.models import Council
+from councils.models import CouncilGeography
 from django.db import connection
 from django.db.models import Q
 from pollingstations.models import PollingDistrict, PollingStation
@@ -229,26 +229,17 @@ class DistrictReport:
 
 # data quality stats for UPRNs assigned polling station ids
 class AddressReport:
-    def __init__(self, council_id, additional_report_councils=None):
-        if not additional_report_councils:
-            additional_report_councils = []
-        self.additional_report_councils = additional_report_councils
+    def __init__(self, council_id):
         self.council_id = council_id
-        self.councils = self.additional_report_councils + [self.council_id]
-        self.gss_codes = [
-            council.geography.gss
-            for council in Council.objects.filter(pk__in=self.councils).select_related(
-                "geography"
-            )
-        ]
+        self.gss_code = CouncilGeography.objects.get(council_id=self.council_id).gss
 
     def get_uprns_in_addressbase(self):
-        return UprnToCouncil.objects.filter(lad__in=self.gss_codes).count()
+        return UprnToCouncil.objects.filter(lad=self.gss_code).count()
 
     def get_addresses_with_station_id(self):
         return (
             UprnToCouncil.objects.filter(
-                lad__in=self.gss_codes, polling_station_id__isnull=False
+                lad=self.gss_code, polling_station_id__isnull=False
             )
             .exclude(polling_station_id="")
             .count()
@@ -257,7 +248,7 @@ class AddressReport:
     def get_addresses_without_station_id(self):
         return UprnToCouncil.objects.filter(
             Q(polling_station_id__isnull=True) | Q(polling_station_id=""),
-            council_id__in=self.councils,
+            council_id=self.council_id,
         ).count()
 
     def get_addresses_with_valid_station_id_ref(self):
@@ -267,12 +258,12 @@ class AddressReport:
             SELECT COUNT(*) FROM addressbase_uprntocouncil
             WHERE polling_station_id IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id IN %s)
-            AND lad IN %s
+                WHERE council_id = %s)
+            AND lad = %s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [tuple(self.councils), tuple(self.gss_codes)],
+            [self.council_id, self.gss_code],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -284,12 +275,12 @@ class AddressReport:
             SELECT COUNT(*) FROM addressbase_uprntocouncil
             WHERE polling_station_id NOT IN
                 (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id IN %s)
-            AND lad IN %s
+                WHERE council_id = %s)
+            AND lad = %s
             AND polling_station_id != ''
             AND polling_station_id IS NOT NULL;
             """,
-            [tuple(self.councils), tuple(self.gss_codes)],
+            [self.council_id, self.gss_code],
         )
         results = cursor.fetchall()
         return results[0][0]
@@ -474,14 +465,12 @@ class DataQualityReportBuilder:
 
         return row_color
 
-    def build_address_report(self):
-        table = Table(title="ADDRESSES", show_header=False, min_width=50)
+    def build_address_report(self, council_id):
+        table = Table(title=f"{council_id} ADDRESSES", show_header=False, min_width=50)
         table.add_column("Caption")
         table.add_column("Number", justify="right")
 
-        address_report = AddressReport(
-            self.council_id, additional_report_councils=self.additional_report_councils
-        )
+        address_report = AddressReport(council_id)
         uprns_in_council_area = address_report.get_uprns_in_addressbase()
         addresses_imported = address_report.get_addresses_with_station_id()
         station_ids = address_report.get_addresses_with_station_id()
@@ -538,7 +527,8 @@ class DataQualityReportBuilder:
         if self.expecting_districts:
             self.report.add_row(self.build_district_report())
         self.report.add_row(self.build_station_report())
-        self.report.add_row(self.build_address_report())
+        for council_id in [self.council_id] + self.additional_report_councils:
+            self.report.add_row(self.build_address_report(council_id))
 
     def generate_string_report(self):
         recorder = Console(record=True)
