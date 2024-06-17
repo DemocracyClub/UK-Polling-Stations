@@ -4,28 +4,28 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TOR"
     addresses_name = (
-        "2024-05-02/2024-02-22T16:57:01.775461/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-17T19:59:22.295705/Democracy_Club__04July2024.tsv"
     )
     stations_name = (
-        "2024-05-02/2024-02-22T16:57:01.775461/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-17T19:59:22.295705/Democracy_Club__04July2024.tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
-        # West Croft School, Coronation Road, Bideford, EX39 3DD
-        if record.polling_place_id == "8565":
+        # postcode correction for: West Croft School, Coronation Road, Bideford, EX39 3DD
+        if record.polling_place_id == "8937":
             record = record._replace(polling_place_postcode="EX39 3DE")
 
-        # Torrington Methodist Church Hall - The Hall, Windy Cross, TORRINGTON, EX38 8AL
-        # Torrington Methodist Church Hall - Creche, Windy Cross, TORRINGTON, EX38 8AL
-        if record.polling_place_id in ["8619", "8623"]:
+        # point correction for: Torrington Methodist Church Hall - The Hall, Windy Cross, TORRINGTON, EX38 8AL
+        # point correction for: Torrington Methodist Church Hall - Creche, Windy Cross, TORRINGTON, EX38 8AL
+        if record.polling_place_id in ["8995", "8991"]:
             record = record._replace(
                 polling_place_easting="249335", polling_place_northing="119076"
             )
 
-        # Newton St Petrock Community Centre, Newton St Petrock
-        if record.polling_place_id == "8679":
+        # add postcode for: Newton St Petrock Community Centre, Newton St Petrock
+        if record.polling_place_id == "9051":
             record = record._replace(polling_place_postcode="EX22 7LW")
 
         return super().station_record_to_dict(record)
@@ -73,24 +73,27 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10002299752",  # COMMON MOOR, CLAWTON, HOLSWORTHY
             "10093911404",  # MEADOW WOOD, FRITHELSTOCK, TORRINGTON
             "10003506170",  # BITEFORD, WOOLSERY, BIDEFORD
+            "10002301421",  # CEDARS, HOLSWORTHY BEACON, HOLSWORTHY
+            "10013842070",  # BEECH HOUSE, HOLSWORTHY BEACON, HOLSWORTHY
+            "10090290617",  # MOONACRE FARM, DOLTON, WINKLEIGH
         ]:
             return None
 
         if record.addressline6 in [
             # splits
             "EX38 8NN",
-            "EX39 3LU",
             "EX39 5FL",
+            "EX22 7XE",
             "EX39 1PU",
             "EX39 3LX",
             "EX21 5HN",
-            "EX22 7XE",
+            "EX39 2DP",
             # suspect
-            "EX39 3TP",  # BUCKLAND VIEW, BIDEFORD
-            "EX39 1HA",  # BURROWS WAY, NORTHAM, BIDEFORD
-            "EX39 1HB",  # SANDYMERE ROAD, NORTHAM, BIDEFORD
-            "EX39 5ED",  # WALLAND DRIVE, BUCKS CROSS, BIDEFORD
-            "EX38 8BJ",  # KITCHENER ROW, CALF STREET, TORRINGTON
+            "EX39 3TP",
+            "EX39 1HA",
+            "EX39 1HB",
+            "EX39 5ED",
+            "EX38 8BJ",
             "EX22 7NA",
             "EX22 7YH",
         ]:
