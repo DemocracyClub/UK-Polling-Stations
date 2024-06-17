@@ -4,13 +4,9 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SWT"
-    addresses_name = (
-        "2024-05-02/2024-02-22T14:46:01.907701/Polling Station Data Somerset (SWT).csv"
-    )
-    stations_name = (
-        "2024-05-02/2024-02-22T14:46:01.907701/Polling Station Data Somerset (SWT).csv"
-    )
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-17T16:33:01.558703/Eros_SQL_Output012.csv"
+    stations_name = "2024-07-04/2024-06-17T16:33:01.558703/Eros_SQL_Output012.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -116,5 +112,4 @@ class Command(BaseHalaroseCsvImporter):
         # more accurate location for: Victoria Park Pavilion Victoria Gate Taunton TA1 3ES
         if record.pollingstationname == "Victoria Park Pavilion":
             rec["location"] = Point(-3.091746, 51.017816, srid=4326)
-
         return rec
