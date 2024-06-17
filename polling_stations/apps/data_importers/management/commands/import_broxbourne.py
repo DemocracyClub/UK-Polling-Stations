@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BRX"
-    addresses_name = "2024-05-02/2024-02-28T15:22:27.029172/Democracy Club - Polling Districts for 2-5-2024.csv"
-    stations_name = "2024-05-02/2024-02-28T15:22:27.029172/Democracy Club - Polling Stations for 2-5-2024.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-17T12:51:05.354706/Democracy Club -  Poling Districts for Borough of Broxbourne for 4-7-2024.csv"
+    stations_name = "2024-07-04/2024-06-17T12:51:05.354706/Democracy Club - Polling stations for Borough of Broxbourne for 4-7-2024.csv"
+    elections = ["2024-07-04"]
     csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
@@ -18,3 +18,10 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Remove stations from EHE council
+        if record.stationcode in ["29", "30", "31", "32", "33", "34"]:
+            return None
+
+        return super().station_record_to_dict(record)
