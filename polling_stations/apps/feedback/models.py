@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
+from polling_stations.settings.constants.asana import AsanaReportType
+
 FOUND_USEFUL_CHOICES = (("YES", _("Yes")), ("NO", _("No")))
 VOTE_CHOICES = (("YES", _("Yes")), ("NO", _("No")))
 
@@ -38,6 +40,6 @@ class Feedback(TimeStampedModel):
                     ),
                 ),
                 settings.ASANA_ISSUE_DESCRIPTION_FIELD_ID: self.comments,
-                settings.ASANA_REPORT_TYPE_FIELD_ID: settings.AsanaReportType.WDIV_FEEDBACK.value,
+                settings.ASANA_REPORT_TYPE_FIELD_ID: AsanaReportType.WDIV_FEEDBACK.value,
             },
         }

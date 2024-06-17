@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
+from polling_stations.settings.constants.asana import AsanaReportType
+
 STATUS_CHOICES = (("OPEN", "Open"), ("RESOLVED", "Resolved"))
 
 REPORT_TYPES = (("OTHER", "Other"),)
@@ -46,6 +48,6 @@ class BugReport(TimeStampedModel):
                     ),
                 ),
                 settings.ASANA_ISSUE_DESCRIPTION_FIELD_ID: self.description,
-                settings.ASANA_REPORT_TYPE_FIELD_ID: settings.AsanaReportType.WDIV_BUG_REPORT.value,
+                settings.ASANA_REPORT_TYPE_FIELD_ID: AsanaReportType.WDIV_BUG_REPORT.value,
             },
         }
