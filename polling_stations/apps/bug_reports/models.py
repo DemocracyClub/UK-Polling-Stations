@@ -1,3 +1,4 @@
+import os
 from urllib.parse import urljoin
 
 from django.conf import settings
@@ -33,15 +34,15 @@ class BugReport(TimeStampedModel):
 
     def as_asana_object(self):
         desc = truncatechars(self.description, 30)
+        fqdn = os.environ.get("FQDN", "wheredoivote.co.uk")
+        base_url = f"https://{fqdn}"
         return {
             "name": f"""{self.pk}: "{desc}" """,
             "projects": [settings.ASANA_PROJECT_ID],
             "custom_fields": {
-                settings.ASANA_SITE_LINK_FIELD_ID: urljoin(
-                    "https://wheredoivote.co.uk", self.source_url
-                ),
+                settings.ASANA_SITE_LINK_FIELD_ID: urljoin(base_url, self.source_url),
                 settings.ASANA_REPORT_LINK_FIELD_ID: urljoin(
-                    "https://wheredoivote.co.uk",
+                    base_url,
                     reverse(
                         "admin:bug_reports_bugreport_change",
                         kwargs={"object_id": self.pk},
