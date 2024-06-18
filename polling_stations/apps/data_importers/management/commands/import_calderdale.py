@@ -13,6 +13,19 @@ class Command(BaseDemocracyCountsCsvImporter):
             record = record._replace(xordinate="408412")
             record = record._replace(yordinate="426427")
 
+        # The following are coord amendments from the council:
+
+        # ST AUGUSTINE'S CENTRE, HANSON LANE, HALIFAX, HX1 5PG
+        if record.stationcode == "68KE":
+            record = record._replace(xordinate="408189")
+            record = record._replace(yordinate="425465")
+        # PELLON BAPTIST SUNDAY SCHOOL, SPRING HALL LANE, HALIFAX, HX1 4UA
+        if record.stationcode in [
+            "110SA",
+            "114SE",
+        ]:
+            record = record._replace(xordinate="407498")
+            record = record._replace(yordinate="425770")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
