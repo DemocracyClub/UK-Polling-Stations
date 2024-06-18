@@ -1,46 +1,23 @@
-from addressbase.models import Address
-from data_importers.github_importer import BaseGitHubImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseGitHubImporter):
-    srid = 4326
+class Command(BaseHalaroseCsvImporter):
     council_id = "PKN"
-    elections = ["2022-05-05"]
-    scraper_name = "wdiv-scrapers/DC-PollingStations-PerthAndKinross"
-    geom_type = "geojson"
+    addresses_name = "2024-07-04/2024-06-18T10:08:11.592808/PKN_combined.csv"
+    stations_name = "2024-07-04/2024-06-18T10:08:11.592808/PKN_combined.csv"
+    elections = ["2024-07-04"]
 
-    def geocode_from_uprn(self, uprn):
-        uprn = str(uprn).lstrip("0").strip()
-        ab_rec = Address.objects.get(uprn=uprn)
-        return ab_rec.location
-
-    def district_record_to_dict(self, record):
-        poly = self.extract_geometry(record, self.geom_type, self.get_srid("districts"))
-        if record["PPD_CODE"] == "tba":
+    def address_record_to_dict(self, record):
+        if record.housepostcode in [
+            # split
+            "PH2 0BL",
+            "PH11 8NF",
+            "PH2 6DD",
+            "PH1 2BX",
+            "PH1 2RH",
+            "PH10 6TD",
+            "PH14 9SY",
+            "PH3 1HD",
+        ]:
             return None
-
-        return {
-            "internal_council_id": record["PPD_CODE"],
-            "name": record["PPD_CODE"],
-            "area": poly,
-            "polling_station_id": record["PPD_CODE"],
-        }
-
-    def station_record_to_dict(self, record):
-        location = self.extract_geometry(
-            record, self.geom_type, self.get_srid("districts")
-        )
-
-        address = f'{record["POLL_PLACE"]}, {record["PPD_NAMES"]}'
-        codes = record["PPD_CODES"].split(",")
-        stations = []
-        for code in codes:
-            stations.append(
-                {
-                    "internal_council_id": code.strip(),
-                    "address": address,
-                    "postcode": "",
-                    "location": location,
-                }
-            )
-        return stations
+        return super().address_record_to_dict(record)
