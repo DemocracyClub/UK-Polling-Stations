@@ -42,3 +42,18 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # station change from council:
+        # old: The Old Watersports Centre, Goodwick SA64 0DE
+        # new: Goodwick Community School, Hill Street, Goodwick, SA64 0ET
+        if record.pollingvenueid == "241":
+            record = record._replace(
+                pollingstationname="Goodwick Community School",
+                pollingstationnumber="2014",
+                pollingstationaddress_1="Hill Street",
+                pollingstationaddress_2="Goodwick",
+                pollingstationaddress_3="",
+                pollingstationpostcode="SA64 0ET",
+            )
+        return super().station_record_to_dict(record)
