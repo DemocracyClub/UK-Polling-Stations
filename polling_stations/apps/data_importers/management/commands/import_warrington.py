@@ -12,8 +12,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Woolston Social Club, 50 Manchester Road, Woolston, Warrington
         if record.polling_place_id == "3224":
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
+                polling_place_easting="364031",
+                polling_place_northing="389256",
             )
 
         return super().station_record_to_dict(record)
