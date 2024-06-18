@@ -3,12 +3,8 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TOB"
-    addresses_name = (
-        "2024-07-04/2024-06-08T21:12:24.878118/Democracy_Club__04July2024.tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-08T21:12:24.878118/Democracy_Club__04July2024.tsv"
-    )
+    addresses_name = "2024-07-04/2024-06-20T10:46:28.307156/TOB_combined.tsv"
+    stations_name = "2024-07-04/2024-06-20T10:46:28.307156/TOB_combined.tsv"
     elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
@@ -20,6 +16,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10024003083",  # 30 SHORTON ROAD, PAIGNTON
             "100040532454",  # 28 SHORTON ROAD, PAIGNTON
             "100040513377",  # MILTON ORCHARD, MILTON STREET, BRIXHAM
+            "100040515861",  # REDWELLS, SOUTHDOWN HILL, BRIXHAM
+            "100040513359",  # BEL-OMBRE, MILTON STREET, BRIXHAM
+            "10024001656",  # GATEHOUSE COTTAGE MUDSTONE LANE, BRIXHAM
+            "10093140000",  # 11 REA BARN ROAD, BRIXHAM
+            "100040509069",  # 89 BOLTON STREET, BRIXHAM
+            "100040509951",  # 64 COPYTHORNE ROAD, BRIXHAM
+            "100040509950",  # 62 COPYTHORNE ROAD, BRIXHAM
+            "100040509722",  # 1A CHURCH HILL EAST, BRIXHAM
+            "100040514040",  # 110 NORTH BOUNDARY ROAD, BRIXHAM
+            "100040534758",  # 187 TOTNES ROAD, PAIGNTON
             "100040512567",  # 48 LICHFIELD DRIVE, BRIXHAM
             "100040510175",  # THE STATION GUEST HOUSE, DARTMOUTH ROAD, CHURSTON FERRERS, BRIXHAM
             "100040534883",  # ZOO AND GARDENS NORTH LODGE TOTNES ROAD, PAIGNTON
@@ -60,8 +66,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         if record.addressline6 in [
+            "TQ3 3NU",  # split
             # looks wrong
             "TQ1 4QZ",
+            "TQ5 8EJ",
+            "TQ5 8AW",
+            "TQ5 0LB",
             "TQ3 3QG",
             "TQ3 3QE",
             "TQ2 5BU",
@@ -69,3 +79,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # The following station postcode looks wrong, commenting out until council confirms:
+        # # Beefeater Restaurant, Whiterock, Long Road South, Paignton TQ4 7RZ
+        # if record.polling_place_id == "10315":
+        #     record = record._replace(polling_place_postcode="TQ4 7AZ")
+        return super().station_record_to_dict(record)
