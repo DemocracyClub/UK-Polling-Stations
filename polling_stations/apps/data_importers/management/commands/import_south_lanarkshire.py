@@ -1,6 +1,16 @@
 from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseHalaroseCsvImporter
 
+ST_BRIDES_BOTHWELL = {
+    "pollingstationname": "St Bride's Primary School",
+    "pollingstationaddress_1": "Ailsa Drive",
+    "pollingstationaddress_2": "Bothwell",
+    "pollingstationpostcode": "G71 8LP",
+    "pollingvenueid": "278",
+    "pollingvenuenorthing": "659591.00",
+    "pollingvenueeasting": "270445.00",
+}
+
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "SLK"
@@ -29,26 +39,26 @@ class Command(BaseHalaroseCsvImporter):
     def station_record_to_dict(self, record):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
-        # Removing one the stations at the following polling place until the council responds:
-        # St Bride's Primary School (Nursery Entrance), Tabernacle Street, Cambuslang G72 8JN
+
+        # Correction from council for: Primary School (Nursery Entrance), Tabernacle Street, Cambuslang G72 8JN
         if (
             self.get_station_hash(record)
             == "262-st-brides-primary-school-nursery-entrance"
         ):
-            return None
+            record = record._replace(**ST_BRIDES_BOTHWELL)
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
 
-        # Removing the addresses assigned to one of the stations at the following polling place until the council responds:
-        # St Bride's Primary School (Nursery Entrance), Tabernacle Street, Cambuslang G72 8JN
+        # Correction from council for: St Bride's Primary School (Nursery Entrance), Tabernacle Street, Cambuslang G72 8JN
         if (
             self.get_station_hash(record)
             == "262-st-brides-primary-school-nursery-entrance"
         ):
-            return None
+            record = record._replace(**ST_BRIDES_BOTHWELL)
 
         if record.housepostcode in [
             # split
