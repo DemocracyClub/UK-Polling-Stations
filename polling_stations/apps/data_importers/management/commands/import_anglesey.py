@@ -3,22 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "AGY"
-    addresses_name = "2024-05-02/2024-03-05T14:11:42.668428/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-03-05T14:11:42.668428/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
-
-    def station_record_to_dict(self, record):
-        # NEUADD BENTREF LLANFACHRAETH, LLANFACHRAETH, YNYS MON LL65 2UH
-        if record.pollingstationnumber == "21":
-            # confirming postcode
-            record = record._replace(pollingstationpostcode="LL65 4UH")
-
-        # YSGOLDY CAPEL M C CARMEL, CARMEL, YNYS MON LL71 8DA
-        if record.pollingstationnumber == "20":
-            # confirming postcode
-            record = record._replace(pollingstationpostcode="LL71 7DH")
-
-        return super().station_record_to_dict(record)
+    addresses_name = "2024-07-04/2024-06-18T10:03:58.926929/Eros_SQL_Output003.csv"
+    stations_name = "2024-07-04/2024-06-18T10:03:58.926929/Eros_SQL_Output003.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         if record.housepostcode in [
@@ -26,6 +13,8 @@ class Command(BaseHalaroseCsvImporter):
             "LL74 8ST",
             "LL65 2EL",
             "LL77 7NW",
+            # suspect
+            "LL77 7UR",
         ]:
             return None
 
@@ -39,7 +28,10 @@ class Command(BaseHalaroseCsvImporter):
             "10013463367",  # HARBOUR HOUSE, TRAETH BYCHAN, MARIANGLAS
             "10013466388",  # OLD GRANARY, PENTRAETH
             "10013853106",  # PANT Y BWLCH, LLANDDONA, BEAUMARIS
+            "10013466115",  # RHANDIR, LLANFIGAEL, HOLYHEAD
+            "10013463941",  # TYN DRYFOL BACH, BODORGAN
             "10013457915",  # CASTELL GRUG, SOUTH STACK, HOLYHEAD
         ]:
             return None
+
         return super().address_record_to_dict(record)
