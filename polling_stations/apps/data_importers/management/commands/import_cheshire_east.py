@@ -3,12 +3,8 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHE"
-    addresses_name = (
-        "2024-07-04/2024-06-06T12:06:58.747543/Democracy_Club__04July2024.tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-06T12:06:58.747543/Democracy_Club__04July2024.tsv"
-    )
+    addresses_name = "2024-07-04/2024-06-20T10:09:10.659361/CHE_combined.tsv"
+    stations_name = "2024-07-04/2024-06-20T10:09:10.659361/CHE_combined.tsv"
     elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
@@ -16,6 +12,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
+            "10014451916",  # BRINDLEY FARM, WREXHAM ROAD, BURLAND, NANTWICH
             "100010170913",  # 10 CROSSFIELD ROAD, HANDFORTH, WILMSLOW
             "100010174333",  # AQUATICS @ WILMSLOW LTD, 145 MANCHESTER ROAD, WILMSLOW
             "10007953840",  # FOUR OAKS, THE COPPICE, POYNTON, STOCKPORT
@@ -26,16 +23,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "SK12 1UB",
-            "SK10 3PG",
             "CW12 3RF",
-            "WA16 0GQ",
+            "SK10 3PG",
             "WA16 0GU",
-            "CW12 2NA",
-            "CW12 4DQ",
+            "CW5 7HN",
+            "CW10 0JW",
+            "WA16 0GQ",
+            "CW10 0HY",
+            "CW10 0HD",
             "CW2 8LA",
+            "CW2 5QZ",
+            "CW12 4DQ",
+            "SK12 1UB",
+            "CW12 2NA",
             # looks wrong
             "SK9 4DD",
+            "SY14 8FJ",
         ]:
             return None
 
