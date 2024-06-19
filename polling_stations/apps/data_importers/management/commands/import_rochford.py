@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ROC"
     addresses_name = (
-        "2024-05-02/2024-04-10T16:39:43.413423/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-19T16:18:42.435440/Democracy_Club__04July2024 (34).tsv"
     )
     stations_name = (
-        "2024-05-02/2024-04-10T16:39:43.413423/Democracy_Club__02May2024.tsv"
+        "2024-07-04/2024-06-19T16:18:42.435440/Democracy_Club__04July2024 (34).tsv"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -25,8 +25,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # split
-            "SS3 0LQ",
             "SS3 0HH",
+            "SS3 0LQ",
+            "SS5 6FP",
             "SS6 8DF",
         ]:
             return None
@@ -36,11 +37,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # Wesley Room, Methodist Church Hall, Eastwood Road, Rayleigh, Essex
         # Fixing the warning, correction is safe
-        if record.polling_place_id == "6131":
+        if record.polling_place_id == "6564":
             record = record._replace(polling_place_postcode="SS6 7JP")
 
         # Rayleigh Vineyard Church, London Road, Rayleigh, Essex SS6 9AY
-        if record.polling_place_id == "6100":
+        if record.polling_place_id == "6513":
             record = record._replace(polling_place_northing="191478")
 
         return super().station_record_to_dict(record)
