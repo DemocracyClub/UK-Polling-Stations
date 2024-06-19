@@ -8,7 +8,7 @@ class Command(BaseGitHubImporter):
     srid = 4326
     districts_srid = 4326
     council_id = "BST"
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-Bristol"
     geom_type = "geojson"
     stations_query = "stations"
