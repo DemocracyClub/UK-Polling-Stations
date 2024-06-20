@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 class Command(BaseHalaroseCsvImporter):
     council_id = "ZET"
     addresses_name = (
-        "2022-05-05/2022-03-10T14:33:34.834669/polling_station_export-2022-03-10.csv"
+        "2024-07-04/2024-06-20T14:57:44.630295/Shetland Eros_SQL_Output004.csv"
     )
     stations_name = (
-        "2022-05-05/2022-03-10T14:33:34.834669/polling_station_export-2022-03-10.csv"
+        "2024-07-04/2024-06-20T14:57:44.630295/Shetland Eros_SQL_Output004.csv"
     )
-    elections = ["2022-05-05"]
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -17,12 +17,6 @@ class Command(BaseHalaroseCsvImporter):
         if uprn in [
             "30100007505",  # NORTH BOOTH, HAROLDSWICK, UNST, SHETLAND
             "30100005132",  # BOOTH, OLLABERRY, SHETLAND
-        ]:
-            return None
-
-        if record.housepostcode in [
-            "ZE1 0UX",
-            "ZE2 9HD",
         ]:
             return None
 
