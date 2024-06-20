@@ -22,3 +22,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Fixes typo for council:
+        # old: Spalwick Community Room, Spaldwick Community Primary School, Spaldwick
+        # new: Spaldwick Community Room, Spaldwick Community Primary School, Spaldwick
+        if record.polling_place_id == "9321":
+            record = record._replace(polling_place_name="Spaldwick Community Room")
+
+        return super().station_record_to_dict(record)
