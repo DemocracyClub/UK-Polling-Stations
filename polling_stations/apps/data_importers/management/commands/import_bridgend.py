@@ -1,13 +1,11 @@
-from addressbase.models import Address
 from data_importers.management.commands import BaseHalaroseCsvImporter
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "BGE"
-    addresses_name = "2024-05-02/2024-03-28T16:34:21.170746/Eros_SQL_Output001.csv"
-    stations_name = "2024-05-02/2024-03-28T16:34:21.170746/Eros_SQL_Output001.csv"
-    elections = ["2024-05-02"]
+    addresses_name = "2024-07-04/2024-06-24T18:01:04.431232/bge-combined.csv"
+    stations_name = "2024-07-04/2024-06-24T18:01:04.431232/bge-combined.csv"
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         if record.housepostcode in [
@@ -29,12 +27,3 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    # quick fix to show maps for Halarose records that have a valid UPRN in the PollingVenueUPRN field
-    def get_station_point(self, record):
-        uprn = record.pollingvenueuprn.strip().lstrip("0")
-        try:
-            ab_rec = Address.objects.get(uprn=uprn)
-            return ab_rec.location
-        except ObjectDoesNotExist:
-            return super().get_station_point(record)
