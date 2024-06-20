@@ -4,8 +4,8 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CAB"
-    addresses_name = "2024-07-04/2024-06-18T16:13:13.629157/CAB_combined.csv"
-    stations_name = "2024-07-04/2024-06-18T16:13:13.629157/CAB_combined.csv"
+    addresses_name = "2024-07-04/2024-06-20T16:15:36.856129/CAB_combined_v2.csv"
+    stations_name = "2024-07-04/2024-06-20T16:15:36.856129/CAB_combined_v2.csv"
     elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
@@ -46,3 +46,13 @@ class Command(BaseHalaroseCsvImporter):
             )
 
         return super().get_station_point(record)
+
+    def station_record_to_dict(self, record):
+        # More accurate point for station, awaiting council reply:
+        # # The Salvation Army Community Centre, 104, Mill Road, Cambridge
+        # if self.get_station_hash(record) == "28-the-salvation-army-community-centre":
+        #     record = record._replace(
+        #         pollingstationeasting="546177.25", pollingstationnorthing="257892.79"
+        #     )
+
+        return super().station_record_to_dict(record)
