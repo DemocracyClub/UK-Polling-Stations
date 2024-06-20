@@ -29,7 +29,7 @@ brew install node
 
 From a clean install of Ubuntu 22.04 (Bionic):
 ```
-sudo apt-get install postgresql-14 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-14-postgis-3 libxml2-dev libxslt1-dev nodejs npm
+sudo apt-get install postgresql-16 postgresql-server-dev-all python3-psycopg2 python3-dev postgis postgresql-16-postgis-3 libxml2-dev libxslt1-dev nodejs npm tidy
 
 sudo npm install -g npm@latest-6
 ```
@@ -39,22 +39,36 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/
 
 ### Install python dependencies
 
-- Local Dev without CDK libs
+For a full install (includes CDK libs):
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+pip install \
+-r requirements/base.txt \
+-r requirements/testing.txt \
+-r requirements/local.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt \
+-r requirements/cdk.txt
+```
+For local development (does not include CDK libs):
+```
+pip install \
+-r requirements/base.txt \
+-r requirements/testing.txt \
+-r requirements/local.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+```
+For test-running only:
+```
+pip install \
+-r requirements/base.txt \
+-r requirements/testing.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements.txt \
+-r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 ```
 
-- Local Dev with CDK libs
-```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
-```
+To update requirements:
 
-- Just Running Tests
-```
-pip install -r requirements/base.txt -r requirements/testing.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
-```
-
-- Update requirements
 Bump version in relevant requirements file, e.g. ```base.in``` then run ```python -m invoke requirements --upgrade```.
 
 ### Install front-end dependencies
@@ -62,17 +76,12 @@ Bump version in relevant requirements file, e.g. ```base.in``` then run ```pytho
 npm install
 ```
 
-### Install testing python dependencies
-```
-pip install -r requirements/testing.txt
-```
-
 ### Install testing system dependencies
 We have a suite of end-to-end integration tests. We use [Playwright](https://playwright.dev/python/)
 with `pytest` to run these.
 
 To set up playwright, after running `pip install -r requirements/testing.txt`,
-run `playwright install`. This will download the browser biniaries required
+run `playwright install`. This will download the browser binaries required
 for your system.
 
 The Playwright tests will run in a headless browser as part of a normal `pytest` run.
@@ -86,9 +95,11 @@ cp polling_stations/settings/local.example.py polling_stations/settings/local.py
 ```
 
 ### Create database
+On Linux, the testing suite will try to connect to the database as the current user so make sure that username of the postgres user you create in the following commands matches the name of the Linux user that will be running the test suite.
+
 ```
 sudo -u postgres createdb polling_stations
-sudo -u postgres createuser dc -P -s
+sudo -u postgres createuser username -P -s
 sudo -u postgres psql polling_stations
 psql (9.3.6)
 Type "help" for help.

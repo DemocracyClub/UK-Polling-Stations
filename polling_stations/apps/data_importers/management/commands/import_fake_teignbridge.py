@@ -14,3 +14,4 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TEI"
     addresses_name = "Democracy_Club__12December2019tein.csv"
     stations_name = "Democracy_Club__12December2019tein.csv"
+    elections = ["2124-05-02"]
