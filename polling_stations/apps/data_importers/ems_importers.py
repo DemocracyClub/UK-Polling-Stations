@@ -339,7 +339,7 @@ class BaseHalaroseCsvImporter(
     def get_station_point(self, record):
         location = None
 
-        # if we have a UPRN, try that:
+        # try UPRN first, if available
         if (
             hasattr(record, self.station_uprn_field)
             and getattr(record, self.station_uprn_field).strip()
@@ -348,16 +348,16 @@ class BaseHalaroseCsvImporter(
                 location = self.geocode_from_uprn(record)
             except ObjectDoesNotExist:
                 location = None
-        # try postcode, if allowed
-        elif self.allow_station_point_from_postcode:
+
+        # if UPRN is not available or fails, try postcode if allowed
+        if location is None and self.allow_station_point_from_postcode:
             postcode = self.get_station_postcode(record)
-            if postcode == "":
-                return None
-            try:
-                location_data = geocode_point_only(postcode)
-                location = location_data.centroid
-            except PostcodeError:
-                location = None
+            if postcode:
+                try:
+                    location_data = geocode_point_only(postcode)
+                    location = location_data.centroid
+                except PostcodeError:
+                    location = None
 
         return location
 
