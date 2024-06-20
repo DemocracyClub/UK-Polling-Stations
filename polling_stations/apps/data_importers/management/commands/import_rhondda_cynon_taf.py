@@ -27,44 +27,18 @@ class Command(BaseHalaroseCsvImporter):
         if self.get_station_hash(record) == "136-rhydyfelin-library":
             record = record._replace(pollingstationpostcode="CF37 5LR")
 
-        # The following stations have postcodes that don't match their postcode in addressbase
-        # These ones are off by only one letter so I'm commenting them out pending council response:
+        # The following stations postcodes have been confirmed with the council:
 
-        # # 'LLWYNYPIA BOYS AND GIRLS CLUB, LLWYNYPIA ROAD, TONYPANDY, CF40 2EL' (id: 276)
-        # if record.pollingvenueid == '276': record = record._replace(pollingstationpostcode='CF40 2ET')
-
-        # # 'LLANHARRY COMMUNITY CENTRE, TYLACOCH, LLANHARRY, CF72 9LF' (id: 57)
-        # if record.pollingvenueid == '57': record = record._replace(pollingstationpostcode='CF72 9LR')
-
-        # # 'TALBOT GREEN PAVILION, LANELAY ROAD, TALBOT GREEN, PONTYCLUN, CF72 8HY' (id: 37)
-        # if record.pollingvenueid == '37': record = record._replace(pollingstationpostcode='CF72 8HS')
-
-        # # 'LLANHARAN RUGBY CLUB, BRIDGEND ROAD, LLANHARAN, PONTYCLUN, CF72 9RD' (id: 53)
-        # if record.pollingvenueid == '53': record = record._replace(pollingstationpostcode='CF72 9RA')
-
-        # # 'COLEG Y CYMOEDD NANTGARW CAMPUS, RAIL BUILDING, GROUND FLOOR, PARC NANTGARW, HEOL Y COLEG, CARDIFF, CF15 7QY' (id: 236)
-        # if record.pollingvenueid == '236': record = record._replace(pollingstationpostcode='CF15 7QX')
-
-        # # 'CARADOG PRIMARY SCHOOL, ACCESS VIA PENDARREN STREET, ABERDARE, CF44 7PE' (id: 79)
-        # if record.pollingvenueid == '79': record = record._replace(pollingstationpostcode='CF44 7PB')
-
-        # These ones are off by two or more letters:
-
-        # 'HOPE CHURCH RHONDDA, DUNRAVEN STREET, TONYPANDY, CF40 1AN' (id: 232)
-        if record.pollingvenueid == "232":
-            record = record._replace(pollingstationpostcode="")
-
-        # 'THE FEEL GOOD FACTORY, ABERCYNON ROAD, YNYSYBOETH, MOUNTAIN ASH, CF45 4XZ' (id: 104)
-        if record.pollingvenueid == "104":
-            record = record._replace(pollingstationpostcode="")
-
-        # 'COEDELY COMMUNITY CENTRE, ELY VALLEY ROAD, COEDELY, TONYREFAIL, CF39 8BL' (id: 38)
-        if record.pollingvenueid == "38":
-            record = record._replace(pollingstationpostcode="")
-
-        # 'CYLCH MEITHRIN ABERDAR, WIND STREET, ABERDARE, CF44 7ES' (id: 81)
-        if record.pollingvenueid == "81":
-            record = record._replace(pollingstationpostcode="")
+        # 'LLWYNYPIA BOYS AND GIRLS CLUB, LLWYNYPIA ROAD, TONYPANDY, CF40 2EL'
+        # 'LLANHARRY COMMUNITY CENTRE, TYLACOCH, LLANHARRY, CF72 9LF'
+        # 'TALBOT GREEN PAVILION, LANELAY ROAD, TALBOT GREEN, PONTYCLUN, CF72 8HY'
+        # 'LLANHARAN RUGBY CLUB, BRIDGEND ROAD, LLANHARAN, PONTYCLUN, CF72 9RD'
+        # 'COLEG Y CYMOEDD NANTGARW CAMPUS, RAIL BUILDING, GROUND FLOOR, PARC NANTGARW, HEOL Y COLEG, CARDIFF, CF15 7QY'
+        # 'CARADOG PRIMARY SCHOOL, ACCESS VIA PENDARREN STREET, ABERDARE, CF44 7PE'
+        # 'HOPE CHURCH RHONDDA, DUNRAVEN STREET, TONYPANDY, CF40 1AN'
+        # 'THE FEEL GOOD FACTORY, ABERCYNON ROAD, YNYSYBOETH, MOUNTAIN ASH, CF45 4XZ'
+        # 'COEDELY COMMUNITY CENTRE, ELY VALLEY ROAD, COEDELY, TONYREFAIL, CF39 8BL'
+        # 'CYLCH MEITHRIN ABERDAR, WIND STREET, ABERDARE, CF44 7ES'
 
         return super().station_record_to_dict(record)
 
