@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BOL"
     addresses_name = (
-        "2024-05-02/2024-03-18T14:48:49.155147/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-20T16:20:19.994021/Democracy_Club__04July2024.CSV"
     )
     stations_name = (
-        "2024-05-02/2024-03-18T14:48:49.155147/Democracy_Club__02May2024.CSV"
+        "2024-07-04/2024-06-20T16:20:19.994021/Democracy_Club__04July2024.CSV"
     )
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -34,81 +34,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "BL4 8JA",
-            "BL6 4ED",
-            "BL4 0LW",
-            "BL1 2JU",
-            "BL5 2DL",
-            "BL1 5HP",
-            "BL3 2DP",
-            "BL3 3JY",
-            "BL2 4JU",
-            "BL1 3SJ",
             "BL1 2HZ",
+            "BL1 2JU",
+            "BL1 5HP",
+            "BL2 4JU",
+            "BL3 2DP",
+            "BL3 3GR",
+            "BL3 3JY",
+            "BL4 0LW",
+            "BL4 8JA",
+            "BL5 2DL",
+            "BL6 4ED",
             # looks wrong
             "BL5 2DJ",
             "BL3 2QH",
             "BL1 2HE",
+            "BL3 3GR",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # add postcode for: The One Stop Shop, Bolton Town Hall, Le Mans Crescent, Bolton
-        if record.polling_place_id == "5573":
-            record = record._replace(polling_place_postcode="BL1 1RJ")
-
-        # add postcode for: The Triangle Annexe, Chorley Old Road
-        if record.polling_place_id == "5758":
-            record = record._replace(polling_place_postcode="BL1 5QP")
-
-        # add postcode for: St Thomas CE Primary School, Eskrick Street
-        if record.polling_place_id == "5792":
-            record = record._replace(polling_place_postcode="BL1 3JB")
-
-        # add postcode for: Ucan Centre (Former Tonge Moor Library), Tonge Moor Road
-        if record.polling_place_id == "5544":
-            record = record._replace(polling_place_postcode="BL2 2LE")
-
-        # add postcode for: Hilton Community Centre, Nuttall Avenue
-        if record.polling_place_id == "5688":
-            record = record._replace(polling_place_postcode="BL6 5RA")
-
-        # add postcode for: Chorley New Rd Primary School, Chorley New Road
-        if record.polling_place_id == "5691":
-            record = record._replace(polling_place_postcode="BL6 6EW")
-
-        # add postcode for: The Pavilion, Doe Hey Park, Cawdor Avenue
-        if record.polling_place_id == "5646":
-            record = record._replace(polling_place_postcode="BL4 7HX")
-
-        # add postcode for: Prestolee CP School, Church Road
-        if record.polling_place_id == "5656":
-            record = record._replace(polling_place_postcode="M26 1HJ")
-
-        # add postcode for: Waggon Road Children's Centre, Waggon Road
-        if record.polling_place_id == "5532":
-            record = record._replace(polling_place_postcode="BL2 5AB")
-
-        # add postcode for: Blackrod Community Centre (Rivington Room), Community Centre, Vicarage Road
-        if record.polling_place_id == "5684":
-            record = record._replace(polling_place_postcode="BL6 5AB")
-
-        # add postcode for: Mobile Station, Cross Street
-        if record.polling_place_id == "5784":
-            record = record._replace(polling_place_postcode="BL1 2SQ")
-
-        # add postcode for: Community Centre, Roosevelt Road
-        if record.polling_place_id == "5655":
-            record = record._replace(polling_place_postcode="BL4 8EA")
-
-        # add postcode for: Mobile Station At Knutshaw Crescent
-        if record.polling_place_id == "5734":
-            record = record._replace(polling_place_postcode="BL3 4SB")
-
-        # add postcode for: Drummond Street Community Centre, Drummond Street
-        if record.polling_place_id == "5481":
-            record = record._replace(polling_place_postcode="BL1 6QQ")
-
-        return super().station_record_to_dict(record)
