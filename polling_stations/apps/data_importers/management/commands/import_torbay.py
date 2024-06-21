@@ -81,8 +81,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # The following station postcode looks wrong, commenting out until council confirms:
-        # # Beefeater Restaurant, Whiterock, Long Road South, Paignton TQ4 7RZ
-        # if record.polling_place_id == "10315":
-        #     record = record._replace(polling_place_postcode="TQ4 7AZ")
+        # The following station postcode has been confirmed by the council:
+
+        # Beefeater Restaurant, Whiterock, Long Road South, Paignton TQ4 7RZ
+        if record.polling_place_id == "10315":
+            record = record._replace(polling_place_postcode="TQ4 7AZ")
         return super().station_record_to_dict(record)
