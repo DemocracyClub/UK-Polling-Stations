@@ -4,12 +4,8 @@ from django.contrib.gis.geos import Point
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "EPP"
-    addresses_name = (
-        "2024-07-04/2024-05-28T17:32:24.547455/Democracy_Club__04July2024.tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-05-28T17:32:24.547455/Democracy_Club__04July2024.tsv"
-    )
+    addresses_name = "2024-07-04/2024-06-26T13:59:04.521969/EPP_combined.tsv"
+    stations_name = "2024-07-04/2024-06-26T13:59:04.521969/EPP_combined.tsv"
     elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
@@ -33,6 +29,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # splits
             "CM16 6JA",
+            "CM16 7QR",
             # suspect
             "CM5 0HP",
         ]:
