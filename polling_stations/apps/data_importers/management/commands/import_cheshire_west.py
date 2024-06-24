@@ -3,12 +3,8 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHW"
-    addresses_name = (
-        "2024-07-04/2024-06-18T10:00:13.527644/Democracy_Club__04July2024 (31).tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-18T10:00:13.527644/Democracy_Club__04July2024 (31).tsv"
-    )
+    addresses_name = "2024-07-04/2024-06-18T10:00:13.527644/CHW_combined.tsv"
+    stations_name = "2024-07-04/2024-06-18T10:00:13.527644/CHW_combined.tsv"
     elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
@@ -35,16 +31,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
+            "CW9 6EL",
+            "CW9 8XB",
+            "CH66 1NZ",
             "CW9 8PU",
+            "CW7 3EQ",
+            "CW9 8UN",
             "CW8 4BT",
+            "CW7 2GG",
+            "CW8 4AB",
             "CH4 7DG",
+            "WA6 6LN",
+            "CW6 9EP",
             "CH65 9JU",
             "CH64 3SG",
-            "CW7 2GG",
-            "CW7 3EQ",
-            "CW8 4AB",
-            "CH66 1NZ",
-            "CW6 9EP",
+            "CW9 7RX",
+            "WA6 0JA",
         ]:
             return None
 
