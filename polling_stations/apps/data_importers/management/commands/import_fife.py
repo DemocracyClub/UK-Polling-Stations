@@ -8,20 +8,22 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
+        # The following coordinte changes are from the council:
+
         # ST ANDREWS-ERSKINE PARISH CHURCH HALL, ROBERTSON ROAD, DUNFERMLINE
         if record.stationcode == "26":
-            record = record._replace(xordinate="", yordinate="")
+            record = record._replace(xordinate="310949.65", yordinate="688612.91")
 
         # OAKLEY CENTRE, STATION ROAD, OAKLEY (two polling stations)
         if record.stationcode in [
             "12",
             "11",
         ]:
-            record = record._replace(xordinate="", yordinate="")
+            record = record._replace(xordinate="302501.68", yordinate="689325.09")
 
         # BRITISH LEGION, THE CROSS, KENNOWAY
         if record.stationcode == "302":
-            record = record._replace(xordinate="", yordinate="")
+            record = record._replace(xordinate="335047.31", yordinate="702501.42")
 
         return super().station_record_to_dict(record)
 
