@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "GLG"
-    addresses_name = "2024-07-04/2024-06-10T12:22:22.251389/Eros_SQL_Output003.csv"
-    stations_name = "2024-07-04/2024-06-10T12:22:22.251389/Eros_SQL_Output003.csv"
+    addresses_name = "2024-07-04/2024-06-25T10:09:53.933815/GLG_combined.csv"
+    stations_name = "2024-07-04/2024-06-25T10:09:53.933815/GLG_combined.csv"
     elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
@@ -43,4 +43,12 @@ class Command(BaseHalaroseCsvImporter):
         if "ST MARGARETS PARISH CHURCH HALL" in record.pollingstationname:
             record = record._replace(pollingstationpostcode="")
 
+        # amendment from council:
+        # old: MARYHILL BURGH  HALLS, 24 GAIRBRIAD AVENUE, GLASGOW
+        # new: Glasgow Club Maryhill, 34 Gairbraid Avenue, Glasgow
+        if self.get_station_hash(record) == "128-maryhill-burgh-halls":
+            record = record._replace(
+                pollingstationname="Glasgow Club Maryhill",
+                pollingstationaddress_1="34 GAIRBRIAD AVENUE",
+            )
         return super().station_record_to_dict(record)
