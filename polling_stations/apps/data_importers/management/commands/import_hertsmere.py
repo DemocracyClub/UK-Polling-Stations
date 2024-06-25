@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "HER"
-    addresses_name = "2024-07-04/2024-05-29T18:04:32.927620/Eros_SQL_Output006.csv"
-    stations_name = "2024-07-04/2024-05-29T18:04:32.927620/Eros_SQL_Output006.csv"
+    addresses_name = "2024-07-04/2024-06-25T10:30:54.426516/HER_combined.csv"
+    stations_name = "2024-07-04/2024-06-25T10:30:54.426516/HER_combined.csv"
     elections = ["2024-07-04"]
 
     # Following warnings checked and no need for correction:
