@@ -35,8 +35,13 @@ class Command(BaseDemocracyCountsCsvImporter):
             record = record._replace(xordinate="519309", yordinate="167339")
 
         # Old Malden Children's Centre, Lawrence Avenue, New Malden
+        # Name change from council
         if record.stationcode == "OMA-W_46":
-            record = record._replace(xordinate="521105", yordinate="166696")
+            record = record._replace(
+                xordinate="521105",
+                yordinate="166696",
+                placename="Old Malden Children's Centre (Lawrence Avenue Entrance)",
+            )
 
         # Temporary Station - Kings College Sports Ground, Windsor Avenue, New Malden
         if record.stationcode == "GLD-W_22":
