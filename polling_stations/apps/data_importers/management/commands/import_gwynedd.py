@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "GWN"
-    addresses_name = "2024-07-04/2024-06-10T12:03:25.557144/Eros_SQL_Output002.csv"
-    stations_name = "2024-07-04/2024-06-10T12:03:25.557144/Eros_SQL_Output002.csv"
+    addresses_name = "2024-07-04/2024-06-25T12:51:22.888148/GWN_combined.csv"
+    stations_name = "2024-07-04/2024-06-25T12:51:22.888148/GWN_combined.csv"
     elections = ["2024-07-04"]
     csv_encoding = "windows-1252"
 
@@ -46,6 +46,7 @@ class Command(BaseHalaroseCsvImporter):
             "10070361201",  # TY CAM, RHOSTRYFAN, CAERNARFON
             "200003178611",  # COED MAWR COTTAGE, LLANBERIS ROAD, RHOSBODRUAL, CAERNARFON
             "200003178515",  # 27 LLANBERIS ROAD, RHOSBODRUAL, CAERNARFON
+            "10094363547",  # 47 PLAS Y COED, BANGOR
         ]:
             return None
 
@@ -60,6 +61,8 @@ class Command(BaseHalaroseCsvImporter):
             "LL53 5TP",
             "LL55 2TD",
             "LL55 2SG",
+            "LL57 4HG",
+            "LL57 3UA",
         ]:
             return None
 
