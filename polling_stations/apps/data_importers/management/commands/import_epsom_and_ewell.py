@@ -5,7 +5,7 @@ class Command(BaseGitHubImporter):
     srid = 27700
     districts_srid = 27700
     council_id = "EPS"
-    elections = ["2024-05-02"]
+    elections = ["2024-07-04"]
     scraper_name = "wdiv-scrapers/DC-PollingStations-EpsomAndEwell"
     geom_type = "gml"
     seen = set()
