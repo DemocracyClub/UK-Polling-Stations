@@ -43,4 +43,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="413613", polling_place_northing="91759"
             )
 
+        # bug report 672: removing station map until council responds for:
+        # Station B - The Annexe at St John`s Church, Dunyeats Road, Broadstone BH18 8AQ
+        # suggested coords:
+        # northing: 95825.15,
+        # easting: 400560.37
+        if record.polling_place_id in [
+            "17528",
+            "17526",
+        ]:
+            record = record._replace(
+                polling_place_easting="",
+                polling_place_northing="",
+                polling_place_uprn="",
+            )
+
         return super().station_record_to_dict(record)
