@@ -52,11 +52,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # bugreport #631
-        # remove incorrect coords for: St John Vianney School, Stanley Road, London, N15 3HD
-        if record.polling_place_id == "11399":
+        # correct coords from council for: St John Vianney School, Stanley Road, London, N15 3HD
+        if record.polling_place_id == "12100":
             record = record._replace(
-                polling_place_easting="", polling_place_northing=""
+                polling_place_easting="531938", polling_place_northing="189139"
             )
 
         return super().station_record_to_dict(record)
