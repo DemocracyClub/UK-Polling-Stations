@@ -69,11 +69,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # bug report from freshdesk:
-        # removes map pending council response for: Hatton Jubilee Hall, Station Road, Hatton
+        # correct coords from council for: Hatton Jubilee Hall, Station Road, Hatton
         if record.polling_place_id == "9691":
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
-                polling_place_uprn="",
+                polling_place_easting="421571",
+                polling_place_northing="330041",
             )
         return super().station_record_to_dict(record)
