@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "BIR"
-    addresses_name = "2024-07-04/2024-06-10T09:15:31.652803/Eros_SQL_Output075.csv"
-    stations_name = "2024-07-04/2024-06-10T09:15:31.652803/Eros_SQL_Output075.csv"
+    addresses_name = "2024-07-04/2024-06-27T08:30:10.119012/Eros_SQL_Output077.csv"
+    stations_name = "2024-07-04/2024-06-27T08:30:10.119012/Eros_SQL_Output077.csv"
     elections = ["2024-07-04"]
 
     def station_record_to_dict(self, record):
@@ -34,7 +34,6 @@ class Command(BaseHalaroseCsvImporter):
             "30-st-marys-catholic-primary-school",  # St Mary's Catholic Primary School Vivian Road
         ]:
             record = record._replace(pollingvenueuprn="")
-
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -59,6 +58,13 @@ class Command(BaseHalaroseCsvImporter):
             "100070414533",  # 1 ICKNIELD PORT ROAD, BIRMINGHAM
             "100070414535",  # 3 ICKNIELD PORT ROAD, BIRMINGHAM
             "100070414536",  # 4 ICKNIELD PORT ROAD, BIRMINGHAM
+            "10023506546",  # 31 REA ROAD, NORTHFIELD, BIRMINGHAM
+            "10023506547",  # 27 REA ROAD, NORTHFIELD, BIRMINGHAM
+            "10023506544",  # 33 REA ROAD, NORTHFIELD, BIRMINGHAM
+            "10023506545",  # 29 REA ROAD, NORTHFIELD, BIRMINGHAM
+            "100070526161",  # 145 STONEHOUSE LANE, QUINTON, BIRMINGHAM
+            "100070526157",  # 141 STONEHOUSE LANE, QUINTON, BIRMINGHAM
+            "100070526159",  # 143 STONEHOUSE LANE, QUINTON, BIRMINGHAM
         ]:
             return None
 
@@ -91,5 +97,4 @@ class Command(BaseHalaroseCsvImporter):
             "B20 2RW",
         ]:
             return None
-
         return super().address_record_to_dict(record)
