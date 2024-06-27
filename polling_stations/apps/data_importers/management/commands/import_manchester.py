@@ -39,4 +39,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
 
+        # amendment from council:
+        # old polling station: Manchester Oratory (St Chads Church), Cheetham Hill.
+        # new polling station: Central Library, St Peters Square, Manchester, M2 5PD
+        if record.polling_place_district_reference == "1DGA":
+            record = record._replace(
+                polling_place_id="14354",
+                polling_place_name="Central Library",
+                polling_place_address_1="St Peters Square",
+                polling_place_address_2="",
+                polling_place_address_3="Manchester",
+                polling_place_address_4="",
+                polling_place_postcode="M2 5PD",
+                polling_place_easting="383864",
+                polling_place_northing="397941",
+                polling_place_uprn="",
+                default_polling_place_id="2834",
+            )
         return super().address_record_to_dict(record)
