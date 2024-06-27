@@ -3,12 +3,8 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PRE"
-    addresses_name = (
-        "2024-07-04/2024-06-10T15:09:03.221481/Democracy_Club__04July2024.tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-10T15:09:03.221481/Democracy_Club__04July2024.tsv"
-    )
+    addresses_name = "2024-07-04/2024-06-27T14:35:25.972080/PRE_combined.tsv"
+    stations_name = "2024-07-04/2024-06-27T14:35:25.972080/PRE_combined.tsv"
     elections = ["2024-07-04"]
     csv_delimiter = "\t"
 
@@ -51,6 +47,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100010538496",  # 1 CEMETERY ROAD, PRESTON
             "100010532131",  # 26-28 ARNO STREET, PRESTON
             "100012746089",  # 119 OXFORD STREET, PRESTON
+            "10093760392",  # 48 CHELTENHAM CRESCENT, LIGHTFOOT GREEN, PRESTON
         ]:
             return None
 
