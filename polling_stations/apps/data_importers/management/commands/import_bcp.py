@@ -28,7 +28,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # removing postcodes until council responds for Station A and B at:
+        # postcode correction from council for:
         # St. George`s Church Hall (Oakdale), Darby`s Lane, (entrance at junction with Johnston Road), Oakdale, Poole
         if record.polling_place_id in [
             "17399",
@@ -43,19 +43,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="413613", polling_place_northing="91759"
             )
 
-        # bug report 672: removing station map until council responds for:
-        # Station B - The Annexe at St John`s Church, Dunyeats Road, Broadstone BH18 8AQ
-        # suggested coords:
-        # northing: 95825.15,
-        # easting: 400560.37
+        # bug report 672:
+        # coord correction from council for stations A and B at:
+        # The Annexe at St John`s Church, Dunyeats Road, Broadstone BH18 8AQ
         if record.polling_place_id in [
             "17528",
             "17526",
         ]:
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
-                polling_place_uprn="",
+                polling_place_easting="400556",
+                polling_place_northing="95824",
             )
 
         return super().station_record_to_dict(record)
