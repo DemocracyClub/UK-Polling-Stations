@@ -25,6 +25,15 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode == "302":
             record = record._replace(xordinate="335047.31", yordinate="702501.42")
 
+        # removes map for the following station pending council response:
+        # TORBAIN PARISH CHURCH HALL, CARRON PLACE, KIRKCALDY, FIFE KY2 6PS
+        if record.stationcode in [
+            "117",
+            "118",
+            "119",
+        ]:
+            record = record._replace(xordinate="", yordinate="")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
