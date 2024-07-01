@@ -32,8 +32,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # postcode correction for West London University Sports Pavilion, (Home of Pitshanger Football Club), Argyle Road, W13 8EL
-        if record.polling_place_id == "7785":
-            record = record._replace(polling_place_postcode="")
+        # The postcode for the following station has been confirmed by the council:
+        # West London University Sports Pavilion, (Home of Pitshanger Football Club), Argyle Road, W13 8EL
 
         return super().station_record_to_dict(record)
