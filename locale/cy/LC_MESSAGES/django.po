@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-05 12:18+0100\n"
+"POT-Creation-Date: 2024-06-13 09:31+0100\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -255,31 +255,32 @@ msgstr ""
 msgid "Opening times"
 msgstr ""
 
-#: polling_stations/templates/fragments/at_the_station.html:5
+#: polling_stations/templates/fragments/at_the_station.html:6
 #, fuzzy
 #| msgid "Find your polling station"
 msgid "At the polling station"
 msgstr "Dod o hyd i'ch gorsaf bleidleisio"
 
-#: polling_stations/templates/fragments/at_the_station.html:12
+#: polling_stations/templates/fragments/at_the_station.html:13
 msgid "nearby parking"
 msgstr "lle parcio gerllaw"
 
-#: polling_stations/templates/fragments/at_the_station.html:19
+#: polling_stations/templates/fragments/at_the_station.html:20
 msgid "disabled parking"
 msgstr "parcio i'r anabl"
 
-#: polling_stations/templates/fragments/at_the_station.html:33
+#: polling_stations/templates/fragments/at_the_station.html:34
 msgid "a hearing loop installed"
 msgstr "mae dolen glyw wedi'i gosod"
 
-#: polling_stations/templates/fragments/at_the_station.html:40
+#: polling_stations/templates/fragments/at_the_station.html:41
 msgid "publicly accessible toilets"
 msgstr "toiledau cyhoeddus"
 
-#: polling_stations/templates/fragments/at_the_station.html:46
+#: polling_stations/templates/fragments/at_the_station.html:47
 msgid "The electoral services team have added a note about this station:"
-msgstr "Mae'r tîm gwasanaethau etholiadol wedi ychwanegu nodyn am yr orsaf hon:"
+msgstr ""
+"Mae'r tîm gwasanaethau etholiadol wedi ychwanegu nodyn am yr orsaf hon:"
 
 #: polling_stations/templates/fragments/cancelled_election.html:6
 msgid "Cancelled Election"
@@ -471,7 +472,8 @@ msgstr "Cyrraedd yno"
 msgid ""
 "The electoral services team have added a note about getting to this station:"
 msgstr ""
-"Mae'r tîm gwasanaethau etholiadol wedi ychwanegu nodyn am gyrraedd yr orsaf hon:"
+"Mae'r tîm gwasanaethau etholiadol wedi ychwanegu nodyn am gyrraedd yr orsaf "
+"hon:"
 
 #: polling_stations/templates/fragments/help_your_council.html:6
 msgid "Your election (might) need you!"
@@ -710,16 +712,15 @@ msgstr "Gallwch bleidleisio yn y cnawd yn:"
 
 #: polling_stations/templates/fragments/polling_station_known.html:57
 #, fuzzy
-#| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgid "Polling stations are open from 7am to 10pm"
-msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
+msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh."
 
 #: polling_stations/templates/fragments/polling_station_known.html:57
 #, python-format
 msgid " on %(NEXT_CHARISMATIC_ELECTION_DATE)s"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:85
+#: polling_stations/templates/fragments/polling_station_known.html:87
 msgid ""
 "\n"
 "                <h3>Advance voting trial</h3>\n"
@@ -762,7 +763,12 @@ msgstr ""
 "href=\"%(council_website)s\">ewch i'w gwefan</a></strong>."
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:19
-msgid "If you don't have a poll card, you need to contact your local council."
+#, fuzzy
+#| msgid ""
+#| "If you don't have a poll card, you need to contact your local council."
+msgid ""
+"If you don't have a poll card, you need to contact your appropriate "
+"electoral services team."
 msgstr ""
 "Os nad oes gennych chi gerdyn pleidleisio, bydd angen i chi gysylltu â'ch "
 "cyngor lleol."
@@ -784,10 +790,8 @@ msgid "Or, you need to contact %(council)s."
 msgstr "Neu, mae angen i chi gysylltu â %(council_aspirate)s."
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:32
-#, fuzzy
-#| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgid "Polling stations are open from 7am to 10pm."
-msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
+msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh."
 
 #: polling_stations/templates/fragments/register_to_vote.html:6
 msgid "You need to be registered in order to vote"
@@ -844,8 +848,6 @@ msgid ""
 msgstr ""
 
 #: polling_stations/templates/fragments/you_dont_need_poll_card.html:10
-#, fuzzy
-#| msgid "You don't need your poll card to vote."
 msgid "You do not need your poll card to vote."
 msgstr "Nid oes angen eich cerdyn pleidleisio arnoch i bleidleisio."
 
@@ -886,16 +888,16 @@ msgid "Photographic identification"
 msgstr "Bydd angen dogfen adnabod â llun arnoch chi"
 
 #: polling_stations/templates/home.html:36
-#: polling_stations/templates/home.html:59
+#, fuzzy
+#| msgid ""
+#| "Photographic identification will be required to vote in English local "
+#| "elections, and parliamentary elections across the UK, on and after 4 May "
+#| "2023."
 msgid ""
-"Photographic identification will be required to vote in English local "
-"elections, and parliamentary elections across the UK, on and after 4 May "
-"2023."
+"Photographic identification will be required to vote at a polling station in "
+"the 4 July UK general election."
 msgstr ""
-"ydd angen dull adnabod ffotograffig i bleidleisio mewn etholiadau "
-"lleol yn Lloegr, ac etholiadau seneddol ar draws y DU, ar ac ar ôl "
-"4 Mai 2023."
-
+""
 #: polling_stations/templates/home.html:37
 #: polling_stations/templates/home.html:60
 msgid ""
@@ -914,9 +916,9 @@ msgstr "Dysgwch fwy ar wefan y Comisiwn Etholiadol."
 msgid ""
 "You can apply for a free 'Voter Authority Certificate' if you do not already "
 "possess a valid ID."
-msgstr  ""
-"Gallwch wneud cais am 'Dystysgrif Awdurdod Pleidleiswyr' am ddim os nad ydych "
-"yn gwneud yn barod"
+msgstr ""
+"Gallwch wneud cais am 'Dystysgrif Awdurdod Pleidleiswyr' am ddim os nad "
+"ydych yn gwneud yn barod"
 
 #: polling_stations/templates/home.html:40
 msgid "Apply for free voter ID."
@@ -934,7 +936,8 @@ msgid "%(election_date)s Elections"
 msgstr "Etholiadau %(election_date)s"
 
 #: polling_stations/templates/home.html:50
-msgid "Polling stations are open from 7am to 10pm <strong>today</strong>."
+msgid ""
+"Polling stations are open from 7am to 10pm <strong>today</strong>."
 msgstr ""
 "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh <strong>heddiw</strong>."
 
@@ -950,6 +953,12 @@ msgstr ""
 "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar <strong>%(day_of_week)s "
 "%(election_date)s</strong>."
 
+#: polling_stations/templates/home.html:59
+msgid ""
+"Photographic identification will be required to vote in the 4 July UK "
+"general election."
+msgstr ""
+""
 #: polling_stations/templates/multiple_councils.html:6
 #: polling_stations/templates/postcode_view.html:15
 msgid "Your Polling Station"
