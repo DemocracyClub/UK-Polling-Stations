@@ -1,5 +1,15 @@
 from data_importers.management.commands import BaseHalaroseCsvImporter
 
+FORTON_CRICKET_CLUB = {
+    "pollingstationname": "Forton Cricket Club",
+    "pollingstationaddress_1": "Eccleshall Road",
+    "pollingstationaddress_2": "Forton",
+    "pollingstationaddress_3": "Nr Newport",
+    "pollingstationaddress_4": "Shropshire",
+    "pollingstationaddress_5": "",
+    "pollingstationpostcode": "TF10 8BF",
+}
+
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "STA"
@@ -33,4 +43,23 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
+        station_hash = self.get_station_hash(record)
+
+        # change from Council
+        # old: Forton Village Hall
+        # new: Forton Cricket Club
+        if station_hash == "26-forton-village-hall":
+            record = record._replace(**FORTON_CRICKET_CLUB)
+
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        station_hash = self.get_station_hash(record)
+
+        # change from Council
+        # old: Forton Village Hall
+        # new: Forton Cricket Club
+        if station_hash == "26-forton-village-hall":
+            record = record._replace(**FORTON_CRICKET_CLUB)
+
+        return super().station_record_to_dict(record)
