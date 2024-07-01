@@ -35,3 +35,15 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # YR HEN FECWS, DWYRAN, YNYS MON
+        if self.get_station_hash == "62-yr-hen-fecws":
+            record = record._replace(pollingstationpostcode="LL61 6AU")
+        # NEUADD EGLWYS SANTES FAIR, 1 FFORDD BRYNGWYN, CAERGYBI, YNYS MON
+        if self.get_station_hash(record) == "7-neuadd-eglwys-santes-fair":
+            record = record._replace(pollingstationpostcode="LL65 1TR")
+        # NEUADD GYMUNED LLAINGOCH, SOUTH STACK ROAD, LLAINGOCH, CAERGYBI / HOLYHEAD, YNYS MON
+        if self.get_station_hash(record) == "5-neuadd-gymuned-llaingoch":
+            record = record._replace(pollingstationpostcode="LL65 1LU")
+        return super().station_record_to_dict(record)
