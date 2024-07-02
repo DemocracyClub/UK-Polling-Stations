@@ -96,7 +96,7 @@ class Command(BaseCommand):
                 continue
 
     def run_misc_fixes(self):
-        call_command("misc_fixes")
+        call_command("import_misc_fixes")
 
     def output_summary(self):
         for line in self.summary:

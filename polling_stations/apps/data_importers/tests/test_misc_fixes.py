@@ -1,7 +1,7 @@
 from addressbase.models import Address, UprnToCouncil
 from addressbase.tests.factories import UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
-from data_importers.management.commands.misc_fixes import (
+from data_importers.management.commands.import_misc_fixes import (
     assign_addresses_by_district,
     delete_council_data,
     remove_points_from_addressbase,
