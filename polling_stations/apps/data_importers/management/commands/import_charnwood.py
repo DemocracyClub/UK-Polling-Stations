@@ -52,3 +52,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # station change from council:
+        # old station: Rothley Village Hall, 2 Fowke Street, Rothley, LE7 7PJ
+        # new station: The Templar Room, The Rothley Centre, 12 Mountsorrel Lane, Rothley, LE7 7PR
+        if record.polling_place_id == "12362":
+            record = record._replace(
+                polling_place_name="The Templar Room",
+                polling_place_address_1="The Rothley Centre",
+                polling_place_address_2="12 Mountsorrel Lane",
+                polling_place_postcode="LE7 7PR",
+                polling_place_easting="458370",
+                polling_place_northing="312900",
+                polling_place_uprn="100032070661",
+            )
+
+        return super().station_record_to_dict(record)
