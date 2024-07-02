@@ -148,7 +148,7 @@ class Command(BaseCommand):
         ]
         for council_id in deleteme:
             print("Deleting data for council %s..." % (council_id))
-
+        # change misc fixes
         print("..done")
 
         print("*** ...finished applying misc fixes. ***")
