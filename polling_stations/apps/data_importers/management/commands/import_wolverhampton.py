@@ -18,6 +18,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # change an import script
         # St Joseph`s Church Hall, Coalway Road, Wolverhampton WV3 7LF
         if record.polling_place_id == "31519":
             record = record._replace(polling_place_postcode="")
