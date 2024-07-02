@@ -88,6 +88,6 @@ class Command(BaseDemocracyCountsCsvImporter):
         # bug report #693: removes potentially wrong postcode for:
         # NEUADD EGLWYS LLANARTH CHURCH HALL, LLANARTH, SA47 0NP
         if record.stationcode == "49-1058":
-            record = record._replace(pollingstationpostcode="")
+            record = record._replace(postcode="")
 
         return super().station_record_to_dict(record)
