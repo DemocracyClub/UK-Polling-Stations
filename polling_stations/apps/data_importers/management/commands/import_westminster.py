@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "WSM"
-    addresses_name = "2024-07-04/2024-06-13T16:14:48.759304/WSM_combined.csv"
-    stations_name = "2024-07-04/2024-06-13T16:14:48.759304/WSM_combined.csv"
+    addresses_name = "2024-07-04/2024-07-02T11:47:40.424979/WSM_combined_v2.csv"
+    stations_name = "2024-07-04/2024-07-02T11:47:40.424979/WSM_combined_v2.csv"
     elections = ["2024-07-04"]
 
     def address_record_to_dict(self, record):
