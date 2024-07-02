@@ -21,4 +21,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # St Joseph`s Church Hall, Coalway Road, Wolverhampton WV3 7LF
         if record.polling_place_id == "31519":
             record = record._replace(polling_place_postcode="")
+
+        # fix from council
+        # Old:  St Martin`s Church, Dixon Street, Wolverhampton
+        # New: Parkfield Primary School, Dimmock Street, Parkfield
+        if record.polling_place_id == "31432":
+            record = record._replace(
+                polling_place_name="Parkfield Primary School",
+                polling_place_address_1="Dimmock Street",
+                polling_place_address_2="Parkfield",
+                polling_place_address_3="",
+                polling_place_address_4="Wolverhampton",
+                polling_place_postcode="",
+            )
+
         return super().station_record_to_dict(record)
