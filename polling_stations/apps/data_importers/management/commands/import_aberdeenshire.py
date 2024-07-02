@@ -45,6 +45,19 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             record = record._replace(pollingstationpostcode="AB33 8RN")
 
+        # Station address correction from council for:
+        # old: PORTSOY COMMUNITY CHURCH, SEAFIELD STREET, PORTSOY, BANFF AB45 2QL
+        # new: PORTSOY COMMUNITY CHURCH, THE SQUARE, PORTSOY, BANFF AB45 2NX
+        if self.get_station_hash(record) == "1-portsoy-community-church":
+            record = record._replace(
+                pollingstationname="PORTSOY COMMUNITY CHURCH",
+                pollingstationnumber="1",
+                pollingstationaddress_1="THE SQUARE",
+                pollingstationaddress_2="PORTSOY",
+                pollingstationaddress_3="BANFF",
+                pollingstationpostcode="AB45 2NX",
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
