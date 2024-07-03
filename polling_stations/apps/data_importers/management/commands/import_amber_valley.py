@@ -46,3 +46,13 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Removes wrong point for: SOMERCOTES PARISH HALL Nottingham Road Somercotes Alfreton Derbyshire DE55 4LY
+        if record.stationcode in [
+            "AV93",
+            "AV94",
+        ]:
+            record = record._replace(xordinate="", yordinate="")
+
+        return super().station_record_to_dict(record)
