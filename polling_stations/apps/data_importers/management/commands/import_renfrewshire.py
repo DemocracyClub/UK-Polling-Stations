@@ -41,4 +41,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
 
+        # removes name duplication
+        record = record._replace(add1="")
+
         return super().station_record_to_dict(record)
