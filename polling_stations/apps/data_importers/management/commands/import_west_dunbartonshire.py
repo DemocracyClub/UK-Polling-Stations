@@ -27,3 +27,17 @@ class Command(BaseHalaroseCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # address correction from council:
+        # old: DALMUIR BARCLAY PARISH CHURCH, 21 DURBAN AVENUE, CLYDEBANK, G81 4JH
+        # new: DALMUIR BARCLAY PARISH CHURCH, 20 DURBAN AVENUE, CLYDEBANK, G81 4JH
+        if self.get_station_hash(record) in [
+            "1-dalmuir-barclay-parish-church",
+            "2-dalmuir-barclay-parish-church",
+            "3-dalmuir-barclay-parish-church",
+            "4-dalmuir-barclay-parish-church",
+        ]:
+            record = record._replace(pollingstationaddress_1="20 DURBAIN AVENUE")
+
+        return super().station_record_to_dict(record)
