@@ -83,6 +83,11 @@ class Command(BaseDemocracyCountsCsvImporter):
             record = record._replace(xordinate="432314")
             record = record._replace(yordinate="410992")
 
+        # bugreport # 705
+        # Incorrect location for SHAW LANE SPORTS CLUB
+        if record.stationcode == "64":
+            record = record._replace(xordinate="433482", yordinate="405907")
+
         # removing the following stations because they look like they've been assigned the wrong polling districts:
         if record.pollingstationid in [
             "3119",  # HOUGHTON MAIN WELFARE AND SPORTS CLUB LTD, Sports Ground, Middllecliffe Lane, Middlecliffe, Barnsley
