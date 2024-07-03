@@ -50,6 +50,10 @@ class Command(BaseDemocracyCountsCsvImporter):
         ):
             return None
 
+        # Twitter bug fix
+        if record.stationcode in ("147MSM2", "146MSM2"):
+            record = record._replace(add1="Royal Borough of Windsor and Maidenhead")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
