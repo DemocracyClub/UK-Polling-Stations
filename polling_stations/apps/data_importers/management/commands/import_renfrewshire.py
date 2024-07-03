@@ -44,4 +44,9 @@ class Command(BaseDemocracyCountsCsvImporter):
         # removes name duplication
         record = record._replace(add1="")
 
+        # HOUSTON & KILLELLAN CHURCH HALLS location
+        # https://app.asana.com/0/1207538772343223/1207727040327547/f
+        if record.stationcode in ("3_IN03/1", "3_IN03/2", "3_IN03/3"):
+            record = record._replace(xordinate="240494", yordinate="666785")
+
         return super().station_record_to_dict(record)
