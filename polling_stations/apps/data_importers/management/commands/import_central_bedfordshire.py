@@ -34,5 +34,5 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
         # bug report: removes wrong point for: Flitton Church Hall, Brook Lane, Flitton, Beds
         if record.stationcode == "BX55WF-G1":
-            record = record._replace(xordinate="", yordinate="")
+            record = record._replace(xordinate="505929", yordinate="235815")
         return super().station_record_to_dict(record)
