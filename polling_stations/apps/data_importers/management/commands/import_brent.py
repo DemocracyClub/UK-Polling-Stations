@@ -24,3 +24,13 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # removes wrong point for: Brent Hubs Kilburn Hornbill House 2 Rudolph Road London
+        if record.stationcode in [
+            "69",
+            "70",
+        ]:
+            record = record._replace(xordinate="", yordinate="")
+
+        return super().station_record_to_dict(record)
