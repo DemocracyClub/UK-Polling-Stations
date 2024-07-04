@@ -88,6 +88,11 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode == "64":
             record = record._replace(xordinate="433482", yordinate="405907")
 
+        # bug report # 715
+        # church mapped instead of hall
+        if record.stationcode == "29":
+            record = record._replace(xordinate="", yordinate="")
+
         # removing the following stations because they look like they've been assigned the wrong polling districts:
         if record.pollingstationid in [
             "3119",  # HOUGHTON MAIN WELFARE AND SPORTS CLUB LTD, Sports Ground, Middllecliffe Lane, Middlecliffe, Barnsley
