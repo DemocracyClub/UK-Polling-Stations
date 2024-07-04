@@ -42,4 +42,8 @@ class Command(BaseDemocracyCountsCsvImporter):
         ):
             rec["location"] = Point(527726, 185479, srid=27700)
 
+        # removes wrong point for: ABBEY COMMUNITY CENTRE 172 Belsize Road London
+        if rec["internal_council_id"] == "FB":
+            rec["location"] = None
+
         return rec
