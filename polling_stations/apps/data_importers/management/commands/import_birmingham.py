@@ -46,6 +46,14 @@ class Command(BaseHalaroseCsvImporter):
             rec["location"] = Point(409733, 294494, srid=27700)
             return rec
 
+        # removes map pending council response for stations at:
+        # Four Dwellings Forum Highfield Lane B32 1RJ
+        if self.get_station_hash(record) in [
+            "42-four-dwellings-forum",
+            "43-four-dwellings-forum",
+        ]:
+            record = record._replace(pollingvenueuprn="")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
