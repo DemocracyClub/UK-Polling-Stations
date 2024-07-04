@@ -1,4 +1,5 @@
 from data_importers.management.commands import BaseHalaroseCsvImporter
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseHalaroseCsvImporter):
@@ -34,6 +35,17 @@ class Command(BaseHalaroseCsvImporter):
             "30-st-marys-catholic-primary-school",  # St Mary's Catholic Primary School Vivian Road
         ]:
             record = record._replace(pollingvenueuprn="")
+
+        # Corrected point for stations at:
+        # Hut: Car Park Beggars Bush Public House Corner of Chester Road and Jockey Road
+        if self.get_station_hash(record) in [
+            "462-hut-car-park-beggars-bush-public-house",
+            "463-hut-car-park-beggars-bush-public-house",
+        ]:
+            rec = super().station_record_to_dict(record)
+            rec["location"] = Point(409733, 294494, srid=27700)
+            return rec
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
