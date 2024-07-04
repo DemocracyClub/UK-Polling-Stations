@@ -12,6 +12,16 @@ class Command(BaseHalaroseCsvImporter):
     def station_record_to_dict(self, record):
         if record.pollingstationnumber in self.duplicate_stations:
             return None
+        # station change from council for stations at:
+        # Larkfield Village Hall New Hythe Lane Larkfield Kent ME20 6PU
+        if self.get_station_hash(record) in [
+            "CA-207-larkfield-village-hall",
+            "CA-208-larkfield-village-hall",
+        ]:
+            record = record._replace(
+                pollingstationname="Larkfield Leisure Centre",
+                pollingstationpostcode="ME20 6RH",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -27,4 +37,15 @@ class Command(BaseHalaroseCsvImporter):
             "ME19 5PA",
         ]:
             return None
+
+        # reassign addresses for Larkfield Village Hall station change:
+        if self.get_station_hash(record) in [
+            "CA-207-larkfield-village-hall",
+            "CA-208-larkfield-village-hall",
+        ]:
+            record = record._replace(
+                pollingstationname="Larkfield Leisure Centre",
+                pollingstationpostcode="ME20 6RH",
+            )
+
         return super().address_record_to_dict(record)
