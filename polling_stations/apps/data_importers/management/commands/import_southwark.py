@@ -29,3 +29,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # station point correction from council for:
+        # Thomas Calton Centre, Corner of Alpha Street and Choumert Road, London
+        if record.polling_place_id == "18506":
+            record = record._replace(
+                polling_place_easting="534244",
+                polling_place_northing="176074",
+            )
+        return super().station_record_to_dict(record)
