@@ -80,6 +80,8 @@ class Command(BaseGitHubImporter):
 
         stations = []
         for code in codes:
+            if code in ("LAWK", "LAWL", "LAWJ", "LAWG"):
+                postcode = "BS2 0LT"
             stations.append(
                 {
                     "internal_council_id": code,
