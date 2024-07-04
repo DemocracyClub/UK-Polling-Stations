@@ -48,4 +48,14 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
 
+        # Removes wrong point for stations at:
+        # NWKLEUS KIRKTON ROAD KILMARNOCK KA3 2DF
+        if record.stationcode in [
+            "KAL16",
+            "KAL15",
+            "KAL14",
+            "KAL13",
+            "KAL12",
+        ]:
+            record = record._replace(xordinate="", yordinate="")
         return super().station_record_to_dict(record)
