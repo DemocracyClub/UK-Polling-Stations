@@ -26,4 +26,10 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             return None
 
-        return super().address_record_to_dict(record)
+        return super().address_record_to_dict(record)  #
+
+    def station_record_to_dict(self, record):
+        # User bug report: station location wrong.
+        if record.stationcode == "S110":
+            record = record._replace(xordinate="", yordinate="")
+        return super().station_record_to_dict(record)
