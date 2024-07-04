@@ -7,9 +7,7 @@
 asana==5.0.7 \
     --hash=sha256:2dbe894400db4fc193ca79aef4c319ef9a039d6526fa6c017d77d5e54d836e4f \
     --hash=sha256:8cf89c2518ba55d1a0132afa0f426966cb1254d55cbea13afd533a278b503ff6
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+    # via -r requirements/base.in
 asgiref==3.8.1 \
     --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
     --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
@@ -436,9 +434,9 @@ django-cors-headers==4.3.1 \
     --hash=sha256:0b1fd19297e37417fc9f835d39e45c8c642938ddba1acce0c1753d3edef04f36 \
     --hash=sha256:0bf65ef45e606aff1994d35503e6b677c0b26cafff6506f8fd7187f3be840207
     # via -r requirements/base.in
-django-debug-toolbar==4.3.0 \
-    --hash=sha256:0b0dddee5ea29b9cb678593bc0d7a6d76b21d7799cb68e091a2148341a80f3c4 \
-    --hash=sha256:e09b7dcb8417b743234dfc57c95a7c1d1d87a88844abd13b4c5387f807b31bf6
+django-debug-toolbar==4.4.3 \
+    --hash=sha256:1418397daa1bd41d0c282e6cb20756eec008cb8e1330cf776de45e58b1e5b44c \
+    --hash=sha256:c01296649dcaa05522d58bbb29461b5def06b687bf2af767069b5f805ac57d43
     # via -r requirements/local.in
 django-dotenv==1.4.2 \
     --hash=sha256:3812bb0f4876cf31f902aad140f0645e120e51ee30eb7c40c22050f58a0e4adb \
@@ -1691,12 +1689,6 @@ sentry-sdk==2.1.1 \
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
     #   -r requirements/base.in
-setuptools==69.2.0 \
-    --hash=sha256:0ff4183f8f42cd8fa3acea16c45205521a4ef28f73c6391d8a25e92893134f2e \
-    --hash=sha256:c21c49fb1042386df081cb5d86759792ab89efca84cf114889191cd09aacc80c
-    # via
-    #   dc-django-utils
-    #   nodeenv
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
