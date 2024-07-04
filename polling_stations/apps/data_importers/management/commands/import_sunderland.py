@@ -49,9 +49,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # removes map for: Sulgrave Centre Manor Road Sulgrave Washington
         if record.polling_place_id == "19371":
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
-                polling_place_uprn="",
+                polling_place_easting="431374",
+                polling_place_northing="558024",
             )
 
         return super().station_record_to_dict(record)
