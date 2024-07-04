@@ -35,6 +35,14 @@ class Command(BaseDemocracyCountsCsvImporter):
             record = record._replace(xordinate="")
             record = record._replace(yordinate="")
 
+        # bug report:
+        # removes wrong point for stations at: PARK ROAD METHODIST CHURCH, PARK ROAD WEST, BEDFORD
+        if record.stationcode in [
+            "31",
+            "32",
+        ]:
+            record = record._replace(xordinate="")
+            record = record._replace(yordinate="")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
