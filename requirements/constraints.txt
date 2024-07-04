@@ -7,9 +7,7 @@
 asana==5.0.7 \
     --hash=sha256:2dbe894400db4fc193ca79aef4c319ef9a039d6526fa6c017d77d5e54d836e4f \
     --hash=sha256:8cf89c2518ba55d1a0132afa0f426966cb1254d55cbea13afd533a278b503ff6
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+    # via -r requirements/base.in
 asgiref==3.8.1 \
     --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
     --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
@@ -1070,14 +1068,14 @@ platformdirs==4.2.1 \
     # via
     #   black
     #   virtualenv
-playwright==1.43.0 \
-    --hash=sha256:50d9a5c07c76456945a2296d63f78fdf6eb11aed3e8d39bb5ccbda760a8d6d41 \
-    --hash=sha256:87191272c40b4c282cf2c9449ca3acaf705f38ac6e2372270f1617ce16b661b8 \
-    --hash=sha256:9b7bd707eeeaebee47f656b2de90aa9bd85e9ca2c6af7a08efd73896299e4d50 \
-    --hash=sha256:b03b12bd4da9c2cfb78dff820deac8b52892fe3c2f89a4d95d6f08c59e41deb9 \
-    --hash=sha256:bd8b818904b17e2914be23e7bc2a340b203f57fe81678520b10f908485b056ea \
-    --hash=sha256:e05a8d8fb2040c630429cca07e843c8fa33059717837c8f50c01b7d1fc651ce1 \
-    --hash=sha256:e9ec21b141727392f630761c7f4dec46d80c98243614257cc501b64ff636d337
+playwright==1.45.0 \
+    --hash=sha256:0ba5a39f25fb9b9cf1bd48678f44536a29f6d83376329de2dee1567dac220afe \
+    --hash=sha256:13b5398831f5499580e819ddc996633446a93bf88029e89451e51da188e16ae3 \
+    --hash=sha256:210c9f848820f58b5b5ed48047748620b780ca3acc3e2b7560dafb2bfdd6d90a \
+    --hash=sha256:701db496928429aec103739e48e3110806bd5cf49456cc95b89f28e1abda71da \
+    --hash=sha256:7d49aee5907d8e72060f04bc299cb6851c2dc44cb227540ade89d7aa529e907a \
+    --hash=sha256:97a7d53af89af54208b69c051046b462675fcf5b93f7fbfb7c0fa7f813424ee2 \
+    --hash=sha256:b09fa76614ba2926d45a4c0581f710c13652d5e32290ba6a1490fbafff7f0be8
     # via
     #   -r requirements/testing.in
     #   pytest-playwright
@@ -1691,12 +1689,6 @@ sentry-sdk==2.1.1 \
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
     #   -r requirements/base.in
-setuptools==69.2.0 \
-    --hash=sha256:0ff4183f8f42cd8fa3acea16c45205521a4ef28f73c6391d8a25e92893134f2e \
-    --hash=sha256:c21c49fb1042386df081cb5d86759792ab89efca84cf114889191cd09aacc80c
-    # via
-    #   dc-django-utils
-    #   nodeenv
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
