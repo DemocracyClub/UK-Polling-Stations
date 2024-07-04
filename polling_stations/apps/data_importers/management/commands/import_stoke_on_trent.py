@@ -86,6 +86,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Station change from council
+        # Jollees -> Redemption community Hub
+        if record.polling_place_id == "17834":
+            record = record._replace(
+                polling_place_name="Redemption community Hub",
+                polling_place_address_1="79 London Road",
+                polling_place_address_2="",
+                polling_place_address_3="Stoke-on-Trent",
+                polling_place_address_4="",
+                polling_place_postcode="ST4 7QE",
+            )
         rec = super().station_record_to_dict(record)
 
         # more accurate point for: Penkhull Village Hall Trent Valley Road Penkhull, ST4 7LG
