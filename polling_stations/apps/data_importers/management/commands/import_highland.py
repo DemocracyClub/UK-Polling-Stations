@@ -16,6 +16,10 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             record = record._replace(xordinate="267087")
 
+        # SCOURIE COMMUNITY HALL, SCOURIE, LAIRG, SUTHERLAND, IV27 4TE
+        if record.stationcode == "C006":
+            record = record._replace(xordinate="", yordinate="")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
