@@ -136,7 +136,8 @@ class WDIVStack(Stack):
             "development": "t3a.large",
             "staging": "t3a.large",
             # "production": "t3a.large",
-            "production": "c6a.2xlarge",
+            # "production": "c6a.2xlarge",
+            "production": "c6a.large",
         }
         return ec2.LaunchTemplate(
             self,
