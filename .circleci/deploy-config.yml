@@ -54,7 +54,7 @@ jobs:
             pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
             python -m venv .venv
             . .venv/bin/activate
-            python -m pip install --upgrade pip
+            python -m pip install --upgrade pip==24.1
             pip install --no-deps -r requirements/base.txt -r requirements/testing.txt -r requirements/ci.txt
             playwright install
 
