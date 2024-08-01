@@ -7,9 +7,7 @@
 asana==5.0.7 \
     --hash=sha256:2dbe894400db4fc193ca79aef4c319ef9a039d6526fa6c017d77d5e54d836e4f \
     --hash=sha256:8cf89c2518ba55d1a0132afa0f426966cb1254d55cbea13afd533a278b503ff6
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+    # via -r requirements/base.in
 asgiref==3.8.1 \
     --hash=sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47 \
     --hash=sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590
@@ -1643,17 +1641,17 @@ rpds-py==0.18.1 \
     # via
     #   jsonschema
     #   referencing
-rtree==1.2.0 \
-    --hash=sha256:008d86fd8990f3ca15c06834ae597e16209b3e0a3d6512f0a3489c201011390f \
-    --hash=sha256:0b4ba127dfdbdc9e415d2bb578f6e6dff92082117722d8703b740231f7a0b1c3 \
-    --hash=sha256:3038f6d96bb66adb40d1cbb366a8a0676342102bc67ca5492f5734e70f38d9cd \
-    --hash=sha256:460c40d246adea80291a406a30e3e0815a1d3a6d514c0438a4235090ba8cd832 \
-    --hash=sha256:5faf8752763258014a10feab67fe68f79eff62f7cfaadb5c338129b3e6d6a657 \
-    --hash=sha256:613f2158aeba6fcb5e4aa4c076bb6de85e20c4f9fb0a8b426a71d6ff5846795b \
-    --hash=sha256:6d6d1c63d97920e4cd1fa25ee0c911be3f79a34850d19166cc27bbb8ac119001 \
-    --hash=sha256:80813bb1a66e65033e6601e54fded428a5b710b41948c83a298943587b3c3e4f \
-    --hash=sha256:cd8653f0e961dcd3f3ab09e10a831885ea9feceb45be6bc761a773c314518b49 \
-    --hash=sha256:f5145f7852bf7f95c126fb16bf1a4c2ca9300ae151b07f8a0f7083ea47912675
+rtree==1.3.0 \
+    --hash=sha256:037130d3ce1fc029de81941ec416ba5546f66228380ba19bb41f2ea1294e8423 \
+    --hash=sha256:4328e9e421797c347e6eb08efbbade962fe3664ebd60c1dffe82c40911b1e125 \
+    --hash=sha256:7e2e9211f4fb404c06a08fd2cbebb03234214f73c51913bb371c3d9954e99cc9 \
+    --hash=sha256:80879d9db282a2273ca3a0d896c84583940e9777477727a277624ebfd424c517 \
+    --hash=sha256:864a05d0c3b7ce6c5e34378b7ab630057603b79179368bc50624258bdf2ff631 \
+    --hash=sha256:97f835801d24c10bbf02381abe5e327345c8296ec711dde7658792376abafc66 \
+    --hash=sha256:b36e9dd2dc60ffe3d02e367242d2c26f7281b00e1aaf0c39590442edaaadd916 \
+    --hash=sha256:b4485fb3e5c5e85b94a95f0a930a3848e040d2699cfb012940ba5b0130f1e09a \
+    --hash=sha256:c021f4772b25cc24915da8073e553ded6fa8d0b317caa4202255ed26b2344c1c \
+    --hash=sha256:ec2ed6d1635753dab966e68f592a9c4896f3f4ec6ad2b09b776d592eacd883a9
     # via -r requirements/base.in
 ruff==0.4.6 \
     --hash=sha256:04a80acfc862e0e1630c8b738e70dcca03f350bad9e106968a8108379e12b31f \
@@ -1691,12 +1689,6 @@ sentry-sdk==2.1.1 \
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
     #   -r requirements/base.in
-setuptools==69.2.0 \
-    --hash=sha256:0ff4183f8f42cd8fa3acea16c45205521a4ef28f73c6391d8a25e92893134f2e \
-    --hash=sha256:c21c49fb1042386df081cb5d86759792ab89efca84cf114889191cd09aacc80c
-    # via
-    #   dc-django-utils
-    #   nodeenv
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
