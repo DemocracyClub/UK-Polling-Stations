@@ -5,7 +5,7 @@ from pathlib import Path
 import boto3
 import botocore
 from django.apps import apps
-from django.core.management import BaseCommand, call_command
+from django.core.management import BaseCommand, CommandError, call_command
 
 
 def get_paths_changed(from_sha, to_sha):
@@ -182,7 +182,7 @@ class Command(BaseCommand):
             self.run_misc_fixes()
             self.update_last_import_sha_on_ssm(to_sha)
         elif has_imports and has_application and not is_post_deploy:
-            self.stdout.write("Need to deploy before running import scripts\n")
+            raise CommandError("Need to deploy before running import scripts\n")
         elif not has_imports:
             self.stdout.write(
                 "No import scripts have changed. So nothing new to import.\n"

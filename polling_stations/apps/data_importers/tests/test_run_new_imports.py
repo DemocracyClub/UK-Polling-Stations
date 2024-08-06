@@ -10,7 +10,7 @@ from data_importers.management.commands.run_new_imports import (
     git_rev_parse,
     is_import_script,
 )
-from django.core.management import call_command
+from django.core.management import CommandError, call_command
 from django.test import TestCase
 
 no_scripts = [
@@ -189,15 +189,16 @@ class test_run_new_imports(TestCase):
     def test_called_with_app_and_scripts_before_deploy(self):
         out = StringIO()
         (to_sha, from_sha) = self.cases["scripts_and_app"]
+        with self.assertRaises(CommandError) as e:
+            call_command(
+                self.run_new_imports_name,
+                to_sha=to_sha,
+                from_sha=from_sha,
+                stdout=out,
+            )
 
-        call_command(
-            self.run_new_imports_name,
-            to_sha=to_sha,
-            from_sha=from_sha,
-            stdout=out,
-        )
         expected_std_out = "Need to deploy before running import scripts\n"
-        self.assertIn(expected_std_out, out.getvalue())
+        self.assertIn(expected_std_out, str(e.exception))
 
     @patch(
         "data_importers.management.commands.run_new_imports.Command.run_scripts",
