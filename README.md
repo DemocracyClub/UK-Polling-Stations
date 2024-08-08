@@ -41,17 +41,17 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/
 
 - Local Dev without CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 ```
 
 - Local Dev with CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 ```
 
 - Just Running Tests
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt
+pip install -r requirements/base.txt -r requirements/testing.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
 ```
 
 - Update requirements
