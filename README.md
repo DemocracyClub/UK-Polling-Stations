@@ -124,7 +124,7 @@ N.B. Path is to data _directory_ which contains the csv, not the csv itself.
 #### Import Councils
 
 ```
-python manage.py import_councils
+python manage.py import_councils --import-old-boundaries
 ```
 
 #### Import some Polling District/Station data
