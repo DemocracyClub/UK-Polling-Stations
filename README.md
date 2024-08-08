@@ -13,10 +13,10 @@ If you are interested in helping out in any way at all, please contact sym@democ
 ## Getting Started
 
 ### Python
-UK-Polling-Stations requires python 3.10
+UK-Polling-Stations requires python 3.12
 
 ### Install system dependencies
-UK-Polling-Stations requires Python 3.10, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
+UK-Polling-Stations requires Python 3.12, Postgres, PostGIS, libgeos, GDAL, Node JS and NPM.
 
 On Mac OSX, run:
 ```
@@ -27,14 +27,12 @@ brew install gdal
 brew install node
 ```
 
-From a clean install of Ubuntu 22.04 (Bionic):
+From a clean install of Ubuntu 24.04 (Noble):
 ```
-sudo apt-get install postgresql-14 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-14-postgis-3 libxml2-dev libxslt1-dev nodejs npm libtidy-dev
-
-sudo npm install -g npm@latest-6
+sudo apt-get install postgresql-16 postgresql-server-dev-all python3-dev postgis postgresql-16-postgis-3 libxml2-dev libxslt1-dev nodejs npm libtidy-dev
 ```
 
-For other linux distributions, see [here](https://docs.djangoproject.com/en/2.2/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
+For other linux distributions, see [here](https://docs.djangoproject.com/en/4.2/ref/contrib/gis/install/geolibs/) for details on installing geospatial libraries for use with Django.
 
 
 ### Install python dependencies
@@ -59,7 +57,7 @@ Bump version in relevant requirements file, e.g. ```base.in``` then run ```pytho
 
 ### Install front-end dependencies
 ```
-npm install
+npm ci
 ```
 
 ### Install testing python dependencies
