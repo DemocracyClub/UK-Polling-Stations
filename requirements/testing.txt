@@ -377,14 +377,14 @@ packaging==24.0 \
     # via
     #   -c requirements/constraints.txt
     #   pytest
-playwright==1.43.0 \
-    --hash=sha256:50d9a5c07c76456945a2296d63f78fdf6eb11aed3e8d39bb5ccbda760a8d6d41 \
-    --hash=sha256:87191272c40b4c282cf2c9449ca3acaf705f38ac6e2372270f1617ce16b661b8 \
-    --hash=sha256:9b7bd707eeeaebee47f656b2de90aa9bd85e9ca2c6af7a08efd73896299e4d50 \
-    --hash=sha256:b03b12bd4da9c2cfb78dff820deac8b52892fe3c2f89a4d95d6f08c59e41deb9 \
-    --hash=sha256:bd8b818904b17e2914be23e7bc2a340b203f57fe81678520b10f908485b056ea \
-    --hash=sha256:e05a8d8fb2040c630429cca07e843c8fa33059717837c8f50c01b7d1fc651ce1 \
-    --hash=sha256:e9ec21b141727392f630761c7f4dec46d80c98243614257cc501b64ff636d337
+playwright==1.45.1 \
+    --hash=sha256:0d236cf427784e77de352ba1b7d700693c5fe455b8e5f627f6d84ad5b84b5bf5 \
+    --hash=sha256:20adc2abf164c5e8969f9066011b152e12c210549edec78cd05bd0e9cf4135b7 \
+    --hash=sha256:2b8f517886ef1e2151982f6e7be84be3ef7d8135bdcf8ee705b4e4e99566e866 \
+    --hash=sha256:360607e37c00cdf97c74317f010e106ac4671aeaec6a192431dd71a30941da9d \
+    --hash=sha256:5f047cdc6accf4c7084dfc7587a2a5ef790cddc44cbb111e471293c5a91119db \
+    --hash=sha256:87dc3b3d17e12c68830c29b7fdf5e93315221bbb4c6090e83e967e154e2c1828 \
+    --hash=sha256:f06f6659abe0abf263e5f6661d379fbf85c112745dd31d82332ceae914f58df7
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/testing.in
@@ -622,7 +622,6 @@ urllib3==1.26.18 \
     #   -c requirements/constraints.txt
     #   requests
     #   selenium
-    #   urllib3
 vcrpy==6.0.1 \
     --hash=sha256:9e023fee7f892baa0bbda2f7da7c8ac51165c1c6e38ff8688683a12a4bde9278
     # via
