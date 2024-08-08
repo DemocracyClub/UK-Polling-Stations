@@ -29,7 +29,7 @@ brew install node
 
 From a clean install of Ubuntu 22.04 (Bionic):
 ```
-sudo apt-get install postgresql-14 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-14-postgis-3 libxml2-dev libxslt1-dev nodejs npm
+sudo apt-get install postgresql-14 postgresql-server-dev-all python-psycopg2 python3-dev postgis postgresql-14-postgis-3 libxml2-dev libxslt1-dev nodejs npm libtidy-dev
 
 sudo npm install -g npm@latest-6
 ```
