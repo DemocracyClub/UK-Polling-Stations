@@ -1068,14 +1068,14 @@ platformdirs==4.2.1 \
     # via
     #   black
     #   virtualenv
-playwright==1.43.0 \
-    --hash=sha256:50d9a5c07c76456945a2296d63f78fdf6eb11aed3e8d39bb5ccbda760a8d6d41 \
-    --hash=sha256:87191272c40b4c282cf2c9449ca3acaf705f38ac6e2372270f1617ce16b661b8 \
-    --hash=sha256:9b7bd707eeeaebee47f656b2de90aa9bd85e9ca2c6af7a08efd73896299e4d50 \
-    --hash=sha256:b03b12bd4da9c2cfb78dff820deac8b52892fe3c2f89a4d95d6f08c59e41deb9 \
-    --hash=sha256:bd8b818904b17e2914be23e7bc2a340b203f57fe81678520b10f908485b056ea \
-    --hash=sha256:e05a8d8fb2040c630429cca07e843c8fa33059717837c8f50c01b7d1fc651ce1 \
-    --hash=sha256:e9ec21b141727392f630761c7f4dec46d80c98243614257cc501b64ff636d337
+playwright==1.46.0 \
+    --hash=sha256:23580f6a3f99757bb9779d29be37144cb9328cd9bafa178e6db5b3ab4b7faf4c \
+    --hash=sha256:3b418509f45879f1403d070858657a39bd0b333b23d92c37355682b671726df9 \
+    --hash=sha256:73dcfc24834f4d004bc862ed0d74b4c1406793a8164734238ad035356fddc8ac \
+    --hash=sha256:85f44dd32a23d02850f0ff4dafe51580e5199531fff5121a62489d9838707782 \
+    --hash=sha256:f14a7fd7e24e954eec6ce61d787d499e41937ade811a0818e9a088aabe28ebb6 \
+    --hash=sha256:f5acfec1dbdc84d02dc696a17a344227e66c91413eab2036428dab405f195b82 \
+    --hash=sha256:fa60b95c16f6ce954636229a6c9dd885485326bca52d5ba20d02c0bc731a2bbb
     # via
     #   -r requirements/testing.in
     #   pytest-playwright
