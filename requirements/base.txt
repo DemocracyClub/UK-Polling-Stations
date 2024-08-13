@@ -56,7 +56,6 @@ black==23.12.1 \
     --hash=sha256:e0aaf6041986767a5e0ce663c7a2f0e9eaf21e6ff87a5f95cbf3675bfd4c41d2
     # via
     #   -c requirements/constraints.txt
-    #   -r requirements/base.in
     #   dc-django-utils
 boto3==1.34.101 \
     --hash=sha256:1d854b5880e185db546b4c759fcb664bf3326275064d2b44229cc217e8be9d7e \
