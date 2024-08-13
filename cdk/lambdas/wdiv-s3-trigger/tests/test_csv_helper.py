@@ -149,7 +149,8 @@ class CsvHelperTests(TestCase):
         )
         self.assertFalse(report["csv_valid"])
         self.assertEqual(
-            "Failed to parse body -> line 1: line contains NUL", report["errors"][0]
+            "File has only 2 columns. We might have failed to detect the delimiter",
+            report["errors"][0],
         )
 
     def test_get_body_sample_windows(self):
