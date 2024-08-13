@@ -46,9 +46,9 @@ jobs:
 
       - run:
           name: Install node node_modules
-          command: npm install
+          command: npm ci
           cache-path: ~/repo/node_modules
-          override-ci-command: npm install
+          override-ci-command: npm ci
 
       - run:
           name: install app dependencies
