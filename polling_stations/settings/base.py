@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import dc_design_system
+import requests
 from dc_logging_client import DCWidePostcodeLoggingClient
 from django.utils.translation import gettext_lazy as _
 from rich import traceback
@@ -55,7 +56,29 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    os.environ.get("FQDN", None),
+    "localhost",
+    "127.0.0.1",
+]
+
+
+def get_ec2_ip():
+    token_req = requests.put(
+        "http://169.254.169.254/latest/api/token",
+        headers={"X-aws-ec2-metadata-token-ttl-seconds": "21600"},
+        timeout=2,
+    )
+    token_req.raise_for_status()
+    token_req.text
+    ip_req = requests.get(
+        "http://169.254.169.254/latest/meta-data/local-ipv4",
+        headers={"X-aws-ec2-metadata-token": token_req.text},
+        timeout=2,
+    )
+    ip_req.raise_for_status()
+    return ip_req.text
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -360,10 +383,8 @@ if os.environ.get("DC_ENVIRONMENT"):
     EMAIL_HOST_USER = os.environ.get("SMTP_USER")
     EMAIL_HOST_PASSWORD = os.environ.get("SMTP_PASSWORD")
 
-    # ALLOWED_HOSTS/ip address stuff
-    # TODO https://github.com/DemocracyClub/polling_deploy/blob/22ce0df9489467d1a2dc088d022b2ec975e32349/webapp_settings/production.py#L96-L108
-    # TODO Is this still true? https://github.com/DemocracyClub/polling_deploy/blob/ff83e6eb8fe1d9ee18efad7a39e524eec9fae477/files/conf/nginx.conf#L5
-    ALLOWED_HOSTS = ["*"]  # TODO Make this a parameter store thing
+    ALLOWED_HOSTS.append(get_ec2_ip())
+
     USE_X_FORWARDED_HOST = True
 
     if fqdn := os.environ.get("FQDN"):
