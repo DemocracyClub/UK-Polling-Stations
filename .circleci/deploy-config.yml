@@ -24,11 +24,11 @@ parameters:
 jobs:
   build_and_test:
     docker:
-      - image: cimg/python:3.10.13-browsers
+      - image: cimg/python:3.12.4-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
-      - image: cimg/postgres:14.5-postgis
+      - image: cimg/postgres:16.3-postgis
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: polling_stations
@@ -37,6 +37,9 @@ jobs:
 
     steps:
       - checkout
+
+      - node/install:
+          node-version: '18'
 
       - restore_cache:
           key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
@@ -51,7 +54,7 @@ jobs:
           name: install app dependencies
           command: |
             sudo apt update && sudo apt install -y gdal-bin
-            pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+            pyenv local $(pyenv versions --bare | grep 3.12 | head -n 1)
             python -m venv .venv
             . .venv/bin/activate
             python -m pip install --upgrade pip
@@ -125,7 +128,7 @@ jobs:
 
   run_new_imports:
     docker:
-      - image: cimg/python:3.10.13-browsers
+      - image: cimg/python:3.12.4-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -139,7 +142,7 @@ jobs:
           name: Check and run new import scripts.
           command: |
             sudo apt update && sudo apt install -y gdal-bin
-            pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+            pyenv local $(pyenv versions --bare | grep 3.12 | head -n 1)
             . .venv/bin/activate
             export CI_DB_PASSWORD=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_PASSWORD' --output text`
             export CI_DB_NAME=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_NAME' --output text`
@@ -154,7 +157,7 @@ jobs:
 
   cdk_synth:
     machine:
-      image: ubuntu-2204:2022.10.2
+      image: ubuntu-2404:2024.05.1
     working_directory: ~/repo
     parameters:
       dc-environment:
@@ -170,7 +173,7 @@ jobs:
     - run:
         name: Install CDK Python dependencies
         command: |
-          pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+          pyenv local $(pyenv versions --bare | grep 3.12 | head -n 1)
           python -m venv .venv
           . .venv/bin/activate
           python -m pip install --no-deps -r requirements/cdk.txt
@@ -198,7 +201,7 @@ jobs:
 
   cdk_deploy:
     machine:
-      image: ubuntu-2204:2022.10.2
+      image: ubuntu-2404:2024.05.1
     working_directory: ~/repo
     parameters:
       dc-environment:
@@ -213,7 +216,7 @@ jobs:
     - run:
         name: CDK deploy
         command: |
-          pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+          pyenv local $(pyenv versions --bare | grep 3.12 | head -n 1)
           . .venv/bin/activate
           npx cdk deploy --all --require-approval never --concurrency 3
     # In the event the deployment has failed, alert the dev team
@@ -224,7 +227,7 @@ jobs:
 
   code_deploy:
     docker:
-      - image: cimg/python:3.10.13-node
+      - image: cimg/python:3.12.4-node
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -247,12 +250,14 @@ jobs:
 
     steps:
     - checkout
+    - node/install:
+        node-version: '18'
     - restore_cache:
         key: v2-polling_stations-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}-{{ checksum "requirements/cdk.txt" }}-{{ checksum "requirements/production.txt" }}-{{ checksum "requirements/ci.txt" }}
     - run:
         name: "Code Deploy: Create deployment group"
         command: |
-          pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+          pyenv local $(pyenv versions --bare | grep 3.12 | head -n 1)
           . .venv/bin/activate
           python deploy/create_deployment_group.py
     - run:
@@ -281,7 +286,7 @@ jobs:
 
   run_new_imports_post_deploy:
     docker:
-      - image: cimg/python:3.10.13-browsers
+      - image: cimg/python:3.12.4-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -297,7 +302,7 @@ jobs:
           name: Check and run new import scripts after a deploy.
           command: |
             sudo apt update && sudo apt install -y gdal-bin
-            pyenv local $(pyenv versions --bare | grep 3.10 | head -n 1)
+            pyenv local $(pyenv versions --bare | grep 3.12 | head -n 1)
             . .venv/bin/activate
             export CI_DB_PASSWORD=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_PASSWORD' --output text`
             export CI_DB_NAME=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_NAME' --output text`
