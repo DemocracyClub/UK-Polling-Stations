@@ -102,7 +102,6 @@ jobs:
           name: Pre-test checks
           command: |
             . .venv/bin/activate
-            black --check .
             python -m pip check
             python manage.py check
             python manage.py makemigrations --check
@@ -112,7 +111,7 @@ jobs:
           command: |
             . .venv/bin/activate
             python manage.py collectstatic --no-input
-            pytest --ruff --cov-report= --cov=polling_stations
+            pytest --cov-report= --cov=polling_stations
 
       - run:
           name: Submit coverage
