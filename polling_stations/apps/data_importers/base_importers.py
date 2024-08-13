@@ -1,6 +1,7 @@
 """
 Defines the base importer classes to implement
 """
+
 import abc
 import contextlib
 import datetime
@@ -66,7 +67,6 @@ class BaseBaseImporter:
 
 
 class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
-
     """
     Turn off auto system check for all apps
     We will manually run system checks only for the
@@ -925,7 +925,6 @@ class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter, CsvMixi
 class BaseScotlandSpatialHubImporter(
     BaseShpStationsShpDistrictsImporter, metaclass=abc.ABCMeta
 ):
-
     """
     Data from the Scotland SpatialHub will be provided in a single
     dataset for the whole country. All importers consuming this data

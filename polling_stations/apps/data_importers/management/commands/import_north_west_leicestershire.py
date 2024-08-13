@@ -15,15 +15,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "200003503741",  # OLD FARMHOUSE, NOTTINGHAM ROAD, STAUNTON HAROLD, ASHBY-DE-LA-ZOUCH
-            "10002361080",  # KEEPERS COTTAGE, KEGWORTH LANE, LONG WHATTON, LOUGHBOROUGH
-            "200003505244",  # THE AVIARY, WARREN LANE, WHITWICK, COALVILLE
-            "10002353672",  # THE MALTINGS, STATION ROAD, HUGGLESCOTE, COALVILLE
-            "10002361801",  # FLAT 1, SHELLBROOK HOUSE IC, MARKET STREET, ASHBY-DE-LA-ZOUCH
-            "100030551333",  # 68 BURTON ROAD, ASHBY-DE-LA-ZOUCH
-            "10002345003",  # AMBROW HILL, ISLEY WALTON, CASTLE DONINGTON, DERBY
-        ]:
+        if (
+            uprn
+            in [
+                "200003503741",  # OLD FARMHOUSE, NOTTINGHAM ROAD, STAUNTON HAROLD, ASHBY-DE-LA-ZOUCH
+                "10002361080",  # KEEPERS COTTAGE, KEGWORTH LANE, LONG WHATTON, LOUGHBOROUGH
+                "200003505244",  # THE AVIARY, WARREN LANE, WHITWICK, COALVILLE
+                "10002353672",  # THE MALTINGS, STATION ROAD, HUGGLESCOTE, COALVILLE
+                "10002361801",  # FLAT 1, SHELLBROOK HOUSE IC, MARKET STREET, ASHBY-DE-LA-ZOUCH
+                "100030551333",  # 68 BURTON ROAD, ASHBY-DE-LA-ZOUCH
+                "10002345003",  # AMBROW HILL, ISLEY WALTON, CASTLE DONINGTON, DERBY
+            ]
+        ):
             return None
 
         if record.addressline6 in [

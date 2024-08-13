@@ -11,6 +11,7 @@ See: http://boto.cloudhackers.com/en/latest/boto_config_tut.html
 
 We can change the section name using the BOTO_SECTION setting
 """
+
 import os
 
 BOTO_SECTION = "wheredoivote"

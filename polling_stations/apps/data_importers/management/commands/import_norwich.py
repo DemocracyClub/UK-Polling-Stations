@@ -20,10 +20,13 @@ class Command(BaseDemocracyCountsCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn in [
-            "10024023874",  # LIVING ACCOMMODATION THE MARSH HARRIER IPSWICH ROAD, NORWICH
-            "200004349456",  # 14A IPSWICH ROAD, NORWICH
-        ]:
+        if (
+            uprn
+            in [
+                "10024023874",  # LIVING ACCOMMODATION THE MARSH HARRIER IPSWICH ROAD, NORWICH
+                "200004349456",  # 14A IPSWICH ROAD, NORWICH
+            ]
+        ):
             return None
 
         return super().address_record_to_dict(record)

@@ -25,14 +25,17 @@ class Command(BaseDemocracyCountsCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn in [
-            "130150387",  # MILL COTTAGE A863 B884 JUNCTION - A850 JUNCTION, KILMUIR, DUNVEGAN
-            "130186635",  # 1 MACFARLANE BUILDINGS, CRUACHAN PLACE, PORTREE
-            "130131942",  # 3 WOODLAND PARK, CONTIN
-            "130178830",  # 12 COUNTY PLACE, CULDUTHEL, INVERNESS
-            "130197101",  # 4 BLACK ISLE VIEW, STRATTON, INVERNESS
-            "130147608",  # NEWLANDS OF URCHANY, NAIRN
-        ]:
+        if (
+            uprn
+            in [
+                "130150387",  # MILL COTTAGE A863 B884 JUNCTION - A850 JUNCTION, KILMUIR, DUNVEGAN
+                "130186635",  # 1 MACFARLANE BUILDINGS, CRUACHAN PLACE, PORTREE
+                "130131942",  # 3 WOODLAND PARK, CONTIN
+                "130178830",  # 12 COUNTY PLACE, CULDUTHEL, INVERNESS
+                "130197101",  # 4 BLACK ISLE VIEW, STRATTON, INVERNESS
+                "130147608",  # NEWLANDS OF URCHANY, NAIRN
+            ]
+        ):
             return None
 
         if record.postcode in [

@@ -16,13 +16,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "100090360367",  # 210 KENTS HILL ROAD, BENFLEET
-            "100091599588",  # 115 DOWNER ROAD, BENFLEET
-            "10004941351",  # 420 DAWS HEATH ROAD, BENFLEET
-            "10004941352",  # 422 DAWS HEATH ROAD, BENFLEET
-            "10094905546",  # BIRD OF PARADISE SMALL GAINS MARINA POINT ROAD, CANVEY ISLAND
-        ]:
+        if (
+            uprn
+            in [
+                "100090360367",  # 210 KENTS HILL ROAD, BENFLEET
+                "100091599588",  # 115 DOWNER ROAD, BENFLEET
+                "10004941351",  # 420 DAWS HEATH ROAD, BENFLEET
+                "10004941352",  # 422 DAWS HEATH ROAD, BENFLEET
+                "10094905546",  # BIRD OF PARADISE SMALL GAINS MARINA POINT ROAD, CANVEY ISLAND
+            ]
+        ):
             return None
         if record.addressline6 in [
             # split

@@ -33,10 +33,13 @@ class Command(BaseHalaroseCsvImporter):
         if station_hash not in self.COUNCIL_STATIONS:
             return None
 
-        if uprn in [
-            "10003948594",  # THE LODGE, BELLMAN GROUND, BOWNESS-ON-WINDERMERE, WINDERMERE
-            "200001822436",  # BECKSIDE FARM, CROOK, KENDAL
-        ]:
+        if (
+            uprn
+            in [
+                "10003948594",  # THE LODGE, BELLMAN GROUND, BOWNESS-ON-WINDERMERE, WINDERMERE
+                "200001822436",  # BECKSIDE FARM, CROOK, KENDAL
+            ]
+        ):
             return None
 
         if record.housepostcode in [

@@ -11,9 +11,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "200003295948",  # CHAPPEL VIEW PONY STUD, TUNSTALL LANE, NUNTHORPE, MIDDLESBROUGH
-        ]:
+        if (
+            uprn
+            in [
+                "200003295948",  # CHAPPEL VIEW PONY STUD, TUNSTALL LANE, NUNTHORPE, MIDDLESBROUGH
+            ]
+        ):
             return None
 
         if record.addressline6 in ["DL7 8DA", "YO7 2BR", "YO7 3NG", "YO61 3GT"]:

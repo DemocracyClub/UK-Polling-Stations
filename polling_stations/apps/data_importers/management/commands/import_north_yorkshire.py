@@ -16,17 +16,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "200001017730",  # WILLOW FARM, DONCASTER ROAD, TADCASTER
-            "200001023825",  # WHITEMOOR GRANGE WHITEMOOR LANE, BARLBY
-            "10012901300",  # FLAT A ALBANY HOUSE CROWN CRESCENT, SCARBOROUGH
-            "10012901301",  # FLAT B ALBANY HOUSE CROWN CRESCENT, SCARBOROUGH
-            "10012901436",  # GEASEA COTTAGE, SAWDON, SCARBOROUGH
-            "10090175389",  # ANNEXE, GEASEA COTTAGE, SAWDON, SCARBOROUGH
-            "10093034006",  # 38 PADDOCK WAY, GREEN HAMMERTON, YORK
-            "10093034565",  # OAK HOUSE PENNY POT LANE TO CENTRAL HOUSE FARM, HAMPSTHWAITE
-            "10090348554",  # MEADOW VIEW 11A, RAVENSWORTH, RICHMOND
-        ]:
+        if (
+            uprn
+            in [
+                "200001017730",  # WILLOW FARM, DONCASTER ROAD, TADCASTER
+                "200001023825",  # WHITEMOOR GRANGE WHITEMOOR LANE, BARLBY
+                "10012901300",  # FLAT A ALBANY HOUSE CROWN CRESCENT, SCARBOROUGH
+                "10012901301",  # FLAT B ALBANY HOUSE CROWN CRESCENT, SCARBOROUGH
+                "10012901436",  # GEASEA COTTAGE, SAWDON, SCARBOROUGH
+                "10090175389",  # ANNEXE, GEASEA COTTAGE, SAWDON, SCARBOROUGH
+                "10093034006",  # 38 PADDOCK WAY, GREEN HAMMERTON, YORK
+                "10093034565",  # OAK HOUSE PENNY POT LANE TO CENTRAL HOUSE FARM, HAMPSTHWAITE
+                "10090348554",  # MEADOW VIEW 11A, RAVENSWORTH, RICHMOND
+            ]
+        ):
             return None
         if record.addressline6 in [
             # split

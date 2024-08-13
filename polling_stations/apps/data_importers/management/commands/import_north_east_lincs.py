@@ -10,17 +10,20 @@ class Command(BaseHalaroseCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn in [
-            "10090078903",  # FLAT, 247 GRIMSBY ROAD, CLEETHORPES
-            "10090086605",  # THE ROOST, DIANA PRINCESS OF WALES HOSPITAL, SCARTHO ROAD, GRIMSBY
-            "10090078890",  # FLAT 3, 50 RUTLAND STREET, GRIMSBY
-            "10090078888",  # FLAT 1, 50 RUTLAND STREET, GRIMSBY
-            "10090078889",  # FLAT 2, 50 RUTLAND STREET, GRIMSBY
-            "10090078891",  # FLAT 4, 50 RUTLAND STREET, GRIMSBY
-            "11023550",  # 38 BRAMHALL STREET, CLEETHORPES
-            "11088787",  # 4 WALTHAM HOUSE FARM COTTAGE, LOUTH ROAD, NEW WALTHAM, GRIMSBY
-            "11088786",  # WALTHAM HOUSE FARM COTTAGE 3 LOUTH ROAD, WALTHAM
-        ]:
+        if (
+            uprn
+            in [
+                "10090078903",  # FLAT, 247 GRIMSBY ROAD, CLEETHORPES
+                "10090086605",  # THE ROOST, DIANA PRINCESS OF WALES HOSPITAL, SCARTHO ROAD, GRIMSBY
+                "10090078890",  # FLAT 3, 50 RUTLAND STREET, GRIMSBY
+                "10090078888",  # FLAT 1, 50 RUTLAND STREET, GRIMSBY
+                "10090078889",  # FLAT 2, 50 RUTLAND STREET, GRIMSBY
+                "10090078891",  # FLAT 4, 50 RUTLAND STREET, GRIMSBY
+                "11023550",  # 38 BRAMHALL STREET, CLEETHORPES
+                "11088787",  # 4 WALTHAM HOUSE FARM COTTAGE, LOUTH ROAD, NEW WALTHAM, GRIMSBY
+                "11088786",  # WALTHAM HOUSE FARM COTTAGE 3 LOUTH ROAD, WALTHAM
+            ]
+        ):
             return None
 
         if record.housepostcode in [

@@ -18,22 +18,25 @@ class Command(BaseHalaroseCsvImporter):
             record = record._replace(pollingstationpostcode="B21 9RE")
 
         # Removing wrong UPRNs:
-        if self.get_station_hash(record) in [
-            "297-birchfield-primary-school",  # Birchfield Primary School, Trinity Road B6 6AJ - suggested UPRN: 100071470999
-            "36-barford-primary-school-nursery-unit",  # George Dixon Primary School, City Road B17 8LE - suggested UPRN: 100071411446
-            "38-george-dixon-primary-school",  # George Dixon Primary School, City Road B17 8LE - suggested UPRN: 100071411446
-            "37-george-dixon-primary-school",  # George Dixon Primary School, City Road B17 8LE - suggested UPRN: 100071411446
-            "9-st-marys-catholic-church-hall",  # St Mary's Catholic Primary School, Vivian Road B17 0DN - suggested UPRN: 100071417689
-            "10-st-marys-catholic-church-hall",  # St Mary's Catholic Primary School, Vivian Road B17 0DN - suggested UPRN: 100071417689
-            "31-grove-hall",  # Grove Hall, Grove Lane B17 0QB - suggested UPRN: can't find in addressbase, postcode might be wrong?
-            "32-grove-hall",  # Grove Hall, Grove Lane B17 0QB - suggested UPRN: can't find in addressbase, postcode might be wrong?
-            "321-wattville-primary-school",  # Wattville Primary School, Wattville Road B21 0DP - suggested UPRN: 100071440040
-            "320-wattville-primary-school",  # Wattville Primary School, Wattville Road B21 0DP - suggested UPRN: 100071440040
-            "245-shenley-lane-community-association-sports-centre",  # Shenley Lane Community Association & Sports Centre, 472 Shenley Lane B29 4HZ - suggested UPRN: 100070510240
-            "322-wattville-primary-school",  # Wattville Primary School Wattville Road
-            "29-st-marys-catholic-primary-school",  # St Mary's Catholic Primary School Vivian Road
-            "30-st-marys-catholic-primary-school",  # St Mary's Catholic Primary School Vivian Road
-        ]:
+        if (
+            self.get_station_hash(record)
+            in [
+                "297-birchfield-primary-school",  # Birchfield Primary School, Trinity Road B6 6AJ - suggested UPRN: 100071470999
+                "36-barford-primary-school-nursery-unit",  # George Dixon Primary School, City Road B17 8LE - suggested UPRN: 100071411446
+                "38-george-dixon-primary-school",  # George Dixon Primary School, City Road B17 8LE - suggested UPRN: 100071411446
+                "37-george-dixon-primary-school",  # George Dixon Primary School, City Road B17 8LE - suggested UPRN: 100071411446
+                "9-st-marys-catholic-church-hall",  # St Mary's Catholic Primary School, Vivian Road B17 0DN - suggested UPRN: 100071417689
+                "10-st-marys-catholic-church-hall",  # St Mary's Catholic Primary School, Vivian Road B17 0DN - suggested UPRN: 100071417689
+                "31-grove-hall",  # Grove Hall, Grove Lane B17 0QB - suggested UPRN: can't find in addressbase, postcode might be wrong?
+                "32-grove-hall",  # Grove Hall, Grove Lane B17 0QB - suggested UPRN: can't find in addressbase, postcode might be wrong?
+                "321-wattville-primary-school",  # Wattville Primary School, Wattville Road B21 0DP - suggested UPRN: 100071440040
+                "320-wattville-primary-school",  # Wattville Primary School, Wattville Road B21 0DP - suggested UPRN: 100071440040
+                "245-shenley-lane-community-association-sports-centre",  # Shenley Lane Community Association & Sports Centre, 472 Shenley Lane B29 4HZ - suggested UPRN: 100070510240
+                "322-wattville-primary-school",  # Wattville Primary School Wattville Road
+                "29-st-marys-catholic-primary-school",  # St Mary's Catholic Primary School Vivian Road
+                "30-st-marys-catholic-primary-school",  # St Mary's Catholic Primary School Vivian Road
+            ]
+        ):
             record = record._replace(pollingvenueuprn="")
 
         # Corrected point for stations at:

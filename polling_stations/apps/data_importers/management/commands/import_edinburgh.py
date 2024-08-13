@@ -10,17 +10,20 @@ class Command(BaseHalaroseCsvImporter):
 
     def station_record_to_dict(self, record):
         # Removing the following stations that are outside of the council area and have no addresses assigned
-        if self.get_station_hash(record) in [
-            "7-north-esk-parish-church-hall",  # North Esk Parish Church Hall, 16 Bridge Street, Musselburgh
-            "5-north-esk-parish-church-hall",  # North Esk Parish Church Hall, 16 Bridge Street, Musselburgh
-            "6-north-esk-parish-church-hall",  # North Esk Parish Church Hall, 16 Bridge Street, Musselburgh
-            "1-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
-            "2-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
-            "3-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
-            "4-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
-            "8-our-lady-of-loretto-church-hall",  # Our Lady Of Loretto Church Hall, 17 Newbigging, Musselburgh
-            "9-our-lady-of-loretto-church-hall",  # Our Lady Of Loretto Church Hall, 17 Newbigging, Musselburgh
-        ]:
+        if (
+            self.get_station_hash(record)
+            in [
+                "7-north-esk-parish-church-hall",  # North Esk Parish Church Hall, 16 Bridge Street, Musselburgh
+                "5-north-esk-parish-church-hall",  # North Esk Parish Church Hall, 16 Bridge Street, Musselburgh
+                "6-north-esk-parish-church-hall",  # North Esk Parish Church Hall, 16 Bridge Street, Musselburgh
+                "1-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
+                "2-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
+                "3-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
+                "4-musselburgh-rugby-football-club",  # Musselburgh Rugby Football Club, 3A Stoneyhill Farm Road, Musselburgh
+                "8-our-lady-of-loretto-church-hall",  # Our Lady Of Loretto Church Hall, 17 Newbigging, Musselburgh
+                "9-our-lady-of-loretto-church-hall",  # Our Lady Of Loretto Church Hall, 17 Newbigging, Musselburgh
+            ]
+        ):
             return None
         return super().station_record_to_dict(record)
 
