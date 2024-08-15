@@ -103,6 +103,8 @@ jobs:
             python -m pip check
             python manage.py check
             python manage.py makemigrations --check
+            ruff format . --check
+            ruff check .
 
       - run:
           name: Pytest
