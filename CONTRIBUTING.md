@@ -14,9 +14,10 @@ At [DemocracyClub](https://democracyclub.org.uk/) we value contributions to our 
 * Use descriptive commit messages.
 * Check your work against our test suite. You can run tests and linters locally using:
     * `pytest` (unit tests)
-* Check your work against our coding standards. We use [ruff](https://beta.ruff.rs/docs/) for linting and code formatting:
+* Check your work against our coding standards. We use [ruff](https://beta.ruff.rs/docs/) and and [djhtml](https://github.com/rtts/djhtml) for linting and code formatting:
      * `ruff check .` (lint with ruff)
      * `ruff format .` (auto-format with ruff)
+     *  `git ls-files '*.html' | xargs djhtml` (auto-format templates with djhtml)
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository.
 * Reference the #issue number in your pull request.
