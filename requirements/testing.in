@@ -5,6 +5,7 @@ faker
 selenium
 
 coverage < 7.0
+djhtml
 pytest
 pytest-django
 pytest-cov

@@ -443,7 +443,7 @@ djangorestframework-gis==1.0 \
     # via -r requirements/base.in
 djhtml==3.0.6 \
     --hash=sha256:abfc4d7b4730432ca6a98322fbdf8ae9d6ba254ea57ba3759a10ecb293bc57de
-    # via -r requirements/local.in
+    # via -r requirements/testing.in
 docopt==0.6.2 \
     --hash=sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491
     # via coveralls
