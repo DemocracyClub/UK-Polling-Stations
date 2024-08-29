@@ -516,9 +516,9 @@ factory-boy==3.3.0 \
     --hash=sha256:a2cdbdb63228177aa4f1c52f4b6d83fab2b8623bf602c7dedd7eb83c0f69c04c \
     --hash=sha256:bc76d97d1a65bbd9842a6d722882098eb549ec8ee1081f9fb2e8ff29f0c300f1
     # via -r requirements/testing.in
-faker==25.1.0 \
-    --hash=sha256:2107618cf306bb188dcfea3e5cfd94aa92d65c7293a2437c1e96a99c83274755 \
-    --hash=sha256:24e28dce0b89683bb9e017e042b971c8c4909cff551b6d46f1e207674c7c2526
+faker==28.0.0 \
+    --hash=sha256:0d3c0399204aaf8205cc1750db443474ca0436f177126b2c27b798e8336cc74f \
+    --hash=sha256:6a3a08be54c37e05f7943d7ba5211d252c1de737687a46ad6f29209d8d5db11f
     # via
     #   -r requirements/testing.in
     #   factory-boy
