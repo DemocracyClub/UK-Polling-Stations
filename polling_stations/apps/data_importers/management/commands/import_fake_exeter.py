@@ -19,6 +19,7 @@ class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
     council_id = "EXE"
     addresses_name = "Democracy_Club__02May2019exe.CSV"
     stations_name = "Democracy_Club__02May2019exe.CSV"
+    elections = ["2124-05-02"]
 
     def add_advance_voting_stations(self):
         opening_times = OpeningTimes()
