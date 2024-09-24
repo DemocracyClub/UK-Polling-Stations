@@ -221,9 +221,10 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter, metaclass=abc.AB
     easting_field = "polling_place_easting"
     northing_field = "polling_place_northing"
     residential_uprn_field = "property_urn"
+    residential_postcode_field = "addressline6"
 
     def address_record_to_dict(self, record):
-        if record.addressline6.strip() == "":
+        if getattr(record, self.residential_postcode_field).strip() == "":
             return None
 
         address = format_residential_address(
@@ -240,7 +241,7 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter, metaclass=abc.AB
 
         return {
             "address": address.strip(),
-            "postcode": record.addressline6.strip(),
+            "postcode": getattr(record, self.residential_postcode_field).strip(),
             "polling_station_id": getattr(record, self.station_id_field).strip(),
             "uprn": uprn,
         }
@@ -318,6 +319,7 @@ class BaseHalaroseCsvImporter(
         "pollingstationaddress_5",
     ]
     residential_uprn_field = "uprn"
+    residential_postcode_field = "housepostcode"
 
     def get_station_hash(self, record):
         return "-".join(
@@ -415,7 +417,7 @@ class BaseHalaroseCsvImporter(
         if record.streetname.lower().strip() == "other electors address":
             return None
 
-        if record.housepostcode.strip() == "":
+        if getattr(record, self.residential_postcode_field).strip() == "":
             return None
 
         address = self.get_residential_address(record)
@@ -429,7 +431,7 @@ class BaseHalaroseCsvImporter(
 
         return {
             "address": address,
-            "postcode": record.housepostcode.strip(),
+            "postcode": getattr(record, self.residential_postcode_field).strip(),
             "polling_station_id": station_id,
             "uprn": uprn,
         }
@@ -452,16 +454,17 @@ class BaseDemocracyCountsCsvImporter(
     csv_delimiter = ","
     station_name_field = "placename"
     address_fields = ["add1", "add2", "add3", "add4", "add5", "add6"]
-    postcode_field = "postcode"
+    station_postcode_field = "postcode"
     station_id_field = "stationcode"
     residential_uprn_field = "uprn"
+    residential_postcode_field = "postcode"
 
     def address_record_to_dict(self, record):
-        if getattr(record, self.postcode_field).strip() == "A1 1AA":
+        if getattr(record, self.residential_postcode_field).strip() == "A1 1AA":
             # this is a dummy record
             return None
 
-        if not getattr(record, self.postcode_field).strip():
+        if not getattr(record, self.residential_postcode_field).strip():
             return None
 
         address = format_residential_address(
@@ -475,7 +478,7 @@ class BaseDemocracyCountsCsvImporter(
 
         return {
             "address": address,
-            "postcode": getattr(record, self.postcode_field).strip(),
+            "postcode": getattr(record, self.residential_postcode_field).strip(),
             "polling_station_id": getattr(record, self.station_id_field).strip(),
             "uprn": uprn,
         }
@@ -518,7 +521,7 @@ class BaseDemocracyCountsCsvImporter(
 
         return {
             "internal_council_id": getattr(record, self.station_id_field).strip(),
-            "postcode": getattr(record, self.postcode_field).strip(),
+            "postcode": getattr(record, self.station_postcode_field).strip(),
             "address": address,
             "location": location,
         }
