@@ -344,8 +344,8 @@ cryptography==42.0.7 \
 dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.6.zip \
     --hash=sha256:21512c334938738eea1cca5807c0f40acf82cc8554eb211831cc04eb9d887d17
     # via -r requirements/base.in
-dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/6.1.1.zip \
-    --hash=sha256:5c51c434da3c4083a3e8471c04b6c00c70d7c6ce834946d24b4fa3f7bb1f245a
+dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip \
+    --hash=sha256:4bc2acc4aa6bb4458cac402400e323c481dd07d87190e177917b659548fd48b0
     # via -r requirements/base.in
 dc-logging-utils @ https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.1.0.zip \
     --hash=sha256:c261bc1a3e5a51b071a0eb4474474d86831123acfd89b16d65ac6582cf19c4ce
