@@ -26,6 +26,7 @@ pythonpath = "cdk/lambdas/wdiv-s3-trigger"
 
 DJANGO_SETTINGS_MODULE = "polling_stations.settings.testing"
 
-addopts =[
+addopts = [
     "--ruff",
+    "--ruff-format",
 ]

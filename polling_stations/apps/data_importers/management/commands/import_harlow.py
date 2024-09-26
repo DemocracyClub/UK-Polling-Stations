@@ -15,18 +15,21 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "10023420143",  # BENSONS, HARLOW COMMON, HARLOW
-            "10023422799",  # BENSONS BARN, HARLOW COMMON, HARLOW
-            "100091255381",  # KITCHEN HALL FARM, RED LION LANE, HARLOW
-            "100091438137",  # 1 KITCHEN HALL COTTAGES, RED LION LANE, HARLOW
-            "100091438138",  # 2 KITCHEN HALL COTTAGES, RED LION LANE, HARLOW
-            "100091255475",  # NEXUS HOUSE, SCHOOL LANE, HARLOW
-            "200002567135",  # STEWARDS RESIDENCE CANONS BROOK GOLF CLUB ELIZABETH WAY, HARLOW
-            "10003710616",  # HEART & CLUB, PYPERS HATCH, HARLOW
-            "100091255570",  # GOLDINGS FARM, TYE GREEN VILLAGE, HARLOW
-            "100091255180",  # THE HAWTHORNS, MONKSWICK ROAD, HARLOW
-        ]:
+        if (
+            uprn
+            in [
+                "10023420143",  # BENSONS, HARLOW COMMON, HARLOW
+                "10023422799",  # BENSONS BARN, HARLOW COMMON, HARLOW
+                "100091255381",  # KITCHEN HALL FARM, RED LION LANE, HARLOW
+                "100091438137",  # 1 KITCHEN HALL COTTAGES, RED LION LANE, HARLOW
+                "100091438138",  # 2 KITCHEN HALL COTTAGES, RED LION LANE, HARLOW
+                "100091255475",  # NEXUS HOUSE, SCHOOL LANE, HARLOW
+                "200002567135",  # STEWARDS RESIDENCE CANONS BROOK GOLF CLUB ELIZABETH WAY, HARLOW
+                "10003710616",  # HEART & CLUB, PYPERS HATCH, HARLOW
+                "100091255570",  # GOLDINGS FARM, TYE GREEN VILLAGE, HARLOW
+                "100091255180",  # THE HAWTHORNS, MONKSWICK ROAD, HARLOW
+            ]
+        ):
             return None
 
         if record.addressline6 in [

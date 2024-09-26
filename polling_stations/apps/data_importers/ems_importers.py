@@ -2,6 +2,7 @@
 Specialised base import classes for handling data exported from
 popular Electoral Management Software packages
 """
+
 import abc
 import contextlib
 import json

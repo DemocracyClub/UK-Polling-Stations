@@ -107,18 +107,21 @@ class Command(BaseHalaroseCsvImporter):
             return None
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn in [
-            "250056648",  # WILLS FARM, PRIDDY, WELLS
-            "250045108",  # ORCHARD BYRE, POLSHAM, WELLS
-            "250070118",  # NEW MANOR FARM, POLSHAM, WELLS
-            "250003895",  # TWIN OAKS, SOMERTON ROAD, STREET
-            "250003837",  # LEIGHOLT FARM, SOMERTON ROAD, STREET
-            "250081238",  # FLAT 1, 13 PRINTWORKS ROAD, FROME
-            "250081239",  # FLAT 2, 13 PRINTWORKS ROAD, FROME
-            "250070558",  # THE BELL TOWER ORCHARDLEIGH VILLAGE PUMP TO LULLINGTON LANE, LULLINGTON, FROME
-            "250070559",  # THE CLOCK TOWER ORCHARDLEIGH VILLAGE PUMP TO LULLINGTON LANE, LULLINGTON, FROME
-            "250046922",  # HEARTY GATE BUNGALOW, NORTH WOOTTON, SHEPTON MALLET
-        ]:
+        if (
+            uprn
+            in [
+                "250056648",  # WILLS FARM, PRIDDY, WELLS
+                "250045108",  # ORCHARD BYRE, POLSHAM, WELLS
+                "250070118",  # NEW MANOR FARM, POLSHAM, WELLS
+                "250003895",  # TWIN OAKS, SOMERTON ROAD, STREET
+                "250003837",  # LEIGHOLT FARM, SOMERTON ROAD, STREET
+                "250081238",  # FLAT 1, 13 PRINTWORKS ROAD, FROME
+                "250081239",  # FLAT 2, 13 PRINTWORKS ROAD, FROME
+                "250070558",  # THE BELL TOWER ORCHARDLEIGH VILLAGE PUMP TO LULLINGTON LANE, LULLINGTON, FROME
+                "250070559",  # THE CLOCK TOWER ORCHARDLEIGH VILLAGE PUMP TO LULLINGTON LANE, LULLINGTON, FROME
+                "250046922",  # HEARTY GATE BUNGALOW, NORTH WOOTTON, SHEPTON MALLET
+            ]
+        ):
             return None
 
         if record.housepostcode in [

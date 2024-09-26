@@ -28,7 +28,7 @@ workflows:
             (?!polling_stations\/apps\/data_importers\/management\/commands\/import_.+\.py).* application-changed true
             polling_stations\/apps\/data_importers\/management\/commands\/import_eoni.py eoni-changed true
           base-revision: master
-          tag: 3.10.8
+          tag: '3.12'
           # this is the path of the configuration we should trigger once
           # path filtering and pipeline parameter value updates are
           # complete. In this case, we are using the parent dynamic

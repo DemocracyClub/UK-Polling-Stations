@@ -1,4 +1,17 @@
-import black
+import subprocess
+
+
+def ruff_format_str(py_script):
+    p = subprocess.Popen(
+        ["ruff", "format", "-"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    p.stdin.write(py_script)
+    stdout, _stderr = p.communicate()
+    return stdout
 
 
 class ImportScript:
@@ -47,4 +60,4 @@ class Command({self.importer_class}):
     stations_name = "{self.stations_name}"
     elections = {self.elections}{self.csv_encoding_string}{self.csv_delimiter_string}
 """
-        return black.format_str(script_str, mode=black.FileMode())
+        return ruff_format_str(script_str)

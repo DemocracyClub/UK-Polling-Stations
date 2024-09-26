@@ -2,26 +2,19 @@ import glob
 import os
 import shutil
 
-from boto.pyami.config import Config
-from boto.s3 import connect_to_region
-from boto.s3.connection import OrdinaryCallingFormat
+import boto3
+from botocore.client import Config
 from django.conf import settings
 
 
 class S3Wrapper:
     def __init__(self):
-        config = Config()
-        access_key = config.get_value(settings.BOTO_SECTION, "aws_access_key_id")
-        secret_key = config.get_value(settings.BOTO_SECTION, "aws_secret_access_key")
-
-        # connect to S3 + get ref to our data bucket
-        conn = connect_to_region(
-            os.environ.get("AWS_REGION", "eu-west-2"),
-            aws_access_key_id=access_key,
-            aws_secret_access_key=secret_key,
-            calling_format=OrdinaryCallingFormat(),
+        s3 = boto3.resource(
+            "s3",
+            region_name=os.environ.get("AWS_REGION", "eu-west-2"),
+            config=Config(s3={"addressing_style": "path"}),
         )
-        self.bucket = conn.get_bucket(settings.S3_DATA_BUCKET)
+        self.bucket = s3.Bucket(settings.S3_DATA_BUCKET)
 
         # this is where our local data will live
         self.base_path = os.path.abspath("./s3cache/")
@@ -48,7 +41,7 @@ class S3Wrapper:
             pass
 
         # fetch data for this prefix
-        keys = self.bucket.list(prefix=prefix)
+        keys = self.bucket.objects.filter(Prefix=prefix)
         count = 0
         for key in keys:
             # ignore directories
@@ -57,9 +50,9 @@ class S3Wrapper:
 
             local_file = os.path.join(self.base_path, key.key)
             os.makedirs(os.path.dirname(local_file), exist_ok=True)
-            key.get_contents_to_filename(local_file)
+            self.bucket.download_file(key.key, local_file)
             # We have to manually build a count of the number of items:
-            # A BucketListResultSet does not have a len() because it is
+            # A s3.Bucket.objectsCollection does not have a len() because it is
             # a generator expression, not a list
             count = count + 1
 

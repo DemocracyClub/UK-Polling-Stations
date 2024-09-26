@@ -15,14 +15,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "10012114417",  # THE SHIPPEN HUISH MOOR ROAD FROM FULLINGCOTT CROSS PAST BEACON FARM, INSTOW
-            "10090333929",  # UNIT 1 BABLES TENEMENT ROAD FROM BALLS CORNER TO MILL MOOR CROSS, BURRINGTON
-            "10094240594",  # LAND AND BUILDINGS AT 254805 145034 LANE TO WOOLSCOTT BARTON, ILFRACOMBE
-            "10012099463",  # LEE DOWN FARM, COMBE MARTIN, ILFRACOMBE
-            "10012091294",  # BRINSCOTT FARMHOUSE, COMBE MARTIN, ILFRACOMBE
-            "10012099767",  # HORE DOWN FARM, ILFRACOMBE
-        ]:
+        if (
+            uprn
+            in [
+                "10012114417",  # THE SHIPPEN HUISH MOOR ROAD FROM FULLINGCOTT CROSS PAST BEACON FARM, INSTOW
+                "10090333929",  # UNIT 1 BABLES TENEMENT ROAD FROM BALLS CORNER TO MILL MOOR CROSS, BURRINGTON
+                "10094240594",  # LAND AND BUILDINGS AT 254805 145034 LANE TO WOOLSCOTT BARTON, ILFRACOMBE
+                "10012099463",  # LEE DOWN FARM, COMBE MARTIN, ILFRACOMBE
+                "10012091294",  # BRINSCOTT FARMHOUSE, COMBE MARTIN, ILFRACOMBE
+                "10012099767",  # HORE DOWN FARM, ILFRACOMBE
+            ]
+        ):
             return None
 
         if record.addressline6 in [

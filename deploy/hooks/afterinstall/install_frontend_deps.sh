@@ -2,4 +2,4 @@
 set -xeE
 
 cd /var/www/polling_stations/code/
-npm install
+npm ci

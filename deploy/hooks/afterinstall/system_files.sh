@@ -3,7 +3,8 @@ set -xeE
 
 set -a
 source /var/www/polling_stations/code/.env
-INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
+METADATA_TOKEN=$(curl -X PUT "http://instance-data/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" --fail --silent)
+INSTANCE_ID=$(curl "http://instance-data/latest/meta-data/instance-id" -H "X-aws-ec2-metadata-token: $METADATA_TOKEN" --fail --silent)
 set +a
 
 SYSTEMD_SRC="${PROJECT_ROOT}/code/deploy/files/systemd"
@@ -13,7 +14,7 @@ CONF_SRC="${PROJECT_ROOT}/code/deploy/files/conf"
 # ----------
 # cloudwatch
 # ----------
-envsubst '$INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)' < "$CONF_SRC"/cloudwatch.json > /root/.cloudwatch.json
+envsubst '$INSTANCE_ID=$(curl "http://instance-data/latest/meta-data/instance-id" -H "X-aws-ec2-metadata-token: $METADATA_TOKEN" --fail --silent)' < "$CONF_SRC"/cloudwatch.json > /root/.cloudwatch.json
 envsubst  '$PROJECT_NAME $PROJECT_ROOT $APP_NAME' < "$SYSTEMD_SRC"/cloudwatch.service > ${SYSTEMD_DST}/"$PROJECT_NAME"_cloudwatch.service
 chmod 0644 /root/.cloudwatch.json
 systemctl enable "$PROJECT_NAME"_cloudwatch.service

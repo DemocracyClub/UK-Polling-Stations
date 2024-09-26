@@ -33,8 +33,7 @@ def ballot_paper_id_to_ee_url(ballot_paper_id):
 
 
 class BaseBakedElectionsHelper(abc.ABC):
-    def __init__(self, **kwargs):
-        ...
+    def __init__(self, **kwargs): ...
 
     @abc.abstractmethod
     def get_response_for_postcode(self, postcode: Postcode):

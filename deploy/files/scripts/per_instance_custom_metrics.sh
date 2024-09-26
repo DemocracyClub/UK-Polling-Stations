@@ -8,7 +8,8 @@ set +a
 
 #### General Config #####
 NAMESPACE="DemocracyClubCustomMetrics"
-INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+METADATA_TOKEN=$(curl -X PUT "http://instance-data/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" --fail --silent)
+INSTANCE_ID=$(curl "http://instance-data/latest/meta-data/instance-id" -H "X-aws-ec2-metadata-token: $METADATA_TOKEN" --fail --silent)
 INSTANCE_DIMENSION="[{\"Name\":\"InstanceId\",\"Value\":\"${INSTANCE_ID}\"}]"
 #### End General Config ####
 

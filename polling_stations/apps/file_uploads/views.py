@@ -1,10 +1,10 @@
 import json
 import logging
+import os
 from datetime import datetime
 
 import boto3
 from addressbase.models import Address, UprnToCouncil
-from boto.pyami.config import Config
 from botocore.exceptions import ClientError
 from councils.models import Council
 from data_finder.helpers import EveryElectionWrapper
@@ -65,12 +65,7 @@ class UploadRequestSchema(Schema):
 
 
 def get_s3_client():
-    config = Config()
-    access_key = config.get_value(settings.BOTO_SECTION, "aws_access_key_id")
-    secret_key = config.get_value(settings.BOTO_SECTION, "aws_secret_access_key")
-    return boto3.client(
-        "s3", aws_access_key_id=access_key, aws_secret_access_key=secret_key
-    )
+    return boto3.client("s3", region_name=os.environ.get("AWS_REGION", "eu-west-2"))
 
 
 class CouncilFileUploadAllowedMixin(UserPassesTestMixin):

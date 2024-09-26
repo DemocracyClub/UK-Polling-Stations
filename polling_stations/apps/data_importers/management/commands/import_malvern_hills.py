@@ -24,14 +24,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "10093062320",  # LOG CABIN AT 2 STRAWBERRY COTTAGE A443 NEWNHAM BRIDGE, NEWNHAM BRIDGE
-            "10014090439",  # BAKERS COTTAGE, WICHENFORD, WORCESTER
-            "10024321016",  # THE CARTHOUSE, BIRCHLEY MILL, BOCKLETON ROAD, OLDWOOD, TENBURY WELLS
-            "100120595356",  # HUNTERS LODGE, MAIN ROAD, KEMPSEY, WORCESTER
-            "200003222513",  # CATTERHALL FARM HOUSE, STOCKS ROAD, ALFRICK, WORCESTER
-            "10014094151",  # ST. MICHAELS CARAVAN PARK, ST. MICHAELS, TENBURY WELLS
-        ]:
+        if (
+            uprn
+            in [
+                "10093062320",  # LOG CABIN AT 2 STRAWBERRY COTTAGE A443 NEWNHAM BRIDGE, NEWNHAM BRIDGE
+                "10014090439",  # BAKERS COTTAGE, WICHENFORD, WORCESTER
+                "10024321016",  # THE CARTHOUSE, BIRCHLEY MILL, BOCKLETON ROAD, OLDWOOD, TENBURY WELLS
+                "100120595356",  # HUNTERS LODGE, MAIN ROAD, KEMPSEY, WORCESTER
+                "200003222513",  # CATTERHALL FARM HOUSE, STOCKS ROAD, ALFRICK, WORCESTER
+                "10014094151",  # ST. MICHAELS CARAVAN PARK, ST. MICHAELS, TENBURY WELLS
+            ]
+        ):
             return None
 
         if record.addressline6 in [

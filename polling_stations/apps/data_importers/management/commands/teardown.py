@@ -16,7 +16,6 @@ fields in DataQuality model
 
 
 class Command(BaseCommand):
-
     """
     Turn off auto system check for all apps
     We will maunally run system checks only for the

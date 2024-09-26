@@ -79,11 +79,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         uprn = record.property_urn.lstrip("0")
-        if uprn in [
-            "10004781106",  # CALVERTS NOOK, THE GAITS, GAYLE, HAWES
-            "10034645690",  # SAUNDERS HOUSE FARM SCOTCH CORNER TO APPLEBY TRUNK ROAD, EAST LAYTON
-            "100051959949",  # GARDENERS COTTAGE RICHMOND ROAD, HIPSWELL
-        ]:
+        if (
+            uprn
+            in [
+                "10004781106",  # CALVERTS NOOK, THE GAITS, GAYLE, HAWES
+                "10034645690",  # SAUNDERS HOUSE FARM SCOTCH CORNER TO APPLEBY TRUNK ROAD, EAST LAYTON
+                "100051959949",  # GARDENERS COTTAGE RICHMOND ROAD, HIPSWELL
+            ]
+        ):
             return None
 
         return super().address_record_to_dict(record)

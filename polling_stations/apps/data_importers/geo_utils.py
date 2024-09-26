@@ -28,7 +28,5 @@ def fix_bad_polygons():
         UPDATE {0}
         SET area=ST_Multi(ST_CollectionExtract(ST_MakeValid(area), 3))
         WHERE NOT ST_IsValid(area);
-        """.format(
-            table_name
-        )
+        """.format(table_name)
     )

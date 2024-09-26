@@ -1,6 +1,7 @@
 """
 Models for actual Polling Stations and Polling Districts!
 """
+
 import urllib.parse
 from datetime import datetime
 from itertools import groupby

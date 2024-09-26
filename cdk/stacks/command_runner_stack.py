@@ -38,7 +38,7 @@ class WDIVOncePerTagCommandRunner(Stack):
             function_name="once_per_tag_command_runner",
             entry="./cdk/lambdas/ssm_run_command_once",
             index="main.py",
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(2),
             role=role,
         )

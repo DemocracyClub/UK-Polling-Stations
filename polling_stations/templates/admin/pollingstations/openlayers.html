@@ -5,7 +5,7 @@
     <div id="{{ id }}_map" class="dj_map" data-width="{{ map_width }}" data-height="{{ map_height }}"></div>
     {% if display_raw %}<p>{% translate "Debugging window (serialized value)" %}</p>{% endif %}
     <textarea id="{{ id }}" class="vSerializedField required" cols="150" rows="10" name="{{ name }}"
-        {% if not display_raw %} hidden{% endif %}>{{ serialized }}</textarea>
+              {% if not display_raw %} hidden{% endif %}>{{ serialized }}</textarea>
     <script>
         {% block base_layer %}
             var base_layer = new ol.layer.Tile({source: new ol.source.OSM()});

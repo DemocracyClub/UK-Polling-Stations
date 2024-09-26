@@ -15,19 +15,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "452098161",  # AQUALATE MANOR, STAFFORD ROAD, NEWPORT
-            "200001754669",  # CHARTLEY, CHURCH ASTON, NEWPORT
-            "452098134",  # CARAVAN 3 GREENFIELDS COUNTRY STORE STATION ROAD, DONNINGTON, TELFORD
-            "452063031",  # HOMECROFT, ADMASTON, TELFORD
-            "452084193",  # MEESE COTTAGE, HOWLE, NEWPORT
-            "452063475",  # 10 RUSHMOOR LANE, BRATTON, TELFORD
-            "452094687",  # THE RIDGEWAYS, THE HEM, SHIFNAL
-            "452044353",  # 12 WATERLOO ROAD, EDGMOND, NEWPORT
-            "10090446309",  # LAKE VIEW RESIDENTIAL CARE HOME, BROOKSIDE AVENUE, TELFORD
-            "452005400",  # 2 POOL HILL, DAWLEY, TELFORD
-            "452005403",  # 5 POOL HILL, DAWLEY, TELFORD
-        ]:
+        if (
+            uprn
+            in [
+                "452098161",  # AQUALATE MANOR, STAFFORD ROAD, NEWPORT
+                "200001754669",  # CHARTLEY, CHURCH ASTON, NEWPORT
+                "452098134",  # CARAVAN 3 GREENFIELDS COUNTRY STORE STATION ROAD, DONNINGTON, TELFORD
+                "452063031",  # HOMECROFT, ADMASTON, TELFORD
+                "452084193",  # MEESE COTTAGE, HOWLE, NEWPORT
+                "452063475",  # 10 RUSHMOOR LANE, BRATTON, TELFORD
+                "452094687",  # THE RIDGEWAYS, THE HEM, SHIFNAL
+                "452044353",  # 12 WATERLOO ROAD, EDGMOND, NEWPORT
+                "10090446309",  # LAKE VIEW RESIDENTIAL CARE HOME, BROOKSIDE AVENUE, TELFORD
+                "452005400",  # 2 POOL HILL, DAWLEY, TELFORD
+                "452005403",  # 5 POOL HILL, DAWLEY, TELFORD
+            ]
+        ):
             return None
 
         if record.addressline6 in [

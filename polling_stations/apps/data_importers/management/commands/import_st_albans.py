@@ -15,12 +15,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "100081131978",  # PADDOCK VIEW, AYRES END LANE, CHILDWICKBURY, ST. ALBANS
-            "10024115888",  # FLAT AT ST ALBANS SCHOOL PAVILLION 162 HARPENDEN ROAD, ST ALBANS
-            "200003633693",  # WOOD END, HATCHING GREEN, HARPENDEN
-            "100081134635",  # PLAISTOWES FARM, NOKE LANE, ST. ALBANS
-        ]:
+        if (
+            uprn
+            in [
+                "100081131978",  # PADDOCK VIEW, AYRES END LANE, CHILDWICKBURY, ST. ALBANS
+                "10024115888",  # FLAT AT ST ALBANS SCHOOL PAVILLION 162 HARPENDEN ROAD, ST ALBANS
+                "200003633693",  # WOOD END, HATCHING GREEN, HARPENDEN
+                "100081134635",  # PLAISTOWES FARM, NOKE LANE, ST. ALBANS
+            ]
+        ):
             return None
 
         if record.addressline6 in [

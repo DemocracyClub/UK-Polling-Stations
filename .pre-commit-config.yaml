@@ -1,38 +1,35 @@
 repos:
--   repo: https://github.com/psf/black
-    rev: 23.7.0
-    hooks:
-    -   id: black
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.3.5
+  rev: v0.4.6
   hooks:
     - id: ruff
       args: [ --fix, --exit-non-zero-on-fix ]
--   repo: local
-    hooks:
-    -   id: pytest
-        name: pytest-ruff
-        language: system
-        entry: pytest --ruff
-        pass_filenames: false
-        stages: [push]
-    -   id: makemigrations
-        name: makemigrations --check
-        language: system
-        entry: ./manage.py makemigrations --check
-        pass_filenames: false
-        stages: [push]
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.2.0
-    hooks:
-    -   id: check-yaml
-    -   id: end-of-file-fixer
-        exclude: cdk/lambdas/wdiv-s3-trigger/tests/fixtures/.*
-    -   id: trailing-whitespace
-        exclude: cdk/lambdas/wdiv-s3-trigger/tests/fixtures/.*
-    -   id: check-json
--   repo: https://github.com/rtts/djhtml
-    rev: v1.5.0
-    hooks:
-    -   id: djhtml
+    - id: ruff-format
+- repo: local
+  hooks:
+    - id: pytest
+      name: pytest-ruff
+      language: system
+      entry: pytest --ruff
+      pass_filenames: false
+      stages: [push]
+    - id: makemigrations
+      name: makemigrations --check
+      language: system
+      entry: ./manage.py makemigrations --check
+      pass_filenames: false
+      stages: [push]
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    - id: check-yaml
+    - id: end-of-file-fixer
+      exclude: cdk/lambdas/wdiv-s3-trigger/tests/fixtures/.*
+    - id: trailing-whitespace
+      exclude: cdk/lambdas/wdiv-s3-trigger/tests/fixtures/.*
+    - id: check-json
+- repo: https://github.com/rtts/djhtml
+  rev: v1.5.0
+  hooks:
+    - id: djhtml

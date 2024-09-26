@@ -63,10 +63,13 @@ class Command(BaseHalaroseCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
-        if uprn in [
-            "151176868",  # THE BLACK HOUSE, NEWBURGH, ELLON
-            "151176475",  # CARAVAN 5 DYKELANDS FARM A937 SOUTH BALMAKELLY ACCESS ROAD TO A90T SOUTH OF LAURENCEKIRK, LAURENCEKIRK
-        ]:
+        if (
+            uprn
+            in [
+                "151176868",  # THE BLACK HOUSE, NEWBURGH, ELLON
+                "151176475",  # CARAVAN 5 DYKELANDS FARM A937 SOUTH BALMAKELLY ACCESS ROAD TO A90T SOUTH OF LAURENCEKIRK, LAURENCEKIRK
+            ]
+        ):
             return None
         if record.housepostcode in [
             # splits

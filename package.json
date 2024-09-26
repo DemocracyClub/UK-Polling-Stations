@@ -9,7 +9,8 @@
     },
     "homepage": "https://github.com/chris48s/UK-Polling-Stations#readme",
     "engines": {
-        "npm": "^8"
+        "npm": ">=8",
+        "node": ">=18"
     },
     "dependencies": {
         "@mapbox/polyline": "^1.2.1",

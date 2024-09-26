@@ -42,7 +42,6 @@ python manage.py import -r -e 'local.[a-z]+.2017-05-04'
 
 
 class Command(BaseCommand):
-
     """
     Turn off auto system check for all apps
     We will maunally run system checks only for the

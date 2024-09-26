@@ -53,7 +53,7 @@ class WDIVS3TriggerStack(Stack):
             entry="cdk/lambdas/wdiv-s3-trigger",
             index="trigger/handler.py",
             handler="main",
-            runtime=aws_lambda.Runtime.PYTHON_3_9,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(10),
             role=role,
             environment=lambda_env_vars,
