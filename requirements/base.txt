@@ -157,8 +157,8 @@ dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/t
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/6.1.1.zip \
-    --hash=sha256:5c51c434da3c4083a3e8471c04b6c00c70d7c6ce834946d24b4fa3f7bb1f245a
+dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip \
+    --hash=sha256:4bc2acc4aa6bb4458cac402400e323c481dd07d87190e177917b659548fd48b0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
