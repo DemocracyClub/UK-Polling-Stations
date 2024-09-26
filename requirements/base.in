@@ -1,7 +1,6 @@
 asana
 commitment<4.0.0
 dj-database-url
-django-basicauth
 django-extensions
 django-filter
 django-localflavor

@@ -133,7 +133,6 @@ MIDDLEWARE = (
     "data_finder.middleware.UTMTrackerMiddleware",
     "whitelabel.middleware.WhiteLabelMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "pollingstations.middleware.BasicAuthMiddleware",
     "django.middleware.security.SecurityMiddleware",
 )
 
@@ -313,10 +312,7 @@ ADDRESS_MODEL = "addressbase.Address"
 ONSUD_MODEL = "addressbase.UprnToCouncil"
 
 DEFAULT_FROM_EMAIL = "pollingstations@democracyclub.org.uk"
-# Disable Basic Auth by default
-# We only want to use this on staging deploys
-BASICAUTH_DISABLE = True
-# TODO https://github.com/DemocracyClub/polling_deploy/blob/22ce0df9489467d1a2dc088d022b2ec975e32349/webapp_settings/production.py#L134-L143
+
 
 SHOW_ADVANCE_VOTING_STATIONS = True
 
