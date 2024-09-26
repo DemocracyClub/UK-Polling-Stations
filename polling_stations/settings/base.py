@@ -134,6 +134,7 @@ MIDDLEWARE = (
     "whitelabel.middleware.WhiteLabelMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "dc_utils.middleware.BasicAuthMiddleware",
 )
 
 TEMPLATES = [
@@ -313,6 +314,12 @@ ONSUD_MODEL = "addressbase.UprnToCouncil"
 
 DEFAULT_FROM_EMAIL = "pollingstations@democracyclub.org.uk"
 
+# Allowlist of URLs that should be ignored by dc_utils BasicAuthMiddleware
+BASIC_AUTH_ALLOWLIST = [
+    "/status_check/",  # load balancer health check
+    "/api",
+    "/api/*",
+]
 
 SHOW_ADVANCE_VOTING_STATIONS = True
 
