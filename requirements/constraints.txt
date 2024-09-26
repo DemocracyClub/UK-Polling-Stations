@@ -372,7 +372,6 @@ django==4.2.13 \
     #   -r requirements/base.in
     #   dc-django-utils
     #   dj-database-url
-    #   django-basicauth
     #   django-cors-headers
     #   django-debug-toolbar
     #   django-dynamodb-cache
@@ -383,10 +382,6 @@ django==4.2.13 \
     #   djangorestframework
     #   drf-spectacular
     #   uk-geo-utils
-django-basicauth==0.5.3 \
-    --hash=sha256:15e9e366f698f53c71b1e794dafea060f990a2ac556bae6b7330dd25324a091c \
-    --hash=sha256:e5e47d1acdc1943bedcc1bf673059d6c15e257dfe9eef67a22fb824f79546c0d
-    # via -r requirements/base.in
 django-cors-headers==4.3.1 \
     --hash=sha256:0b1fd19297e37417fc9f835d39e45c8c642938ddba1acce0c1753d3edef04f36 \
     --hash=sha256:0bf65ef45e606aff1994d35503e6b677c0b26cafff6506f8fd7187f3be840207
