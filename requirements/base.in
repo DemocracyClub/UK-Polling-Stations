@@ -29,6 +29,11 @@ uk-geo-utils
 freezegun
 polars
 
+# ruff needs to be in the production requirements
+# because https://github.com/DemocracyClub/UK-Polling-Stations/blob/7323740ecade04f8e883b18fb3363e6f6ec37ff6/polling_stations/apps/data_importers/import_script.py#L4-L14
+# is used when we create a PR after a file upload is received
+ruff==0.4.6
+
 https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.6.zip
 https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip
 https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.1.0.zip
