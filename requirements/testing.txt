@@ -553,7 +553,6 @@ ruff==0.4.6 \
     --hash=sha256:f13410aabd3b5776f9c5699f42b37a3a348d65498c4310589bc6e5c548dc8a2f
     # via
     #   -c requirements/constraints.txt
-    #   -r requirements/testing.in
     #   pytest-ruff
 selenium==4.20.0 \
     --hash=sha256:0bd564ee166980d419a8aaf4ac00289bc152afcf2eadca5efe8c8e36711853fd \
