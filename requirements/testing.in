@@ -14,4 +14,3 @@ playwright
 pytest-playwright
 pytest-ruff
 pytest-vcr
-ruff
