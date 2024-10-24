@@ -85,11 +85,7 @@
             {% endif %}
         </div>
     {% else %}
-        <p>
-            We don't know about any upcoming elections administered by {{ object.name }}.
-            If you have data to upload, please <a href="mailto:pollingstations@democracyclub.org.uk.">get in touch</a>
-            to tell us which election you want to upload data for.
-        </p>
+        {% include "./no_upcoming_elections_snippet.html" with name=object.name %}
     {% endif %}
 
     <h2>Contact details</h2>
