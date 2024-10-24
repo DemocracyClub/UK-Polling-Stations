@@ -27,13 +27,8 @@
     </noscript>
 
     <h1>{{ council.name }}</h1>
-    {%if NO_UPCOMING_ELECTIONS %}
-        <p>
-            We don't know about any upcoming elections administered by {{ council.name }}.
-            If you have data to upload, please <a href="mailto:pollingstations@democracyclub.org.uk.">get in touch</a>
-            to tell us which election you want to upload data for.
-        </p>
-
+    {% if NO_UPCOMING_ELECTIONS %}
+        {% include "./no_upcoming_elections_snippet.html" with name=council.name %}
     {% else %}
         <h2>Upload EMS export</h2>
         <p>
@@ -90,7 +85,7 @@
             </fieldset>
             <button type="submit" class="ds-button" id="submit" disabled>Upload</button>
         </form>
-    {%endif%}
+    {% endif %}
 
 {% endblock council_content %}
 
