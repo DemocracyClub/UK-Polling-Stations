@@ -98,7 +98,7 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
 
         # If the list returns no items, flag that there are no upcoming elections
         # that we know about.
-        context["NO_UPCOMING_ELECTIONS"] = bool(upcoming_election_dates)
+        context["NO_UPCOMING_ELECTIONS"] = not upcoming_election_dates
 
         # Only show the date picker if there's more than one upcoming election date
         context["SHOW_DATE_PICKER"] = len(upcoming_election_dates) > 1

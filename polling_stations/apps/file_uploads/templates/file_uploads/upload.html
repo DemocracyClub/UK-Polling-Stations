@@ -27,61 +27,70 @@
     </noscript>
 
     <h1>{{ council.name }}</h1>
-    <h2>Upload EMS export</h2>
-    <p>
-        Use the buttons below to select and upload a polling station export file from your computer.
-        Instructions on how to create the export can be found <a href="https://democracyclub.org.uk/projects/polling-stations/upload/">here</a>.
-    </p>
-    <p>
-        In the event that some of the stations in your council area are managed by neighbouring councils for the GE,
-        please ensure that they are aware that they need to provide this data to us.
-    </p>
+    {%if NO_UPCOMING_ELECTIONS %}
+        <p>
+            We don't know about any upcoming elections administered by {{ council.name }}.
+            If you have data to upload, please <a href="mailto:pollingstations@democracyclub.org.uk.">get in touch</a>
+            to tell us which election you want to upload data for.
+        </p>
 
-    <form id="file_upload_form" method="POST">
-        {% if SHOW_DATE_PICKER %}
+    {% else %}
+        <h2>Upload EMS export</h2>
+        <p>
+            Use the buttons below to select and upload a polling station export file from your computer.
+            Instructions on how to create the export can be found <a href="https://democracyclub.org.uk/projects/polling-stations/upload/">here</a>.
+        </p>
+        <p>
+            In the event that some of the stations in your council area are managed by neighbouring councils for the GE,
+            please ensure that they are aware that they need to provide this data to us.
+        </p>
+
+        <form id="file_upload_form" method="POST">
+            {% if SHOW_DATE_PICKER %}
+                <fieldset>
+                    <legend>Election date</legend>
+                    <p>
+                        There is more than one upcoming election in your region. Please pick the date this upload is for.
+                        if you have more than one upcoming election, you will need to upload different data exports for each,
+                        or email us if you would like us to reuse the data.
+                    </p>
+                    <div class="ds-stack-smallest">
+                        {% for election_date in UPCOMING_ELECTION_DATES %}
+                            <label class="ds-field-radio">
+                                <input type="radio" name="election_date" value="{{ election_date }}" required >
+                                <span>{{ election_date }}</span>
+                            </label>
+                        {% endfor %}
+
+                    </div>
+                </fieldset>
+
+            {% else %}
+                <p>Please upload data for the elections taking place on <strong>{{ UPCOMING_ELECTION_DATES.0 }}</strong></p>
+                <input type="hidden" name="election_date" value="{{ UPCOMING_ELECTION_DATES.0 }}">
+            {% endif %}
+
             <fieldset>
-                <legend>Election date</legend>
-                <p>
-                    There is more than one upcoming election in your region. Please pick the date this upload is for.
-                    if you have more than one upcoming election, you will need to upload different data exports for each,
-                    or email us if you would like us to reuse the data.
-                </p>
-                <div class="ds-stack-smallest">
-                    {% for election_date in UPCOMING_ELECTION_DATES %}
-                        <label class="ds-field-radio">
-                            <input type="radio" name="election_date" value="{{ election_date }}" required >
-                            <span>{{ election_date }}</span>
-                        </label>
-                    {% endfor %}
+                <legend>Exported data</legend>
+                <p>Please upload the file(s) exported from your EMS. The accepted file types are CSV or TSV.</p>
 
+                <div class="ds-field">
+                    <label for="file0">File 1</label>
+                    <input type="file" id="file0" name="file0" accept=".csv,.tsv"  />
+                    <progress id="progressBar0" value="0" max="100"></progress>
+                </div>
+                <div class="ds-field">
+                    <label for="file1">File 2 (optional)
+                        <small>Only required if you use the 'Democracy Counts' EMS</small>
+                    </label>
+
+                    <input type="file" id="file1" name="file1" accept=".csv,.tsv" />
+                    <progress id="progressBar1" value="0" max="100"></progress>
                 </div>
             </fieldset>
-
-        {% else %}
-            <p>Please upload data for the elections taking place on <strong>{{ UPCOMING_ELECTION_DATES.0 }}</strong></p>
-            <input type="hidden" name="election_date" value="{{ UPCOMING_ELECTION_DATES.0 }}">
-        {% endif %}
-
-        <fieldset>
-            <legend>Exported data</legend>
-            <p>Please upload the file(s) exported from your EMS. The accepted file types are CSV or TSV.</p>
-
-            <div class="ds-field">
-                <label for="file0">File 1</label>
-                <input type="file" id="file0" name="file0" accept=".csv,.tsv"  />
-                <progress id="progressBar0" value="0" max="100"></progress>
-            </div>
-            <div class="ds-field">
-                <label for="file1">File 2 (optional)
-                    <small>Only required if you use the 'Democracy Counts' EMS</small>
-                </label>
-
-                <input type="file" id="file1" name="file1" accept=".csv,.tsv" />
-                <progress id="progressBar1" value="0" max="100"></progress>
-            </div>
-        </fieldset>
-        <button type="submit" class="ds-button" id="submit" disabled>Upload</button>
-    </form>
+            <button type="submit" class="ds-button" id="submit" disabled>Upload</button>
+        </form>
+    {%endif%}
 
 {% endblock council_content %}
 
