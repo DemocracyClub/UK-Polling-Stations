@@ -75,8 +75,9 @@ class EveryElectionWrapper:
                 council_id,
             )
         )
-        # Only used by council users atm so seems safe to cache for a whole day
-        return self.get_data(query_url, cache_hours=24)
+        # Only used by council users in the uploader
+        # This query is expensive, so we want to avoid making it too often
+        return self.get_data(query_url, cache_hours=0.5)
 
     def get_data(self, query_url, cache_hours=0):
         res_json = None
