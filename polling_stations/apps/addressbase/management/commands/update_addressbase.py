@@ -1,9 +1,25 @@
+import tempfile
+
+import boto3
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from uk_geo_utils.base_updater import BaseUpdater
+from uk_geo_utils.base_importer import BaseImporter
 
 
-class AddressbaseUpdater(BaseUpdater):
+def get_file_from_s3(uri):
+    if not uri.startswith("s3://"):
+        raise Exception("url must start with s3://")
+    if not uri.lower().endswith(".csv"):
+        raise Exception("url must end with .csv")
+    bucket = uri.split("/")[2]
+    key = "/".join(uri.split("/")[3:])
+    tmp = tempfile.NamedTemporaryFile(delete=False)
+    bucket = boto3.resource("s3").Bucket(bucket)
+    bucket.download_file(key, tmp.name)
+    return tmp.name
+
+
+class AddressbaseUpdater(BaseImporter):
     def get_table_name(self):
         return "addressbase_address"
 
@@ -18,7 +34,7 @@ class AddressbaseUpdater(BaseUpdater):
             self.cursor.copy_expert(copy_string, f)
 
 
-class UprnToCouncilUpdater(BaseUpdater):
+class UprnToCouncilUpdater(BaseImporter):
     def get_table_name(self):
         return "addressbase_uprntocouncil"
 
@@ -34,29 +50,60 @@ class UprnToCouncilUpdater(BaseUpdater):
 
 
 class Command(BaseCommand):
+    """
+    Usage:
+
+    ./manage.py update_addressbase \
+        --addressbase-s3-uri='s3://bucket/addressbase/sample/addressbase_cleaned/addressbase_cleaned.csv' \
+        --uprntocouncil-s3-uri='s3://bucket/addressbase/sample/uprn-to-council/uprn-to-councils.csv'
+    or
+     ./manage.py update_addressbase \
+        --addressbase-path /path/to/addressbase_cleaned.csv \
+        --uprntocouncil-path /path/to/uprn-to-councils.csv
+
+    """
+
     help = (
         "Updates both Addressbase and UPRN to Council mapping tables from local files"
     )
 
     def add_arguments(self, parser):
-        parser.add_argument(
+        addressbase_group = parser.add_mutually_exclusive_group(required=True)
+        addressbase_group.add_argument(
             "--addressbase-path",
-            required=True,
             help="Local path to the Addressbase data file",
         )
-        parser.add_argument(
+        addressbase_group.add_argument(
+            "--addressbase-s3-uri",
+            help="S3 URI for Addressbase data file",
+        )
+        uprntocouncil_group = parser.add_mutually_exclusive_group(required=True)
+        uprntocouncil_group.add_argument(
             "--uprntocouncil-path",
-            required=True,
             help="Local path to the UPRN to Council data file",
+        )
+        uprntocouncil_group.add_argument(
+            "--uprntocouncil-s3-uri",
+            help="S3 URI for UPRN to Council data file",
         )
 
     def handle(self, *args, **options):
+        addressbase_path = options.get("addressbase_path", None)
+        uprntocouncil_path = options.get("uprntocouncil_path", None)
+        if options.get("addressbase_s3_uri"):
+            addressbase_path = get_file_from_s3(options["addressbase_s3_uri"])
+        if options.get("uprntocouncil_s3_uri"):
+            uprntocouncil_path = get_file_from_s3(options["uprntocouncil_s3_uri"])
+
+        self.stdout.write(f"addressbase_path set to {addressbase_path}")
+        self.stdout.write(f"uprntocouncil_path to {uprntocouncil_path}")
+
         addressbase_updater = AddressbaseUpdater()
         uprntocouncil_updater = UprnToCouncilUpdater()
 
         # Set the data_path on each updater instance
-        addressbase_updater.data_path = options["addressbase_path"]
-        uprntocouncil_updater.data_path = options["uprntocouncil_path"]
+        addressbase_updater.data_path = addressbase_path
+        uprntocouncil_updater.data_path = uprntocouncil_path
 
         # Get constraints and index information for both tables
         addressbase_updater.get_constraints_and_index_statements()
