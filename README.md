@@ -114,7 +114,7 @@ python manage.py migrate
 For development purposes, you can use the ONSPD for geocoding. Grab the latest release from https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=-modified&tags=PRD_ONSPD unzip the data and import it using:
 
 ```
-python manage.py import_onspd /path/to/data
+python manage.py import_onspd --data-path /path/to/data
 ```
 
 N.B. Path is to data _directory_ which contains the csv, not the csv itself.
