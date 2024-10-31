@@ -164,7 +164,7 @@ def list_rds_dbs(
     conn_string = get_rds_connection_string(
         profile, user=user, db_name=db_name, host=host, password=password
     )
-    ctx.run(f'psql {conn_string} -c "\l"')
+    ctx.run(f'psql {conn_string} -c "\\l"')
 
 
 @task(
