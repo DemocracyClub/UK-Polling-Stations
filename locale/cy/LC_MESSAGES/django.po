@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 07:51+0100\n"
+"POT-Creation-Date: 2024-11-06 14:29+0000\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -107,19 +107,19 @@ msgstr "Anfon adborth"
 msgid "Uploads"
 msgstr "Uwchlwythiadau"
 
-#: polling_stations/apps/pollingstations/models.py:137
+#: polling_stations/apps/pollingstations/models.py:138
 msgid "level access"
 msgstr "mynediad gwastad"
 
-#: polling_stations/apps/pollingstations/models.py:139
+#: polling_stations/apps/pollingstations/models.py:140
 msgid "a temporary ramp for access"
 msgstr "ramp dros dro ar gyfer mynediad"
 
-#: polling_stations/apps/pollingstations/models.py:141
+#: polling_stations/apps/pollingstations/models.py:142
 msgid "a ramp for access"
 msgstr "ramp ar gyfer mynediad"
 
-#: polling_stations/settings/base.py:281
+#: polling_stations/settings/base.py:304
 #: polling_stations/templates/base.html:66
 msgid "Where Do I Vote?"
 msgstr "Ble Ydw i'n Pleidleisio?"
@@ -710,18 +710,24 @@ msgstr "Pleidleisiwch ar y diwrnod pleidleisio"
 msgid "You can vote in person at:"
 msgstr "Gallwch bleidleisio yn y cnawd yn:"
 
-#: polling_stations/templates/fragments/polling_station_known.html:57
+#: polling_stations/templates/fragments/polling_station_known.html:58
+#, fuzzy
+#| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
+msgid "Polling stations are open from 8am to 8pm"
+msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
+
+#: polling_stations/templates/fragments/polling_station_known.html:60
 #, fuzzy
 #| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgid "Polling stations are open from 7am to 10pm"
 msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 
-#: polling_stations/templates/fragments/polling_station_known.html:57
+#: polling_stations/templates/fragments/polling_station_known.html:62
 #, python-format
 msgid " on %(NEXT_CHARISMATIC_ELECTION_DATE)s"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:87
+#: polling_stations/templates/fragments/polling_station_known.html:92
 msgid ""
 "\n"
 "                <h3>Advance voting trial</h3>\n"
@@ -790,7 +796,13 @@ msgstr ""
 msgid "Or, you need to contact %(council)s."
 msgstr "Neu, mae angen i chi gysylltu â %(council_aspirate)s."
 
-#: polling_stations/templates/fragments/polling_station_unknown.html:32
+#: polling_stations/templates/fragments/polling_station_unknown.html:34
+#, fuzzy
+#| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
+msgid "Polling stations are open from 8am to 8pm."
+msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
+
+#: polling_stations/templates/fragments/polling_station_unknown.html:36
 #, fuzzy
 #| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgid "Polling stations are open from 7am to 10pm."
@@ -815,6 +827,22 @@ msgid ""
 msgstr ""
 "Nid oes angen i chi gofrestru eto os ydych chi eisoes wedi cofrestru yn eich "
 "cyfeiriad cyfredol."
+
+#: polling_stations/templates/fragments/register_to_vote.html:17
+msgid ""
+"City of London council elections do not use the same electoral register as "
+"other elections."
+msgstr ""
+
+#: polling_stations/templates/fragments/register_to_vote.html:22
+msgid ""
+"Both residents and city workers are eligible to vote. There is one register "
+"published annually, and the deadline to apply is 30 November each year. The "
+"new register comes into force on 16 February each year, and cannot be "
+"modified after that date. For more information, visit the <a href=\"https://"
+"www.speakforthecity.com/\">Speak for the City</a> website or contact City of "
+"London electoral services."
+msgstr ""
 
 #: polling_stations/templates/fragments/travel_time.html:6
 #, python-format
