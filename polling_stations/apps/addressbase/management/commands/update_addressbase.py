@@ -5,6 +5,11 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from uk_geo_utils.base_importer import BaseImporter
 
+from councils.models import Council
+from data_importers.event_helpers import record_teardown_event
+from data_importers.models import DataQuality
+from pollingstations.models import PollingDistrict, PollingStation, AdvanceVotingStation
+
 
 def get_file_from_s3(uri):
     if not uri.startswith("s3://"):
@@ -87,6 +92,21 @@ class Command(BaseCommand):
             help="S3 URI for UPRN to Council data file",
         )
 
+    def teardown(self):
+        self.stdout.write(
+            "New addresses imported. Deleting all Polling Stations, Advance Polling Stations and Polling Districts..."
+        )
+        for council in Council.objects.with_polling_stations_in_db():
+            record_teardown_event(council.council_id)
+            PollingDistrict.objects.all().delete()
+            PollingStation.objects.all().delete()
+            AdvanceVotingStation.objects.all().delete()
+            DataQuality.objects.all().update(
+                report="", num_addresses=0, num_districts=0, num_stations=0
+            )
+
+        self.stdout.write("..deleted.")
+
     def handle(self, *args, **options):
         addressbase_path = options.get("addressbase_path", None)
         uprntocouncil_path = options.get("uprntocouncil_path", None)
@@ -153,7 +173,7 @@ class Command(BaseCommand):
                     addressbase_updater.add_foreign_keys()
                 if uprntocouncil_updater.foreign_key_constraints:
                     uprntocouncil_updater.add_foreign_keys()
-
+                self.teardown()
             self.stdout.write(
                 self.style.SUCCESS(
                     "Successfully updated both Addressbase and UPRN to Council tables"
