@@ -283,7 +283,7 @@ class EveryElectionWrapper:
 
     @property
     def multiple_elections(self):
-        if self.has_election and self.request_success:
+        if self.has_election() and self.request_success:
             uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
             return len(uncancelled_ballots) > 1
         return False
@@ -348,7 +348,7 @@ class StaticElectionsAPIElectionWrapper:
 
     @property
     def multiple_elections(self):
-        if self.has_election:
+        if self.has_election():
             uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
             return len(uncancelled_ballots) > 1
         return False
