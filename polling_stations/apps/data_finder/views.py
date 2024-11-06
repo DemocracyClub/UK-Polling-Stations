@@ -216,6 +216,7 @@ class BasePollingStationView(
         context["cancelled_election"] = ee.get_cancelled_election_info()
         context["advance_voting_station"] = self.get_advance_voting_station()
         context["requires_voter_id"] = ee.get_voter_id_status()
+        context["has_city_of_london_ballots"] = ee.has_city_of_london_ballots
 
         context["postcode"] = self.postcode.with_space
         context["location"] = self.location
@@ -226,6 +227,7 @@ class BasePollingStationView(
         context["we_know_where_you_should_vote"] = self.we_know_where_you_should_vote()
         context["noindex"] = True
         context["territory"] = self.postcode.territory
+
         if not context["we_know_where_you_should_vote"]:
             if loc is None:
                 context["custom"] = None
