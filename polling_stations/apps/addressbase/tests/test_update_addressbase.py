@@ -10,6 +10,9 @@ from addressbase.models import Address, UprnToCouncil
 from addressbase.management.commands.update_addressbase import (
     Command as UpdateAddressbaseCommand,
 )
+from councils.tests.factories import CouncilFactory
+from pollingstations.models import PollingStation
+from pollingstations.tests.factories import PollingStationFactory
 
 
 def get_primary_key_name(table):
@@ -99,9 +102,13 @@ class UpdateAddressbaseTest(TransactionTestCase):
                 addressbase_postal="D",
             ),
         ]
+        self.council = CouncilFactory(council_id="FOO")
+        PollingStationFactory(council=self.council, internal_council_id="ps11")
         self.initial_uprns = [
             UprnToCouncil.objects.create(
-                uprn=Address.objects.get(uprn="123456789"), lad="E07000223"
+                uprn=Address.objects.get(uprn="123456789"),
+                lad="E07000223",
+                polling_station_id="ps1",
             ),
             UprnToCouncil.objects.create(
                 uprn=Address.objects.get(uprn="9876543210"), lad="E07000070"
@@ -166,6 +173,8 @@ class UpdateAddressbaseTest(TransactionTestCase):
             self.uprntocouncil_initial_values["primary_key"],
             msg="uprntocouncil primary key does not match",
         )
+        self.assertEqual(self.council.dataevent_set.latest().event_type, "TEARDOWN")
+        self.assertEqual(PollingStation.objects.count(), 0)
 
     def test_transaction_db_error(self):
         # paths
@@ -226,3 +235,5 @@ class UpdateAddressbaseTest(TransactionTestCase):
             self.uprntocouncil_initial_values["primary_key"],
             msg="uprntocouncil primary key does not match",
         )
+        self.assertEqual(PollingStation.objects.count(), 1)
+        self.assertEqual(self.council.dataevent_set.count(), 0)
