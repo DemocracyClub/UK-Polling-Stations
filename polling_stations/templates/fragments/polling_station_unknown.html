@@ -29,4 +29,10 @@
     {% endif %}
 </p>
 
-<p><strong>{% blocktrans %}Polling stations are open from 7am to 10pm.{% endblocktrans %}</strong></p>
+<p><strong>
+    {% if has_city_of_london_ballots %}
+        {% blocktrans %}Polling stations are open from 8am to 8pm.{% endblocktrans %}
+    {% else %}
+        {% blocktrans %}Polling stations are open from 7am to 10pm.{% endblocktrans %}
+    {% endif %}
+</strong></p>

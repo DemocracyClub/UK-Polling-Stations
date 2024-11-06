@@ -54,7 +54,12 @@
         </address>
 
         <p><strong>
-            {% blocktrans %}Polling stations are open from 7am to 10pm{% endblocktrans %}{% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans %} on {{ NEXT_CHARISMATIC_ELECTION_DATE }}{% endblocktrans %}{% endif %}.
+            {% if has_city_of_london_ballots %}
+                {% blocktrans %}Polling stations are open from 8am to 8pm{% endblocktrans %}{% if not NEXT_CHARISMATIC_ELECTION_DATE %}.{% endif %}
+            {% else %}
+                {% blocktrans %}Polling stations are open from 7am to 10pm{% endblocktrans %}{% if not NEXT_CHARISMATIC_ELECTION_DATE %}.{% endif %}
+            {% endif %}
+            {% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans %} on {{ NEXT_CHARISMATIC_ELECTION_DATE }}{% endblocktrans %}.{% endif %}
         </strong></p>
         {% comment %} {% if territory != 'NI' %}
             <p>
