@@ -294,27 +294,23 @@ class EmptyEveryElectionWrapper:
     when we are going to show an address picker.
 
     This class allows us to swap out the EveryElectionWrapper while keeping
-    exisitng code the same.
+    existing code the same.
     """
 
-    @staticmethod
-    def has_election() -> bool:
+    def has_election(self) -> bool:
         return False
 
-    @staticmethod
-    def get_metadata() -> None:
+    def get_metadata(self) -> None:
         return None
 
-    @staticmethod
-    def get_ballots_for_next_date() -> List:
+    def get_ballots_for_next_date(self) -> List:
         return []
 
-    @staticmethod
-    def get_all_ballots() -> List:
+    def get_all_ballots(self) -> List:
         return []
 
-    @staticmethod
-    def multiple_elections():
+    @property
+    def multiple_elections(self):
         return False
 
     def get_explanations(self):
