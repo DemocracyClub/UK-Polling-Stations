@@ -287,6 +287,18 @@ class EveryElectionWrapper:
             return len(uncancelled_ballots) > 1
         return False
 
+    @property
+    def has_city_of_london_ballots(self):
+        # City of London local elections have some edge cases e.g:
+        # diffrent polling station opening times, different registration rules
+        if not self.request_success:
+            return False
+        uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
+        for b in uncancelled_ballots:
+            if b["election_id"].startswith("local.city-of-london"):
+                return True
+        return False
+
 
 class EmptyEveryElectionWrapper:
     """
@@ -321,6 +333,10 @@ class EmptyEveryElectionWrapper:
 
     def get_cancelled_election_info(self):
         return {}
+
+    @property
+    def has_city_of_london_ballots(self) -> bool:
+        return False
 
 
 class StaticElectionsAPIElectionWrapper:
@@ -445,3 +461,13 @@ class StaticElectionsAPIElectionWrapper:
             if b["election_id"] not in settings.ELECTION_BLACKLIST
         ]
         return sorted(ballots, key=lambda k: k["poll_open_date"])
+
+    @property
+    def has_city_of_london_ballots(self):
+        # City of London local elections have some edge cases e.g:
+        # diffrent polling station opening times, different registration rules
+        uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
+        for b in uncancelled_ballots:
+            if b["election_id"].startswith("local.city-of-london."):
+                return True
+        return False
