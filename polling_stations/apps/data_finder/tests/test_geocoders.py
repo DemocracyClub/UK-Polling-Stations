@@ -52,7 +52,7 @@ class GeocodeTest(TestCase):
         for the UPRNs we found
         The UPRNs described by this postcode map to more than one local authority
 
-        Exception of class MultipleCodesException should be thrown
+        Result should be different depending on uprn
         """
         self.assertIsInstance(geocode("CC11CC"), AddressBaseGeocoder)
 
