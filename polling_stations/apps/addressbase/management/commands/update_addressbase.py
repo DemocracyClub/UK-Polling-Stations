@@ -1,4 +1,5 @@
 import tempfile
+from pathlib import Path
 
 import boto3
 from django.core.management.base import BaseCommand
@@ -75,6 +76,11 @@ class Command(BaseCommand):
         "Updates both Addressbase and UPRN to Council mapping tables from local files"
     )
 
+    def __init__(self, stdout=None, stderr=None, no_color=False, force_color=False):
+        super().__init__(stdout, stderr, no_color, force_color)
+        self.clean_up_uprntocouncil_file = False
+        self.clean_up_addressbase_file = False
+
     def add_arguments(self, parser):
         addressbase_group = parser.add_mutually_exclusive_group(required=True)
         addressbase_group.add_argument(
@@ -115,8 +121,10 @@ class Command(BaseCommand):
         uprntocouncil_path = options.get("uprntocouncil_path", None)
         if options.get("addressbase_s3_uri"):
             addressbase_path = get_file_from_s3(options["addressbase_s3_uri"])
+            self.clean_up_addressbase_file = True
         if options.get("uprntocouncil_s3_uri"):
             uprntocouncil_path = get_file_from_s3(options["uprntocouncil_s3_uri"])
+            self.clean_up_uprntocouncil_file = True
 
         self.stdout.write(f"addressbase_path set to {addressbase_path}")
         self.stdout.write(f"uprntocouncil_path to {uprntocouncil_path}")
@@ -196,3 +204,8 @@ class Command(BaseCommand):
             self.stdout.write("Cleaning up...")
             addressbase_updater.db_cleanup()
             uprntocouncil_updater.db_cleanup()
+
+            if self.clean_up_addressbase_file:
+                Path(addressbase_path).unlink()
+            if self.clean_up_uprntocouncil_file:
+                Path(uprntocouncil_path).unlink()
