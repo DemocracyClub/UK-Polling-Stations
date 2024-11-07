@@ -2,13 +2,16 @@ import tempfile
 
 import boto3
 from django.core.management.base import BaseCommand
-from django.db import transaction
+from django.db import connections, transaction
 from uk_geo_utils.base_importer import BaseImporter
 
 from councils.models import Council
 from data_importers.event_helpers import record_teardown_event
 from data_importers.models import DataQuality
+from polling_stations.db_routers import get_principal_db_name
 from pollingstations.models import PollingDistrict, PollingStation, AdvanceVotingStation
+
+PRINCIPAL_DB_NAME = get_principal_db_name()
 
 
 def get_file_from_s3(uri):
@@ -118,8 +121,16 @@ class Command(BaseCommand):
         self.stdout.write(f"addressbase_path set to {addressbase_path}")
         self.stdout.write(f"uprntocouncil_path to {uprntocouncil_path}")
 
+        # Get the principal (i.e. RDS) DB
+        cursor = connections[PRINCIPAL_DB_NAME].cursor()
+
+        # Create addressbase updater and set cursor
         addressbase_updater = AddressbaseUpdater()
+        addressbase_updater.cursor = cursor
+
+        # Create addressbase updater and set cursor
         uprntocouncil_updater = UprnToCouncilUpdater()
+        uprntocouncil_updater.cursor = cursor
 
         # Set the data_path on each updater instance
         addressbase_updater.data_path = addressbase_path
