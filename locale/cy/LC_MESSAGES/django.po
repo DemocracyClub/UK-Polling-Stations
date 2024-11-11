@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 14:29+0000\n"
+"POT-Creation-Date: 2024-11-11 16:57+0000\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -713,7 +713,8 @@ msgstr "Gallwch bleidleisio yn y cnawd yn:"
 #: polling_stations/templates/fragments/polling_station_known.html:58
 #, fuzzy
 #| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
-msgid "Polling stations are open from 8am to 8pm"
+msgid ""
+"Polling stations are open from 8am to 8pm for City of London local elections"
 msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 
 #: polling_stations/templates/fragments/polling_station_known.html:60
@@ -727,7 +728,7 @@ msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 msgid " on %(NEXT_CHARISMATIC_ELECTION_DATE)s"
 msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_known.html:92
+#: polling_stations/templates/fragments/polling_station_known.html:96
 msgid ""
 "\n"
 "                <h3>Advance voting trial</h3>\n"
@@ -797,12 +798,16 @@ msgid "Or, you need to contact %(council)s."
 msgstr "Neu, mae angen i chi gysylltu â %(council_aspirate)s."
 
 #: polling_stations/templates/fragments/polling_station_unknown.html:34
-#, fuzzy
-#| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
-msgid "Polling stations are open from 8am to 8pm."
-msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
+msgid ""
+"\n"
+"            <strong>Polling stations are open from 8am to 8pm for City of "
+"London local elections.</strong>\n"
+"            For elections to other organisations (e.g: GLA or Parliament) "
+"polling stations will be open from 7am to 10pm.\n"
+"        "
+msgstr ""
 
-#: polling_stations/templates/fragments/polling_station_unknown.html:36
+#: polling_stations/templates/fragments/polling_station_unknown.html:39
 #, fuzzy
 #| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
 msgid "Polling stations are open from 7am to 10pm."
@@ -1017,6 +1022,11 @@ msgid ""
 msgstr ""
 "Neu, mae angen i chi gysylltu â'ch cyngor. Mae'n bosib bod trigolion yn "
 "%(postcode)s yn un o'r ardaloedd cyngor canlynol:"
+
+#, fuzzy
+#~| msgid "Polling stations are open from 7am to 10pm on Thursday 6 May."
+#~ msgid "Polling stations are open from 8am to 8pm."
+#~ msgstr "Mae gorsafoedd pleidleisio ar agor o 7yb i 10yh ar ddydd Iau 6 Mai."
 
 #~ msgid "About"
 #~ msgstr "Amdanom ni"

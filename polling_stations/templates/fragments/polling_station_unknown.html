@@ -29,10 +29,13 @@
     {% endif %}
 </p>
 
-<p><strong>
+<p>
     {% if has_city_of_london_ballots %}
-        {% blocktrans %}Polling stations are open from 8am to 8pm.{% endblocktrans %}
+        {% blocktrans %}
+            <strong>Polling stations are open from 8am to 8pm for City of London local elections.</strong>
+            For elections to other organisations (e.g: GLA or Parliament) polling stations will be open from 7am to 10pm.
+        {% endblocktrans %}
     {% else %}
-        {% blocktrans %}Polling stations are open from 7am to 10pm.{% endblocktrans %}
+        <strong>{% blocktrans %}Polling stations are open from 7am to 10pm.{% endblocktrans %}</strong>
     {% endif %}
-</strong></p>
+</p>
