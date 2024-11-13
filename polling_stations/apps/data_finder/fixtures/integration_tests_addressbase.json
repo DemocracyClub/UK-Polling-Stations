@@ -10,7 +10,6 @@
         "model": "pollingstations.pollingstation",
         "pk": 1
     },
-
     {
         "fields": {
             "address": "1 Baz Street, Bar Town",
@@ -93,8 +92,61 @@
         "pk": 2
     },
     {
-        "fields":
-            {"pcd": "BT153JX", "pcd2": "BT15 3JX", "pcds": "BT15 3JX", "dointr": "198412", "doterm": "", "oscty": "N99999999", "ced": "N99999999", "oslaua": "N09000003", "osward": "N08000322", "parish": "N99999999", "usertype": "0", "oseast1m": "334150", "osnrth1m": "0376920", "osgrdind": "1", "oshlthau": "ZB001", "nhser": "N99999999", "ctry": "N92000002", "rgn": "N99999999", "streg": "0", "pcon": "N06000002", "eer": "N07000001", "teclec": "N99999999", "ttwa": "N12000002", "pct": "ZC010", "nuts": "N08000322", "statsward": "99ZZ00", "oa01": "95GG200007", "casward": "95GG20", "park": "N99999999", "lsoa01": "95GG20S1", "msoa01": "N99999999", "ur01ind": "A", "oac01": "5B3", "oa11": "N00001134", "lsoa11": "95GG20S1", "msoa11": "N99999999", "wz11": "N19000650", "ccg": "ZC010", "bua11": "N99999999", "buasd11": "N99999999", "ru11ind": "", "oac11": "8B1", "lat": "54.622642", "long": "-5.923832", "lep1": "N99999999", "lep2": "N99999999", "pfa": "N99999999", "imd": "49", "calncv": "N99999999", "stp": "N99999999", "location": "SRID=4326;POINT (-5.923832 54.622642)"},
-        "model": "uk_geo_utils.onspd"
+        "model": "uk_geo_utils.onspd",
+        "fields": {
+            "pcd": "BT153JX",
+            "pcd2": "BT15 3JX",
+            "pcds": "BT15 3JX",
+            "dointr": "198412",
+            "doterm": "",
+            "oscty": "N99999999",
+            "oslaua": "N09000003",
+            "osward": "N08000322",
+            "usertype": "0",
+            "oseast1m": "334150",
+            "osnrth1m": "0376920",
+            "osgrdind": "1",
+            "oshlthau": "ZB001",
+            "nhser": "N99999999",
+            "ctry": "N92000002",
+            "rgn": "N99999999",
+            "pcon": "N05000002",
+            "eer": "N07000001",
+            "teclec": "N99999999",
+            "ttwa": "N12000002",
+            "pct": "ZC010",
+            "itl": "N09000003",
+            "statsward": "99ZZ00",
+            "oa01": "95GG200007",
+            "casward": "95GG20",
+            "npark": "N99999999",
+            "lsoa01": "95GG20S1",
+            "msoa01": "N99999999",
+            "ur01ind": "A",
+            "oac01": "5B3",
+            "oa11": "N00001134",
+            "lsoa11": "95GG20S1",
+            "msoa11": "N99999999",
+            "parish": "N99999999",
+            "wz11": "N19000650",
+            "bua22": "N99999999",
+            "ru11ind": "",
+            "oac11": "8B1",
+            "lat": "54.622642",
+            "long": "-5.923832",
+            "lep1": "N99999999",
+            "lep2": "",
+            "pfa": "N99999999",
+            "imd": "49",
+            "location": "SRID=4326;POINT (-5.923832 54.622642)",
+            "ced": "N99999999",
+            "calncv": "N99999999",
+            "streg": "0",
+            "lsoa21": "N21000191",
+            "msoa21": "",
+            "oa21": "N20000835",
+            "icb": "N99999999",
+            "sicbl": "ZC010"
+        }
     }
 ]
