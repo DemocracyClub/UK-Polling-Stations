@@ -76,8 +76,8 @@ class Command(BaseCommand):
         "Updates both Addressbase and UPRN to Council mapping tables from local files"
     )
 
-    def __init__(self, stdout=None, stderr=None, no_color=False, force_color=False):
-        super().__init__(stdout, stderr, no_color, force_color)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.clean_up_uprntocouncil_file = False
         self.clean_up_addressbase_file = False
 
