@@ -24,6 +24,7 @@ retry
 rich
 rtree
 sentry_sdk
+slack_sdk
 boto3>1.0.0,<2.0.0
 uk-geo-utils
 freezegun
