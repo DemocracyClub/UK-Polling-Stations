@@ -1,8 +1,10 @@
 import csv
 import datetime
 from pathlib import Path
+from typing import Dict, Any
 
 from addressbase.models import Address, UprnToCouncil
+from core.slack_client import SlackClient
 from councils.models import Council
 from data_importers.base_importers import BaseStationsImporter, CsvMixin
 from data_importers.data_types import StationSet
@@ -41,6 +43,14 @@ class Command(BaseStationsImporter, CsvMixin):
     eoni_csv_encoding = "latin-1"
     additional_report_councils = NIR_IDS
     elections = ["2024-07-04"]
+    address_counts = {council_id: 0 for council_id in NIR_IDS}
+    deduced_addresses = {}
+    removed_addresses = 0
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slack_client = None
+        self.should_post_to_slack = False
 
     def add_arguments(self, parser):
         super().add_arguments(parser)
@@ -58,24 +68,44 @@ class Command(BaseStationsImporter, CsvMixin):
             help="Coordinates available in 4326. Fieldnames: PRO_{X,Y}_4326 & PREM_{X,Y}_4326",
             action="store_true",
         )
+        parser.add_argument(
+            "--slack",
+            help="Post a report to slack in the channel specified",
+            action="store",
+        )
 
     def handle(self, *args, **options):
-        self.eoni_export_path = Path(options["eoni_csv"])
-        self.eoni_data_root = self.eoni_export_path.absolute().parent
+        if slack_channel := options.get("slack"):
+            self.slack_client = SlackClient(channel=slack_channel)
+            self.should_post_to_slack = True
 
-        self.paths = {
-            "addresses": self.eoni_data_root / "eoni_address.csv",
-            "uprn_to_council": self.eoni_data_root / "eoni_uprn_to_council.csv",
-            "stations": self.eoni_data_root / "eoni_stations.csv",
-        }
-        self.stations_only = options.get("stations_only")
-        self.pre_process_data(reprojected=options["reprojected"])
-        self.clear_old_data()
-        self.copy_data()
-        self.assign_uprn_to_councils()
-        super().handle(*args, **options)
-        if options.get("cleanup"):
-            [path.unlink() for path in self.paths.values() if path.exists()]
+        try:
+            self.eoni_export_path = Path(options["eoni_csv"])
+            self.eoni_data_root = self.eoni_export_path.absolute().parent
+
+            self.paths = {
+                "addresses": self.eoni_data_root / "eoni_address.csv",
+                "uprn_to_council": self.eoni_data_root / "eoni_uprn_to_council.csv",
+                "stations": self.eoni_data_root / "eoni_stations.csv",
+            }
+            self.stations_only = options.get("stations_only")
+            self.pre_process_data(reprojected=options["reprojected"])
+            with transaction.atomic():
+                self.clear_old_data()
+                self.copy_data()
+                self.assign_uprn_to_councils()
+            super().handle(*args, **options)
+            if options.get("cleanup"):
+                [path.unlink() for path in self.paths.values() if path.exists()]
+
+        except Exception as e:
+            if self.should_post_to_slack:
+                self.post_failure_to_slack(e)
+            raise e
+
+        else:
+            if self.should_post_to_slack:
+                self.post_to_slack()
 
     def record_import_event(self):
         election_dates = []
@@ -239,7 +269,10 @@ class Command(BaseStationsImporter, CsvMixin):
                 .filter(lad="EONI")
                 .filter(uprn__location__within=council.geography.geography)
             )
-            uprns_in_council.using(DB_NAME).update(lad=council.geography.gss)
+            address_count = uprns_in_council.using(DB_NAME).update(
+                lad=council.geography.gss
+            )
+            self.address_counts[council.council_id] = address_count
 
         self.assign_or_remove_left_over_addresses()
 
@@ -261,11 +294,13 @@ class Command(BaseStationsImporter, CsvMixin):
                 address_uprn = address.uprntocouncil
                 address_uprn.lad = other_uprn.lad
                 address_uprn.save(using=DB_NAME)
+                self.deduced_addresses[address.uprn] = other_uprn.lad
 
             else:
                 self.stdout.write(f"Council ambiguous for {address.uprn}, deleting")
                 address.uprntocouncil.delete(using=DB_NAME)
                 address.delete(using=DB_NAME)
+                self.removed_addresses += 1
 
     def station_record_to_dict(self, record):
         if record.sample_uprn not in UPRN_TO_COUNCIL_CACHE:
@@ -303,3 +338,56 @@ class Command(BaseStationsImporter, CsvMixin):
         if not station_record["postcode"].startswith("BT"):
             return False
         return True
+
+    def post_failure_to_slack(self, exception: Exception) -> None:
+        try:
+            response = self.slack_client.send_message(
+                message=":warning: *EONI Data Import Failed*",
+            )
+            self.slack_client.send_message(
+                message=f"Error: {str(exception)}", thread_ts=response.get("ts")
+            )
+        except Exception as slack_e:
+            self.stderr.write(f"Error posting to Slack: {str(slack_e)}")
+
+    def post_to_slack(self) -> None:
+        try:
+            response = self.post_header()
+            thread_ts = response.get("ts")
+            self.post_details(thread_ts)
+        except Exception as e:
+            self.stderr.write(f"Error posting to Slack: {str(e)}")
+
+    def post_header(self) -> Dict[str, Any]:
+        return self.slack_client.send_message(
+            message=":house_buildings: *EONI Data Imported*",
+        )
+
+    def post_details(self, thread_ts: str) -> None:
+        # Post address counts
+        address_counts_text = ["*Address Counts by Council:*"]
+        for council_id, count in self.address_counts.items():
+            address_counts_text.append(f"- {council_id}: {count:,} addresses")
+
+        self.slack_client.send_message(
+            message="\n".join(address_counts_text),
+            thread_ts=thread_ts,
+        )
+
+        # Post deduced addresses info if any
+        if self.deduced_addresses:
+            self.slack_client.send_message(
+                message="\n".join(
+                    f"Council inferred from other addresses in the same postcode for  {len(self.deduced_addresses):,} addresses.*"
+                ),
+                thread_ts=thread_ts,
+            )
+
+        # Post removed addresses info if any
+        if self.removed_addresses:
+            self.slack_client.send_message(
+                message="\n".join(
+                    f"Council ambiguous for  {len(self.deduced_addresses):,} addresses, so they've been discarded."
+                ),
+                thread_ts=thread_ts,
+            )
