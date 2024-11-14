@@ -1002,6 +1002,12 @@ six==1.16.0 \
     #   -c requirements/constraints.txt
     #   asana
     #   python-dateutil
+slack-sdk==3.33.3 \
+    --hash=sha256:0515fb93cd03b18de61f876a8304c4c3cef4dd3c2a3bad62d7394d2eb5a3c8e6 \
+    --hash=sha256:4cc44c9ffe4bb28a01fbe3264c2f466c783b893a4eca62026ab845ec7c176ff1
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.in
 sqlparse==0.5.0 \
     --hash=sha256:714d0a4932c059d16189f58ef5411ec2287a4360f17cdd0edd2d09d4c5087c93 \
     --hash=sha256:c204494cd97479d0e39f28c93d46c0b2d5959c7b9ab904762ea6c7af211c8663
