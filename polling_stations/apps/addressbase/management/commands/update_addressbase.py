@@ -100,6 +100,11 @@ class Command(BaseCommand):
             "--uprntocouncil-s3-uri",
             help="S3 URI for UPRN to Council data file",
         )
+        parser.add_argument(
+            "--database",
+            default=PRINCIPAL_DB_NAME,
+            help="Database name. Defaults to PRINCIPAL_DB_NAME - i.e. RDS if you're on EC2",
+        )
 
     def teardown(self):
         self.stdout.write(
@@ -129,8 +134,10 @@ class Command(BaseCommand):
         self.stdout.write(f"addressbase_path set to {addressbase_path}")
         self.stdout.write(f"uprntocouncil_path to {uprntocouncil_path}")
 
+        database_name = options["database"]
+
         # Get the principal (i.e. RDS) DB
-        cursor = connections[PRINCIPAL_DB_NAME].cursor()
+        cursor = connections[database_name].cursor()
 
         # Create addressbase updater and set cursor
         addressbase_updater = AddressbaseUpdater()

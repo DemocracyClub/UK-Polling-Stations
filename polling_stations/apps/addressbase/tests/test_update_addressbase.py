@@ -2,6 +2,7 @@ from io import StringIO
 from pathlib import Path
 from unittest.mock import patch
 
+from django.core.management import call_command
 from django.db import connection
 from django.test import TestCase, TransactionTestCase
 from uk_geo_utils.base_importer import BaseImporter
@@ -138,18 +139,13 @@ class UpdateAddressbaseTest(TransactionTestCase):
         self.assertEqual(Address.objects.count(), 2)
         self.assertEqual(UprnToCouncil.objects.count(), 2)
 
-        # setup command
-        cmd = UpdateAddressbaseCommand()
-
-        # supress output
-        cmd.stdout = StringIO()
-
         # import data
         opts = {
             "addressbase_path": addressbase_path,
             "uprntocouncil_path": uprntocouncil_path,
+            "stdout": StringIO(),
         }
-        cmd.handle(**opts)
+        call_command("update_addressbase", **opts)
 
         self.assertEqual(Address.objects.count(), 4)
         self.assertEqual(UprnToCouncil.objects.count(), 4)
