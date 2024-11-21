@@ -331,7 +331,7 @@ INITIAL_REPLICATION_COMPLETE_FILE = (
 )
 
 # When we're running on AWS
-if os.environ.get("DC_ENVIRONMENT"):
+if DC_ENVIRONMENT := os.environ.get("DC_ENVIRONMENT", None):
     if not Path(INITIAL_REPLICATION_COMPLETE_FILE).exists():
         DATABASES["local"] = {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
