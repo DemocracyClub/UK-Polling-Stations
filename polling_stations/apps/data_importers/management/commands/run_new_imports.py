@@ -5,6 +5,7 @@ from pathlib import Path
 import boto3
 import botocore
 from django.apps import apps
+from django.conf import settings
 from django.core.management import BaseCommand, call_command
 
 
@@ -41,9 +42,30 @@ def any_non_import_scripts(changed):
     return any(not is_import_script(path) for path in changed)
 
 
+def sha_in_tree(sha):
+    try:
+        git_rev_parse(sha)
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+class LastImportShaNotInTreeError(Exception):
+    pass
+
+
 def get_last_import_sha_from_ssm():
     ssm_client = boto3.client("ssm")
     response = ssm_client.get_parameter(Name="LAST_IMPORT_SHA")
+    last_import_sha = response["Parameter"]["Value"]
+    if not sha_in_tree(last_import_sha) and settings.DC_ENVIRONMENT == "development":
+        # We often end up with an out of tree sha in parameter store on development.
+        # Just set 'from_sha' to master
+        return git_rev_parse("master")
+    if not sha_in_tree(last_import_sha):
+        raise LastImportShaNotInTreeError(
+            f"Value of LAST_IMPORT_SHA ('{last_import_sha}') stored in parameter store not in working tree."
+        )
     return response["Parameter"]["Value"]
 
 
@@ -107,7 +129,7 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(line[1])
 
-    def update_last_import_sha_on_ssm(self, to_sha):
+    def update_last_import_sha_on_ssm(self, to_sha, dc_environment=None):
         self.stdout.write("Updating LAST_IMPORT_SHA on ssm...")
         try:
             ssm_client = boto3.client("ssm")
@@ -153,6 +175,7 @@ class Command(BaseCommand):
         is_post_deploy = options.get("post_deploy")
 
         changed_paths = get_paths_changed(from_sha, to_sha)
+
         changed_scripts = get_changed_scripts(changed_paths)
         has_imports = any_import_scripts(changed_paths)
         has_application = any_non_import_scripts(changed_paths)

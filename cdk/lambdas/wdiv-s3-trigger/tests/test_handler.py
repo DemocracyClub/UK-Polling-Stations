@@ -22,7 +22,7 @@ trigger_payload_str = """{
     {
       "eventVersion": "2.0",
       "eventSource": "aws:s3",
-      "awsRegion": "eu-west-1",
+      "awsRegion": "eu-west-2",
       "eventTime": "1970-01-01T00:00:00.000Z",
       "eventName": "ObjectCreated:Put",
       "userIdentity": {
@@ -59,7 +59,7 @@ trigger_payload = json.loads(trigger_payload_str)
 
 ios_payload = json.loads(trigger_payload_str.replace("X01000000", "IOS"))
 
-os.environ["AWS_DEFAULT_REGION"] = moto_s3_responses.DEFAULT_REGION_NAME = "eu-west-1"
+os.environ["AWS_DEFAULT_REGION"] = moto_s3_responses.DEFAULT_REGION_NAME = "eu-west-2"
 
 
 @pytest.mark.django_db
@@ -90,7 +90,7 @@ class HandlerTests(TestCase):
         self.repo = "chris48s/does-not-exist"
         self.upload_bucket = "fake-upload-bucket"
         self.final_bucket = "fake-final-bucket"
-        region = "eu-west-1"
+        region = "eu-west-2"
         os.environ["GITHUB_REPO"] = self.repo
         os.environ["GITHUB_API_KEY"] = "testing"
         os.environ["WDIV_API_KEY"] = "testing"
