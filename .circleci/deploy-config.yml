@@ -187,12 +187,12 @@ jobs:
     - run:
         name: CDK version
         command: |
-          npx cdk@2.166.0 --version
+          npx cdk --version
     - run:
         name: CDK synth
         command: |
           . .venv/bin/activate
-          npx cdk@2.166.0 synth --all
+          npx cdk synth --all
     - persist_to_workspace:
         root: ~/repo/
         paths: [ cdk.out ]
@@ -220,7 +220,7 @@ jobs:
         command: |
           pyenv local $(pyenv versions --bare | grep 3.12 | head -n 1)
           . .venv/bin/activate
-          npx cdk@2.166.0 deploy --all --require-approval never --concurrency 3
+          npx cdk deploy --all --require-approval never --concurrency 3
     # In the event the deployment has failed, alert the dev team
     - slack/notify:
         event: fail
