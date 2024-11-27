@@ -285,8 +285,9 @@ class Command(BaseStationsImporter, CsvMixin):
             )
             if len(others_in_postcode) == 1:
                 other_address = others_in_postcode[0]
-                other_uprn = other_address.uprntocouncil
-                other_uprn.refresh_from_db(using=DB_NAME)
+                other_uprn = UprnToCouncil.objects.using(DB_NAME).get(
+                    uprn=other_address.uprn
+                )
                 self.stdout.write(
                     f"Updating UprnToCouncil record for {address.uprn} with gss {other_uprn.lad}"
                 )
