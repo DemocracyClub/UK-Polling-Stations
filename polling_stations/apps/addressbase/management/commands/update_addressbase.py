@@ -135,16 +135,17 @@ class Command(BaseCommand):
         self.stdout.write(f"uprntocouncil_path to {uprntocouncil_path}")
 
         database_name = options["database"]
-
-        # Get the principal (i.e. RDS) DB
-        cursor = connections[database_name].cursor()
+        connection = connections[database_name]
+        cursor = connection.cursor()
 
         # Create addressbase updater and set cursor
         addressbase_updater = AddressbaseUpdater()
+        addressbase_updater.connection = connection
         addressbase_updater.cursor = cursor
 
         # Create addressbase updater and set cursor
         uprntocouncil_updater = UprnToCouncilUpdater()
+        uprntocouncil_updater.connection = connection
         uprntocouncil_updater.cursor = cursor
 
         # Set the data_path on each updater instance
@@ -216,3 +217,6 @@ class Command(BaseCommand):
                 Path(addressbase_path).unlink()
             if self.clean_up_uprntocouncil_file:
                 Path(uprntocouncil_path).unlink()
+
+            # We only need one report.
+            addressbase_updater.report_on_replicaton_status()
