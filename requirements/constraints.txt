@@ -1670,9 +1670,9 @@ typing-extensions==4.11.0 \
     #   pydantic
     #   pyee
     #   selenium
-uk-geo-utils==0.16.0 \
-    --hash=sha256:28518eb8b43089a5a01d4ea493910c4a8890d63cf7acd29f28e60788caf5082f \
-    --hash=sha256:83098013844906d9415178db5c935285d7b25a08ca911b0a3848a9ecb3289402
+uk-geo-utils==0.17.0 \
+    --hash=sha256:09d8f3683288400acf599c99bf4681a2b9b2e96bb8504e23458cb6612c9072fb \
+    --hash=sha256:40b36dc152de7860009ce5b7b6da90d804717c596ac9b0451303e7ca081d5253
     # via -r requirements/base.in
 uritemplate==4.1.1 \
     --hash=sha256:4346edfc5c3b79f694bccd6d6099a322bbeb628dbf2cd86eea55a456ce5124f0 \
