@@ -90,9 +90,10 @@ class Command(BaseStationsImporter, CsvMixin):
             }
             self.stations_only = options.get("stations_only")
             self.pre_process_data(reprojected=options["reprojected"])
-            self.clear_old_data()
-            self.copy_data()
-            self.assign_uprn_to_councils()
+            with transaction.atomic():
+                self.clear_old_data()
+                self.copy_data()
+                self.assign_uprn_to_councils()
             super().handle(*args, **options)
             if options.get("cleanup"):
                 [path.unlink() for path in self.paths.values() if path.exists()]
