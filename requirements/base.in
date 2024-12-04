@@ -2,6 +2,7 @@
 asana
 boto3>1.0.0,<2.0.0
 botocore
+chardet
 commitment<4.0.0
 django<4.3
 dj-database-url
