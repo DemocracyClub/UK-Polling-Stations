@@ -41,7 +41,7 @@ echo "Apt finished, continuing"
 
 
 # Install apt packages
-apt-get install --yes nginx nodejs npm gettext miller
+apt-get install --yes nginx nodejs npm gettext
 
 # Reinstall unattended-upgrades
 apt-get install --yes unattended-upgrades
