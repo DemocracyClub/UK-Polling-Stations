@@ -6,7 +6,7 @@
 
 {% block extra_page_css %}
 
-    {% if we_know_where_you_should_vote and station.location or advance_voting_station.location %}
+    {% if show_map %}
         {% stylesheet 'map' %}
     {% endif %}
 
@@ -81,7 +81,7 @@
             var mq_key = null;
         {% endif %}
 
-        {% if we_know_where_you_should_vote and station.location %}
+        {% if show_map %}
             $(document).ready(function() {
                 var station_point = [{{ station.location.1 }}, {{ station.location.0 }}];
                 var tile_layer = '{{ tile_layer }}';
@@ -113,7 +113,7 @@
 
     {% javascript 'scripts' %}
 
-    {% if we_know_where_you_should_vote and station.location or advance_voting_station.location and has_election and not error %}
+    {% if show_map %}
         {% javascript 'map' %}
     {% endif %}
 
