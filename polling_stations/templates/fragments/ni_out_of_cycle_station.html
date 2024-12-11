@@ -4,9 +4,9 @@
 {% if cancelled_election.cancelled %}
     {% include "fragments/cancelled_election.html" %}
 {% else %}
-    <h2>{% trans "We don't know of any upcoming elections in your area" %}</h2>
+    <h2>{% trans "You don't have any upcoming elections in your area" %}</h2>
     <p>
-        {% trans "We're not aware of any upcoming elections in your area." %}
+        {% trans "We are not aware of any upcoming elections in your area." %}
         {% blocktrans trimmed with council.electoral_services_phone_numbers.0 as council_phone and council.electoral_services_website as council_website %}
             If you think there may be elections in your area,
             check the <a href="{{ council_website }}">website</a> of The Electoral Office for Northern Ireland for more information,
@@ -19,7 +19,7 @@
 <p>
     {% trans "This polling station is for elections for your" %}
     {{ ni_elected_rep_type }}.
-    {% trans "It may change before the next election, please check back before travelling to vote." %}
+    {% trans "It may change before the next election, please check again before travelling to vote." %}
 </p>
 <p>
     <address>
