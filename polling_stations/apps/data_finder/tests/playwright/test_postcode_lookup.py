@@ -3,6 +3,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+from django.test import override_settings
 
 from addressbase.tests.factories import UprnToCouncilFactory
 from context_managers import check_for_console_errors
@@ -164,6 +165,7 @@ def bt_15_3jx_station_data():
     )
 
 
+@override_settings(SHOW_EONI_STATIONS_ALL_THE_TIME=True)
 @pytest.mark.django_db
 def test_northern_ireland_with_station_no_election(
     page,
