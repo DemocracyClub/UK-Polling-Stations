@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UK-Polling-Stations\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-11 16:57+0000\n"
+"POT-Creation-Date: 2024-12-10 18:14+0000\n"
 "PO-Revision-Date: 2021-05-04 14:37+0000\n"
 "Last-Translator: Lowri Lewis <lowrilewis@gmail.com>\n"
 "Language-Team: Welsh (http://www.transifex.com/democracy-club/uk-polling-"
@@ -640,15 +640,51 @@ msgstr ""
 "Peidiwch â phoeni, gallwch bleidleisio ym mhob un yn yr un orsaf bleidleisio "
 "a darllen amdanynt ar"
 
+#: polling_stations/templates/fragments/ni_out_of_cycle_station.html:7
 #: polling_stations/templates/fragments/no_election.html:7
 msgid "We don't know of any upcoming elections in your area"
 msgstr ""
 "Nid ydym yn ymwybodol o unrhyw etholiadau sydd ar ddod yn eich ardal chi"
 
+#: polling_stations/templates/fragments/ni_out_of_cycle_station.html:9
 #: polling_stations/templates/fragments/no_election.html:9
 msgid "We're not aware of any upcoming elections in your area."
 msgstr ""
 "Nid ydym yn ymwybodol o unrhyw etholiadau sydd ar ddod yn eich ardal chi."
+
+#: polling_stations/templates/fragments/ni_out_of_cycle_station.html:10
+#, fuzzy, python-format
+#| msgid ""
+#| "If you think there may be elections in your area, check your local <a "
+#| "href=\"%(council_website)s\">council website</a> for more information, or "
+#| "contact %(council)s on <strong><a href=\"tel:"
+#| "%(council_phone)s\">%(council_phone)s</a></strong>."
+msgid ""
+"If you think there may be elections in your area, check the <a "
+"href=\"%(council_website)s\">website</a> of The Electoral Office for "
+"Northern Ireland for more information, or contact them on on <strong><a "
+"href=\"tel:%(council_phone)s\">%(council_phone)s</a></strong>."
+msgstr ""
+"Os ydych chi'n credu bod yna etholiadau yn eich ardal chi, gwiriwch wefan "
+"eich <a href=\"%(council_website)s\">cyngor lleol</a> am ragor o wybodaeth, "
+"neu cysylltwch â %(council_aspirate)s ar <strong><a href=\"tel:"
+"%(council_phone)s\">%(council_phone)s</a></strong>."
+
+#: polling_stations/templates/fragments/ni_out_of_cycle_station.html:18
+#: polling_stations/templates/multiple_councils.html:6
+#: polling_stations/templates/postcode_view.html:15
+msgid "Your Polling Station"
+msgstr "Eich Gorsaf Bleidleisio"
+
+#: polling_stations/templates/fragments/ni_out_of_cycle_station.html:20
+msgid "This polling station is for elections for your"
+msgstr ""
+
+#: polling_stations/templates/fragments/ni_out_of_cycle_station.html:22
+msgid ""
+"It may change before the next election, please check back before travelling "
+"to vote."
+msgstr ""
 
 #: polling_stations/templates/fragments/no_election.html:10
 #, python-format
@@ -1012,11 +1048,6 @@ msgid ""
 msgstr ""
 "ydd angen dull adnabod ffotograffig i bleidleisio mewn etholiadau lleol yn "
 "Lloegr, ac etholiadau seneddol ar draws y DU, ar ac ar ôl 4 Mai 2023."
-
-#: polling_stations/templates/multiple_councils.html:6
-#: polling_stations/templates/postcode_view.html:15
-msgid "Your Polling Station"
-msgstr "Eich Gorsaf Bleidleisio"
 
 #: polling_stations/templates/multiple_councils.html:11
 msgid "Contact Your Council"
