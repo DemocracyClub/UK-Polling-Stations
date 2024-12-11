@@ -184,7 +184,9 @@ def test_northern_ireland_with_station_no_election(
             page.locator("text=website of The Electoral Office for Northern Ireland")
         ).not_to_be_empty()
         expect(
-            page.locator("text=We're not aware of any upcoming elections in your area.")
+            page.locator(
+                "text=We are not aware of any upcoming elections in your area."
+            )
         ).to_have_count(1)
         expect(page.locator('h2:has-text("Your polling station")')).not_to_be_empty()
         expect(
