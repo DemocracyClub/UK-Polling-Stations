@@ -70,6 +70,14 @@ msgstr "Cod post:"
 msgid "Enter your postcode"
 msgstr "Rhowch eich cod post"
 
+#: polling_stations/apps/data_finder/views.py:186
+msgid "local Councillor"
+msgstr ""
+
+#: polling_stations/apps/data_finder/views.py:187
+msgid "Member of the Legislative Assembly, and Member of Parliament"
+msgstr ""
+
 #: polling_stations/apps/feedback/forms.py:19
 #: polling_stations/apps/feedback/templates/feedback/feedback_form.html:21
 msgid "Did you find this useful?"

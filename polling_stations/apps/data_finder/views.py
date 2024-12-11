@@ -11,6 +11,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone, translation
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 from pollingstations.models import (
     AccessibilityInformation,
@@ -19,6 +20,8 @@ from pollingstations.models import (
 )
 from uk_geo_utils.geocoders import MultipleCodesException
 from uk_geo_utils.helpers import AddressSorter, Postcode
+
+from polling_stations.settings.constants.importers import EONIImportScheme
 from whitelabel.views import WhiteLabelTemplateOverrideMixin
 
 from .forms import AddressSelectForm, PostcodeLookupForm
@@ -178,6 +181,11 @@ class BasePollingStationView(
     def we_know_where_you_should_vote(self):
         return polling_station_current(self.get_station())
 
+    def get_ni_elected_rep_type(self):
+        if settings.EONI_IMPORT_SCHEME == EONIImportScheme.LOCAL:
+            return _("local Councillor")
+        return _("Member of the Legislative Assembly, and Member of Parliament")
+
     def show_map(self, context):
         station = context.get("station")
         station_location = getattr(station, "location", None)
@@ -188,10 +196,15 @@ class BasePollingStationView(
         we_know_where_you_should_vote = context.get("we_know_where_you_should_vote")
         errors = context.get("errors")
         has_election = context.get("has_election")
+        ni_out_of_cycle_station = context.get("ni_out_of_cycle_station")
 
         # If there are any errors return false
         if errors:
             return False
+
+        # If we have a station location, are in Northern Ireland and there are no upcoming elections return true
+        if ni_out_of_cycle_station and station_location:
+            return True
 
         # If we have a station location or advance station location, and there are upcoming elections return true
         if (
@@ -253,6 +266,16 @@ class BasePollingStationView(
         context["we_know_where_you_should_vote"] = self.we_know_where_you_should_vote()
         context["noindex"] = True
         context["territory"] = self.postcode.territory
+        context["ni_out_of_cycle_station"] = False
+
+        if (
+            context["territory"] == "NI"
+            and getattr(settings, "SHOW_EONI_STATIONS_ALL_THE_TIME", None)
+            and self.station
+            and not context["has_election"]
+        ):
+            context["ni_out_of_cycle_station"] = True
+            context["ni_elected_rep_type"] = self.get_ni_elected_rep_type()
 
         if not context["we_know_where_you_should_vote"]:
             if loc is None:
