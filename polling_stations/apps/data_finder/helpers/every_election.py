@@ -469,6 +469,6 @@ class StaticElectionsAPIElectionWrapper:
         # diffrent polling station opening times, different registration rules
         uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
         for b in uncancelled_ballots:
-            if b["election_id"].startswith("local.city-of-london."):
+            if b["election_id"].startswith("local.city-of-london"):
                 return True
         return False
