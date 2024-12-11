@@ -178,6 +178,32 @@ class BasePollingStationView(
     def we_know_where_you_should_vote(self):
         return polling_station_current(self.get_station())
 
+    def show_map(self, context):
+        station = context.get("station")
+        station_location = getattr(station, "location", None)
+        advance_voting_station = context.get("advance_voting_station")
+        advance_voting_station_location = getattr(
+            advance_voting_station, "location", None
+        )
+        we_know_where_you_should_vote = context.get("we_know_where_you_should_vote")
+        errors = context.get("errors")
+        has_election = context.get("has_election")
+
+        # If there are any errors return false
+        if errors:
+            return False
+
+        # If we have a station location or advance station location, and there are upcoming elections return true
+        if (
+            we_know_where_you_should_vote
+            and (station_location or advance_voting_station_location)
+            and has_election
+        ):
+            return True
+
+        # Otherwise return false
+        return False
+
     def get_context_data(self, **context):
         context["tile_layer"] = settings.TILE_LAYER
         context["mq_key"] = settings.MQ_KEY
@@ -239,6 +265,8 @@ class BasePollingStationView(
 
                 except MultipleCodesException:
                     context["custom"] = None
+
+        context["show_map"] = self.show_map(context)
 
         self.log_postcode(self.postcode, context, type(self).__name__)
 
