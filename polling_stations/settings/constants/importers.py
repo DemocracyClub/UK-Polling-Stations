@@ -16,3 +16,5 @@ class EONIImportScheme(models.TextChoices):
 
 
 EONI_IMPORT_SCHEME = EONIImportScheme.NATIONAL
+
+SHOW_EONI_STATIONS_ALL_THE_TIME = True
