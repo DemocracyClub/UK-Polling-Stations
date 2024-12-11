@@ -32,7 +32,8 @@
                 {% endif %}
 
             {% endif %}
-
+        {%  elif ni_out_of_cycle_station %}
+            {% include "fragments/ni_out_of_cycle_station.html" %}
         {% else %}
             {% include "fragments/no_election.html" %}
         {% endif %}

@@ -1,0 +1,39 @@
+{% load i18n_with_welsh %}
+{% load dc_forms %}
+
+{% if cancelled_election.cancelled %}
+    {% include "fragments/cancelled_election.html" %}
+{% else %}
+    <h2>{% trans "We don't know of any upcoming elections in your area" %}</h2>
+    <p>
+        {% trans "We're not aware of any upcoming elections in your area." %}
+        {% blocktrans trimmed with council.electoral_services_phone_numbers.0 as council_phone and council.electoral_services_website as council_website %}
+            If you think there may be elections in your area,
+            check the <a href="{{ council_website }}">website</a> of The Electoral Office for Northern Ireland for more information,
+            or contact them on on <strong><a href="tel:{{ council_phone }}">{{ council_phone }}</a></strong>.
+        {% endblocktrans %}
+    </p>
+{% endif %}
+
+<h2>{% trans "Your Polling Station" %}</h2>
+<p>
+    {% trans "This polling station is for elections for your" %}
+    {{ ni_elected_rep_type }}.
+    {% trans "It may change before the next election, please check back before travelling to vote." %}
+</p>
+<p>
+    <address>
+        {% if station.formatted_address %}
+            {{ station.formatted_address|linebreaksbr }}<br />
+        {% endif %}
+
+        {% if station.postcode %}
+            {% if not station.postcode in station.address %}
+                {{ station.postcode }}
+            {% endif %}
+        {% endif %}
+    </address>
+</p>
+{% if show_map %}
+    <div id="area_map" class="ds-card-image"></div>
+{% endif %}

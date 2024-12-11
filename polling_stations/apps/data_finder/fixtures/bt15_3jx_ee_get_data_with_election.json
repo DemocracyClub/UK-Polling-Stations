@@ -1,0 +1,9 @@
+[
+  {
+    "election_id": "local.belfast.2099-12-31",
+    "group_type": null,
+    "cancelled": false,
+    "poll_open_date": "2099-12-31",
+    "requires_voter_id": "EFA-2002"
+  }
+]

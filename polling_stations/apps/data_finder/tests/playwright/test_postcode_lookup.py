@@ -1,6 +1,14 @@
+import json
+from pathlib import Path
+from unittest.mock import patch
+
 import pytest
+
+from addressbase.tests.factories import UprnToCouncilFactory
 from context_managers import check_for_console_errors
 from playwright.sync_api import expect
+
+from pollingstations.tests.factories import PollingStationFactory
 
 
 @pytest.mark.vcr()
@@ -95,8 +103,25 @@ def test_invalid_postcode(page, live_server):
         ).not_to_be_empty()
 
 
-@pytest.mark.vcr()
-def test_northern_ireland(page, live_server):
+@pytest.fixture
+def mock_bt15_3jx_ee_get_data_with_election():
+    mock_data_path = (
+        Path(__file__).parent.parent.parent
+        / "fixtures"
+        / "bt15_3jx_ee_get_data_with_election.json"
+    )
+    with open(mock_data_path) as f:
+        mock_data = json.load(f)
+    with patch(
+        "data_finder.helpers.every_election.EveryElectionWrapper.get_data"
+    ) as mock_get_data:
+        mock_get_data.return_value = mock_data
+        yield mock_get_data
+
+
+def test_northern_ireland_has_election(
+    page, live_server, mock_bt15_3jx_ee_get_data_with_election
+):
     with check_for_console_errors(page):
         page.goto(live_server.url)
         expect(page).to_have_title("Find your polling station | Where Do I Vote?")
@@ -109,6 +134,59 @@ def test_northern_ireland(page, live_server):
         expect(
             page.locator("text=The Electoral Office for Northern Ireland")
         ).not_to_be_empty()
+        expect(
+            page.locator("text=We're not aware of any upcoming elections in your area.")
+        ).to_have_count(0)
+        expect(
+            page.locator(
+                "text=You will need to take photo ID to vote at a polling station in this election"
+            )
+        )
+
+
+@pytest.fixture
+def mock_bt15_3jx_ee_get_data_without_election():
+    with patch(
+        "data_finder.helpers.every_election.EveryElectionWrapper.get_data"
+    ) as mock_get_data:
+        mock_get_data.return_value = []
+        yield mock_get_data
+
+
+@pytest.fixture
+def bt_15_3jx_station_data():
+    ps = PollingStationFactory(council_id="BFD", internal_council_id="xyz123")
+    UprnToCouncilFactory.create_batch(
+        3,
+        lad="N09000003",
+        polling_station_id=ps.internal_council_id,
+        uprn__postcode="BT15 3JX",
+    )
+
+
+@pytest.mark.django_db
+def test_northern_ireland_with_station_no_election(
+    page,
+    live_server,
+    mock_bt15_3jx_ee_get_data_without_election,
+    bt_15_3jx_station_data,
+):
+    with check_for_console_errors(page):
+        page.goto(live_server.url)
+        expect(page).to_have_title("Find your polling station | Where Do I Vote?")
+        expect(page.locator("h1")).to_have_text("Find your polling station")
+        expect(page.locator("#id_postcode")).to_have_count(1)
+        page.query_selector("#id_postcode").fill("BT15 3JX")
+
+        with page.expect_navigation():
+            page.query_selector("#submit-postcode").click()
+        expect(
+            page.locator("text=website of The Electoral Office for Northern Ireland")
+        ).not_to_be_empty()
+        expect(
+            page.locator("text=We're not aware of any upcoming elections in your area.")
+        ).to_have_count(1)
+        expect(page.locator('h2:has-text("Your polling station")')).not_to_be_empty()
         expect(
             page.locator(
                 "text=You will need to take photo ID to vote at a polling station in this election"
