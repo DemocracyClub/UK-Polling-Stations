@@ -6,6 +6,7 @@ from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from pollingstations.models import AdvanceVotingStation, PollingDistrict, PollingStation
+from polling_stations.settings.constants.councils import NIR_IDS
 
 """
 Clear PollingDistrict, PollingStation, and AdvancedVotingStation models
@@ -42,6 +43,33 @@ class Command(BaseCommand):
             default=False,
         )
 
+        group.add_argument(
+            "--eoni",
+            help="Clear data for all councils in Northern Ireland",
+            action="store_true",
+        )
+
+    def teardown_council(self, council_id):
+        self.stdout.write(f"Deleting data for: {council_id}...")
+        council_obj = Council.objects.get(pk=council_id)
+        gss_code = council_obj.geography.gss
+
+        PollingStation.objects.filter(council=council_id).delete()
+        PollingDistrict.objects.filter(council=council_id).delete()
+        AdvanceVotingStation.objects.filter(council=council_id).delete()
+
+        UprnToCouncil.objects.filter(lad=gss_code).update(polling_station_id="")
+
+        dq = DataQuality.objects.get(council_id=council_id)
+        dq.report = ""
+        dq.num_addresses = 0
+        dq.num_districts = 0
+        dq.num_stations = 0
+        dq.save()
+
+        record_teardown_event(council_id)
+        print("..done")
+
     @transaction.atomic
     def handle(self, *args, **kwargs):
         """
@@ -59,26 +87,11 @@ class Command(BaseCommand):
 
         if kwargs["council"]:
             for council_id in kwargs["council"]:
-                print("Deleting data for council %s..." % (council_id))
-                # check this council exists
-                council_obj = Council.objects.get(pk=council_id)
-                gss_code = council_obj.geography.gss
+                self.teardown_council(council_id)
 
-                PollingStation.objects.filter(council=council_id).delete()
-                PollingDistrict.objects.filter(council=council_id).delete()
-                AdvanceVotingStation.objects.filter(council=council_id).delete()
-
-                UprnToCouncil.objects.filter(lad=gss_code).update(polling_station_id="")
-
-                dq = DataQuality.objects.get(council_id=council_id)
-                dq.report = ""
-                dq.num_addresses = 0
-                dq.num_districts = 0
-                dq.num_stations = 0
-                dq.save()
-
-                record_teardown_event(council_id)
-                print("..done")
+        elif kwargs.get("eoni"):
+            for council_id in NIR_IDS:
+                self.teardown_council(council_id)
 
         elif kwargs.get("all"):
             print("Deleting ALL data...")
