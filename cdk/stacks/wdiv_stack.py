@@ -419,6 +419,7 @@ class WDIVStack(Stack):
                         "X-CSRFToken",
                         "Accept",
                         "Accept-Language",
+                        "Authorization",
                         "Cache-Control",
                         "Referer",
                     ),
