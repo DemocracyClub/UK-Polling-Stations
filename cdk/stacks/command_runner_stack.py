@@ -54,12 +54,10 @@ class WDIVOncePerTagCommandRunner(Stack):
             )
 
         if dc_environment in ["development", "staging", "production"]:
-            command = (
-                "/usr/bin/manage-py-command import_eoni_from_s3 --send-slack-report"
-            )
+            command = "runuser -l polling_stations -c '/usr/bin/manage-py-command import_eoni_from_s3 --send-slack-report'"
             if dc_environment == "staging":
                 # Don't bother to post to bots on staging.
-                command = "/usr/bin/manage-py-command import_eoni_from_s3"
+                command = "runuser -l polling_stations -c '/usr/bin/manage-py-command import_eoni_from_s3'"
             self.add_job(
                 "import_eoni_data_from_s3",
                 "cron(30 1 * * ? *)",
