@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from pyproj import Transformer
 
+from core.slack_client import SlackClient
 from data_importers.s3wrapper import parse_s3_uri, S3Wrapper
 from data_importers.management.commands.import_eoni import Command as EONI_Importer
 
@@ -195,6 +196,13 @@ class Command(BaseCommand):
 
             # Run the import
             self.call_import_eoni_command(options)
+
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as err:
+            if options.get("send_slack_report"):
+                self.send_failure_to_slack(err)
+            raise err
 
         finally:
             # Cleanup
@@ -408,6 +416,13 @@ class Command(BaseCommand):
             )
             raise CommandError("Failed to reproject all rows")
 
+    @property
+    def slack_channel(self):
+        if self.dc_environment == "production":
+            return BOTS_CHANNEL
+        else:
+            return BOTS_TESTING_CHANNEL
+
     def call_import_eoni_command(self, options):
         eoni_importer = EONI_Importer()
 
@@ -420,14 +435,24 @@ class Command(BaseCommand):
         }
 
         if options.get("send_slack_report"):
-            if self.dc_environment == "production":
-                channel = BOTS_CHANNEL
-            else:
-                channel = BOTS_TESTING_CHANNEL
-
-            importer_opts["slack"] = channel
+            importer_opts["slack"] = self.slack_channel
 
         eoni_importer.handle(**importer_opts)
+
+    def send_failure_to_slack(self, exception: Exception):
+        slack_client = SlackClient(channel=self.slack_channel)
+        try:
+            response = slack_client.send_message(
+                message=":warning: *import_eoni_from_s3 command failed*",
+            )
+            slack_client.send_message(
+                message=f"Error: {str(exception)}", thread_ts=response.get("ts")
+            )
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as slack_err:
+            self.stderr.write(f"Error posting to Slack: {str(slack_err)}")
+            raise slack_err
 
     def cleanup(self, options):
         if options.get("keep_temp_files"):
