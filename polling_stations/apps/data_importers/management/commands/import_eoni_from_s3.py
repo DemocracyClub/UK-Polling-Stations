@@ -12,6 +12,7 @@ from data_importers.s3wrapper import parse_s3_uri, S3Wrapper
 from data_importers.management.commands.import_eoni import Command as EONI_Importer
 
 from polling_stations.settings.constants.importers import EONIImportScheme
+from polling_stations.settings.constants.slack import BOTS_TESTING_CHANNEL, BOTS_CHANNEL
 
 
 def attempt_decode(body: bytes):
@@ -420,9 +421,9 @@ class Command(BaseCommand):
 
         if options.get("send_slack_report"):
             if self.dc_environment == "production":
-                channel = settings.BOTS_CHANNEL
+                channel = BOTS_CHANNEL
             else:
-                channel = settings.BOT_TESTING_CHANNEL
+                channel = BOTS_TESTING_CHANNEL
 
             importer_opts["slack"] = channel
 
