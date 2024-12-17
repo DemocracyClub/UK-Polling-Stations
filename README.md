@@ -39,37 +39,24 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/4.2/
 
 - Local Dev without CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+./install-local-python-deps.sh
 ```
 
 - Local Dev with CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+uv sync --all-packages --group testing --group dev --group cdk
 ```
-
-- Just Running Tests
-```
-pip install -r requirements/base.txt -r requirements/testing.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
-```
-
-- Update requirements
-Bump version in relevant requirements file, e.g. ```base.in``` then run ```python -m invoke requirements --upgrade```.
 
 ### Install front-end dependencies
 ```
 npm ci
 ```
 
-### Install testing python dependencies
-```
-pip install -r requirements/testing.txt
-```
-
 ### Install testing system dependencies
 We have a suite of end-to-end integration tests. We use [Playwright](https://playwright.dev/python/)
 with `pytest` to run these.
 
-To set up playwright, after running `pip install -r requirements/testing.txt`,
+To set up playwright, after installing python dependencies,
 run `playwright install`. This will download the browser biniaries required
 for your system.
 
