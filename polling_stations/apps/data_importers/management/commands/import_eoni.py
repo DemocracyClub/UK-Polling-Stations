@@ -378,17 +378,13 @@ class Command(BaseStationsImporter, CsvMixin):
         # Post deduced addresses info if any
         if self.deduced_addresses:
             self.slack_client.send_message(
-                message="\n".join(
-                    f"Council inferred from other addresses in the same postcode for  {len(self.deduced_addresses):,} addresses.*"
-                ),
+                message=f"Council inferred from other addresses in the same postcode for  {len(self.deduced_addresses):,} addresses.",
                 thread_ts=thread_ts,
             )
 
         # Post removed addresses info if any
         if self.removed_addresses:
             self.slack_client.send_message(
-                message="\n".join(
-                    f"Council ambiguous for  {len(self.deduced_addresses):,} addresses, so they've been discarded."
-                ),
+                message=f"Council ambiguous for  {len(self.deduced_addresses):,} addresses, so they've been discarded.",
                 thread_ts=thread_ts,
             )
