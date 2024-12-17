@@ -32,7 +32,7 @@ class Command(BaseCommand):
             "-c",
             "--council",
             nargs=1,
-            help="Council ID to clear in the format X01000001",
+            help="Council ID to clear, uses three letter council codes, e.g. 'ABC'",
         )
 
         group.add_argument(
