@@ -1,2 +1,2 @@
 BOTS_CHANNEL = "bots"
-BOT_TESTING_CHANNEL = "bot-testing"
+BOTS_TESTING_CHANNEL = "bot-testing"
