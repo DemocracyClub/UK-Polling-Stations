@@ -180,11 +180,14 @@ def test_get_last_import_sha_not_in_tree_dev(mock_ssm):
     master_sha = "headofmasterbranch"
     mock_ssm.get_parameter.return_value = {"Parameter": {"Value": not_in_tree_sha}}
 
-    with patch(
-        "data_importers.management.commands.run_new_imports.sha_in_tree"
-    ) as mock_sha_in_tree, patch(
-        "data_importers.management.commands.run_new_imports.git_rev_parse"
-    ) as mock_git_rev_parse:
+    with (
+        patch(
+            "data_importers.management.commands.run_new_imports.sha_in_tree"
+        ) as mock_sha_in_tree,
+        patch(
+            "data_importers.management.commands.run_new_imports.git_rev_parse"
+        ) as mock_git_rev_parse,
+    ):
         # First call returns False (original SHA not in tree), second call returns True (master SHA is in tree)
         mock_sha_in_tree.side_effect = [False, True]
         # Just mock rev_parse to always return master
