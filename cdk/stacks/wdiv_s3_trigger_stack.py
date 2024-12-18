@@ -3,7 +3,8 @@ import typing
 from pathlib import Path
 
 import aws_cdk.aws_lambda_python_alpha as aws_lambda_python
-from aws_cdk import Duration, Environment, Stack
+import jsii
+from aws_cdk import Duration, Environment, Stack, DockerVolume
 from aws_cdk import (
     aws_iam as iam,
 )
@@ -22,6 +23,24 @@ from aws_cdk import (
 from constructs import Construct
 
 MONITORING_ACCOUNTS = {"development": "985364114241"}
+
+
+@jsii.implements(aws_lambda_python.ICommandHooks)
+class CommandHooks:
+    @jsii.member(jsii_name="beforeBundling")
+    def before_bundling(self, input_dir: str, output_dir: str) -> list[str]:
+        return [
+            "printenv",
+            f"{input_dir}/scripts/install_uv.sh",
+            f"/tmp/uv_venv/bin/uv export --no-cache --no-hashes --project wdiv-s3-trigger > {input_dir}/requirements.txt",
+        ]
+
+    @jsii.member(jsii_name="afterBundling")
+    def after_bundling(self, input_dir: str, output_dir: str) -> list[str]:
+        return [
+            f"rm {input_dir}/requirements.txt",
+            f"rm {input_dir}/uv.lock",
+        ]
 
 
 class WDIVS3TriggerStack(Stack):
@@ -46,6 +65,14 @@ class WDIVS3TriggerStack(Stack):
         role = self.create_lambda_role()
 
         lambda_env_vars = self.get_lambda_env_vars()
+
+        scripts_dir = str(
+            Path(__file__).resolve().parent.parent.parent
+            / "deploy"
+            / "files"
+            / "scripts"
+        )
+
         wdiv_s3_trigger_function = aws_lambda_python.PythonFunction(
             self,
             "wdiv_s3_trigger_function",
@@ -58,6 +85,15 @@ class WDIVS3TriggerStack(Stack):
             role=role,
             environment=lambda_env_vars,
             memory_size=1024,
+            bundling=aws_lambda_python.BundlingOptions(
+                volumes=[
+                    DockerVolume(
+                        container_path="/asset-input/scripts",
+                        host_path=scripts_dir,
+                    )
+                ],
+                command_hooks=CommandHooks(),
+            ),
         )
 
         uploads_bucket.add_event_notification(
