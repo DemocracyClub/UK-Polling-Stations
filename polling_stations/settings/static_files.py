@@ -13,7 +13,6 @@ PIPELINE["STYLESHEETS"].update(
         "map": {
             "source_filenames": [
                 "leaflet/dist/leaflet.css",
-                "custom_css/map.css",
                 "leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css",
             ],
             "output_filename": "css/map.css",

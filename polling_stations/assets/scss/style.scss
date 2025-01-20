@@ -28,6 +28,7 @@
 @import 'partials/_codeblock.scss';
 @import 'partials/_dark.scss';
 @import 'partials/_page.scss';
+@import 'partials/_map-leaflet.scss';
 @import 'partials/_utilities.scss';
 @import 'partials/_logo.scss';
 // // Generate atomic classes for documentation demos
@@ -57,6 +58,7 @@ $scope: false;
     @include filter;
     @include status;
     @include codeblock;
+    @include map-leaflet;
     @include logo;
 }
 
