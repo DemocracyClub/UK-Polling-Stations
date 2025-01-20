@@ -159,13 +159,13 @@ commitment==3.0.1 \
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.6.zip \
-    --hash=sha256:21512c334938738eea1cca5807c0f40acf82cc8554eb211831cc04eb9d887d17
+dc-design-system @ https://github.com/DemocracyClub/design-system/archive/refs/tags/0.7.0.zip \
+    --hash=sha256:874eec79334eac3dacd19a9a631dcf8311b600ceaafa11d7915ea5aa3cc56db2
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip \
-    --hash=sha256:4bc2acc4aa6bb4458cac402400e323c481dd07d87190e177917b659548fd48b0
+dc-django-utils @ https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/8.0.1.zip \
+    --hash=sha256:b14cf14157eaa0e22c5343cbb3c6b2c98e10b5a03fd0091e7f25ca469857adb8
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
