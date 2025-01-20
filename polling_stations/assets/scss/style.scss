@@ -1,4 +1,5 @@
 // DC DESIGN SYSTEM
+@import 'partials/_switcher.scss';
 @import 'partials/_fonts.scss';
 @import 'partials/_variables.scss';
 @import 'partials/_type.scss';
@@ -34,6 +35,7 @@
 @import 'partials/_classes-scales.scss';
 $scope: false;
 @mixin optional-styles {
+    @include switcher;
     @include description-lists;
     @include button;
     @include cta;
