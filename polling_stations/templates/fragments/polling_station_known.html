@@ -73,7 +73,7 @@
 
     </div>
     {% if station.location %}
-        <div id="area_map" class="ds-card-image"></div>
+        <div id="area_map" class="ds-map-leaflet"></div>
     {% endif %}
 </div>
 {% if directions.time or  station.accessibility_information.getting_to_the_station or station_is_temporary or has_at_station_info %}
