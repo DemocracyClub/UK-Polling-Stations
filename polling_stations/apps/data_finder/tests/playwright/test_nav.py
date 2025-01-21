@@ -23,4 +23,4 @@ def test_embed(page, live_server):
 def test_example(page, live_server):
     with check_for_console_errors(page):
         page.goto(f"{live_server.url}/example")
-        expect(page.locator("h2")).to_have_text("Your polling station")
+        expect(page.locator("h2").first).to_have_text("Your polling station")
