@@ -158,8 +158,7 @@ TEMPLATES = [
                 "pollingstations.context_processors.google_analytics",
                 "pollingstations.context_processors.global_settings",
                 "whitelabel.context_processors.base_template",
-                "core.context_processors.canonical_url",
-                "core.context_processors.site_title",
+                "dc_utils.context_processors.dc_django_utils",
             ],
         },
     }
@@ -302,10 +301,6 @@ CORS_URLS_REGEX = r"^/(api|embed)/.*$"
 
 INTERNAL_IPS = "127.0.0.1"
 SITE_TITLE = _("Where Do I Vote?")
-SITE_LOGO = (
-    "https://dc-shared-frontend-assets.s3.eu-west-2.amazonaws.com/images/logo_icon.svg"
-)
-SITE_LOGO_WIDTH = "390px"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
