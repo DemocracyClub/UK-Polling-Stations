@@ -62,22 +62,36 @@
 {% endblock content %}
 {% block mailing_list %}{% endblock mailing_list %}
 {% block footer_menu %}
-    <div class="ds-cluster-center">
-        <p class="ds-h4">{% trans "Where Do I Vote?"%}</p>
-        <ul class="ds-padded" style="list-style:none;">
-            <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
-            <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About Where Do I Vote?" %}</a></li>
-            <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
-            <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
-            <li><a href="https://democracyclub.org.uk/contact">{% trans "Contact Us" %}</a></li>
-            <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
-            <li><a href="https://twitter.com/democlub/">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
-            <li><a href="https://facebook.com/DemocracyClub/">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
-            <li><a href="https://github.com/DemocracyClub/">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
-        </ul>
-    </div>
+    {% block footer_links %}
+        <div class="ds-footer-links">
+            <nav>
+                <h2 class="ds-h6">{% trans "Where Do I Vote?"%}</h2>
+                <ul>
+                    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+                    <li><a href="https://democracyclub.org.uk/projects/polling-stations/">{% trans "About Where Do I Vote?" %}</a></li>
+                </ul>
+            </nav>
+            <nav>
+                <h2 class="ds-h6">About Democracy Club</h2>
+                <ul>
+                    <li><a href="https://democracyclub.org.uk/about/">{% trans "About Democracy Club" %}</a></li>
+                    <li><a href="https://democracyclub.org.uk/privacy/">{% trans "Privacy" %}</a></li>
+                    <li><a href="https://democracyclub.org.uk/contact">{% trans "Contact Us" %}</a></li>
+                    <li><a href="https://democracyclub.org.uk/blog/">{% trans "Blog" %}</a></li>
+                </ul>
+            </nav>
+            <nav>
+                <h2 class="ds-h6">Connect with us</h2>
+                <ul>
+                    <li><a href="https://twitter.com/democlub/">{% trans "Twitter" context "link to Democracy Club Twitter page" %}</a></li>
+                    <li><a href="https://facebook.com/DemocracyClub/">{% trans "Facebook" context "link to Democracy Club Facebook page" %}</a></li>
+                    <li><a href="https://github.com/DemocracyClub/">{% trans "GitHub" context "link to Democracy Club GitHub page" %}</a></li>
+                </ul>
+            </nav>
+        </div>
+    {% endblock footer_links %}
 {% endblock footer_menu %}
-{% block extra_footer_text %}
+{% block extra_footer_copyright_text %}
     {% now "Y" as current_year %}
     <div class="ds-copyright">
         <p>
@@ -86,7 +100,7 @@
             {% blocktrans %}Contains National Statistics data © Crown copyright and database right {{ current_year }}{% endblocktrans %}<br>
         </p>
     </div>
-{% endblock extra_footer_text %}
+{% endblock extra_footer_copyright_text %}
 
 
 {% block extra_site_js %}
