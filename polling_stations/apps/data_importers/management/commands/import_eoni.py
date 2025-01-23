@@ -14,7 +14,7 @@ from data_importers.models import DataEvent
 from django.contrib.gis.geos import Point
 from django.db import connections, transaction
 from django.db.models import Q
-from pollingstations.models import CustomFinder, PollingStation
+from pollingstations.models import PollingStation
 
 from polling_stations.db_routers import get_principal_db_name
 from polling_stations.settings.constants.councils import NIR_IDS
@@ -130,7 +130,6 @@ class Command(BaseStationsImporter, CsvMixin):
         # is populated by this command previously, so deleting data form it
         # isn't useful.
         with transaction.atomic(using=DB_NAME):
-            CustomFinder.objects.using(DB_NAME).filter(area_code="N07000001").delete()
             PollingStation.objects.using(DB_NAME).filter(
                 council_id__in=NIR_IDS
             ).delete()
