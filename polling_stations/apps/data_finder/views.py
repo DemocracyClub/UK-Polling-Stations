@@ -15,10 +15,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 from pollingstations.models import (
     AccessibilityInformation,
-    CustomFinder,
     PollingStation,
 )
-from uk_geo_utils.geocoders import MultipleCodesException
 from uk_geo_utils.helpers import AddressSorter, Postcode
 
 from polling_stations.settings.constants.importers import EONIImportScheme
@@ -277,18 +275,6 @@ class BasePollingStationView(
             context["ni_out_of_cycle_station"] = True
             context["ni_elected_rep_type"] = self.get_ni_elected_rep_type()
 
-        if not context["we_know_where_you_should_vote"]:
-            if loc is None:
-                context["custom"] = None
-            else:
-                try:
-                    context["custom"] = CustomFinder.objects.get_custom_finder(
-                        loc, self.postcode.without_space
-                    )
-
-                except MultipleCodesException:
-                    context["custom"] = None
-
         context["show_map"] = self.show_map(context)
 
         self.log_postcode(self.postcode, context, type(self).__name__)
@@ -396,7 +382,6 @@ class ExamplePostcodeView(BasePollingStationView):
         context["has_election"] = True
         context["election_explainers"] = []
         context["error"] = None
-        context["custom"] = None
         context["requires_voter_id"] = True
         return context
 

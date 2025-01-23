@@ -2,19 +2,16 @@
 Models for actual Polling Stations and Polling Districts!
 """
 
-import urllib.parse
 from datetime import datetime
 from itertools import groupby
 
 from core.opening_times import OpeningTimes
 from django.contrib.gis.db import models
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import CheckConstraint, JSONField, Q
 from django.utils.functional import cached_property
 from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 from django_extensions.db.models import TimeStampedModel
-from uk_geo_utils.helpers import Postcode
 
 
 class PollingDistrict(models.Model):
@@ -153,93 +150,6 @@ class AccessibilityInformation(TimeStampedModel):
         if get_language() == "cy":
             return self.getting_to_the_station_cy
         return self.getting_to_the_station
-
-
-class CustomFinderManager(models.Manager):
-    def get_custom_finder(self, geocoder, postcode):
-        try:
-            from addressbase.models import UprnToCouncil
-
-            eoni_data_in_db = UprnToCouncil.objects.filter(
-                uprn__postcode__startswith="BT"
-            )[:1]
-
-            code = geocoder.get_code("lad")
-            if code.startswith("N") and not eoni_data_in_db:
-                finder = self.get(pk="N07000001")
-                finder.message = _(finder.message)
-                """
-                EONI's poling station finder requires postcode to have a space :(
-                http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT5+7TQ
-                will produce a result, whereas
-                http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode=BT57TQ
-                will not.
-
-                We might need to take a more sophisticated approach as we add more custom finders
-                that accept postcodes (e.g: a postcode format flag in the database).
-                At the moment I only have this one to work with.
-                """
-                finder.encoded_postcode = urllib.parse.quote(
-                    Postcode(postcode).with_space
-                )
-            else:
-                finder = self.get(pk=code)
-
-            return finder
-        except ObjectDoesNotExist:
-            return None
-
-
-class CustomFinder(models.Model):
-    """
-    Store details of areas that have their own
-    custom polling station finders
-    and/or a message that we might want to show.
-
-
-    Example content:
-
-    record = CustomFinder(
-        area_code='E07000082'
-        base_url='https://stroud.maps.arcgis.com/apps/webappviewer/index.html?id=ea6bf4b3655542c1a05c8d7e87d32bb1'
-        can_pass_postcode=False
-        message="Stroud District Council has its own polling station finder:"
-    )
-    record.save()
-
-    record = CustomFinder(
-        area_code='W06000008'
-        base_url=''
-        can_pass_postcode=False
-        message='<h2>We're working on it!</h2>Ceredigion Council have provided polling station data. It will be available soon.'
-    )
-    record.save()
-
-    record = CustomFinder(
-        area_code='N07000001'
-        base_url='http://www.eoni.org.uk/Offices/Postcode-Search-Results?postcode='
-        can_pass_postcode=True
-        message='The Electoral Office of Northern Ireland has its own polling station finder:'
-    )
-    record.save()
-    """
-
-    area_code = models.CharField(
-        max_length=9, primary_key=True, help_text="The GSS code for this area"
-    )
-    base_url = models.CharField(
-        blank=True,
-        max_length=255,
-        help_text="The landing page for the polling station finder",
-    )
-    can_pass_postcode = models.BooleanField(
-        default=False, help_text="Does the URL have '?postcode=' in it?"
-    )
-    message = models.TextField(
-        blank=True, default="This council has its own polling station finder:"
-    )
-
-    objects = CustomFinderManager()
 
 
 class AdvanceVotingStation(models.Model):

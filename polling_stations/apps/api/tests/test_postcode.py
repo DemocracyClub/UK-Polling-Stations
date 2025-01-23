@@ -112,7 +112,6 @@ class PostcodeTest(APITestCase):
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual(3, len(response.data["addresses"]))
-        self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(1, len(response.data["ballots"]))
 
@@ -127,7 +126,6 @@ class PostcodeTest(APITestCase):
         self.assertTrue("advance_voting_station" in response.data)
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
-        self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(1, len(response.data["ballots"]))
 
@@ -144,7 +142,6 @@ class PostcodeTest(APITestCase):
             response.data["polling_station"]["properties"]["address"],
         )
         self.assertEqual([], response.data["addresses"])
-        self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(1, len(response.data["ballots"]))
         self.assertTrue("requires_voter_id" in response.data["ballots"][0])
@@ -160,7 +157,6 @@ class PostcodeTest(APITestCase):
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
-        self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(0, len(response.data["ballots"]))
 
@@ -184,7 +180,6 @@ class PostcodeTest(APITestCase):
         self.assertFalse(response.data["polling_station_known"])
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
-        self.assertIsNone(response.data["custom_finder"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(1, len(response.data["ballots"]))
 

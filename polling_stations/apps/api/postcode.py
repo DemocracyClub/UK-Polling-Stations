@@ -11,11 +11,9 @@ from data_finder.views import LogLookUpMixin, polling_station_current
 from django.core.exceptions import ObjectDoesNotExist
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
-from pollingstations.models import CustomFinder
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from uk_geo_utils.geocoders import MultipleCodesException
 from uk_geo_utils.helpers import AddressSorter, Postcode
 
 from .address import PostcodeResponseSerializer, get_bug_report_url
@@ -38,17 +36,6 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
     def generate_polling_station(self, routing_helper):
         if routing_helper.route_type == "single_address":
             return routing_helper.addresses[0].polling_station_with_elections()
-        return None
-
-    def generate_custom_finder(self, geocoder, postcode):
-        try:
-            finder = CustomFinder.objects.get_custom_finder(geocoder, postcode)
-        except MultipleCodesException:
-            finder = None
-        if finder and finder.base_url:
-            if finder.can_pass_postcode:
-                return finder.base_url + finder.encoded_postcode
-            return finder.base_url
         return None
 
     def generate_advance_voting_station(self, routing_helper):
@@ -128,11 +115,6 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
                     ret["polling_station"] = None
             if ret["polling_station"] and not ret["council"]:
                 ret["council"] = ret["polling_station"].council
-
-        # get custom finder (if no polling station)
-        ret["custom_finder"] = None
-        if not ret["polling_station_known"] and loc:
-            ret["custom_finder"] = self.generate_custom_finder(loc, postcode)
 
         # get advance voting station
         ret["advance_voting_station"] = self.generate_advance_voting_station(rh)
