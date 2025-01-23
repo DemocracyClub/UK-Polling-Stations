@@ -20,17 +20,10 @@
         {% include "fragments/errors.html" %}
     {% else %}
         {% if has_election %}
-
-            {% if custom %}
-                {% include "custom_finder.html" %}
+            {% if we_know_where_you_should_vote %}
+                {% include "fragments/polling_station_known.html" %}
             {% else %}
-
-                {% if we_know_where_you_should_vote %}
-                    {% include "fragments/polling_station_known.html" %}
-                {% else %}
-                    {% include "fragments/polling_station_unknown.html" %}
-                {% endif %}
-
+                {% include "fragments/polling_station_unknown.html" %}
             {% endif %}
         {%  elif ni_out_of_cycle_station %}
             {% include "fragments/ni_out_of_cycle_station.html" %}
@@ -55,7 +48,7 @@
         {% include "fragments/ical_feed.html" %}
     {% endif %}
 
-    {% if we_know_where_you_should_vote or custom %}
+    {% if we_know_where_you_should_vote %}
         {% if request.brand == 'democracyclub' and has_election and not error %}
             <div class="ds-card">
                 {% include "feedback/feedback_form.html" %}
