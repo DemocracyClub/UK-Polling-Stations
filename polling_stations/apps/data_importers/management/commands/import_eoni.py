@@ -292,7 +292,9 @@ class Command(BaseStationsImporter, CsvMixin):
                 self.stdout.write(
                     f"Updating UprnToCouncil record for {address.uprn} with gss {other_uprn.lad}"
                 )
-                address_uprn = address.uprntocouncil
+                address_uprn = UprnToCouncil.objects.using(DB_NAME).get(
+                    uprn=address.uprn
+                )
                 address_uprn.lad = other_uprn.lad
                 address_uprn.save(using=DB_NAME)
                 self.deduced_addresses[address.uprn] = other_uprn.lad
