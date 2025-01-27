@@ -90,7 +90,7 @@ class Command(BaseStationsImporter, CsvMixin):
             }
             self.stations_only = options.get("stations_only")
             self.pre_process_data(reprojected=options["reprojected"])
-            with transaction.atomic():
+            with transaction.atomic(using=DB_NAME):
                 self.clear_old_data()
                 self.copy_data()
                 self.assign_uprn_to_councils()
@@ -129,7 +129,7 @@ class Command(BaseStationsImporter, CsvMixin):
         # Only remove old polling stations, as the UPRN to Council table
         # is populated by this command previously, so deleting data form it
         # isn't useful.
-        with transaction.atomic():
+        with transaction.atomic(using=DB_NAME):
             CustomFinder.objects.using(DB_NAME).filter(area_code="N07000001").delete()
             PollingStation.objects.using(DB_NAME).filter(
                 council_id__in=NIR_IDS
