@@ -27,7 +27,10 @@ class ReplicationRouter(object):
         # We only care about trying to scale
         # by serving traffic from a replica
         # when we are serving HTTP traffic
-        if get_request():
+        request = get_request()
+        if request:
+            if request.path.startswith("/admin"):
+                return PRIMARY
             return REPLICA
 
         # in all other cases (e.g: management commands, shell)
