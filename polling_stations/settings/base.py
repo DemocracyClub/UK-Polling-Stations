@@ -124,6 +124,7 @@ from .static_files import PIPELINE, STATICFILES_FINDERS  # noqa
 MIDDLEWARE = (
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "django_middleware_global_request.middleware.GlobalRequestMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -197,6 +198,7 @@ INSTALLED_APPS = (
     "dc_design_system",
     "dc_utils",
     "drf_spectacular",
+    "django_middleware_global_request",
 )
 
 PROJECT_APPS = (

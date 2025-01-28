@@ -11,6 +11,7 @@ django-dotenv
 django-extensions
 django-filter
 django-localflavor
+django-middleware-global-request
 django-sesame
 djangorestframework
 djangorestframework-csv
