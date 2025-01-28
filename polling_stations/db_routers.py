@@ -2,6 +2,8 @@ import os
 
 from django.conf import settings
 from django.db import DEFAULT_DB_ALIAS
+from django_middleware_global_request import get_request
+
 
 PRIMARY = settings.PRINCIPAL_DB_NAME
 REPLICA = DEFAULT_DB_ALIAS
@@ -17,7 +19,11 @@ class ReplicationRouter(object):
             "file_uploads.File",
         ):
             return PRIMARY
-        return REPLICA
+
+        if get_request():
+            return REPLICA
+
+        return PRIMARY
 
     def db_for_write(self, model, **hints):
         if os.environ.get("CIRCLECI"):
