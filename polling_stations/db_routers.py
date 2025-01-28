@@ -11,18 +11,27 @@ REPLICA = DEFAULT_DB_ALIAS
 
 class ReplicationRouter(object):
     def db_for_read(self, model, **hints):
+        # In CI, there is only one DB connection
         if os.environ.get("CIRCLECI"):
             return DEFAULT_DB_ALIAS
 
+        # We don't need to scale requests touching these models
+        # but we do want to prevent race conditions
+        # when reading a record we just wrote
         if model._meta.label in (
             "file_uploads.Upload",
             "file_uploads.File",
         ):
             return PRIMARY
 
+        # We only care about trying to scale
+        # by serving traffic from a replica
+        # when we are serving HTTP traffic
         if get_request():
             return REPLICA
 
+        # in all other cases (e.g: management commands, shell)
+        # perform reads from the primary to prevent race conditions
         return PRIMARY
 
     def db_for_write(self, model, **hints):
