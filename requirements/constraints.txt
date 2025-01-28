@@ -381,6 +381,7 @@ django==4.2.13 \
     #   django-extensions
     #   django-filter
     #   django-localflavor
+    #   django-middleware-global-request
     #   django-sesame
     #   djangorestframework
     #   drf-spectacular
@@ -415,6 +416,10 @@ django-localflavor==4.0 \
     # via
     #   -r requirements/base.in
     #   dc-django-utils
+django-middleware-global-request==0.3.5 \
+    --hash=sha256:37c79c9cd80e73751ae2821696e20af13ba7628a0915ff1818d124e0e72980b1 \
+    --hash=sha256:7beb2c8ca9106aac641692cda2bac290bd7083a315446a12db06fa91b73903d6
+    # via -r requirements/base.in
 django-pipeline==3.0.0 \
     --hash=sha256:49a8bee298668100bb6e8a2144dff8c607baa5297820a2503793c38693f34103 \
     --hash=sha256:e9e08b084ef3ebf599795510519a8d44f2240b487782bebf4a8fcaf6302c31d1
