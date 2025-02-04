@@ -2,7 +2,7 @@ from pathlib import Path
 
 from addressbase.models import Address, UprnToCouncil
 from django.core.management.base import BaseCommand
-from django.db import connection
+from polling_stations.db_routers import get_principal_db_connection
 
 
 class Command(BaseCommand):
@@ -22,7 +22,7 @@ class Command(BaseCommand):
         if not self.path.exists():
             raise FileNotFoundError(f"No csv found at {kwargs['path']}")
 
-        cursor = connection.cursor()
+        cursor = get_principal_db_connection().cursor()
         self.stdout.write("clearing existing data..")
         cursor.execute("TRUNCATE TABLE %s;" % (self.table_name))
 

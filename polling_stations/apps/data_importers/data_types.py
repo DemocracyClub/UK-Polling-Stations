@@ -8,9 +8,9 @@ from collections import namedtuple
 
 from addressbase.models import Address, UprnToCouncil, get_uprn_hash_table
 from councils.models import Council
-from django.db import connection
 from pollingstations.models import PollingDistrict, PollingStation
 from uk_geo_utils.helpers import Postcode
+from polling_stations.db_routers import get_principal_db_connection
 
 Station = namedtuple(
     "Station",
@@ -116,7 +116,7 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
         self.saved = True
 
     def get_uprns_by_district(self):
-        cursor = connection.cursor()
+        cursor = get_principal_db_connection().cursor()
         cursor.execute(
             """
                 SELECT a.uprn, d.polling_station_id
@@ -133,7 +133,7 @@ class DistrictSet(CustomSet, AssignPollingStationsMixin):
         return cursor.fetchall()
 
     def get_uprns_by_district_join_stations(self):
-        cursor = connection.cursor()
+        cursor = get_principal_db_connection().cursor()
         cursor.execute(
             """
                 SELECT a.uprn, s.internal_council_id
