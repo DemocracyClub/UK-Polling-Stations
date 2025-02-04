@@ -16,6 +16,9 @@ from file_uploads.models import File, Upload
 from pollingstations.models import PollingStation
 
 from polling_stations.i18n.cy import WelshNameMutationMixin
+from polling_stations.db_routers import get_principal_db_name
+
+DB_NAME = get_principal_db_name()
 
 
 class UnsafeToDeleteCouncil(Exception):
@@ -23,7 +26,7 @@ class UnsafeToDeleteCouncil(Exception):
 
 
 class CouncilQueryset(models.QuerySet):
-    @transaction.atomic
+    @transaction.atomic(using=DB_NAME)
     def delete(self, force_cascade=False):
         if force_cascade:
             return super().delete()
@@ -113,7 +116,7 @@ class Council(WelshNameMutationMixin, models.Model):
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
-        with transaction.atomic():
+        with transaction.atomic(using=DB_NAME):
             new = self._state.adding
             super().save(
                 force_insert=force_insert,

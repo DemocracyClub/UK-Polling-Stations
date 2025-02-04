@@ -10,12 +10,16 @@ from django.core.management.base import BaseCommand
 from django.db import DEFAULT_DB_ALIAS, transaction
 from requests.exceptions import HTTPError
 from retry import retry
+from polling_stations.db_routers import get_principal_db_name
+
 
 from polling_stations.settings.constants.councils import (
     COUNCIL_ID_FIELD,
     NIR_IDS,
     WELSH_COUNCIL_NAMES,
 )
+
+DB_NAME = get_principal_db_name()
 
 
 def union_areas(a1, a2):
@@ -243,7 +247,7 @@ class Command(BaseCommand):
 
             council.save()
 
-    @transaction.atomic
+    @transaction.atomic(using=DB_NAME)
     def handle(self, **options):
         """
         Manually run system checks for the

@@ -7,6 +7,9 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from pollingstations.models import AdvanceVotingStation, PollingDistrict, PollingStation
 from polling_stations.settings.constants.councils import NIR_IDS
+from polling_stations.db_routers import get_principal_db_name
+
+DB_NAME = get_principal_db_name()
 
 """
 Clear PollingDistrict, PollingStation, and AdvancedVotingStation models
@@ -70,7 +73,7 @@ class Command(BaseCommand):
         record_teardown_event(council_id)
         print("..done")
 
-    @transaction.atomic
+    @transaction.atomic(using=DB_NAME)
     def handle(self, *args, **kwargs):
         """
         Manually run system checks for the
