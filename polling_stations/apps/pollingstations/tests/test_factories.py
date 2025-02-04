@@ -8,6 +8,9 @@ from pollingstations.tests.factories import (
     PollingDistrictFactory,
     PollingStationFactory,
 )
+from polling_stations.db_routers import get_principal_db_name
+
+DB_NAME = get_principal_db_name()
 
 
 class TestPollingStationFactory(TestCase):
@@ -38,7 +41,7 @@ class TestAccessibilityInformationFactory(TestCase):
         self.assertEqual(len(PollingStation.objects.all()), 1)
 
     def test_accessibility_information_factory_constraint(self):
-        with self.assertRaises(IntegrityError), transaction.atomic():
+        with self.assertRaises(IntegrityError), transaction.atomic(using=DB_NAME):
             AccessibilityInformationFactory(level_access=True, temporary_ramp=True)
 
         AccessibilityInformationFactory(level_access=True, temporary_ramp=False)
