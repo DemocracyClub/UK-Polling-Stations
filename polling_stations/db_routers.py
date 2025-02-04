@@ -3,6 +3,7 @@ import os
 from django.conf import settings
 from django.db import DEFAULT_DB_ALIAS
 from django_middleware_global_request import get_request
+from django.db import connections
 
 
 PRINCIPAL = settings.PRINCIPAL_DB_NAME
@@ -54,3 +55,7 @@ def get_principal_db_name():
     if PRINCIPAL in settings.DATABASES:
         return PRINCIPAL
     return REPLICA
+
+
+def get_principal_db_connection():
+    return connections[get_principal_db_name()]
