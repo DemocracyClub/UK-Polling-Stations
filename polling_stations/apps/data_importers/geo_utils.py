@@ -1,6 +1,10 @@
 from django.contrib.gis.geos import LinearRing, MultiPolygon, Polygon
-from django.db import connection, transaction
+from django.db import transaction
 from pollingstations.models import PollingDistrict
+from polling_stations.db_routers import (
+    get_principal_db_name,
+    get_principal_db_connection,
+)
 
 
 def convert_linestring_to_multiploygon(linestring):
@@ -16,13 +20,16 @@ def convert_linestring_to_multiploygon(linestring):
     return MultiPolygon(poly)
 
 
-@transaction.atomic
+DB_NAME = get_principal_db_name()
+
+
+@transaction.atomic(using=DB_NAME)
 def fix_bad_polygons():
     # fix self-intersecting polygons
     print("running fixup SQL")
     table_name = PollingDistrict()._meta.db_table
 
-    cursor = connection.cursor()
+    cursor = get_principal_db_connection().cursor()
     cursor.execute(
         """
         UPDATE {0}
