@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.postgres.aggregates import BoolAnd, StringAgg
 from django.core.mail import EmailMessage
-from django.db import transaction
 from django.db.models import Case, Exists, Func, OuterRef, Q, Value, When
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -219,7 +218,6 @@ class Upload(models.Model):
         )
         email.send()
 
-    @transaction.atomic
     def send_error_email(self):
         subject = "File upload failed"
         message = f"File upload failure: {self}. Please investigate further."
