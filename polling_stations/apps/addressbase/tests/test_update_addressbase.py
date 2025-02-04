@@ -3,7 +3,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 from django.core.management import call_command
-from django.db import connection
 from django.test import TestCase, TransactionTestCase
 from uk_geo_utils.base_importer import BaseImporter
 
@@ -14,10 +13,11 @@ from addressbase.management.commands.update_addressbase import (
 from councils.tests.factories import CouncilFactory
 from pollingstations.models import PollingStation
 from pollingstations.tests.factories import PollingStationFactory
+from polling_stations.db_routers import get_principal_db_connection
 
 
 def get_primary_key_name(table):
-    with connection.cursor() as cursor:
+    with get_principal_db_connection().cursor() as cursor:
         cursor.execute(f"""
             SELECT conname
             FROM pg_constraint
@@ -32,7 +32,7 @@ def get_primary_key_name(table):
 
 
 def get_foreign_key_names(table):
-    with connection.cursor() as cursor:
+    with get_principal_db_connection().cursor() as cursor:
         cursor.execute(f"""
             SELECT conname
             FROM pg_constraint
@@ -44,7 +44,7 @@ def get_foreign_key_names(table):
 
 class HelpersTest(TestCase):
     def setUp(self):
-        with connection.cursor() as cursor:
+        with get_principal_db_connection().cursor() as cursor:
             # Create table with named primary key
             cursor.execute("""
                 CREATE TABLE foo (
@@ -53,7 +53,7 @@ class HelpersTest(TestCase):
                     CONSTRAINT foo_primary_key PRIMARY KEY (id)
                 );
             """)
-        with connection.cursor() as cursor:
+        with get_principal_db_connection().cursor() as cursor:
             # Create table with named foreign key
             cursor.execute("""
                 CREATE TABLE bar (
@@ -64,7 +64,7 @@ class HelpersTest(TestCase):
             """)
 
     def tearDown(self):
-        with connection.cursor() as cursor:
+        with get_principal_db_connection().cursor() as cursor:
             cursor.execute("""
             DROP TABLE IF EXISTS foo CASCADE;
             DROP TABLE IF EXISTS bar CASCADE;
