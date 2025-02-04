@@ -38,6 +38,9 @@ from django.db import transaction
 from file_uploads.models import File, Upload
 from pollingstations.models import PollingDistrict, PollingStation
 from uk_geo_utils.helpers import Postcode
+from polling_stations.db_routers import get_principal_db_name
+
+DB_NAME = get_principal_db_name()
 
 
 class CsvMixin:
@@ -116,7 +119,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         )
 
     def teardown(self, council):
-        with transaction.atomic():
+        with transaction.atomic(using=DB_NAME):
             super().teardown(council)
             PollingStation.objects.filter(council=council).delete()
             PollingDistrict.objects.filter(council=council).delete()
@@ -296,7 +299,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
 
         self.base_folder_path = self.get_base_folder_path()
 
-        with transaction.atomic():
+        with transaction.atomic(using=DB_NAME):
             self.import_data()
             self.record_import_event()
         self.council.update_all_station_visibilities_from_events(self.election_dates)
