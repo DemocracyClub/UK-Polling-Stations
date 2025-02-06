@@ -1,32 +1,22 @@
 {% load i18n_with_welsh %}
-{% load markdown_filter %}
 {% if cancelled_election.metadata.cancelled_election.title %}
     <h2>{{ cancelled_election.metadata.cancelled_election.title }}</h2>
 {% else %}
     <h2>{% trans "Cancelled Election" %}</h2>
 {% endif %}
 
-{% if cancelled_election.name %}
-    {% if cancelled_election.rescheduled_date %}
-        <p>{% blocktrans with cancelled_election_name=cancelled_election.name %}The poll for <strong>{{ cancelled_election_name }}</strong> has been rescheduled.{% endblocktrans %}</p>
-        {% comment %}Translators: 'it' is a postponed election{% endcomment %}
-        <p>{% blocktrans with cancelled_election_rescheduled_date=cancelled_election.rescheduled_date %}It will now take place on {{ cancelled_election_rescheduled_date }}.{% endblocktrans %}</p>
-    {% else %}
-        <p>{% blocktrans with cancelled_election_name=cancelled_election.name %}The poll for <strong>{{ cancelled_election_name }}</strong> has been cancelled.{% endblocktrans %}</p>
-    {% endif %}
-    <p>To learn more, please visit <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}/">Who Can I Vote For?</a></p>
+{% if cancelled_election.rescheduled_date %}
+    <p>{% blocktrans with cancelled_election_name=cancelled_election.name %}The poll for <strong>{{ cancelled_election_name }}</strong> has been rescheduled.{% endblocktrans %}</p>
+    {% comment %}Translators: 'it' is a postponed election{% endcomment %}
+    <p>{% blocktrans with cancelled_election_rescheduled_date=cancelled_election.rescheduled_date %}It will now take place on {{ cancelled_election_rescheduled_date }}.{% endblocktrans %}</p>
+{% elif cancelled_election.metadata.cancelled_election.detail %}
+    {{ cancelled_election.metadata.cancelled_election.detail | linebreaks }}
+{% else %}
+    <p>{% blocktrans with cancelled_election_name=cancelled_election.name %}The poll for <strong>{{ cancelled_election_name }}</strong> will not go ahead as planned.{% endblocktrans %}</p>
 {% endif %}
 
-{% if cancelled_election.metadata.cancelled_election.detail %}
-    {{ cancelled_election.metadata.cancelled_election.detail | markdown }}
+{% if cancelled_election.metadata.cancelled_election.url %}
+    <p><a href="{{ cancelled_election.metadata.cancelled_election.url }}">Learn More</a></p>
 {% else %}
-    {% if council.electoral_services_phone_numbers %}
-        <p>
-            {% blocktrans trimmed with phone_number=council.electoral_services_phone_numbers.0 %}
-                For more information contact {{ council }} on <strong><a href="tel:{{ phone_number }}">{{ phone_number }}</a></strong>.
-            {% endblocktrans %}
-        </p>
-    {% else %}
-        <p>{% blocktrans %}For more information contact {{ council }}.{% endblocktrans %}</p>
-    {% endif %}
+    <p>To learn more, please visit <a href="https://whocanivotefor.co.uk/elections/{{ postcode }}/">Who Can I Vote For?</a></p>
 {% endif %}
