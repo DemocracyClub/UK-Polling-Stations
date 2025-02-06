@@ -4,38 +4,26 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NBL"
     addresses_name = (
-        "2024-07-04/2024-05-28T12:57:30.578981/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-02-06T14:15:04.466776/Democracy_Club__01May2025.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-28T12:57:30.578981/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-02-06T14:15:04.466776/Democracy_Club__01May2025.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if (
-            uprn
-            in [
-                "10096301305",  # 4 MARINA WEST, AMBLE, MORPETH
-                "10096301304",  # 5 MARINA WEST, AMBLE, MORPETH
-                "200002823696",  # ST. AIDANS PRIMARY SCHOOL HOUSE, MOORHOUSE LANE, ASHINGTON
-                "10094015954",  # 7 HARRISON CRESCENT, ESSENDENE RISE, NORTH SEATON, ASHINGTON
-                "10012421608",  # LANE END FARM, NEWBIGGIN ROAD, NORTH SEATON, ASHINGTON
-                "10032938120",  # THE BIRCHES, RED ROW DRIVE, BEDLINGTON
-                "10000843358",  # EBENEEZER, CARRSHIELD, HEXHAM
-                "10000844527",  # EAST HOT BANK FARM, BARDON MILL, HEXHAM
-                "200000923540",  # GRINDON HILL BUNGALOW, HAYDON BRIDGE, HEXHAM
-                "10001018037",  # COALSFIELD HOUSE, ELSDON, NEWCASTLE UPON TYNE
-                "200000919007",  # FARGLOW FARM, GREENHEAD, BRAMPTON
-            ]
-        ):
+        if uprn in [
+            "2920007245",  # KIRKLEY OLD MILL, KIRKLEY, NEWCASTLE UPON TYNE
+        ]:
             return None
 
         if record.addressline6 in [
             # splits
             "NE61 6JD",
+            "NE65 9FY",
         ]:
             return None
 
