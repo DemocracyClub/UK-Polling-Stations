@@ -1,6 +1,5 @@
 from addressbase.models import UprnToCouncil
 from councils.models import Council
-from django.db import connection
 from django.db.models import Q
 from pollingstations.models import PollingDistrict, PollingStation
 from rich.console import Console
@@ -45,38 +44,32 @@ class StationReport:
         ).count()
 
     def get_stations_with_valid_district_id_ref(self):
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT COUNT(*) FROM pollingstations_pollingstation
-            WHERE polling_district_id IN
-                (SELECT internal_council_id FROM pollingstations_pollingdistrict
-                WHERE council_id IN %s)
-            AND council_id IN %s
-            AND polling_district_id != ''
-            AND polling_district_id IS NOT NULL;
-            """,
-            [tuple(self.councils), tuple(self.councils)],
+        return (
+            PollingStation.objects.filter(
+                polling_district_id__in=PollingDistrict.objects.filter(
+                    council_id__in=self.councils
+                ).values_list("internal_council_id", flat=True),
+                council_id__in=self.councils,
+            )
+            .exclude(polling_district_id__isnull=True)
+            .exclude(polling_district_id="")
+            .count()
         )
-        results = cursor.fetchall()
-        return results[0][0]
 
     def get_stations_with_invalid_district_id_ref(self):
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT COUNT(*) FROM pollingstations_pollingstation
-            WHERE polling_district_id NOT IN
-                (SELECT internal_council_id FROM pollingstations_pollingdistrict
-                WHERE council_id IN %s)
-            AND council_id IN %s
-            AND polling_district_id != ''
-            AND polling_district_id IS NOT NULL;
-            """,
-            [tuple(self.councils), tuple(self.councils)],
+        return (
+            PollingStation.objects.filter(
+                ~Q(
+                    polling_district_id__in=PollingDistrict.objects.filter(
+                        council_id__in=self.councils
+                    ).values_list("internal_council_id", flat=True)
+                ),
+                council_id__in=self.councils,
+            )
+            .exclude(polling_district_id__isnull=True)
+            .exclude(polling_district_id="")
+            .count()
         )
-        results = cursor.fetchall()
-        return results[0][0]
 
     def get_stations_with_point(self):
         return PollingStation.objects.filter(
@@ -166,38 +159,32 @@ class DistrictReport:
         ).count()
 
     def get_districts_with_valid_station_id_ref(self):
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT COUNT(*) FROM pollingstations_pollingdistrict
-            WHERE polling_station_id IN
-                (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id IN %s)
-            AND council_id IN %s
-            AND polling_station_id != ''
-            AND polling_station_id IS NOT NULL;
-            """,
-            [tuple(self.councils), tuple(self.councils)],
+        return (
+            PollingDistrict.objects.filter(
+                polling_station_id__in=PollingStation.objects.filter(
+                    council_id__in=self.councils
+                ).values_list("internal_council_id", flat=True),
+                council_id__in=self.councils,
+            )
+            .exclude(polling_station_id__isnull=True)
+            .exclude(polling_station_id="")
+            .count()
         )
-        results = cursor.fetchall()
-        return results[0][0]
 
     def get_districts_with_invalid_station_id_ref(self):
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT COUNT(*) FROM pollingstations_pollingdistrict
-            WHERE polling_station_id NOT IN
-                (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id IN %s)
-            AND council_id IN %s
-            AND polling_station_id != ''
-            AND polling_station_id IS NOT NULL;
-            """,
-            [tuple(self.councils), tuple(self.councils)],
+        return (
+            PollingDistrict.objects.filter(
+                ~Q(
+                    polling_station_id__in=PollingStation.objects.filter(
+                        council_id__in=self.councils
+                    ).values_list("internal_council_id", flat=True)
+                ),
+                council_id__in=self.councils,
+            )
+            .exclude(polling_station_id__isnull=True)
+            .exclude(polling_station_id="")
+            .count()
         )
-        results = cursor.fetchall()
-        return results[0][0]
 
     def generate_counts(self):
         districts = PollingDistrict.objects.filter(council_id__in=self.councils)
@@ -261,38 +248,32 @@ class AddressReport:
         ).count()
 
     def get_addresses_with_valid_station_id_ref(self):
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT COUNT(*) FROM addressbase_uprntocouncil
-            WHERE polling_station_id IN
-                (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id IN %s)
-            AND lad IN %s
-            AND polling_station_id != ''
-            AND polling_station_id IS NOT NULL;
-            """,
-            [tuple(self.councils), tuple(self.gss_codes)],
+        return (
+            UprnToCouncil.objects.filter(
+                polling_station_id__in=PollingStation.objects.filter(
+                    council_id__in=self.councils
+                ).values_list("internal_council_id", flat=True),
+                lad__in=self.gss_codes,
+            )
+            .exclude(polling_station_id__isnull=True)
+            .exclude(polling_station_id="")
+            .count()
         )
-        results = cursor.fetchall()
-        return results[0][0]
 
     def get_addresses_with_invalid_station_id_ref(self):
-        cursor = connection.cursor()
-        cursor.execute(
-            """
-            SELECT COUNT(*) FROM addressbase_uprntocouncil
-            WHERE polling_station_id NOT IN
-                (SELECT internal_council_id FROM pollingstations_pollingstation
-                WHERE council_id IN %s)
-            AND lad IN %s
-            AND polling_station_id != ''
-            AND polling_station_id IS NOT NULL;
-            """,
-            [tuple(self.councils), tuple(self.gss_codes)],
+        return (
+            UprnToCouncil.objects.filter(
+                ~Q(
+                    polling_station_id__in=PollingStation.objects.filter(
+                        council_id__in=self.councils
+                    ).values_list("internal_council_id", flat=True)
+                ),
+                lad__in=self.gss_codes,
+            )
+            .exclude(polling_station_id__isnull=True)
+            .exclude(polling_station_id="")
+            .count()
         )
-        results = cursor.fetchall()
-        return results[0][0]
 
 
 # generate all the stats

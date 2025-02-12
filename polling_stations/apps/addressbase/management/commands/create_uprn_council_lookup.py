@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from django.core.management.base import BaseCommand
-from django.db import connection
+from polling_stations.db_routers import get_principal_db_connection
 
 
 class Command(BaseCommand):
@@ -16,7 +16,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-        self.cursor = connection.cursor()
+        self.cursor = get_principal_db_connection().cursor()
         # Set where we'll write the join query to.
         if kwargs["destination"]:
             self.dst = Path(kwargs["destination"])

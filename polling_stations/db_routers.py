@@ -2,6 +2,7 @@ import os
 
 from django.conf import settings
 from django.db import DEFAULT_DB_ALIAS
+from django.db import connections
 
 
 class ReplicationRouter(object):
@@ -29,3 +30,7 @@ def get_principal_db_name():
     if settings.PRINCIPAL_DB_NAME in settings.DATABASES:
         return settings.PRINCIPAL_DB_NAME
     return DEFAULT_DB_ALIAS
+
+
+def get_principal_db_connection():
+    return connections[get_principal_db_name()]

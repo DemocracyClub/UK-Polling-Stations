@@ -3,6 +3,9 @@ from rest_framework import serializers, viewsets
 from rest_framework.exceptions import PermissionDenied
 
 from .models import File, Upload
+from polling_stations.db_routers import get_principal_db_name
+
+DB_NAME = get_principal_db_name()
 
 
 class FileSerializer(serializers.ModelSerializer):
@@ -18,7 +21,7 @@ class UploadSerializer(serializers.ModelSerializer):
         model = Upload
         fields = ("gss", "timestamp", "github_issue", "file_set", "election_date")
 
-    @transaction.atomic
+    @transaction.atomic(using=DB_NAME)
     def create(self, validated_data):
         def update_file_set(validated_data):
             upload = Upload.objects.get(

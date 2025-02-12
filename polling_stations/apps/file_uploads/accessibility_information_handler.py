@@ -6,6 +6,10 @@ from councils.models import Council
 from django.db import transaction
 from pollingstations.models import AccessibilityInformation, PollingStation
 
+from polling_stations.db_routers import get_principal_db_name
+
+DB_NAME = get_principal_db_name()
+
 
 class AccessibilityInformationHandler:
     def __init__(self, council):
@@ -55,7 +59,7 @@ class AccessibilityInformationHandler:
     def header(self, header: list[str]):
         self._header = header
 
-    @transaction.atomic
+    @transaction.atomic(using=DB_NAME)
     def handle(self, accessibility_info: list[str]):
         sys.stdout.write("Checking accessibility information csv")
         data: csv.DictReader = self.parse_data(accessibility_info)

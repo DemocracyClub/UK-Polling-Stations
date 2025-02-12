@@ -178,7 +178,7 @@ class Command(BaseCommand):
             uprntocouncil_updater.build_temp_indexes()
 
             # Perform the table swaps in a single transaction
-            with transaction.atomic():
+            with transaction.atomic(using=database_name):
                 self.stdout.write("Starting atomic transaction for table swaps...")
 
                 # Drop all foreign keys first

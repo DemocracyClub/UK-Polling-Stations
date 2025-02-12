@@ -9,6 +9,9 @@ from pollingstations.models import (
     PollingStation,
     VisibilityChoices,
 )
+from polling_stations.db_routers import get_principal_db_name
+
+DB_NAME = get_principal_db_name()
 
 
 class AccessibilityInformationInline(admin.StackedInline):
@@ -84,7 +87,7 @@ class PollingStationAdmin(admin.ModelAdmin):
     @admin.action(
         description="Unpublish selected Polling Stations. This will hide them from users."
     )
-    @transaction.atomic
+    @transaction.atomic(using=DB_NAME)
     def unpublish(self, request, queryset):
         queryset.update(visibility=VisibilityChoices.UNPUBLISHED)
         for station in queryset:
@@ -99,7 +102,7 @@ class PollingStationAdmin(admin.ModelAdmin):
     @admin.action(
         description="Republish selected Polling Stations. This will make them visible to users."
     )
-    @transaction.atomic
+    @transaction.atomic(using=DB_NAME)
     def publish(self, request, queryset):
         queryset.update(visibility=VisibilityChoices.PUBLISHED)
         for station in queryset:
