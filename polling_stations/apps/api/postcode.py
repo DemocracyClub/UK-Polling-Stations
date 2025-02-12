@@ -116,10 +116,6 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             if ret["polling_station"] and not ret["council"]:
                 ret["council"] = ret["polling_station"].council
 
-        # this feature doesn't exist any more, but the key is
-        # still in the API response for legacy compatibility
-        ret["custom_finder"] = None
-
         # get advance voting station
         ret["advance_voting_station"] = self.generate_advance_voting_station(rh)
 

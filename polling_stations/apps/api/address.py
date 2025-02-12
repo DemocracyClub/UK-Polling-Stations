@@ -98,7 +98,6 @@ class PostcodeResponseSerializer(serializers.Serializer):
         read_only=True,
         help_text="A GeoJSON Feature containing a Point object describing the centroid of the input postcode.",
     )
-    custom_finder = serializers.CharField(read_only=True)
     advance_voting_station = AdvanceVotingStationSerializer(read_only=True)
     council = CouncilDataSerializer(read_only=True)
     polling_station = PollingStationGeoSerializer(
@@ -147,7 +146,6 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         self, request, uprn=None, format=None, geocoder=geocode_point_only, log=True
     ):
         ret = {}
-        ret["custom_finder"] = None
 
         # attempt to get address based on uprn
         # if we fail, return an error response
