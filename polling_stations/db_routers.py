@@ -5,7 +5,7 @@ from django.db import DEFAULT_DB_ALIAS
 from django_middleware_global_request import get_request
 
 
-PRIMARY = settings.PRINCIPAL_DB_NAME
+PRINCIPAL = settings.PRINCIPAL_DB_NAME
 REPLICA = DEFAULT_DB_ALIAS
 
 
@@ -22,7 +22,7 @@ class ReplicationRouter(object):
             "file_uploads.Upload",
             "file_uploads.File",
         ):
-            return PRIMARY
+            return PRINCIPAL
 
         # We only care about trying to scale
         # by serving traffic from a replica
@@ -30,18 +30,18 @@ class ReplicationRouter(object):
         request = get_request()
         if request:
             if request.path.startswith("/admin"):
-                return PRIMARY
+                return PRINCIPAL
             return REPLICA
 
         # in all other cases (e.g: management commands, shell)
-        # perform reads from the primary to prevent race conditions
-        return PRIMARY
+        # perform reads from the principal to prevent race conditions
+        return PRINCIPAL
 
     def db_for_write(self, model, **hints):
         if os.environ.get("CIRCLECI"):
             return DEFAULT_DB_ALIAS
 
-        return PRIMARY
+        return PRINCIPAL
 
     def allow_relation(self, obj1, obj2, **hints):
         return True
@@ -51,6 +51,6 @@ class ReplicationRouter(object):
 
 
 def get_principal_db_name():
-    if PRIMARY in settings.DATABASES:
-        return PRIMARY
+    if PRINCIPAL in settings.DATABASES:
+        return PRINCIPAL
     return REPLICA
