@@ -11,3 +11,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     )
     elections = ["2025-02-20"]
     csv_delimiter = "\t"
+
+    def station_record_to_dict(self, record):
+        # Tiptree United Reformed Church Hall, Chapel Road, Tiptree
+        if record.polling_place_id == "14019":
+            record = record._replace(
+                polling_place_easting="590290", polling_place_northing="216096"
+            )
+
+        return super().station_record_to_dict(record)
