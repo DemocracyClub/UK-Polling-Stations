@@ -3,36 +3,37 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BUC"
-    addresses_name = "2024-07-04/2024-06-10T14:53:02.994870/buc-combined.tsv"
-    stations_name = "2024-07-04/2024-06-10T14:53:02.994870/buc-combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-02-13T17:41:34.465191/Democracy_Club__01May2025.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-02-13T17:41:34.465191/Democracy_Club__01May2025.tsv"
+    )
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if (
-            uprn
-            in [
-                "766271522",  # CLOVERHILL HOUSE IVY LANE, GREAT BRICKHILL
-                "766297815",  # MANOR FARM, HILLESDEN ROAD, GAWCOTT, BUCKINGHAM HOUSE IVY LANE, GREAT BRICKHILL
-                "10092750629",  # HQ AIR COMMAND HURRICANE BUILDING RAF HIGH WYCOMBE NEW ROAD, WALTERS ASH
-                "10033201817",  # STABLE COTTAGE, HARLEYFORD LANE, MARLOW
-                "200000812734",  # TEMPLE LOCK HOUSE HARLEYFORD LANE, MARLOW
-                "10013781402",  # MOBILE HOME ST GEORGES HALL WHITE LION ROAD, LITTLE CHALFONT
-            ]
-        ):
+        if uprn in [
+            "200000796229",  # MOORGATE COTTAGE, MOOR END, FRIETH, HENLEY-ON-THAMES
+            "10090192931",  # MOBILE HOME AT STABLES AND PADDOCK WILLETTS LANE, DENHAM
+            "766297724",  # RYE HOUSE THE HOLLOWAY, DRAYTON BEAUCHAMP
+        ]:
             return None
 
         if record.addressline6 in [
             # split
-            "HP21 9HY",
-            "HP8 4QT",
-            "SL9 9FH",
-            "HP23 6NG",
-            "MK18 1PJ",
             "SL9 9JH",
+            "HP8 4QT",
+            "HP23 6NG",
+            "HP8 4DF",
+            "SL0 0DB",
+            "SL9 9FH",
+            "HP5 3BD",
+            "HP18 0RU",
             "RG9 6JH",
+            "HP18 9UJ",
             # suspect
             "HP12 3HP",  # MCLELLAN PLACE
             "SL3 6QH",  # CROMWELLS COURT
