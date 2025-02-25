@@ -3,13 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "WAT"
-    addresses_name = (
-        "2024-07-04/2024-06-05T15:48:24.091486/Watford Democracy Counts Extract.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-05T15:48:24.091486/Watford Democracy Counts Extract.csv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2025-05-01/2025-02-25T15:00:12.120364/Democracy Club Data.csv"
+    stations_name = "2025-05-01/2025-02-25T15:00:12.120364/Democracy Club Data.csv"
+    elections = ["2025-05-01"]
 
     def address_record_to_dict(self, record):
         if record.housepostcode in [
