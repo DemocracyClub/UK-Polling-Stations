@@ -41,3 +41,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Correction from council: St John’s Methodist Church, 60 Woodside Avenue to Restore Hope Amersham Hall, 60 Woodside Avenue
+        if record.polling_place_id == "42155":
+            record = record._replace(polling_place_name="Restore Hope Amersham Hall")
+
+        return super().station_record_to_dict(record)
