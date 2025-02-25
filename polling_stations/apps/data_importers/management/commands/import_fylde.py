@@ -5,13 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "FYL"
     addresses_name = (
-        "2024-07-04/2024-06-06T10:44:20.480636/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-02-25T14:08:41.404175/Democracy_Club__01May2025.CSV"
     )
     stations_name = (
-        "2024-07-04/2024-06-06T10:44:20.480636/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-02-25T14:08:41.404175/Democracy_Club__01May2025.CSV"
     )
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    elections = ["2025-05-01"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -21,12 +20,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             in [
                 "200001880578",  # FLAT C, 55 ST. ANNES ROAD WEST, LYTHAM ST. ANNES
                 "200001880577",  # FLAT B, 55 ST. ANNES ROAD WEST, LYTHAM ST. ANNES
-                "100012389926",  # COPPICE FARM HOUSE, WEST MOSS LANE, LYTHAM ST. ANNES
                 "200002845180",  # FLAT, 6 ST. DAVIDS ROAD SOUTH, LYTHAM ST. ANNES
                 "200001697189",  # HOLLY BANK, DIVISION LANE, BLACKPOOL
                 "100012618360",  # FAIRHAVEN LAKE AND GARDENS INNER PROMENADE, LYTHAM ST ANNES
                 "100012753403",  # CLIFTON GRANGE FARM, BLACKPOOL ROAD, CLIFTON, PRESTON
-                "100010418002",  # 112 LYTHAM ROAD, FRECKLETON, PRESTON
                 "100012753615",  # 72 LYTHAM ROAD, FRECKLETON
                 "100012753616",  # 74 LYTHAM ROAD, FRECKLETON
                 "100010400412",  # 33D CLIFTON STREET, LYTHAM ST. ANNES
@@ -43,23 +40,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "100010410533",  # 126 ST ANDREWS ROAD SOUTH, LYTHAM ST ANNES
                 "100012390106",  # POINTER HOUSE FARM, FLEETWOOD ROAD, SINGLETON, POULTON-LE-FYLDE
                 "100012620477",  # ST. CUTHBERTS VICARAGE, CHURCH ROAD, LYTHAM, LYTHAM ST. ANNES
+                "100010421126",  # 17 STATION ROAD, WESHAM, PRESTON
             ]
         ):
             return None
 
         if record.addressline6 in [
             # splits
+            "PR4 2RY",
+            "FY8 2BS",
             "FY8 2AW",
             "FY8 2LY",
             "PR4 3DJ",
-            "PR4 1PN",
             "PR4 2JN",
-            "FY8 1JU",
-            "PR4 2RY",
             "FY8 2DS",
+            "FY8 1JU",
             "PR4 2JW",
-            "FY8 2BS",
-            "PR4 3AR",
         ]:
             return None
 
@@ -72,7 +68,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().station_record_to_dict(record)
 
         # more accurate point for: St Thomas Parish Centre, St Thomas Road, Lytham St Annes
-        if rec["internal_council_id"] in ["3603", "3607"]:
+        if rec["internal_council_id"] in ["3842", "3846"]:
             rec["location"] = Point(-3.024416, 53.747426, srid=4326)
 
         return rec
