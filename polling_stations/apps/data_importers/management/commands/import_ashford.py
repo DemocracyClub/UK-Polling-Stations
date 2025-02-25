@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ASF"
     addresses_name = (
-        "2024-07-04/2024-05-28T16:12:28.601885/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-02-25T16:21:12.660272/Democracy_Club__01May2025.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-28T16:12:28.601885/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-02-25T16:21:12.660272/Democracy_Club__01May2025.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     # Below warnings checked and no correction needed:
@@ -22,7 +22,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "200004389187",  # MOBILE HOME AT CLOVER FARM THE PINNOCK, PLUCKLEY
             "10012873869",  # 1B BOND ROAD, ASHFORD
             "100060797854",  # KNOLLYS COTTAGE, SANDY LANE, WILLESBOROUGH, ASHFORD
-            "100062379318",  # THE OLD FARMHOUSE, FAVERSHAM ROAD, THROWLEY, FAVERSHAM
         ]:
             return None
 
