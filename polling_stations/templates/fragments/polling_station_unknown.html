@@ -27,6 +27,15 @@
             Or, you need to contact {{ council }}.
         {% endblocktrans %}
     {% endif %}
+    {% if council.name == "City of London Corporation" %}
+        <p>
+            {% blocktrans %}
+                City of London Business voters: please visit
+                <strong><a href="https://www.speakforthecity.com/find-your-ward/">Speak for the City</a></strong>
+                to find your ward and polling station
+            {% endblocktrans %}
+        </p>
+    {% endif %}
 </p>
 
 <p>
