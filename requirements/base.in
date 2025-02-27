@@ -37,7 +37,7 @@ rtree
 ruff==0.4.6
 sentry_sdk
 slack_sdk
-uk-geo-utils==0.17.1
+uk-geo-utils==0.18.0
 
 
 https://github.com/DemocracyClub/design-system/archive/refs/tags/0.7.0.zip

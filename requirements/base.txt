@@ -1063,9 +1063,9 @@ typing-extensions==4.11.0 \
     # via
     #   -c requirements/constraints.txt
     #   dj-database-url
-uk-geo-utils==0.17.1 \
-    --hash=sha256:072e8d38b22bb1e7636fb98a56b73c89fc9d091228ae779c32484ba16488c73b \
-    --hash=sha256:bb227dc79bfa3e38e575ed3c09bc018cc5d1ca8efd9ae805a7e98609bd2beb71
+uk-geo-utils==0.18.0 \
+    --hash=sha256:0baf8f300bf6f6d1a09fbac62f3cc9835ea8b5ab2a8c7be56e06fb9e4bf79b67 \
+    --hash=sha256:3fec7e3639085b9415e19550d4e20b608fa9925f5f056a0cffc92d7db3264dc0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
