@@ -3,19 +3,11 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "CHO"
-    addresses_name = "2024-07-04/2024-06-04T09:29:17.473081/CHO_combined.csv"
-    stations_name = "2024-07-04/2024-06-04T09:29:17.473081/CHO_combined.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2025-05-01/2025-02-28T08:34:33.193115/Eros_SQL_Output001.csv"
+    stations_name = "2025-05-01/2025-02-28T08:34:33.193115/Eros_SQL_Output001.csv"
+    elections = ["2025-05-01"]
 
     def station_record_to_dict(self, record):
-        # TEMPORARY MOBILE STATION, WHITE HORSE CAR PARK, RAWLINSON LANE, HEATH CHARNOCK, CHORLEY, LANCS PR6 9LJ
-        if record.pollingstationnumber == "35":
-            record = record._replace(pollingstationpostcode="PR6 9JS")
-
-        # LANCASTER WAY COMMUNITY CENTRE, LANCASTER WAY (OFF ORDINANCE ROAD), BUCKSHAW VILLAGE, CHORLEY, PR7 7GA (id: 95)
-        if record.pollingvenueid == "95":
-            record = record._replace(pollingstationpostcode="PR7 7LJ")
-
         # The following station's postcode has been confirmed by the council:
         # BUCKSHAW ROF SCOUT GROUP, MILE STONE MEADOW, EUXTON, CHORLEY, PR7 6FX (id: 97)
 
@@ -26,7 +18,6 @@ class Command(BaseHalaroseCsvImporter):
 
         if uprn in [
             "100010387618",  # MILLSTONE HOUSE, THE GREEN, ECCLESTON, CHORLEY
-            "10094693572",  # 64B MARKET STREET, CHORLEY
         ]:
             return None
 
