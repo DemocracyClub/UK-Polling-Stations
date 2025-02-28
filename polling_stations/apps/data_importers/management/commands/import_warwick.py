@@ -4,28 +4,33 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WAW"
     addresses_name = (
-        "2024-07-04/2024-06-20T11:36:52.808462/Democracy_Club__04July2024.csv"
+        "2025-05-01/2025-02-28T09:36:47.805307/Democracy_Club__01May2025.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-20T11:36:52.808462/Democracy_Club__04July2024.csv"
+        "2025-05-01/2025-02-28T09:36:47.805307/Democracy_Club__01May2025.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
+    csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "100071258162",  # BUDBROOKE LODGE FARM, HAMPTON ROAD, WARWICK
-            "100071258929",  # FLAT VINE INN 86-88 WEST STREET, WARWICK
-            "10013184069",  # THE BUNGALOW, GUYS CLIFFE STABLES, GUYS CLIFFE, WARWICK
-            "100071258712",  # FLAT 32 SPINNEY HILL, WARWICK
-            "100071255338",  # 14B REGENCY HOUSE NEWBOLD TERRACE, LEAMINGTON SPA
-            "10023406679",  # 44 WARWICK PLACE, LEAMINGTON SPA
-            "10094931337",  # 28 SANDPIT BOULEVARD, WARWICK
-            "10013183598",  # THE FLAT THE WATERSIDE INN QUEENSWAY, LEAMINGTON SPA
-            "100071511638",  # THE COTTAGE SHREWLEY COMMON, SHREWLEY
-            "10003785246",  # QUAIL COTTAGE, CHASE LANE, KENILWORTH
-        ]:
+        if (
+            uprn
+            in [
+                "100071258162",  # BUDBROOKE LODGE FARM, HAMPTON ROAD, WARWICK
+                "100071258929",  # FLAT VINE INN 86-88 WEST STREET, WARWICK
+                "10013184069",  # THE BUNGALOW, GUYS CLIFFE STABLES, GUYS CLIFFE, WARWICK
+                "100071258712",  # FLAT 32 SPINNEY HILL, WARWICK
+                "100071255338",  # 14B REGENCY HOUSE NEWBOLD TERRACE, LEAMINGTON SPA
+                "10023406679",  # 44 WARWICK PLACE, LEAMINGTON SPA
+                "10094931337",  # 28 SANDPIT BOULEVARD, WARWICK
+                "10013183598",  # THE FLAT THE WATERSIDE INN QUEENSWAY, LEAMINGTON SPA
+                "10003785246",  # QUAIL COTTAGE, CHASE LANE, KENILWORTH
+                "10090527829",  # ASPS FARM, BANBURY ROAD, WARWICK	CV34 6SS
+                "10013182829",  # HEATHCOTE HOUSE, HARBURY LANE, HEATHCOTE, WARWICK	CV34 6SL
+            ]
+        ):
             return None
 
         if record.addressline6 in [
@@ -46,7 +51,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # Temporary Building, (Grassed area), Fusiliers Way, Warwick
-        if record.polling_place_id == "15286":
+        if record.polling_place_id == "14926":
             record = record._replace(polling_place_postcode="CV34 8AG")
 
         return super().station_record_to_dict(record)
