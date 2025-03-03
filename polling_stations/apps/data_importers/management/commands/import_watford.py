@@ -16,4 +16,24 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
+        # station reassignment from council for stations at:
+        # Imam Hussein Foundation Centre, 205 North Approach, Kingswood, Watford
+        if self.get_station_hash(record) == "7-imam-hussein-foundation-centre":
+            record = record._replace(
+                pollingstationname="Kingsway Infant School",
+                pollingstationaddress_1="North Approach",
+                pollingstationaddress_2="",
+            )
+
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # station change from council for stations at:
+        # Imam Hussein Foundation Centre, 205 North Approach, Kingswood, Watford
+        if self.get_station_hash(record) == "7-imam-hussein-foundation-centre":
+            record = record._replace(
+                pollingstationname="Kingsway Infant School",
+                pollingstationaddress_1="North Approach",
+                pollingstationaddress_2="",
+            )
+        return super().station_record_to_dict(record)
