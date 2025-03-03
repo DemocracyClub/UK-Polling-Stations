@@ -4,9 +4,14 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "VAL"
-    addresses_name = "2024-07-04/2024-06-11T16:32:30.079354/SOXandVAL_combined_v2.tsv"
-    stations_name = "2024-07-04/2024-06-11T16:32:30.079354/SOXandVAL_combined_v2.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-03T13:58:57.436476/Democracy_Club__01May2025 2.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-03T13:58:57.436476/Democracy_Club__01May2025 2.tsv"
+    )
+    elections = ["2025-05-01"]
+    csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def pre_import(self):
@@ -31,11 +36,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id not in self.COUNCIL_STATIONS:
             return None
 
-        # Amendment from council for:
-        # old: Committee Room, Sutton Courtenay Village Hall, Hobbyhorse Lane, Sutton Courtenay
-        # new: Sutton Courtenay Village Hall, Hobbyhorse Lane, Sutton Courtenay
-        if record.polling_place_id == "22717":
-            record = record._replace(polling_place_name="Sutton Courtenay Village Hall")
+        # Removing bad coords for:
+        # Milton Hill Bowls Club, Potash Lane, Milton Hill, Abingdon OX14 4DR
+        if record.polling_place_id == "23925":
+            record = record._replace(
+                polling_place_easting="",
+                polling_place_northing="",
+            )
 
         return super().station_record_to_dict(record)
 
@@ -46,15 +53,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10014028754",  # CHURCH PATH FARM, FARINGDON
+            "10095813377",  # 2 BENEDICTINE ROW, ABINGDON
         ]:
             return None
 
         if record.addressline6 in [
             # split
-            "OX13 5ND",
+            "SN7 8QH",
             "OX13 5GW",
+            "OX13 5ND",
             "SN7 8DJ",
+            # suspect
+            "OX14 1TG",
+            "OX14 1ZW",
+            "OX11 6JY",
         ]:
             return None
 
