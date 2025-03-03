@@ -4,9 +4,14 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SOX"
-    addresses_name = "2024-07-04/2024-06-10T17:51:15.466072/SOXandVAL_combined.tsv"
-    stations_name = "2024-07-04/2024-06-10T17:51:15.466072/SOXandVAL_combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-03T13:37:38.710993/Democracy_Club__01May2025 2.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-03T13:37:38.710993/Democracy_Club__01May2025 2.tsv"
+    )
+    elections = ["2025-05-01"]
+    csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def pre_import(self):
@@ -40,15 +45,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10033006434",  # GLADE HOUSE, PISHILL, HENLEY-ON-THAMES
+            "10033005616",  # DOWN FARM, DIDCOT
         ]:
             return None
 
         if record.addressline6 in [
             # split
             "RG8 0PY",
-            "OX11 7SE",
             "OX11 7TP",
+            "OX11 7SE",
             # suspect
             "OX44 7NW",
         ]:
