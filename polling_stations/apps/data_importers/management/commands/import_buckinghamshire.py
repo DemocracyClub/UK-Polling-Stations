@@ -4,10 +4,10 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BUC"
     addresses_name = (
-        "2025-05-01/2025-02-13T17:41:34.465191/Democracy_Club__01May2025.tsv"
+        "2025-05-01/2025-03-04T12:01:56.775425/Democracy_Club__01May2025 3.tsv"
     )
     stations_name = (
-        "2025-05-01/2025-02-13T17:41:34.465191/Democracy_Club__01May2025.tsv"
+        "2025-05-01/2025-03-04T12:01:56.775425/Democracy_Club__01May2025 3.tsv"
     )
     elections = ["2025-05-01"]
     csv_delimiter = "\t"
@@ -41,10 +41,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Correction from council: St John’s Methodist Church, 60 Woodside Avenue to Restore Hope Amersham Hall, 60 Woodside Avenue
-        if record.polling_place_id == "42155":
-            record = record._replace(polling_place_name="Restore Hope Amersham Hall")
-
-        return super().station_record_to_dict(record)
