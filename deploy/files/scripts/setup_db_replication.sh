@@ -27,7 +27,7 @@ source /var/www/polling_stations/code/venv/bin/activate
 /var/www/polling_stations/code/manage.py migrate --database=local
 
 # Truncate some tables that are populated by the above steps
-psql "$DB" -U "$DB_USER" -c 'TRUNCATE "spatial_ref_sys", "auth_permission", "django_migrations", "django_content_type", "django_site", RESTART IDENTITY CASCADE;'
+psql "$DB" -U "$DB_USER" -c 'TRUNCATE "spatial_ref_sys", "auth_permission", "django_migrations", "django_content_type", "django_site" RESTART IDENTITY CASCADE;'
 
 # Drop constraints to improve sync time
 psql "$DB" -U "$DB_USER" -c 'alter table addressbase_address drop constraint addressbase_address_pkey cascade;'
