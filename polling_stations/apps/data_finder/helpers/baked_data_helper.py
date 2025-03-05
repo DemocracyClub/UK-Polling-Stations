@@ -78,6 +78,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             data["addresses"] = data_for_postcode
         else:
             data["dates"] = self.ballot_list_to_dates(data_for_postcode)
+            # TODO: return list of ballots here instead
 
         return data
 
