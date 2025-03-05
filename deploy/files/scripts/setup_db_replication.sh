@@ -24,7 +24,7 @@ psql "$DB" -U "$DB_USER" -c 'create extension postgis;'
 source /var/www/polling_stations/code/venv/bin/activate
 
 # Migrate db - this builds the schema before syncing
-IGNORE_ROUTERS=True /var/www/polling_stations/code/manage.py migrate --database=local
+/var/www/polling_stations/code/manage.py migrate --database=local
 
 # Truncate some tables that are populated by the above steps
 psql "$DB" -U "$DB_USER" -c 'TRUNCATE "spatial_ref_sys", "auth_permission", "django_migrations", "django_content_type", "django_site", RESTART IDENTITY CASCADE;'
