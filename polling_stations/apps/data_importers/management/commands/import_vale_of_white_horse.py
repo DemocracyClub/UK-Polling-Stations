@@ -36,12 +36,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id not in self.COUNCIL_STATIONS:
             return None
 
-        # Removing bad coords for:
+        # council coord fix for:
         # Milton Hill Bowls Club, Potash Lane, Milton Hill, Abingdon OX14 4DR
         if record.polling_place_id == "23925":
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
+                polling_place_northing="190845",
             )
 
         return super().station_record_to_dict(record)
