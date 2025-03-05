@@ -7,7 +7,7 @@ from django.db import migrations
 def create_custom_finders(apps, schema_editor):
     CustomFinder = apps.get_model("pollingstations", "CustomFinder")
 
-    CustomFinder.objects.update_or_create(
+    CustomFinder.objects.using(schema_editor.connection.alias).update_or_create(
         area_code="N07000001",
         base_url="http://www.eoni.org.uk/"
         + "Offices/Postcode-Search-Results?postcode=",
@@ -19,7 +19,9 @@ def create_custom_finders(apps, schema_editor):
 
 def remove_custom_finders(apps, schema_editor):
     CustomFinder = apps.get_model("pollingstations", "CustomFinder")
-    CustomFinder.objects.filter(area_code__in=["N07000001"]).delete()
+    CustomFinder.objects.using(schema_editor.connection.alias).filter(
+        area_code__in=["N07000001"]
+    ).delete()
 
 
 class Migration(migrations.Migration):
