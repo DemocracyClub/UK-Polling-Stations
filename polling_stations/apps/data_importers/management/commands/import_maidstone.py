@@ -4,32 +4,20 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "MAI"
     addresses_name = (
-        "2024-07-04/2024-05-30T15:24:34.390824/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-06T10:47:02.230037/Democracy_Club__01May2025.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-30T15:24:34.390824/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-06T10:47:02.230037/Democracy_Club__01May2025.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
-
-        if (
-            uprn
-            in [
-                "10093304076",  # 25 MEADOW VIEW, PILGRIMS RETREAT, HARRIETSHAM, MAIDSTONE
-                "10093304077",  # 26 MEADOW VIEW, PILGRIMS RETREAT, HARRIETSHAM, MAIDSTONE
-                "10093304078",  # 27 MEADOW VIEW, PILGRIMS RETREAT, HARRIETSHAM, MAIDSTONE
-                "10093304078",  # THE FARMHOUSE, LITTLE BENOVER, BENOVER ROAD, YALDING, MAIDSTONE
-            ]
-        ):
-            return None
         if record.addressline6 in [
             # split
-            "ME15 6EL",
             "ME16 8DT",
             "ME15 9RA",
+            "ME15 6EL",
             "ME14 3EP",
             # suspect
             "ME18 5EF",
