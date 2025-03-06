@@ -6,7 +6,10 @@ from data_finder.helpers import (
     PostcodeError,
     geocode_point_only,
 )
+from data_finder.helpers.baked_data_helper import LocalParquetElectionsHelper
+from data_finder.helpers.every_election import StaticElectionsAPIElectionWrapper
 from data_finder.views import LogLookUpMixin, polling_station_current
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import (
@@ -120,10 +123,27 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         return Address.objects.get(uprn=kwargs["uprn"])
 
     def get_ee_wrapper(self, address, query_params):
+        # TODO: how do we deal with include_current if we're using parquet files?
+        # Are the parquet files even giving us the right thing?
+        # See notes on future vs current
+
         kwargs = {}
         query_params = parse_qs_to_python(query_params)
         if include_current := query_params.get("include_current", False):
             kwargs["include_current"] = any(include_current)
+
+        """
+        TODO: What about Northern Ireland??
+        if self.postcode.with_space.territory == "NI":
+            return EveryElectionWrapper(point=self.address.location, **kwargs)
+        ??
+        """
+
+        if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
+            helper = LocalParquetElectionsHelper()
+            return StaticElectionsAPIElectionWrapper(
+                helper.get_response(Postcode(address.postcode), address.uprn)
+            )
 
         return EveryElectionWrapper(point=address.location, **kwargs)
 
