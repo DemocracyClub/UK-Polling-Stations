@@ -1,6 +1,6 @@
 import abc
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from urllib.parse import urljoin
 
 import polars
@@ -22,7 +22,7 @@ class BaseBakedElectionsHelper(abc.ABC):
     def __init__(self, **kwargs): ...
 
     @abc.abstractmethod
-    def get_response_for_postcode(self, postcode: Postcode):
+    def get_response(self, postcode: Postcode, uprn: Optional[str] = None):
         raise NotImplementedError
 
 
@@ -36,7 +36,7 @@ class NoOpElectionsHelper(BaseBakedElectionsHelper):
 
     ee_wrapper = EveryElectionWrapper
 
-    def get_response_for_postcode(self, postcode: Postcode):
+    def get_response(self, postcode: Postcode, uprn: Optional[str] = None):
         return {}
 
 
@@ -53,8 +53,8 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             )
         super().__init__(**kwargs)
 
-    def get_response_for_postcode(self, postcode: Postcode):
-        is_split, data_for_postcode = self.get_ballot_list(postcode)
+    def get_response(self, postcode: Postcode, uprn: Optional[str] = None):
+        is_split, data_for_postcode = self.get_ballot_list(postcode, uprn)
         data = {
             "address_picker": is_split,
             "addresses": [],
@@ -79,12 +79,14 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         outcode = postcode.with_space.split()[0]
         return self.elections_parquet_path / f"{outcode}.parquet"
 
-    def get_ballot_list(self, postcode: Postcode) -> Tuple[bool, List]:
+    def get_ballot_list(
+        self, postcode: Postcode, uprn: Optional[str] = None
+    ) -> Tuple[bool, List]:
         try:
             df = polars.read_parquet(self.get_file_path(postcode))
         except FileNotFoundError:
             # If the file isn't found it should mean that there are no current
-            # elections for this outcode. Just return an empty dates list.
+            # elections for this outcode. Just return an empty ballots list.
             return False, []
 
         if "ballot_ids" in df.columns:
@@ -104,6 +106,18 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             # This file doesn't have any rows matching the given postcode
             # Just return an empty list as this means there aren't elections here.
             return False, []
+
+        if uprn:
+            df = df.filter((polars.col("uprn") == uprn))
+            if len(df) == 0:
+                # In theory this shouldn't happen
+                # but if our 2 copies of AddressBase (local DB and parquet files)
+                # are out of sync this will totally happen at some point
+                raise ValueError("NOPE")
+            if len(df) > 1:
+                # BUG!
+                raise ValueError("WTF?!")
+            return False, df["current_elections"][0].split(",")
 
         # Count the unique values in the `ballot_ids` column.
         # If there is more than one value, count the postcode as split
