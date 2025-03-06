@@ -77,35 +77,17 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         if is_split:
             data["addresses"] = data_for_postcode
         else:
-            data["dates"] = self.ballot_list_to_dates(data_for_postcode)
-            # TODO: return list of ballots here instead
+            data["ballots"] = self.get_full_ballots(data_for_postcode)
 
         return data
 
-    def get_full_ballots(self, ballot_data):
+    def get_full_ballots(self, ballot_ids):
         result = []
-        for ballot in ballot_data:
-            ballot_id = ballot["ballot_paper_id"]
+        for ballot_id in ballot_ids:
             url = ballot_paper_id_to_ee_url(ballot_id)
             req = session.get(url)
             result.append(req.json())
         return result
-
-    def ballot_list_to_dates(self, ballot_list):
-        ballot_data = [{"ballot_paper_id": ballot} for ballot in ballot_list]
-        ballot_data = self.get_full_ballots(ballot_data)
-
-        ballots_by_date = {}
-        for ballot in ballot_data:
-            ballot_date = ballot["election_id"].rsplit(".", 1)[-1]
-            if ballot_date not in ballots_by_date:
-                ballots_by_date[ballot_date] = []
-            ballots_by_date[ballot_date].append(ballot)
-
-        dates_list = []
-        for date, ballots in ballots_by_date.items():
-            dates_list.append({"date": date, "ballots": ballots})
-        return sorted(dates_list, key=lambda date: date["date"])
 
     def get_file_path(self, postcode: Postcode):
         outcode = postcode.with_space.split()[0]
