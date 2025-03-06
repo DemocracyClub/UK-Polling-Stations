@@ -1,5 +1,4 @@
 import abc
-import enum
 from pathlib import Path
 from typing import List, Tuple
 from urllib.parse import urljoin
@@ -12,19 +11,6 @@ from requests import Session
 from uk_geo_utils.helpers import Postcode
 
 session = Session()
-
-
-@enum.unique
-class BakedElectionsHelperMode(enum.Enum):
-    REMOTE = "REMOTE"
-    S3 = "S3"
-    LOCAL = "LOCAL"
-
-
-def ballot_paper_id_to_static_url(ballot_paper_id):
-    parts = ballot_paper_id.split(".")
-    path = "/".join((parts[-1], parts[0], parts[1], f"{ballot_paper_id}.json"))
-    return urljoin(settings.WCIVF_BALLOT_CACHE_URL, path)
 
 
 def ballot_paper_id_to_ee_url(ballot_paper_id):
@@ -129,22 +115,3 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             return is_split, []
 
         return is_split, df["current_elections"][0].split(",")
-
-
-class RemoteBakedElectionsHelper(BaseBakedElectionsHelper):
-    def __init__(self, api_key=None, **kwargs):
-        self.api_key = api_key or getattr(settings, "DEVS_DC_API_KEY", None)
-        if not self.api_key:
-            raise ValueError("API key required for remote backend")
-        super().__init__(**kwargs)
-
-    def get_response_for_postcode(self, postcode: Postcode):
-        req = session.get(
-            urljoin(
-                settings.DEVS_DC_BASE,
-                f"/api/v1/elections/postcode/{postcode.with_space}/",
-            ),
-            params={"auth_token": self.api_key},
-        )
-        req.raise_for_status()
-        return req.json()
