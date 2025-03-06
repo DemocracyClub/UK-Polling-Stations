@@ -101,9 +101,7 @@ class RoutingHelper:
         return self._elections_response
 
     def lookup_elections(self):
-        self._elections_response = self.elections_backend().get_response_for_postcode(
-            self.postcode
-        )
+        self._elections_response = self.elections_backend().get_response(self.postcode)
         return self._elections_response
 
     @property
