@@ -29,7 +29,7 @@ class RoutingHelper:
         self._elections_response = None
 
     def get_elections_backend(self):
-        if self.postcode.with_space.startswith("BT"):
+        if self.postcode.with_space.territory == "NI":
             return NoOpElectionsHelper
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             return LocalParquetElectionsHelper
