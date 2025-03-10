@@ -20,6 +20,6 @@ def StaticElectionsAPIElectionWrapper(elections_response, include_current=False)
 
     return EEWrapper(
         elections_response["ballots"],
-        request_success=True,
+        request_success=elections_response["request_success"],
         include_current=include_current,
     )
