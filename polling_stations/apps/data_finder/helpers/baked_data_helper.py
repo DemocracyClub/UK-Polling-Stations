@@ -108,7 +108,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             return False, []
 
         if uprn:
-            df = df.filter((polars.col("postcode") == uprn))
+            df = df.filter((polars.col("uprn") == uprn))
             if len(df) == 0:
                 # In theory this shouldn't happen
                 # but if our 2 copies of AddressBase (local DB and parquet files)
