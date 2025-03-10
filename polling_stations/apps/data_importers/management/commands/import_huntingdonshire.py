@@ -3,31 +3,21 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HUN"
-    addresses_name = "2024-07-04/2024-05-28T14:21:52.453156/HUN_combined.tsv"
-    stations_name = "2024-07-04/2024-05-28T14:21:52.453156/HUN_combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-10T17:31:30.888147/Democracy_Club__01May2025.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-10T17:31:30.888147/Democracy_Club__01May2025.tsv"
+    )
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         if record.addressline6 in [
             # split
-            "PE28 2QG",
-            "PE27 6DT",
             "PE19 1HW",
-            # suspect
-            "PE29 1NY",
-            "PE28 4NS",
-            "PE28 4EW",
+            "PE28 2QG",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Fixes typo for council:
-        # old: Spalwick Community Room, Spaldwick Community Primary School, Spaldwick
-        # new: Spaldwick Community Room, Spaldwick Community Primary School, Spaldwick
-        if record.polling_place_id == "9321":
-            record = record._replace(polling_place_name="Spaldwick Community Room")
-
-        return super().station_record_to_dict(record)
