@@ -86,6 +86,11 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             # elections for this outcode. Just return an empty ballots list.
             return {"address_picker": False, "ballot_ids": [], "request_success": True}
 
+        if df.height == 0:
+            # If the file is empty it should mean that there are no current
+            # elections for this outcode. Just return an empty ballots list.
+            return {"address_picker": False, "ballot_ids": [], "request_success": True}
+
         if "ballot_ids" in df.columns:
             # TODO Remove this if we change the name at source
             df = df.rename({"ballot_ids": "current_elections"})
