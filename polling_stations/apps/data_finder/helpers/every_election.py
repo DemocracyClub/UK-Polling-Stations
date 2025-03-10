@@ -3,7 +3,10 @@ def EveryElectionWrapper(
 ):
     from .ee2 import EEFetcher, EEWrapper
 
-    return EEWrapper(**EEFetcher(postcode, point, council_id, include_current).fetch())
+    kwargs = EEFetcher(postcode, point, council_id).fetch()
+    kwargs["include_current"] = include_current
+
+    return EEWrapper(**kwargs)
 
 
 def EmptyEveryElectionWrapper():
@@ -12,7 +15,11 @@ def EmptyEveryElectionWrapper():
     return EmptyEEWrapper()
 
 
-def StaticElectionsAPIElectionWrapper(elections_response):
+def StaticElectionsAPIElectionWrapper(elections_response, include_current=False):
     from .ee2 import EEWrapper
 
-    return EEWrapper(elections_response["ballots"], True)
+    return EEWrapper(
+        elections_response["ballots"],
+        request_success=True,
+        include_current=include_current,
+    )
