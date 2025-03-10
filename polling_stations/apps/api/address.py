@@ -123,19 +123,16 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         return Address.objects.get(uprn=kwargs["uprn"])
 
     def get_ee_wrapper(self, address, query_params):
-        # TODO: how do we deal with include_current if we're using parquet files?
-        # Are the parquet files even giving us the right thing?
-        # See notes on future vs current
-
         kwargs = {}
         query_params = parse_qs_to_python(query_params)
-        if include_current := query_params.get("include_current", False):
-            kwargs["include_current"] = any(include_current)
+        include_current = any(query_params.get("include_current", []))
+        kwargs["include_current"] = include_current
 
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             helper = LocalParquetElectionsHelper()
             return StaticElectionsAPIElectionWrapper(
-                helper.get_response(Postcode(address.postcode), address.uprn)
+                helper.get_response(Postcode(address.postcode), address.uprn),
+                include_current,
             )
 
         return EveryElectionWrapper(point=address.location, **kwargs)

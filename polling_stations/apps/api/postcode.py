@@ -50,8 +50,8 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return rh.elections_backend.ee_wrapper(rh.elections_response)
         kwargs = {}
         query_params = parse_qs_to_python(query_params)
-        if include_current := query_params.get("include_current", False):
-            kwargs["include_current"] = any(include_current)
+        include_current = any(query_params.get("include_current", []))
+        kwargs["include_current"] = include_current
         return rh.elections_backend.ee_wrapper(postcode, **kwargs)
 
     @extend_schema(

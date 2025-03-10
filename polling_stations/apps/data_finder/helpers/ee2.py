@@ -11,14 +11,10 @@ from uk_geo_utils.helpers import Postcode
 
 
 class EEFetcher:
-    def __init__(
-        self, postcode=None, point=None, council_id=None, include_current=False
-    ):
+    def __init__(self, postcode=None, point=None, council_id=None):
+        # always request "current" elections
+        # it is the responsibility of EEWrapper to filter to future
         self.base_params = {"identifier_type": "ballot", "current": 1}
-        if not include_current:
-            # When future=1, current-but-past elections are excluded.
-            # Only pass future if include_current is False
-            self.base_params["future"] = 1
         if not any((postcode, point, council_id)):
             raise ValueError("Expected either a point, postcode or council_id")
         self.postcode = postcode
@@ -183,8 +179,15 @@ class EmptyEEWrapper(BaseEEWrapper):
 
 
 class EEWrapper(BaseEEWrapper):
-    def __init__(self, elections, request_success):
+    def __init__(self, elections, request_success, include_current=False):
         self.elections = elections
+        if not include_current:
+            self.elections = [
+                e
+                for e in self.elections
+                if datetime.datetime.strptime(e["poll_open_date"], "%Y-%m-%d").date()
+                >= datetime.datetime.today().date()
+            ]
         self.request_success = request_success
         self.ballots = self.get_ballots_for_next_date()
         self.cancelled_ballots = self.get_cancelled_ballots()
