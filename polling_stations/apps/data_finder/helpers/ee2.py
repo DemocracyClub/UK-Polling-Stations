@@ -92,7 +92,7 @@ class EEFetcher:
                 elections = self.get_data_by_postcode(
                     Postcode(self.postcode).with_space
                 )
-                self.request_success = True
+                request_success = True
             if self.point:
                 elections = self.get_data_by_point(self.point)
                 request_success = True
