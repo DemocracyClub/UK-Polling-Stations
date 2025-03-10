@@ -339,8 +339,13 @@ class BaseHalaroseCsvImporter(
 
     def get_station_point(self, record):
         location = None
+        # Try coords first
+        x_coord = float(record.pollingvenueeasting)
+        y_coord = float(record.pollingvenuenorthing)
+        if x_coord > 0 and y_coord > 0:
+            location = Point(x_coord, y_coord, srid=27700)
 
-        # try UPRN first, if available
+        # try UPRN next, if available
         if (
             hasattr(record, self.station_uprn_field)
             and getattr(record, self.station_uprn_field).strip()
