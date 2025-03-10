@@ -132,13 +132,6 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         if include_current := query_params.get("include_current", False):
             kwargs["include_current"] = any(include_current)
 
-        """
-        TODO: What about Northern Ireland??
-        if self.postcode.with_space.territory == "NI":
-            return EveryElectionWrapper(point=self.address.location, **kwargs)
-        ??
-        """
-
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             helper = LocalParquetElectionsHelper()
             return StaticElectionsAPIElectionWrapper(

@@ -338,13 +338,6 @@ class AddressView(BasePollingStationView):
         return self.address.polling_station_with_elections()
 
     def get_ee_wrapper(self, rh=None):
-        """
-        TODO: What about Northern Ireland??
-        if self.postcode.with_space.territory == "NI":
-            return EveryElectionWrapper(point=self.address.location)
-        ??
-        """
-
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             helper = LocalParquetElectionsHelper()
             return StaticElectionsAPIElectionWrapper(
