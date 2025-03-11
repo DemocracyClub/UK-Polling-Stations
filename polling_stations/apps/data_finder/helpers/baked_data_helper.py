@@ -76,9 +76,12 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         try:
             df = polars.read_parquet(parquet_filepath)
         except FileNotFoundError:
-            # If the file isn't found it should mean that there are no current
-            # elections for this outcode. Just return an empty ballots list.
-            return {"address_picker": False, "ballot_ids": [], "request_success": True}
+            # In theory this shouldn't happen
+            # every outcode should exists as a parquet file
+            message = f"Expected file {parquet_filepath} not found"
+            logger.error(message)
+            capture_message(message, level="error")
+            return {"address_picker": False, "ballot_ids": [], "request_success": False}
 
         if df.height == 0:
             # If the file is empty it should mean that there are no current
@@ -99,9 +102,12 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
 
         df = df.filter((polars.col("postcode") == postcode.with_space))
         if df.is_empty():
-            # This file doesn't have any rows matching the given postcode
-            # Just return an empty list as this means there aren't elections here.
-            return {"address_picker": False, "ballot_ids": [], "request_success": True}
+            # In theory this shouldn't happen. If the postcode exists in AddressBase
+            # and the outcode file is non-empty, we should get results.
+            message = f"Expected postcode {postcode.with_space} not found in file {parquet_filepath}"
+            logger.error(message)
+            capture_message(message, level="error")
+            return {"address_picker": False, "ballot_ids": [], "request_success": False}
 
         if uprn:
             df = df.filter((polars.col("uprn") == uprn))
