@@ -76,6 +76,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         try:
             df = polars.read_parquet(parquet_filepath)
         except FileNotFoundError:
+            # ERROR
             # In theory this shouldn't happen
             # every outcode should exists as a parquet file
             message = f"Expected file {parquet_filepath} not found"
@@ -84,6 +85,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             return {"address_picker": False, "ballot_ids": [], "request_success": False}
 
         if df.height == 0:
+            # VALID
             # If the file is empty it should mean that there are no current
             # elections for this outcode. Just return an empty ballots list.
             return {"address_picker": False, "ballot_ids": [], "request_success": True}
@@ -102,6 +104,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
 
         df = df.filter((polars.col("postcode") == postcode.with_space))
         if df.is_empty():
+            # ERROR
             # In theory this shouldn't happen. If the postcode exists in AddressBase
             # and the outcode file is non-empty, we should get results.
             message = f"Expected postcode {postcode.with_space} not found in file {parquet_filepath}"
@@ -112,6 +115,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         if uprn:
             df = df.filter((polars.col("uprn") == uprn))
             if df.height == 0:
+                # ERROR
                 # In theory this shouldn't happen
                 # but if our 2 copies of AddressBase (local DB and parquet files)
                 # are out of sync this will totally happen at some point
@@ -126,6 +130,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
                     "request_success": False,
                 }
             if df.height > 1:
+                # ERROR
                 # Again, this this shouldn't happen in theory
                 # A UPRN should only appear in our data once or zero times
                 # Those are the valid options
@@ -138,6 +143,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
                     "request_success": False,
                 }
 
+            # VALID
             return {
                 "address_picker": False,
                 "ballot_ids": []
@@ -153,8 +159,10 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         )
 
         if is_split:
+            # VALID
             return {"address_picker": True, "ballot_ids": [], "request_success": True}
 
+        # VALID
         return {
             "address_picker": is_split,
             "ballot_ids": []
