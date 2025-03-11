@@ -5,8 +5,6 @@ from typing import Optional
 from urllib.parse import urljoin
 
 import polars
-from data_finder.helpers import EveryElectionWrapper
-from data_finder.helpers.every_election import StaticElectionsAPIElectionWrapper
 from django.conf import settings
 from requests import Session
 from uk_geo_utils.helpers import Postcode
@@ -37,15 +35,11 @@ class NoOpElectionsHelper(BaseBakedElectionsHelper):
 
     """
 
-    ee_wrapper = EveryElectionWrapper
-
     def get_response(self, postcode: Postcode, uprn: Optional[str] = None):
         return {}
 
 
 class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
-    ee_wrapper = StaticElectionsAPIElectionWrapper
-
     def __init__(self, elections_parquet_path: Path = None, **kwargs):
         self.elections_parquet_path = elections_parquet_path or getattr(
             settings, "ELECTION_PARQUET_DATA_PATH", None
