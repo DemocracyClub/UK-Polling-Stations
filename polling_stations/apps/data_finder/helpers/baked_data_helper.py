@@ -140,7 +140,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
 
             return {
                 "address_picker": False,
-                "ballot_ids": df["current_elections"][0].split(","),
+                "ballot_ids": []
+                if df["current_elections"][0] == ""
+                else df["current_elections"][0].split(","),
                 "request_success": True,
             }
 
@@ -155,6 +157,8 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
 
         return {
             "address_picker": is_split,
-            "ballot_ids": df["current_elections"][0].split(","),
+            "ballot_ids": []
+            if df["current_elections"][0] == ""
+            else df["current_elections"][0].split(","),
             "request_success": True,
         }
