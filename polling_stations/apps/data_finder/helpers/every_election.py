@@ -284,17 +284,9 @@ class EEWrapper(BaseEEWrapper):
         rec["metadata"] = cancelled_ballot["metadata"]
 
         if cancelled_ballot["replaced_by"]:
-            try:
-                query_url = "%sapi/elections/%s.json" % (
-                    settings.EE_BASE,
-                    cancelled_ballot["replaced_by"],
-                )
-                new_ballot = self.get_data(query_url)
-                rec["rescheduled_date"] = datetime.datetime.strptime(
-                    new_ballot["poll_open_date"], "%Y-%m-%d"
-                ).strftime("%-d %B %Y")
-            except requests.exceptions.RequestException:
-                rec["rescheduled_date"] = None
+            rec["rescheduled_date"] = datetime.datetime.strptime(
+                cancelled_ballot["replaced_by"].split(".")[-1], "%Y-%m-%d"
+            ).strftime("%-d %B %Y")
 
         return rec
 
