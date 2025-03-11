@@ -2,12 +2,11 @@ import urllib
 
 from addressbase.models import Address
 from data_finder.helpers import (
-    EveryElectionWrapper,
     PostcodeError,
     geocode_point_only,
 )
 from data_finder.helpers.baked_data_helper import LocalParquetElectionsHelper
-from data_finder.helpers.every_election import StaticElectionsAPIElectionWrapper
+from data_finder.helpers.every_election import EEFetcher, EEWrapper
 from data_finder.views import LogLookUpMixin, polling_station_current
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -123,19 +122,21 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         return Address.objects.get(uprn=kwargs["uprn"])
 
     def get_ee_wrapper(self, address, query_params):
-        kwargs = {}
         query_params = parse_qs_to_python(query_params)
         include_current = any(query_params.get("include_current", []))
-        kwargs["include_current"] = include_current
 
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             helper = LocalParquetElectionsHelper()
-            return StaticElectionsAPIElectionWrapper(
-                helper.get_response(Postcode(address.postcode), address.uprn),
-                include_current,
+            resp = helper.get_response(Postcode(address.postcode), address.uprn)
+            return EEWrapper(
+                resp["ballots"],
+                request_success=resp["request_success"],
+                include_current=include_current,
             )
 
-        return EveryElectionWrapper(point=address.location, **kwargs)
+        return EEWrapper(
+            **EEFetcher(point=address.location).fetch(), include_current=include_current
+        )
 
     @extend_schema(
         parameters=[

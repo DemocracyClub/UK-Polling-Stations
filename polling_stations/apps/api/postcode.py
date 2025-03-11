@@ -4,9 +4,7 @@ from data_finder.helpers import (
     geocode,
     get_council,
 )
-from data_finder.helpers.every_election import (
-    EmptyEveryElectionWrapper,
-)
+from data_finder.helpers.every_election import EEFetcher, EEWrapper, EmptyEEWrapper
 from data_finder.views import LogLookUpMixin, polling_station_current
 from django.core.exceptions import ObjectDoesNotExist
 from drf_spectacular.types import OpenApiTypes
@@ -44,15 +42,22 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
         return None
 
     def get_ee_wrapper(self, postcode, rh, query_params):
-        if rh.route_type == "multiple_addresses":
-            return EmptyEveryElectionWrapper()
-        if rh.elections_response:
-            return rh.elections_backend.ee_wrapper(rh.elections_response)
-        kwargs = {}
         query_params = parse_qs_to_python(query_params)
         include_current = any(query_params.get("include_current", []))
-        kwargs["include_current"] = include_current
-        return rh.elections_backend.ee_wrapper(postcode, **kwargs)
+
+        if rh.route_type == "multiple_addresses":
+            return EmptyEEWrapper()
+
+        if rh.elections_response:
+            return EEWrapper(
+                rh.elections_response["ballots"],
+                request_success=rh.elections_response["request_success"],
+                include_current=include_current,
+            )
+
+        return EEWrapper(
+            **EEFetcher(postcode=postcode).fetch(), include_current=include_current
+        )
 
     @extend_schema(
         parameters=[

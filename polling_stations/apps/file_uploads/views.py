@@ -7,7 +7,7 @@ import boto3
 from addressbase.models import Address, UprnToCouncil
 from botocore.exceptions import ClientError
 from councils.models import Council
-from data_finder.helpers import EveryElectionWrapper
+from data_finder.helpers.every_election import EEFetcher, EEWrapper
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
@@ -92,8 +92,8 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
             .exclude(council_id__startswith="N09")
             .get(council_id=self.kwargs["gss"])
         )
-        upcoming_election_dates = EveryElectionWrapper(
-            council_id=self.kwargs["gss"]
+        upcoming_election_dates = EEWrapper(
+            **EEFetcher(council_id=self.kwargs["gss"]).fetch()
         ).get_future_election_dates()
 
         # If the list returns no items, flag that there are no upcoming elections
@@ -199,8 +199,8 @@ class CouncilView:
         context = super().get_context_data(**kwargs)
 
         if self.kwargs.get("pk"):
-            upcoming_election_dates = EveryElectionWrapper(
-                council_id=self.kwargs["pk"]
+            upcoming_election_dates = EEWrapper(
+                **EEFetcher(council_id=self.kwargs["pk"]).fetch()
             ).get_future_election_dates()
             context["HAS_UPCOMING_ELECTIONS"] = bool(upcoming_election_dates)
             context["NO_COUNCILS"] = False

@@ -25,17 +25,13 @@ from whitelabel.views import WhiteLabelTemplateOverrideMixin
 from .forms import AddressSelectForm, PostcodeLookupForm
 from .helpers import (
     DirectionsHelper,
-    EveryElectionWrapper,
     PostcodeError,
     RoutingHelper,
     geocode,
     get_council,
 )
 from .helpers.baked_data_helper import LocalParquetElectionsHelper
-from .helpers.every_election import (
-    EmptyEveryElectionWrapper,
-    StaticElectionsAPIElectionWrapper,
-)
+from .helpers.every_election import EEFetcher, EEWrapper, EmptyEEWrapper
 
 
 def polling_station_current(station):
@@ -162,12 +158,15 @@ class BasePollingStationView(
 
     def get_ee_wrapper(self, rh: RoutingHelper):
         if rh and rh.route_type == "multiple_addresses":
-            return EmptyEveryElectionWrapper()
+            return EmptyEEWrapper()
         if rh.elections_response:
-            return StaticElectionsAPIElectionWrapper(rh.elections_response)
+            return EEWrapper(
+                rh.elections_response["ballots"],
+                request_success=rh.elections_response["request_success"],
+            )
         if not self.location or self.location.tuple == (0.0, 0.0):
-            return EveryElectionWrapper(postcode=self.postcode)
-        return EveryElectionWrapper(point=self.location)
+            return EEWrapper(**EEFetcher(postcode=self.postcode).fetch())
+        return EEWrapper(**EEFetcher(point=self.location).fetch())
 
     def get_directions(self):
         if self.location and self.station and self.station.location:
@@ -340,11 +339,15 @@ class AddressView(BasePollingStationView):
     def get_ee_wrapper(self, rh=None):
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             helper = LocalParquetElectionsHelper()
-            return StaticElectionsAPIElectionWrapper(
-                helper.get_response(Postcode(self.address.postcode), self.address.uprn)
+            resp = helper.get_response(
+                Postcode(self.address.postcode), self.address.uprn
+            )
+            return EEWrapper(
+                resp["ballots"],
+                request_success=resp["request_success"],
             )
 
-        return EveryElectionWrapper(point=self.address.location)
+        return EEWrapper(**EEFetcher(point=self.address.location).fetch())
 
 
 class ExamplePostcodeView(BasePollingStationView):
