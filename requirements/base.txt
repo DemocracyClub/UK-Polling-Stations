@@ -526,13 +526,14 @@ packaging==24.0 \
     # via
     #   -c requirements/constraints.txt
     #   marshmallow
-polars==0.20.30 \
-    --hash=sha256:039c84f7a294aa71438048e14899d59ce005f213872e27fe6bf6ce3ae8730d7d \
-    --hash=sha256:0d7278f6e12e6623c8ee6e637d866b96b69f960b358125c955ac76abeb942192 \
-    --hash=sha256:510f708332a0e0d563a5bac266c11ccd12932606c7331bf28f7173cf669d0c69 \
-    --hash=sha256:70d58b89cf9902fb5c3506afef76c5c2b247581d0991b082bcdc6d73d983aa2b \
-    --hash=sha256:7802cb8a6d3fa0fadf446bf19b61ef8450b81229766f1817980bc6e0b2488c03 \
-    --hash=sha256:b9fd2c6b5100caa7c26496ce17ec289cae23c2db6c41713bc52c54c76d4451ae
+polars==1.24.0 \
+    --hash=sha256:331e737465b8d954bec51e6906bdc6e979a6ee52f97ffe5e8d0c10794a46bfd9 \
+    --hash=sha256:3c6c774aebdd5cd601839594986648789352f72b8893f4b7e34224e75b060c8d \
+    --hash=sha256:563b99a6597fe77a3c89d478e4a6fb49c063f44ef84d4adefe490e14626e2f99 \
+    --hash=sha256:5ea781ca8e0a39c3b677171dbd852e5fa2d5c53417b5fbd69d711b6044a49eaa \
+    --hash=sha256:6ad64d938d60b7fda39b60892ef67bc6a9942e0c7170db593a65d019e8730b09 \
+    --hash=sha256:6e7553789495081c998f5e4ad4ebc7e19e970a9cc83326d40461564e85ad226d \
+    --hash=sha256:a5a473ff44fe1b9e3e7a9013a9321efe841d858e89cf33d424e6f3fef3ea4d5e
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
