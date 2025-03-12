@@ -94,7 +94,7 @@ class RoutingHelper:
 
     @property
     def elections_response(self):
-        if not self._elections_response:
+        if self._elections_response is None:
             self.lookup_elections()
         return self._elections_response
 
