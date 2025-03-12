@@ -1,16 +1,16 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "EHE"
     addresses_name = (
-        "2024-07-04/2024-05-29T15:56:56.225774/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-24T12:39:42.372250/Democracy_Club__01May2025.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-29T15:56:56.225774/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-24T12:39:42.372250/Democracy_Club__01May2025.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
+    csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -21,14 +21,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10094847645",  # 18 GROSVENOR WALK, HERTFORD
             "10033105209",  # BEECHCROFT, STANDON GREEN END, HIGH CROSS, WARE
             "200002751708",  # PARK HOUSE, THE DRIVE, SAWBRIDGEWORTH
+            "10033100497",  # MARLERS, PYE CORNER, GILSTON, HARLOW
+            "10023090473",  # MARLERS LODGE, PYE CORNER, GILSTON, HARLOW
+            "10034515380",  # 103 GILSTON, HARLOW
+            "10034515381",  # 104 GILSTON, HARLOW
         ]:
             return None
 
         if record.addressline6 in [
             # split
-            "CM21 0HX",
+            "AL6 0LJ",
             "SG9 9DW",
-            "CM23 3QY",
             # look wrong
             "SG12 0XY",
             "CM23 2EG",
@@ -39,15 +42,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "SG14 2PQ",
             "SG14 1FT",
             "CM23 4SB",
+            "CM23 0AS",
+            "CM23 0AH",
+            "CM23 0AR",
         ]:
             return None
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # more accurate point for: Albury Village Hall, The Bourne, Clapgate, Albury, SG11 2BP
-        if record.polling_place_id == "5971":
-            rec = super().station_record_to_dict(record)
-            rec["location"] = Point(0.093994, 51.903481, srid=4326)
-            return rec
-
-        return super().station_record_to_dict(record)
