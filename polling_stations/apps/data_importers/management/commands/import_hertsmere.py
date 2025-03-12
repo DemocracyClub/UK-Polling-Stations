@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "HER"
-    addresses_name = "2024-07-04/2024-06-25T10:30:54.426516/HER_combined.csv"
-    stations_name = "2024-07-04/2024-06-25T10:30:54.426516/HER_combined.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2025-05-01/2025-03-12T17:07:55.818621/Eros_SQL_Output001.csv"
+    stations_name = "2025-05-01/2025-03-12T17:07:55.818621/Eros_SQL_Output001.csv"
+    elections = ["2025-05-01"]
 
     # Following warnings checked and no need for correction:
     # WARNING: Polling station MERIDEN COMMUNITY CENTRE (18-meriden-community-centre) is in Watford Borough Council (WAT)
@@ -16,16 +16,9 @@ class Command(BaseHalaroseCsvImporter):
         if (
             uprn
             in [
-                "10013913353",  # THE COTTAGE, CHASE FARM, STAGG HILL, POTTERS BAR
-                "10013029889",  # M & T SHEET METAL LTD, KITTS END FARM, KITTS END ROAD, BARNET
                 "10013031843",  # SOUTH LODGE, BLACKHORSE LANE, SOUTH MIMMS, POTTERS BAR
                 "10034171504",  # SHENLEY LODGE COTTAGE MANOR LODGE SCHOOL RIDGE HILL, SHENLEY
-                "10034168386",  # HERTFORDSHIRE PARTNERSHIP NHS TRUST, THE MEADOWS CASTLEFORD CLOSE, BOREHAMWOOD
                 "10034165002",  # 77 ALLUM LANE, ELSTREE, BOREHAMWOOD
-                "10013018262",  # 1 COLDHARBOUR LANE, BUSHEY
-                "10013031535",  # KEEPERS LODGE, RECTORY LANE, SHENLEY, RADLETT
-                "10013029890",  # KITTS END LODGE, KITTS END ROAD, BARNET
-                "10093526495",  # GLASSHOUSE, SOUTH MEDBURN FARM, WATLING STREET, ELSTREE, BOREHAMWOOD
             ]
         ):
             return None
