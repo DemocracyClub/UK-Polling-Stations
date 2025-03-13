@@ -2,8 +2,8 @@
 
 EC_COUNCIL_CONTACT_EMAIL = "digitalcommunications@electoralcommission.org.uk"
 
-BOUNDARIES_URL = "https://s3.eu-west-2.amazonaws.com/pollingstations.public.data/ons/boundaries/Local_Authority_Districts_December_2023_UK_BFE.geojson"
-COUNCIL_ID_FIELD = "LAD23CD"
+BOUNDARIES_URL = "https://s3.eu-west-2.amazonaws.com/pollingstations.public.data/ons/boundaries/Local_Authority_Districts_December_2024_Boundaries_UK_BFE.geojson"
+COUNCIL_ID_FIELD = "LAD24CD"
 EC_COUNCIL_CONTACT_DETAILS_API_URL = (
     "https://electoralcommission.org.uk/api/v1/data/local-authorities.json"
 )
