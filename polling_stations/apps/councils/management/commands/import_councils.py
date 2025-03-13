@@ -28,17 +28,31 @@ def union_areas(a1, a2):
     return MultiPolygon(a1.union(a2))
 
 
+# Sometimes we want to get most boundaries from one ONS file, but some from an older one.
+# In 2024 this was because there were some new unitaries which had combined their electoral services teams, and some
+# which still wanted to have separate contact details for the teams which mapped onto the old districts.
+# This meant we added the gss codes for Westmoreland and Furness Council and Somerset Council to the `exclude` parameter
+# in the call to self.attach_boundaries(). Then if the command was run with the lines in OLD_BOUNDARIES_GSS_CODES uncommented
+# and the --import-old-boundaries flag, we would grab geoms for the old districts from OLD_BOUNDARY_URL.
+# This also required that there was an entry for each of the old districts in the EC contact details, where the name field
+# matched the new unitary (with a '(formerly ...)'), but the 'code', 'electoral_services' and 'identifiers' fields details
+# matched the old districts.
 OLD_BOUNDARY_URL = "https://s3.eu-west-2.amazonaws.com/pollingstations.public.data/ons/boundaries/Local_Authority_Districts_May_2022_UK_BFE_V3.geojson"
 OLD_BOUNDARIES_GSS_CODES = [
-    "E07000187",  # MEN Mendip
-    "E07000188",  # SEG Sedgemoor
-    "E07000246",  # SWT Somerset West & Taunton
-    "E07000189",  # SSO South Somerset
-    "E07000031",  # SLA South Lakeland
-    "E07000030",  # EDN Eden
-    "E07000027",  # BAR Barrow
+    # "E07000187",  # MEN Mendip
+    # "E07000188",  # SEG Sedgemoor
+    # "E07000246",  # SWT Somerset West & Taunton
+    # "E07000189",  # SSO South Somerset
+    # "E07000031",  # SLA South Lakeland
+    # "E07000030",  # EDN Eden
+    # "E07000027",  # BAR Barrow
 ]
+OLD_ID_FIELD = "LAD22CD"
 
+# There have been problems getting accurate NI data from boundary line (2023).
+# The values from these constants can be used to get the NI Boundaries from a different source. In this case OSNI.
+# The command will need to be called with the '--use-osni' flag, but you could obviously put a different url in here.
+# You will probably also need to add the NI_BOUNDARY_GSS_CODES list to the `exclude` parameter in the call to self.attach_boundaries()
 NI_BOUNDARY_URL = "https://s3.eu-west-2.amazonaws.com/pollingstations.public.data/osni/OSNI_Open_Data_-_Largescale_Boundaries_-_Local_Government_Districts_2012.geojson"
 NI_BOUNDARY_GSS_CODES = [
     "N09000001",  # ANN Antrim and Newtownabbey
@@ -53,6 +67,7 @@ NI_BOUNDARY_GSS_CODES = [
     "N09000010",  # NMD Newry, Mourne and Down
     "N09000011",  # AND Ards and North Down
 ]
+NI_ID_FIELD = "LGDCode"
 
 
 class Command(BaseCommand):
@@ -278,24 +293,17 @@ class Command(BaseCommand):
         self.import_councils_from_ec()
 
         if not options["only_contact_details"]:
-            self.attach_boundaries(
-                options.get("alt_url"),
-                exclude=NI_BOUNDARY_GSS_CODES
-                + [
-                    "E06000064",  # Westmorland and Furness
-                    "E06000066",  # Somerset
-                ],
-            )
+            self.attach_boundaries(options.get("alt_url"))
 
             if options.get("use_osni", None):
                 self.attach_boundaries(
-                    NI_BOUNDARY_URL, id_field="LGDCode", include=NI_BOUNDARY_GSS_CODES
+                    NI_BOUNDARY_URL, id_field=NI_ID_FIELD, include=NI_BOUNDARY_GSS_CODES
                 )
 
             if options.get("import_old_boundaries", None):
                 self.attach_boundaries(
                     OLD_BOUNDARY_URL,
-                    id_field="LAD22CD",
+                    id_field=OLD_ID_FIELD,
                     include=OLD_BOUNDARIES_GSS_CODES,
                 )
 
