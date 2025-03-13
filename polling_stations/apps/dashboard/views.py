@@ -133,7 +133,7 @@ class PostCodeGeoJSONView(View):
                             "type": "pollingstation",
                             "council_id": station.council_id,
                             "internal_council_id": station.internal_council_id,
-                            "address": station.address,
+                            "address": station.address + ", " + station.postcode,
                             "color": station_colors[
                                 (station.council_id, station.internal_council_id)
                             ],
@@ -153,7 +153,7 @@ class PostCodeGeoJSONView(View):
                         else None,
                         "properties": {
                             "type": "residentialaddress",
-                            "address": address.address,
+                            "address": address.address + ", " + address.postcode,
                             "color": station_colors[
                                 (
                                     address.council_id,
