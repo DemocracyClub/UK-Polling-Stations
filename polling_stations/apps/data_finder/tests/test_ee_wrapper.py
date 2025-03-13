@@ -1,22 +1,16 @@
 from datetime import datetime, timedelta
-from unittest import mock
-from urllib.parse import parse_qs
 
-import requests
-from data_finder.helpers import EveryElectionWrapper
+
+from data_finder.helpers.every_election import EEWrapper
 from django.test import TestCase, override_settings
 
 
 # mock get_data() functions
-def get_data_exception(self, query_url):
-    raise requests.exceptions.RequestException()
-
-
-def get_data_no_elections(self, query_url):
+def get_data_no_elections():
     return []
 
 
-def get_data_only_group(self, query_url):
+def get_data_only_group():
     return [
         {
             "election_id": "foo.date",
@@ -35,7 +29,7 @@ def get_data_only_group(self, query_url):
     ]
 
 
-def get_data_group_and_ballot(self, query_url):
+def get_data_group_and_ballot():
     return [
         {
             "election_id": "foo.bar.date",
@@ -54,7 +48,7 @@ def get_data_group_and_ballot(self, query_url):
     ]
 
 
-def get_data_all_ballots_have_id_requirements(self, query_url):
+def get_data_all_ballots_have_id_requirements():
     return [
         {
             "election_id": f"foo.bar.baz.{(datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')}",
@@ -67,7 +61,7 @@ def get_data_all_ballots_have_id_requirements(self, query_url):
     ]
 
 
-def get_data_cancelled_ballot_has_id_requirements(self, query_url):
+def get_data_cancelled_ballot_has_id_requirements():
     return [
         {
             "election_id": f"foo.bar.baz.{(datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')}",
@@ -80,13 +74,11 @@ def get_data_cancelled_ballot_has_id_requirements(self, query_url):
     ]
 
 
-def get_data_some_ballots_have_id_requirements(self, query_url):
-    return get_data_all_ballots_have_id_requirements(
-        self, query_url
-    ) + get_data_group_and_ballot(self, query_url)
+def get_data_some_ballots_have_id_requirements():
+    return get_data_all_ballots_have_id_requirements() + get_data_group_and_ballot()
 
 
-def get_data_with_elections(self, query_url):
+def get_data_with_elections():
     return [
         {
             "election_id": "foo.bar.date",
@@ -121,10 +113,8 @@ class EveryElectionWrapperTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch("data_finder.helpers.EveryElectionWrapper.get_data", get_data_exception)
-    def test_exception(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertFalse(ee.request_success)
+    def test_error(self):
+        ee = EEWrapper([], request_success=False)
         self.assertTrue(ee.has_election())
         self.assertEqual([], ee.get_explanations())
         cancelled_info = ee.get_cancelled_election_info()
@@ -136,12 +126,8 @@ class EveryElectionWrapperTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_no_elections
-    )
     def test_no_elections(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_no_elections(), request_success=True)
         self.assertFalse(ee.has_election())
         self.assertEqual([], ee.get_explanations())
         cancelled_info = ee.get_cancelled_election_info()
@@ -153,12 +139,8 @@ class EveryElectionWrapperTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
-    )
     def test_elections(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_with_elections(), request_success=True)
         self.assertTrue(ee.has_election())
         self.assertEqual(
             [{"title": "some election", "explanation": "some text"}],
@@ -174,14 +156,10 @@ class EveryElectionWrapperTests(TestCase):
             (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
         ],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
-    )
     def test_non_charismatic_elections(self):
         # there are upcoming elections
         # but they aren't in NEXT_CHARISMATIC_ELECTION_DATES
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_with_elections(), request_success=True)
         self.assertFalse(ee.has_election())
         self.assertEqual([], ee.get_explanations())
         cancelled_info = ee.get_cancelled_election_info()
@@ -192,13 +170,9 @@ class EveryElectionWrapperTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
-    )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_only_group
     )
     def test_elections_only_group(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_only_group(), request_success=True)
         self.assertFalse(ee.has_election())
         self.assertEqual([], ee.get_explanations())
         cancelled_info = ee.get_cancelled_election_info()
@@ -210,12 +184,8 @@ class EveryElectionWrapperTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot
-    )
     def test_elections_group_and_ballot(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_group_and_ballot(), request_success=True)
         self.assertTrue(ee.has_election())
         self.assertEqual([], ee.get_explanations())
         cancelled_info = ee.get_cancelled_election_info()
@@ -227,32 +197,26 @@ class EveryElectionWrapperTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot
-    )
     def test_settings_override_false(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
+        ee = EEWrapper(get_data_group_and_ballot(), request_success=True)
         # election is really happening here
         self.assertTrue(ee.has_election())
         # manually override it to false
         with override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": False}):
-            ee = EveryElectionWrapper(postcode="AA11AA")
+            ee = EEWrapper(get_data_group_and_ballot(), request_success=True)
             self.assertFalse(ee.has_election())
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_only_group
-    )
     def test_settings_override_true(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
+        ee = EEWrapper(get_data_only_group(), request_success=True)
         # election is not really happening here
         self.assertFalse(ee.has_election())
         # manually override it to true
         with override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": True}):
-            ee = EveryElectionWrapper(postcode="AA11AA")
+            ee = EEWrapper(get_data_only_group(), request_success=True)
             self.assertTrue(ee.has_election())
 
     @override_settings(
@@ -260,12 +224,8 @@ class EveryElectionWrapperTests(TestCase):
         ELECTION_BLACKLIST=["foo.bar.baz.date"],
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
-    )
     def test_some_blacklisted(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_with_elections(), request_success=True)
         self.assertTrue(ee.has_election())
         self.assertFalse(ee.multiple_elections)
 
@@ -274,52 +234,40 @@ class EveryElectionWrapperTests(TestCase):
         ELECTION_BLACKLIST=["foo.bar.baz.date", "foo.bar.qux.date"],
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_with_elections
-    )
     def test_all_blacklisted(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_with_elections(), request_success=True)
         self.assertFalse(ee.has_election())
         self.assertFalse(ee.multiple_elections)
 
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_all_ballots_have_id_requirements,
-    )
     def test_get_voter_id_status_all_ballots_need_id(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
+        ee = EEWrapper(
+            get_data_all_ballots_have_id_requirements(), request_success=True
+        )
         status = ee.get_voter_id_status()
         self.assertEqual(status, "EA-2022")
 
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_some_ballots_have_id_requirements,
-    )
     def test_get_voter_id_status_not_all_ballots_need_id(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
+        ee = EEWrapper(
+            get_data_some_ballots_have_id_requirements(), request_success=True
+        )
+        status = ee.get_voter_id_status()
         status = ee.get_voter_id_status()
         self.assertEqual(status, "EA-2022")
 
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data", get_data_group_and_ballot
-    )
     def test_get_voter_id_status_no_ballots_need_id(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
+        ee = EEWrapper(get_data_group_and_ballot(), request_success=True)
         status = ee.get_voter_id_status()
         self.assertEqual(status, None)
 
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_cancelled_ballot_has_id_requirements,
-    )
     def test_get_voter_id_status_cancelled_ballot(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
+        ee = EEWrapper(
+            get_data_cancelled_ballot_has_id_requirements(), request_success=True
+        )
         status = ee.get_voter_id_status()
         self.assertEqual(status, None)
 
 
-def get_data_two_ballots_one_cancelled(self, query_url):
+def get_data_two_ballots_one_cancelled():
     # 2 ballots on the same date
     # one is cancelled, one isn't
     return [
@@ -342,7 +290,7 @@ def get_data_two_ballots_one_cancelled(self, query_url):
     ]
 
 
-def get_data_two_ballots_both_cancelled(self, query_url):
+def get_data_two_ballots_both_cancelled():
     # 2 different ballots on the same date
     # both are cancelled
     return [
@@ -367,7 +315,7 @@ def get_data_two_ballots_both_cancelled(self, query_url):
     ]
 
 
-def get_data_one_cancelled_ballot_no_replacement(self, query_url):
+def get_data_one_cancelled_ballot_no_replacement():
     return [
         {
             "election_id": "foo.bar.baz.date",
@@ -381,40 +329,32 @@ def get_data_one_cancelled_ballot_no_replacement(self, query_url):
     ]
 
 
-def get_data_one_cancelled_ballot_with_replacement(self, query_url):
-    this_election = {
-        "election_id": "local.foo.thisdate",
-        "election_title": "this election",
-        "group_type": None,
-        "cancelled": True,
-        "poll_open_date": datetime.now().strftime("%Y-%m-%d"),
-        "replaced_by": "local.foo.thatdate",
-        "metadata": None,
-    }
-    that_election = {
-        "election_id": "local.foo.thatdate",
-        "election_title": "that election",
-        "group_type": None,
-        "cancelled": False,
-        "poll_open_date": (datetime.now() + timedelta(weeks=1)).strftime("%Y-%m-%d"),
-        "replaced_by": None,
-        "metadata": None,
-    }
-    query_params = parse_qs(query_url.split("?")[-1])
-    expected_params = {
-        "postcode": ["AA1 1AA"],
-        "future": ["1"],
-        "current": ["1"],
-        "identifier_type": ["ballot"],
-    }
-    if query_params == expected_params:
-        return [this_election, that_election]
-    if query_url.endswith("/api/elections/local.foo.thatdate.json"):
-        return that_election
-    raise Exception(f"no fixture match for {query_url=}")
+def get_data_one_cancelled_ballot_with_replacement():
+    date1 = datetime.now().strftime("%Y-%m-%d")
+    date2 = (datetime.now() + timedelta(weeks=1)).strftime("%Y-%m-%d")
+    return [
+        {
+            "election_id": "local.foo." + date1,
+            "election_title": "this election",
+            "group_type": None,
+            "cancelled": True,
+            "poll_open_date": date1,
+            "replaced_by": "local.foo." + date2,
+            "metadata": None,
+        },
+        {
+            "election_id": "local.foo." + date2,
+            "election_title": "that election",
+            "group_type": None,
+            "cancelled": False,
+            "poll_open_date": date2,
+            "replaced_by": None,
+            "metadata": None,
+        },
+    ]
 
 
-def get_data_one_cancelled_ballot_with_metadata(self, query_url):
+def get_data_one_cancelled_ballot_with_metadata():
     return [
         {
             "election_id": "foo.bar.baz.date",
@@ -437,13 +377,9 @@ class CancelledElectionTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_two_ballots_one_cancelled,
-    )
     def test_two_ballots_one_cancelled(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_two_ballots_one_cancelled(), request_success=True)
+
         self.assertTrue(ee.has_election(future_only=False))
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], False)
@@ -456,13 +392,9 @@ class CancelledElectionTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_two_ballots_both_cancelled,
-    )
     def test_two_ballots_both_cancelled(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(get_data_two_ballots_both_cancelled(), request_success=True)
+
         self.assertFalse(ee.has_election())
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], True)
@@ -475,13 +407,11 @@ class CancelledElectionTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_one_cancelled_ballot_no_replacement,
-    )
     def test_one_cancelled_ballot_no_replacement(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(
+            get_data_one_cancelled_ballot_no_replacement(), request_success=True
+        )
+
         self.assertFalse(ee.has_election())
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], True)
@@ -494,13 +424,11 @@ class CancelledElectionTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_one_cancelled_ballot_with_replacement,
-    )
     def test_one_cancelled_ballot_with_replacement(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(
+            get_data_one_cancelled_ballot_with_replacement(), request_success=True
+        )
+
         self.assertFalse(ee.has_election())
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], True)
@@ -516,13 +444,11 @@ class CancelledElectionTests(TestCase):
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
-    @mock.patch(
-        "data_finder.helpers.EveryElectionWrapper.get_data",
-        get_data_one_cancelled_ballot_with_metadata,
-    )
     def test_one_cancelled_ballot_with_metadata(self):
-        ee = EveryElectionWrapper(postcode="AA11AA")
-        self.assertTrue(ee.request_success)
+        ee = EEWrapper(
+            get_data_one_cancelled_ballot_with_metadata(), request_success=True
+        )
+
         self.assertFalse(ee.has_election())
         cancelled_info = ee.get_cancelled_election_info()
         self.assertEqual(cancelled_info["cancelled"], True)

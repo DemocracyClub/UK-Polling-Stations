@@ -1,30 +1,17 @@
 import abc
-import enum
+import logging
 from pathlib import Path
-from typing import List, Tuple
+from typing import Optional
 from urllib.parse import urljoin
 
 import polars
-from data_finder.helpers import EveryElectionWrapper
-from data_finder.helpers.every_election import StaticElectionsAPIElectionWrapper
 from django.conf import settings
 from requests import Session
 from uk_geo_utils.helpers import Postcode
+from sentry_sdk import capture_message
 
+logger = logging.getLogger(__name__)
 session = Session()
-
-
-@enum.unique
-class BakedElectionsHelperMode(enum.Enum):
-    REMOTE = "REMOTE"
-    S3 = "S3"
-    LOCAL = "LOCAL"
-
-
-def ballot_paper_id_to_static_url(ballot_paper_id):
-    parts = ballot_paper_id.split(".")
-    path = "/".join((parts[-1], parts[0], parts[1], f"{ballot_paper_id}.json"))
-    return urljoin(settings.WCIVF_BALLOT_CACHE_URL, path)
 
 
 def ballot_paper_id_to_ee_url(ballot_paper_id):
@@ -36,7 +23,7 @@ class BaseBakedElectionsHelper(abc.ABC):
     def __init__(self, **kwargs): ...
 
     @abc.abstractmethod
-    def get_response_for_postcode(self, postcode: Postcode):
+    def get_response(self, postcode: Postcode, uprn: Optional[str] = None):
         raise NotImplementedError
 
 
@@ -48,15 +35,11 @@ class NoOpElectionsHelper(BaseBakedElectionsHelper):
 
     """
 
-    ee_wrapper = EveryElectionWrapper
-
-    def get_response_for_postcode(self, postcode: Postcode):
+    def get_response(self, postcode: Postcode, uprn: Optional[str] = None):
         return {}
 
 
 class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
-    ee_wrapper = StaticElectionsAPIElectionWrapper
-
     def __init__(self, elections_parquet_path: Path = None, **kwargs):
         self.elections_parquet_path = elections_parquet_path or getattr(
             settings, "ELECTION_PARQUET_DATA_PATH", None
@@ -67,56 +50,45 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             )
         super().__init__(**kwargs)
 
-    def get_response_for_postcode(self, postcode: Postcode):
-        is_split, data_for_postcode = self.get_ballot_list(postcode)
-        data = {
-            "address_picker": is_split,
-            "addresses": [],
-        }
+    def get_response(self, postcode: Postcode, uprn: Optional[str] = None):
+        result = self.get_ballot_list(postcode, uprn)
 
-        if is_split:
-            data["addresses"] = data_for_postcode
-        else:
-            data["dates"] = self.ballot_list_to_dates(data_for_postcode)
+        if not result["address_picker"]:
+            result["ballots"] = self.get_full_ballots(result["ballot_ids"])
+            # TODO: how to set request_success if some requests failed here?
 
-        return data
+        return result
 
-    def get_full_ballots(self, ballot_data):
+    def get_full_ballots(self, ballot_ids):
         result = []
-        for ballot in ballot_data:
-            ballot_id = ballot["ballot_paper_id"]
+        for ballot_id in ballot_ids:
             url = ballot_paper_id_to_ee_url(ballot_id)
             req = session.get(url)
             result.append(req.json())
         return result
 
-    def ballot_list_to_dates(self, ballot_list):
-        ballot_data = [{"ballot_paper_id": ballot} for ballot in ballot_list]
-        ballot_data = self.get_full_ballots(ballot_data)
-
-        ballots_by_date = {}
-        for ballot in ballot_data:
-            ballot_date = ballot["election_id"].rsplit(".", 1)[-1]
-            if ballot_date not in ballots_by_date:
-                ballots_by_date[ballot_date] = []
-            ballots_by_date[ballot_date].append(ballot)
-
-        dates_list = []
-        for date, ballots in ballots_by_date.items():
-            dates_list.append({"date": date, "ballots": ballots})
-        return sorted(dates_list, key=lambda date: date["date"])
-
     def get_file_path(self, postcode: Postcode):
         outcode = postcode.with_space.split()[0]
         return self.elections_parquet_path / f"{outcode}.parquet"
 
-    def get_ballot_list(self, postcode: Postcode) -> Tuple[bool, List]:
+    def get_ballot_list(self, postcode: Postcode, uprn: Optional[str] = None):
+        parquet_filepath = self.get_file_path(postcode)
         try:
-            df = polars.read_parquet(self.get_file_path(postcode))
+            df = polars.read_parquet(parquet_filepath)
         except FileNotFoundError:
-            # If the file isn't found it should mean that there are no current
-            # elections for this outcode. Just return an empty dates list.
-            return False, []
+            # ERROR
+            # In theory this shouldn't happen
+            # every outcode should exists as a parquet file
+            message = f"Expected file {parquet_filepath} not found"
+            logger.error(message)
+            capture_message(message, level="error")
+            return {"address_picker": False, "ballot_ids": [], "request_success": False}
+
+        if df.height == 0:
+            # VALID
+            # If the file is empty it should mean that there are no current
+            # elections for this outcode. Just return an empty ballots list.
+            return {"address_picker": False, "ballot_ids": [], "request_success": True}
 
         if "ballot_ids" in df.columns:
             # TODO Remove this if we change the name at source
@@ -132,9 +104,53 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
 
         df = df.filter((polars.col("postcode") == postcode.with_space))
         if df.is_empty():
-            # This file doesn't have any rows matching the given postcode
-            # Just return an empty list as this means there aren't elections here.
-            return False, []
+            # ERROR
+            # In theory this shouldn't happen. If the postcode exists in AddressBase
+            # and the outcode file is non-empty, we should get results.
+            message = f"Expected postcode {postcode.with_space} not found in file {parquet_filepath}"
+            logger.error(message)
+            capture_message(message, level="error")
+            return {"address_picker": False, "ballot_ids": [], "request_success": False}
+
+        if uprn:
+            df = df.filter((polars.col("uprn") == uprn))
+            if df.height == 0:
+                # ERROR
+                # In theory this shouldn't happen
+                # but if our 2 copies of AddressBase (local DB and parquet files)
+                # are out of sync this will totally happen at some point
+                message = (
+                    f"UPRN {uprn} did not exist in Parquet file {parquet_filepath}"
+                )
+                logger.error(message)
+                capture_message(message, level="error")
+                return {
+                    "address_picker": False,
+                    "ballot_ids": [],
+                    "request_success": False,
+                }
+            if df.height > 1:
+                # ERROR
+                # Again, this this shouldn't happen in theory
+                # A UPRN should only appear in our data once or zero times
+                # Those are the valid options
+                message = f"UPRN {uprn} found {df.height} times in Parquet file {parquet_filepath}"
+                logger.error(message)
+                capture_message(message, level="error")
+                return {
+                    "address_picker": False,
+                    "ballot_ids": [],
+                    "request_success": False,
+                }
+
+            # VALID
+            return {
+                "address_picker": False,
+                "ballot_ids": []
+                if df["current_elections"][0] == ""
+                else df["current_elections"][0].split(","),
+                "request_success": True,
+            }
 
         # Count the unique values in the `ballot_ids` column.
         # If there is more than one value, count the postcode as split
@@ -143,25 +159,14 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         )
 
         if is_split:
-            return is_split, []
+            # VALID
+            return {"address_picker": True, "ballot_ids": [], "request_success": True}
 
-        return is_split, df["current_elections"][0].split(",")
-
-
-class RemoteBakedElectionsHelper(BaseBakedElectionsHelper):
-    def __init__(self, api_key=None, **kwargs):
-        self.api_key = api_key or getattr(settings, "DEVS_DC_API_KEY", None)
-        if not self.api_key:
-            raise ValueError("API key required for remote backend")
-        super().__init__(**kwargs)
-
-    def get_response_for_postcode(self, postcode: Postcode):
-        req = session.get(
-            urljoin(
-                settings.DEVS_DC_BASE,
-                f"/api/v1/elections/postcode/{postcode.with_space}/",
-            ),
-            params={"auth_token": self.api_key},
-        )
-        req.raise_for_status()
-        return req.json()
+        # VALID
+        return {
+            "address_picker": is_split,
+            "ballot_ids": []
+            if df["current_elections"][0] == ""
+            else df["current_elections"][0].split(","),
+            "request_success": True,
+        }

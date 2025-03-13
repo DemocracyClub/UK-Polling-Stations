@@ -26,8 +26,3 @@ SHOW_GB_ID_MESSAGING = True
 if data_path := os.environ.get("ELECTION_PARQUET_DATA_PATH", False):
     ELECTION_PARQUET_DATA_PATH = Path(data_path)
     USE_LOCAL_PARQUET_ELECTIONS = False
-WCIVF_BALLOT_CACHE_URL = (
-    "https://wcivf-ballot-cache.s3.eu-west-2.amazonaws.com/ballot_data/"
-)
-
-DEVS_DC_BASE = os.environ.get("DEVS_DC_BASE", "https://developers.democracyclub.org.uk")

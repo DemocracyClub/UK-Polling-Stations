@@ -29,8 +29,6 @@ class RoutingHelper:
         self._elections_response = None
 
     def get_elections_backend(self):
-        if self.postcode.with_space.startswith("BT"):
-            return NoOpElectionsHelper
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             return LocalParquetElectionsHelper
         return NoOpElectionsHelper
@@ -96,14 +94,12 @@ class RoutingHelper:
 
     @property
     def elections_response(self):
-        if not self._elections_response:
+        if self._elections_response is None:
             self.lookup_elections()
         return self._elections_response
 
     def lookup_elections(self):
-        self._elections_response = self.elections_backend().get_response_for_postcode(
-            self.postcode
-        )
+        self._elections_response = self.elections_backend().get_response(self.postcode)
         return self._elections_response
 
     @property

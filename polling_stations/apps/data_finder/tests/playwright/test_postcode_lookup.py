@@ -114,7 +114,7 @@ def mock_bt15_3jx_ee_get_data_with_election():
     with open(mock_data_path) as f:
         mock_data = json.load(f)
     with patch(
-        "data_finder.helpers.every_election.EveryElectionWrapper.get_data"
+        "data_finder.helpers.every_election.EEFetcher.get_data"
     ) as mock_get_data:
         mock_get_data.return_value = mock_data
         yield mock_get_data
@@ -148,7 +148,7 @@ def test_northern_ireland_has_election(
 @pytest.fixture
 def mock_bt15_3jx_ee_get_data_without_election():
     with patch(
-        "data_finder.helpers.every_election.EveryElectionWrapper.get_data"
+        "data_finder.helpers.every_election.EEFetcher.get_data"
     ) as mock_get_data:
         mock_get_data.return_value = []
         yield mock_get_data

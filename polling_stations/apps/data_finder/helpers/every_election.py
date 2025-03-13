@@ -1,5 +1,5 @@
+import abc
 import datetime
-from functools import cached_property
 from typing import List, Optional
 from urllib.parse import urlencode, urljoin
 
@@ -9,39 +9,18 @@ from django.conf import settings
 from django.core.cache import cache
 from uk_geo_utils.helpers import Postcode
 
-session = requests.session()
 
-
-class EveryElectionWrapper:
-    def __init__(
-        self, postcode=None, point=None, council_id=None, include_current=False
-    ):
+class EEFetcher:
+    def __init__(self, postcode=None, point=None, council_id=None):
+        # always request "current" elections
+        # it is the responsibility of EEWrapper to filter to future
         self.base_params = {"identifier_type": "ballot", "current": 1}
-        if not include_current:
-            # When future=1, current-but-past elections are excluded.
-            # Only pass future if include_current is False
-            self.base_params["future"] = 1
         if not any((postcode, point, council_id)):
             raise ValueError("Expected either a point, postcode or council_id")
-        try:
-            self.request_success = False
-            if postcode:
-                self.elections = self.get_data_by_postcode(
-                    Postcode(postcode).with_space
-                )
-                self.request_success = True
-            if point:
-                self.elections = self.get_data_by_point(point)
-                self.request_success = True
-            if council_id:
-                self.elections = self.get_election_intersecting_local_authority(
-                    council_id
-                )
-                self.request_success = True
-            self.ballots = self.get_ballots_for_next_date()
-            self.cancelled_ballots = self.get_cancelled_ballots()
-        except requests.exceptions.RequestException:
-            self.request_success = False
+        self.postcode = postcode
+        self.point = point
+        self.council_id = council_id
+        self.postcode = postcode
 
     def get_data_by_postcode(self, postcode):
         params = self.base_params.copy()
@@ -88,7 +67,7 @@ class EveryElectionWrapper:
             if hasattr(settings, "CUSTOM_UA"):
                 headers["User-Agent"] = settings.CUSTOM_UA
 
-            res = session.get(query_url, timeout=10, headers=headers)
+            res = requests.get(query_url, timeout=10, headers=headers)
 
             if res.status_code != 200:
                 res.raise_for_status()
@@ -100,6 +79,118 @@ class EveryElectionWrapper:
         if "results" in res_json:
             return res_json["results"]
         return res_json
+
+    def fetch(self):
+        request_success = False
+        elections = []
+        try:
+            if self.postcode:
+                elections = self.get_data_by_postcode(
+                    Postcode(self.postcode).with_space
+                )
+                request_success = True
+            if self.point:
+                elections = self.get_data_by_point(self.point)
+                request_success = True
+            if self.council_id:
+                elections = self.get_election_intersecting_local_authority(
+                    self.council_id
+                )
+                request_success = True
+        except requests.exceptions.RequestException:
+            request_success = False
+
+        return {"elections": elections, "request_success": request_success}
+
+
+# if we're adding a "public" property, add it to the BaseEEWrapper
+# and implement it in both implementations
+
+
+class BaseEEWrapper(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def has_election(self, future_only=True) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def get_metadata(self):
+        pass
+
+    @abc.abstractmethod
+    def get_ballots_for_next_date(self) -> List:
+        pass
+
+    @abc.abstractmethod
+    def get_all_ballots(self) -> List:
+        pass
+
+    @property
+    @abc.abstractmethod
+    def multiple_elections(self):
+        pass
+
+    @abc.abstractmethod
+    def get_explanations(self):
+        pass
+
+    @abc.abstractmethod
+    def get_voter_id_status(self) -> Optional[str]:
+        pass
+
+    @abc.abstractmethod
+    def get_cancelled_election_info(self):
+        pass
+
+    @property
+    @abc.abstractmethod
+    def has_city_of_london_ballots(self) -> bool:
+        pass
+
+
+class EmptyEEWrapper(BaseEEWrapper):
+    def has_election(self, future_only=True) -> bool:
+        return False
+
+    def get_metadata(self) -> None:
+        return None
+
+    def get_ballots_for_next_date(self) -> List:
+        return []
+
+    def get_all_ballots(self) -> List:
+        return []
+
+    @property
+    def multiple_elections(self):
+        return False
+
+    def get_explanations(self):
+        return []
+
+    def get_voter_id_status(self) -> Optional[str]:
+        return None
+
+    def get_cancelled_election_info(self):
+        return {}
+
+    @property
+    def has_city_of_london_ballots(self) -> bool:
+        return False
+
+
+class EEWrapper(BaseEEWrapper):
+    def __init__(self, elections, request_success, include_current=False):
+        self.elections = elections
+        if not include_current:
+            self.elections = [
+                e
+                for e in self.elections
+                if datetime.datetime.strptime(e["poll_open_date"], "%Y-%m-%d").date()
+                >= datetime.datetime.today().date()
+            ]
+        self.request_success = request_success
+        self.ballots = self.get_ballots_for_next_date()
+        self.cancelled_ballots = self.get_cancelled_ballots()
 
     def get_all_ballots(self):
         if not self.request_success:
@@ -193,17 +284,9 @@ class EveryElectionWrapper:
         rec["metadata"] = cancelled_ballot["metadata"]
 
         if cancelled_ballot["replaced_by"]:
-            try:
-                query_url = "%sapi/elections/%s.json" % (
-                    settings.EE_BASE,
-                    cancelled_ballot["replaced_by"],
-                )
-                new_ballot = self.get_data(query_url)
-                rec["rescheduled_date"] = datetime.datetime.strptime(
-                    new_ballot["poll_open_date"], "%Y-%m-%d"
-                ).strftime("%-d %B %Y")
-            except requests.exceptions.RequestException:
-                rec["rescheduled_date"] = None
+            rec["rescheduled_date"] = datetime.datetime.strptime(
+                cancelled_ballot["replaced_by"].split(".")[-1], "%Y-%m-%d"
+            ).strftime("%-d %B %Y")
 
         return rec
 
@@ -256,15 +339,6 @@ class EveryElectionWrapper:
 
         return None
 
-    def get_metadata_by_key(self, key):
-        if not settings.EVERY_ELECTION["CHECK"] or not self.request_success:
-            return None
-
-        for b in self.ballots:
-            if "metadata" in b and b["metadata"] and key in b["metadata"]:
-                return b["metadata"][key]
-        return None
-
     def get_voter_id_status(self) -> Optional[str]:
         """
         For a given election, determine whether any ballots require photo ID
@@ -294,179 +368,6 @@ class EveryElectionWrapper:
         # diffrent polling station opening times, different registration rules
         if not self.request_success:
             return False
-        uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
-        for b in uncancelled_ballots:
-            if b["election_id"].startswith("local.city-of-london"):
-                return True
-        return False
-
-
-class EmptyEveryElectionWrapper:
-    """
-    There are times when we know that we don't want to query EE, for example
-    when we are going to show an address picker.
-
-    This class allows us to swap out the EveryElectionWrapper while keeping
-    existing code the same.
-    """
-
-    def has_election(self) -> bool:
-        return False
-
-    def get_metadata(self) -> None:
-        return None
-
-    def get_ballots_for_next_date(self) -> List:
-        return []
-
-    def get_all_ballots(self) -> List:
-        return []
-
-    @property
-    def multiple_elections(self):
-        return False
-
-    def get_explanations(self):
-        return None
-
-    def get_voter_id_status(self):
-        return None
-
-    def get_cancelled_election_info(self):
-        return {}
-
-    @property
-    def has_city_of_london_ballots(self) -> bool:
-        return False
-
-
-class StaticElectionsAPIElectionWrapper:
-    def __init__(self, elections_response):
-        self.elections_response = elections_response
-        self.ballots = []
-        for date in self.elections_response["dates"]:
-            for ballot in date["ballots"]:
-                self.ballots.append(ballot)
-
-    def has_election(self, future_only=True):
-        if not self.elections_response["dates"]:
-            return False
-
-        if future_only:
-            for ballot in self.ballots:
-                if parse(ballot["poll_open_date"]).date() >= datetime.date.today():
-                    return True
-        return False
-
-    @property
-    def multiple_elections(self):
-        if self.has_election():
-            uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
-            return len(uncancelled_ballots) > 1
-        return False
-
-    def get_explanations(self):
-        # TODO: This currently isn't in the static JSON so we can't get it without
-        #       calling EE. Either call EE (seems silly given where we are) or add
-        #       to the JSON (easier and more useful?)
-        return []
-
-    @property
-    def all_ballots_cancelled(self):
-        return all(b["cancelled"] for b in self.ballots)
-
-    def get_cancelled_election_info(self):
-        rec = {
-            "cancelled": None,
-            "name": None,
-            "rescheduled_date": None,
-            "metadata": None,
-        }
-
-        # What we care about here is if _all_
-        # applicable ballot objects are cancelled.
-        rec["cancelled"] = self.all_ballots_cancelled
-
-        if not rec["cancelled"]:
-            return rec
-
-        cancelled_ballots = self.cancelled_ballots
-        if cancelled_ballots:
-            cancelled_ballot = cancelled_ballots[0]
-            if len(cancelled_ballots) == 1:
-                rec["name"] = cancelled_ballot["election_title"]
-            rec["metadata"] = cancelled_ballot["metadata"]
-        return rec
-
-    @cached_property
-    def cancelled_ballots(self):
-        return [b for b in self.ballots if b["cancelled"]]
-
-    def get_voter_id_status(self) -> Optional[str]:
-        """
-        For a given election, determine whether any ballots require photo ID
-        If yes, return the stub value (e.g. EA-2022)
-        If no, return None
-        """
-        ballot_with_id = next(
-            (
-                ballot
-                for ballot in self.ballots
-                if ballot.get("requires_voter_id") and not ballot.get("cancelled")
-            ),
-            {},
-        )
-        return ballot_with_id.get("requires_voter_id")
-
-    def get_metadata(self):
-        cancelled = self.get_cancelled_election_info()
-        if cancelled["cancelled"]:
-            return {"cancelled_election": cancelled["metadata"]}
-
-        return None
-
-    def get_ballots_for_next_date(self):
-        if len(self.ballots) == 0:
-            return []
-        next_election_date = self._get_next_election_date()
-        return [b for b in self.ballots if b["poll_open_date"] == next_election_date]
-
-    def _get_next_election_date(self):
-        # if no ballots, return early
-        if len(self.ballots) == 0:
-            return None
-        next_charismatic_election_dates = getattr(
-            settings, "NEXT_CHARISMATIC_ELECTION_DATES", []
-        )
-        next_charismatic_election_dates.sort()
-        dates = [b["poll_open_date"] for b in self.ballots]
-        dates.sort()
-
-        if next_charismatic_election_dates:
-            # If we have some dates return the first one that is in NEXT_CHARISMATIC_ELECTION_DATES
-            for date in dates:
-                if date in next_charismatic_election_dates:
-                    return date
-            # If none of them are in NEXT_CHARISMATIC_ELECTION_DATES,
-            # return the earliest charismatic election date
-            return next_charismatic_election_dates[0]
-
-        # If we haven't set NEXT_CHARISMATIC_ELECTION_DATES,
-        # return the earliest election
-        return dates[0]
-
-    def get_all_ballots(self):
-        ballots = [
-            b
-            for b in self.ballots
-            if b["election_id"] not in settings.ELECTION_BLACKLIST
-        ]
-        return sorted(ballots, key=lambda k: k["poll_open_date"])
-
-    @property
-    def has_city_of_london_ballots(self):
-        # City of London local elections have some edge cases e.g:
-        # diffrent polling station opening times, different registration rules
         uncancelled_ballots = [b for b in self.ballots if not b["cancelled"]]
         for b in uncancelled_ballots:
             if b["election_id"].startswith("local.city-of-london"):
