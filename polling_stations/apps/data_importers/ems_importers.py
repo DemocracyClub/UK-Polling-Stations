@@ -346,7 +346,7 @@ class BaseHalaroseCsvImporter(
             location = Point(x_coord, y_coord, srid=27700)
 
         # try UPRN next, if available
-        if (
+        if location is None and (
             hasattr(record, self.station_uprn_field)
             and getattr(record, self.station_uprn_field).strip()
         ):
