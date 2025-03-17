@@ -35,6 +35,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="390412",
                 polling_place_northing="261303",
             )
+        # The council has supplied missing UPRNS for the following stations:
+        # Droitwich Spa Leisure Centre Studio 1 (at rear of Centre) Briar Mill DROITWICH SPA WR9 0RZ
+        if record.polling_place_id == "9448":
+            record = record._replace(polling_place_uprn="10013941783")
+        # Emmanuel Church Droitwich Blake Avenue DROTWICH SPA WR9 8PQ
+        if record.polling_place_id == "9379":
+            record = record._replace(polling_place_uprn="200002876472")
+        # Wick Club Main Street Wick PERSHORE WR10 3NZ
+        if record.polling_place_id == "9226":
+            record = record._replace(polling_place_uprn="100121277967")
 
         return super().station_record_to_dict(record)
 
