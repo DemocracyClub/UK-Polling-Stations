@@ -19,6 +19,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="379264",
                 polling_place_northing="246303",
             )
+        # Council has provided coordinates for:
+        # The Studio Tenbury Swimming Pool Palmers Meadow Tenbury Wells
+        if record.polling_place_id == "15596":
+            record = record._replace(
+                polling_place_easting="359790",
+                polling_place_northing="268290",
+            )
 
         return super().station_record_to_dict(record)
 
