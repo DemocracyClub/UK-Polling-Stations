@@ -36,3 +36,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # The council has supplied missing postcodes for the following stations:
+        # Mobile Unit G M Fitted Furniture The Ideal Home Centre Whalley Road
+        if record.polling_place_id == "2623":
+            record = record._replace(polling_place_postcode="BB5 5DH")
+        # The Pavilion King George Playing Fields Off Royds Avenue Accrington
+        if record.polling_place_id == "2642":
+            record = record._replace(polling_place_postcode="BB5 2JX")
+        # St Paul`s Church, Catlow Hall Street, Oswaldtwistle
+        if record.polling_place_id == "2722":
+            record = record._replace(polling_place_postcode="BB5 3EY")
+
+        return super().station_record_to_dict(record)
