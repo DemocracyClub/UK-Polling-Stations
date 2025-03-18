@@ -12,11 +12,10 @@ class Command(BaseDemocracyCountsCsvImporter):
         # Removes polling stations name duplication in addresses
         record = record._replace(add1="")
 
-        # Removes suspect coordinates pending council response for:
+        # Coord corrections from council for:
         # ASHBOURNE LIBRARY COMPTON ASHBOURNE DERBYSHIRE
         if record.stationcode == "2":
-            record = record._replace(xordinate="")
-            record = record._replace(yordinate="")
+            record = record._replace(xordinate="418090", yordinate="346551")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
