@@ -69,20 +69,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Removing wrong coordinates for:
+        # Correcting wrong coordinates for:
         # Great Lumley Methodist Church Hall, Front Street, Great Lumley, Chester le Street, Co Durham DH3 4JB
         if record.polling_place_id == "71962":
-            record = record._replace(
-                polling_place_easting="", polling_place_northing=""
-            )
+            record = record._replace(polling_place_easting="429303")
         # The Cose, Bridge Creative, 1 Dorset Place, Henknowle, Bishop Auckland, Co Durham DL14 6TH
         if record.polling_place_id == "70811":
             record = record._replace(
-                polling_place_easting="", polling_place_northing=""
+                polling_place_easting="421132", polling_place_northing="528246"
             )
         # Willington Library, 46a High Street, Willington, Crook DL15 0PG
         if record.polling_place_id == "71884":
             record = record._replace(
-                polling_place_easting="", polling_place_northing=""
+                polling_place_easting="419848", polling_place_northing="535150"
             )
         return super().station_record_to_dict(record)
