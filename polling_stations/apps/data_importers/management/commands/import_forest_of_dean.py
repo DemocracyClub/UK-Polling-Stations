@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "FOE"
     addresses_name = (
-        "2024-07-04/2024-05-29T22:26:20.420202/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-18T10:21:20.040469/Democracy_Club__01May2025.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-29T22:26:20.420202/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-18T10:21:20.040469/Democracy_Club__01May2025.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -61,6 +61,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "10012936428",  # BLUE BELLS, FOREST RISE, CINDERFORD
                 "10012936427",  # BRAMBLES, FOREST RISE, CINDERFORD
                 "10012936429",  # NIRVANA, FOREST RISE, CINDERFORD
+                "100120456829",  # SHAPRIDGE COTTAGE, LOWER SHAPRIDGE, MITCHELDEAN
+                "100121243363",  # ROCK HAVEN, CHURCH LANE, ABENHALL, MITCHELDEAN
+                "100120452337",  # WOOLCOTT, LORDS HILL, COLEFORD
             ]
         ):
             return None
@@ -68,12 +71,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # splits
             "GL14 2HQ",
-            "GL14 2PP",
-            "GL14 2BB",
-            "GL15 4AN",
-            "GL18 1LN",
             "GL17 9QU",
+            "GL15 4AN",
+            "GL14 2BB",
             "GL17 9JS",
+            "GL18 1LN",
             # looks wrong
             "GL16 7ES",
             "GL15 5HD",
@@ -88,11 +90,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
     def station_record_to_dict(self, record):
         # easting correction for: Rudford & Highleadon Village Hall, Buttermilk Lane, Rudford, GL2 8DY
-        if record.polling_place_id == "3954":
+        if record.polling_place_id == "4192":
             record = record._replace(polling_place_easting="377237")
 
         # point correction for: Primrose Hill Church Hall, Primrose Hill, Lydney GL15 5SF
-        if record.polling_place_id == "3898":
+        if record.polling_place_id == "4116":
             record = record._replace(polling_place_easting="363533")
             record = record._replace(polling_place_northing="204434")
 
