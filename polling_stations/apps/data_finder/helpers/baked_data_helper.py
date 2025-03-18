@@ -1,17 +1,45 @@
 import abc
+import asyncio
 import logging
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urljoin
 
+import httpx
 import polars
 from django.conf import settings
-from requests import Session
 from uk_geo_utils.helpers import Postcode
-from sentry_sdk import capture_message
+from sentry_sdk import capture_message, set_context
 
 logger = logging.getLogger(__name__)
-session = Session()
+
+
+async def fetch(client, url):
+    # fetch from a URL
+    # if anything fails, just log an error and return None
+    try:
+        response = await client.get(url, timeout=10)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            message = f"Error fetching {url}: {response.status_code}"
+            logging.error(message)
+            # attach details about the response to the sentry event as context
+            set_context(
+                "http_response",
+                {
+                    "status_code": response.status_code,
+                    "headers": dict(response.headers),
+                    "truncated_body": response.text[:1000],
+                },
+            )
+            capture_message(message, level="error")
+            return None
+    except Exception as e:
+        message = f"Exception fetching {url}: {e.__class__}"
+        logging.error(message)
+        capture_message(message, level="error")
+        return None
 
 
 def ballot_paper_id_to_ee_url(ballot_paper_id):
@@ -60,12 +88,15 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         return result
 
     def get_full_ballots(self, ballot_ids):
-        result = []
-        for ballot_id in ballot_ids:
-            url = ballot_paper_id_to_ee_url(ballot_id)
-            req = session.get(url)
-            result.append(req.json())
-        return result
+        urls = [ballot_paper_id_to_ee_url(ballot_id) for ballot_id in ballot_ids]
+
+        async def fetch_all():
+            async with httpx.AsyncClient() as client:
+                responses = await asyncio.gather(*(fetch(client, url) for url in urls))
+            # filter out any responses that did not return a valid object
+            return [resp for resp in responses if resp is not None]
+
+        return asyncio.run(fetch_all())
 
     def get_file_path(self, postcode: Postcode):
         outcode = postcode.with_space.split()[0]
