@@ -17,9 +17,9 @@ class Command(BaseDemocracyCountsCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Removing suspect coordinates pending council confirmation for the following station:
+        # Corrected coordinates from council for the following station:
         # Chatteris Library 2 Furrowfields Road Chatteris Cambridgeshire, PE16 6DY
         if record.stationcode == "1":
-            record = record._replace(xordinate="", yordinate="")
+            record = record._replace(xordinate="539243", yordinate="286369")
 
         return super().station_record_to_dict(record)
