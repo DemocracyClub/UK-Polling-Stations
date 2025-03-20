@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 import polars
 from django.conf import settings
 from requests import Session
+from requests.exceptions import HTTPError, RequestException
 from uk_geo_utils.helpers import Postcode
 from sentry_sdk import set_context, get_current_scope
 
@@ -54,8 +55,33 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         result = self.get_ballot_list(postcode, uprn)
 
         if not result["address_picker"]:
-            result["ballots"] = self.get_full_ballots(result["ballot_ids"])
-            # TODO: how to set request_success if some requests failed here?
+            try:
+                result["ballots"] = self.get_full_ballots(result["ballot_ids"])
+            except HTTPError as e:
+                message = f"Error fetching {e.request.url}: {e.response.status_code}"
+                # attach details about the response to the sentry event as context
+                set_context(
+                    "http_response",
+                    {
+                        "status_code": e.response.status_code,
+                        "headers": dict(e.response.headers),
+                        "truncated_body": e.response.text[:1000],
+                    },
+                )
+                scope = get_current_scope()
+                scope.fingerprint = ["error_fetching_url", str(e.response.status_code)]
+                logging.error(message)
+
+                result["ballots"] = []
+                result["request_success"] = False
+            except RequestException as e:
+                message = f"Exception fetching {e.request.url}: {e.__class__}"
+                scope = get_current_scope()
+                scope.fingerprint = ["exception_fetching_url"]
+                logging.error(message)
+
+                result["ballots"] = []
+                result["request_success"] = False
 
         return result
 
@@ -63,8 +89,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         result = []
         for ballot_id in ballot_ids:
             url = ballot_paper_id_to_ee_url(ballot_id)
-            req = session.get(url)
-            result.append(req.json())
+            response = session.get(url, timeout=10)
+            response.raise_for_status()
+            result.append(response.json())
         return result
 
     def get_file_path(self, postcode: Postcode):
