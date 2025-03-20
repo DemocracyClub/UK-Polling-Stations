@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "LAC"
-    addresses_name = "2024-07-04/2024-06-19T15:00:14.355648/LAC_combined.tsv"
-    stations_name = "2024-07-04/2024-06-19T15:00:14.355648/LAC_combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-20T10:13:08.250557/Democracy_Club__01May2025.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-20T10:13:08.250557/Democracy_Club__01May2025.tsv"
+    )
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -16,19 +20,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             in [
                 "10009269943",  # LING COTTAGE, CRAG FOOT, WARTON, CARNFORTH
                 "10091522599",  # 53 TWIN LAKES COUNTRY CLUB BURTON ROAD, TEWITFIELD
-                "10094206136",  # WARTON CRAG VIEW, KELLET LANE, BORWICK, CARNFORTH
                 "10009274881",  # LECK FELL HOUSE, LECK, CARNFORTH
                 "10009274155",  # PARK HOUSE FARM, TATHAM, LANCASTER
                 "200000657611",  # HOLEHOUSE FARM, CATON GREEN ROAD, CATON GREEN, LANCASTER
                 "100012622526",  # WHITE CROSS PUB, QUARRY ROAD, LANCASTER
                 "100012394574",  # WOODSIDE, BOWERHAM ROAD, LANCASTER
-                "100012395677",  # WEST VIEW FARM, WYRESDALE ROAD, LANCASTER
                 "100012394393",  # WILSON HOUSE, ASHTON ROAD, LANCASTER
                 "100012622911",  # LANCASTER HOUSE HOTEL, GREEN LANE, ELLEL, LANCASTER
                 "10009280294",  # BLACK HOUSE FARM, ELLEL, LANCASTER
                 "10009278691",  # THORNCLIFFE, ELLEL, LANCASTER
                 "100012396351",  # BANK HOUSE FARM, THURNHAM, LANCASTER
-                "10009273868",  # BANK HOUSE COTTAGE, THURNHAM, LANCASTER
                 "100012622683",  # 120 BOWERHAM ROAD, LANCASTER
                 "10009274369",  # HALF MOON HOUSE, BARROWS LANE, HEYSHAM, MORECAMBE
                 "100010479648",  # 115 ALEXANDRA ROAD, MORECAMBE
@@ -68,20 +69,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # splits
             "LA1 3TE",
-            "LA5 0SW",
-            "LA2 6AL",
-            "LA2 0AQ",
-            "LA2 6AS",
             "LA1 3LY",
+            "LA1 1AF",
+            "LA2 6AL",
+            "LA2 6AS",
+            "LA2 0AQ",
+            "LA5 0SW",
             # suspect
-            "LA2 9HW",  # THREE MILE COTTAGE, CROOK O LUNE, LANCASTER
-            "LA1 3JW",  # DAISY BANK, LANCASTER
-            "LA1 3JJ",  # WYRESDALE ROAD, LANCASTER
-            "LA2 9EB",  # LANGTHWAITE ROAD, QUERNMORE, LANCASTER
-            "LA1 5AH",  # ASHTON ROAD, LANCASTER
-            "LA3 3DD",  # INGLEDENE, WESTGATE, MORECAMBE
-            "LA4 6RU",  # 162A BARE LANE, MORECAMBE
-            "LA2 8NN",  #  WENNINGTON, LANCASTER
+            "LA1 3JJ",
+            "LA1 5AH",
+            "LA3 3DD",
+            "LA4 6RU",
+            "LA2 8NN",
         ]:
             return None
 
