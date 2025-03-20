@@ -1478,6 +1478,7 @@ responses==0.25.3 \
     --hash=sha256:617b9247abd9ae28313d57a75880422d55ec63c29d33d629697590a034358dba
     # via
     #   -r requirements/../cdk/lambdas/wdiv-s3-trigger/requirements/testing.in
+    #   -r requirements/testing.in
     #   moto
 retry==0.9.2 \
     --hash=sha256:ccddf89761fa2c726ab29391837d4327f819ea14d244c232a1d24c67a2f98606 \
