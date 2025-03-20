@@ -6,6 +6,8 @@ from uk_geo_utils.helpers import Postcode
 
 import pytest
 import polars
+from httpx import Response
+import respx
 
 
 @pytest.fixture()
@@ -276,3 +278,48 @@ def test_uprn_with_elections(temp_data_root, sample_data_writer):
         "request_success": True,
     }
     assert helper.get_ballot_list(postcode, uprn="000001") == expected
+
+
+@respx.mock
+def test_get_full_ballots(temp_data_root, caplog):
+    respx.get(
+        "https://elections.democracyclub.org.uk/api/elections/local.north-kesteven.bracebridge-heath.by.2025-03-20/"
+    ).mock(
+        return_value=Response(
+            200,
+            json={
+                "election_id": "local.north-kesteven.bracebridge-heath.by.2025-03-20"
+            },
+        )
+    )
+    respx.get(
+        "https://elections.democracyclub.org.uk/api/elections/mayor.greater-lincolnshire-cca.2025-05-01/"
+    ).mock(
+        return_value=Response(
+            500,
+            json={"error": "oh no"},
+        )
+    )
+    respx.get(
+        "https://elections.democracyclub.org.uk/api/elections/local.lincolnshire.washingborough.2025-05-01/"
+    ).mock(
+        return_value=Response(
+            502,
+            text="Bad Gateway",
+        )
+    )
+
+    helper = LocalParquetElectionsHelper(elections_parquet_path=Path(temp_data_root))
+
+    ballot_ids = [
+        "local.lincolnshire.washingborough.2025-05-01",
+        "mayor.greater-lincolnshire-cca.2025-05-01",
+        "local.north-kesteven.bracebridge-heath.by.2025-03-20",
+    ]
+    assert helper.get_full_ballots(ballot_ids) == [
+        {"election_id": "local.north-kesteven.bracebridge-heath.by.2025-03-20"}
+    ]
+    assert (
+        len([rec for rec in caplog.records if rec.message.startswith("Error fetching")])
+        == 2
+    )

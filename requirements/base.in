@@ -28,6 +28,7 @@ pyproj
 pyshp
 rapidfuzz
 requests>=2.22.0
+httpx==0.28.1
 retry
 rich
 rtree
