@@ -8,7 +8,7 @@ import polars
 from django.conf import settings
 from requests import Session
 from uk_geo_utils.helpers import Postcode
-from sentry_sdk import capture_message
+from sentry_sdk import set_context, get_current_scope
 
 logger = logging.getLogger(__name__)
 session = Session()
@@ -80,8 +80,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             # In theory this shouldn't happen
             # every outcode should exists as a parquet file
             message = f"Expected file {parquet_filepath} not found"
-            logger.error(message)
-            capture_message(message, level="error")
+            scope = get_current_scope()
+            scope.fingerprint = ["parquet:expected_parquet_file_not_found"]
+            logging.error(message)
             return {"address_picker": False, "ballot_ids": [], "request_success": False}
 
         if df.height == 0:
@@ -108,8 +109,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             # In theory this shouldn't happen. If the postcode exists in AddressBase
             # and the outcode file is non-empty, we should get results.
             message = f"Expected postcode {postcode.with_space} not found in file {parquet_filepath}"
-            logger.error(message)
-            capture_message(message, level="error")
+            scope = get_current_scope()
+            scope.fingerprint = ["parquet:expected_postcode_not_found_not_found"]
+            logging.error(message)
             return {"address_picker": False, "ballot_ids": [], "request_success": False}
 
         if uprn:
@@ -122,8 +124,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
                 message = (
                     f"UPRN {uprn} did not exist in Parquet file {parquet_filepath}"
                 )
-                logger.error(message)
-                capture_message(message, level="error")
+                scope = get_current_scope()
+                scope.fingerprint = ["parquet:uprn_not_in_parquet_file"]
+                logging.error(message)
                 return {
                     "address_picker": False,
                     "ballot_ids": [],
@@ -135,8 +138,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
                 # A UPRN should only appear in our data once or zero times
                 # Those are the valid options
                 message = f"UPRN {uprn} found {df.height} times in Parquet file {parquet_filepath}"
-                logger.error(message)
-                capture_message(message, level="error")
+                scope = get_current_scope()
+                scope.fingerprint = ["parquet:duplicate_urpn"]
+                logging.error(message)
                 return {
                     "address_picker": False,
                     "ballot_ids": [],
