@@ -7,8 +7,9 @@ from urllib.parse import urljoin
 import polars
 from django.conf import settings
 from requests import Session
+from requests.exceptions import HTTPError, RequestException
 from uk_geo_utils.helpers import Postcode
-from sentry_sdk import capture_message
+from sentry_sdk import set_context, get_current_scope
 
 logger = logging.getLogger(__name__)
 session = Session()
@@ -54,8 +55,33 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         result = self.get_ballot_list(postcode, uprn)
 
         if not result["address_picker"]:
-            result["ballots"] = self.get_full_ballots(result["ballot_ids"])
-            # TODO: how to set request_success if some requests failed here?
+            try:
+                result["ballots"] = self.get_full_ballots(result["ballot_ids"])
+            except HTTPError as e:
+                message = f"Error fetching {e.request.url}: {e.response.status_code}"
+                # attach details about the response to the sentry event as context
+                set_context(
+                    "http_response",
+                    {
+                        "status_code": e.response.status_code,
+                        "headers": dict(e.response.headers),
+                        "truncated_body": e.response.text[:1000],
+                    },
+                )
+                scope = get_current_scope()
+                scope.fingerprint = ["error_fetching_url", str(e.response.status_code)]
+                logging.error(message)
+
+                result["ballots"] = []
+                result["request_success"] = False
+            except RequestException as e:
+                message = f"Exception fetching {e.request.url}: {e.__class__}"
+                scope = get_current_scope()
+                scope.fingerprint = ["exception_fetching_url"]
+                logging.error(message)
+
+                result["ballots"] = []
+                result["request_success"] = False
 
         return result
 
@@ -63,8 +89,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         result = []
         for ballot_id in ballot_ids:
             url = ballot_paper_id_to_ee_url(ballot_id)
-            req = session.get(url)
-            result.append(req.json())
+            response = session.get(url, timeout=10)
+            response.raise_for_status()
+            result.append(response.json())
         return result
 
     def get_file_path(self, postcode: Postcode):
@@ -80,8 +107,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             # In theory this shouldn't happen
             # every outcode should exists as a parquet file
             message = f"Expected file {parquet_filepath} not found"
-            logger.error(message)
-            capture_message(message, level="error")
+            scope = get_current_scope()
+            scope.fingerprint = ["parquet:expected_parquet_file_not_found"]
+            logging.error(message)
             return {"address_picker": False, "ballot_ids": [], "request_success": False}
 
         if df.height == 0:
@@ -108,8 +136,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
             # In theory this shouldn't happen. If the postcode exists in AddressBase
             # and the outcode file is non-empty, we should get results.
             message = f"Expected postcode {postcode.with_space} not found in file {parquet_filepath}"
-            logger.error(message)
-            capture_message(message, level="error")
+            scope = get_current_scope()
+            scope.fingerprint = ["parquet:expected_postcode_not_found_not_found"]
+            logging.error(message)
             return {"address_picker": False, "ballot_ids": [], "request_success": False}
 
         if uprn:
@@ -122,8 +151,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
                 message = (
                     f"UPRN {uprn} did not exist in Parquet file {parquet_filepath}"
                 )
-                logger.error(message)
-                capture_message(message, level="error")
+                scope = get_current_scope()
+                scope.fingerprint = ["parquet:uprn_not_in_parquet_file"]
+                logging.error(message)
                 return {
                     "address_picker": False,
                     "ballot_ids": [],
@@ -135,8 +165,9 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
                 # A UPRN should only appear in our data once or zero times
                 # Those are the valid options
                 message = f"UPRN {uprn} found {df.height} times in Parquet file {parquet_filepath}"
-                logger.error(message)
-                capture_message(message, level="error")
+                scope = get_current_scope()
+                scope.fingerprint = ["parquet:duplicate_urpn"]
+                logging.error(message)
                 return {
                     "address_picker": False,
                     "ballot_ids": [],

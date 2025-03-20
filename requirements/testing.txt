@@ -526,6 +526,7 @@ pyyaml==6.0.1 \
     --hash=sha256:fd66fc5d0da6d9815ba2cebeb4205f95818ff4b79c3ebe268e75d961704af52f
     # via
     #   -c requirements/constraints.txt
+    #   responses
     #   vcrpy
 requests==2.31.0 \
     --hash=sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f \
@@ -533,6 +534,13 @@ requests==2.31.0 \
     # via
     #   -c requirements/constraints.txt
     #   pytest-base-url
+    #   responses
+responses==0.25.3 \
+    --hash=sha256:521efcbc82081ab8daa588e08f7e8a64ce79b91c39f6e62199b19159bea7dbcb \
+    --hash=sha256:617b9247abd9ae28313d57a75880422d55ec63c29d33d629697590a034358dba
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/testing.in
 ruff==0.4.6 \
     --hash=sha256:04a80acfc862e0e1630c8b738e70dcca03f350bad9e106968a8108379e12b31f \
     --hash=sha256:0cf5cc02d3ae52dfb0c8a946eb7a1d6ffe4d91846ffc8ce388baa8f627e3bd50 \
@@ -610,6 +618,7 @@ urllib3==1.26.18 \
     # via
     #   -c requirements/constraints.txt
     #   requests
+    #   responses
     #   selenium
 vcrpy==6.0.1 \
     --hash=sha256:9e023fee7f892baa0bbda2f7da7c8ac51165c1c6e38ff8688683a12a4bde9278
