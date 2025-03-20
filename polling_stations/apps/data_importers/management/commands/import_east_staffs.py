@@ -3,9 +3,14 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "EST"
-    addresses_name = "2024-07-04/2024-06-25T15:10:11.622430/EST_PD_combined.csv"
-    stations_name = "2024-07-04/2024-06-25T15:10:11.622430/EST_PS_combined.csv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-20T14:09:10.936427/Democracy Club - Polling Districts.csv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-20T14:09:10.936427/Democracy Club - Polling Stations.csv"
+    )
+    elections = ["2025-05-01"]
+    csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -13,9 +18,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         if (
             uprn
             in [
-                "100031648376",  # OUSLEY CROSS FARM, STANTON LANE, ELLASTONE, ASHBOURNE
                 "10008036775",  # THORSWOOD GRANGE, STANTON, ASHBOURNE
-                "10008036394",  # PARKGATE COTTAGE, WOOTTON ROAD, ELLASTONE, ASHBOURNE
                 "10094378229",  # DOVE CROFT BARN, BARROW HILL, ROCESTER, UTTOXETER
                 "100031678921",  # 34 HOLLY ROAD, UTTOXETER
                 "100031678918",  # 32 HOLLY ROAD, UTTOXETER
@@ -35,7 +38,6 @@ class Command(BaseDemocracyCountsCsvImporter):
                 "100031650805",  # 15 BEARWOOD HILL ROAD, BURTON-ON-TRENT
                 "10010540757",  # 4A LODGE HILL, TUTBURY, BURTON-ON-TRENT
                 "10009257620",  # OAKAMORE, ANSLOW ROAD, HANBURY, BURTON-ON-TRENT
-                "10010542140",  # ANFIELD HOUSE FARM, NEW ROAD, UTTOXETER
                 "100031680029",  # PARK VIEW, NEW ROAD, UTTOXETER
                 "100031680026",  # ASHDENE, NEW ROAD, UTTOXETER
                 "100031680035",  # THE HAVEN, NEW ROAD, UTTOXETER
@@ -44,21 +46,20 @@ class Command(BaseDemocracyCountsCsvImporter):
                 "10008037294",  # OAKLANDS, SCOUNSLOW GREEN ROAD, SCOUNSLOW GREEN, UTTOXETER
                 "100032002408",  # THREE LANE END FARM, THORNEY LANES, NEWBOROUGH, BURTON-ON-TRENT
                 "100031679871",  # NEWLANDS COTTAGE FARM, MOISTY LANE, MARCHINGTON, UTTOXETER
-                "10009259655",  # DOVEDALE HOUSE, CALWICH, ASHBOURNE
                 "10009259632",  # WHITEHALL BANK FARM, DRAYCOTT-IN-THE-CLAY, ASHBOURNE
                 "100031679871",  # NEWLANDS COTTAGE FARM, MOISTY LANE, MARCHINGTON, UTTOXETER
                 "100031672646",  # OAKLANDS COTTAGE, THORNEY LANES, NEWBOROUGH, BURTON-ON-TRENT
-                "100031672649",  # TOMLINSONS CORNER FARM, THORNEY LANES, NEWBOROUGH, BURTON-ON-TRENT
+                "10008037294",  # OAKLANDS, SCOUNSLOW GREEN ROAD, SCOUNSLOW GREEN, UTTOXETER
             ]
         ):
             return None
 
         if record.postcode in [
-            # splits
+            # suspect
             "DE13 9AZ",
-            "ST14 5DS",  # HAWTHORNE, NEW ROAD, UTTOXETER
-            "ST14 7RB",  # HOLLYSTONE, STONE ROAD, UTTOXETER
-            "DE15 0FD",  # WEST STREET, BURTON-ON-TRENT
+            "ST14 5DS",
+            "ST14 7RB",
+            "DE15 0FD",
         ]:
             return None
 
@@ -66,7 +67,7 @@ class Command(BaseDemocracyCountsCsvImporter):
 
     def station_record_to_dict(self, record):
         # St Giles Church, Croxden Lane, Croxden ,Uttoxeter, Staffordshire
-        if record.pollingstationid == "4383":
+        if record.pollingstationid == "4473":
             record = record._replace(xordinate="406486")
             record = record._replace(yordinate="339871")
 
