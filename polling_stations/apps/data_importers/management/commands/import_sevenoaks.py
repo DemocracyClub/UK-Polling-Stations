@@ -3,15 +3,19 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SEV"
-    addresses_name = "2024-07-04/2024-06-06T12:07:44.241204/SEV_combined.tsv"
-    stations_name = "2024-07-04/2024-06-06T12:07:44.241204/SEV_combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-17T09:28:03.019684/Democracy_Club__01May2025 (1).tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-17T09:28:03.019684/Democracy_Club__01May2025 (1).tsv"
+    )
+    elections = ["2025-05-01"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # St. John`s Church Hall, Quakers Hall Lane, Sevenoaks TN13 3NU
-        if record.polling_place_id == "9509":
+        if record.polling_place_id == "10102":
             record = record._replace(
                 polling_place_easting="553197",
                 polling_place_northing="156100",
