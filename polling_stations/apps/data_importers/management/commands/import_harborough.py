@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HAO"
-    addresses_name = "2024-07-04/2024-06-19T12:01:44.718343/HAO_combined.tsv"
-    stations_name = "2024-07-04/2024-06-19T12:01:44.718343/HAO_combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-24T13:48:52.525136/Democracy_Club__01May2025.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-24T13:48:52.525136/Democracy_Club__01May2025.tsv"
+    )
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -34,17 +38,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # split
-            "LE16 9PZ",
             "LE8 0JX",
-            "LE17 5LE",
             "LE17 6AX",
+            "LE16 8TD",
+            "LE17 5LE",
+            # suspect
+            "LE16 9FL",
+            "LE16 9FN",
         ]:
             return None
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # postcode correction for: Billesdon Coplow Centre, Uppingham Road, Billesdon, Leicester, LE7 9ER
-        # source: https://www.thecoplowcentre.com/contact
-        if record.polling_place_id == "7853":
-            record = record._replace(polling_place_postcode="LE7 9FL")
+        # add missing postcode for: Bruntingthorpe Village Hall, Main Street, Bruntingthorpe, Lutterworth, Leicestershire
+        if record.polling_place_id == "8051":
+            record = record._replace(polling_place_postcode="LE17 5QF")
         return super().station_record_to_dict(record)
