@@ -3,9 +3,9 @@ from data_importers.management.commands import BaseHalaroseCsvImporter
 
 class Command(BaseHalaroseCsvImporter):
     council_id = "WEW"
-    addresses_name = "2024-07-04/2024-06-24T13:51:35.135872/WEW_combined.csv"
-    stations_name = "2024-07-04/2024-06-24T13:51:35.135872/WEW_combined.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2025-05-01/2025-03-24T11:28:50.310602/Eros_SQL_Output001.csv"
+    stations_name = "2025-05-01/2025-03-24T11:28:50.310602/Eros_SQL_Output001.csv"
+    elections = ["2025-05-01"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -30,9 +30,9 @@ class Command(BaseHalaroseCsvImporter):
 
         if record.housepostcode in [
             # suspect
-            "AL6 9FJ",  # WELWYN BY PASS ROAD, WELWYN
-            "AL6 9AF",  # WHITEHILL, WELWYN
-            "AL10 0TA",  # ST. ALBANS ROAD WEST, HATFIELD
+            "AL6 9FJ",
+            "AL6 9AF",
+            "AL10 0TA",
         ]:
             return None
         return super().address_record_to_dict(record)
