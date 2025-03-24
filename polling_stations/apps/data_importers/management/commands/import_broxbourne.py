@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BRX"
-    addresses_name = "2025-05-01/2025-03-18T15:21:50.978077/DC - Polling Districts.csv"
-    stations_name = "2025-05-01/2025-03-18T15:21:50.978077/DC - Polling Stations.csv"
+    addresses_name = "2025-05-01/2025-03-24T16:55:00.760095/Democracy Club - polling districts for 1-5-2025.csv"
+    stations_name = "2025-05-01/2025-03-24T16:55:00.760095/Democracy Club - polling stations for 1-5-2025.csv"
     elections = ["2025-05-01"]
     csv_encoding = "utf-16le"
 
