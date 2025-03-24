@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "OAD"
-    addresses_name = "2024-07-04/2024-05-24T19:21:09.113141/Democracy_Club__04July2024 (Rev. 24-05-2024).tsv"
-    stations_name = "2024-07-04/2024-05-24T19:21:09.113141/Democracy_Club__04July2024 (Rev. 24-05-2024).tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-03-24T13:10:54.646211/Democracy_Club__01May2025.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-03-24T13:10:54.646211/Democracy_Club__01May2025.tsv"
+    )
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -25,7 +29,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10010149309",  # FLAT 8, MOAT HOUSE, 107 MOAT STREET, WIGSTON
             "10010149310",  # FLAT 9, MOAT HOUSE, 107 MOAT STREET, WIGSTON
             "100030601417",  # 1 TRURO DRIVE, WIGSTON
-            "100030589686",  # MELROSE HOUSE, NEWTON LANE, WIGSTON
+            "100030582546",  # 2 BRIAR WALK, OADBY, LEICESTER
+            "100030587491",  # 1 SHIPSTON HILL, OADBY, LEICESTER
+            "100032050440",  # 44A LEICESTER ROAD, WIGSTON, WIGSTON
+            "10009233898",  # FLAT 4 LEICESTER ROAD, WIGSTON, WIGSTON
+            "10009233831",  # 32A BELL STREET, WIGSTON
         ]:
             return None
 
