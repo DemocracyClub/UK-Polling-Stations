@@ -19,6 +19,7 @@ from drf_spectacular.utils import (
 )
 from pollingstations.models import AdvanceVotingStation
 from rest_framework import serializers
+from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -128,15 +129,18 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
             helper = LocalParquetElectionsHelper()
             resp = helper.get_response(Postcode(address.postcode), address.uprn)
+            if not resp["request_success"]:
+                raise APIException("failed to get list of ballots")
             return EEWrapper(
                 resp["ballots"],
                 request_success=resp["request_success"],
                 include_current=include_current,
             )
 
-        return EEWrapper(
-            **EEFetcher(point=address.location).fetch(), include_current=include_current
-        )
+        ee_response = EEFetcher(point=address.location).fetch()
+        if not ee_response["request_success"]:
+            raise APIException("failed to get list of ballots")
+        return EEWrapper(**ee_response, include_current=include_current)
 
     @extend_schema(
         parameters=[
