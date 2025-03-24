@@ -2,16 +2,20 @@ import datetime
 
 from api.postcode import PostcodeViewSet
 from councils.tests.factories import CouncilFactory
-from data_finder.helpers import PostcodeError
+from data_finder.helpers import PostcodeError, RoutingHelper
 from data_importers.event_types import DataEventType
 from data_importers.tests.factories import DataEventFactory
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import call_command
+from django.test import TestCase
 from django.utils import timezone
+from rest_framework.exceptions import APIException
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.views import APIView
+from uk_geo_utils.helpers import Postcode
+from unittest.mock import patch
 
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
@@ -184,11 +188,10 @@ class PostcodeTest(APITestCase):
         self.assertEqual(1, len(response.data["ballots"]))
 
     def test_no_council(self):
-        response = self.endpoint.retrieve(
-            self.request, "DD11DD", "json", geocoder=mock_geocode, log=False
-        )
-
-        self.assertEqual(500, response.status_code)
+        with self.assertRaises(APIException):
+            self.endpoint.retrieve(
+                self.request, "DD11DD", "json", geocoder=mock_geocode, log=False
+            )
 
     def test_bad_postcode(self):
         response = self.endpoint.retrieve(
@@ -202,3 +205,39 @@ class PostcodeTest(APITestCase):
             "/api/postcode/AA11AA/", format="json", HTTP_ORIGIN="foo.bar/baz"
         )
         self.assertEqual(resp.get("Access-Control-Allow-Origin"), "*")
+
+
+class GetEEWrapperTest(TestCase):
+    def setUp(self):
+        self.endpoint = PostcodeViewSet()
+        self.query_params = {}
+
+    def test_success_parquet(self):
+        postcode = "AA11AA"
+        rh = RoutingHelper(Postcode(postcode))
+        setattr(rh, "_elections_response", {"request_success": True, "ballots": []})
+        ee_wrapper = self.endpoint.get_ee_wrapper(postcode, rh, self.query_params)
+        self.assertTrue(ee_wrapper.request_success)
+
+    def test_fail_parquet(self):
+        postcode = "AA11AA"
+        rh = RoutingHelper(Postcode(postcode))
+        setattr(rh, "_elections_response", {"request_success": False})
+        with self.assertRaises(APIException):
+            self.endpoint.get_ee_wrapper(postcode, rh, self.query_params)
+
+    @patch("api.postcode.EEFetcher.fetch")
+    def test_success_live(self, mock_fetch):
+        mock_fetch.return_value = {"request_success": True, "elections": []}
+        postcode = "AA11AA"
+        rh = RoutingHelper(Postcode(postcode))
+        ee_wrapper = self.endpoint.get_ee_wrapper(postcode, rh, self.query_params)
+        self.assertTrue(ee_wrapper.request_success)
+
+    @patch("api.postcode.EEFetcher.fetch")
+    def test_fail_live(self, mock_fetch):
+        mock_fetch.return_value = {"request_success": False}
+        postcode = "AA11AA"
+        rh = RoutingHelper(Postcode(postcode))
+        with self.assertRaises(APIException):
+            self.endpoint.get_ee_wrapper(postcode, rh, self.query_params)

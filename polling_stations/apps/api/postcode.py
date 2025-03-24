@@ -9,6 +9,7 @@ from data_finder.views import LogLookUpMixin, polling_station_current
 from django.core.exceptions import ObjectDoesNotExist
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
+from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -49,15 +50,18 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             return EmptyEEWrapper()
 
         if rh.elections_response:
+            if not rh.elections_response["request_success"]:
+                raise APIException("failed to get list of ballots")
             return EEWrapper(
                 rh.elections_response["ballots"],
                 request_success=rh.elections_response["request_success"],
                 include_current=include_current,
             )
 
-        return EEWrapper(
-            **EEFetcher(postcode=postcode).fetch(), include_current=include_current
-        )
+        ee_response = EEFetcher(postcode=postcode).fetch()
+        if not ee_response["request_success"]:
+            raise APIException("failed to get list of ballots")
+        return EEWrapper(**ee_response, include_current=include_current)
 
     @extend_schema(
         parameters=[
@@ -97,7 +101,7 @@ class PostcodeViewSet(ViewSet, LogLookUpMixin):
             try:
                 council = get_council(loc)
             except ObjectDoesNotExist:
-                return Response({"detail": "Internal server error"}, 500)
+                raise APIException("council does not exist")
         ret["council"] = council
 
         ret["addresses"] = self.generate_addresses(rh)

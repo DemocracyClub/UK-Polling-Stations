@@ -1,5 +1,6 @@
 import datetime
 
+from addressbase.models import Address
 from api.address import AddressViewSet
 from councils.tests.factories import CouncilFactory
 from data_importers.event_types import DataEventType
@@ -7,11 +8,13 @@ from data_importers.tests.factories import DataEventFactory
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.gis.geos import Point
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import override_settings, TestCase
 from django.utils import timezone
 from pollingstations.models import PollingStation, VisibilityChoices
+from rest_framework.exceptions import APIException
 from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
+from unittest.mock import patch
 
 from .mocks import EEMockWithElection, EEMockWithoutElection
 
@@ -202,3 +205,60 @@ class AddressTest(TestCase):
         )
 
         self.assertEqual(404, response.status_code)
+
+
+class GetEEWrapperTest(TestCase):
+    def setUp(self):
+        self.viewset = AddressViewSet()
+        self.address = Address(
+            uprn="100080051217",
+            postcode="AB1 2CD",
+            location=Point(0.22247314453125, 53.149405955929744, srid=4326),
+        )
+        self.query_params = {}
+
+    @patch("api.address.LocalParquetElectionsHelper")
+    @override_settings(USE_LOCAL_PARQUET_ELECTIONS=True)
+    def test_success_parquet(self, MockHelper):
+        mock_helper_instance = MockHelper.return_value
+        mock_helper_instance.get_response.return_value = {
+            "request_success": True,
+            "ballots": [],
+        }
+
+        ee_wrapper = self.viewset.get_ee_wrapper(self.address, self.query_params)
+        self.assertTrue(ee_wrapper.request_success)
+
+    @patch("api.address.LocalParquetElectionsHelper")
+    @override_settings(USE_LOCAL_PARQUET_ELECTIONS=True)
+    def test_fail_parquet(self, MockHelper):
+        mock_helper_instance = MockHelper.return_value
+        mock_helper_instance.get_response.return_value = {
+            "request_success": False,
+        }
+
+        with self.assertRaises(APIException):
+            self.viewset.get_ee_wrapper(self.address, self.query_params)
+
+    @patch("api.address.EEFetcher")
+    @override_settings(USE_LOCAL_PARQUET_ELECTIONS=False)
+    def test_success_live(self, MockFetcher):
+        mock_fetcher_instance = MockFetcher.return_value
+        mock_fetcher_instance.fetch.return_value = {
+            "request_success": True,
+            "elections": [],
+        }
+
+        ee_wrapper = self.viewset.get_ee_wrapper(self.address, self.query_params)
+        self.assertTrue(ee_wrapper.request_success)
+
+    @patch("api.address.EEFetcher")
+    @override_settings(USE_LOCAL_PARQUET_ELECTIONS=False)
+    def test_fail_live(self, MockFetcher):
+        mock_fetcher_instance = MockFetcher.return_value
+        mock_fetcher_instance.fetch.return_value = {
+            "request_success": False,
+        }
+
+        with self.assertRaises(APIException):
+            self.viewset.get_ee_wrapper(self.address, self.query_params)
