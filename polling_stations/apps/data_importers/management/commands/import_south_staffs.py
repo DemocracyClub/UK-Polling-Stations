@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SST"
     addresses_name = (
-        "2024-07-04/2024-05-31T15:57:56.112836/Democracy_Club__04July2024 SSDC.tsv"
+        "2025-05-01/2025-03-24T11:04:53.621587/Democracy_Club__01May2025.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-31T15:57:56.112836/Democracy_Club__04July2024 SSDC.tsv"
+        "2025-05-01/2025-03-24T11:04:53.621587/Democracy_Club__01May2025.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -37,10 +37,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "ST19 9AB",
-            "WV11 2DN",
             "ST19 9AG",
             "WV9 5BW",
+            "WV11 2DN",
+            "ST19 9AB",
             # suspect
             "WV5 8EX",
             "WV11 2RD",
@@ -51,8 +51,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # St Bartholomew's Church Hall, Vicarage Road, Penn, Wolverhampton
-        if record.polling_place_id == "5468":
+        # Ignore warning: Polling station Hyde Lea Village Hall (6031) is in Stafford Borough Council (STA)
+        # Location is correct, just outside of the council border
+
+        # Point correction for: St Bartholomew's Church Hall, Vicarage Road, Penn, Wolverhampton, WV4 5HU
+        # Ignore warning: Polling station St Bartholomew's Church Hall (6225) is in Wolverhampton City Council
+        if record.polling_place_id == "6225":
+            print(record)
             record = record._replace(
                 polling_place_easting="389364", polling_place_northing="295314"
             )
