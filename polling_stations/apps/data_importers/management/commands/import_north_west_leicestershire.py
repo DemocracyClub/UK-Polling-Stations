@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NWL"
     addresses_name = (
-        "2024-07-04/2024-05-30T11:05:57.723777/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-24T11:11:48.525799/Democracy_Club__01May2025.CSV"
     )
     stations_name = (
-        "2024-07-04/2024-05-30T11:05:57.723777/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-24T11:11:48.525799/Democracy_Club__01May2025.CSV"
     )
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    elections = ["2025-05-01"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -24,7 +23,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "10002353672",  # THE MALTINGS, STATION ROAD, HUGGLESCOTE, COALVILLE
                 "10002361801",  # FLAT 1, SHELLBROOK HOUSE IC, MARKET STREET, ASHBY-DE-LA-ZOUCH
                 "100030551333",  # 68 BURTON ROAD, ASHBY-DE-LA-ZOUCH
-                "10002345003",  # AMBROW HILL, ISLEY WALTON, CASTLE DONINGTON, DERBY
+                "10095742061",  # FINCH HOUSE, LOWER MOOR ROAD, COLEORTON, COALVILLE
+                "100030568246",  # HOO ASH BUNGALOW, SWANNINGTON ROAD, COALVILLE
             ]
         ):
             return None
