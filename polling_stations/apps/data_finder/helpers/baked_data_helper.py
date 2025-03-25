@@ -2,17 +2,31 @@ import abc
 import logging
 from pathlib import Path
 from typing import Optional
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import polars
 from django.conf import settings
 from requests import Session
+from requests.adapters import HTTPAdapter
 from requests.exceptions import HTTPError, RequestException
 from uk_geo_utils.helpers import Postcode
+from urllib3.util.retry import Retry
 from sentry_sdk import set_context, get_current_scope
+
 
 logger = logging.getLogger(__name__)
 session = Session()
+
+retries = Retry(
+    total=1,
+    backoff_factor=0.1,
+    status_forcelist=[502, 503, 504],
+    allowed_methods={"GET"},
+)
+
+session.mount(
+    f"{urlparse(settings.EE_BASE).scheme}://", HTTPAdapter(max_retries=retries)
+)
 
 
 def ballot_paper_id_to_ee_url(ballot_paper_id):
@@ -89,7 +103,7 @@ class LocalParquetElectionsHelper(BaseBakedElectionsHelper):
         result = []
         for ballot_id in ballot_ids:
             url = ballot_paper_id_to_ee_url(ballot_id)
-            response = session.get(url, timeout=10)
+            response = session.get(url, timeout=5)
             response.raise_for_status()
             result.append(response.json())
         return result
