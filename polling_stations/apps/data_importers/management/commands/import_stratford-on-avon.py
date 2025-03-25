@@ -5,13 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STR"
     addresses_name = (
-        "2024-07-04/2024-06-07T16:48:33.753603/Democracy_Club__04July2024 (24).tsv"
+        "2025-05-01/2025-03-25T09:56:31.025683/Democracy_Club__01May2025.CSV"
     )
     stations_name = (
-        "2024-07-04/2024-06-07T16:48:33.753603/Democracy_Club__04July2024 (24).tsv"
+        "2025-05-01/2025-03-25T09:56:31.025683/Democracy_Club__01May2025.CSV"
     )
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    elections = ["2025-05-01"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -43,15 +42,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "100071491317",  # HENLEY HOTEL, TANWORTH LANE, HENLEY-IN-ARDEN
                 "10094567022",  # 32 LANCASTER WAY, SHACKLETON VILLAGE
                 "10023387972",  # AVON BANK HOUSE, CHURCH BANK, BINTON ROAD, WELFORD ON AVON, STRATFORD-UPON-AVON
+                "10023582137",  # FOURSHIRES LODGE, LEMINGTON LANE, MORETON-IN-MARSH
             ]
         ):
             return None
 
         if record.addressline6 in [
-            # splits
-            "CV37 8LT",
             # looks wrong
             "CV37 5AF",
+            "CV37 7PN",
+            "CV37 5AS",
+            "CV36 4DY",
+            "CV37 5AR",
+            "CV37 5AG",
         ]:
             return None
 
@@ -61,11 +64,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         rec = super().station_record_to_dict(record)
 
         # more accurate point for: Wellesbourne Sports and Community Centre, Loxley Close, Wellesbourne, CV35 9RU
-        if rec["internal_council_id"] == "12241":
+        if rec["internal_council_id"] == "12678":
             rec["location"] = Point(-1.5998000, 52.191589, srid=4326)
 
         # more accurate point for: Alcester Guide and Scout Centre, 28 Moorfield Road, Alcester, B49 5DA
-        if rec["internal_council_id"] == "12293":
+        if rec["internal_council_id"] == "12570":
             rec["location"] = Point(-1.871989, 52.216317, srid=4326)
 
         return rec
