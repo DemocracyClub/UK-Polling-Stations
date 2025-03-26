@@ -19,6 +19,7 @@ session = Session()
 
 retries = Retry(
     total=1,
+    connect=1,
     backoff_factor=0.1,
     status_forcelist=[502, 503, 504],
     allowed_methods={"GET"},
