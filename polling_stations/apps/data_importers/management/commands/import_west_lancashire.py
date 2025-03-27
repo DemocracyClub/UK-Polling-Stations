@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WLA"
     addresses_name = (
-        "2024-07-04/2024-05-28T16:23:35.023638/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-27T10:21:21.955308/Democracy_Club__01May2025.CSV"
     )
     stations_name = (
-        "2024-07-04/2024-05-28T16:23:35.023638/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-27T10:21:21.955308/Democracy_Club__01May2025.CSV"
     )
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    elections = ["2025-05-01"]
 
     # The following warning can be ignored:
     # WARNING: Polling station Up Holland High School (10662) is in Wigan Metropolitan Borough Council (WGN)
@@ -20,29 +19,27 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10012356569",  # 3 THE GRAVEL, MERE BROW, PRESTON
             "10012344947",  # 201 SHAW HALL CARAVAN PARK SMITHY LANE, SCARISBRICK
-            "10012365587",  # FLAT 1, HEBA HOUSE, 4 AUGHTON STREET, ORMSKIRK
             "10012363964",  # 1 COLLIER WAY, UPHOLLAND, SKELMERSDALE
+            "10012363965",  # 2 COLLIER WAY, UPHOLLAND, SKELMERSDALE
+            "10012363967",  # 4 COLLIER WAY, UPHOLLAND, SKELMERSDALE
             "10012355457",  # APARTMENT 47, BROOKSIDE, AUGHTON STREET, ORMSKIRK
-            "10012365587",  # FLAT 1, HEBA HOUSE, 4 AUGHTON STREET, ORMSKIRK
             "10012360939",  # 1 TOWER VIEW CLOSE, BURSCOUGH, ORMSKIRK
-            "100012414181",  # ALTYS FARM, ALTYS LANE, ORMSKIRK
         ]:
             return None
 
         if record.addressline6 in [
             # split
-            "L39 8SR",
-            "L40 5BE",
-            "PR9 8FB",
-            "PR4 6RT",
             "WN6 9EN",
+            "L39 8SR",
+            "PR4 6RT",
             "WN6 9QE",
             "L40 6JA",
-            "PR9 8DH",
-            "WN8 7XA",
+            "L40 5BE",
+            "PR9 8FB",
             "WN8 6SH",
+            "WN8 7XA",
+            "PR9 8DH",
         ]:
             return None
 
