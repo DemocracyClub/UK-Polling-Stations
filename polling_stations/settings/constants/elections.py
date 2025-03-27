@@ -25,4 +25,4 @@ SHOW_GB_ID_MESSAGING = True
 
 if data_path := os.environ.get("ELECTION_PARQUET_DATA_PATH", False):
     ELECTION_PARQUET_DATA_PATH = Path(data_path)
-    USE_LOCAL_PARQUET_ELECTIONS = False
+    USE_LOCAL_PARQUET_ELECTIONS = True
