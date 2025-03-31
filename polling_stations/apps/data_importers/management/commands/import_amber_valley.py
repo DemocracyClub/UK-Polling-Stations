@@ -35,4 +35,22 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             record = record._replace(xordinate="442409", yordinate="353784")
 
+        # corrections from council for the following stations:
+        # TESCO SUPERSTORE, 24 Admiral Close, Heanor, DE75 7QH
+        if record.stationcode == "29":
+            record = record._replace(
+                add1="High Street",
+                postcode="DE75 7EX",
+                xordinate="443032",
+                yordinate="346571",
+            )
+        # WILMOT STREET CENTRE, 15 The Ropewalk, Heanor, DE75 7BL
+        if record.stationcode == "27":
+            record = record._replace(
+                add1="Wilmot Street",
+                postcode="DE75 7EF",
+                xordinate="443402",
+                yordinate="346258",
+            )
+
         return super().station_record_to_dict(record)
