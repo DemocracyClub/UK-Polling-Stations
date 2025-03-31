@@ -68,4 +68,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="411692",
                 polling_place_northing="200044",
             )
+        # postcode and coords from council for:
+        # Hatherop Working Men's Club, Hatherop
+        if record.polling_place_id == "30538":
+            record = record._replace(
+                polling_place_postcode="GL7 3NA",
+                polling_place_easting="415600",
+                polling_place_northing="205127",
+            )
         return super().station_record_to_dict(record)
