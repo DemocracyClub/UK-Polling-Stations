@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PTE"
     addresses_name = (
-        "2024-07-04/2024-06-11T13:38:20.042367/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-31T16:53:28.554952/Democracy_Club__01May2025.CSV"
     )
     stations_name = (
-        "2024-07-04/2024-06-11T13:38:20.042367/Democracy_Club__04July2024.tsv"
+        "2025-05-01/2025-03-31T16:53:28.554952/Democracy_Club__01May2025.CSV"
     )
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    elections = ["2025-05-01"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -18,15 +17,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "10094542529",  # 64 GREENFIELD WAY, HAMPTON WATER, PETERBOROUGH
             "100091206701",  # WOODLANDS, HAM LANE, ORTON WATERVILLE, PETERBOROUGH
-            "100090190220",  # 296 EASTFIELD ROAD, PETERBOROUGH
-            "100091511753",  # 294 EASTFIELD ROAD, PETERBOROUGH
-        ]:
-            return None
-
-        if record.addressline6 in [
-            # looks wrong
-            "PE3 8AA",
-            "PE1 4RZ",
+            "10090764144",  # 43B SILVERWOOD ROAD, MILLFIELD, PETERBOROUGH
         ]:
             return None
 
@@ -35,9 +26,4 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # Below warnings checked and no correction needed:
         # Polling station Wothorpe Sports Centre (11397) is in South Kesteven District Council (SKE)
-
-        # postcode correction for: Copeland Community Centre, 37 Copeland, Bretton, Peterborough, PE3 9YJ
-        if record.polling_place_id == "11343":
-            record = record._replace(polling_place_postcode="PE3 6YJ")
-
         return super().station_record_to_dict(record)
