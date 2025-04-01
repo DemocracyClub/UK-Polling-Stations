@@ -57,9 +57,24 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Point correction for: St Bartholomew's Church Hall, Vicarage Road, Penn, Wolverhampton, WV4 5HU
         # Ignore warning: Polling station St Bartholomew's Church Hall (6225) is in Wolverhampton City Council
         if record.polling_place_id == "6225":
-            print(record)
             record = record._replace(
                 polling_place_easting="389364", polling_place_northing="295314"
+            )
+
+        # coords and UPRN from council for the following stations:
+        # The Shepherds Buildings, Burnhill Green, WV6 7JA
+        if record.polling_place_id == "6244":
+            record = record._replace(
+                polling_place_easting="378976",
+                polling_place_northing="300293",
+                polling_place_uprn="200004521936",
+            )
+        # Wombourne Village Hall, High Street, Wombourne, Wolverhampton, WV5 9DT
+        if record.polling_place_id == "6221":
+            record = record._replace(
+                polling_place_easting="387823",
+                polling_place_northing="293176",
+                polling_place_uprn="200004528646",
             )
 
         return super().station_record_to_dict(record)
