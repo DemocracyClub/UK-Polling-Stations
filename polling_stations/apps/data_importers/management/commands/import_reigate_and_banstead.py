@@ -12,7 +12,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
-    # By-election script so maintaing previous exclusions as comments for future reference
+    # By-election script so maintaining previous exclusions as comments for future reference
     # def address_record_to_dict(self, record):
     #     uprn = record.property_urn.lstrip("0")
 
@@ -35,3 +35,27 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     #         return None
 
     #     return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Coords from council for the following stations
+        # St Mark’s Church Hall, Great Tattenhams, KT18 5RD
+        if record.polling_place_id == "5736":
+            record = record._replace(
+                polling_place_easting="523352",
+                polling_place_northing="158124",
+            )
+        # St Mark’s Church Hall, Great Tattenhams, KT18 5RD
+        if record.polling_place_id == "5734":
+            record = record._replace(
+                polling_place_easting="524630",
+                polling_place_northing="159246",
+                polling_place_uprn="68157550",
+            )
+        # St Pauls Church Hall, Warren Road Banstead Surrey SM7 1LG
+        if record.polling_place_id == "5725":
+            record = record._replace(
+                polling_place_easting="523884",
+                polling_place_northing="159996",
+                polling_place_uprn="68157553",
+            )
+        return super().station_record_to_dict(record)
