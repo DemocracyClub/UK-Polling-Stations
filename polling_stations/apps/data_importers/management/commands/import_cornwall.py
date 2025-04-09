@@ -19,12 +19,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "18055":
             record = record._replace(polling_place_uprn="10023432417")
 
-        # Removing wrong points for:
+        # Station coords from council for:
         # Trevenson Church Community Hall, Church Road, Pool, Redruth, TR15 3PT
         if record.polling_place_id == "18651":
             record = record._replace(
-                polling_place_easting="",
-                polling_place_northing="",
+                polling_place_easting="166658",
+                polling_place_northing="41812",
+                polling_place_uprn="10013623443",
             )
 
         # East Taphouse Community Hall, Salts Meadow Road, East Taphouse, Liskeard, PL14 4TG
@@ -32,7 +33,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(
                 polling_place_easting="",
                 polling_place_northing="",
-                polling_place_uprn="",
+                polling_place_uprn="010003070931",
+            )
+
+        # St Breward Village Hall. Churchtown, Wet Lane, St Breward, Bodmin, PL30 4PP
+        if record.polling_place_id == "19071":
+            record = record._replace(
+                polling_place_easting="209731",
+                polling_place_northing="77253",
+                polling_place_uprn="10003295304",
+            )
+
+        # Troon Church Hall, Treslothan Road, Troon, Camborne TR14 9EJ
+        if record.polling_place_id == "18479":
+            record = record._replace(
+                polling_place_easting="165957",
+                polling_place_northing="37924",
             )
 
         return super().station_record_to_dict(record)
