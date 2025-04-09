@@ -29,3 +29,19 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station Change from councl:
+        # Old: Lawrence Weston Youth Centre, Lawrence Weston Road, Lawrence Weston, Bristol BS11 0RX
+        # New:The Rock Community Centre, St Peter's Church, Ridingleaze, Lawrence Weston, Bristol BS11 0QF 31897
+        if record.polling_place_id == "31901":
+            record = record._replace(
+                polling_place_name="The Rock Community Centre",
+                polling_place_address_1="St Peter's Church",
+                polling_place_address_2="Ridingleaze",
+                polling_place_address_3="Lawrence Weston",
+                polling_place_address_4="Bristol",
+                polling_place_postcode="BS11 0QF",
+            )
+
+        return super().station_record_to_dict(record)
