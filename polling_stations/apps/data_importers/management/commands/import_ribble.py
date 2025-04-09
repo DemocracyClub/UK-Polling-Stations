@@ -5,9 +5,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RIB"
-    addresses_name = "2024-07-04/2024-06-25T12:25:05.523108/RIB_combined.tsv"
-    stations_name = "2024-07-04/2024-06-25T12:25:05.523108/RIB_combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2025-05-01/2025-04-09T14:19:45.282804/Democracy_Club__01May2025.tsv"
+    )
+    stations_name = (
+        "2025-05-01/2025-04-09T14:19:45.282804/Democracy_Club__01May2025.tsv"
+    )
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
@@ -26,11 +30,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if uprn in [
             "10093891716",  # 44 HACKINGS CARAVAN PARK ELKER LANE, BILLINGTON
             "10093893136",  # BROCKTHRON LAITHE, WIGGLESWORTH ROAD, TOSSIDE, SKIPTON
-        ]:
-            return None
-        if record.addressline6 in [
-            # split
-            "BB7 9GL",
+            "10022975925",  # CARAVAN GHYLL SEEDS FARM KNOTTS LANE, BOLTON BY BOWLAND
         ]:
             return None
 
