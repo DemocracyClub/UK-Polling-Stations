@@ -33,3 +33,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Station coords from council for:
+        # Drawing Room, Hemswell Court, Lancaster Green, Hemswell Cliff,  Gainsborough, DN21 5TQ
+        if record.polling_place_id == "13465":
+            record = record._replace(polling_place_uprn="10013810899")
+        # The Village Hall, Bishop Norton Road, Glentham LN8 2EU
+        if record.polling_place_id == "13319":
+            record = record._replace(polling_place_uprn="100032253643")
+
+        return super().station_record_to_dict(record)
