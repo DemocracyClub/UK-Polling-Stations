@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "STF"
     addresses_name = (
-        "2024-07-04/2024-06-03T11:06:55.323891/Democracy_Club__04July2024 (14).tsv"
+        "2025-05-01/2025-04-08T10:03:23.873243/Democracy_Club__01May2025 (11).tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-03T11:06:55.323891/Democracy_Club__04July2024 (14).tsv"
+        "2025-05-01/2025-04-08T10:03:23.873243/Democracy_Club__01May2025 (11).tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2025-05-01"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -41,14 +41,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "ST13 8BS",
-            "ST13 6BU",
-            "ST8 7JW",
-            "ST10 1LT",
-            "ST9 9DQ",
-            "ST10 1UB",
-            "SK17 0QT",
             "ST13 5DP",
+            "ST10 1LT",
+            "ST13 6BU",
+            "ST9 9DQ",
+            "SK17 0QT",
+            "ST13 8BS",
+            "ST10 1UB",
+            "ST8 7JW",
             "ST13 7QX",
             # suspect
             "ST10 2PR",
@@ -56,3 +56,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # postcode correction for: Werrington Village Hall, Ash Bank Road, Werrington, Stoke-on-Trent, ST9 1JS
+        if record.polling_place_id == "9956":
+            record = record._replace(polling_place_postcode="ST9 0JS")
+        return super().station_record_to_dict(record)
