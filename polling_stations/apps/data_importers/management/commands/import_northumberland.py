@@ -138,4 +138,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # # 'Cambois Camera Club, Ridley Terrace, Cambois, NE24 1QS' (id: 8783)
         # # postcode provided by the council, ignore the warning
 
+        # Station change from Council:
+        # Old: The Abbey Morpeth (The Wansbeck) 2 Abbey Meadows, NE61 2BD
+        # New: County Hall, Morpeth NE61 2EF
+        if record.polling_place_id == "15603":
+            record = record._replace(
+                polling_place_name="County Hall",
+                polling_place_address_1="Morpeth",
+                polling_place_address_4="",
+                polling_place_postcode="NE61 2EF",
+                polling_place_uprn="2920008846",
+            )
+
         return super().station_record_to_dict(record)
