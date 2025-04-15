@@ -43,8 +43,8 @@ from constructs import Construct
 # sys.path.append("..")
 
 # output of
-# https://eu-west-2.console.aws.amazon.com/imagebuilder/home?region=eu-west-2#/images/arn%3Aaws%3Aimagebuilder%3Aeu-west-2%3A732292556707%3Aimage%2Feeimage-ubuntu%2F0.0.35%2F2/details
-EE_IMAGE = "ami-0c8d319e3a044e7da"
+# https://eu-west-2.console.aws.amazon.com/imagebuilder/home?region=eu-west-2#/images/arn%3Aaws%3Aimagebuilder%3Aeu-west-2%3A732292556707%3Aimage%2Feeimage-ubuntu%2F0.0.47%2F1/details
+EE_IMAGE = "ami-05eea127ce68d51cf"
 
 MONITORING_ACCOUNTS = {
     "development": "985364114241",
