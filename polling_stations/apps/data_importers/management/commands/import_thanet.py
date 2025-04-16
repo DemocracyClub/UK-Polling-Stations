@@ -32,9 +32,9 @@ class Command(BaseFcsDemocracyClubApiImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Removing suspect postcode for:
+        # Postcode correction from council for:
         # Cliftonville ( Outdoor) Bowls Club, St Georges Pavillion, Third Avenue, Margate CT9 2DW
         if record["id"] == 6866:
-            record["addressPostCode"] = ""
+            record["addressPostCode"] = "CT9 2LN"
 
         return super().station_record_to_dict(record)
