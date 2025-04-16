@@ -42,7 +42,7 @@ class Command(BaseCommand):
             Onspd.objects.annotate(
                 # Create "ONSPD:{postcode}" with whitespace removed
                 uprn=Concat(
-                    Value("ONSPD:", output_field=CharField()),
+                    Value("ONSPD-", output_field=CharField()),
                     Replace("pcds", Value(" "), Value(""), output_field=CharField()),
                     output_field=CharField(),
                 ),
