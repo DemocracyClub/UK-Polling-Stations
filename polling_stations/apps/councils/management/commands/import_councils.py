@@ -10,7 +10,6 @@ from django.core.management.base import BaseCommand
 from django.db import DEFAULT_DB_ALIAS, transaction
 from requests.exceptions import HTTPError
 from retry import retry
-from polling_stations.db_routers import get_principal_db_name
 
 
 from polling_stations.settings.constants.councils import (
@@ -18,8 +17,6 @@ from polling_stations.settings.constants.councils import (
     NIR_IDS,
     WELSH_COUNCIL_NAMES,
 )
-
-DB_NAME = get_principal_db_name()
 
 
 def union_areas(a1, a2):
@@ -191,12 +188,16 @@ class Command(BaseCommand):
             self.attach_council_geography(council, feature, gss_code)
 
     def attach_council_geography(self, council: Council, feature: dict, gss_code: str):
-        council_geography, _ = CouncilGeography.objects.using(
-            self.database
-        ).get_or_create(council=council)
+        try:
+            council_geography = CouncilGeography.objects.using(self.database).get(
+                council=council
+            )
+        except CouncilGeography.DoesNotExist:
+            council_geography = CouncilGeography(council=council)
+
         council_geography.gss = gss_code
         council_geography.geography = self.feature_to_multipolygon(feature)
-        council_geography.save()
+        council_geography.save(using=self.database)
 
     def load_contact_details(self):
         return requests.get(settings.EC_COUNCIL_CONTACT_DETAILS_API_URL).json()
@@ -229,9 +230,12 @@ class Command(BaseCommand):
 
             self.seen_ids.add(council_data["code"])
 
-            council, _ = Council.objects.using(self.database).get_or_create(
-                council_id=council_data["code"]
-            )
+            try:
+                council = Council.objects.using(self.database).get(
+                    council_id=council_data["code"]
+                )
+            except Council.DoesNotExist:
+                council = Council(council_id=council_data["code"])
 
             council.name = self.get_council_name(council_data)
             council.identifiers = council_data["identifiers"]
@@ -260,9 +264,8 @@ class Command(BaseCommand):
             elif council.name_translated.get("cy"):
                 del council.name_translated["cy"]
 
-            council.save()
+            council.save(using=self.database)
 
-    @transaction.atomic(using=DB_NAME)
     def handle(self, **options):
         """
         Manually run system checks for the
@@ -276,40 +279,43 @@ class Command(BaseCommand):
 
         self.database = options["database"]
 
-        if options["teardown"]:
-            try:
-                self.stdout.write("Clearing councils table..")
-                Council.objects.using(self.database).all().delete()
-                self.stdout.write("Clearing councils_geography table..")
-                CouncilGeography.objects.using(self.database).all().delete()
-            except UnsafeToDeleteCouncil:
-                self.stdout.write(
-                    "Can't delete councils there are polling stations attached. "
-                    "Please run manage.py teardown --all first if you want to delete them."
-                )
-                return
+        with transaction.atomic(self.database):
+            if options["teardown"]:
+                try:
+                    self.stdout.write("Clearing councils table..")
+                    Council.objects.using(self.database).all().delete()
+                    self.stdout.write("Clearing councils_geography table..")
+                    CouncilGeography.objects.using(self.database).all().delete()
+                except UnsafeToDeleteCouncil:
+                    self.stdout.write(
+                        "Can't delete councils there are polling stations attached. "
+                        "Please run manage.py teardown --all first if you want to delete them."
+                    )
+                    return
 
-        self.seen_ids = set()
-        self.import_councils_from_ec()
+            self.seen_ids = set()
+            self.import_councils_from_ec()
 
-        if not options["only_contact_details"]:
-            self.attach_boundaries(options.get("alt_url"))
+            if not options["only_contact_details"]:
+                self.attach_boundaries(options.get("alt_url"))
 
-            if options.get("use_osni", None):
-                self.attach_boundaries(
-                    NI_BOUNDARY_URL, id_field=NI_ID_FIELD, include=NI_BOUNDARY_GSS_CODES
-                )
+                if options.get("use_osni", None):
+                    self.attach_boundaries(
+                        NI_BOUNDARY_URL,
+                        id_field=NI_ID_FIELD,
+                        include=NI_BOUNDARY_GSS_CODES,
+                    )
 
-            if options.get("import_old_boundaries", None):
-                self.attach_boundaries(
-                    OLD_BOUNDARY_URL,
-                    id_field=OLD_ID_FIELD,
-                    include=OLD_BOUNDARIES_GSS_CODES,
-                )
+                if options.get("import_old_boundaries", None):
+                    self.attach_boundaries(
+                        OLD_BOUNDARY_URL,
+                        id_field=OLD_ID_FIELD,
+                        include=OLD_BOUNDARIES_GSS_CODES,
+                    )
 
-        # Clean up old councils that we've not seen in the EC data
-        Council.objects.using(self.database).exclude(
-            council_id__in=self.seen_ids
-        ).delete()
+            # Clean up old councils that we've not seen in the EC data
+            Council.objects.using(self.database).exclude(
+                council_id__in=self.seen_ids
+            ).delete()
 
-        self.stdout.write("..done")
+            self.stdout.write("..done")
