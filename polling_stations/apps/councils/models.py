@@ -116,7 +116,7 @@ class Council(WelshNameMutationMixin, models.Model):
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
-        with transaction.atomic(using=DB_NAME):
+        with transaction.atomic(using=using):
             new = self._state.adding
             super().save(
                 force_insert=force_insert,
@@ -125,8 +125,13 @@ class Council(WelshNameMutationMixin, models.Model):
                 update_fields=update_fields,
             )
             if new:
-                # model has just been created, so create corresponding DataQuality object.
-                DataQuality.objects.get_or_create(council_id=self.council_id)
+                try:
+                    dq = DataQuality.objects.using(using).get(
+                        council_id=self.council_id
+                    )
+                except DataQuality.DoesNotExist:
+                    dq = DataQuality(council_id=self.council_id)
+                    dq.save(using=using)
 
     def delete(self, using=None, keep_parents=False, force_cascade=False):
         if (not force_cascade) and self.pollingstation_set.exists():
