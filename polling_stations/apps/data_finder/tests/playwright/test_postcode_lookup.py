@@ -100,7 +100,9 @@ def test_invalid_postcode(page, live_server):
     with check_for_console_errors(page):
         page.goto(f"{live_server.url}/postcode/foo")
         expect(
-            page.locator("text=This doesn't appear to be a valid postcode.")
+            page.locator(
+                "text=We don't hold data for this postcode, or it is an invalid postcode."
+            )
         ).not_to_be_empty()
 
 
@@ -179,7 +181,6 @@ def test_northern_ireland_with_station_no_election(
         expect(page.locator("h1")).to_have_text("Find your polling station")
         expect(page.locator("#id_postcode")).to_have_count(1)
         page.query_selector("#id_postcode").fill("BT15 3JX")
-
         with page.expect_navigation():
             page.query_selector("#submit-postcode").click()
         expect(
