@@ -12,8 +12,7 @@
             <div class="ds-card">
                 <div class="ds-card-body ds-text-centered">
                     {% if form.errors %}
-                        <h2>{% blocktrans %}Sorry, we can't find {{ postcode }}{% endblocktrans %}</h2>
-                        <p>{% trans "This doesn't appear to be a valid postcode." %}</p>
+                        {% include "fragments/errors.html" with postcode=postcode %}
                     {% endif %}
 
                     {% if not is_whitelabel %}
