@@ -39,12 +39,17 @@ class OnspdGeocoderAdapter(BaseGeocoder):
             raise PostcodeError("No location information")
 
         local_auth = geocoder.get_code("lad")
-        error_values = [
+        lad_error_values = [
             "L99999999",  # Channel Islands
             "M99999999",  # Isle of Man
             "",  # Terminated Postcode or other
         ]
-        if not local_auth or local_auth in error_values:
+        usertype = geocoder.get_code("usertype")
+        if (
+            not local_auth
+            or local_auth in lad_error_values
+            or usertype == "1"  # large users
+        ):
             raise PostcodeError("No location information")
 
         return geocoder

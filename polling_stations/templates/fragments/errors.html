@@ -3,7 +3,7 @@
 
 <div class="ds-text-centered">
     <h2>{% blocktrans %}Sorry, we can't find {{ postcode }}{% endblocktrans %}</h2>
-    <p>{% trans "This doesn't appear to be a valid postcode." %}</p>
+    <p>{% trans "We don't hold information for this postcode, or it is an invalid postcode." %}</p>
     <form method="post" action="{% url 'home' %}" class="form form-inline">
         {% csrf_token %}
         {{ postcode_form|dc_form }}

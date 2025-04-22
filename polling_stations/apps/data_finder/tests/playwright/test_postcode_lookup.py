@@ -101,7 +101,7 @@ def test_invalid_postcode(page, live_server):
         page.goto(f"{live_server.url}/postcode/foo")
         expect(
             page.locator(
-                "text=We don't hold data for this postcode, or it is an invalid postcode."
+                "text=We don't hold information for this postcode, or it is an invalid postcode."
             )
         ).not_to_be_empty()
 
