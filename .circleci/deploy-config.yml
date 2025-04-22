@@ -372,14 +372,14 @@ workflows:
         requires:
         - "CDK Synth"
         context: [deployment-development-wdiv, slack-secrets]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, npm20250422 ] } }
         dc-environment: development
     - code_deploy:
         name: "Development: AWS CodeDeploy"
         requires:
         - "Development: CDK Deploy"
         context: [deployment-development-wdiv, slack-secrets]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, npm20250422 ] } }
         dc-environment: development
         min-size: 1
         max-size: 2
@@ -389,7 +389,7 @@ workflows:
         name: "Development: Run New Imports Post Deploy"
         requires: ["Development: AWS CodeDeploy"]
         context: [deployment-development-wdiv, slack-secrets, fcs-api]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, npm20250422 ] } }
 
     ###########
     # STAGING #
