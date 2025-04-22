@@ -2,4 +2,4 @@
 set -xeE
 
 cd /var/www/polling_stations/code/
-npm ci
+UV_USE_IO_URING=0 npm ci
