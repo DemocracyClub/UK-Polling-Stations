@@ -8,7 +8,7 @@ from file_uploads.models import Upload
 class DataEvent(TimeStampedModel):
     council = models.ForeignKey("councils.Council", on_delete=models.CASCADE)
     upload = models.ForeignKey(Upload, null=True, on_delete=models.CASCADE)
-    event_type = models.CharField(choices=DataEventType.choices)
+    event_type = models.CharField(choices=DataEventType.choices, max_length=255)
     election_dates = ArrayField(models.DateField(), default=list)
     metadata = models.JSONField(default=dict)
     payload = models.JSONField(default=dict)
