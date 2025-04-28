@@ -46,4 +46,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="179880",
                 polling_place_uprn="",
             )
+        # Remove wrong point pending council response for:
+        # BAWA (The Concorde Room) 589 Southmead Road, Filton, Bristol, BS34 7RG
+        if record.polling_place_id == "17708":
+            record = record._replace(
+                polling_place_easting="",
+                polling_place_northing="",
+            )
         return super().station_record_to_dict(record)
