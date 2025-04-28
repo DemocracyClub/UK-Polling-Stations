@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "STN"
     addresses_name = (
-        "2025-04-10/2025-03-25T16:57:30.766897/Democracy Club Polling Districts.csv"
+        "2025-05-22/2025-04-28T09:58:32.350706/Democracy Club- Polling Districts.csv"
     )
     stations_name = (
-        "2025-04-10/2025-03-25T16:57:30.766897/Democracy Club Polling Stations.csv"
+        "2025-05-22/2025-04-28T09:58:32.350706/Democracy clubs- Polling stations.csv"
     )
-    elections = ["2025-04-10"]
+    elections = ["2025-05-22"]
     csv_encoding = "utf-16le"
 
     # By-election, Maintaining unused script changes as comment for future reference:
