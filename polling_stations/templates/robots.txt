@@ -4,6 +4,7 @@ Disallow: /address/
 Disallow: /address_select/
 Disallow: /email/
 Disallow: /embed/
+Disallow: /example/
 Disallow: /i18n/
 Disallow: /league_table/
 Disallow: /nus_wales/
