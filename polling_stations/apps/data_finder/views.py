@@ -220,6 +220,7 @@ class BasePollingStationView(
     def get_context_data(self, **context):
         context["tile_layer"] = settings.TILE_LAYER
         context["mq_key"] = settings.MQ_KEY
+        context["show_form_on_error"] = True
 
         try:
             loc = self.get_location()
