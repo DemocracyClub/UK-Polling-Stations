@@ -1,11 +1,13 @@
 import abc
 from datetime import datetime
 from typing import Optional
+from django.utils.safestring import mark_safe
 
 from addressbase.models import Address
 from api.councils import tmp_fix_parl_24_scotland_details
 from councils.models import Council
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.gis.geos import Point
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -360,6 +362,11 @@ class ExamplePostcodeView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
         kwargs["rh"] = RoutingHelper("BS4 4NL")
         context = self.get_context_data(**kwargs)
+        url = reverse("home")
+        message = mark_safe(
+            f'THIS IS AN EXAMPLE PAGE. To find your polling station please return to the <a href="{url}">homepage</a> and enter your postcode.'
+        )
+        messages.error(self.request, message)
         return self.render_to_response(context)
 
     def get_location(self):
