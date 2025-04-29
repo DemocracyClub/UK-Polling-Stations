@@ -12,6 +12,12 @@
     {%  endblock extra_page_css %}
 {% endblock extra_site_css %}
 
+{% if noindex %}
+    {% block page_meta %}
+        <meta name="robots" content="noindex">
+    {% endblock page_meta %}
+{% endif %}
+
 {% block top_banner %}
     {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
         <div class="ds-card">
