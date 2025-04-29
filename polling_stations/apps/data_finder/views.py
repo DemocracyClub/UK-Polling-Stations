@@ -400,6 +400,7 @@ class ExamplePostcodeView(BasePollingStationView):
         context["election_explainers"] = []
         context["error"] = None
         context["requires_voter_id"] = True
+        context["noindex"] = True
         return context
 
 
