@@ -59,9 +59,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "45574":
             record = record._replace(polling_place_postcode="NN12 7AH")
 
-        # remove wrong point for: Mobile Unit, Sunnyside Public House, Boughton Green Road, Northampton, NN2 7AG (bug report 761)
+        # correct point for: Mobile Unit, Sunnyside Public House, Boughton Green Road, Northampton, NN2 7AG (bug report 761)
         if record.polling_place_id == "45193":
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
+            record = record._replace(polling_place_easting="475878")
+            record = record._replace(polling_place_northing="264323")
 
         return super().station_record_to_dict(record)
