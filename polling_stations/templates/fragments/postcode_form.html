@@ -1,0 +1,21 @@
+{% load dc_forms %}
+{% load i18n static %}
+
+<div class="ds-card">
+  <div class="ds-card-body ds-text-centered">
+    {% if form.errors %}
+      <h2>{% blocktrans %}Sorry, we can't find {{ postcode }}{% endblocktrans %}</h2>
+      <span>{% trans "We don't hold information for this postcode, or it is an invalid postcode." %}</span>
+    {% endif %}
+
+    {% if not is_whitelabel %}
+      <h1>{% trans "Find your polling station" %}</h1>
+    {% endif %}
+
+    <form id="find-polling-station-form" method="post" action="{% url 'home' %}" class="form form-inline">
+      {% csrf_token %}
+      {{ form|dc_form }}
+      <button type="submit" class="ds-button-blue" id="submit-postcode">{% trans "Find your Polling Station" %}</button>
+    </form>
+  </div>
+</div>
