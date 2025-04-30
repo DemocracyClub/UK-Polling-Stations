@@ -49,3 +49,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Remove wrong coords for: Weaverthorpe Scout H.Q, Weaverthorpe Road, Woodthorpe, NG5 4PT (bug report 760)
+        if record.polling_place_id == "4989":
+            record = record._replace(
+                polling_place_easting="",
+                polling_place_northing="",
+            )
+
+        return super().station_record_to_dict(record)
