@@ -1,5 +1,4 @@
 {% extends base_template|default:"base.html" %}
-{% load dc_forms %}
 
 {% load i18n static %}
 
@@ -9,22 +8,7 @@
     {% block extra_content %}{% endblock extra_content %}
     {% block page_content %}
         <div class="ds-stack">
-            <div class="ds-card">
-                <div class="ds-card-body ds-text-centered">
-                    {% if form.errors %}
-                        {% include "fragments/errors.html" %}
-                    {% endif %}
-
-                    {% if not is_whitelabel %}
-                        <h1>{% trans "Find your polling station" %}</h1>
-                    {% endif %}
-                    <form id="find-polling-station-form" method="post">
-                        {% csrf_token %}
-                        {{ form|dc_form }}
-                        <button type="submit" class="ds-button-blue" id="submit-postcode">{% trans "Find your polling station" %}</button>
-                    </form>
-                </div>
-            </div>
+            {% include "fragments/postcode_form.html" with form=form %}
             {% if not show_polls_open_card and show_gb_id_messaging %}
                 <div class="ds-card">
                     <div class="ds-card-body ds-text-centered">

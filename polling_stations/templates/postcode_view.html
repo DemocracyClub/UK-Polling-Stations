@@ -17,7 +17,7 @@
 {% block content %}
 
     {% if error %}
-        {% include "fragments/errors.html" %}
+        {% include "fragments/postcode_form.html" with form=postcode_form %}
     {% else %}
         {% if has_election %}
             {% if we_know_where_you_should_vote %}
