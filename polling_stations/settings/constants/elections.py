@@ -19,7 +19,7 @@ ELECTION_BLACKLIST = [
     "local.epping-forest.moreton-and-fyfield.by.2018-05-03"  # uncontested
 ]
 
-NEXT_CHARISMATIC_ELECTION_DATES = ["2025-05-01"]
+NEXT_CHARISMATIC_ELECTION_DATES = []
 
 SHOW_GB_ID_MESSAGING = True
 
