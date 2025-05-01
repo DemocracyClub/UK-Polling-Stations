@@ -43,3 +43,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        if record.polling_place_id == "13502":
+            record = record._replace(polling_place_name="Methodist Church Schoolroom")
+
+        return super().station_record_to_dict(record)
