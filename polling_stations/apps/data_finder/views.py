@@ -226,6 +226,7 @@ class BasePollingStationView(
         except PostcodeError as e:
             context["error"] = str(e)
             context["postcode_form"] = PostcodeLookupForm({"postcode": self.postcode})
+            context["postcode_form"].add_error("postcode", "Enter a valid postcode.")
             return context
 
         if loc is None:
