@@ -462,9 +462,9 @@ factory-boy==3.3.3 \
     --hash=sha256:1c39e3289f7e667c4285433f305f8d506efc2fe9c73aaea4151ebd5cdea394fc \
     --hash=sha256:866862d226128dfac7f2b4160287e899daf54f2612778327dd03d0e2cb1e3d03
     # via -r requirements/testing.in
-faker==25.1.0 \
-    --hash=sha256:2107618cf306bb188dcfea3e5cfd94aa92d65c7293a2437c1e96a99c83274755 \
-    --hash=sha256:24e28dce0b89683bb9e017e042b971c8c4909cff551b6d46f1e207674c7c2526
+faker==37.3.0 \
+    --hash=sha256:48c94daa16a432f2d2bc803c7ff602509699fca228d13e97e379cd860a7e216e \
+    --hash=sha256:77b79e7a2228d57175133af0bbcdd26dc623df81db390ee52f5104d46c010f2f
     # via
     #   -r requirements/testing.in
     #   factory-boy
@@ -1286,7 +1286,6 @@ python-dateutil==2.9.0.post0 \
     # via
     #   asana
     #   botocore
-    #   faker
     #   fastkml
     #   freezegun
     #   jsii
@@ -1707,6 +1706,10 @@ typing-extensions==4.11.0 \
     #   pydantic
     #   pyee
     #   selenium
+tzdata==2025.2 \
+    --hash=sha256:1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8 \
+    --hash=sha256:b60a638fcc0daffadf82fe0f57e53d06bdec2f36c4df66280ae79bce6bd6f2b9
+    # via faker
 uk-geo-utils==0.18.0 \
     --hash=sha256:0baf8f300bf6f6d1a09fbac62f3cc9835ea8b5ab2a8c7be56e06fb9e4bf79b67 \
     --hash=sha256:3fec7e3639085b9415e19550d4e20b608fa9925f5f056a0cffc92d7db3264dc0
