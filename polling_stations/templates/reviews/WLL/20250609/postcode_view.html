@@ -1,0 +1,62 @@
+{% extends "postcode_view.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load pipeline %}
+
+{% block extra_page_css %}
+
+    {% if show_map %}
+        {% stylesheet 'map' %}
+    {% endif %}
+
+{% endblock extra_page_css %}
+
+{% block page_title %}{% trans "Your Polling Station" %}{% endblock page_title %}
+
+{% block content %}
+
+    {% if error %}
+        {% include "fragments/postcode_form.html" with form=postcode_form %}
+    {% else %}
+        {% if has_election %}
+            {% if we_know_where_you_should_vote %}
+                <div class="ds-card">
+                    <div class="ds-card-body">
+                        <h3>
+                            Walsall Council Polling District and Polling Place Review 2025
+                        </h3>
+                        <p>
+                            Please find your proposed polling place below and feedback on the consultation at
+                            <a href="https://www.walsall.gov.uk/PollingDistrictReview">
+                                https://www.walsall.gov.uk/PollingDistrictReview
+                            </a>
+                        </p>
+                        <p>
+                            Please provide your feedback by no later than Sunday 20 July 2025.
+                        </p>
+                        <p>
+                            For more information please visit
+                            <a href="https://www.walsall.gov.uk/PollingDistrictReview">
+                                https://www.walsall.gov.uk/PollingDistrictReview
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                {% include "reviews/WLL/20250609/polling_station_known.html" %}
+            {% else %}
+                {% include "fragments/polling_station_unknown.html" %}
+            {% endif %}
+        {%  elif ni_out_of_cycle_station %}
+            {% include "fragments/ni_out_of_cycle_station.html" %}
+        {% else %}
+            {% include "fragments/no_election.html" %}
+        {% endif %}
+
+    {% endif %}
+
+    {% if council.electoral_services_address or council.electoral_services_postcode or council.electoral_services_phone_numbers or council.electoral_services_email %}
+        {% include "fragments/contact_details.html" %}
+    {% endif %}
+
+{% endblock content %}
