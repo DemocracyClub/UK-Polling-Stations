@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
 from api.router import router
-from data_finder.views import (
-    AddressFormView,
-    AddressView,
-    ExamplePostcodeView,
-    HomeView,
-    MultipleCouncilsView,
-    PostcodeView,
-    WeDontKnowView,
-)
+import data_finder.views as data_finder_views
+from data_finder import review_views
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -26,26 +19,36 @@ admin.autodiscover()
 core_patterns = [
     re_path(r"^status_check/$", status_check, name="status_check"),
     re_path(
-        r"^postcode/(?P<postcode>.+)/$", PostcodeView.as_view(), name="postcode_view"
+        r"^postcode/(?P<postcode>.+)/$",
+        data_finder_views.PostcodeView.as_view(),
+        name="postcode_view",
     ),
-    re_path(r"^postcode/$", PostcodeView.as_view(), name="postcode_view_alias"),
-    re_path(r"^address/(?P<uprn>.+)/$", AddressView.as_view(), name="address_view"),
+    re_path(
+        r"^postcode/$",
+        data_finder_views.PostcodeView.as_view(),
+        name="postcode_view_alias",
+    ),
+    re_path(
+        r"^address/(?P<uprn>.+)/$",
+        data_finder_views.AddressView.as_view(),
+        name="address_view",
+    ),
     re_path(
         r"^we_dont_know/(?P<postcode>.+)/$",
-        WeDontKnowView.as_view(),
+        data_finder_views.WeDontKnowView.as_view(),
         name="we_dont_know",
     ),
     re_path(
         r"^multiple_councils/(?P<postcode>.+)/$",
-        MultipleCouncilsView.as_view(),
+        data_finder_views.MultipleCouncilsView.as_view(),
         name="multiple_councils_view",
     ),
     re_path(
         r"^address_select/(?P<postcode>.+)/$",
-        AddressFormView.as_view(),
+        data_finder_views.AddressFormView.as_view(),
         name="address_select_view",
     ),
-    re_path(r"^$", HomeView.as_view(), name="home"),
+    re_path(r"^$", data_finder_views.HomeView.as_view(), name="home"),
     re_path(
         r"^privacy/$",
         RedirectView.as_view(
@@ -68,7 +71,9 @@ extra_patterns = [
     re_path(r"^feedback/", include("feedback.urls")),
     re_path(r"^report_problem/", include("bug_reports.urls")),
     re_path(r"^uploads/", include("file_uploads.urls", namespace="file_uploads")),
-    re_path(r"^example/$", ExamplePostcodeView.as_view(), name="example"),
+    re_path(
+        r"^example/$", data_finder_views.ExamplePostcodeView.as_view(), name="example"
+    ),
     re_path(
         r"^about/$",
         RedirectView.as_view(
@@ -78,6 +83,38 @@ extra_patterns = [
         name="about",
     ),
 ]
+
+boundary_review_patterns = (
+    [
+        re_path(
+            r"^WLL/20250609/postcode/(?P<postcode>.+)/$",
+            review_views.PostcodeView.as_view(),
+            name="postcode_view",
+        ),
+        re_path(
+            r"^WLL/20250609/postcode/$",
+            review_views.PostcodeView.as_view(),
+            name="postcode_view_alias",
+        ),
+        re_path(
+            r"^WLL/20250609/address/(?P<uprn>.+)/$",
+            review_views.AddressView.as_view(),
+            name="address_view",
+        ),
+        re_path(
+            r"^WLL/20250609/we_dont_know/(?P<postcode>.+)/$",
+            review_views.WeDontKnowView.as_view(),
+            name="we_dont_know",
+        ),
+        re_path(
+            r"^WLL/20250609/address_select/(?P<postcode>.+)/$",
+            review_views.AddressFormView.as_view(),
+            name="address_select_view",
+        ),
+        re_path(r"^WLL/20250609/$", review_views.HomeView.as_view(), name="home"),
+    ],
+    "reviews",
+)
 
 if "dashboard" in settings.INSTALLED_APPS:
     extra_patterns.append(
@@ -106,7 +143,11 @@ PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:
     extra_patterns += [re_path(r"^%s/" % EMBED, include("whitelabel.urls"))]
 
-urlpatterns = extra_patterns + core_patterns
+urlpatterns = (
+    extra_patterns
+    + core_patterns
+    + [path("reviews/", include(boundary_review_patterns))]
+)
 
 handler500 = "dc_utils.urls.dc_server_error"
 
