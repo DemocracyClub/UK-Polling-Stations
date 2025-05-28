@@ -34,6 +34,33 @@ from .helpers import (
 )
 from .helpers.baked_data_helper import LocalParquetElectionsHelper
 from .helpers.every_election import EEFetcher, EEWrapper, EmptyEEWrapper
+from urllib.parse import urlencode
+
+
+def reverse_with_qs(view, kwargs, request):
+    """Returns a URL to route to, preserving any important query parameters"""
+    _query_params_to_preserve = {
+        "utm_content",
+        "utm_medium",
+        "utm_source",
+        "utm_campaign",
+    }
+    url = reverse(view, kwargs=kwargs)
+    query = urlencode(
+        [
+            (k, request.GET.getlist(k))
+            for k in request.GET
+            if k in _query_params_to_preserve
+        ],
+        doseq=True,
+    )
+    if query:
+        url += "?" + query
+    return url
+
+
+def namespace_view(namespace, view):
+    return f"{namespace}{view}"
 
 
 def polling_station_current(station):
@@ -101,9 +128,12 @@ def get_date_context(election_date: Optional[str]) -> dict:
 class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
     form_class = PostcodeLookupForm
     template_name = "home.html"
+    namespace = ""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context["submit_url"] = reverse(namespace_view(self.namespace, "home"))
 
         context["show_gb_id_messaging"] = getattr(
             settings, "SHOW_GB_ID_MESSAGING", False
@@ -124,7 +154,9 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         postcode = Postcode(form.cleaned_data["postcode"])
         rh = RoutingHelper(postcode)
         # Don't preserve query, as the user has already been to an HTML page
-        self.success_url = rh.get_canonical_url(self.request, preserve_query=False)
+        self.success_url = reverse(
+            namespace_view(self.namespace, rh.view), kwargs=rh.kwargs
+        )
 
         return super(HomeView, self).form_valid(form)
 
@@ -138,6 +170,7 @@ class BasePollingStationView(
     TemplateView, LogLookUpMixin, LanguageMixin, metaclass=abc.ABCMeta
 ):
     template_name = "postcode_view.html"
+    namespace = ""
 
     @abc.abstractmethod
     def get_location(self):
@@ -227,6 +260,7 @@ class BasePollingStationView(
             context["error"] = str(e)
             context["postcode_form"] = PostcodeLookupForm({"postcode": self.postcode})
             context["postcode_form"].add_error("postcode", "Enter a valid postcode.")
+            context["submit_url"] = reverse(namespace_view(self.namespace, "home"))
             return context
 
         if loc is None:
@@ -290,13 +324,17 @@ class PostcodeView(BasePollingStationView):
         if "postcode" in request.GET:
             self.kwargs["postcode"] = kwargs["postcode"] = request.GET["postcode"]
         if "postcode" not in kwargs or kwargs["postcode"] == "":
-            return HttpResponseRedirect(reverse("home"))
+            return HttpResponseRedirect(reverse(namespace_view(self.namespace, "home")))
 
         rh = RoutingHelper(self.kwargs["postcode"])
         kwargs["rh"] = rh
 
         if rh.view != "postcode_view":
-            return HttpResponseRedirect(rh.get_canonical_url(request))
+            return HttpResponseRedirect(
+                reverse_with_qs(
+                    namespace_view(self.namespace, rh.view), rh.kwargs, request
+                )
+            )
 
         # we are already in postcode_view
         self.postcode = Postcode(kwargs["postcode"])
@@ -363,7 +401,7 @@ class ExamplePostcodeView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
         kwargs["rh"] = RoutingHelper("BS4 4NL")
         context = self.get_context_data(**kwargs)
-        url = reverse("home")
+        url = reverse(namespace_view(self.namespace, "home"))
         message = mark_safe(
             f'THIS IS AN EXAMPLE PAGE. To find your polling station please return to the <a href="{url}">homepage</a> and enter your postcode.'
         )
@@ -412,7 +450,7 @@ class WeDontKnowView(PostcodeView):
         if rh.councils:
             return HttpResponseRedirect(
                 reverse(
-                    "multiple_councils_view",
+                    namespace_view(self.namespace, "multiple_councils_view"),
                     kwargs={"postcode": self.postcode.without_space},
                 )
             )
@@ -438,7 +476,11 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
         rh = RoutingHelper(self.postcode)
 
         if not rh.councils:
-            return HttpResponseRedirect(rh.get_canonical_url(request))
+            return HttpResponseRedirect(
+                reverse_with_qs(
+                    namespace_view(self.namespace, rh.view), rh.kwargs, request
+                )
+            )
 
         self.council_ids = rh.councils
         context = self.get_context_data(**kwargs)
@@ -462,6 +504,7 @@ class AddressFormView(FormView):
     form_class = AddressSelectForm
     template_name = "address_select.html"
     NOTINLIST = "519RA5LCGuHHXQvBUVgOXiCcqWy7SZG1inRDKcx1"
+    namespace = ""
 
     def get_context_data(self, **kwargs):
         context = super(AddressFormView, self).get_context_data(**kwargs)
@@ -506,8 +549,11 @@ class AddressFormView(FormView):
         uprn = form.cleaned_data["address"]
         if uprn == self.NOTINLIST:
             self.success_url = reverse(
-                "we_dont_know", kwargs={"postcode": self.postcode.without_space}
+                namespace_view(self.namespace, "we_dont_know"),
+                kwargs={"postcode": self.postcode.without_space},
             )
         else:
-            self.success_url = reverse("address_view", kwargs={"uprn": uprn})
+            self.success_url = reverse(
+                namespace_view(self.namespace, "address_view"), kwargs={"uprn": uprn}
+            )
         return super(AddressFormView, self).form_valid(form)

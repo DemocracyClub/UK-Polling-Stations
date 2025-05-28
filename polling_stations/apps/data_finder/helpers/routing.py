@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 from addressbase.models import Address
 
 # use a postcode to decide which endpoint the user should be directed to
@@ -9,19 +7,11 @@ from data_finder.helpers.baked_data_helper import (
     NoOpElectionsHelper,
 )
 from django.conf import settings
-from django.urls import reverse
 from django.utils.functional import cached_property
 from uk_geo_utils.helpers import Postcode
 
 
 class RoutingHelper:
-    _query_params_to_preserve = {
-        "utm_content",
-        "utm_medium",
-        "utm_source",
-        "utm_campaign",
-    }
-
     def __init__(self, postcode):
         self.postcode = Postcode(postcode)
         self.addresses = self.get_addresses()
@@ -153,18 +143,3 @@ class RoutingHelper:
         if self.route_type == "single_address":
             return {"uprn": self.addresses[0].uprn}
         return {"postcode": self.postcode.without_space}
-
-    def get_canonical_url(self, request, preserve_query=True):
-        """Returns a canonical URL to route to, preserving any important query parameters"""
-        url = reverse(self.view, kwargs=self.kwargs)
-        query = urlencode(
-            [
-                (k, request.GET.getlist(k))
-                for k in request.GET
-                if k in self._query_params_to_preserve
-            ],
-            doseq=True,
-        )
-        if query and preserve_query:
-            url += "?" + query
-        return url

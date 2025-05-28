@@ -1,10 +1,8 @@
 from collections import namedtuple
-from unittest import mock
 
 from councils.tests.factories import CouncilFactory
 from data_finder.helpers import RoutingHelper
 from django.core.management import call_command
-from django.http import QueryDict
 from django.test import TestCase
 
 MockAddress = namedtuple(
@@ -138,21 +136,3 @@ class RoutingHelperTest(TestCase):
     def test_multiple_polling_stations_with_null(self):
         rh = RoutingHelper("EE1 1EE")
         self.assertEqual("address_select_view", rh.view)
-
-    def test_canonical_url(self):
-        rh = RoutingHelper("CC11AA")
-        request = mock.Mock()
-        request.GET = QueryDict("utm_source=foo&something=other")
-        # Could be either uprn
-        self.assertRegex(
-            rh.get_canonical_url(request), r"/address/10[23]/\?utm_source=foo"
-        )
-
-    def test_canonical_url_without_preserve(self):
-        rh = RoutingHelper("CC11AA")
-        request = mock.Mock()
-        request.GET = QueryDict("utm_source=foo&something=other")
-        # Could be either uprn
-        self.assertRegex(
-            rh.get_canonical_url(request, preserve_query=False), r"/address/10[23]/"
-        )

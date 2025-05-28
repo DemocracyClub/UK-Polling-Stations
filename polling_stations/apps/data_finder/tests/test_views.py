@@ -4,7 +4,12 @@ from unittest.mock import patch
 from addressbase.models import Address
 from addressbase.tests.factories import AddressFactory, UprnToCouncilFactory
 from councils.tests.factories import CouncilFactory
-from data_finder.views import AddressView, get_date_context, polling_station_current
+from data_finder.views import (
+    AddressView,
+    get_date_context,
+    polling_station_current,
+    reverse_with_qs,
+)
 from data_importers.event_types import DataEventType
 from data_importers.tests.factories import DataEventFactory
 from django.core.management import call_command
@@ -14,6 +19,8 @@ from pollingstations.models import PollingStation, VisibilityChoices
 from pollingstations.tests.factories import PollingStationFactory
 from uk_geo_utils.helpers import Postcode
 from zoneinfo import ZoneInfo
+from django.http import QueryDict
+from unittest import mock
 
 
 class LogTestMixin:
@@ -44,6 +51,30 @@ class LogTestMixin:
         assert '"utm_source": "test"' in logging_message.message
         assert '"utm_campaign": "better_tracking"' in logging_message.message
         assert '"utm_medium": "pytest"' in logging_message.message
+
+
+class TestReverseWithQs(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        CouncilFactory(
+            council_id="X01",
+            identifiers=["X01"],
+            geography__geography=None,
+        )
+
+        call_command(
+            "loaddata",
+            "test_multiple_addresses_single_polling_station.json",
+            verbosity=0,
+        )
+
+    def test_reverse_with_qs(self):
+        request = mock.Mock()
+        request.GET = QueryDict("utm_source=foo&something=other")
+        self.assertEqual(
+            reverse_with_qs("address_view", {"uprn": "102"}, request),
+            "/address/102/?utm_source=foo",
+        )
 
 
 class HomeViewTestCase(TestCase):
