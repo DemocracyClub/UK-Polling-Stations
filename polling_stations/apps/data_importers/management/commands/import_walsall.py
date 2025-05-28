@@ -1,44 +1,70 @@
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseShpStationsShpDistrictsImporter
+from textwrap import dedent
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseShpStationsShpDistrictsImporter):
     council_id = "WLL"
-    addresses_name = (
-        "2024-07-04/2024-05-30T10:48:52.727524/Democracy_Club__04July2024 (1).tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-05-30T10:48:52.727524/Democracy_Club__04July2024 (1).tsv"
-    )
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    districts_name = "2025-05-20/NEWPD2025.shp"
+    stations_name = "2025-05-20/PS2025.shp"
+    elections = []
 
-    def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+    def district_record_to_dict(self, record):
+        if record[1] == "PEL4AB":
+            return {"internal_council_id": "PEL4/AB", "name": "PEL4/AB"}
+        if record[1] == "ASC5/AB":
+            return {"internal_council_id": "ACS5/AB", "name": "ACS5/AB"}
+        return {"internal_council_id": record[1], "name": record[1]}
 
-        if uprn in [
-            "100071349802",  # 659A WALSALL ROAD, WEDNESBURY
-            "100071109642",  # 124 GOUGH STREET, WILLENHALL
-            "10090065467",  # 123A GOUGH STREET, WILLENHALL
-            "10090065466",  # 123 GOUGH STREET, WILLENHALL
-            "100071062219",  # 240 INGRAM ROAD, WALSALL
-            "100071062221",  # 242 INGRAM ROAD, WALSALL
-            "200003317397",  # CHRIST CHURCH RECTORY, BLAKENALL HEATH, WALSALL
-            "10013664575",  # 52 MATTESLEY COURT, CRESSWELL CRESCENT, WALSALL
-        ]:
+    def station_record_to_dict(self, record):
+        alt_address = None
+
+        address_text = dedent(f"""
+        Starting from May 2026
+
+        Your new ward will be: **{record[0]}**
+
+        Your new polling district will be: **{record[1]}**""")
+
+        if record[1] == "STM3/WB" and record[4] == "Option 2":
             return None
+        if record[1] == "STM3/WB" and record[4] == "Option 1":
+            alt_address = "Walsall Gala Swimming & Fitness Centre, Gala Swimming Baths, Tower Street WS1 1DH"
 
-        if record.addressline6 in [
-            # splits
-            "WV12 4BZ",
-            "WS1 3LD",
-            "WS3 2DX",
-            # look wrong
-            "WS2 0HS",
-            "WS3 4NX",
-            "WS3 4NT",
-            "WS10 7TG",
-            "WV13 2BG",
-        ]:
+        if record[1] == "PLK1/WB" and record[4] == "Option 2":
             return None
+        if record[1] == "PLK1/WB" and record[4] == "Option 1":
+            alt_address = "Alternative - Emmanuel School, 36 Wolverhampton Road WS2 8PR"
 
-        return super().address_record_to_dict(record)
+        if record[1] == "RSF1/AB" and record[4] == "Option 2":
+            return None
+        if record[1] == "RSF1/AB" and record[4] == "Option 1":
+            alt_address = (
+                "Alternative - Shelfield Methodist Church, 77 Lichfield Road WS4 1PU"
+            )
+
+        if alt_address:
+            address_text += dedent(f"""
+
+            Your new polling station will be either:
+
+            <address>{'<br>'.join(record[3].split(','))}</address>
+
+            or
+
+            <address>{'<br>'.join(alt_address.split(','))}</address>""")
+        else:
+            address_text += dedent(f"""
+
+            Your new polling station will be:
+
+            <address>{'<br>'.join(record[3].split(','))}</address>""")
+
+        station_dict = {
+            "internal_council_id": record[1],
+            "address": address_text.strip(),
+            "postcode": "",
+            "polling_district_id": record[1],
+        }
+        if alt_address:
+            station_dict["location"] = None
+        return station_dict
