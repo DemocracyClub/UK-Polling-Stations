@@ -1268,9 +1268,9 @@ pytest-playwright==0.5.0 \
     --hash=sha256:b382c870384419c025d66aea14518bab71fb9e79917d4808692cde70d8c5216a \
     --hash=sha256:f9f5ae8ade2f773e6e2cd85ec6bfff2ab287f7943108b3956fe5971324151622
     # via -r requirements/testing.in
-pytest-ruff==0.3.2 \
-    --hash=sha256:5096578df2240b2a99f7376747bc433ce25e590c7d570d5c2b47f725497f2c10 \
-    --hash=sha256:8d82882969e52b664a7cef4465cba63e45173f38d907dffeca41d9672f59b6c6
+pytest-ruff==0.4.1 \
+    --hash=sha256:2c9a30f15f384c229c881b52ec86cfaf1e79d39530dd7dd5f2d6aebe278f7eb7 \
+    --hash=sha256:69acd5b2ba68d65998c730b5b4d656788193190e45f61a53aa66ef8b390634a4
     # via -r requirements/testing.in
 pytest-subtests==0.14.1 \
     --hash=sha256:350c00adc36c3aff676a66135c81aed9e2182e15f6c3ec8721366918bbbf7580 \
