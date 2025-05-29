@@ -16,12 +16,19 @@ class Command(BaseShpStationsShpDistrictsImporter):
         return {"internal_council_id": record[1], "name": record[1]}
 
     def station_record_to_dict(self, record):
+        if "\n" in record[0]:
+            ward_name = record[0].split("\n")[0].strip()
+        else:
+            ward_name = record[0].strip()
+        if "(" in ward_name:
+            ward_name = ward_name.split("(")[0].strip()
+
         alt_address = None
 
         address_text = dedent(f"""
         Starting from May 2026
 
-        Your new ward will be: **{record[0]}**
+        Your new ward will be: **{ward_name}**
 
         Your new polling district will be: **{record[1]}**""")
 
