@@ -1,8 +1,8 @@
 import data_finder.views as data_finder_views
-from django.shortcuts import get_object_or_404
-from addressbase.models import Address
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from .forms import PostcodeLookupForm
+from .views import namespace_view
 
 
 class HomeView(data_finder_views.HomeView):
@@ -14,12 +14,20 @@ class PostcodeView(data_finder_views.PostcodeView):
     template_name = "reviews/WLL/20250609/postcode_view.html"
     namespace = "reviews:"
 
-    def get(self, request, *args, **kwargs):
-        resp = super().get(request, *args, **kwargs)
-        council = getattr(self, "council", None)
-        if council and council.council_id != "WLL":
-            return HttpResponseRedirect(reverse("postcode_view", kwargs=kwargs))
-        return resp
+    def get_context_data(self, **context):
+        context = super().get_context_data(**context)
+        postcode = context["postcode"]
+        if context.get("council") and context["council"].council_id != "WLL":
+            context = {
+                "error": "postcode_outside_walsall",
+                "postcode_form": PostcodeLookupForm({"postcode": self.postcode}),
+                "postcode": postcode,
+                "submit_url": reverse(namespace_view(self.namespace, "home")),
+            }
+            context["postcode_form"].add_error(
+                "postcode", "Enter a postcode in Walsall Council"
+            )
+        return context
 
     def we_know_where_you_should_vote(self):
         return self.get_station()
@@ -34,13 +42,16 @@ class AddressView(data_finder_views.AddressView):
     template_name = "reviews/WLL/20250609/postcode_view.html"
     namespace = "reviews:"
 
-    def get(self, request, *args, **kwargs):
-        address = get_object_or_404(
-            Address.objects.select_related("uprntocouncil"), uprn=self.kwargs["uprn"]
-        )
-        if address.uprntocouncil.lad != "E08000030":
-            return HttpResponseRedirect(reverse("address_view", kwargs=kwargs))
-        return super().get(request, *args, **kwargs)
+    def get_context_data(self, **context):
+        context = super().get_context_data(**context)
+        postcode = context["postcode"]
+        if context.get("council") and context["council"].council_id != "WLL":
+            context = {
+                "error": "address_outside_walsall",
+                "postcode": postcode,
+                "submit_url": reverse(namespace_view(self.namespace, "home")),
+            }
+        return context
 
     def we_know_where_you_should_vote(self):
         return self.get_station()
