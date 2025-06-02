@@ -18,7 +18,40 @@
 
     {% if error %}
         {% include "reviews/WLL/20250609/intro.html" %}
-        {% include "fragments/postcode_form.html" with form=postcode_form %}
+
+        {% if error == 'postcode_outside_walsall' %}
+            <div class="ds-card">
+                <div class="ds-card-body">
+                    <p>The postcode you searched for is outside Walsall.</p>
+
+                    <p>
+                        For information about Walsall Council's Polling District and
+                        Polling Place Review, search for a Walsall postcode below.
+                    </p>
+
+                    <p>
+                        If you're looking for information on an upcoming elections in
+                        other areas search on <a href="https://wheredoivote.co.uk/">wheredoivote.co.uk</a>.
+                    </p>
+                </div>
+            </div>
+
+            {% include "fragments/postcode_form.html" with form=postcode_form %}
+        {% elif error == 'address_outside_walsall' %}
+            <div class="ds-card">
+                <div class="ds-card-body">
+                    <p>The address you picked is outside Walsall.</p>
+
+                    <p>
+                        If you're looking for information on an upcoming elections in
+                        other areas search on <a href="https://wheredoivote.co.uk/">wheredoivote.co.uk</a>.
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            {% include "fragments/postcode_form.html" with form=postcode_form %}
+        {% endif %}
+
     {% else %}
         {% if has_election %}
             {% if we_know_where_you_should_vote %}
