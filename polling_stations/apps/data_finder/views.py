@@ -470,6 +470,7 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
     """
 
     template_name = "multiple_councils.html"
+    namespace = ""
 
     def get(self, request, *args, **kwargs):
         self.postcode = Postcode(self.kwargs["postcode"])
