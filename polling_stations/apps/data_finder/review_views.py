@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .forms import PostcodeLookupForm
 from .views import namespace_view
+from .helpers import geocode, PostcodeError
 
 
 class HomeView(data_finder_views.HomeView):
@@ -13,6 +14,12 @@ class HomeView(data_finder_views.HomeView):
 class PostcodeView(data_finder_views.PostcodeView):
     template_name = "reviews/WLL/20250609/postcode_view.html"
     namespace = "reviews:"
+
+    def get_location(self):
+        result = geocode(self.postcode)
+        if result and hasattr(result, "onspd_model"):
+            raise PostcodeError("Could not geocode from any source")
+        return result
 
     def get_context_data(self, **context):
         context = super().get_context_data(**context)
