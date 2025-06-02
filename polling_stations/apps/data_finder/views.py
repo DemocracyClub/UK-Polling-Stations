@@ -540,7 +540,8 @@ class AddressFormView(FormView):
         addresses = addresses_with_station + addresses_without_station
 
         select_addresses = [(element.uprn, element.address) for element in addresses]
-        select_addresses.append((self.NOTINLIST, "My address is not in the list"))
+        if self.NOTINLIST:
+            select_addresses.append((self.NOTINLIST, "My address is not in the list"))
         return form_class(
             select_addresses, self.postcode.without_space, **self.get_form_kwargs()
         )

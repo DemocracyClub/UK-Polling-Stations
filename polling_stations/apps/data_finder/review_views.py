@@ -65,3 +65,4 @@ class WeDontKnowView(data_finder_views.WeDontKnowView):
 
 class AddressFormView(data_finder_views.AddressFormView):
     namespace = "reviews:"
+    NOTINLIST = ""  # disable "My address is not in the list" option
