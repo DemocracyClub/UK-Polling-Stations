@@ -17,6 +17,7 @@
 {% block content %}
 
     {% if error %}
+        {% include "reviews/WLL/20250609/intro.html" %}
         {% include "fragments/postcode_form.html" with form=postcode_form %}
     {% else %}
         {% if has_election %}
