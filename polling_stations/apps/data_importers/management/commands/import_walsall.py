@@ -1,5 +1,6 @@
 from data_importers.management.commands import BaseShpStationsShpDistrictsImporter
 from textwrap import dedent
+from django.contrib.gis.geos import Point
 
 
 class Command(BaseShpStationsShpDistrictsImporter):
@@ -24,6 +25,11 @@ class Command(BaseShpStationsShpDistrictsImporter):
             ward_name = ward_name.split("(")[0].strip()
 
         alt_address = None
+
+        # correction
+        primary_address = record[3]
+        if record[1] == "DLS8/WS":
+            primary_address = "Moorcroft Wood Primary School, Bull Lane WV14 8NE"
 
         address_text = dedent(f"""
         Starting from May 2026
@@ -54,7 +60,7 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
             Your new polling station will be either:
 
-            <address>{'<br>'.join(record[3].split(','))}</address>
+            <address>{'<br>'.join(primary_address.split(','))}</address>
 
             or
 
@@ -64,7 +70,7 @@ class Command(BaseShpStationsShpDistrictsImporter):
 
             Your new polling station will be:
 
-            <address>{'<br>'.join(record[3].split(','))}</address>""")
+            <address>{'<br>'.join(primary_address.split(','))}</address>""")
 
         station_dict = {
             "internal_council_id": record[1],
@@ -74,4 +80,9 @@ class Command(BaseShpStationsShpDistrictsImporter):
         }
         if alt_address:
             station_dict["location"] = None
+
+        # correction
+        if record[1] == "WIL4/WS":
+            station_dict["location"] = Point(-2.0499874, 52.5841243, srid=4326)
+
         return station_dict
