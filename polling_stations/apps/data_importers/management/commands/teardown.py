@@ -53,8 +53,8 @@ class Command(BaseCommand):
         )
 
     def teardown_council(self, council_id):
-        self.stdout.write(f"Deleting data for: {council_id}...")
         council_obj = Council.objects.get(pk=council_id)
+        self.stdout.write(f"Deleting data for: {council_obj.name} ({council_id})...")
         gss_code = council_obj.geography.gss
 
         PollingStation.objects.filter(council=council_id).delete()
@@ -71,7 +71,7 @@ class Command(BaseCommand):
         dq.save()
 
         record_teardown_event(council_id)
-        print("..done")
+        self.stdout.write("..done")
 
     @transaction.atomic(using=DB_NAME)
     def handle(self, *args, **kwargs):
