@@ -52,6 +52,7 @@ class Command(BaseCommand):
             action="store_true",
         )
 
+    @transaction.atomic(using=DB_NAME)
     def teardown_council(self, council_id):
         council_obj = Council.objects.get(pk=council_id)
         self.stdout.write(f"Deleting data for: {council_obj.name} ({council_id})...")
