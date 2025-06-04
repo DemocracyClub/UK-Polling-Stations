@@ -7,6 +7,8 @@ from django.core.management.base import CommandParser
 
 
 class Command(BaseCommand):
+    help = "Delete data relevant to elections that are in the past"
+
     def add_arguments(self, parser: CommandParser):
         parser.add_argument(
             "--dry-run",
