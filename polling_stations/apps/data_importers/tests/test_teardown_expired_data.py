@@ -48,20 +48,20 @@ class TestCleanup(TestCase):
 
     def test_dry_run_output(self):
         out = StringIO()
-        call_command("cleanup", "--dry-run", stdout=out)
+        call_command("teardown_expired_data", "--dry-run", stdout=out)
         output = out.getvalue()
         self.assertIn("Would delete data for: Council A (AAA)", output)
         self.assertIn("Would preserve data for: Council B (BBB)", output)
         self.assertIn("Would preserve data for: Council C (CCC)", output)
         self.assertNotIn("Council D", output)
 
-    @patch("data_importers.management.commands.cleanup.TeardownCommand")
+    @patch("data_importers.management.commands.teardown_expired_data.TeardownCommand")
     def test_teardown_called_for_past_election(self, mock_teardown_cmd):
         mock_cmd_instance = MagicMock()
         mock_teardown_cmd.return_value = mock_cmd_instance
 
         out = StringIO()
-        call_command("cleanup", stdout=out)
+        call_command("teardown_expired_data", stdout=out)
 
         # Should call teardown_council for councilA only
         mock_cmd_instance.teardown_council.assert_called_once_with("AAA")
