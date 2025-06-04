@@ -1,16 +1,21 @@
-{% load i18n %}
-<div class="ds-table">
-    <table>
-        <tr>
-            <th>{% trans "Date" %}</th>
-            {% comment %}Translators: Opening times, from and to{% endcomment %}
-            <th>{% trans "Open" %}</th>
-        </tr>
-        {% for opening_time in advance_voting_station.opening_times_table %}
-            <tr>
-                <td>{% ifchanged opening_time.0 %}{{ opening_time.0 }}{% endifchanged %}</td>
-                <td>{{ opening_time.1 }} — {{ opening_time.2 }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-</div>
+{% load i18n_with_welsh %}
+
+<p>
+    {% if has_city_of_london_ballots %}
+        <strong>
+            {% blocktrans %}
+                Polling stations are open from 8am to 8pm for City of London local elections{% endblocktrans %}{% if multiple_elections %}.{% endif %}
+            {% if not multiple_elections and next_election_date %}
+                {% blocktrans %}on {{ next_election_date }}{% endblocktrans %}.
+            {% endif %}
+        </strong>
+        {% blocktrans %}
+            For elections to other organisations (e.g: GLA or Parliament) polling stations will be open from 7am to 10pm.
+        {% endblocktrans %}
+    {% else %}
+        <strong>
+            {% blocktrans %}Polling stations are open from 7am to 10pm{% endblocktrans %}{% if not next_election_date %}.{% endif %}
+            {% if next_election_date %}{% blocktrans %} on {{ next_election_date }}{% endblocktrans %}.{% endif %}
+        </strong>
+    {% endif %}
+</p>
