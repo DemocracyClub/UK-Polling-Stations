@@ -45,7 +45,7 @@ class Command(BaseStationsImporter, CsvMixin):
     csv_encoding = "utf-8"
     eoni_csv_encoding = "latin-1"
     additional_report_councils = NIR_IDS
-    elections = ["2024-07-04"]
+    elections = []
     address_counts = {council_id: 0 for council_id in NIR_IDS}
     deduced_addresses = {}
     removed_addresses = 0
