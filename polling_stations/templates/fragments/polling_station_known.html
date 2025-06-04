@@ -8,7 +8,7 @@
     {% endblocktrans %}
 </h2>
 
-{% if not show_polls_open_card and advance_voting_station and advance_voting_station.open_in_future %}
+{% if advance_voting_station and advance_voting_station.open_in_future %}
     <p>
         {% if NEXT_CHARISMATIC_ELECTION_DATE %}
             {% blocktrans trimmed %}
@@ -53,18 +53,8 @@
             {% endif %}
         </address>
 
-        <p><strong>
-            {% if has_city_of_london_ballots %}
-                {% blocktrans %}Polling stations are open from 8am to 8pm for City of London local elections{% endblocktrans %}{% if not NEXT_CHARISMATIC_ELECTION_DATE %}.{% endif %}
-            {% else %}
-                {% blocktrans %}Polling stations are open from 7am to 10pm{% endblocktrans %}{% if not NEXT_CHARISMATIC_ELECTION_DATE %}.{% endif %}
-            {% endif %}
-            {% if NEXT_CHARISMATIC_ELECTION_DATE %}{% blocktrans %} on {{ NEXT_CHARISMATIC_ELECTION_DATE }}{% endblocktrans %}.{% endif %}
-        </strong>
-            {% if has_city_of_london_ballots %}
-                For elections to other organisations (e.g: GLA or Parliament) polling stations will be open from 7am to 10pm.
-            {% endif %}
-        </p>
+        {% include "fragments/opening_times.html" %}
+
         {% comment %} {% if territory != 'NI' %}
             <p>
                 {% blocktrans %}If you have a postal vote, you can hand it in at this polling station on election day up to 10pm{% endblocktrans %}
@@ -89,7 +79,7 @@
     </div>
 {% endif %}
 
-{% if show_polls_open_card and advance_voting_station and not advance_voting_station.open_in_future %}
+{% if advance_voting_station and not advance_voting_station.open_in_future %}
     <div class="ds-card">
         <div class="ds-card-body">
             {% blocktrans %}
