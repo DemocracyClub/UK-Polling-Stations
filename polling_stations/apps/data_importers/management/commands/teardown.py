@@ -11,21 +11,20 @@ from polling_stations.db_routers import get_principal_db_name
 
 DB_NAME = get_principal_db_name()
 
-"""
-Clear PollingDistrict, PollingStation, and AdvancedVotingStation models
-Clear polling_station_id field in UprnToCouncil model
-Clear report, num_addresses, num_districts and num_stations
-fields in DataQuality model
-"""
-
 
 class Command(BaseCommand):
+    """
+    Clear PollingDistrict, PollingStation, and AdvancedVotingStation models
+    Clear polling_station_id field in UprnToCouncil model
+    Clear report, num_addresses, num_districts and num_stations
+    fields in DataQuality model
+    """
+
     """
     Turn off auto system check for all apps
     We will maunally run system checks only for the
     'data_importers' and 'pollingstations' apps
     """
-
     requires_system_checks = []
 
     def add_arguments(self, parser):
