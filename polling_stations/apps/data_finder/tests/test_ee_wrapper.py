@@ -111,7 +111,6 @@ def get_data_with_elections():
 class EveryElectionWrapperTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_error(self):
         ee = EEWrapper([], request_success=False)
@@ -124,7 +123,6 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_no_elections(self):
         ee = EEWrapper(get_data_no_elections(), request_success=True)
@@ -137,7 +135,6 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_elections(self):
         ee = EEWrapper(get_data_with_elections(), request_success=True)
@@ -152,24 +149,6 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[
-            (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-        ],
-    )
-    def test_non_charismatic_elections(self):
-        # there are upcoming elections
-        # but they aren't in NEXT_CHARISMATIC_ELECTION_DATES
-        ee = EEWrapper(get_data_with_elections(), request_success=True)
-        self.assertFalse(ee.has_election())
-        self.assertEqual([], ee.get_explanations())
-        cancelled_info = ee.get_cancelled_election_info()
-        self.assertEqual(cancelled_info["cancelled"], False)
-        self.assertEqual(None, ee.get_metadata())
-        self.assertFalse(ee.multiple_elections)
-
-    @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_elections_only_group(self):
         ee = EEWrapper(get_data_only_group(), request_success=True)
@@ -182,7 +161,6 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_elections_group_and_ballot(self):
         ee = EEWrapper(get_data_group_and_ballot(), request_success=True)
@@ -195,7 +173,6 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_settings_override_false(self):
         ee = EEWrapper(get_data_group_and_ballot(), request_success=True)
@@ -208,7 +185,6 @@ class EveryElectionWrapperTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": False},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_settings_override_true(self):
         ee = EEWrapper(get_data_only_group(), request_success=True)
@@ -222,7 +198,6 @@ class EveryElectionWrapperTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         ELECTION_BLACKLIST=["foo.bar.baz.date"],
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_some_blacklisted(self):
         ee = EEWrapper(get_data_with_elections(), request_success=True)
@@ -232,7 +207,6 @@ class EveryElectionWrapperTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
         ELECTION_BLACKLIST=["foo.bar.baz.date", "foo.bar.qux.date"],
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_all_blacklisted(self):
         ee = EEWrapper(get_data_with_elections(), request_success=True)
@@ -375,7 +349,6 @@ def get_data_one_cancelled_ballot_with_metadata():
 class CancelledElectionTests(TestCase):
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_two_ballots_one_cancelled(self):
         ee = EEWrapper(get_data_two_ballots_one_cancelled(), request_success=True)
@@ -390,7 +363,6 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_two_ballots_both_cancelled(self):
         ee = EEWrapper(get_data_two_ballots_both_cancelled(), request_success=True)
@@ -405,7 +377,6 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_one_cancelled_ballot_no_replacement(self):
         ee = EEWrapper(
@@ -422,7 +393,6 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_one_cancelled_ballot_with_replacement(self):
         ee = EEWrapper(
@@ -442,7 +412,6 @@ class CancelledElectionTests(TestCase):
 
     @override_settings(
         EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        NEXT_CHARISMATIC_ELECTION_DATES=[],
     )
     def test_one_cancelled_ballot_with_metadata(self):
         ee = EEWrapper(

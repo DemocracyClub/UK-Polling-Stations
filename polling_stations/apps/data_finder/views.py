@@ -285,6 +285,12 @@ class BasePollingStationView(
 
         ee = self.get_ee_wrapper(context.get("rh"))
         context["has_election"] = ee.has_election()
+        next_election_date = ee.get_next_election_date()
+        context["next_election_date"] = (
+            datetime.strptime(next_election_date, "%Y-%m-%d").date()
+            if next_election_date
+            else None
+        )
         context["multiple_elections"] = ee.multiple_elections
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()

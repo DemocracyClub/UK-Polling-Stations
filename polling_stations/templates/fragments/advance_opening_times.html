@@ -1,0 +1,16 @@
+{% load i18n %}
+<div class="ds-table">
+    <table>
+        <tr>
+            <th>{% trans "Date" %}</th>
+            {% comment %}Translators: Opening times, from and to{% endcomment %}
+            <th>{% trans "Open" %}</th>
+        </tr>
+        {% for opening_time in advance_voting_station.opening_times_table %}
+            <tr>
+                <td>{% ifchanged opening_time.0 %}{{ opening_time.0 }}{% endifchanged %}</td>
+                <td>{{ opening_time.1 }} — {{ opening_time.2 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

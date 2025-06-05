@@ -117,6 +117,10 @@ class BaseEEWrapper(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
+    def get_next_election_date(self) -> Optional[str]:
+        pass
+
+    @abc.abstractmethod
     def get_ballots_for_next_date(self) -> List:
         pass
 
@@ -152,6 +156,9 @@ class EmptyEEWrapper(BaseEEWrapper):
         return False
 
     def get_metadata(self) -> None:
+        return None
+
+    def get_next_election_date(self) -> Optional[str]:
         return None
 
     def get_ballots_for_next_date(self) -> List:
@@ -207,29 +214,15 @@ class EEWrapper(BaseEEWrapper):
         dates = {e["poll_open_date"] for e in self.elections if not e["cancelled"]}
         return sorted(dates)
 
-    def _get_next_election_date(self):
+    def get_next_election_date(self):
         ballots = self.get_all_ballots()
         # if no ballots, return early
         if len(ballots) == 0:
             return None
-        next_charismatic_election_dates = getattr(
-            settings, "NEXT_CHARISMATIC_ELECTION_DATES", []
-        )
-        next_charismatic_election_dates.sort()
+
         dates = [b["poll_open_date"] for b in ballots]
         dates.sort()
 
-        if next_charismatic_election_dates:
-            # If we have some dates return the first one that is in NEXT_CHARISMATIC_ELECTION_DATES
-            for date in dates:
-                if date in next_charismatic_election_dates:
-                    return date
-            # If none of them are in NEXT_CHARISMATIC_ELECTION_DATES,
-            # return the earliest charismatic election date
-            return next_charismatic_election_dates[0]
-
-        # If we haven't set NEXT_CHARISMATIC_ELECTION_DATES,
-        # return the earliest election
         return dates[0]
 
     def get_ballots_for_next_date(self):
@@ -238,7 +231,7 @@ class EEWrapper(BaseEEWrapper):
         ballots = self.get_all_ballots()
         if len(ballots) == 0:
             return ballots
-        next_election_date = self._get_next_election_date()
+        next_election_date = self.get_next_election_date()
         return [e for e in ballots if e["poll_open_date"] == next_election_date]
 
     def get_cancelled_ballots(self):
@@ -322,7 +315,7 @@ class EEWrapper(BaseEEWrapper):
                 if (
                     "explanation" in election
                     and election["explanation"]
-                    and election["poll_open_date"] == self._get_next_election_date()
+                    and election["poll_open_date"] == self.get_next_election_date()
                 ):
                     explanations.append(
                         {
