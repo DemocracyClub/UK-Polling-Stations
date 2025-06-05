@@ -33,8 +33,8 @@ class Command(BaseCommand):
         group.add_argument(
             "-c",
             "--council",
-            nargs=1,
-            help="Council ID to clear, uses three letter council codes, e.g. 'ABC'",
+            nargs="+",
+            help="Council IDs to clear, uses three letter council codes, e.g. 'ABC'",
         )
 
         group.add_argument(
