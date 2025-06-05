@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.core.management.base import CommandParser
 from data_importers.management.commands.teardown import Command as TeardownCommand
+from data_importers.event_types import DataEventType
 
 
 class Command(BaseCommand):
@@ -23,12 +24,19 @@ class Command(BaseCommand):
             try:
                 latest_event = (
                     DataEvent.objects.filter(council=council)
-                    .filter(event_type="IMPORT")
+                    .filter(
+                        event_type__in=[DataEventType.IMPORT, DataEventType.TEARDOWN]
+                    )
                     .latest("created")
                 )
 
-                if latest_event.election_dates and all(
-                    date < timezone.now().date() for date in latest_event.election_dates
+                if (
+                    latest_event.event_type == DataEventType.IMPORT
+                    and latest_event.election_dates
+                    and all(
+                        date < timezone.now().date()
+                        for date in latest_event.election_dates
+                    )
                 ):
                     councils_to_teardown.append(council)
                 else:
