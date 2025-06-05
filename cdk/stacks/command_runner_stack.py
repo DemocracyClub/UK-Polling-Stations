@@ -63,11 +63,19 @@ class WDIVOncePerTagCommandRunner(Stack):
                 "cron(30 1 * * ? *)",
                 command,
             )
+
         if dc_environment in ["development", "staging", "production"]:
             self.add_job(
                 "run_once_custom_metrics",
                 "rate(5 minutes)",
                 "/var/www/polling_stations/run_once_custom_metrics.sh",
+            )
+
+        if dc_environment in ["development", "staging", "production"]:
+            self.add_job(
+                "teardown_expired_data",
+                "cron(0 3 ? * SUN *)",
+                "runuser -l polling_stations -c '/usr/bin/manage-py-command teardown_expired_data",
             )
 
     def add_job(
