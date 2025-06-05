@@ -64,7 +64,7 @@ class TestCleanup(TestCase):
         call_command("teardown_expired_data", stdout=out)
 
         # Should call teardown_council for councilA only
-        mock_cmd_instance.teardown_council.assert_called_once_with("AAA")
+        mock_cmd_instance.teardown_councils.assert_called_once_with([self.councilA])
         output = out.getvalue()
         self.assertIn("Preserving data for: Council B (BBB)...", output)
         self.assertIn("Preserving data for: Council C (CCC)", output)

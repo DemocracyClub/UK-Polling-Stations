@@ -2,8 +2,8 @@ from data_importers.models import DataEvent
 from councils.models import Council
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from data_importers.management.commands.teardown import Command as TeardownCommand
 from django.core.management.base import CommandParser
+from data_importers.management.commands.teardown import Command as TeardownCommand
 
 
 class Command(BaseCommand):
@@ -51,8 +51,7 @@ class Command(BaseCommand):
                 )
         else:
             cmd = TeardownCommand()
-            for council in councils_to_teardown:
-                cmd.teardown_council(council.council_id)
+            cmd.teardown_councils(councils_to_teardown)
 
             self.stdout.write("")
 
