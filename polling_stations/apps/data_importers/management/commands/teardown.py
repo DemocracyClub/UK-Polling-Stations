@@ -52,25 +52,31 @@ class Command(BaseCommand):
         )
 
     @transaction.atomic(using=DB_NAME)
-    def teardown_council(self, council_id):
-        council_obj = Council.objects.get(pk=council_id)
-        self.stdout.write(f"Deleting data for: {council_obj.name} ({council_id})...")
-        gss_code = council_obj.geography.gss
+    def teardown_councils(self, councils):
+        for council in councils:
+            self.stdout.write(
+                f"Deleting data for: {council.name} ({council.council_id})..."
+            )
 
-        PollingStation.objects.filter(council=council_id).delete()
-        PollingDistrict.objects.filter(council=council_id).delete()
-        AdvanceVotingStation.objects.filter(council=council_id).delete()
+        council_ids = [c.council_id for c in councils]
+        gss_codes = [c.geography.gss for c in councils]
 
-        UprnToCouncil.objects.filter(lad=gss_code).update(polling_station_id="")
+        PollingStation.objects.filter(council__in=council_ids).delete()
+        PollingDistrict.objects.filter(council__in=council_ids).delete()
+        AdvanceVotingStation.objects.filter(council__in=council_ids).delete()
 
-        dq = DataQuality.objects.get(council_id=council_id)
-        dq.report = ""
-        dq.num_addresses = 0
-        dq.num_districts = 0
-        dq.num_stations = 0
-        dq.save()
+        UprnToCouncil.objects.filter(lad__in=gss_codes).update(polling_station_id="")
 
-        record_teardown_event(council_id)
+        DataQuality.objects.filter(council_id__in=council_ids).update(
+            report="",
+            num_addresses=0,
+            num_districts=0,
+            num_stations=0,
+        )
+
+        for council_id in council_ids:
+            record_teardown_event(council_id)
+
         self.stdout.write("..done")
 
     @transaction.atomic(using=DB_NAME)
@@ -89,12 +95,16 @@ class Command(BaseCommand):
         )
 
         if kwargs["council"]:
-            for council_id in kwargs["council"]:
-                self.teardown_council(council_id)
+            councils = Council.objects.all().filter(council_id__in=kwargs["council"])
+            in_ids = set(kwargs["council"])
+            db_ids = set([c.council_id for c in councils])
+            if in_ids != db_ids:
+                raise Exception(f"Could not find Council IDs: {in_ids-db_ids}")
+            self.teardown_councils(councils)
 
         elif kwargs.get("eoni"):
-            for council_id in NIR_IDS:
-                self.teardown_council(council_id)
+            councils = Council.objects.all().filter(council_id__in=NIR_IDS)
+            self.teardown_councils(councils)
 
         elif kwargs.get("all"):
             print("Deleting ALL data...")
