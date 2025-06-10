@@ -22,6 +22,18 @@ class Command(BaseCommand):
 
         for council in Council.objects.all():
             try:
+                """
+                Get the latest event of type IMPORT or TEARDOWN
+
+                If the most recent event is a TEARDOWN we can skip this council
+
+                If the most recent event is an IMPORT we will use the data to
+                decide if we want to keep this data or delete it.
+
+                If the latest event is a SET_STATION_VISIBILITY that doesn't
+                tell us anything in this context. We just want to look at the
+                IMPORT event prior to any SET_STATION_VISIBILITY events.
+                """
                 latest_event = (
                     DataEvent.objects.filter(council=council)
                     .filter(
