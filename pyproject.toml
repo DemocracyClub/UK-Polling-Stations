@@ -16,6 +16,7 @@ dependencies = [
     "django-extensions==3.2.3",
     "django-filter==24.3",
     "django-localflavor==4.0",
+    "django-middleware-global-request==0.3.5",
     "django-sesame==3.2.2",
     "django==4.2.20",
     "djangorestframework-csv==3.0.2",
@@ -36,7 +37,6 @@ dependencies = [
     "sentry-sdk==2.19.2",
     "slack-sdk==3.33.5",
     "uk-geo-utils==0.18.0",
-    "django-middleware-global-request==0.3.5",
 ]
 
 [dependency-groups]
