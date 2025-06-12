@@ -11,7 +11,6 @@ dependencies = [
     "dc-design-system",
     "dc-django-utils",
     "dc-logging-utils",
-    "dj-database-url>=2.3.0",
     "django-cors-headers>=4.6.0",
     "django-dotenv>=1.4.2",
     "django-extensions>=3.2.3",
