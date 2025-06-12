@@ -3,18 +3,18 @@ name = "wdiv-s3-trigger"
 version = "0.0.0"
 requires-python = ">=3.12"
 dependencies = [
-    "chardet>=5.2.0",
-    "requests-paginator>=0.2.0",
-    "requests>=2.22.0",
-    "sentry-sdk>=2.19.2",
-    "urllib3<2.0.0",
+    "chardet==5.2.0",
+    "requests-paginator==0.2.0",
+    "requests==2.32.3",
+    "sentry-sdk==2.19.2",
+    "urllib3==1.26.20",
 ]
 
 [dependency-groups]
 testing = [
-    "moto[s3,ses]>=5.0.22",
-    "pydantic~=1.0",
-    "responses>=0.25.3",
+    "moto[s3,ses]==5.0.22",
+    "pydantic==1.10.19",
+    "responses==0.25.3",
 ]
 
 

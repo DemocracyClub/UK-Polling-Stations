@@ -4,34 +4,34 @@ version = "0.0.0"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "asana>=5.0.10",
-    "boto3>1.0.0,<2.0.0",
-    "botocore>=1.35.78",
-    "commitment<4",
+    "asana==5.0.10",
+    "boto3==1.35.78",
+    "botocore==1.35.78",
+    "commitment==3.0.1",
     "dc-design-system",
     "dc-django-utils",
     "dc-logging-utils",
-    "django-cors-headers>=4.6.0",
-    "django-dotenv>=1.4.2",
-    "django-extensions>=3.2.3",
-    "django-filter>=24.3",
-    "django-localflavor>=4.0",
-    "django-sesame>=3.2.2",
-    "django<4.3",
-    "djangorestframework-csv>=3.0.2",
-    "djangorestframework-gis>=1.1",
-    "djangorestframework>=3.15.2",
-    "drf-spectacular<1",
-    "freezegun>=1.5.1",
-    "markdown>=3.7",
-    "marshmallow>=3.23.1",
-    "polars>=1.17.1",
-    "pyshp>=2.3.1",
-    "rapidfuzz>=3.10.1",
-    "requests>=2.32.3",
-    "retry>=0.9.2",
-    "rich>=13.9.4",
-    "rtree>=1.3.0",
+    "django-cors-headers==4.6.0",
+    "django-dotenv==1.4.2",
+    "django-extensions==3.2.3",
+    "django-filter==24.3",
+    "django-localflavor==4.0",
+    "django-sesame==3.2.2",
+    "django==4.2.20",
+    "djangorestframework-csv==3.0.2",
+    "djangorestframework-gis==1.1",
+    "djangorestframework==3.15.2",
+    "drf-spectacular==0.28.0 ",
+    "freezegun==1.5.1",
+    "markdown==3.7",
+    "marshmallow==3.23.1",
+    "polars==1.17.1",
+    "pyshp==2.3.1",
+    "rapidfuzz==3.10.1",
+    "requests==2.32.3",
+    "retry==0.9.2",
+    "rich==13.9.4",
+    "rtree==1.3.0",
     "ruff==0.4.6",
     "sentry-sdk==2.19.2",
     "slack-sdk==3.33.5",
@@ -41,39 +41,39 @@ dependencies = [
 
 [dependency-groups]
 cdk = [
-    "aws-cdk-aws-lambda-python-alpha>=2.0.0a1",
-    "aws-cdk-lib>=2.0.0,<3.0.0",
-    "constructs>=10.0.0",
+    "aws-cdk-aws-lambda-python-alpha==2.200.1a0",
+    "aws-cdk-lib==2.200.1",
+    "constructs==10.4.2",
 ]
 ci = [
-    "coveralls>3",
-    "wheel>=0.45.1",
+    "coveralls==4.0.1",
+    "wheel==0.45.1",
 ]
 dev = [
-    "django-debug-toolbar>=4.4.6",
-    "invoke>=2.2.0",
-    "ipdb>=0.13.13",
-    "pre-commit>=4.0.1",
+    "django-debug-toolbar==4.4.6",
+    "invoke==2.2.0",
+    "ipdb==0.13.13",
+    "pre-commit==4.0.1",
 ]
 production = [
-    "django-dynamodb-cache>=0.6.0",
+    "django-dynamodb-cache==0.6.0",
     "gunicorn==22.0.0",
 ]
 testing = [
-    "coverage>=7.6.9",
-    "djhtml>=3.0.7",
-    "factory-boy>=3.3.1",
-    "faker>=33.1.0",
-    "playwright>=1.49.1",
-    "pytest-cov>=6.0.0",
-    "pytest-django>=4.9.0",
+    "coverage==7.6.9",
+    "djhtml==3.0.7",
+    "factory-boy==3.3.3",
+    "faker==33.1.0",
+    "playwright==1.49.1",
+    "pytest-cov==6.0.0",
+    "pytest-django==4.9.0",
     "pytest-playwright>=0.6.2",
-    "pytest-ruff>=0.4.1",
-    "pytest-subtests>=0.14.1",
-    "pytest-vcr>=1.0.2",
-    "pytest>=8.3.4",
-    "selenium>=4.27.1",
-    "vcrpy>=6.0.2",
+    "pytest-ruff==0.4.1",
+    "pytest-subtests==0.14.1",
+    "pytest-vcr==1.0.2",
+    "pytest==8.3.4",
+    "selenium==4.27.1",
+    "vcrpy==6.0.2",
 ]
 
 [tool.uv]
@@ -85,7 +85,7 @@ members = ["cdk/lambdas/wdiv-s3-trigger"]
 [tool.uv.sources]
 dc-django-utils = { url = "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip" }
 dc-logging-utils = { url = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.1.0.zip" }
-dc-design-system = { url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.6.zip" }
+dc-design-system = { url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.7.0.zip" }
 
 [tool.ruff]
 line-length = 88
