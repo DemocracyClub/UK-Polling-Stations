@@ -477,19 +477,6 @@ wheels = [
 ]
 
 [[package]]
-name = "dj-database-url"
-version = "3.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/81/c0/5d660bbe707c8bce8c9217c9af92345170c204e29005628dc57528b648d7/dj_database_url-3.0.0.tar.gz", hash = "sha256:749a7a42d88d6c741c1d2f4ab24c2ae0d5cd12f00f2d1d55ff9f5fadabe8a2c3", size = 12594 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e8/7b/d68df6365e442ae6370d6d970915329eae85bce5afb3602058d9ccc71700/dj_database_url-3.0.0-py3-none-any.whl", hash = "sha256:cbb84b2e3f372460b1e43692bf9fdc0c32e78930ee101db470cba56105fca1e5", size = 8835 },
-]
-
-[[package]]
 name = "django"
 version = "4.2.23"
 source = { registry = "https://pypi.org/simple" }
@@ -2130,7 +2117,6 @@ dependencies = [
     { name = "dc-design-system" },
     { name = "dc-django-utils" },
     { name = "dc-logging-utils" },
-    { name = "dj-database-url" },
     { name = "django" },
     { name = "django-cors-headers" },
     { name = "django-dotenv" },
@@ -2205,7 +2191,6 @@ requires-dist = [
     { name = "dc-design-system", url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.4.6.zip" },
     { name = "dc-django-utils", url = "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip" },
     { name = "dc-logging-utils", url = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.1.0.zip" },
-    { name = "dj-database-url", specifier = ">=2.3.0" },
     { name = "django", specifier = "<4.3" },
     { name = "django-cors-headers", specifier = ">=4.6.0" },
     { name = "django-dotenv", specifier = ">=1.4.2" },
