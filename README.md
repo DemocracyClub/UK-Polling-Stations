@@ -37,41 +37,29 @@ For other linux distributions, see [here](https://docs.djangoproject.com/en/4.2/
 
 ### Install python dependencies
 
+This project uses [uv](https://docs.astral.sh/uv/) to manage dependencies.
+
 - Local Dev without CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+uv sync --all-packages --group dev --group testing
 ```
 
 - Local Dev with CDK libs
 ```
-pip install -r requirements/base.txt -r requirements/testing.txt -r requirements/local.txt -r requirements/cdk.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
+uv sync --all-packages --group dev --group testing --group cdk
 ```
-
-- Just Running Tests
-```
-pip install -r requirements/base.txt -r requirements/testing.txt -r cdk/lambdas/wdiv-s3-trigger/requirements.txt -r cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt
-```
-
-- Update requirements
-Bump version in relevant requirements file, e.g. ```base.in``` then run ```python -m invoke requirements --upgrade```.
 
 ### Install front-end dependencies
 ```
 npm ci
 ```
 
-### Install testing python dependencies
-```
-pip install -r requirements/testing.txt
-```
-
 ### Install testing system dependencies
 We have a suite of end-to-end integration tests. We use [Playwright](https://playwright.dev/python/)
 with `pytest` to run these.
 
-To set up playwright, after running `pip install -r requirements/testing.txt`,
-run `playwright install`. This will download the browser biniaries required
-for your system.
+To set up playwright, after installing python dependencies, run `playwright install`.
+This will download the browser binaries required for your system.
 
 The Playwright tests will run in a headless browser as part of a normal `pytest` run.
 You may want to run the Playwright suite in headed mode for debugging purposes. To do that, run the following:
