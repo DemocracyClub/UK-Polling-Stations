@@ -9,12 +9,12 @@ User=${PROJECT_NAME}
 Group=${PROJECT_NAME}
 RuntimeDirectory=gunicorn
 WorkingDirectory=${PROJECT_ROOT}/code/
-ExecStart=${PROJECT_ROOT}/code/venv/bin/gunicorn ${APP_NAME}.wsgi \
+ExecStart=${PROJECT_ROOT}/code/.venv/bin/gunicorn ${APP_NAME}.wsgi \
     --pid /run/${PROJECT_NAME}_gunicorn/pid \
     --workers 3 \
     --log-file=/tmp/${APP_NAME}.log \
     --log-level=debug \
-    --env=PATH="${PROJECT_ROOT}/code/venv/bin/:$PATH exec" \
+    --env=PATH="${PROJECT_ROOT}/code/.venv/bin/:$PATH exec" \
     --bind=unix:/run/${PROJECT_NAME}_gunicorn/socket
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID

@@ -1,4 +1,4 @@
-#!/var/www/polling_stations/code/venv/bin/python
+#!/var/www/polling_stations/code/.venv/bin/python
 
 import sys
 
