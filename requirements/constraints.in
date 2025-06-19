@@ -1,8 +1,0 @@
--r base.in
--r cdk.in
--r ci.in
--r local.in
--r production.in
--r testing.in
--r ../cdk/lambdas/wdiv-s3-trigger/requirements/base.in
--r ../cdk/lambdas/wdiv-s3-trigger/requirements/testing.in
