@@ -3,11 +3,11 @@
 
 # TODO: UPDATE ALL OF THIS
 
-For now deps are managed with pip-tools:
+Install uv
+
+Create cdk/lambdas/wdiv-s3-trigger/requirements.txt:
 ```
-pip install pip-tools
-python -m pip-compile --generate-hashes  --resolver=backtracking -o cdk/lambdas/wdiv-s3-trigger/requirements/base.txt cdk/lambdas/wdiv-s3-trigger/requirements/base.in
-python -m pip-compile --generate-hashes  --resolver=backtracking -o cdk/lambdas/wdiv-s3-trigger/requirements/testing.txt cdk/lambdas/wdiv-s3-trigger/requirements/testing.in
+./cdk/scripts/wdiv-s3-trigger-requirements.sh
 ```
 
 Deploy with:
