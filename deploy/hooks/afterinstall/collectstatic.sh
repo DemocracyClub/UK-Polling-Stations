@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -xeE
 
-source /var/www/polling_stations/code/venv/bin/activate
-python /var/www/polling_stations/code/manage.py collectstatic --noinput --clear
+cd /var/www/polling_stations/code/
+uv run python manage.py collectstatic --noinput --clear

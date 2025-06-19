@@ -21,7 +21,7 @@ psql "$DB" -U "$DB_USER" -c 'create extension postgis;'
 
 
 # Activate Virtual env
-source /var/www/polling_stations/code/venv/bin/activate
+source /var/www/polling_stations/code/.venv/bin/activate
 
 # Migrate db - this builds the schema before syncing
 /var/www/polling_stations/code/manage.py migrate --database=local
