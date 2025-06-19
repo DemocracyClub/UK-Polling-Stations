@@ -7,4 +7,4 @@
 #     2. It calls the manage.py with the virtualenv's python
 # It requires the project to be at /var/www/{{ project_name }}
 #
-output-on-error /var/www/${PROJECT_NAME}/code/venv/bin/python /var/www/${PROJECT_NAME}/code/manage.py "$@"
+output-on-error /var/www/${PROJECT_NAME}/code/.venv/bin/python /var/www/${PROJECT_NAME}/code/manage.py "$@"
