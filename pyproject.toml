@@ -41,8 +41,8 @@ dependencies = [
 
 [dependency-groups]
 cdk = [
-    "aws-cdk-aws-lambda-python-alpha==2.200.1a0",
-    "aws-cdk-lib==2.200.1",
+    "aws-cdk-aws-lambda-python-alpha==2.201.0a0",
+    "aws-cdk-lib==2.201.0",
     "constructs==10.4.2",
 ]
 ci = [
