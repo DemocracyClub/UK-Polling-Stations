@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CRF"
     addresses_name = (
-        "2024-12-05/2024-11-04T11:49:39.653577/Democracy_Club__05December2024.CSV"
+        "2025-07-24/2025-06-23T13:43:35.408430/Democracy_Club__24July2025.CSV"
     )
     stations_name = (
-        "2024-12-05/2024-11-04T11:49:39.653577/Democracy_Club__05December2024.CSV"
+        "2025-07-24/2025-06-23T13:43:35.408430/Democracy_Club__24July2025.CSV"
     )
-    elections = ["2024-12-05"]
+    elections = ["2025-07-24"]
 
     # Maintaining GE 2024 exclusions as comments for future reference:
 
@@ -39,49 +39,49 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if (
-            uprn
-            in [
-                # "100100127979",  # 17 LON-Y-RHYD, CARDIFF
-                # "100100110392",  # 10 SOMERSET COURT, BURNHAM AVENUE, LLANRUMNEY, CARDIFF
-                # "100100107993",  # 890 NEWPORT ROAD, RUMNEY, CARDIFF
-                # "100100107313",  # 45 LLANSTEPHAN ROAD, RUMNEY, CARDIFF
-                # "10002524512",  # CLUB HOUSE RUMNEY R F C HARTLAND ROAD, LLANRUMNEY, CARDIFF
-                # "10008904957",  # OAK HOUSE, 340 NEWPORT ROAD, CARDIFF
-                # "100100066910",  # 1 WHITMUIR ROAD, CARDIFF
-                # "10090486882",  # SECOND FLOOR DOCK CHAMBERS 5 BUTE STREET, BUTETOWN, CARDIFF
-                # "200002932357",  # 46 AMHERST STREET, CARDIFF
-                # "200002932358",  # 48 AMHERST STREET, CARDIFF
-                # "200002932356",  # 44 AMHERST STREET, CARDIFF
-                # "10090488749",  # 456A COWBRIDGE ROAD EAST, CARDIFF
-                # "10092985344",  # FIRST FLOOR FLAT 452 COWBRIDGE ROAD EAST, CANTON, CARDIFF
-                # "100101043751",  # VVV RETAIL LTD, THE CABIN, WAUNGRON ROAD, CARDIFF
-                # "100100094616",  # CROSSLANDS CHILDRENS UNIT, 318 COWBRIDGE ROAD WEST, CARDIFF
-                # "100100098970",  # 144 SNOWDEN ROAD, CARDIFF
-                # "100100094085",  # 2 CAERWENT ROAD, CARDIFF
-                # "10002507423",  # MAES Y LLECH FARM, RADYR, CARDIFF
-                # "100100127342",  # 145 HEOL Y DERI, CARDIFF
-                # "100100896720",  # PARK HOUSE, MUIRTON ROAD, CARDIFF
-                # "100100890356",  # UNIVERSITY CATHOLIC CHAPLAINCY, 62 PARK PLACE, CARDIFF
-                # "100100094728",  # 7 CROSSWAYS ROAD, CARDIFF
-                # "100100139505",  # WHITE LODGE, CHURCH ROAD, PENTYRCH, CARDIFF
-                # "10002509001",  # LLANFAIR COURT, ST. Y NYLL LANE, CAPEL LLANILLTERN, CARDIFF
-            ]
-        ):
+        if uprn in [
+            # "100100127979",  # 17 LON-Y-RHYD, CARDIFF
+            "100100110392",  # 10 SOMERSET COURT, BURNHAM AVENUE, LLANRUMNEY, CARDIFF
+            # "100100107993",  # 890 NEWPORT ROAD, RUMNEY, CARDIFF
+            # "100100107313",  # 45 LLANSTEPHAN ROAD, RUMNEY, CARDIFF
+            # "10002524512",  # CLUB HOUSE RUMNEY R F C HARTLAND ROAD, LLANRUMNEY, CARDIFF
+            # "10008904957",  # OAK HOUSE, 340 NEWPORT ROAD, CARDIFF
+            # "100100066910",  # 1 WHITMUIR ROAD, CARDIFF
+            # "10090486882",  # SECOND FLOOR DOCK CHAMBERS 5 BUTE STREET, BUTETOWN, CARDIFF
+            # "200002932357",  # 46 AMHERST STREET, CARDIFF
+            # "200002932358",  # 48 AMHERST STREET, CARDIFF
+            # "200002932356",  # 44 AMHERST STREET, CARDIFF
+            # "10090488749",  # 456A COWBRIDGE ROAD EAST, CARDIFF
+            # "10092985344",  # FIRST FLOOR FLAT 452 COWBRIDGE ROAD EAST, CANTON, CARDIFF
+            # "100101043751",  # VVV RETAIL LTD, THE CABIN, WAUNGRON ROAD, CARDIFF
+            # "100100094616",  # CROSSLANDS CHILDRENS UNIT, 318 COWBRIDGE ROAD WEST, CARDIFF
+            # "100100098970",  # 144 SNOWDEN ROAD, CARDIFF
+            # "100100094085",  # 2 CAERWENT ROAD, CARDIFF
+            # "10002507423",  # MAES Y LLECH FARM, RADYR, CARDIFF
+            # "100100127342",  # 145 HEOL Y DERI, CARDIFF
+            # "100100896720",  # PARK HOUSE, MUIRTON ROAD, CARDIFF
+            # "100100890356",  # UNIVERSITY CATHOLIC CHAPLAINCY, 62 PARK PLACE, CARDIFF
+            # "100100094728",  # 7 CROSSWAYS ROAD, CARDIFF
+            # "100100139505",  # WHITE LODGE, CHURCH ROAD, PENTYRCH, CARDIFF
+            # "10002509001",  # LLANFAIR COURT, ST. Y NYLL LANE, CAPEL LLANILLTERN, CARDIFF
+        ]:
             return None
 
-        if record.addressline6 in [
-            # splits
-            # "CF15 8EL",
-            "CF24 2DG",
-            # looks wrong
-            # "CF3 1XY",
-            # "CF24 2EE",
-            # "CF24 0DF",
-            # "CF11 6BN",
-            # "CF5 5SB",
-            # "CF14 9UA",
-        ]:
+        if (
+            record.addressline6
+            in [
+                # splits
+                # "CF15 8EL",
+                # "CF24 2DG",
+                # looks wrong
+                # "CF3 1XY",
+                # "CF24 2EE",
+                # "CF24 0DF",
+                # "CF11 6BN",
+                # "CF5 5SB",
+                # "CF14 9UA",
+            ]
+        ):
             return None
 
         return super().address_record_to_dict(record)
