@@ -163,14 +163,8 @@ jobs:
         key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
     - aws-cli/setup
     - run:
-          name: Check wdiv-s3-trigger requirements
-          command: |
-            ./cdk/scripts/wdiv-s3-trigger-requirements.sh
-            # Check if the file changed
-            if ! git diff --exit-code cdk/lambdas/wdiv-s3-trigger/requirements.txt; then
-              echo "Error: wdiv-s3-trigger pyproject.toml updated, but requirements.txt hasn't been. Run ./cdk/scripts/wdiv-s3-trigger-requirements.sh and commit changes"
-              exit 1
-            fi
+          name: Build wdiv-s3-trigger requirements
+          command: ./cdk/scripts/wdiv-s3-trigger-requirements.sh
     - run:
         name: CDK version
         command: |
