@@ -78,8 +78,8 @@ jobs:
           paths:
             - ./.venv
             - ./node_modules
-            - /home/circleci/.cache
-            - /home/circleci/.cache/uv
+            - $HOME/.cache
+            - $HOME/.cache/uv
           key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
 
       - run:
