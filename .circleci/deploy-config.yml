@@ -276,8 +276,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install uv
-        command: deploy/files/scripts/install_uv.sh
+          name: Install uv
+          command: deploy/files/scripts/install_uv.sh
       - restore_cache:
           key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
       - aws-cli/setup
