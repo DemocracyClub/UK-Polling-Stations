@@ -7,11 +7,6 @@ orbs:
   aws-cli: circleci/aws-cli@5.4.0
 
 
-commands:
-  install_uv:
-    steps:
-      - run: pip install --upgrade uv">=0.5.12,<0.6.0"
-
 # the default pipeline parameters, which will be updated according to
 # the results of the path-filtering orb
 parameters:
@@ -55,7 +50,9 @@ jobs:
           cache-path: ~/repo/node_modules
           override-ci-command: npm ci
 
-      - install_uv
+      - run:
+          name: Install uv
+          command: deploy/files/scripts/install_uv.sh
 
       - run:
           name: install app system dependencies
@@ -126,7 +123,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - install_uv
+      - run:
+          name: Install uv
+          command: deploy/files/scripts/install_uv.sh
       - restore_cache:
           key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
       - aws-cli/setup
@@ -158,7 +157,9 @@ jobs:
 
     steps:
     - checkout
-    - install_uv
+    - run:
+        name: Install uv
+        command: deploy/files/scripts/install_uv.sh
     - restore_cache:
         key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
     - aws-cli/setup
@@ -193,7 +194,9 @@ jobs:
       DC_ENVIRONMENT: "<<parameters.dc-environment>>"
     steps:
     - checkout
-    - install_uv
+    - run:
+        name: Install uv
+        command: deploy/files/scripts/install_uv.sh
     - restore_cache:
         key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
     - aws-cli/setup
@@ -231,7 +234,9 @@ jobs:
 
     steps:
     - checkout
-    - install_uv
+    - run:
+        name: Install uv
+        command: deploy/files/scripts/install_uv.sh
     - node/install:
         node-version: '18'
     - restore_cache:
@@ -270,7 +275,9 @@ jobs:
 
     steps:
       - checkout
-      - install_uv
+      - run:
+          name: Install uv
+          command: deploy/files/scripts/install_uv.sh
       - restore_cache:
           key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
       - aws-cli/setup
