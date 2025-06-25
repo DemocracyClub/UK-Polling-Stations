@@ -2,7 +2,7 @@
 name = "UK-Polling-Stations"
 version = "0.0.0"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = "==3.12.*"
 dependencies = [
     "asana==5.0.10",
     "boto3==1.35.78",
