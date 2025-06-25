@@ -82,9 +82,9 @@ package = false
 members = ["cdk/lambdas/wdiv-s3-trigger"]
 
 [tool.uv.sources]
-dc-django-utils = { url = "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip" }
-dc-logging-utils = { url = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.1.0.zip" }
-dc-design-system = { url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.7.0.zip" }
+dc-django-utils = { git = "https://github.com/DemocracyClub/dc_django_utils.git", tag = "7.0.1" }
+dc-logging-utils = { git = "https://github.com/DemocracyClub/dc_logging.git", tag = "1.1.0" }
+dc-design-system = { git = "https://github.com/DemocracyClub/design-system.git", tag = "0.7.0" }
 
 [tool.ruff]
 line-length = 88
