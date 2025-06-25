@@ -354,13 +354,12 @@ wheels = [
 [[package]]
 name = "dc-design-system"
 version = "0.7.0"
-source = { url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.7.0.zip" }
-sdist = { hash = "sha256:874eec79334eac3dacd19a9a631dcf8311b600ceaafa11d7915ea5aa3cc56db2" }
+source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0#9bc27773cd5a91c9f10966fe6c4871a4d3277a1a" }
 
 [[package]]
 name = "dc-django-utils"
 version = "7.0.1"
-source = { url = "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip" }
+source = { git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1#78b20cf5e955c2994f49fd3d5db3fdad8ee5beba" }
 dependencies = [
     { name = "django" },
     { name = "django-localflavor" },
@@ -372,43 +371,14 @@ dependencies = [
     { name = "setuptools" },
     { name = "whitenoise" },
 ]
-sdist = { hash = "sha256:4bc2acc4aa6bb4458cac402400e323c481dd07d87190e177917b659548fd48b0" }
-
-[package.metadata]
-requires-dist = [
-    { name = "dc-design-system", marker = "extra == 'dev'", url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.5.0.tar.gz" },
-    { name = "django", specifier = ">=4.2" },
-    { name = "django-localflavor", specifier = ">=4.0" },
-    { name = "django-pipeline", specifier = ">=3.0.0" },
-    { name = "djhtml", marker = "extra == 'dev'", specifier = "==3.0.6" },
-    { name = "ipdb", marker = "extra == 'dev'", specifier = "==0.13.13" },
-    { name = "jsmin", specifier = "<3.1" },
-    { name = "markdown" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.0.0" },
-    { name = "pysass" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = "==8.3.2" },
-    { name = "pytest-django", marker = "extra == 'dev'", specifier = "==4.8.0" },
-    { name = "pytest-flakes", marker = "extra == 'dev'", specifier = "==4.0.5" },
-    { name = "pytest-mock", marker = "extra == 'dev'", specifier = "==3.14.0" },
-    { name = "pytest-ruff", marker = "extra == 'dev'", specifier = "==0.4.1" },
-    { name = "pytidylib" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.6.1" },
-    { name = "setuptools", specifier = ">=69.2.0" },
-    { name = "tox", marker = "extra == 'ci'", specifier = "==4.18.0" },
-    { name = "whitenoise" },
-]
 
 [[package]]
 name = "dc-logging-utils"
 version = "1.1.0"
-source = { url = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.1.0.zip" }
+source = { git = "https://github.com/DemocracyClub/dc_logging.git?tag=1.1.0#5dec330ae7081e83b0451e37c3f7e5f930198854" }
 dependencies = [
     { name = "cachetools" },
 ]
-sdist = { hash = "sha256:c261bc1a3e5a51b071a0eb4474474d86831123acfd89b16d65ac6582cf19c4ce" }
-
-[package.metadata]
-requires-dist = [{ name = "cachetools", specifier = ">5.0,<6" }]
 
 [[package]]
 name = "decorator"
@@ -1871,9 +1841,9 @@ requires-dist = [
     { name = "boto3", specifier = "==1.35.78" },
     { name = "botocore", specifier = "==1.35.78" },
     { name = "commitment", specifier = "==3.0.1" },
-    { name = "dc-design-system", url = "https://github.com/DemocracyClub/design-system/archive/refs/tags/0.7.0.zip" },
-    { name = "dc-django-utils", url = "https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/7.0.1.zip" },
-    { name = "dc-logging-utils", url = "https://github.com/DemocracyClub/dc_logging/archive/refs/tags/1.1.0.zip" },
+    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0" },
+    { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=7.0.1" },
+    { name = "dc-logging-utils", git = "https://github.com/DemocracyClub/dc_logging.git?tag=1.1.0" },
     { name = "django", specifier = "==4.2.23" },
     { name = "django-cors-headers", specifier = "==4.6.0" },
     { name = "django-dotenv", specifier = "==1.4.2" },
