@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -xeE
 
-uv run python /var/www/polling_stations/code/manage.py collectstatic --noinput --clear
+cd /var/www/polling_stations/code/
+uv run python manage.py collectstatic --noinput --clear
