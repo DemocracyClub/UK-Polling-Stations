@@ -47,7 +47,6 @@ cdk = [
 ]
 ci = [
     "coveralls==4.0.1",
-    "wheel==0.45.1",
 ]
 dev = [
     "django-debug-toolbar==4.4.6",
