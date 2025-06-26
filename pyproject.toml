@@ -75,6 +75,7 @@ testing = [
 ]
 
 [tool.uv]
+required-version = "<0.6.0"
 package = false
 
 [tool.uv.workspace]
