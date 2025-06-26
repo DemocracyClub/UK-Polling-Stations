@@ -1807,7 +1807,6 @@ cdk = [
 ]
 ci = [
     { name = "coveralls" },
-    { name = "wheel" },
 ]
 dev = [
     { name = "django-debug-toolbar" },
@@ -1878,10 +1877,7 @@ cdk = [
     { name = "aws-cdk-lib", specifier = "==2.201.0" },
     { name = "constructs", specifier = "==10.4.2" },
 ]
-ci = [
-    { name = "coveralls", specifier = "==4.0.1" },
-    { name = "wheel", specifier = "==0.45.1" },
-]
+ci = [{ name = "coveralls", specifier = "==4.0.1" }]
 dev = [
     { name = "django-debug-toolbar", specifier = "==4.4.6" },
     { name = "invoke", specifier = "==2.2.0" },
