@@ -108,7 +108,7 @@ def create_deployment_group():
         blueGreenDeploymentConfiguration={
             "terminateBlueInstancesOnDeploymentSuccess": {
                 "action": "TERMINATE",
-                "terminationWaitTimeInMinutes": 0,
+                "terminationWaitTimeInMinutes": 2,
             },
             "deploymentReadyOption": {
                 "actionOnTimeout": "CONTINUE_DEPLOYMENT",
@@ -119,6 +119,7 @@ def create_deployment_group():
         loadBalancerInfo={
             "targetGroupInfoList": [{"name": TARGET_GROUP_NAME}],
         },
+        terminationHookEnabled=True,
     )
 
 
