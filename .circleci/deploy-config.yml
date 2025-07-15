@@ -197,6 +197,8 @@ jobs:
       DC_ENVIRONMENT: "<<parameters.dc-environment>>"
     steps:
     - checkout
+    - attach_workspace:
+        at: ~/repo
     - run:
         name: Install uv
         command: deploy/files/scripts/install_uv.sh
