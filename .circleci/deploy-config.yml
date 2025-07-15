@@ -176,7 +176,10 @@ jobs:
           uv run --group cdk npx cdk synth --all
     - persist_to_workspace:
         root: ~/repo/
-        paths: [ cdk.out ]
+        paths: [
+          cdk.out,
+          cdk/lambdas/wdiv-s3-trigger/requirements.txt,
+        ]
     - slack/notify:
         event: fail
         template: basic_fail_1
