@@ -80,3 +80,6 @@ uprn-to-councils.csv
 # cdk gubbins
 cdk.out/**
 cdk.context.json
+
+# Upload trigger requirements
+cdk/lambdas/wdiv-s3-trigger/requirements.txt

@@ -1,6 +1,0 @@
-# Empty place holder.
-# This is populated by the "cdk/scripts/wdiv-s3-trigger-requirements.sh" script
-# If you need to deploy this lambda you will need to run that script to populate this file first.
-# There is not need to commit the results.
-# To restore run:
-#   git restore cdk/lambdas/wdiv-s3-trigger/requirements.txt
