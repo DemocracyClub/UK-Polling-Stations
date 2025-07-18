@@ -3,10 +3,6 @@
 # If you want to have a command run only once per env / once globally, use SSM Run Command
 MAILTO=developers@democracyclub.org.uk
 
-# Sync elections from EE
-# */5 * * * * every_election /usr/local/bin/ee-manage-py-command sync_elections
-# 0 2 * * * every_election cd /var/www/every_election/repo && ./serverscripts/rebuild_local_db.sh
-
 # Per instance cloudwatch custom metrics
 */5  * * * * polling_stations /var/www/polling_stations/per_instance_custom_metrics.sh
 
