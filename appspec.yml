@@ -70,9 +70,6 @@ hooks:
     - location: deploy/hooks/beforeinstall/initial_setup.sh
       timeout: 300
       runas: root
-    - location: deploy/hooks/beforeinstall/reload_ee_db.sh
-      timeout: 300
-      runas: root
     - location: deploy/files/scripts/install_uv.sh
       timeout: 300
       runas: root
@@ -112,12 +109,6 @@ hooks:
     - location: deploy/hooks/afterinstall/migrate_rds.sh
       timeout: 10800
       runas: polling_stations
-    - location: deploy/hooks/afterinstall/ee_init_db.sh
-      timeout: 300
-      runas: polling_stations
-    - location: deploy/hooks/afterinstall/restart_ee.sh
-      timeout: 300
-      runas: root
     - location: deploy/hooks/afterinstall/touchclean.sh
       timeout: 300
       runas: polling_stations
