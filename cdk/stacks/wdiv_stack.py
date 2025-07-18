@@ -43,8 +43,8 @@ from constructs import Construct
 # sys.path.append("..")
 
 # output of
-# https://eu-west-2.console.aws.amazon.com/imagebuilder/home?region=eu-west-2#/images/arn%3Aaws%3Aimagebuilder%3Aeu-west-2%3A732292556707%3Aimage%2Feeimage-ubuntu%2F0.0.47%2F1/details
-EE_IMAGE = "ami-05eea127ce68d51cf"
+# https://eu-west-2.console.aws.amazon.com/imagebuilder/home?region=eu-west-2#/images/arn%3Aaws%3Aimagebuilder%3Aeu-west-2%3A743524368797%3Aimage%2Fdcbaseimage-ubuntu-24-04%2F0.0.4%2F1/details?region=eu-west-2
+DC_BASE_IMAGE = "ami-00abbecbd06959d2c"
 
 MONITORING_ACCOUNTS = {
     "development": "985364114241",
@@ -83,7 +83,7 @@ class WDIVStack(Stack):
             availability_zones=["eu-west-2a", "eu-west-2b", "eu-west-2c"]
         )
         self.latest_ami = ec2.MachineImage.generic_linux(
-            ami_map={"eu-west-2": EE_IMAGE}
+            ami_map={"eu-west-2": DC_BASE_IMAGE}
         )
 
         self.create_parameters()

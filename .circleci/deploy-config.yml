@@ -356,14 +356,14 @@ workflows:
         requires:
         - "CDK Synth"
         context: [deployment-development-wdiv, slack-secrets]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, remove-embedded-ee ] } }
         dc-environment: development
     - code_deploy:
         name: "Development: AWS CodeDeploy"
         requires:
         - "Development: CDK Deploy"
         context: [deployment-development-wdiv, slack-secrets]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, remove-embedded-ee ] } }
         dc-environment: development
         min-size: 1
         max-size: 2
