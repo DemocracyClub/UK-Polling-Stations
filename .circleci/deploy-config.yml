@@ -351,18 +351,18 @@ workflows:
         requires:
         - "CDK Synth"
         context: [deployment-development-wdiv, slack-secrets]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, dealing-with-dead-replication-slots ] } }
         dc-environment: development
     - code_deploy:
         name: "Development: AWS CodeDeploy"
         requires:
         - "Development: CDK Deploy"
         context: [deployment-development-wdiv, slack-secrets]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, dealing-with-dead-replication-slots ] } }
         dc-environment: development
         min-size: 1
-        max-size: 2
-        desired-capacity: 1
+        max-size: 10
+        desired-capacity: 9
     - run_new_imports_post_deploy:
         # NB if no imports have changed this is a no-op
         name: "Development: Run New Imports Post Deploy"
