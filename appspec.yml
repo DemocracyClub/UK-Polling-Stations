@@ -124,3 +124,7 @@ hooks:
     - location: deploy/hooks/validate_application.sh
       timeout: 300
       runas: root
+  AfterBlockTraffic:
+    - location: deploy/hooks/after_block_traffic.sh
+      timeout: 120
+      runas: root
