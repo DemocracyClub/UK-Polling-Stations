@@ -361,8 +361,8 @@ workflows:
         filters: { branches: { only: [ development, dealing-with-dead-replication-slots ] } }
         dc-environment: development
         min-size: 1
-        max-size: 10
-        desired-capacity: 9
+        max-size: 2
+        desired-capacity: 1
     - run_new_imports_post_deploy:
         # NB if no imports have changed this is a no-op
         name: "Development: Run New Imports Post Deploy"
