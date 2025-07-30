@@ -52,18 +52,18 @@ class FeedbackTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<input type="radio" name="vote" value="YES" data-toggle="button" id="id_vote_0" required>',
+            '<input type="radio" name="vote" value="MORE_LIKELY" data-toggle="button" id="id_vote_0" required>',
         )
-        self.assertContains(response, "Did you find this useful?")
+        self.assertContains(response, "Did you find what you were looking for?")
         self.assertContains(
-            response, "Has this information made you more likely to vote?"
+            response, "Has this service changed your likelihood of voting?"
         )
 
         request = self.client.post(
             "/feedback/",
             {
                 "found_useful": "YES",
-                "vote": "YES",
+                "vote": "MORE_LIKELY",
                 "source_url": "/postcode/AA11AA",
                 "token": "test_token",
             },

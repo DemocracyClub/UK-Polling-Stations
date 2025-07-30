@@ -11,7 +11,11 @@ from django_extensions.db.models import TimeStampedModel
 from polling_stations.settings.constants.asana import AsanaReportType
 
 FOUND_USEFUL_CHOICES = (("YES", _("Yes")), ("NO", _("No")))
-VOTE_CHOICES = (("YES", _("Yes")), ("NO", _("No")))
+VOTE_CHOICES = (
+    ("MORE_LIKELY", _("More likely")),
+    ("LESS_LIKELY", _("Less likely")),
+    ("NO_DIFFERENCE", _("No change")),
+)
 
 
 class Feedback(TimeStampedModel):
