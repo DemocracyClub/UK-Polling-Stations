@@ -38,7 +38,7 @@
                 var found_useful_radio_value = $('#feedback_form input[name=found_useful]:checked').val();
                 var vote_radio_value = $('#feedback_form input[name=vote]:checked').val();
                 if (((found_useful_radio_value === 'YES') || (found_useful_radio_value === 'NO')) &
-                    ((vote_radio_value === 'YES') || (vote_radio_value === 'NO'))) {
+                    ((vote_radio_value === 'MORE_LIKELY') || (vote_radio_value === 'LESS_LIKELY') || (vote_radio_value === 'NO_DIFFERENCE'))) {
                         $("#feedback_form .comments_container").show();
                         $("#report_form_container").hide();
                     }
@@ -55,7 +55,7 @@
                 var found_useful_radio_value = $('#feedback_form input[name=found_useful]:checked').val();
                 var vote_radio_value = $('#feedback_form input[name=vote]:checked').val();
                 if (((found_useful_radio_value === 'YES') || (found_useful_radio_value === 'NO')) &
-                    ((vote_radio_value === 'YES') || (vote_radio_value === 'NO'))) {
+                    ((vote_radio_value === 'MORE_LIKELY') || (vote_radio_value === 'LESS_LIKELY') || (vote_radio_value === 'NO_DIFFERENCE'))) {
                         $("#feedback_form .comments_container").show();
                         $("#report_form_container").hide();
                     }
