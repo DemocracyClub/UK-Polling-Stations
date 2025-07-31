@@ -74,6 +74,17 @@ class WDIVOncePerTagCommandRunner(Stack):
                 command,
             )
 
+        if dc_environment in ["development", "staging", "production"]:
+            command = "runuser -l polling_stations -c '/usr/bin/manage-py-command drop_failed_replication_slots --send-slack-report'"
+            if dc_environment == "staging":
+                # Don't bother to post to bots on staging.
+                command = "runuser -l polling_stations -c '/usr/bin/manage-py-command drop_failed_replication_slots'"
+            self.add_job(
+                "drop_failed_replication_slots",
+                "cron(30 2 * * ? *)",
+                command,
+            )
+
     def add_job(
         self,
         command_name,
