@@ -45,7 +45,21 @@ do
     WORKER_STATS=$(psql polling_stations -U polling_stations -AXqtc "select string_agg(distinct srsubstate, '' order by srsubstate) from pg_subscription_rel;")
     sleep 15
     if [ "$WORKER_STATS" = "fr" ]; then
+
+      echo "Dropping and recreating subscription due to failure state..."
       psql "$DB" -U "$DB_USER" -c "DROP SUBSCRIPTION $SUBSCRIPTION;"
+      sleep 5
+
+      echo "Checking for replication slot on RDS..."
+      SLOT_EXISTS=$(PGPASSWORD="$RDS_DB_PASSWORD" psql -h "$RDS_DB_HOST" -d "$RDS_DB_NAME" -U postgres -t -c "SELECT COUNT(*) FROM pg_replication_slots WHERE slot_name = '$SUBSCRIPTION';" | tr -d ' ')
+
+      if [ "$SLOT_EXISTS" -gt 0 ]; then
+          echo "Cleaning up replication slot '$SUBSCRIPTION' on RDS..."
+          PGPASSWORD="$RDS_DB_PASSWORD" psql -h "$RDS_DB_HOST" -d "$RDS_DB_NAME" -U postgres -c "SELECT pg_drop_replication_slot('$SUBSCRIPTION');"
+          sleep 5
+      fi
+
+      echo "Recreate subscription on RDS"
       psql "$DB" -U "$DB_USER" -c "CREATE SUBSCRIPTION $SUBSCRIPTION CONNECTION 'dbname=$RDS_DB_NAME host=$RDS_DB_HOST user=postgres password=$RDS_DB_PASSWORD' PUBLICATION alltables with (streaming=true, binary=true, copy_data=false);"
     fi
 done

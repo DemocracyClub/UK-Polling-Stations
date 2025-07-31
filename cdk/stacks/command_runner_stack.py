@@ -52,6 +52,16 @@ class WDIVOncePerTagCommandRunner(Stack):
                 "cron(1 * * * ? *)",
                 "/usr/bin/manage-py-command import_councils --only-contact-details --database principal",
             )
+            self.add_job(
+                "teardown_expired_data",
+                "cron(0 3 ? * SUN *)",
+                "runuser -l polling_stations -c '/usr/bin/manage-py-command teardown_expired_data",
+            )
+            self.add_job(
+                "run_once_custom_metrics",
+                "rate(5 minutes)",
+                "/var/www/polling_stations/run_once_custom_metrics.sh",
+            )
 
         if dc_environment in ["development", "staging", "production"]:
             command = "runuser -l polling_stations -c '/usr/bin/manage-py-command import_eoni_from_s3 --send-slack-report'"
@@ -65,17 +75,14 @@ class WDIVOncePerTagCommandRunner(Stack):
             )
 
         if dc_environment in ["development", "staging", "production"]:
+            command = "runuser -l polling_stations -c '/usr/bin/manage-py-command drop_failed_replication_slots --send-slack-report'"
+            if dc_environment == "staging":
+                # Don't bother to post to bots on staging.
+                command = "runuser -l polling_stations -c '/usr/bin/manage-py-command drop_failed_replication_slots'"
             self.add_job(
-                "run_once_custom_metrics",
-                "rate(5 minutes)",
-                "/var/www/polling_stations/run_once_custom_metrics.sh",
-            )
-
-        if dc_environment in ["development", "staging", "production"]:
-            self.add_job(
-                "teardown_expired_data",
-                "cron(0 3 ? * SUN *)",
-                "runuser -l polling_stations -c '/usr/bin/manage-py-command teardown_expired_data",
+                "drop_failed_replication_slots",
+                "cron(30 2 * * ? *)",
+                command,
             )
 
     def add_job(
