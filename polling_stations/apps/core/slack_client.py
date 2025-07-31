@@ -12,7 +12,13 @@ class SlackChannelNotFoundError(Exception):
 
 
 class SlackClient:
-    def __init__(self, token: Optional[str] = None, channel: str = "bots", stdout=None):
+    def __init__(
+        self,
+        token: Optional[str] = None,
+        channel: str = "bots",
+        stdout=None,
+        username: str = "WDIV Bot",
+    ):
         self.stdout = stdout or sys.stdout
         self.token = token or os.getenv("SLACK_TOKEN")
         if not self.token:
@@ -23,6 +29,7 @@ class SlackClient:
         self.client = WebClient(token=self.token)
         self.channel = channel
         self.channel_id = self.get_channel_id_from_name(self.channel)
+        self.username = username
 
     def get_channel_id_from_name(self, channel_name: str) -> Optional[str]:
         conversation_id = None
@@ -54,6 +61,7 @@ class SlackClient:
                 thread_ts=thread_ts,
                 blocks=blocks,
                 icon_emoji=":robot_face:",
+                username=self.username,
             )
 
             return response.data
