@@ -87,6 +87,7 @@ class TestSlackClient:
             thread_ts=None,
             blocks=None,
             icon_emoji=":robot_face:",
+            username="WDIV Bot",
         )
         assert response == {"ok": True, "ts": "1234567890.123456"}
 
@@ -104,6 +105,7 @@ class TestSlackClient:
             thread_ts="1234567890.123456",
             blocks=None,
             icon_emoji=":robot_face:",
+            username="WDIV Bot",
         )
 
     def test_send_message_with_blocks(self, mock_webclient, mock_env_token):
@@ -121,6 +123,7 @@ class TestSlackClient:
             thread_ts=None,
             blocks=blocks,
             icon_emoji=":robot_face:",
+            username="WDIV Bot",
         )
 
     def test_send_message_api_error(self, mock_webclient, mock_env_token):
