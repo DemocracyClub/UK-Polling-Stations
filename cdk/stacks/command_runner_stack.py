@@ -52,6 +52,16 @@ class WDIVOncePerTagCommandRunner(Stack):
                 "cron(1 * * * ? *)",
                 "/usr/bin/manage-py-command import_councils --only-contact-details --database principal",
             )
+            self.add_job(
+                "teardown_expired_data",
+                "cron(0 3 ? * SUN *)",
+                "runuser -l polling_stations -c '/usr/bin/manage-py-command teardown_expired_data",
+            )
+            self.add_job(
+                "run_once_custom_metrics",
+                "rate(5 minutes)",
+                "/var/www/polling_stations/run_once_custom_metrics.sh",
+            )
 
         if dc_environment in ["development", "staging", "production"]:
             command = "runuser -l polling_stations -c '/usr/bin/manage-py-command import_eoni_from_s3 --send-slack-report'"
@@ -62,20 +72,6 @@ class WDIVOncePerTagCommandRunner(Stack):
                 "import_eoni_data_from_s3",
                 "cron(30 1 * * ? *)",
                 command,
-            )
-
-        if dc_environment in ["development", "staging", "production"]:
-            self.add_job(
-                "run_once_custom_metrics",
-                "rate(5 minutes)",
-                "/var/www/polling_stations/run_once_custom_metrics.sh",
-            )
-
-        if dc_environment in ["development", "staging", "production"]:
-            self.add_job(
-                "teardown_expired_data",
-                "cron(0 3 ? * SUN *)",
-                "runuser -l polling_stations -c '/usr/bin/manage-py-command teardown_expired_data",
             )
 
     def add_job(
