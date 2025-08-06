@@ -13,6 +13,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     # These exclusions aren't relevant for the by-election but I'm maintaining them as a comment for future reference
+    # comment to deploy
 
     # def address_record_to_dict(self, record):
     #     if record.addressline6 in [
