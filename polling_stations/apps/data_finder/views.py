@@ -321,7 +321,6 @@ class BasePollingStationView(
         context["show_map"] = self.show_map(context)
 
         self.log_postcode(self.postcode, context, type(self).__name__)
-
         return context
 
 
@@ -446,6 +445,7 @@ class ExamplePostcodeView(BasePollingStationView):
         context["error"] = None
         context["requires_voter_id"] = True
         context["noindex"] = True
+        context["show_map"] = True
         return context
 
 
