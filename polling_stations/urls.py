@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from api.router import router
 import data_finder.views as data_finder_views
-from data_finder import review_views
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -84,38 +83,6 @@ extra_patterns = [
     ),
 ]
 
-boundary_review_patterns = (
-    [
-        re_path(
-            r"^WLL/20250609/postcode/(?P<postcode>.+)/$",
-            review_views.PostcodeView.as_view(),
-            name="postcode_view",
-        ),
-        re_path(
-            r"^WLL/20250609/postcode/$",
-            review_views.PostcodeView.as_view(),
-            name="postcode_view_alias",
-        ),
-        re_path(
-            r"^WLL/20250609/address/(?P<uprn>.+)/$",
-            review_views.AddressView.as_view(),
-            name="address_view",
-        ),
-        re_path(
-            r"^WLL/20250609/we_dont_know/(?P<postcode>.+)/$",
-            review_views.WeDontKnowView.as_view(),
-            name="we_dont_know",
-        ),
-        re_path(
-            r"^WLL/20250609/address_select/(?P<postcode>.+)/$",
-            review_views.AddressFormView.as_view(),
-            name="address_select_view",
-        ),
-        re_path(r"^WLL/20250609/$", review_views.HomeView.as_view(), name="home"),
-    ],
-    "reviews",
-)
-
 if "dashboard" in settings.INSTALLED_APPS:
     extra_patterns.append(
         re_path(r"^dashboard/", include("dashboard.urls", namespace="dashboard"))
@@ -143,11 +110,7 @@ PREFIXED_URLS = settings.EMBED_PREFIXES + settings.WHITELABEL_PREFIXES
 for EMBED in PREFIXED_URLS:
     extra_patterns += [re_path(r"^%s/" % EMBED, include("whitelabel.urls"))]
 
-urlpatterns = (
-    extra_patterns
-    + core_patterns
-    + [path("reviews/", include(boundary_review_patterns))]
-)
+urlpatterns = extra_patterns + core_patterns
 
 handler500 = "dc_utils.urls.dc_server_error"
 
