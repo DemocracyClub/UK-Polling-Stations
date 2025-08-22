@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -xeE
 
-UV_CONSTRAINT=">=0.5.12,<0.6.0"
+UV_CONSTRAINT="==0.8.*"
 
 if [ "$CI" = "true" ]; then
     pip install uv"$UV_CONSTRAINT"
