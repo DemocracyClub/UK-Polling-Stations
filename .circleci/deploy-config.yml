@@ -42,7 +42,7 @@ jobs:
           node-version: '18'
 
       - restore_cache:
-          key:  v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
+          key:  v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
 
       - run:
           name: Install node node_modules
@@ -73,11 +73,10 @@ jobs:
 
       - save_cache:
           paths:
-            - ./.venv
             - ./node_modules
             - $HOME/.cache
             - $HOME/.cache/uv
-          key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
+          key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
 
       - run:
           name: Print versions
@@ -127,7 +126,7 @@ jobs:
           name: Install uv
           command: deploy/files/scripts/install_uv.sh
       - restore_cache:
-          key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
+          key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
       - aws-cli/setup
       - run:
           name: Check and run new import scripts.
@@ -161,7 +160,7 @@ jobs:
         name: Install uv
         command: deploy/files/scripts/install_uv.sh
     - restore_cache:
-        key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
+        key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
     - aws-cli/setup
     - run:
           name: Build wdiv-s3-trigger requirements
@@ -203,7 +202,7 @@ jobs:
         name: Install uv
         command: deploy/files/scripts/install_uv.sh
     - restore_cache:
-        key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
+        key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
     - aws-cli/setup
     - run:
         name: CDK deploy
@@ -245,7 +244,7 @@ jobs:
     - node/install:
         node-version: '18'
     - restore_cache:
-        key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
+        key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
     - run:
         name: "Code Deploy: Create deployment group"
         command: uv run python deploy/create_deployment_group.py
@@ -284,7 +283,7 @@ jobs:
           name: Install uv
           command: deploy/files/scripts/install_uv.sh
       - restore_cache:
-          key: v1-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
+          key: v2-dependencies-{{ checksum "uv.lock" }}-{{ checksum "package-lock.json" }}
       - aws-cli/setup
       - run:
           name: Check and run new import scripts after a deploy.
