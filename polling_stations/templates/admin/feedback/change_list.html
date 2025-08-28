@@ -6,7 +6,9 @@
         {% block object-tools-items %}
             {% if user.is_superuser %}
                 <li><a href="export_all">Export All</a></li>
-                <li><a href="export_comments">Export Comments</a></li>
+                {% if not module_name == "No Election Page Feedback" %}
+                    <li><a href="export_comments">Export Comments</a></li>
+                {% endif %}
             {% endif %}
         {% endblock %}
     </ul>

@@ -48,3 +48,13 @@ class Feedback(TimeStampedModel):
                 settings.ASANA_REPORT_TYPE_FIELD_ID: AsanaReportType.WDIV_FEEDBACK.value,
             },
         }
+
+
+class NoElectionFeedback(TimeStampedModel):
+    class Meta:
+        verbose_name = "No Election Page Feedback"
+        verbose_name_plural = "No Election Page Feedback"
+
+    no_election_feedback_text = models.TextField(blank=True)
+    source_url = models.CharField(blank=True, max_length=800)
+    token = models.CharField(blank=True, max_length=100, unique=True)
