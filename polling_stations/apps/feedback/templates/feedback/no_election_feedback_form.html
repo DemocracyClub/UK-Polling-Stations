@@ -1,0 +1,24 @@
+{% load i18n %}
+<style>
+    .link-button {
+        color: #403F41;
+        border-color: #E6007C;
+    }
+</style>
+
+<form id="no_election_feedback_form" method="post" action="{% url 'no_election_feedback_form_view' %}">
+    <h5>
+        <span aria-hidden="true">🗳️</span>
+        {% trans "We'd like your feedback" %}
+    </h5>
+    <div>
+        <label for={{no_election_feedback_form.no_election_feedback_text.id_for_label}}>
+            {% trans "Why did you search today? What would make this more useful?" %}
+        </label>
+        {{ no_election_feedback_form.no_election_feedback_text }}
+    </div>
+    <button type="submit" style="display: block;" class="ds-button">{% trans "Send feedback" %}</button>
+    {% csrf_token %}
+    {{ no_election_feedback_form.token }}
+    {{ no_election_feedback_form.source_url }}
+</form>

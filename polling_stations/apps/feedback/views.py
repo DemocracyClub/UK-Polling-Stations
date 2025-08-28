@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import UpdateView, View
 
-from .forms import FeedbackForm
-from .models import Feedback
+from .forms import FeedbackForm, NoElectionFeedbackForm
+from .models import Feedback, NoElectionFeedback
 
 
 class FeedbackFormView(UpdateView):
@@ -27,6 +27,18 @@ class FeedbackFormView(UpdateView):
         ):
             return self.object.source_url
         return "/"
+
+
+class NoElectionFeedbackFormView(FeedbackFormView):
+    form_class = NoElectionFeedbackForm
+    template_name = "feedback/no_election_feedback_form_view.html"
+
+    def get_object(self, queryset=None):
+        token = self.request.POST.get("token")
+        try:
+            return NoElectionFeedback.objects.get(token=token)
+        except NoElectionFeedback.DoesNotExist:
+            return NoElectionFeedback(token=token)
 
 
 class RecordJsonFeedback(View):
