@@ -48,6 +48,10 @@
         {% include "fragments/ical_feed.html" %}
     {% endif %}
 
+    {% if not error and not has_election and not ni_out_of_cycle_station %}
+        {% include "feedback/no_election_feedback_form.html" %}
+    {% endif %}
+
     {% if we_know_where_you_should_vote %}
         {% if request.brand == 'democracyclub' and has_election and not error %}
             <div class="ds-card">
