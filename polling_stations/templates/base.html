@@ -12,11 +12,11 @@
     {%  endblock extra_page_css %}
 {% endblock extra_site_css %}
 
-{% if noindex %}
-    {% block page_meta %}
+{% block page_meta %}
+    {% if noindex %}
         <meta name="robots" content="noindex">
-    {% endblock page_meta %}
-{% endif %}
+    {% endif %}
+{% endblock page_meta %}
 
 {% block top_banner %}
     {% if SERVER_ENVIRONMENT == 'test' or SERVER_ENVIRONMENT == 'staging' %}
