@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "REI"
     addresses_name = (
-        "2025-05-01/2025-03-26T10:26:14.227748/Democracy_Club__01May2025.tsv"
+        "2025-10-16/2025-09-26T15:31:08.656291/Democracy_Club__16October2025.tsv"
     )
     stations_name = (
-        "2025-05-01/2025-03-26T10:26:14.227748/Democracy_Club__01May2025.tsv"
+        "2025-10-16/2025-09-26T15:31:08.656291/Democracy_Club__16October2025.tsv"
     )
-    elections = ["2025-05-01"]
+    elections = ["2025-10-16"]
     csv_delimiter = "\t"
 
     # By-election script so maintaining previous exclusions as comments for future reference
@@ -28,34 +28,4 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     #     ):
     #         return None
 
-    #     if record.addressline6 in [
-    #         # splits
-    #         "RH6 8DU",
-    #     ]:
-    #         return None
-
     #     return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Coords from council for the following stations
-        # St Mark’s Church Hall, Great Tattenhams, KT18 5RD
-        if record.polling_place_id == "5736":
-            record = record._replace(
-                polling_place_easting="523352",
-                polling_place_northing="158124",
-            )
-        # St Mark’s Church Hall, Great Tattenhams, KT18 5RD
-        if record.polling_place_id == "5734":
-            record = record._replace(
-                polling_place_easting="524630",
-                polling_place_northing="159246",
-                polling_place_uprn="68157550",
-            )
-        # St Pauls Church Hall, Warren Road Banstead Surrey SM7 1LG
-        if record.polling_place_id == "5725":
-            record = record._replace(
-                polling_place_easting="523884",
-                polling_place_northing="159996",
-                polling_place_uprn="68157553",
-            )
-        return super().station_record_to_dict(record)
