@@ -92,6 +92,7 @@ class LogLookUpMixin(object):
             entry = settings.POSTCODE_LOGGER.entry_class(
                 postcode=postcode,
                 dc_product=settings.POSTCODE_LOGGER.dc_product.wdiv,
+                had_election=context.get("has_election", False),
                 **utm_data,
             )
 
