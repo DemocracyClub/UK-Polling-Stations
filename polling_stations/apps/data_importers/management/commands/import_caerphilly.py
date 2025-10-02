@@ -116,8 +116,13 @@ class Command(BaseHalaroseCsvImporter):
         # if record.pollingvenueid == "49":
         #     record = record._replace(pollingstationpostcode="CF83 1PA")
 
-        # # 'TRETHOMAS LIFE CENTRE, HEOL YR YSGOL, TRETHOMAS, CAERPHILLY, CF83 8FL' (id: 60)
-        # if record.pollingvenueid == "60":
-        #     record = record._replace(pollingstationpostcode="CF83 8DE")
+        # 'TRETHOMAS LIFE CENTRE, HEOL YR YSGOL, TRETHOMAS, CAERPHILLY, CF83 8FL' (id: 60)
+        if record.pollingvenueid == "60":
+            # record = record._replace(pollingstationpostcode="CF83 8DE")
+            record = record._replace(pollingvenueuprn="43091261")
+
+        # 'PORTA CABIN in LAY-BY, MAFON ROAD (Close to Railway Inn)' (id: 36)
+        if record.pollingvenueid == "36":
+            record = record._replace(pollingvenueuprn="43088144")
 
         return super().station_record_to_dict(record)
