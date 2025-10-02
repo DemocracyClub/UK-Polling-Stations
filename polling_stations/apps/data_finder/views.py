@@ -81,22 +81,21 @@ def polling_station_current(station):
 
 
 class LogLookUpMixin(object):
-    def log_postcode(self, postcode, context, view_used):
-        if view_used != "api":
-            # Log to firehose
-            utm_data = {}
+    def log_postcode(self, postcode, context):
+        # Log to firehose
+        utm_data = {}
 
-            if hasattr(self.request, "session"):
-                utm_data = self.request.session.get("utm_data")
+        if hasattr(self.request, "session"):
+            utm_data = self.request.session.get("utm_data")
 
-            entry = settings.POSTCODE_LOGGER.entry_class(
-                postcode=postcode,
-                dc_product=settings.POSTCODE_LOGGER.dc_product.wdiv,
-                had_election=context.get("has_election", False),
-                **utm_data,
-            )
+        entry = settings.POSTCODE_LOGGER.entry_class(
+            postcode=postcode,
+            dc_product=settings.POSTCODE_LOGGER.dc_product.wdiv,
+            had_election=context.get("has_election", False),
+            **utm_data,
+        )
 
-            settings.POSTCODE_LOGGER.log(entry)
+        settings.POSTCODE_LOGGER.log(entry)
 
 
 class LanguageMixin(object):
@@ -321,7 +320,7 @@ class BasePollingStationView(
 
         context["show_map"] = self.show_map(context)
 
-        self.log_postcode(self.postcode, context, type(self).__name__)
+        self.log_postcode(self.postcode, context)
         return context
 
 
@@ -503,7 +502,7 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
             "location": None,
             "council": None,
         }
-        self.log_postcode(self.postcode, log_data, type(self).__name__)
+        self.log_postcode(self.postcode, log_data)
 
         return context
 
