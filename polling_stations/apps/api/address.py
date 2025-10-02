@@ -7,7 +7,7 @@ from data_finder.helpers import (
 )
 from data_finder.helpers.baked_data_helper import LocalParquetElectionsHelper
 from data_finder.helpers.every_election import EEFetcher, EEWrapper
-from data_finder.views import LogLookUpMixin, polling_station_current
+from data_finder.views import polling_station_current
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from drf_spectacular.types import OpenApiTypes
@@ -112,7 +112,7 @@ class PostcodeResponseSerializer(serializers.Serializer):
     ballots = BallotSerializer(read_only=True, many=True)
 
 
-class AddressViewSet(ViewSet, LogLookUpMixin):
+class AddressViewSet(ViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     http_method_names = ["get", "post", "head", "options"]
     lookup_field = "uprn"
@@ -205,18 +205,6 @@ class AddressViewSet(ViewSet, LogLookUpMixin):
             ret["ballots"] = ee.get_all_ballots()
         else:
             ret["ballots"] = ee.get_ballots_for_next_date()
-
-        # create log entry
-        log_data = {}
-        log_data["we_know_where_you_should_vote"] = ret["polling_station_known"]
-        log_data["location"] = address.location
-        log_data["council"] = ret["council"]
-        log_data["brand"] = "api"
-        log_data["language"] = ""
-        log_data["api_user"] = request.user
-        log_data["has_election"] = has_election
-        if log:
-            self.log_postcode(Postcode(address.postcode), log_data, "api")
 
         ret["report_problem_url"] = get_bug_report_url(
             request, ret["polling_station_known"]
