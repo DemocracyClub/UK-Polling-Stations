@@ -13,7 +13,7 @@ from data_finder.views import (
 from data_importers.event_types import DataEventType
 from data_importers.tests.factories import DataEventFactory
 from django.core.management import call_command
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, override_settings
 from django.utils import timezone
 from pollingstations.models import PollingStation, VisibilityChoices
 from pollingstations.tests.factories import PollingStationFactory
@@ -48,6 +48,7 @@ class LogTestMixin:
             f'"postcode": "{self.test_dc_logging_postcode}"' in logging_message.message
         )
         assert '"dc_product": "WDIV"' in logging_message.message
+        assert '"had_election": false' in logging_message.message
         assert '"utm_source": "test"' in logging_message.message
         assert '"utm_campaign": "better_tracking"' in logging_message.message
         assert '"utm_medium": "pytest"' in logging_message.message
@@ -185,19 +186,47 @@ class PostCodeViewTestCase(TestCase, LogTestMixin):
             )
 
     def test_redirect_if_should_be_other_view(self):
-        # This should go to the address picker, because it's split over multiple polling districts
-        response = self.client.get(
-            "/postcode/DD11DD/?utm_source=foo&something=other", follow=False
-        )
-        self.assertEqual(302, response.status_code)
-        self.assertEqual(response["Location"], "/address_select/DD11DD/?utm_source=foo")
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            # This should go to the address picker, because it's split over multiple polling districts
+            response = self.client.get(
+                "/postcode/DD11DD/?utm_source=foo&something=other", follow=False
+            )
+            self.assertEqual(302, response.status_code)
+            self.assertEqual(
+                response["Location"], "/address_select/DD11DD/?utm_source=foo"
+            )
+
+            # shouldn't log because follow=False
+            mock_log.assert_not_called()
 
     def test_station_known(self):
-        response = self.client.get(
-            "/postcode/AA11AA/?utm_source=foo&something=other", follow=False
-        )
-        self.assertEqual(302, response.status_code)
-        self.assertEqual(response["Location"], "/address/100/?utm_source=foo")
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            response = self.client.get(
+                "/postcode/AA11AA/?utm_source=foo&something=other", follow=False
+            )
+            self.assertEqual(302, response.status_code)
+            self.assertEqual(response["Location"], "/address/100/?utm_source=foo")
+
+            # shouldn't log because follow=False
+            mock_log.assert_not_called()
+
+    def test_log_postcode_called(self):
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            self.client.get(
+                "/postcode/AA11AA/", follow=True
+            )  # follow=True because we want to log the search at the point the user sees a result
+
+            # Should log because we show a result
+            mock_log.assert_called_once()
+
+    def test_log_postcode_not_called_on_redirect(self):
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            self.client.get(
+                "/postcode/DD11DD/", follow=True
+            )  # follow=True because we want to log the search at the point the user sees a result
+
+            # shouldn't log because we redirect to AddressSelectForm
+            mock_log.assert_not_called()
 
 
 class AddressViewTestCase(TestCase):
@@ -227,8 +256,12 @@ class AddressViewTestCase(TestCase):
         self.factory = RequestFactory()
 
     def test_station_known_response(self):
-        response = self.client.get("/address/100/", follow=False)
-        self.assertEqual(200, response.status_code)
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            response = self.client.get("/address/100/", follow=False)
+            self.assertEqual(200, response.status_code)
+
+            # Should log because we show a result
+            mock_log.assert_called_once()
 
     def test_get_station_station_known(self):
         request = self.factory.get("/address/100/")
@@ -270,6 +303,32 @@ class AddressViewTestCase(TestCase):
         self.assertFalse(context["we_know_where_you_should_vote"])
         self.assertIsNone(context["station"])
 
+    @override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": True})
+    def test_log_postcode_has_election_true(self):
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            self.client.get("/address/100/", follow=False)
+
+            # Verify log_postcode was called
+            mock_log.assert_called_once()
+
+            # Check the context passed to log_postcode
+            call_args = mock_log.call_args
+            context = call_args[0][1]  # Second argument is context
+            self.assertTrue(context["has_election"])
+
+    @override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": False})
+    def test_log_postcode_has_election_false(self):
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            self.client.get("/address/100/", follow=False)
+
+            # Verify log_postcode was called
+            mock_log.assert_called_once()
+
+            # Check the context passed to log_postcode
+            call_args = mock_log.call_args
+            context = call_args[0][1]  # Second argument is context
+            self.assertFalse(context["has_election"])
+
 
 class PostCodeViewNoStationTestCase(TestCase, LogTestMixin):
     test_dc_logging_postcode = "BB11BB"
@@ -295,20 +354,28 @@ class PostCodeViewNoStationTestCase(TestCase, LogTestMixin):
             )
 
     def test_polling_station_is_blank(self):
-        response = self.client.get(
-            "/postcode/BB11BB/?utm_source=foo&something=other", follow=False
-        )
-        self.assertEqual(200, response.status_code)
-        self.assertContains(response, "ontact Foo Council")
-        self.assertContains(response, "tel:01314 159265")
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            response = self.client.get(
+                "/postcode/BB11BB/?utm_source=foo&something=other", follow=False
+            )
+            self.assertEqual(200, response.status_code)
+            self.assertContains(response, "ontact Foo Council")
+            self.assertContains(response, "tel:01314 159265")
+
+            # Should log because we show a result
+            mock_log.assert_called_once()
 
     def test_post_code_not_in_addressbase(self):
-        response = self.client.get(
-            "/postcode/HJ67KL/?utm_source=foo&something=other", follow=False
-        )
-        self.assertEqual(200, response.status_code)
-        self.assertContains(response, "Contact Foo Council")
-        self.assertContains(response, "tel:01314 159265")
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            response = self.client.get(
+                "/postcode/HJ67KL/?utm_source=foo&something=other", follow=False
+            )
+            self.assertEqual(200, response.status_code)
+            self.assertContains(response, "Contact Foo Council")
+            self.assertContains(response, "tel:01314 159265")
+
+            # Should log because we show a result
+            mock_log.assert_called_once()
 
 
 class WeDontknowViewTestCase(TestCase):
@@ -342,6 +409,7 @@ class WeDontknowViewTestCase(TestCase):
 
         assert '"postcode": "FF22FF"' in logging_message.message
         assert '"dc_product": "WDIV"' in logging_message.message
+        assert '"had_election": false' in logging_message.message
         assert '"utm_source": "test"' in logging_message.message
         assert '"utm_campaign": "better_tracking"' in logging_message.message
         assert '"utm_medium": "pytest"' in logging_message.message
@@ -382,19 +450,27 @@ class WeDontknowViewTestCase(TestCase):
         self.assertEqual(response["Location"], r"/address_select/FF22FF/")
 
     def test_we_dont_know_redirect(self):
-        response = self.client.get("/we_dont_know/FF22FF/", follow=False)
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            response = self.client.get("/we_dont_know/FF22FF/", follow=False)
 
-        self.assertEqual(302, response.status_code)
-        self.assertEqual(response["Location"], r"/multiple_councils/FF22FF/")
+            self.assertEqual(302, response.status_code)
+            self.assertEqual(response["Location"], r"/multiple_councils/FF22FF/")
+
+            # Shouldn't log because follow=False
+            mock_log.assert_not_called()
 
     def test_multiple_councils_view(self):
-        response = self.client.get("/multiple_councils/FF22FF/", follow=False)
-        self.assertContains(
-            response,
-            "Residents in FF22FF may be in one of the following council areas:",
-        )
-        self.assertContains(response, "Foo Council")
-        self.assertContains(response, "Bar Borough")
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            response = self.client.get("/multiple_councils/FF22FF/", follow=False)
+            self.assertContains(
+                response,
+                "Residents in FF22FF may be in one of the following council areas:",
+            )
+            self.assertContains(response, "Foo Council")
+            self.assertContains(response, "Bar Borough")
+
+            # Should log because we show a result
+            mock_log.assert_called_once()
 
     def test_home_redirect_no_stations(self):
         response = self.client.post(
@@ -409,13 +485,17 @@ class WeDontknowViewTestCase(TestCase):
         self.assertEqual(response["Location"], r"/address_select/GG22GG/")
 
     def test_multiple_councils_no_stations(self):
-        response = self.client.get("/multiple_councils/GG22GG/", follow=False)
-        self.assertContains(
-            response,
-            "Residents in GG22GG may be in one of the following council areas:",
-        )
-        self.assertContains(response, "Foo Council")
-        self.assertContains(response, "Bar Borough")
+        with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
+            response = self.client.get("/multiple_councils/GG22GG/", follow=False)
+            self.assertContains(
+                response,
+                "Residents in GG22GG may be in one of the following council areas:",
+            )
+            self.assertContains(response, "Foo Council")
+            self.assertContains(response, "Bar Borough")
+
+            # Should log because we show a result
+            mock_log.assert_called_once()
 
 
 class PollingStationCurrentTestCase(TestCase):
