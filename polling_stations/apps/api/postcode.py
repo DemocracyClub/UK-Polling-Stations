@@ -91,7 +91,10 @@ class PostcodeViewSet(ViewSet):
         except PostcodeError as e:
             return Response({"detail": e.args[0]}, status=400)
 
-        ret["postcode_location"] = location
+        ret["postcode_location"] = {
+            "point": location,
+            "properties": {"postcode": postcode.with_space},
+        }
 
         # council object
         if rh.councils or not loc:

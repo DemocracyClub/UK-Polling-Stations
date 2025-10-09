@@ -11,12 +11,17 @@ class PointField(serializers.Field):
     def to_representation(self, value):
         """
         Transform POINT object to a geojson feature.
+        Value should be a dict with 'point' and 'properties' keys, where the values are a GEOS Point and a dict.
         """
+
         if value is None:
             return value
 
+        point = value["point"]
+        properties = value.get("properties", None)
+
         return {
             "type": "Feature",
-            "properties": None,
-            "geometry": {"type": "Point", "coordinates": [value.x, value.y]},
+            "properties": properties,
+            "geometry": {"type": "Point", "coordinates": [point.x, point.y]},
         }

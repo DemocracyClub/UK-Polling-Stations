@@ -181,9 +181,12 @@ class AddressViewSet(ViewSet):
         try:
             geocoded_postcode = geocoder(address.postcode)
             location = geocoded_postcode.centroid
+            ret["postcode_location"] = {
+                "point": location,
+                "properties": {"postcode": address.postcode},
+            }
         except PostcodeError:
-            location = None
-        ret["postcode_location"] = location
+            ret["postcode_location"] = None
 
         ret["polling_station_known"] = False
         ret["polling_station"] = None
