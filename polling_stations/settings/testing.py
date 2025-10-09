@@ -14,7 +14,7 @@ MAPZEN_API_KEY = ""
 GOOGLE_API_KEYS = []
 MAPBOX_API_KEY = ""
 
-STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
+STORAGES["staticfiles"] = {"BACKEND": "pipeline.storage.PipelineStorage"}  # noqa F405
 
 RUNNING_TESTS = True
 
