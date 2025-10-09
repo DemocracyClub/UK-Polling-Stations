@@ -2,7 +2,10 @@ import os
 
 from dc_logging_client import DCWidePostcodeLoggingClient
 
-STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "pipeline.storage.PipelineStorage"},
+}
 
 DATABASES = {
     "default": {
