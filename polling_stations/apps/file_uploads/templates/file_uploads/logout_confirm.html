@@ -3,13 +3,36 @@
     Log out
 {% endblock %}
 
+{% block extra_page_css %}
+    <style>
+        {# Local override so the form button can look like the ds-cta anchor #}
+        button.ds-cta,
+        .ds-logout button.ds-cta {
+            display: inline-block;
+            color: #E6007C;
+            background-color: #fff;
+            font-size: 1.25rem;
+            padding: .875rem 1.25rem;
+            border: .25rem solid;
+            text-decoration: none;
+            margin-top: 0;
+        }
+        button.ds-cta:hover {
+            transform: scale(1.05);
+        }
+    </style>
+{% endblock extra_page_css %}
+
 {% block council_content %}
     <h1>Log out</h1>
     <p>Are you sure you want to log out?</p>
     <div class="ds-cluster">
         <div>
-            <a href="{% url "file_uploads:councils_list" %}" class="ds-cta ds-button-blue">Cancel</a>
-            <a href="{% url "logout" %}?next={% url "file_uploads:council_login_view" %}" class="ds-cta">Confirm</a>
+            <a href="{% url "file_uploads:councils_list" %}" class="ds-cta">Cancel</a>
+            <form class="ds-logout" method="post" action="{% url 'logout' %}?next={% url "file_uploads:council_login_view" %}">
+                {% csrf_token %}
+                <button type="submit" class="ds-cta">Logout</button>
+            </form>
         </div>
     </div>
 {% endblock %}

@@ -29,8 +29,8 @@
 {% endblock top_banner %}
 
 {% block base_language_menu %}
-    <form action="{% url 'set_language' %}" id="language-menu" method="post">
-        <aside class="ds-language" aria-labelledby="language-label">
+    <aside class="ds-language" aria-labelledby="language-label">
+        <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <input name="next" type="hidden" value="{{ request.get_full_path }}">
             <ul>
@@ -46,8 +46,8 @@
                     </li>
                 {% endfor %}
             </ul>
-        </aside>
-    </form>
+        </form>
+    </aside>
 {% endblock base_language_menu %}
 
 {% block messages %}

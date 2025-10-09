@@ -31,6 +31,7 @@
 @import 'partials/_map-leaflet.scss';
 @import 'partials/_utilities.scss';
 @import 'partials/_logo.scss';
+@import 'partials/_logout.scss';
 // // Generate atomic classes for documentation demos
 @import 'partials/_classes-colors.scss';
 @import 'partials/_classes-scales.scss';
@@ -60,6 +61,7 @@ $scope: false;
     @include codeblock;
     @include map-leaflet;
     @include logo;
+    @include logout;
 }
 
 @if $scope {
