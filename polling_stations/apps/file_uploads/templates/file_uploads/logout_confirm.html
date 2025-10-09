@@ -8,8 +8,11 @@
     <p>Are you sure you want to log out?</p>
     <div class="ds-cluster">
         <div>
-            <a href="{% url "file_uploads:councils_list" %}" class="ds-cta ds-button-blue">Cancel</a>
-            <a href="{% url "logout" %}?next={% url "file_uploads:council_login_view" %}" class="ds-cta">Confirm</a>
+            <a href="{% url "file_uploads:councils_list" %}" class="ds-cta">Cancel</a>
+            <form class="ds-logout" method="post" action="{% url 'logout' %}?next={% url "file_uploads:council_login_view" %}">
+                {% csrf_token %}
+                <button type="submit" class="ds-cta-logout">Logout</button>
+            </form>
         </div>
     </div>
 {% endblock %}

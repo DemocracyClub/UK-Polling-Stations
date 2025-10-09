@@ -31,6 +31,7 @@
 @import 'partials/_map-leaflet.scss';
 @import 'partials/_utilities.scss';
 @import 'partials/_logo.scss';
+@import 'partials/_logout.scss';
 // // Generate atomic classes for documentation demos
 @import 'partials/_classes-colors.scss';
 @import 'partials/_classes-scales.scss';
@@ -60,6 +61,7 @@ $scope: false;
     @include codeblock;
     @include map-leaflet;
     @include logo;
+    @include logout;
 }
 
 @if $scope {
@@ -240,4 +242,20 @@ input[type="radio"] {
 
 footer .ds-cluster-center ul li:nth-child(3) a span {
     color: inherit;
+}
+
+// override so logout button can look like ds-cta anchor
+.ds-logout button.ds-cta-logout {
+    display: inline-block;
+    color: #E6007C;
+    background-color: #fff;
+    font-size: $s2;
+    padding: $ss7 $s2;
+    border: $ss2 solid;
+    text-decoration: none;
+    margin-top: 0;
+}
+
+.ds-logout button.ds-cta-logout:hover {
+    transform: scale(1.05);
 }
