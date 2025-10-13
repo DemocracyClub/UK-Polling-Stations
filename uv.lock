@@ -392,16 +392,16 @@ wheels = [
 
 [[package]]
 name = "django"
-version = "4.2.23"
+version = "5.2.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "sqlparse" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b5/20/02242739714eb4e53933d6c0fe2c57f41feb449955b0aa39fc2da82b8f3c/django-4.2.23.tar.gz", hash = "sha256:42fdeaba6e6449d88d4f66de47871015097dc6f1b87910db00a91946295cfae4", size = 10448384, upload-time = "2025-06-10T10:06:34.574Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8/django-5.2.7.tar.gz", hash = "sha256:e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd", size = 10865812, upload-time = "2025-10-01T14:22:12.081Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/44/314e8e4612bd122dd0424c88b44730af68eafbee88cc887a86586b7a1f2a/django-4.2.23-py3-none-any.whl", hash = "sha256:dafbfaf52c2f289bd65f4ab935791cb4fb9a198f2a5ba9faf35d7338a77e9803", size = 7993904, upload-time = "2025-06-10T10:06:28.092Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/ef/81f3372b5dd35d8d354321155d1a38894b2b766f576d0abffac4d8ae78d9/django-5.2.7-py3-none-any.whl", hash = "sha256:59a13a6515f787dec9d97a0438cd2efac78c8aca1c80025244b0fe507fe0754b", size = 8307145, upload-time = "2025-10-01T14:22:49.476Z" },
 ]
 
 [[package]]
@@ -504,15 +504,15 @@ wheels = [
 
 [[package]]
 name = "django-pipeline"
-version = "4.0.0"
+version = "4.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "setuptools" },
     { name = "wheel" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/49/f5/12c83c33f0d6cd93a7b1498a1b3ae9bd86828f1f739998f59c5249d7504e/django_pipeline-4.0.0.tar.gz", hash = "sha256:0ab1190d9dc64e2f7b72be3f7b023c06aca7cc1cc61e7dc9f0343838e29bbc88", size = 71780, upload-time = "2024-12-06T12:11:11.795Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1c/7b/2f78ccdad9f45a3d4f709950160f9d7e5009b2b8bec8ef636025ec89b62e/django_pipeline-4.1.0.tar.gz", hash = "sha256:aa1d79df6f215b78396cdd50ed162f8741dc4993e9fba2c78483d9b6f1e722b4", size = 72180, upload-time = "2025-09-13T11:47:45.332Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/05/7258f4b27839d186dfc29f9416475d236c2a64f25ff64a22e77d700eb753/django_pipeline-4.0.0-py3-none-any.whl", hash = "sha256:90e50c15387a6e051ee1a6ce2aaca333823ccfb23695028790f74412bde7d7db", size = 75384, upload-time = "2024-12-06T12:10:08.162Z" },
+    { url = "https://files.pythonhosted.org/packages/9a/89/fd40adbf5cc16550007ad67bffd7493c9976f7e576bf431d1bc537cfa976/django_pipeline-4.1.0-py3-none-any.whl", hash = "sha256:bdb84feb8db73b9fe8298fd9d0f6e50f30d78eb28a8ed28f73ca5d154080c3d5", size = 75523, upload-time = "2025-09-13T11:42:55.754Z" },
 ]
 
 [[package]]
@@ -1835,7 +1835,7 @@ requires-dist = [
     { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.7.0" },
     { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.4" },
     { name = "dc-logging-utils", git = "https://github.com/DemocracyClub/dc_logging.git?tag=3.0.0" },
-    { name = "django", specifier = "==4.2.23" },
+    { name = "django", specifier = "==5.2.7" },
     { name = "django-cors-headers", specifier = "==4.6.0" },
     { name = "django-dotenv", specifier = "==1.4.2" },
     { name = "django-extensions", specifier = "==3.2.3" },
