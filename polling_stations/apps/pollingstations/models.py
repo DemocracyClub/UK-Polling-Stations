@@ -110,7 +110,7 @@ class AccessibilityInformation(TimeStampedModel):
         constraints = [
             CheckConstraint(
                 name="no_ramp_if_access_level",
-                check=~Q(Q(level_access=True) & Q(temporary_ramp=True)),
+                condition=~Q(Q(level_access=True) & Q(temporary_ramp=True)),
             )
         ]
 

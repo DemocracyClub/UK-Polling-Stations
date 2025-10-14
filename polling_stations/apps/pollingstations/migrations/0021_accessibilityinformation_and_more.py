@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="accessibilityinformation",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     models.Q(("level_access", True), ("temporary_ramp", True)),
                     _negated=True,
                 ),
