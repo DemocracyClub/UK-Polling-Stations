@@ -55,7 +55,7 @@ class WDIVOncePerTagCommandRunner(Stack):
             self.add_job(
                 "teardown_expired_data",
                 "cron(0 3 ? * SUN *)",
-                "runuser -l polling_stations -c '/usr/bin/manage-py-command teardown_expired_data",
+                "runuser -l polling_stations -c '/usr/bin/manage-py-command teardown_expired_data'",
             )
             self.add_job(
                 "run_once_custom_metrics",
