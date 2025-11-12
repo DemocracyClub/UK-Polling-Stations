@@ -2,78 +2,195 @@ interactions:
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0
     method: GET
     uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=walking&origin=51.596012118680264,-2.998065948486328&destination=51.595814835763214,-2.995147704661227
   response:
     body:
-      string: !!binary |
-        H4sIAAAAAAAC/82a4XKqRhSA/9+n2OFP/ySpCBi4M52AhhpzY6wxuZk7Nxm6gVV3gmB2F700N52+
-        Q5+ir9FH6ZN0AZOIYIRUrfhDZQ97zmHPdzi7y+MHAIAwQL7tO8ixpjAc+9hjVAAfwdeojR+Ps+85
-        SWJRBlkQiwmdT8LenMjYhTaysBO3NYat03NkfW6wk5F9Nbho9Hqmpzyo42s/dRELxyhRyjvweeeu
-        FekRwO1M6GlvDdaY2A5bP1+4TvNUtL37Qbc6pS1TcR2pPrG97vzvwaVrhO3GdPD5ii61lDKCELOg
-        4xBE6Zyx0fdtfJVA/IChpffzzg88J26dOxs1eD5hQwQpy7ZFzS6MGxTxQNEU9fBQ0ZJjLyvpDSLJ
-        /eqBpsmqLCkpiaf0BQLl1g6nqIhauaaJ6tv6tJqmLuh7/TevWrD9cUjwYJhEntCGY+BABsHff1Ur
-        Yg00fX/gotQ4uGiQuqvJkTXZwTw4PBvlOhQJMPQtdkqoHEhghIWMS5HQBLpB3IWsiYvtT9mb4AQE
-        Mux7q5XWuEqPrlAqKWoBpchzXkORd10Fl4jdBSQEDXcPnKPpmMfUyw9w/ku1sgeuPmV1xz25vv22
-        C4VDECxEhSLKilbAHz5uhKU8yvUBKM3zJX4kPZTzpKpmg3rRg2xcL/MAjXOCNDnyTAEFAnYm9hJB
-        oiaDPsuNoJnoSxxlb/sy059tWRHHGVuiaC5kilwraUqRmJyJprKUWpGlNwxKDatUkzOgrTBryEau
-        xQlmJLAj05JAPUHQATdBpSLZd/EXihNrcubH2Snge2mZOiQE2vfgBLvugijzp5AsdHkCiYseAuyB
-        Y5IWXzYC/NHqhi72VsXWaw0gPKDv4cnd47B7Zn5uHpt9/fasK5S8R8UwnAkXgfFZdBWSK+xiBE6Q
-        a43iQoP7em2cfWqdN/Pcy+1jXQTXakUBrlZ2BmBR3hLAhxVJLBoEYrVSNsXlA9xzo2IkzZuL+iyD
-        JeBDHZYgeSmaI+ihYIJIrJ4FxNunsQ37kdo1Au3fcaB//zbsHnfOLH1rKG86D+8Ky1VVKwqzWtbH
-        zcGcrS9XmPJemDVJKRoFh5okl83o+TAbDPC5FCDRXAvyGRcvIBm8R/HJFLYiXQQcfcOM0805Twl2
-        A4S8H+i7+X41Zd14P0KOtzcddo2m3tRN82t7ZJi23vximI1O68v2eN9w2t4V3iVRKcq7Vrbk3Rzv
-        atk64p28K3z2XjQKaoeSmplbrzDrP/IuEacY72ehh8CFs1uo39sc9V/Hw67ZMJvNTrNndo+MRsdo
-        HbWM9lGHf3p6i394GujCLT7pN5zjd4V8Wa4UJV+UyhbLZdGvLl9GWjRG2xb7Yq1wHGQXJleblc/+
-        Ja+c0+zGy4qZmfci4eYEehT02Lur9VjNGum2ook3GfKJN9TrHb1zdN1ARuvR3OLke7O5e1c4riqF
-        p9+HO1Sxly2Y3kuxWtMqyVE0GGRNLL0UUxTmnDl4ztMaOfGyd+FlsSzNa35Uhw6HefJ90IVGHRun
-        22N4wzl4VxhWqoUfxbtThItlM+a7EX57c+b5klVbNCusWyvCrztXadHkn4MngLLQRT/dCH1+8T7F
-        v6GPlQMNjW6ERPAYUYa9+FaBKZ+lg7t4vT2aAswZwDv6v1MDwjw19J8GXeP86OZme5lhO3m9TIJY
-        PHeb3VDj3fX72LboGCHHQh4jYby9liM6wfDldYZEJiUyp23+YsHnYz3BaGotH8nc7RFHb7u6rV9A
-        /czSjWa93cP1HjVaX8xG+7o71RsPen2q19t8JsYLumNLbzxF1VzyPFgc+tTWOA1GI5j4KTxXqamd
-        8CkkHvbydsOFa+je8ybgYIISKAEkCGCP48DgQSRzRRGwYRCD8s8ff4LLIaYgfmkBjGAYYTPClEad
-        UOygKe+QAp+AMXI4YQRDD4whG9IDYckNfR4DyydOgtHXvNck0m9wfHj68C9kg4NZmiIAAA==
+      string: "{\n   \"geocoded_waypoints\" : [\n      {\n         \"geocoder_status\"
+        : \"OK\",\n         \"place_id\" : \"ChIJNe_VCtHmcUgRCSSEn5q8pWo\",\n         \"types\"
+        : [ \"postal_code\" ]\n      },\n      {\n         \"geocoder_status\" : \"OK\",\n
+        \        \"place_id\" : \"EicyIFRldGJ1cnkgQ2wsIE5ld3BvcnQsIE5ld3BvcnQgTlAyMCwgVUs\",\n
+        \        \"types\" : [ \"street_address\" ]\n      }\n   ],\n   \"routes\"
+        : [\n      {\n         \"bounds\" : {\n            \"northeast\" : {\n               \"lat\"
+        : 51.59587759999999,\n               \"lng\" : -2.9948435\n            },\n
+        \           \"southwest\" : {\n               \"lat\" : 51.5946918,\n               \"lng\"
+        : -2.9996985\n            }\n         },\n         \"copyrights\" : \"Map
+        data \xA92016 Google\",\n         \"legs\" : [\n            {\n               \"distance\"
+        : {\n                  \"text\" : \"0.3 mi\",\n                  \"value\"
+        : 491\n               },\n               \"duration\" : {\n                  \"text\"
+        : \"6 mins\",\n                  \"value\" : 358\n               },\n               \"end_address\"
+        : \"2 Tetbury Cl, Newport, Newport NP20, UK\",\n               \"end_location\"
+        : {\n                  \"lat\" : 51.59587759999999,\n                  \"lng\"
+        : -2.9951459\n               },\n               \"start_address\" : \"Newport,
+        Newport NP20 5GN, UK\",\n               \"start_location\" : {\n                  \"lat\"
+        : 51.595288,\n                  \"lng\" : -2.9996985\n               },\n
+        \              \"steps\" : [\n                  {\n                     \"distance\"
+        : {\n                        \"text\" : \"194 ft\",\n                        \"value\"
+        : 59\n                     },\n                     \"duration\" : {\n                        \"text\"
+        : \"1 min\",\n                        \"value\" : 46\n                     },\n
+        \                    \"end_location\" : {\n                        \"lat\"
+        : 51.5948043,\n                        \"lng\" : -2.9993648\n                     },\n
+        \                    \"html_instructions\" : \"Head \\u003cb\\u003esouth\\u003c/b\\u003e
+        on \\u003cb\\u003eBarrack Hill\\u003c/b\\u003e toward \\u003cb\\u003eHarlequin
+        Dr\\u003c/b\\u003e\",\n                     \"polyline\" : {\n                        \"points\"
+        : \"qe|yHb{hQLEVGDEf@]LQ\"\n                     },\n                     \"start_location\"
+        : {\n                        \"lat\" : 51.595288,\n                        \"lng\"
+        : -2.9996985\n                     },\n                     \"travel_mode\"
+        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
+        : {\n                        \"text\" : \"66 ft\",\n                        \"value\"
+        : 20\n                     },\n                     \"duration\" : {\n                        \"text\"
+        : \"1 min\",\n                        \"value\" : 14\n                     },\n
+        \                    \"end_location\" : {\n                        \"lat\"
+        : 51.5947031,\n                        \"lng\" : -2.9991209\n                     },\n
+        \                    \"html_instructions\" : \"Slight \\u003cb\\u003eleft\\u003c/b\\u003e
+        to stay on \\u003cb\\u003eBarrack Hill\\u003c/b\\u003e\",\n                     \"maneuver\"
+        : \"turn-slight-left\",\n                     \"polyline\" : {\n                        \"points\"
+        : \"ob|yH~xhQDOL_@\"\n                     },\n                     \"start_location\"
+        : {\n                        \"lat\" : 51.5948043,\n                        \"lng\"
+        : -2.9993648\n                     },\n                     \"travel_mode\"
+        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
+        : {\n                        \"text\" : \"289 ft\",\n                        \"value\"
+        : 88\n                     },\n                     \"duration\" : {\n                        \"text\"
+        : \"1 min\",\n                        \"value\" : 58\n                     },\n
+        \                    \"end_location\" : {\n                        \"lat\"
+        : 51.5949353,\n                        \"lng\" : -2.9979345\n                     },\n
+        \                    \"html_instructions\" : \"At the roundabout, take the
+        \\u003cb\\u003e1st\\u003c/b\\u003e exit onto \\u003cb\\u003eQueen's Hill\\u003c/b\\u003e\",\n
+        \                    \"maneuver\" : \"roundabout-left\",\n                     \"polyline\"
+        : {\n                        \"points\" : \"{a|yHnwhQAG@G@EE[MmAEc@GYAECOIY\"\n
+        \                    },\n                     \"start_location\" : {\n                        \"lat\"
+        : 51.5947031,\n                        \"lng\" : -2.9991209\n                     },\n
+        \                    \"travel_mode\" : \"WALKING\"\n                  },\n
+        \                 {\n                     \"distance\" : {\n                        \"text\"
+        : \"315 ft\",\n                        \"value\" : 96\n                     },\n
+        \                    \"duration\" : {\n                        \"text\" :
+        \"1 min\",\n                        \"value\" : 80\n                     },\n
+        \                    \"end_location\" : {\n                        \"lat\"
+        : 51.5952011,\n                        \"lng\" : -2.9967381\n                     },\n
+        \                    \"html_instructions\" : \"At the roundabout, take the
+        \\u003cb\\u003e3rd\\u003c/b\\u003e exit onto \\u003cb\\u003eLyne Rd\\u003c/b\\u003e\",\n
+        \                    \"maneuver\" : \"roundabout-left\",\n                     \"polyline\"
+        : {\n                        \"points\" : \"kc|yH`phQECEGGOGSEQ?ACOAI?IAM?O?O?S@I@I@G@EQa@\"\n
+        \                    },\n                     \"start_location\" : {\n                        \"lat\"
+        : 51.5949353,\n                        \"lng\" : -2.9979345\n                     },\n
+        \                    \"travel_mode\" : \"WALKING\"\n                  },\n
+        \                 {\n                     \"distance\" : {\n                        \"text\"
+        : \"440 ft\",\n                        \"value\" : 134\n                     },\n
+        \                    \"duration\" : {\n                        \"text\" :
+        \"2 mins\",\n                        \"value\" : 90\n                     },\n
+        \                    \"end_location\" : {\n                        \"lat\"
+        : 51.5951653,\n                        \"lng\" : -2.9948435\n                     },\n
+        \                    \"html_instructions\" : \"Turn \\u003cb\\u003eright\\u003c/b\\u003e
+        onto \\u003cb\\u003eEvans St\\u003c/b\\u003e\",\n                     \"maneuver\"
+        : \"turn-right\",\n                     \"polyline\" : {\n                        \"points\"
+        : \"_e|yHrhhQLa@BO@O?WCeAI{E\"\n                     },\n                     \"start_location\"
+        : {\n                        \"lat\" : 51.5952011,\n                        \"lng\"
+        : -2.9967381\n                     },\n                     \"travel_mode\"
+        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
+        : {\n                        \"text\" : \"256 ft\",\n                        \"value\"
+        : 78\n                     },\n                     \"duration\" : {\n                        \"text\"
+        : \"1 min\",\n                        \"value\" : 59\n                     },\n
+        \                    \"end_location\" : {\n                        \"lat\"
+        : 51.59586900000001,\n                        \"lng\" : -2.9949185\n                     },\n
+        \                    \"html_instructions\" : \"Turn \\u003cb\\u003eleft\\u003c/b\\u003e
+        onto \\u003cb\\u003eLedbury Dr\\u003c/b\\u003e\",\n                     \"maneuver\"
+        : \"turn-left\",\n                     \"polyline\" : {\n                        \"points\"
+        : \"yd|yHv|gQaABiAJ\"\n                     },\n                     \"start_location\"
+        : {\n                        \"lat\" : 51.5951653,\n                        \"lng\"
+        : -2.9948435\n                     },\n                     \"travel_mode\"
+        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
+        : {\n                        \"text\" : \"52 ft\",\n                        \"value\"
+        : 16\n                     },\n                     \"duration\" : {\n                        \"text\"
+        : \"1 min\",\n                        \"value\" : 11\n                     },\n
+        \                    \"end_location\" : {\n                        \"lat\"
+        : 51.59587759999999,\n                        \"lng\" : -2.9951459\n                     },\n
+        \                    \"html_instructions\" : \"Turn \\u003cb\\u003eleft\\u003c/b\\u003e
+        onto \\u003cb\\u003eTetbury Cl\\u003c/b\\u003e\\u003cdiv style=\\\"font-size:0.9em\\\"\\u003eDestination
+        will be on the left\\u003c/div\\u003e\",\n                     \"maneuver\"
+        : \"turn-left\",\n                     \"polyline\" : {\n                        \"points\"
+        : \"ei|yHf}gQAN?\\\\\"\n                     },\n                     \"start_location\"
+        : {\n                        \"lat\" : 51.59586900000001,\n                        \"lng\"
+        : -2.9949185\n                     },\n                     \"travel_mode\"
+        : \"WALKING\"\n                  }\n               ],\n               \"traffic_speed_entry\"
+        : [],\n               \"via_waypoint\" : []\n            }\n         ],\n
+        \        \"overview_polyline\" : {\n            \"points\" : \"qe|yHb{hQd@Ml@c@Ra@L_@AGBMSiBSsAIYECMWQw@Cq@Bw@BMQa@La@D_@C}AI{EaABiAJAN?\\\\\"\n
+        \        },\n         \"summary\" : \"Evans St\",\n         \"warnings\" :
+        [\n            \"Walking directions are in beta.    Use caution \u2013 This
+        route may be missing sidewalks or pedestrian paths.\"\n         ],\n         \"waypoint_order\"
+        : []\n      }\n   ],\n   \"status\" : \"OK\"\n}\n"
     headers:
-      Alt-Svc: ['quic=":443"; ma=2592000; v="34,33,32,31,30,29,28,27,26,25"']
-      Alternate-Protocol: ['443:quic']
-      Cache-Control: ['public, max-age=86400']
-      Content-Encoding: [gzip]
-      Content-Length: ['1477']
-      Content-Type: [application/json; charset=UTF-8]
-      Date: ['Sat, 11 Jun 2016 10:31:31 GMT']
-      Expires: ['Sun, 12 Jun 2016 10:31:31 GMT']
-      Server: [mafe]
-      Vary: [Accept-Language]
-      X-Frame-Options: [SAMEORIGIN]
-      X-XSS-Protection: [1; mode=block]
-    status: {code: 200, message: OK}
+      Alt-Svc:
+      - quic=":443"; ma=2592000; v="34,33,32,31,30,29,28,27,26,25"
+      Alternate-Protocol:
+      - 443:quic
+      Cache-Control:
+      - public, max-age=86400
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1477'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Sat, 11 Jun 2016 10:31:31 GMT
+      Expires:
+      - Sun, 12 Jun 2016 10:31:31 GMT
+      Server:
+      - mafe
+      Vary:
+      - Accept-Language
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.7.0 CPython/3.5.2 Linux/4.4.0-67-generic]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.7.0 CPython/3.5.2 Linux/4.4.0-67-generic
     method: GET
     uri: https://elections.democracyclub.org.uk/api/elections.json?coords=51.596012118680264,-2.998065948486328&current=1&identifier_type=ballot
   response:
-    body: {string: '{"count":1,"next":null,"previous":null,"results":[
-      {"election_id":"blablabla.bla", "group_type":null, "cancelled":false, "poll_open_date":"2099-12-31"}
-    ]}'}
+    body:
+      string: '{"count":1,"next":null,"previous":null,"results":[ {"election_id":"blablabla.bla",
+        "group_type":null, "cancelled":false, "poll_open_date":"2099-12-31"} ]}'
     headers:
-      Allow: ['GET, OPTIONS']
-      Connection: [keep-alive]
-      Content-Type: [application/json]
-      Date: ['Fri, 17 Mar 2017 16:28:15 GMT']
-      Server: [nginx]
-      Strict-Transport-Security: [max-age=15768000]
-      Vary: ['Accept, Cookie']
-      X-Frame-Options: [SAMEORIGIN]
-    status: {code: 200, message: OK}
+      Allow:
+      - GET, OPTIONS
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 17 Mar 2017 16:28:15 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=15768000
+      Vary:
+      - Accept, Cookie
+      X-Frame-Options:
+      - SAMEORIGIN
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
