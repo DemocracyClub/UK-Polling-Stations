@@ -1,21 +1,20 @@
 version: 2
 updates:
-- package-ecosystem: pip
+- package-ecosystem: "pip"
   directory: "/"
   schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  groups:
-    cdk-libs:
-      patterns:
-        - "aws_cdk*"
-        - "constructs"
-    boto-libs:
-      patterns:
-        - "boto*"
+    interval: "yearly"
+  open-pull-requests-limit: 0
   ignore:
-  - dependency-name: boto*
-    update-types: ["version-update:semver-patch"]
+    - dependency-name: "*"
+- package-ecosystem: "uv"
+  directory: "/"
+  schedule:
+    interval: "yearly"
+  open-pull-requests-limit: 0
+  ignore:
+    - dependency-name: "*"
+
 - package-ecosystem: npm
   directory: "/"
   schedule:
