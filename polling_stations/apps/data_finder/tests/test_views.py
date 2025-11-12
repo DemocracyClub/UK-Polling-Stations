@@ -24,6 +24,7 @@ from unittest import mock
 
 
 class LogTestMixin:
+    @override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": False})
     def test_dc_logging(self):
         with self.assertLogs(level="DEBUG") as captured:
             self.client.get(
