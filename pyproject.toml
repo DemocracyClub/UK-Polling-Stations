@@ -71,12 +71,15 @@ testing = [
     "pytest-subtests==0.14.1",
     "pytest-vcr==1.0.2",
     "pytest==8.3.4",
-    "vcrpy==6.0.2",
+    "vcrpy==7.0.0",
 ]
 
 [tool.uv]
 required-version = "==0.8.*"
 package = false
+environments = [
+    "platform_python_implementation == 'CPython'"
+]
 
 [tool.uv.workspace]
 members = ["cdk/lambdas/wdiv-s3-trigger"]
