@@ -7,7 +7,6 @@ dependencies = [
     "requests-paginator==0.2.0",
     "requests==2.32.4",
     "sentry-sdk==2.19.2",
-    "urllib3==1.26.20",
 ]
 
 [dependency-groups]
