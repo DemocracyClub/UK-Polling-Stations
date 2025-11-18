@@ -13,6 +13,28 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from .mixins import PollingEntityMixin
+from pollingstations.models import AccessibilityInformation
+from rest_framework.serializers import (
+    ModelSerializer,
+)
+
+
+class AccessibilityInformationSerializer(ModelSerializer):
+    class Meta:
+        model = AccessibilityInformation
+        fields = (
+            "is_temporary",
+            "nearby_parking",
+            "disabled_parking",
+            "level_access",
+            "temporary_ramp",
+            "hearing_loop",
+            "public_toilets",
+            "getting_to_the_station",
+            "getting_to_the_station_cy",
+            "at_the_station",
+            "at_the_station_cy",
+        )
 
 
 class PollingStationSerializer:
@@ -40,10 +62,18 @@ class PollingStationDataSerializer(
 ):
     station_id = CharField(source="internal_council_id", read_only=True)
     urls = SerializerMethodField("generate_urls")
+    accessibility_information = AccessibilityInformationSerializer(read_only=True)
 
     class Meta:
         model = PollingStation
-        fields = ("urls", "council", "station_id", "postcode", "address")
+        fields = (
+            "urls",
+            "council",
+            "station_id",
+            "postcode",
+            "address",
+            "accessibility_information",
+        )
 
 
 class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSerializer):
@@ -51,6 +81,7 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
     id = SerializerMethodField("generate_id")
     urls = SerializerMethodField("generate_urls")
     council = SerializerMethodField("generate_council")
+    accessibility_information = AccessibilityInformationSerializer(read_only=True)
 
     @extend_schema_field(OpenApiTypes.URI)
     def generate_council(self, record):
@@ -76,6 +107,7 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
             "postcode",
             "address",
             "location",
+            "accessibility_information",
         )
 
 
