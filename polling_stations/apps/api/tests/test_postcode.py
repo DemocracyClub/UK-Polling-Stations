@@ -31,14 +31,12 @@ class StubGeocoder:
         return self.code
 
 
-"""
-Test double for geocode function
-allows us to use fake postcodes and return known
-results that work with the data in our test fixtures
-"""
-
-
 def mock_geocode(postcode):
+    """
+    Test double for geocode function
+    allows us to use fake postcodes and return known
+    results that work with the data in our test fixtures
+    """
     postcode = postcode.without_space
     # list of addresses
     if postcode == "AA11AA":
