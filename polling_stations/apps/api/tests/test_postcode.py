@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
+from pollingstations.models import AccessibilityInformation, PollingStation
 from rest_framework.exceptions import APIException
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.views import APIView
@@ -147,6 +148,53 @@ class PostcodeTest(APITestCase):
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(1, len(response.data["ballots"]))
         self.assertTrue("requires_voter_id" in response.data["ballots"][0])
+        self.assertIsNone(
+            response.data["polling_station"]["properties"]["accessibility_information"]
+        )
+
+    def test_station_found_with_accessibility(self):
+        ps = PollingStation.objects.get(internal_council_id="1", council_id="ABC")
+        AccessibilityInformation.objects.create(
+            polling_station=ps,
+            is_temporary=False,
+            nearby_parking=True,
+            disabled_parking=True,
+            level_access=True,
+            hearing_loop=None,
+            public_toilets=True,
+            getting_to_the_station="Use the main road",
+            getting_to_the_station_cy="Defnyddiwch y brif ffordd",
+            at_the_station="Look for the blue door",
+            at_the_station_cy="Chwiliwch am y drws glas",
+        )
+        expected_a11y = {
+            "is_temporary": False,
+            "nearby_parking": True,
+            "disabled_parking": True,
+            "level_access": True,
+            "temporary_ramp": None,
+            "hearing_loop": None,
+            "public_toilets": True,
+            "getting_to_the_station": "Use the main road",
+            "getting_to_the_station_cy": "Defnyddiwch y brif ffordd",
+            "at_the_station": "Look for the blue door",
+            "at_the_station_cy": "Chwiliwch am y drws glas",
+        }
+
+        response = self.endpoint.retrieve(
+            self.request, "CC11CC", "json", geocoder=mock_geocode, log=False
+        )
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(response.data["polling_station_known"])
+        self.assertEqual(
+            "St Foo's Church Hall, Bar Town",
+            response.data["polling_station"]["properties"]["address"],
+        )
+        self.assertDictEqual(
+            expected_a11y,
+            response.data["polling_station"]["properties"]["accessibility_information"],
+        )
 
     def test_station_found_but_no_election(self):
         self.endpoint.get_ee_wrapper = lambda x, rh, params: EEMockWithoutElection()
