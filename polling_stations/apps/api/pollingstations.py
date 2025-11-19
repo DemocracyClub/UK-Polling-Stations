@@ -7,6 +7,7 @@ from rest_framework.reverse import reverse
 from rest_framework.serializers import (
     CharField,
     HyperlinkedModelSerializer,
+    ModelSerializer,
     SerializerMethodField,
 )
 from rest_framework.viewsets import GenericViewSet
@@ -14,9 +15,6 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from .mixins import PollingEntityMixin
 from pollingstations.models import AccessibilityInformation
-from rest_framework.serializers import (
-    ModelSerializer,
-)
 
 
 class AccessibilityInformationSerializer(ModelSerializer):
