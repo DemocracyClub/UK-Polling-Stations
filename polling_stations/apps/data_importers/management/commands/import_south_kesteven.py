@@ -11,3 +11,24 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     )
     elections = ["2025-12-11"]
     csv_delimiter = "\t"
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10007248725",  # KLONDYKE FARM BUNGALOW HARVEY CLOSE, BOURNE
+        ]:
+            return None
+
+        if record.addressline6 in [
+            # split
+            "NG32 1AT",
+            "PE10 9RP",
+            "NG33 4JQ",
+            # suspect
+            "NG31 8NH",  # MANTHORPE, GRANTHAM
+            "PE10 9NG",  # BURGHLEY STREET, BOURNE
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
