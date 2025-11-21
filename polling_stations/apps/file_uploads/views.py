@@ -378,6 +378,13 @@ class AuthenticateView(TemplateView):
         return redirect("file_uploads:councils_list")
 
 
+class ImportError(Exception):
+    def __init__(self, message, errors, infos):
+        super().__init__(message)
+        self.errors = errors
+        self.infos = infos
+
+
 class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
     template_name = "file_uploads/upload_accessibility_information.html"
     form_class = CSVUploadForm
@@ -404,7 +411,7 @@ class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
         file_handler = AccessibilityInformationHandler(self.council)
         file_handler.handle(rows)
         if file_handler.errors:
-            pass  # do stuff with errors
+            raise ImportError("Oh no", file_handler.errors, file_handler.infos)
         if file_handler.infos:
             pass  # do stuff with infos
 
