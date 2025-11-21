@@ -202,6 +202,7 @@ class CouncilView:
             upcoming_election_dates = EEWrapper(
                 **EEFetcher(council_id=self.kwargs["pk"]).fetch()
             ).get_future_election_dates()
+            # this doesn't matter
             context["HAS_UPCOMING_ELECTIONS"] = bool(upcoming_election_dates)
             context["NO_COUNCILS"] = False
 
