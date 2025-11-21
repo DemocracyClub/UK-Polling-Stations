@@ -316,7 +316,7 @@ workflows:
         name: "Development: Run New Imports"
         requires: [build_and_test]
         context: [deployment-development-wdiv, slack-secrets, fcs-api]
-        filters: { branches: { only: [ development ] } }
+        filters: { branches: { only: [ development, test-a11y-data20251121 ] } }
     ###########
     # STAGING #
     ###########
