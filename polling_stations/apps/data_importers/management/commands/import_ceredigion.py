@@ -4,15 +4,43 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "CGN"
     addresses_name = (
-        "2024-07-04/2024-06-14T14:22:31.403452/Democracy Club - Polling Districts.csv"
+        "2026-05-07/2026-02-03T16:42:33.559509/CEREDIGION - Polling Districts.csv"
     )
     stations_name = (
-        "2024-07-04/2024-06-14T14:22:31.403452/Democracy Club - Polling Stations.csv"
+        "2026-05-07/2026-02-03T16:42:33.559509/CEREDIGION - Polling Stations.csv"
     )
-    elections = ["2024-07-04"]
-    csv_encoding = "utf-16le"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
+        """
+        The file we received from Ceredigion this time (2026)
+        has every address in it 4 times.
+        Mostly they are just exact duplicates. However we have around 6,000
+        cases where the same UPRN is assigned to 2 different station codes.
+        However in all these cases, one of the station codes exists
+        and the other one doesn't.
+        If we exclude all of these UPRNs, we end up with some stations that
+        have no addresses assigned to them at all.
+        If we drop any row with a station code that doesn't exist in the
+        stations file, that essentially says
+        "if this UPRN is assigned to >1 station, assume the one that exists"
+        and basically everything imports.
+        """
+        bad_codes = [
+            "1-1070/1071/1072",
+            "66-1087",
+            "69-1090",
+            "55-1073",
+            "11-1013",
+            "38-1063",
+            "76-1063",
+            "12-1030/1031",
+            "37-1049/1062",
+            "68-1089",
+        ]
+        if record.stationcode in bad_codes:
+            return None
+
         uprn = record.uprn.strip().lstrip("0")
 
         if (
@@ -55,38 +83,5 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         # Remove duplicated stations names
         record = record._replace(placename="")
-
-        # Remove stations from the PEM council
-        if record.stationcode in [
-            "100-2025",
-            "00-2025",
-            "101-2026",
-            "102-2027",
-            "77-2001",
-            "78-2002",
-            "79-2003",
-            "80-2004",
-            "81-2005",
-            "82-2006",
-            "83-2007",
-            "83-2008",
-            "84-2009",
-            "85-2010",
-            "86-2011",
-            "87-2012",
-            "88-2013",
-            "89-2014",
-            "90-2015",
-            "91-2016",
-            "92-2017",
-            "93-2018",
-            "94-2019",
-            "95-2020",
-            "96-2021",
-            "97-2022",
-            "98-2023",
-            "99-2024",
-        ]:
-            return None
 
         return super().station_record_to_dict(record)
