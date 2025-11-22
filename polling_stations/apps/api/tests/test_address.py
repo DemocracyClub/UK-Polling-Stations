@@ -10,7 +10,11 @@ from django.contrib.gis.geos import Point
 from django.core.management import call_command
 from django.test import override_settings, TestCase
 from django.utils import timezone
-from pollingstations.models import PollingStation, VisibilityChoices
+from pollingstations.models import (
+    AccessibilityInformation,
+    PollingStation,
+    VisibilityChoices,
+)
 from rest_framework.exceptions import APIException
 from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
@@ -86,6 +90,57 @@ class AddressTest(TestCase):
         )
         self.assertEqual(1, len(response.data["addresses"]))
         self.assertEqual(1, len(response.data["ballots"]))
+        self.assertIsNone(
+            response.data["polling_station"]["properties"]["accessibility_information"]
+        )
+
+    def test_station_found_with_accessibility(self):
+        ps = PollingStation.objects.get(internal_council_id="2", council_id="ABC")
+        AccessibilityInformation.objects.create(
+            polling_station=ps,
+            is_temporary=False,
+            nearby_parking=True,
+            disabled_parking=True,
+            level_access=True,
+            hearing_loop=None,
+            public_toilets=True,
+            getting_to_the_station="Use the main road",
+            getting_to_the_station_cy="Defnyddiwch y brif ffordd",
+            at_the_station="Look for the blue door",
+            at_the_station_cy="Chwiliwch am y drws glas",
+        )
+        expected_a11y = {
+            "is_temporary": False,
+            "nearby_parking": True,
+            "disabled_parking": True,
+            "level_access": True,
+            "temporary_ramp": None,
+            "hearing_loop": None,
+            "public_toilets": True,
+            "getting_to_the_station": "Use the main road",
+            "getting_to_the_station_cy": "Defnyddiwch y brif ffordd",
+            "at_the_station": "Look for the blue door",
+            "at_the_station_cy": "Chwiliwch am y drws glas",
+        }
+
+        response = self.endpoint.retrieve(
+            self.request,
+            "200",
+            "json",
+            geocoder=mock_geocode,
+            log=False,
+        )
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(response.data["polling_station_known"])
+        self.assertEqual(
+            "Foo Street Primary School, Bar Town",
+            response.data["polling_station"]["properties"]["address"],
+        )
+        self.assertDictEqual(
+            expected_a11y,
+            response.data["polling_station"]["properties"]["accessibility_information"],
+        )
 
     def test_station_exists_but_is_unpublished_with_election(self):
         # Unpublish the station
