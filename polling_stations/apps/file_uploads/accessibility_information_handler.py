@@ -43,10 +43,7 @@ class AccessibilityInformationHandler:
             "polling_station_identifier",
         )
         self.all_fields = (
-            self.polling_station_fields
-            + self.bool_fields
-            + self.text_fields
-            + self.welsh_text_fields
+            self.polling_station_fields + self.bool_fields + self.text_fields
         )
         self.errors = []
         self.infos = []
@@ -149,12 +146,6 @@ class AccessibilityInformationHandler:
         for field in self.all_fields:
             if field not in self.header:
                 self.errors.append(f"Field: '{field}' missing from header")
-
-        for field in self.header:
-            if field not in self.all_fields:
-                self.infos.append(
-                    f"Unexpected field: '{field}' present in header. Ignoring."
-                )
 
     def check_row_lengths(self, reader):
         expected_row_length = len(self.header)

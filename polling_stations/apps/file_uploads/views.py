@@ -18,8 +18,11 @@ from django.db.models import Count, Max, Subquery
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
+from django.template.response import TemplateResponse
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 from file_uploads.forms import CouncilLoginForm, CSVUploadForm
@@ -378,7 +381,7 @@ class AuthenticateView(TemplateView):
 
 
 class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
-    template_name = "file_uploads/upload_accessibility_information.html"
+    template_name = "file_uploads/accessibility_information_upload.html"
     form_class = CSVUploadForm
 
     def __init__(self, *args, **kwargs):
@@ -392,6 +395,12 @@ class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
     def test_func(self):
         return self.request.user.is_staff
 
+    def list_to_ul(self, items):
+        if not items:
+            return ""
+        lis = "".join(f"<li>{escape(item)}</li>" for item in items)
+        return mark_safe(f"<ul>{lis}</ul>")
+
     def form_valid(self, form):
         self.council: Council = Council.objects.prefetch_related(
             "pollingstation_set"
@@ -402,14 +411,13 @@ class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
         ]
         file_handler = AccessibilityInformationHandler(self.council)
         file_handler.handle(rows)
-        if file_handler.errors:
-            pass  # do stuff with errors
-        if file_handler.infos:
-            pass  # do stuff with infos
 
-        return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self):
-        return reverse(
-            "file_uploads:councils_detail", kwargs={"pk": self.council.council_id}
+        return TemplateResponse(
+            self.request,
+            "file_uploads/accessibility_information_report.html",
+            context={
+                "errors": self.list_to_ul(file_handler.errors),
+                "warnings": self.list_to_ul(file_handler.infos),
+                "council_id": self.council.council_id,
+            },
         )
