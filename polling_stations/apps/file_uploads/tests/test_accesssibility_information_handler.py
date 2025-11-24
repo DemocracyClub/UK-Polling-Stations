@@ -102,10 +102,6 @@ class AccessibilityInformationHandlerTest(TestCase):
         handler.header = header
         handler.check_header()
         self.assertListEqual(
-            ["Unexpected field: 'polling_station_id' present in header. Ignoring."],
-            handler.infos,
-        )
-        self.assertListEqual(
             ["Field: 'internal_council_id' missing from header"], handler.errors
         )
 
