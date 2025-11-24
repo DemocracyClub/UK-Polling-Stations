@@ -421,7 +421,7 @@ class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
             "file_uploads/accessibility_information_report.html",
             context={
                 "errors": self.list_to_ul(file_handler.errors),
-                "warnings": self.list_to_ul(file_handler.infos),
+                "warnings": self.list_to_ul(file_handler.warnings),
                 "council_id": self.council.council_id,
             },
         )
