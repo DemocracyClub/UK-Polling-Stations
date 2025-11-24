@@ -46,7 +46,7 @@ class AccessibilityInformationHandler:
             self.polling_station_fields + self.bool_fields + self.text_fields
         )
         self.errors = []
-        self.infos = []
+        self.warnings = []
 
     @property
     def header(self) -> list[str]:
@@ -71,8 +71,8 @@ class AccessibilityInformationHandler:
         sys.stdout.write("Importing new accessibility information\n")
         self.import_accessibility_info(data)
 
-        if self.infos:
-            sys.stdout.write("\n".join(self.infos))
+        if self.warnings:
+            sys.stdout.write("\n".join(self.warnings))
             sys.stdout.write("\n")
         if self.errors:
             sys.stdout.write("\n".join(self.errors))
@@ -94,7 +94,7 @@ class AccessibilityInformationHandler:
             seen.add(row["internal_council_id"])
 
         if duplicate_ids:
-            self.infos.append(
+            self.warnings.append(
                 f"There was more than one row containing the following ids: {','.join(duplicate_ids)}"
             )
 
@@ -162,7 +162,7 @@ class AccessibilityInformationHandler:
     def check_row_count_vs_station_count(self, row_count):
         station_count = self.council.pollingstation_set.count()
         if row_count != station_count:
-            self.infos.append(
+            self.warnings.append(
                 f"File has {row_count} rows, but there are {station_count} stations."
             )
 

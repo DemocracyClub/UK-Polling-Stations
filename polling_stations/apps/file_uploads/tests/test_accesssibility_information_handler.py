@@ -89,7 +89,7 @@ class AccessibilityInformationHandlerTest(TestCase):
 
         handler.header = self.valid_header
         handler.check_header()
-        self.assertListEqual([], handler.infos)
+        self.assertListEqual([], handler.warnings)
         self.assertListEqual([], handler.errors)
 
     def test_check_header_field_name_changed(self):
@@ -114,7 +114,7 @@ class AccessibilityInformationHandlerTest(TestCase):
         header.remove("nearby_parking")
         handler.header = header
         handler.check_header()
-        self.assertListEqual([], handler.infos)
+        self.assertListEqual([], handler.warnings)
         self.assertListEqual(
             ["Field: 'nearby_parking' missing from header"], handler.errors
         )
@@ -260,7 +260,7 @@ class AccessibilityInformationHandlerTest(TestCase):
         }
         handler.handle_row(row)
 
-        self.assertListEqual([], handler.infos)
+        self.assertListEqual([], handler.warnings)
         self.assertListEqual([], handler.errors)
         station.refresh_from_db()
         accessibility_information = station.accessibility_information
@@ -350,18 +350,18 @@ class AccessibilityInformationHandlerTest(TestCase):
         handler.import_accessibility_info(data)
 
         self.assertEqual(2, AccessibilityInformation.objects.count())
-        self.assertListEqual([], handler.infos)
+        self.assertListEqual([], handler.warnings)
         self.assertListEqual([], handler.errors)
 
     def test_check_row_count_vs_station_count(self):
         handler = AccessibilityInformationHandler(
             council=Council.objects.get(council_id="FOO")
         )
-        self.assertListEqual([], handler.infos)
+        self.assertListEqual([], handler.warnings)
         self.assertListEqual([], handler.errors)
         handler.check_row_count_vs_station_count(3)
         self.assertListEqual(
-            ["File has 3 rows, but there are 1 stations."], handler.infos
+            ["File has 3 rows, but there are 1 stations."], handler.warnings
         )
         self.assertListEqual([], handler.errors)
 
@@ -392,7 +392,7 @@ class AccessibilityInformationHandlerTest(TestCase):
         )
         self.assertEqual(
             ["There was more than one row containing the following ids: 20336"],
-            handler.infos,
+            handler.warnings,
         )
         self.assertEqual([], handler.errors)
 
@@ -414,5 +414,5 @@ class AccessibilityInformationHandlerTest(TestCase):
         )
 
         self.assertEqual(2, AccessibilityInformation.objects.count())
-        self.assertEqual([], handler.infos)
+        self.assertEqual([], handler.warnings)
         self.assertEqual([], handler.errors)
