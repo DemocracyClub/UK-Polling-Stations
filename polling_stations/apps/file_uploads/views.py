@@ -398,7 +398,11 @@ class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
     def list_to_ul(self, items):
         if not items:
             return ""
+
+        # The `item` could potentially include data from the uploaded CSV
+        # (i.e: user input) so `escape()` before we `mark_safe()`
         lis = "".join(f"<li>{escape(item)}</li>" for item in items)
+
         return mark_safe(f"<ul>{lis}</ul>")
 
     def form_valid(self, form):
