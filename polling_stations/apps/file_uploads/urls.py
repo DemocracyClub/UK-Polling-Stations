@@ -43,7 +43,7 @@ urlpatterns = [
     ),
     path("authenticate/", AuthenticateView.as_view(), name="council_authenticate"),
     re_path(
-        "^upload_accessibility_info/(?P<council_id>.+)/$",
+        "^accessibility_info_upload/(?P<council_id>.+)/$",
         AccessibilityInformationUploadView.as_view(),
         name="accessibility_upload",
     ),
