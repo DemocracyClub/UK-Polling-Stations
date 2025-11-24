@@ -7,11 +7,11 @@
   {% endif %}
 
   {% if errors %}
-    <p>❌ Accessibility Information was not uploaded</p>
-    <p>The following errors occurred:</p>
+    <p>❌ Accessibility Information was <strong>not</strong> uploaded</p>
+    <p>⛔ The following errors occurred:</p>
     {{ errors }}
     {% if warnings %}
-      <p>Also the following warnings occurred:</p>
+      <p>⚠️ Also the following warnings occurred:</p>
       {{ warnings }}
     {% endif %}
     <p><a href="{% url 'file_uploads:accessibility_upload' council_id=council_id %}" class="ds-cta ds-cta-blue">Upload again</a></p>
@@ -19,7 +19,7 @@
 
   {% if not errors and warnings %}
     <p>😐 Accessibility Information was uploaded</p>
-    <p>However, the following warnings occurred:</p>
+    <p>⚠️ However, the following warnings occurred:</p>
     {{ warnings }}
     <p><a href="{% url 'file_uploads:accessibility_upload' council_id=council_id %}" class="ds-cta ds-cta-blue">Upload again</a></p>
   {% endif %}
