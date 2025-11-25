@@ -284,12 +284,17 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
         station_to_example_uprn_map = get_station_to_example_uprn_map(
             council_from_default_db
         )
-        for station in council_from_default_db.pollingstation_set.all():
+        for station in council_from_default_db.pollingstation_set.all().select_related(
+            "accessibility_information"
+        ):
             context["STATIONS"].append(
                 {
                     "address": station.address,
                     "postcode": station.postcode,
                     "location": "✔️" if station.location else "❌",
+                    "accessibility_information": "✔️"
+                    if getattr(station, "accessibility_information", None)
+                    else "❌",
                     "example_uprn": get_example_uprn(
                         station, station_to_example_uprn_map
                     ),
