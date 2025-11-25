@@ -56,7 +56,6 @@ class AccessibilityInformationHandler:
     def header(self, header: list[str]):
         self._header = header
 
-    @transaction.atomic(using=DB_NAME)
     def handle(self, accessibility_info: list[str]):
         sys.stdout.write("Checking accessibility information csv")
         data: csv.DictReader = self.parse_data(accessibility_info)
@@ -65,11 +64,19 @@ class AccessibilityInformationHandler:
             sys.stdout.write("\n".join(self.errors))
             return
 
-        sys.stdout.write("Clearing existing accessibility information\n")
-        self.delete_existing_info()
+        with transaction.atomic(using=DB_NAME):
+            sid = transaction.savepoint()
 
-        sys.stdout.write("Importing new accessibility information\n")
-        self.import_accessibility_info(data)
+            sys.stdout.write("Clearing existing accessibility information\n")
+            self.delete_existing_info()
+
+            sys.stdout.write("Importing new accessibility information\n")
+            self.import_accessibility_info(data)
+
+            if self.errors:
+                transaction.savepoint_rollback(sid)
+            else:
+                transaction.savepoint_commit(sid)
 
         if self.warnings:
             sys.stdout.write("\n".join(self.warnings))
