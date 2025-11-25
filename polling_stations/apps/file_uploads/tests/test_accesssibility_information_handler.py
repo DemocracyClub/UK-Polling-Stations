@@ -416,3 +416,52 @@ class AccessibilityInformationHandlerTest(TestCase):
         self.assertEqual(2, AccessibilityInformation.objects.count())
         self.assertEqual([], handler.warnings)
         self.assertEqual([], handler.errors)
+
+    def test_handle_with_errors(self):
+        PollingStation.objects.all().delete()
+        PollingStationFactory(council_id="FOO", internal_council_id="20336")
+        PollingStationFactory(council_id="FOO", internal_council_id="20340")
+        self.assertEqual(0, AccessibilityInformation.objects.count())
+        handler = AccessibilityInformationHandler(
+            council=Council.objects.get(council_id="FOO")
+        )
+
+        handler.handle(
+            [
+                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_cy,at_the_station,at_the_station_cy",
+                # next row has an "id" that doesn't match any of the polling stations
+                """unexpected,"Tredegarville Primary School, Glossop Road, Adamsdown, Cardiff",CF24 0JT,200001850808,AA,No,Yes,No,Yes,,Yes,No,Instructions on how to get there from the council,Cyfarwyddiadau ar sut i gyrraedd yno gan y cyngor,What the council says you should do once you’re therer,Beth mae'r cyngor yn dweud y dylech chi ei wneud unwaith y byddwch chi yno""",
+                '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
+            ],
+        )
+
+        # if we hit errors on the import, nothing should be imported
+        self.assertEqual(0, AccessibilityInformation.objects.count())
+        self.assertEqual([], handler.warnings)
+        self.assertEqual(
+            ["No polling station found with internal_council_id 'unexpected'"],
+            handler.errors,
+        )
+
+    def test_handle_with_warnigs(self):
+        PollingStation.objects.all().delete()
+        PollingStationFactory(council_id="FOO", internal_council_id="20336")
+        PollingStationFactory(council_id="FOO", internal_council_id="20340")
+        self.assertEqual(0, AccessibilityInformation.objects.count())
+        handler = AccessibilityInformationHandler(
+            council=Council.objects.get(council_id="FOO")
+        )
+
+        handler.handle(
+            [
+                "internal_council_id,polling_station_address,polling_station_postcode,polling_station_uprn,polling_station_identifier,is_temporary,nearby_parking,disabled_parking,level_access,temporary_ramp,hearing_loop,public_toilets,getting_to_the_station,getting_to_the_station_cy,at_the_station,at_the_station_cy",
+                '20340,"Little Angels Flying Start Nursery, Corner of Constellation / Metal Street, Adamsdown, Cardiff ",CF24 0LZ,100101042723,AB,No,Yes,No,No,Yes,Yes,No,,,,',
+            ],
+        )
+
+        # we can still do a partial import if there were only warnings
+        self.assertEqual(1, AccessibilityInformation.objects.count())
+        self.assertEqual(
+            ["File has 1 rows, but there are 2 stations."], handler.warnings
+        )
+        self.assertEqual([], handler.errors)
