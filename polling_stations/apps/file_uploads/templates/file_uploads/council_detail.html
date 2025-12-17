@@ -68,6 +68,7 @@
 
         {% else %}
             <p>We've not received any data for future elections yet.</p>
+            <p>Please note that this service does not support town, parish, or community council elections. </p>
         {% endif %}
         <div class="ds-cluster">
             <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
