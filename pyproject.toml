@@ -25,7 +25,7 @@ dependencies = [
     "drf-spectacular==0.28.0 ",
     "freezegun==1.5.1",
     "markdown==3.7",
-    "marshmallow==3.23.1",
+    "marshmallow==3.26.2",
     "polars==1.17.1",
     "pyshp==2.3.1",
     "rapidfuzz==3.10.1",
