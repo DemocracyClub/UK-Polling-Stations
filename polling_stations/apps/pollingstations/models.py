@@ -67,6 +67,7 @@ class PollingStation(models.Model):
             If there has been a new file, then all stations in that file will default to 'published'.<br>
             This means you need to remember if you want a station to be republished or stay unpublished.
         """,
+        max_length=255,
     )
 
     class Meta:
