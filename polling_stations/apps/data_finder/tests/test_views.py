@@ -354,6 +354,7 @@ class PostCodeViewNoStationTestCase(TestCase, LogTestMixin):
                 verbosity=0,
             )
 
+    @override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": False})
     def test_polling_station_is_blank(self):
         with patch("data_finder.views.LogLookUpMixin.log_postcode") as mock_log:
             response = self.client.get(
