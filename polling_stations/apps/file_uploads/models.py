@@ -117,12 +117,13 @@ class Upload(models.Model):
     @property
     def import_script(self):
         if not self.fileset_valid:
-            return None
+            raise Exception("One or more uploaded files is not valid")
 
         elections = [str(self.election_date)]
         council_id = self.gss.council_id
 
-        if len(self.file_set.all()) == 1:
+        num_files = len(self.file_set.all())
+        if num_files == 1:
             file = self.file_set.first()
             path = "/".join(file.key.split("/")[1:])
             import_script = ImportScript(
@@ -136,7 +137,7 @@ class Upload(models.Model):
                 }
             )
 
-        elif len(self.file_set.all()) == 2:
+        elif num_files == 2:
             stations_file, addresses_file = sorted(
                 self.file_set.all(), key=lambda f: f.csv_rows
             )
@@ -151,7 +152,7 @@ class Upload(models.Model):
                 }
             )
         else:
-            return None
+            raise Exception(f"expected 1 or 2 files, found {num_files}")
 
         return import_script.script
 

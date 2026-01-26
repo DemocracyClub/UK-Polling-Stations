@@ -96,7 +96,8 @@ class UploadManagerWithStatus(TestCase):
             ems="Democracy Counts",
         )
 
-        self.assertIsNone(upload.import_script)
+        with self.assertRaises(Exception):
+            upload.import_script
 
     def test_import_script_two_invalid_two_files(self):
         upload = UploadFactory(
@@ -119,7 +120,8 @@ class UploadManagerWithStatus(TestCase):
             csv_valid=False,
         )
 
-        self.assertIsNone(upload.import_script)
+        with self.assertRaises(Exception):
+            upload.import_script
 
     def test_import_script_no_files(self):
         upload = UploadFactory(
@@ -128,4 +130,5 @@ class UploadManagerWithStatus(TestCase):
             gss=CouncilFactory(council_id="FOO"),
         )
 
-        self.assertIsNone(upload.import_script)
+        with self.assertRaises(Exception):
+            upload.import_script
