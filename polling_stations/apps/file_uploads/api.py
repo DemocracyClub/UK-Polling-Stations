@@ -21,6 +21,19 @@ class UploadSerializer(serializers.ModelSerializer):
         model = Upload
         fields = ("gss", "timestamp", "github_issue", "file_set", "election_date")
 
+    def check_files(self, file_set):
+        if (
+            file_set.first().ems == "Democracy Counts"
+            and file_set.count() == 1
+            and file_set.first().errors == "Expected 2 files, found 1"
+        ):
+            return
+        for f in file_set.all():
+            if not f.csv_valid:
+                raise Exception(
+                    f"Found error '{f.errors}' processing file from {str(f.upload.gss)}"
+                )
+
     def create(self, validated_data):
         def update_file_set(validated_data):
             upload = Upload.objects.get(
@@ -55,6 +68,7 @@ class UploadSerializer(serializers.ModelSerializer):
         file_set = upload.file_set
 
         if file_set.exists():
+            self.check_files(file_set)
             if (
                 file_set.first().ems == "Democracy Counts" and file_set.count() == 2
             ) or file_set.first().ems != "Democracy Counts":
