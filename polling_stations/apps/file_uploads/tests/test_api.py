@@ -13,7 +13,7 @@ successful_upload_pull_request = Mock()
 
 
 @patch("file_uploads.models.Upload.make_pull_request", successful_upload_pull_request)
-class AddressTest(APITestCase):
+class ApiTest(APITestCase):
     @classmethod
     def setUpTestData(cls):
         cls.council = CouncilFactory(
@@ -131,7 +131,50 @@ class AddressTest(APITestCase):
         )
         successful_upload_pull_request.assert_not_called()
 
-    def test_valid_payload_one_file(
+    def test_valid_payload_one_valid_file(
+        self,
+    ):
+        self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
+        os.environ["SERVER_ENVIRONMENT"] = "production"
+        Upload.objects.create(
+            **{
+                "gss": self.council,
+                "timestamp": "2020-01-10T13:26:05Z",
+                "election_date": "2020-05-07",
+                "upload_user": User.objects.create(
+                    username="test_user", email="example@example.com"
+                ),
+            }
+        )
+        payload = {
+            "gss": "X01000001",
+            "timestamp": "2020-01-10T13:26:05Z",
+            "election_date": "2020-05-07",
+            "github_issue": "",
+            "file_set": [
+                {
+                    "csv_valid": True,
+                    "csv_rows": 25432,
+                    "csv_encoding": "utf-8",
+                    "ems": "Xpress DC",
+                    "errors": "",
+                    "key": "E07000223/2020-01-10T15:38:59.029979/richmondshire-Democracy_Club__02May2019.CSV",
+                }
+            ],
+        }
+        resp = self.client.post("/api/beta/uploads/", payload, format="json")
+        self.assertEqual(201, resp.status_code)
+        self.assertEqual(1, len(Upload.objects.all()))
+        self.assertEqual(1, len(File.objects.all()))
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(mail.outbox[0].to, ["example@example.com"])
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Your file upload for Piddleton Parish (2020-05-07) was successful",
+        )
+        successful_upload_pull_request.assert_called()
+
+    def test_valid_payload_one_invalid_file(
         self,
     ):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")
@@ -162,17 +205,13 @@ class AddressTest(APITestCase):
                 }
             ],
         }
-        resp = self.client.post("/api/beta/uploads/", payload, format="json")
-        self.assertEqual(201, resp.status_code)
+        with self.assertRaises(Exception):
+            self.client.post("/api/beta/uploads/", payload, format="json")
+
         self.assertEqual(1, len(Upload.objects.all()))
         self.assertEqual(1, len(File.objects.all()))
-        self.assertEqual(1, len(mail.outbox))
-        self.assertEqual(mail.outbox[0].to, ["example@example.com"])
-        self.assertEqual(
-            mail.outbox[0].subject,
-            "Your file upload for Piddleton Parish (2020-05-07) was successful",
-        )
-        successful_upload_pull_request.assert_called()
+        self.assertEqual(0, len(mail.outbox))
+        successful_upload_pull_request.assert_not_called()
 
     def test_valid_payload_two_files(self):
         self.client.credentials(HTTP_AUTHORIZATION="Token superuser-key")

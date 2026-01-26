@@ -20,6 +20,7 @@ RUNNING_TESTS = True
 
 POSTCODE_LOGGER = DCWidePostcodeLoggingClient(fake=True)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+ADMINS = []
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
