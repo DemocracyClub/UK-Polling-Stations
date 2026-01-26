@@ -21,7 +21,6 @@ class UploadSerializer(serializers.ModelSerializer):
         model = Upload
         fields = ("gss", "timestamp", "github_issue", "file_set", "election_date")
 
-    @transaction.atomic(using=DB_NAME)
     def create(self, validated_data):
         def update_file_set(validated_data):
             upload = Upload.objects.get(
@@ -42,8 +41,9 @@ class UploadSerializer(serializers.ModelSerializer):
         if len(validated_data["file_set"]) > len(existing_files):
             # Only overwrite the old data with the new report
             # if the new one has more stuff in it
-            existing_files.delete()
-            upload = update_file_set(validated_data)
+            with transaction.atomic(using=DB_NAME):
+                existing_files.delete()
+                upload = update_file_set(validated_data)
         else:
             # In the situation where we're processing multiple files
             # if there's already an upload and it has more files in it
