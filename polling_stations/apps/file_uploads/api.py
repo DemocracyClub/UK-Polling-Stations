@@ -35,35 +35,26 @@ class UploadSerializer(serializers.ModelSerializer):
                 )
 
     def create(self, validated_data):
-        def update_file_set(validated_data):
-            upload = Upload.objects.get(
-                gss=validated_data["gss"],
-                timestamp=validated_data["timestamp"],
-                election_date=validated_data["election_date"],
-            )
-            for f in validated_data["file_set"]:
-                File.objects.create(upload=upload, **f)
-            return upload
-
-        existing_upload = Upload.objects.get(
+        upload = Upload.objects.get(
             gss=validated_data["gss"],
             election_date=validated_data["election_date"],
             timestamp=validated_data["timestamp"],
         )
-        existing_files = File.objects.filter(upload=existing_upload)
+        existing_files = File.objects.filter(upload=upload)
         if len(validated_data["file_set"]) > len(existing_files):
             # Only overwrite the old data with the new report
             # if the new one has more stuff in it
             with transaction.atomic(using=DB_NAME):
                 existing_files.delete()
-                upload = update_file_set(validated_data)
+                for f in validated_data["file_set"]:
+                    File.objects.create(upload=upload, **f)
         else:
             # In the situation where we're processing multiple files
             # if there's already an upload and it has more files in it
             # than the new one we're trying to write, assume an
             # out-of-order delivery has happened (entirely possible)
             # and leave the existing data in place.
-            upload = existing_upload
+            pass
 
         file_set = upload.file_set
 
