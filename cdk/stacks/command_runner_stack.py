@@ -6,6 +6,8 @@ from aws_cdk import (
     aws_events_targets,
     aws_iam,
     aws_lambda,
+    aws_sns,
+    aws_sns_subscriptions,
 )
 from constructs import Construct
 
@@ -45,6 +47,50 @@ class WDIVOncePerTagCommandRunner(Stack):
 
         # Environment conditionals
         dc_environment = self.node.try_get_context("dc-environment") or "development"
+
+        # SNS topic for SSM command failure alerts
+        self.ssm_failure_topic = aws_sns.Topic(
+            self,
+            "SSMCommandFailureTopic",
+            topic_name=f"ssm-command-runner-failures-{dc_environment}",
+            display_name="SSM Command Runner Failures",
+        )
+        self.ssm_failure_topic.add_subscription(
+            aws_sns_subscriptions.EmailSubscription(
+                f"developers+wdiv-ssm-failures-{dc_environment}@democracyclub.org.uk"
+            )
+        )
+
+        # EventBridge rule to capture SSM command failures and route to SNS
+        # https://docs.aws.amazon.com/systems-manager/latest/userguide/monitoring-systems-manager-events.html
+        # https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html
+        # https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-pattern-operators.html
+        ssm_failure_rule = aws_events.Rule(
+            self,
+            "SSMCommandFailureRule",
+            rule_name=f"ssm-command-runner-failure-alert-{dc_environment}",
+            description="Alerts when SSM Run Commands fail on EC2 instances",
+            event_pattern=aws_events.EventPattern(
+                source=["aws.ssm"],
+                detail_type=[
+                    "EC2 Command Invocation Status-change Notification",
+                    "EC2 Command Status-change Notification",
+                ],
+                detail={
+                    "status": [
+                        {
+                            "anything-but": [
+                                "Pending",
+                                "InProgress",
+                                "Delayed",
+                                "Success",
+                            ]
+                        }
+                    ],
+                },
+            ),
+        )
+        ssm_failure_rule.add_target(aws_events_targets.SnsTopic(self.ssm_failure_topic))
 
         if dc_environment in ["development", "staging", "production"]:
             self.add_job(
