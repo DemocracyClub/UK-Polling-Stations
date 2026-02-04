@@ -1282,6 +1282,26 @@ wheels = [
 ]
 
 [[package]]
+name = "pyproj"
+version = "3.7.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi", marker = "platform_python_implementation == 'CPython'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/04/90/67bd7260b4ea9b8b20b4f58afef6c223ecb3abf368eb4ec5bc2cdef81b49/pyproj-3.7.2.tar.gz", hash = "sha256:39a0cf1ecc7e282d1d30f36594ebd55c9fae1fda8a2622cee5d100430628f88c", size = 226279, upload-time = "2025-08-14T12:05:42.18Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8d/ab/9893ea9fb066be70ed9074ae543914a618c131ed8dff2da1e08b3a4df4db/pyproj-3.7.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:0a9bb26a6356fb5b033433a6d1b4542158fb71e3c51de49b4c318a1dff3aeaab", size = 6219832, upload-time = "2025-08-14T12:04:10.264Z" },
+    { url = "https://files.pythonhosted.org/packages/53/78/4c64199146eed7184eb0e85bedec60a4aa8853b6ffe1ab1f3a8b962e70a0/pyproj-3.7.2-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:567caa03021178861fad27fabde87500ec6d2ee173dd32f3e2d9871e40eebd68", size = 4620650, upload-time = "2025-08-14T12:04:11.978Z" },
+    { url = "https://files.pythonhosted.org/packages/b6/ac/14a78d17943898a93ef4f8c6a9d4169911c994e3161e54a7cedeba9d8dde/pyproj-3.7.2-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:c203101d1dc3c038a56cff0447acc515dd29d6e14811406ac539c21eed422b2a", size = 9667087, upload-time = "2025-08-14T12:04:13.964Z" },
+    { url = "https://files.pythonhosted.org/packages/b8/be/212882c450bba74fc8d7d35cbd57e4af84792f0a56194819d98106b075af/pyproj-3.7.2-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:1edc34266c0c23ced85f95a1ee8b47c9035eae6aca5b6b340327250e8e281630", size = 9552797, upload-time = "2025-08-14T12:04:16.624Z" },
+    { url = "https://files.pythonhosted.org/packages/ba/c0/c0f25c87b5d2a8686341c53c1792a222a480d6c9caf60311fec12c99ec26/pyproj-3.7.2-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:aa9f26c21bc0e2dc3d224cb1eb4020cf23e76af179a7c66fea49b828611e4260", size = 10837036, upload-time = "2025-08-14T12:04:18.733Z" },
+    { url = "https://files.pythonhosted.org/packages/5d/37/5cbd6772addde2090c91113332623a86e8c7d583eccb2ad02ea634c4a89f/pyproj-3.7.2-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:f9428b318530625cb389b9ddc9c51251e172808a4af79b82809376daaeabe5e9", size = 10775952, upload-time = "2025-08-14T12:04:20.709Z" },
+    { url = "https://files.pythonhosted.org/packages/69/a1/dc250e3cf83eb4b3b9a2cf86fdb5e25288bd40037ae449695550f9e96b2f/pyproj-3.7.2-cp312-cp312-win32.whl", hash = "sha256:b3d99ed57d319da042f175f4554fc7038aa4bcecc4ac89e217e350346b742c9d", size = 5898872, upload-time = "2025-08-14T12:04:22.485Z" },
+    { url = "https://files.pythonhosted.org/packages/4a/a6/6fe724b72b70f2b00152d77282e14964d60ab092ec225e67c196c9b463e5/pyproj-3.7.2-cp312-cp312-win_amd64.whl", hash = "sha256:11614a054cd86a2ed968a657d00987a86eeb91fdcbd9ad3310478685dc14a128", size = 6312176, upload-time = "2025-08-14T12:04:24.736Z" },
+    { url = "https://files.pythonhosted.org/packages/5d/68/915cc32c02a91e76d02c8f55d5a138d6ef9e47a0d96d259df98f4842e558/pyproj-3.7.2-cp312-cp312-win_arm64.whl", hash = "sha256:509a146d1398bafe4f53273398c3bb0b4732535065fa995270e52a9d3676bca3", size = 6233452, upload-time = "2025-08-14T12:04:27.287Z" },
+]
+
+[[package]]
 name = "pysass"
 version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1774,6 +1794,7 @@ dependencies = [
     { name = "asana", marker = "platform_python_implementation == 'CPython'" },
     { name = "boto3", marker = "platform_python_implementation == 'CPython'" },
     { name = "botocore", marker = "platform_python_implementation == 'CPython'" },
+    { name = "chardet", marker = "platform_python_implementation == 'CPython'" },
     { name = "commitment", marker = "platform_python_implementation == 'CPython'" },
     { name = "dc-design-system", marker = "platform_python_implementation == 'CPython'" },
     { name = "dc-django-utils", marker = "platform_python_implementation == 'CPython'" },
@@ -1794,6 +1815,7 @@ dependencies = [
     { name = "markdown", marker = "platform_python_implementation == 'CPython'" },
     { name = "marshmallow", marker = "platform_python_implementation == 'CPython'" },
     { name = "polars", marker = "platform_python_implementation == 'CPython'" },
+    { name = "pyproj", marker = "platform_python_implementation == 'CPython'" },
     { name = "pyshp", marker = "platform_python_implementation == 'CPython'" },
     { name = "rapidfuzz", marker = "platform_python_implementation == 'CPython'" },
     { name = "requests", marker = "platform_python_implementation == 'CPython'" },
@@ -1846,6 +1868,7 @@ requires-dist = [
     { name = "asana", specifier = "==5.0.10" },
     { name = "boto3", specifier = "==1.35.78" },
     { name = "botocore", specifier = "==1.35.78" },
+    { name = "chardet", specifier = "==5.2.0" },
     { name = "commitment", specifier = "==3.0.1" },
     { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.9.0" },
     { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.5" },
@@ -1866,6 +1889,7 @@ requires-dist = [
     { name = "markdown", specifier = "==3.7" },
     { name = "marshmallow", specifier = "==3.26.2" },
     { name = "polars", specifier = "==1.17.1" },
+    { name = "pyproj", specifier = "==3.7.2" },
     { name = "pyshp", specifier = "==2.3.1" },
     { name = "rapidfuzz", specifier = "==3.10.1" },
     { name = "requests", specifier = "==2.32.4" },
