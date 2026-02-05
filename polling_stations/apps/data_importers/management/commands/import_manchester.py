@@ -11,3 +11,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     )
     elections = ["2026-02-26"]
     csv_delimiter = "\t"
+
+    def address_record_to_dict(self, record):
+        uprn = record.property_urn.strip().lstrip("0")
+
+        if uprn in [
+            "10093073712",
+            "77176372",
+        ]:
+            return None
+
+        if record.addressline6 in [
+            # looks wrong
+            "M19 3NW",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
