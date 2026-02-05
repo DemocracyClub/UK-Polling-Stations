@@ -4,39 +4,27 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HAA"
     addresses_name = (
-        "2024-07-04/2024-05-31T22:39:36.717310/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-02-05T14:04:29.515690/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-31T22:39:36.717310/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-02-05T14:04:29.515690/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "100060449180",  # 161A WEST LANE, HAYLING ISLAND
-            "100060449181",  # 161 WEST LANE, HAYLING ISLAND
+            "10013686452",  # THE ANNEXE 2 LOVEDEAN LANE, WATERLOOVILLE
+            "10013687155",  # ANNEXE 30 FIR COPSE ROAD, WATERLOOVILLE
+            "100060455188",  # 129 LONDON ROAD, WATERLOOVILLE
         ]:
             return None
 
         if record.addressline6 in [
-            # splits
-            "PO9 4JG",
+            "PO9 4JG",  # split
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Amendment from council:
-        # Robins Oak, Mill Road, Waterlooville PO7 7DB
-        if record.polling_place_id == "8139":
-            record = record._replace(
-                polling_place_easting="468127",
-                polling_place_northing="108652",
-                polling_place_uprn="10013682242",
-            )
-
-        return super().station_record_to_dict(record)
