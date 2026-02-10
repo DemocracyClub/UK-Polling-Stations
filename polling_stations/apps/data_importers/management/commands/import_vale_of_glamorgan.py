@@ -3,18 +3,27 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "VGL"
-    addresses_name = (
-        "2024-07-04/2024-06-06T10:32:09.163599/polling-districts-combined.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-06T10:32:09.163599/polling-stations-combined.csv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-02-10T14:52:58.106281/Democracy Club Polling Districts VoG 2.csv"
+    stations_name = "2026-05-07/2026-02-10T14:52:58.106281/Democracy Club Polling Stations VoG 2.csv"
+    elections = ["2026-05-07"]
+    csv_encoding = "utf-16le"
 
     def station_record_to_dict(self, record):
-        # bug report #683: postcode correction confirmed by council for:
-        # HEBRON CHURCH ANNEXE - STATION A, PILL STREET, COGAN, PENARTH, VALE OF GLAMORGAN
-        if record.stationcode == "14-a":
-            record = record._replace(postcode="CF64 2JS")
+        # Removing bad coordinates for:
+        # ST CATTWGS VILLAGE HALL, SIGINSTONE LANE, LLANMAES, VALE OF GLAMORGAN CF61 2XR
+        if record.stationcode == "72":
+            record = record._replace(
+                xordinate="",
+                yordinate="",
+            )
 
         return super().station_record_to_dict(record)
+
+    def address_record_to_dict(self, record):
+        if record.postcode in [
+            # split
+            "CF62 6BA",
+        ]:
+            return None
+
+        return super().address_record_to_dict(record)
