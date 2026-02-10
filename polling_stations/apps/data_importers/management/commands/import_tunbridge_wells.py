@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "TUN"
     addresses_name = (
-        "2025-05-01/2025-03-17T16:00:04.636176/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-02-10T13:29:01.152535/Democracy_Club__07May2026 - 10Feb.tsv"
     )
     stations_name = (
-        "2025-05-01/2025-03-17T16:00:04.636176/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-02-10T13:29:01.152535/Democracy_Club__07May2026 - 10Feb.tsv"
     )
-    elections = ["2025-05-01"]
+    elections = ["2026-05-07"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -29,31 +29,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100061193913",  # HUNTERS LODGE, PEMBURY ROAD, TONBRIDGE
             "100062551952",  # BLACK BUSH COTTAGE, BEDGEBURY ROAD, GOUDHURST, Cranbrook
             "10090055018",  # CRABTREE HOUSE, COURSE HORN LANE, CRANBROOK
+            "10008666136",  # NIGHTINGALE COTTAGE, CONGHURST LANE, HAWKHURST, CRANBROOK
+            "100062543979",  # 1 BROOK FARM COTTAGES, FIVE OAK GREEN ROAD, TONBRIDGE
         ]:
             return None
 
         if record.addressline6 in [
             # split
-            "TN4 0AB",
             "TN3 0HX",
+            "TN4 0AB",
             # suspect
-            "TN11 0PG",
-            "TN18 5AH",
+            "TN12 7BZ",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # UPRN correction from council for: Kilndown Village Hall, Church Road, Kilndown, Cranbrook, Kent, TN17 2RY
-        if record.polling_place_id == "4303":
-            record = record._replace(polling_place_uprn="10008671449")
-
-        # UPRN correction from council for: The Function Room, The Hawkhurst Club Unity Hall, TN18 4AG
-        if record.polling_place_id == "4289":
-            record = record._replace(
-                polling_place_uprn="100062553029",
-                polling_place_easting="",
-                polling_place_northing="",
-            )
-        return super().station_record_to_dict(record)
