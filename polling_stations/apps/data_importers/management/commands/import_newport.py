@@ -22,13 +22,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             rec["location"] = Point(327492, 187872, srid=27700)
             return rec
 
-        # Postcode changes pending council confirmation:
-        # # 'Eveswell Nursery Unit, St Johns Road, Beechwood, Newport, NP19 8GR' (id: 13791)
-        # if record.polling_place_id == "13791":
-        #     record = record._replace(polling_place_postcode="NP19 8GX")
-        # # 'Llanwern Village Institute, Llanwern Village Institute, Station Road, Llanwern, Newport, NP18 2DW' (id: 13980)
-        # if record.polling_place_id == "13980":
-        #     record = record._replace(polling_place_postcode="NP18 2DP")
+        # Postcode changes approved by council:
+        # 'Eveswell Nursery Unit, St Johns Road, Beechwood, Newport, NP19 8GR' (id: 13791)
+        if record.polling_place_id == "13791":
+            record = record._replace(polling_place_postcode="NP19 8GX")
+        # 'Llanwern Village Institute, Llanwern Village Institute, Station Road, Llanwern, Newport, NP18 2DW' (id: 13980)
+        if record.polling_place_id == "13980":
+            record = record._replace(polling_place_postcode="NP18 2DP")
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
