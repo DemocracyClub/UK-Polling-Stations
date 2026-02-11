@@ -9,12 +9,12 @@ class Command(BaseDemocracyCountsCsvImporter):
     csv_encoding = "utf-16le"
 
     def station_record_to_dict(self, record):
-        # Removing bad coordinates for:
+        # Fixing bad coordinates for:
         # ST CATTWGS VILLAGE HALL, SIGINSTONE LANE, LLANMAES, VALE OF GLAMORGAN CF61 2XR
         if record.stationcode == "72":
             record = record._replace(
-                xordinate="",
-                yordinate="",
+                xordinate="298052",
+                yordinate="169848",
             )
 
         return super().station_record_to_dict(record)

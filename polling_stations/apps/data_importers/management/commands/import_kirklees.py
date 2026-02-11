@@ -22,8 +22,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Removing bad coordinates for:
         # Broad Oak Bowling Club, 73 Broad Oak, Cowlersley Lane, Linthwaite, Huddersfield, HD7 5TE
         if record.polling_place_id == "22238":
-            record = record._replace(polling_place_easting="")
-            record = record._replace(polling_place_northing="")
+            record = record._replace(polling_place_easting="410268")
+            record = record._replace(polling_place_northing="414480")
 
         return super().station_record_to_dict(record)
 
