@@ -160,6 +160,9 @@
                     <tr>
                         <th>Station Address</th>
                         <th>Station Postcode</th>
+                        {% if user.is_staff %}
+                            <th>Internal Council ID</th>
+                        {% endif %}
                         <th>Map Showing<br><small style="font-weight: normal;"><a href="https://democracyclub.org.uk/projects/polling-stations/upload/#Mapping">More Info</a></small></th>
                         {% if council.nation == "Wales" and user.is_staff %}
                             <th>A11y info</th>
@@ -186,11 +189,17 @@
                                         {% endif %}
                                     </cite></small>
                                 </td>
+
                                 <td>{{ station.postcode }}</td>
+
+                                {% if user.is_staff %} <td>{{ station.internal_council_id }}</td> {% endif %}
+
                                 <td>{{ station.location }} </td>
+
                                 {% if council.nation == "Wales" and user.is_staff %}
                                     <td>{{ station.accessibility_information }}</td>
                                 {% endif %}
+
                                 <td>
                                     <a href={%  url "address_view" station.example_uprn %}>Example page</a>
                                     <br>
