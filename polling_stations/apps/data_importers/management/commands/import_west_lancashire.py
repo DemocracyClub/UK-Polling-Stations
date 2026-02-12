@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WLA"
     addresses_name = (
-        "2025-05-01/2025-03-27T10:21:21.955308/Democracy_Club__01May2025.CSV"
+        "2026-05-07/2026-02-05T11:37:28.466200/Democracy_Club__07May2026.CSV"
     )
     stations_name = (
-        "2025-05-01/2025-03-27T10:21:21.955308/Democracy_Club__01May2025.CSV"
+        "2026-05-07/2026-02-05T11:37:28.466200/Democracy_Club__07May2026.CSV"
     )
-    elections = ["2025-05-01"]
+    elections = ["2026-05-07"]
 
     # The following warning can be ignored:
     # WARNING: Polling station Up Holland High School (10662) is in Wigan Metropolitan Borough Council (WGN)
@@ -30,16 +30,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # split
-            "WN6 9EN",
-            "L39 8SR",
-            "PR4 6RT",
-            "WN6 9QE",
-            "L40 6JA",
-            "L40 5BE",
             "PR9 8FB",
-            "WN8 6SH",
+            "L40 6JA",
+            "L40 4BX",
+            "PR4 6RT",
+            "L40 5BE",
+            "L39 8SR",
+            "WN6 9EN",
             "WN8 7XA",
+            "WN6 9QE",
             "PR9 8DH",
+            "WN8 6SH",
         ]:
             return None
 
