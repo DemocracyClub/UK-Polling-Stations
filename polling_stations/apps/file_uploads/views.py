@@ -308,6 +308,7 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
             )
         context["STATIONS"].sort(key=lambda d: d["address"])
         context["live_upload"] = council.live_upload
+        context["upload_set"] = council.upload_set.order_by("-timestamp")
         context["events"] = council.dataevent_set.all().order_by("-created")
         return context
 

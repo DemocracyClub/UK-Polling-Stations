@@ -12,7 +12,7 @@
     <h2>Uploads</h2>
     {% if HAS_UPCOMING_ELECTIONS %}
 
-        {% if object.upload_set.with_status.future.exists %}
+        {% if upload_set.with_status.future.exists %}
             <table class="ds-table">
                 <th>Election Date</th>
                 <th>Uploaded</th>
@@ -20,7 +20,7 @@
                 <th>File upload status</th>
                 <th>Data live?</th>
 
-                {% for upload in object.upload_set.with_status.future %}
+                {% for upload in upload_set.with_status.future %}
 
                     <tr>
                         <td>
@@ -73,7 +73,7 @@
         <div class="ds-cluster">
             <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
                 Upload
-                {% if object.upload_set.exists %}
+                {% if upload_set.exists %}
                     an updated
                 {% endif %}
                 EMS export
