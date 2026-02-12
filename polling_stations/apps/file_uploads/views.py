@@ -291,6 +291,7 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                 {
                     "address": station.address,
                     "postcode": station.postcode,
+                    "internal_council_id": station.internal_council_id,
                     "location": "✔️" if station.location else "❌",
                     "accessibility_information": "✔️"
                     if getattr(station, "accessibility_information", None)
@@ -307,6 +308,7 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
             )
         context["STATIONS"].sort(key=lambda d: d["address"])
         context["live_upload"] = council.live_upload
+        context["upload_set"] = council.upload_set.order_by("-timestamp")
         context["events"] = council.dataevent_set.all().order_by("-created")
         return context
 
