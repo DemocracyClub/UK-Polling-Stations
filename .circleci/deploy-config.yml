@@ -24,7 +24,7 @@ parameters:
 jobs:
   build_and_test:
     docker:
-      - image: cimg/python:3.12.4-browsers
+      - image: cimg/python:3.12-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -115,7 +115,7 @@ jobs:
 
   run_new_imports:
     docker:
-      - image: cimg/python:3.12.4-browsers
+      - image: cimg/python:3.12-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -215,7 +215,7 @@ jobs:
 
   code_deploy:
     docker:
-      - image: cimg/python:3.12.4-node
+      - image: cimg/python:3.12-node
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -270,7 +270,7 @@ jobs:
 
   run_new_imports_post_deploy:
     docker:
-      - image: cimg/python:3.12.4-browsers
+      - image: cimg/python:3.12-browsers
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
