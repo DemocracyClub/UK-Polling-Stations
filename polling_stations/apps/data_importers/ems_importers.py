@@ -442,6 +442,52 @@ class BaseHalaroseCsvImporter(
 
 
 """
+Halarose has released an update (Feb 2026) to their EMS that exports CSVs in a new format.
+We don't know which version of the EMS the councils we'll be using
+so for now we'll need to support both formats.
+"""
+
+
+class BaseHalarose2026UpdateCsvImporter(BaseHalaroseCsvImporter, metaclass=abc.ABCMeta):
+    station_address_fields = [
+        "pollingstationname",
+        "pollingstationaddress1",
+        "pollingstationaddress2",
+        "pollingstationaddress3",
+        "pollingstationaddress4",
+        "pollingstationaddress5",
+    ]
+
+    def address_record_to_dict(self, record):
+        if record.postcode.strip() == "":
+            return None
+
+        address = format_residential_address(
+            [
+                record.addressline1,
+                record.addressline2,
+                record.addressline3,
+                record.addressline4,
+                record.addressline5,
+            ]
+        )
+
+        if record.pollingstationnumber.strip() == "n/a":
+            station_id = ""
+        else:
+            station_id = self.get_station_hash(record)
+
+        uprn = getattr(record, self.residential_uprn_field).strip()
+
+        return {
+            "address": address,
+            "postcode": record.postcode.strip(),
+            "polling_station_id": station_id,
+            "uprn": uprn,
+        }
+
+
+"""
 We see a lot of CSVs exported from Democracy Counts
 electoral service software: http://www.democracycounts.co.uk/
 with the addresses and stations in a single CSV file

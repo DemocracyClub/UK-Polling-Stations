@@ -14,6 +14,7 @@ from data_importers.ems_importers import (
     BaseDemocracyCountsCsvImporter,
     BaseFcsDemocracyClubApiImporter,
     BaseHalaroseCsvImporter,
+    BaseHalarose2026UpdateCsvImporter,
     BaseXpressDCCsvInconsistentPostcodesImporter,
     BaseXpressDemocracyClubCsvImporter,
     BaseXpressWebLookupCsvImporter,
@@ -34,6 +35,7 @@ __all__ = [
     BaseXpressDemocracyClubCsvImporter,
     BaseXpressDCCsvInconsistentPostcodesImporter,
     BaseHalaroseCsvImporter,
+    BaseHalarose2026UpdateCsvImporter,
     BaseDemocracyCountsCsvImporter,
     BaseFcsDemocracyClubApiImporter,
 ]
