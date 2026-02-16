@@ -23,6 +23,15 @@ class CsvHelperTests(TestCase):
         self.assertEqual(10, report["csv_rows"])
         self.assertEqual("Idox Eros (Halarose)", report["ems"])
 
+    def test_valid_idox_eros_2026_update(self):
+        report = get_csv_report(
+            get_fixture("ems-idox-eros-2026-update.csv", "text/csv"),
+            "ems-idox-eros-2026-update.csv",
+        )
+        self.assertTrue(report["csv_valid"])
+        self.assertEqual(10, report["csv_rows"])
+        self.assertEqual("Idox Eros (Halarose) 2026 Update", report["ems"])
+
     def test_valid_xpress_dc(self):
         report = get_csv_report(
             get_fixture("ems-xpress-dc.csv", "text/csv"), "ems-xpress-dc.csv"
