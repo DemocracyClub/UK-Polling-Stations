@@ -6,6 +6,8 @@ import chardet
 
 def detect_ems(header):
     first_col = header[0].lower()
+    if first_col == "houseid" and "addressline1" in [h.lower() for h in header]:
+        return "Idox Eros (Halarose) 2026 Update"
     if first_col == "houseid":
         return "Idox Eros (Halarose)"
     if first_col == "authoritycode":
