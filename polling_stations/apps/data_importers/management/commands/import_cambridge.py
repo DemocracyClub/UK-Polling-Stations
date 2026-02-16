@@ -1,15 +1,20 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "CAB"
-    addresses_name = "2025-05-01/2025-03-24T11:15:17.136445/Cab_fixed.csv"
-    stations_name = "2025-05-01/2025-03-24T11:15:17.136445/Cab_fixed.csv"
-    elections = ["2025-05-01"]
+    addresses_name = "2026-05-07/2026-02-16T14:26:03.938575/Democracy Club - Idox_2026-02-16 14-12.csv"
+    stations_name = "2026-05-07/2026-02-16T14:26:03.938575/Democracy Club - Idox_2026-02-16 14-12.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
-        if record.housepostcode in [
-            "CB4 1LD",  # split
+        if record.uprn in [
+            "10090966442",  # RIVERBOAT TUMBLING WATER G20635 RIVERSIDE, CAMBRIDGE
+        ]:
+            return None
+
+        if record.postcode in [
+            "CB3 0UW",  # split
         ]:
             return None
         return super().address_record_to_dict(record)
