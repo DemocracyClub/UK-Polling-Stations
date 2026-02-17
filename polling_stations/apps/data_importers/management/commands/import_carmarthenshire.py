@@ -1,12 +1,11 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "CMN"
-    addresses_name = "2024-07-04/2024-06-05T13:06:51.093400/Eros_SQL_Output001.csv"
-    stations_name = "2024-07-04/2024-06-05T13:06:51.093400/Eros_SQL_Output001.csv"
-    elections = ["2024-07-04"]
-    csv_encoding = "windows-1252"
+    addresses_name = "2026-05-07/2026-02-17T17:11:18.875080/Democracy Club - Idox_2026-02-17 17-03.csv"
+    stations_name = "2026-05-07/2026-02-17T17:11:18.875080/Democracy Club - Idox_2026-02-17 17-03.csv"
+    elections = ["2026-05-07"]
 
     def station_record_to_dict(self, record):
         record = record._replace(pollingvenueuprn="")
@@ -22,38 +21,35 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
-        if record.housepostcode in [
+        if record.postcode in [
             # split
+            "SA14 8BZ",
+            "SA16 0LE",
+            "SA18 2TA",
+            "SA44 5YB",
+            "SA17 4NF",
+            "SA31 3JJ",
+            "SA39 9EU",
+            "SA19 8BR",
+            "SA14 8TP",
+            "SA14 8JA",
             "SA19 8TA",
+            "SA15 1HP",
+            "SA16 0PP",
+            "SA14 8AY",
             "SA15 5LP",
             "SA32 7AS",
-            "SA16 0PP",
-            "SA44 5YB",
-            "SA31 3JJ",
-            "SA19 7SG",
-            "SA39 9EU",
-            "SA19 7YE",
-            "SA33 5DH",
-            "SA15 1HP",
-            "SA14 8TP",
-            "SA14 8AY",
-            "SA18 3DZ",
-            "SA16 0LE",
-            "SA18 3NB",
-            "SA32 8BX",
-            "SA32 7QJ",
-            "SA14 8JA",
-            "SA18 3TB",
-            "SA17 5US",
             "SA34 0HX",
-            "SA14 8BZ",
-            "SA19 9AS",
-            "SA39 9EJ",
-            "SA19 8BR",
-            "SA17 4NF",
+            "SA18 3DZ",
             "SA20 0EY",
+            "SA39 9EJ",
+            "SA32 7QJ",
+            "SA19 7SG",
+            "SA18 3NB",
+            "SA19 9AS",
+            "SA19 7YE",
+            "SA17 5US",
             # suspect
-            "SA18 2ET",
             "SA15 1JE",
         ]:
             return None
