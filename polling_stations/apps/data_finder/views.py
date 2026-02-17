@@ -528,23 +528,20 @@ class AddressFormView(FormView):
         if not addresses:
             raise Http404
 
-        addresses_with_station = addresses.exclude(uprntocouncil__polling_station_id="")
-        addresses_without_station = addresses.filter(
-            uprntocouncil__polling_station_id=""
-        )
+        """
+        Note: There's some history here.
+        We did try sorting addresses with a station assigned ahead
+        of addresses without a station assigned. See
+        https://github.com/DemocracyClub/UK-Polling-Stations/commit/61d2908ddab15c24ccd0b644fba86d413752438f
 
-        addresses_with_station = (
-            AddressSorter(addresses_with_station).natural_sort()
-            if addresses_with_station
-            else []
-        )
-        addresses_without_station = (
-            AddressSorter(addresses_without_station).natural_sort()
-            if addresses_without_station
-            else []
-        )
-
-        addresses = addresses_with_station + addresses_without_station
+        This works well if all the addresses without a station
+        assigned are pubs, shops, etc
+        However, if you have a lot of numbered streets where a handful of
+        numbered houses are not assigned to a station this leads to address
+        pickers that are sorted in an incomprehensible way.
+        """
+        sorter = AddressSorter(addresses)
+        addresses = sorter.natural_sort()
 
         select_addresses = [(element.uprn, element.address) for element in addresses]
         if self.NOTINLIST:
