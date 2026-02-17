@@ -53,7 +53,7 @@ class WDIVOncePerTagCommandRunner(Stack):
             self,
             "SSMCommandFailureTopic",
             topic_name=f"ssm-command-runner-failures-{dc_environment}",
-            display_name="SSM Command Runner Failures",
+            display_name=f"({dc_environment}) SSM Command Runner Failures",
         )
         self.ssm_failure_topic.add_subscription(
             aws_sns_subscriptions.EmailSubscription(
