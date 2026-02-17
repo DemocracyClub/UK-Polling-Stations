@@ -11,6 +11,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     )
     elections = ["2026-05-07"]
 
+    def station_record_to_dict(self, record):
+        # UPRN from council for:
+        # Busbridge Village Hall Brighton Road Godalming, GU7 1XA
+        if record.polling_place_id == "7358":
+            record = record._replace(polling_place_uprn="100062609703")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 

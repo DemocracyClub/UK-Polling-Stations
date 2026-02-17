@@ -12,6 +12,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # council-approved more accurate coordinates for:
+        # Bishopstoke Methodist Church, Sedgwick Road, Bishopstoke, Eastleigh SO50 6FH
+        if record.polling_place_id == "6408":
+            record = record._replace(
+                polling_place_easting="446888",
+                polling_place_northing="119531",
+            )
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
