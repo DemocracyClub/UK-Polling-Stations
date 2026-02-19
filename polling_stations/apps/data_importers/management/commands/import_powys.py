@@ -1,11 +1,11 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "POW"
-    addresses_name = "2024-07-04/2024-06-12T15:13:10.440907/Eros_SQL_Output004.csv"
-    stations_name = "2024-07-04/2024-06-12T15:13:10.440907/Eros_SQL_Output004.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-02-19T16:03:18.493604/POW_combined.csv"
+    stations_name = "2026-05-07/2026-02-19T16:03:18.493604/POW_combined.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
         if (
@@ -13,7 +13,6 @@ class Command(BaseHalaroseCsvImporter):
             in [
                 "10011806077",  # COACH HOUSE, LLANBEDR ROAD, CRICKHOWELL
                 "10011744832",  # RECTORY COTTAGE, CATHEDINE, BRECON
-                "10011738931",  # ORCHARD COTTAGE, BRYNWERN HALL, LLANFIHANGEL BRYNPABUAN, BUILTH WELLS
                 "10011741058",  # THE BRYN, OLD RADNOR, PRESTEIGNE
                 "10011755050",  # COED COCHIAN, RHAYADER
                 "10011797348",  # TY ISAF GLYNGYNWYDD A470T FROM LLANGURIG ROUNDABOUT TO JUNCTION WITH B4518 BY LLANIDLOES, LLANGURIG, LLANIDLOES
@@ -24,35 +23,30 @@ class Command(BaseHalaroseCsvImporter):
         ):
             return None
 
-        if record.housepostcode in [
+        if record.postcode in [
             # split
-            "SY20 9NL",
-            "SY22 6DE",
-            "LD1 6TY",
-            "LD3 0HG",
-            "HR3 5JY",
-            "LD3 9EF",
-            "SY21 9AP",
-            "SY21 0NG",
-            "LD3 7HN",
-            "SY21 0DT",
-            "LD1 6UT",
-            "SY16 3DW",
-            "SY16 3DR",
-            "SY17 5SA",
-            "SY10 0LH",
-            "SY21 7QU",
-            "SY18 6NR",
-            "SY16 1HG",
-            "LD2 3UD",
-            "SY22 6JG",
-            "LD1 6SW",
-            "SY18 6JD",
-            "SY17 5PA",
             "SY18 6QT",
-            "SY21 9AY",
-            "SY21 9HZ",
+            "SY22 6DE",
+            "SY17 5PA",
+            "SY18 6NR",
+            "LD3 0HG",
+            "LD1 6SW",
+            "SY16 3DR",
+            "SY20 9NL",
+            "SY16 3DW",
+            "SY16 1HG",
+            "HR3 5JY",
+            "LD1 6TY",
+            "LD3 9EF",
+            "SY21 7QU",
             "SY20 8EX",
+            "SY21 0NG",
+            "SY21 9AP",
+            "SY22 6JG",
+            "SY18 6JD",
+            "SY21 9HZ",
+            "SY21 0DT",
+            "SY21 9AY",
         ]:
             return None
 
