@@ -13,7 +13,7 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             "10013172306",  # HILLFORT PRIORYRATH, HOWARTH CLOSE, MILFORD HAVEN
         ]:
             return None
-        if record.housepostcode in [
+        if record.postcode in [
             # split
             "SA62 4NJ",
             "SA73 3RA",
