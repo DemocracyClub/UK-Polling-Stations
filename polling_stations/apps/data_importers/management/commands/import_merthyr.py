@@ -1,15 +1,15 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "MTY"
-    addresses_name = "2024-07-04/2024-06-08T12:05:23.815608/Eros_SQL_Output005.csv"
-    stations_name = "2024-07-04/2024-06-08T12:05:23.815608/Eros_SQL_Output005.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-02-20T15:14:47.599472/Democracy Club - Idox_2026-02-20 15-05.csv"
+    stations_name = "2026-05-07/2026-02-20T15:14:47.599472/Democracy Club - Idox_2026-02-20 15-05.csv"
+    elections = ["2026-05-07"]
 
     def station_record_to_dict(self, record):
         # PONTSTICILL MEMORIAL HALL, CF48 2UR
-        if record.pollingstationnumber == "54":
+        if record.pollingstationnumber == "255":
             record = record._replace(pollingstationpostcode="CF48 2UD")
         return super().station_record_to_dict(record)
 
@@ -22,7 +22,7 @@ class Command(BaseHalaroseCsvImporter):
             "10034663931",  # HIGH GARDEN, TRAMROAD SIDE SOUTH, MERTHYR TYDFIL
         ]:
             return None
-        if record.housepostcode in [
+        if record.postcode in [
             "CF48 1TL",  # split
         ]:
             return None
