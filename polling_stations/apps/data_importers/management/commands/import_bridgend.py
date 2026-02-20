@@ -1,29 +1,8 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "BGE"
-    addresses_name = "2024-07-04/2024-06-24T18:01:04.431232/bge-combined.csv"
-    stations_name = "2024-07-04/2024-06-24T18:01:04.431232/bge-combined.csv"
-    elections = ["2024-07-04"]
-
-    def address_record_to_dict(self, record):
-        if record.housepostcode in [
-            # split
-            "CF34 0UF",
-            "CF32 8TY",
-            "CF31 2DH",
-            "CF31 5FD",
-            "CF31 3HL",
-            "CF31 1NP",
-            "CF34 9SD",
-            "CF35 6GD",
-            "CF33 6PL",
-            "CF35 6HZ",
-            "CF32 0NR",
-            # suspect
-            "CF31 2DL",  #
-        ]:
-            return None
-
-        return super().address_record_to_dict(record)
+    addresses_name = "2026-05-07/2026-02-20T15:35:40.439319/Democracy Club - Idox_2026-02-20 15-33.csv"
+    stations_name = "2026-05-07/2026-02-20T15:35:40.439319/Democracy Club - Idox_2026-02-18 09-45.csv"
+    elections = ["2026-05-07"]
