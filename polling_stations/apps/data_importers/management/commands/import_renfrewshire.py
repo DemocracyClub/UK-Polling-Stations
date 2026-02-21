@@ -1,52 +1,9 @@
-from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "RFW"
-    addresses_name = (
-        "2024-07-04/2024-06-11T16:20:32.780888/DemocracyClub_PollingDistricts2024.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-11T16:20:32.780888/DemocracyClub_PollingStations2024.csv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-02-19T12:45:14.327541/Democracy Club - Polling District (Ren).csv"
+    stations_name = "2026-05-07/2026-02-19T12:45:14.327541/Democracy Club - Polling Stations (Ren).csv"
+    elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
-
-    def pre_import(self):
-        # We need to consider rows that don't have a uprn when importing data.
-        # However there are lots of rows for other councils in this file.
-        # So build a list of stations from rows that do have UPRNS
-        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
-
-        council_uprns = set(
-            UprnToCouncil.objects.filter(lad=self.council.geography.gss).values_list(
-                "uprn", flat=True
-            )
-        )
-        self.COUNCIL_STATIONS = set()
-        data = self.get_addresses()
-
-        for record in data:
-            if record.uprn in council_uprns:
-                self.COUNCIL_STATIONS.add(record.stationcode)
-
-    def address_record_to_dict(self, record):
-        if record.stationcode not in self.COUNCIL_STATIONS:
-            return None
-
-        return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        if record.stationcode not in self.COUNCIL_STATIONS:
-            return None
-
-        # removes name duplication
-        record = record._replace(add1="")
-
-        # HOUSTON & KILLELLAN CHURCH HALLS location
-        # https://app.asana.com/0/1207538772343223/1207727040327547/f
-        if record.stationcode in ("3_IN03/1", "3_IN03/2", "3_IN03/3"):
-            record = record._replace(xordinate="240494", yordinate="666785")
-
-        return super().station_record_to_dict(record)
