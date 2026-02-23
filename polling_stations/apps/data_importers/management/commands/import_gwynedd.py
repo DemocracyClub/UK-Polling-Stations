@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "GWN"
-    addresses_name = "2026-05-07/2026-02-17T11:38:48.076093/Democracy Club - Idox_Senedd2-26_Take_on_2026-02-17 09-19 - Copi.csv"
-    stations_name = "2026-05-07/2026-02-17T11:38:48.076093/Democracy Club - Idox_Senedd2-26_Take_on_2026-02-17 09-19 - Copi.csv"
+    addresses_name = "2026-05-07/2026-02-23T11:40:14.920142/GWN_combined.csv"
+    stations_name = "2026-05-07/2026-02-23T11:40:14.920142/GWN_combined.csv"
     elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
@@ -21,6 +21,8 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             "10070361201",  # TY CAM, RHOSTRYFAN, CAERNARFON
             "200003178611",  # COED MAWR COTTAGE, LLANBERIS ROAD, RHOSBODRUAL, CAERNARFON
             "200003178515",  # 27 LLANBERIS ROAD, RHOSBODRUAL, CAERNARFON
+            "10094363547",  # 47 PLAS Y COED, BANGOR
+            "200003195096",  # 8 PEN Y GRAIG, BETHESDA, BANGOR
         ]:
             return None
 
@@ -35,6 +37,7 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             "LL53 6SY",
             "LL55 2TD",
             "LL53 8DR",
+            "LL57 3UA",
         ]:
             return None
 
