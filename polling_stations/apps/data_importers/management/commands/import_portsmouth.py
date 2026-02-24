@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "POR"
     addresses_name = (
-        "2024-07-04/2024-05-30T11:07:34.792700/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-02-24T12:37:00.902325/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-05-30T11:07:34.792700/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-02-24T12:37:00.902325/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -37,6 +37,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "1775034486",  # 20 HAMILTON ROAD, SOUTHSEA
             "1775034488",  # 22 HAMILTON ROAD, SOUTHSEA
             "1775034484",  # 18 HAMILTON ROAD, SOUTHSEA
+            "1775113351",  # 57 WOODMANCOTE ROAD, SOUTHSEA
+            "1775113350",  # 55 WOODMANCOTE ROAD, SOUTHSEA
         ]:
             return None
 
@@ -47,6 +49,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "PO3 5NB",
             "PO4 9JF",
             "PO5 2HH",
+            "PO1 1EX",
         ]:
             return None
 
@@ -55,7 +58,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # Import warnings, but no correction needed (checked with the council):
         # John Pounds Centre, Queen Street, Portsmouth, PO1 3HN
-        # Highslopes Community Centre (6404) is in Fareham Borough Council (FAR) but target council is Portsmouth City Council (POR)
         # St Peter & St Paul Hall, Old Wymering Lane, Wymering, PO6 3NH
         # Portacabin on north side of green, Fairfield Square/Hythe Road, Portsmouth, PO6 3JS
 
