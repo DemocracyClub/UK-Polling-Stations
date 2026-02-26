@@ -1,11 +1,11 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "SPE"
-    addresses_name = "2024-07-04/2024-06-29T10:37:45.305544/Eros_SQL_Output016.csv"
-    stations_name = "2024-07-04/2024-06-29T10:37:45.305544/Eros_SQL_Output016.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-02-26T11:34:38.261833/Democracy Club - Idox_2026-02-25 16-08.csv"
+    stations_name = "2026-05-07/2026-02-26T11:34:38.261833/Democracy Club - Idox_2026-02-25 16-08.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -20,12 +20,13 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
-        if record.housepostcode in [
+        if record.postcode in [
             # split
-            "TW15 1AG",
             "TW18 1HE",
             "TW15 3SH",
             # looks wrong
+            "TW17 8SP",
+            "TW16 6AT",
             "TW17 8SY",
             "TW18 1HD",
             "TW18 1QP",
