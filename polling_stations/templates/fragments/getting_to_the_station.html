@@ -9,7 +9,7 @@
 {% if directions.time %}
     {% include "fragments/travel_time.html" %}
 {% endif %}
-{% if station.accessibility_information.getting_to_the_station %}
+{% if station.accessibility_information.getting_to_the_station_text %}
     <p>
         <strong>{% trans "The electoral services team have added a note about getting to this station:" %}</strong>
     </p>
