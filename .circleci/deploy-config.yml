@@ -101,10 +101,10 @@ jobs:
             uv run python manage.py collectstatic --no-input
             uv run pytest --cov-report= --cov=polling_stations
 
-      - run:
-          name: Submit coverage
-          command: |
-            uv run coveralls
+      # - run:
+      #     name: Submit coverage
+      #     command: |
+      #       uv run coveralls
 
 
       # In the event the build has failed, alert the dev team
