@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DEN"
     addresses_name = (
-        "2024-07-04/2024-06-14T15:02:30.247466/Democracy_Club__04July2024 (28).tsv"
+        "2026-05-07/2026-02-26T14:09:17.885169/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-14T15:02:30.247466/Democracy_Club__04July2024 (28).tsv"
+        "2026-05-07/2026-02-26T14:09:17.885169/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -18,13 +18,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "200004298031",  # AELWYD UCHA, RHUALLT, ST. ASAPH
-            "10003928367",  # MYNYDD LLANFAIR, BRYNEGLWYS, CORWEN
+            "200004299740",  # YR HEN FELIN, LLANNEFYDD ROAD, HENLLAN, DENBIGH
         ]:
             return None
 
         if record.addressline6 in [
             # suspect
             "LL15 1FF",
+            "LL18 3AG",
         ]:
             return None
 
