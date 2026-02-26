@@ -1,16 +1,18 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "CHT"
-    addresses_name = "2025-05-01/2025-02-28T13:01:36.708211/Eros_SQL_Output007.csv"
-    stations_name = "2025-05-01/2025-02-28T13:01:36.708211/Eros_SQL_Output007.csv"
-    elections = ["2025-05-01"]
+    addresses_name = "2026-05-07/2026-02-26T12:04:00.564616/Democracy Club - Idox_2026-02-24 10-38.csv"
+    stations_name = "2026-05-07/2026-02-26T12:04:00.564616/Democracy Club - Idox_2026-02-24 10-38.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
+            "200002686590",  # HOLMLEA FARM SPRINGBANK ROAD, CHELTENHAM
+            "200002686059",  # 3A CLARENCE ROAD, CHELTENHAM
             "100121229562",  # THE MEWS, BACK MONTPELLIER TERRACE, CHELTENHAM
             "200002684616",  # 49A BACK MONTPELLIER TERRACE, CHELTENHAM
             "100120413433",  # FLAT, 19 SUFFOLK ROAD, CHELTENHAM
@@ -18,20 +20,13 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
-        if record.housepostcode in [
+        if record.postcode in [
             # split
-            "GL52 6RN",
             "GL50 2RF",
+            "GL52 6RN",
             "GL52 2ES",
             "GL50 3RB",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Below stations are throwing a warning about different postcode in the addressbase, but council requested to keep them.
-        # HILLVIEW COMMUNITY CENTRE, HULBERT CRESCENT, UP HATHERLEY, CHELTENHAM, GL51 3EB
-        # OAKLEY COMMUNITY, RESOURCE CENTRE, CLYDE CRESCENT, CHELTENHAM, GL52 5QL
-
-        return super().station_record_to_dict(record)
