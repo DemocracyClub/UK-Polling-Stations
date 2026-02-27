@@ -43,69 +43,61 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Council says to ignore the following postcode mismatch warnings:
+        # Cwmavon Community Centre, Depot Road, Cwmavon, Port Talbot, SA12 9DF
+        # Vale of Neath Leisure Centre, Chain Road, Glynneath, Neath, SA11 5HW
+        # The Scout Hall, Maes Y Ffynnon Close, Wellfield, Neath, SA11 1HQ
+
         # postcode correction for: Godrergraig Workingmens Club, Glanyrafon Road, Ystalyfera, SA9 2HA
         if self.get_station_hash(record) == "826-godrergraig-workingmens-club":
             record = record._replace(pollingstationpostcode="SA9 2DE")
 
-        # postcode mismatches pending council reply:
-        # # 'Aberavon Community Resource Centre (NSA), Michna Street, Port Talbot, SA12 6UH' (id: 3)
-        # if record.pollingvenueid == "3":
-        #     record = record._replace(pollingstationpostcode="SA12 6LR")
+        # 'Aberavon Community Resource Centre (NSA), Michna Street, Port Talbot, SA12 6UH' (id: 3)
+        if record.pollingvenueid == "3":
+            record = record._replace(pollingstationpostcode="SA12 6LR")
 
-        # # 'Baglan Community Centre, Hawthorn Avenue, Baglan, SA12 8PG' (id: 11)
-        # if record.pollingvenueid == "11":
-        #     record = record._replace(pollingstationpostcode="SA12 8PH")
+        # 'Baglan Community Centre, Hawthorn Avenue, Baglan, SA12 8PG' (id: 11)
+        if record.pollingvenueid == "11":
+            record = record._replace(pollingstationpostcode="SA12 8PH")
 
-        # # 'Hengwrt Community Sports Centre, Llansawel Crescent, Briton Ferry, Neath, SA11 2UW' (id: 15)
-        # if record.pollingvenueid == "15":
-        #     record = record._replace(pollingstationpostcode="SA11 2UP")
+        # 'Hengwrt Community Sports Centre, Llansawel Crescent, Briton Ferry, Neath, SA11 2UW' (id: 15)
+        if record.pollingvenueid == "15":
+            record = record._replace(pollingstationpostcode="SA11 2UP")
 
-        # # 'Cwmavon Community Centre, Depot Road, Cwmavon, Port Talbot, SA12 9DF' (id: 147)
-        # if record.pollingvenueid == "147":
-        #     record = record._replace(pollingstationpostcode="SA12 9BA")
+        # 'Bryn Village Hall, Maesteg Road, Bryn, Port Talbot, SA13 2RY' (id: 23)
+        if record.pollingvenueid == "23":
+            record = record._replace(pollingstationpostcode="SA13 2RW")
 
-        # # 'Bryn Village Hall, Maesteg Road, Bryn, Port Talbot, SA13 2RY' (id: 23)
-        # if record.pollingvenueid == "23":
-        #     record = record._replace(pollingstationpostcode="SA13 2RW")
+        # 'Carmel Bethany Presbyterian Church, Off Station Road, (Rear Of Post Office), Port Talbot, SA13 1EJ' (id: 148)
+        if record.pollingvenueid == "148":
+            record = record._replace(pollingstationpostcode="SA13 1PQ")
 
-        # # 'Carmel Bethany Presbyterian Church, Off Station Road, (Rear Of Post Office), Port Talbot, SA13 1EJ' (id: 148)
-        # if record.pollingvenueid == "148":
-        #     record = record._replace(pollingstationpostcode="SA13 1PQ")
+        # 'Sandfields Presbyterian Church, Western Avenue, Port Talbot, SA12 7LZ' (id: 185)
+        if record.pollingvenueid == "185":
+            record = record._replace(pollingstationpostcode="SA12 7LS")
 
-        # # 'Sandfields Presbyterian Church, Western Avenue, Port Talbot, SA12 7LZ' (id: 185)
-        # if record.pollingvenueid == "185":
-        #     record = record._replace(pollingstationpostcode="SA12 7LS")
+        # 'Pelenna Community Centre, Dan Y Coed, Tonmawr, SA12 9UL' (id: 109)
+        if record.pollingvenueid == "109":
+            record = record._replace(pollingstationpostcode="SA12 9UB")
 
-        # # 'Pelenna Community Centre, Dan Y Coed, Tonmawr, SA12 9UL' (id: 109)
-        # if record.pollingvenueid == "109":
-        #     record = record._replace(pollingstationpostcode="SA12 9UB")
+        # 'Cilfrew Community Centre, New Road, Cilfrew, SA10 8LL' (id: 64)
+        if record.pollingvenueid == "64":
+            record = record._replace(pollingstationpostcode="SA10 8AR")
 
-        # # 'Cilfrew Community Centre, New Road, Cilfrew, SA10 8LL' (id: 64)
-        # if record.pollingvenueid == "64":
-        #     record = record._replace(pollingstationpostcode="SA10 8AR")
+        # 'Traherne Court, Stratton Way, Court Herbert, Neath, SA10 7BT' (id: 82)
+        if record.pollingvenueid == "82":
+            record = record._replace(pollingstationpostcode="SA10 7EE")
 
-        # # 'Vale of Neath Leisure Centre, Chain Road, Glynneath, Neath, SA11 5HW' (id: 67)
-        # if record.pollingvenueid == "67":
-        #     record = record._replace(pollingstationpostcode="SA11 5HP")
+        # 'Ebenezer Baptist Church, Herbert Road, Melin, Neath, SA11 2DD' (id: 97)
+        if record.pollingvenueid == "97":
+            record = record._replace(pollingstationpostcode="SA11 2DN")
 
-        # # 'Traherne Court, Stratton Way, Court Herbert, Neath, SA10 7BT' (id: 82)
-        # if record.pollingvenueid == "82":
-        #     record = record._replace(pollingstationpostcode="SA10 7EE")
+        # 'Melincryddan Community Centre, Melincryddan Community Centre, Crythan Road, Neath, SA11 1TB' (id: 98)
+        if record.pollingvenueid == "98":
+            record = record._replace(pollingstationpostcode="SA11 1SU")
 
-        # # 'The Scout Hall, Maes Y Ffynnon Close, Wellfield, Neath, SA11 1HQ' (id: 94)
-        # if record.pollingvenueid == "94":
-        #     record = record._replace(pollingstationpostcode="SA11 1EZ")
-
-        # # 'Ebenezer Baptist Church, Herbert Road, Melin, Neath, SA11 2DD' (id: 97)
-        # if record.pollingvenueid == "97":
-        #     record = record._replace(pollingstationpostcode="SA11 2DN")
-
-        # # 'Melincryddan Community Centre, Melincryddan Community Centre, Crythan Road, Neath, SA11 1TB' (id: 98)
-        # if record.pollingvenueid == "98":
-        #     record = record._replace(pollingstationpostcode="SA11 1SU")
-
-        # # 'The Ganu - Melincourt Community Hall, Lletty Dafydd, Melincourt, SA11 4BW' (id: 116)
-        # if record.pollingvenueid == "116":
-        #     record = record._replace(pollingstationpostcode="SA11 4DB")
+        # 'The Ganu - Melincourt Community Hall, Lletty Dafydd, Melincourt, SA11 4BW' (id: 116)
+        if record.pollingvenueid == "116":
+            record = record._replace(pollingstationpostcode="SA11 4DB")
 
         return super().station_record_to_dict(record)

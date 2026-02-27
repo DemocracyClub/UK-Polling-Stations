@@ -9,6 +9,13 @@ class Command(BaseHalarose2026UpdateCsvImporter):
 
     def station_record_to_dict(self, record):
         record = record._replace(pollingvenueuprn="")
+        # Venue address correction from council for:
+        # BLACK MOUNTAIN CENTRE, BRYNAMMAN, CWMGARW ROAD, CANOLFAN Y MYNYDD DU, BRYNAMAN SA18 1BU
+        if record.pollingvenueid == "119":
+            record = record._replace(
+                pollingstationaddress4="HEOL CWMGARW",
+                pollingstationaddress5="BRYNAMAN",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
