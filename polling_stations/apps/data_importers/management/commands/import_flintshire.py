@@ -3,23 +3,38 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "FLN"
-    addresses_name = (
-        "2024-07-04/2024-06-04T10:04:48.599321/Democracy_Club__04July2024 (18).tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-04T10:04:48.599321/Democracy_Club__04July2024 (18).tsv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-02-27T11:02:16.435939/Democracy_Club__07May2026 - Flintshire.CSV"
+    stations_name = "2026-05-07/2026-02-27T11:02:16.435939/Democracy_Club__07May2026 - Flintshire.CSV"
+    elections = ["2026-05-07"]
     csv_encoding = "windows-1252"
-    csv_delimiter = "\t"
+
+    def station_record_to_dict(self, record):
+        # the following stations postcodes are being confirmed by the council:
+        # # 'Village Hall/Neuadd Y Pentref, Ysceifiog, Nr Holywell/Nr Treffynnon, CH8 8NR' (id: 8249)
+        # if record.polling_place_id == "8249":
+        #     record = record._replace(polling_place_postcode="CH8 8NJ")
+
+        # # 'Village Hall/Neuadd Y Pentref, Rhesycae/Rhes-y-Cae, Nr Holywell/Nr Treffynnon, CH8 8JR' (id: 8233)
+        # if record.polling_place_id == "8233":
+        #     record = record._replace(polling_place_postcode="CH8 8JG")
+
+        # # 'Rhosesmor Village Hall, Neuadd Bentref Rhosesmor, Rhosesmor, Mold/Yr Wyddgrug, CH7 6PQ' (id: 8237)
+        # if record.polling_place_id == "8237":
+        #     record = record._replace(polling_place_postcode="CH7 6WF")
+
+        # # 'St. Michael`s Church/Eglwys Sant Mihangel, Brynford/Brynffordd, CH8 8AD' (id: 8223)
+        # if record.polling_place_id == "8223":
+        #     record = record._replace(polling_place_postcode="CH8 8LQ")
+
+        # # 'Community Centre/Canolfan Gymunedol, Mynydd Isa, Mold/Yr Wyddgrug, CH7 6UH' (id: 8210)
+        # if record.polling_place_id == "8210":
+        #     record = record._replace(polling_place_postcode="CH7 6UY")
+        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10013716442",  # TY NANT BARN, WHITFORD ROAD, WHITFORD, HOLYWELL
-            "10013704303",  # NANT Y BI, DOWNING ROAD, WHITFORD, HOLYWELL
-            "10013706023",  # BRYN CADW, LLWYN IFOR LANE, WHITFORD, HOLYWELL
             "10090462571",  # PLYMOUTH COPSE, BABELL, HOLYWELL
             "10013705239",  # DYFFRYN AUR, BABELL, HOLYWELL
             "10013716952",  # NANT Y FUWCH, PENTRE HALKYN, HOLYWELL
@@ -31,43 +46,37 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100100930264",  # THE GRANGE, SANDY LANE, HIGHER KINNERTON, CHESTER
             "200002940307",  # GRANGE FARM COTTAGE, SANDY LANE, HIGHER KINNERTON, CHESTER
             "100100219238",  # 86 SANDY LANE, HIGHER KINNERTON, CHESTER
-            "10013707814",  # OLD ORCHARD, OLD LONDON ROAD, BAGILLT
             "100100209552",  # WOODVILLE, HIGH STREET, BAGILLT
             "10023843516",  # ELM HOUSE, HIGH STREET, BAGILLT
             "200002942099",  # FLAT 2 WELL STREET, HOLYWELL
-            "100100939330",  # ROCK COTTAGE, CYMAU ROAD, FFRITH, WREXHAM
         ]:
             return None
         if record.addressline6 in [
             # split
-            "CH8 8NF",
-            "CH4 0PE",
-            "CH8 8LR",
-            "CH7 6YX",
-            "CH5 3EF",
-            "CH5 1QR",
-            "CH7 2JR",
-            "CH6 5TP",
-            "CH8 8NY",
-            "CH5 1PD",
-            "CH8 8JY",
             "CH7 6BA",
             "CH8 7ED",
-            "CH8 9NY",
-            "CH7 3DG",
             "CH7 6SD",
-            "CH7 6PA",
-            "LL12 9HN",
-            "CH7 6EH",
             "CH8 7PQ",
+            "CH6 5TG",
+            "CH8 8NY",
+            "CH4 0PE",
+            "CH5 3EF",
+            "CH7 2JR",
+            "CH8 8NF",
+            "CH8 8LR",
+            "CH8 8JY",
+            "CH5 1QR",
+            "CH7 6YX",
+            "CH6 5TP",
             "CH7 6AH",
             "LL12 9DU",
+            "CH5 1PD",
+            "LL12 9HN",
+            "CH7 6EH",
+            "CH7 6PA",
             "CH7 2JP",
-            "CH7 6TH",
             # suspect
             "CH8 7AX",
-            "CH8 7LS",
-            "CH8 7LY",
             "CH8 7EY",
             "CH6 6ES",
             "CH5 4XL",
