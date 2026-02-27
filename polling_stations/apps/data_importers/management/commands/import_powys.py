@@ -7,6 +7,13 @@ class Command(BaseHalarose2026UpdateCsvImporter):
     stations_name = "2026-05-07/2026-02-19T16:03:18.493604/POW_combined.csv"
     elections = ["2026-05-07"]
 
+    def station_record_to_dict(self, record):
+        # postcode fix from council for:
+        # NEW RADNOR COMMUNITY CENTRE, New Radnor Community Centre, Hall Lane, New Radnor, Presteigne LD8 2SE
+        if self.get_station_hash(record) == "77-new-radnor-community-centre":
+            record = record._replace(pollingstationpostcode="LD8 2SW")
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         if (
             record.uprn
