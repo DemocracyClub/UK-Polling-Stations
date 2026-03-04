@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "PLY"
-    addresses_name = "2025-07-17/2025-06-17T10:10:40.181606/Democracy Club Data.tsv"
-    stations_name = "2025-07-17/2025-06-17T10:10:40.181606/Democracy Club Data.tsv"
-    elections = ["2025-07-17"]
+    addresses_name = (
+        "2026-05-07/2026-03-04T16:37:36.094929/Democracy_Club__07May2026.tsv"
+    )
+    stations_name = (
+        "2026-05-07/2026-03-04T16:37:36.094929/Democracy_Club__07May2026.tsv"
+    )
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -28,33 +32,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "100040482972",  # HUNNY B FLORIST, 55 SALISBURY ROAD, PLYMOUTH
                 "100040434952",  # CARETAKERS FLAT (FLAT 1) METHODIST CENTRAL HALL EASTLAKE STREET, PLYMOUTH
                 "10091564022",  # FLAT 2 METHODIST CENTRAL HALL EASTLAKE STREET, PLYMOUTH
-                "100040476103",  # 76 PLYMSTOCK ROAD, PLYMOUTH
-                "100040476105",  # 79 PLYMSTOCK ROAD, PLYMOUTH
             ]
         ):
             return None
 
         if record.addressline6 in [
-            # # splits
-            "PL3 4HB",
+            # splits
             "PL4 8BP",
-            "PL4 7QB",
-            "PL3 6EP",
+            "PL3 4HB",
             # suspect
-            "PL7 1UF",  # RIDGE ROAD, PLYMPTON, PLYMOUTH
-            "PL7 1AA",  # OSMAND GARDENS, PLYMOUTH
+            "PL9 7PB",
+            "PL1 4SG",
+            "PL1 4DU",
+            "PL1 4TH",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Adding missing polling place details the second station at the same polling place
-        if record.polling_place_id == "8640":
-            record = record._replace(
-                polling_place_easting="246538",
-                polling_place_northing="59085",
-                polling_place_name="St. Francis of Assisi Church Hall",
-            )
-
-        return super().station_record_to_dict(record)
