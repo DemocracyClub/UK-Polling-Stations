@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BRD"
     addresses_name = (
-        "2024-07-04/2024-06-14T15:57:51.218542/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-04T16:48:58.387966/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-14T15:57:51.218542/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-04T16:48:58.387966/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -18,6 +18,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if (
             uprn
             in [
+                "100051237197",  # 21 WILLOW STREET, BRADFORD, BD8 9QJ
                 "100051130917",  # COTTAGE STANSFIELD ARMS RESTAURANT APPERLEY LANE, APPERLEY BRIDGE, BRADFORD
                 "100051942648",  # LOW LODGE, BELGRAVE ROAD, KEIGHLEY
                 "10010571811",  # OLD SOUTH BARN, MOOR END, BLACK MOOR ROAD, OXENHOPE, KEIGHLEY
@@ -82,7 +83,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "200002415190",  # 14 WILMER ROAD, BRADFORD
                 "100051934836",  # ROSE COTTAGE, WAGON LANE, BINGLEY
                 "10090404421",  # 2 BIRKSLAND STREET, BRADFORD
-                "10010574743",  # SECOND FLOOR 11 UPPER MILLERGATE, BRADFORD
                 "10090402475",  # FLAT 514 THORNTON ROAD, BRADFORD
                 "100051137696",  # 26 BIRCH STREET, BRADFORD
                 "100051137695",  # 25 BIRCH STREET, BRADFORD
@@ -97,17 +97,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "LS29 6QJ",
             "BD15 7WB",
             "BD22 7JU",
-            "BD7 4RA",
-            "BD1 2PJ",
-            "BD6 1HP",
-            "BD16 1NT",
-            "BD10 8FB",
-            "BD10 8LL",
-            "BD22 0ER",
+            "LS29 8FJ",
             "BD8 9NW",
+            "BD16 1NT",
+            "BD7 4RA",
+            "BD22 0ER",
             # suspect
             "BD12 8EW",
             "BD12 8EY",
@@ -124,11 +120,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "BD15 7SQ",
             "BD21 1AX",
             "BD13 2JR",
-            "BD4 7PG",
-            "BD5 7DP",
             "BD4 7TL",
             "BD12 9EU",
             "BD8 9NY",
+            "BD4 9JP",
+            "BD16 2DN",
         ]:
             return None
 
