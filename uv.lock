@@ -10,6 +10,7 @@ supported-markers = [
 
 [manifest]
 members = [
+    "format-ssm-command-event",
     "uk-polling-stations",
     "wdiv-s3-trigger",
 ]
@@ -647,6 +648,21 @@ sdist = { url = "https://files.pythonhosted.org/packages/1d/65/ce7f1b70157833bf3
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b5/36/7fb70f04bf00bc646cd5bb45aa9eddb15e19437a28b8fb2b4a5249fac770/filelock-3.20.3-py3-none-any.whl", hash = "sha256:4b0dda527ee31078689fc205ec4f1c1bf7d56cf88b6dc9426c4f230e46c2dce1", size = 16701, upload-time = "2026-01-09T17:55:04.334Z" },
 ]
+
+[[package]]
+name = "format-ssm-command-event"
+version = "0.0.0"
+source = { virtual = "cdk/lambdas/format_ssm_command_event" }
+
+[package.dev-dependencies]
+testing = [
+    { name = "moto", marker = "platform_python_implementation == 'CPython'" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+testing = [{ name = "moto", extras = ["sns", "sqs"], specifier = "==5.0.22" }]
 
 [[package]]
 name = "freezegun"
