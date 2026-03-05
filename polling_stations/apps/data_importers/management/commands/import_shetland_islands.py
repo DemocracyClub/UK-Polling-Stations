@@ -1,21 +1,16 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "ZET"
-    addresses_name = (
-        "2024-07-04/2024-06-20T14:57:44.630295/Shetland Eros_SQL_Output004.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-20T14:57:44.630295/Shetland Eros_SQL_Output004.csv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-05T15:41:53.622621/Democracy Club - Idox_2026-03-05 11-54 (1).csv"
+    stations_name = "2026-05-07/2026-03-05T15:41:53.622621/Democracy Club - Idox_2026-03-05 11-54 (1).csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
-            "30100007505",  # NORTH BOOTH, HAROLDSWICK, UNST, SHETLAND
             "30100005132",  # BOOTH, OLLABERRY, SHETLAND
         ]:
             return None
