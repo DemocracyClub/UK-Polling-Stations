@@ -1,33 +1,23 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "NEL"
-    addresses_name = "2025-05-01/2025-03-03T14:56:37.387375/Eros_SQL_Output004.csv"
-    stations_name = "2025-05-01/2025-03-03T14:56:37.387375/Eros_SQL_Output004.csv"
-    elections = ["2025-05-01"]
+    addresses_name = "2026-05-07/2026-03-11T15:10:52.914923/Democracy Club - Idox_2026-03-11 15-08.csv"
+    stations_name = "2026-05-07/2026-03-11T15:10:52.914923/Democracy Club - Idox_2026-03-11 15-08.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
-        if (
-            uprn
-            in [
-                "10090078903",  # FLAT, 247 GRIMSBY ROAD, CLEETHORPES
-                "10090086605",  # THE ROOST, DIANA PRINCESS OF WALES HOSPITAL, SCARTHO ROAD, GRIMSBY
-                "10090078890",  # FLAT 3, 50 RUTLAND STREET, GRIMSBY
-                "10090078888",  # FLAT 1, 50 RUTLAND STREET, GRIMSBY
-                "10090078889",  # FLAT 2, 50 RUTLAND STREET, GRIMSBY
-                "10090078891",  # FLAT 4, 50 RUTLAND STREET, GRIMSBY
-                "11023550",  # 38 BRAMHALL STREET, CLEETHORPES
-                "11088787",  # 4 WALTHAM HOUSE FARM COTTAGE, LOUTH ROAD, NEW WALTHAM, GRIMSBY
-                "11088786",  # WALTHAM HOUSE FARM COTTAGE 3 LOUTH ROAD, WALTHAM
-            ]
-        ):
+        if uprn in [
+            "10090078903",  # FLAT, 247 GRIMSBY ROAD, CLEETHORPES
+        ]:
             return None
 
-        if record.housepostcode in [
+        if record.postcode in [
             # split
+            "DN33 3PF",
             "DN35 0RA",
             # suspect
             "DN37 0BN",
