@@ -9,7 +9,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.uprn.strip().lstrip("0")
+        uprn = record.polling_place_uprn.strip().lstrip("0")
 
         if uprn in [
             "10093324969",  #  24 WOOD STREET, HEATH TOWN, WOLVERHAMPTON
