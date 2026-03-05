@@ -84,7 +84,7 @@ environments = [
 ]
 
 [tool.uv.workspace]
-members = ["cdk/lambdas/wdiv-s3-trigger"]
+members = ["cdk/lambdas/wdiv-s3-trigger", "cdk/lambdas/format_ssm_command_event"]
 
 [tool.uv.sources]
 dc-django-utils = { git = "https://github.com/DemocracyClub/dc_django_utils.git", tag = "8.0.5" }
@@ -117,7 +117,7 @@ norecursedirs = [
     ".circleci"
 ]
 
-pythonpath = "cdk/lambdas/wdiv-s3-trigger"
+pythonpath = ["cdk/lambdas/wdiv-s3-trigger", "cdk/lambdas/format_ssm_command_event"]
 
 DJANGO_SETTINGS_MODULE = "polling_stations.settings.testing"
 
