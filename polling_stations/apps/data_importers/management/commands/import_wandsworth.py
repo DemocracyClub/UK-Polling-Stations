@@ -4,19 +4,18 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WND"
     addresses_name = (
-        "2024-07-04/2024-06-10T13:16:47.467544/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-05T16:23:21.565444/Democracy_Club__07May2026 (2).tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-10T13:16:47.467544/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-05T16:23:21.565444/Democracy_Club__07May2026 (2).tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10095441123",  # BASEMENT FLAT, 221 PUTNEY BRIDGE ROAD, LONDON
             "100022701958",  # 5 THURLEIGH MANSIONS 33 THURLEIGH ROAD, LONDON
             "100023328601",  # THE COTTAGE, MAGDALEN ROAD, LONDON
         ]:
@@ -25,7 +24,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # split
             "SW12 9RF",
-            "SW17 7BB",
         ]:
             return None
 
