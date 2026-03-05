@@ -1,20 +1,21 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "AGY"
-    addresses_name = "2024-07-04/2024-06-18T10:03:58.926929/Eros_SQL_Output003.csv"
-    stations_name = "2024-07-04/2024-06-18T10:03:58.926929/Eros_SQL_Output003.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-05T16:31:00.410075/Democracy Club - Idox_2026-03-05 15-54.csv"
+    stations_name = "2026-05-07/2026-03-05T16:31:00.410075/Democracy Club - Idox_2026-03-05 15-54.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
-        if record.housepostcode in [
+        if record.postcode in [
             # split
-            "LL74 8ST",
-            "LL65 2EL",
+            "LL65 2ED",
             "LL77 7NW",
-            # suspect
-            "LL77 7UR",
+            "LL65 2EL",
+            "LL65 1BG",
+            "LL74 8ST",
+            "LL72 8LJ",
         ]:
             return None
 
@@ -23,27 +24,11 @@ class Command(BaseHalaroseCsvImporter):
         if uprn in [
             "200002649098",  # 4 TREMWYLFA, CARMEL, LLANNERCH-Y-MEDD
             "10024357287",  # CHAPEL HOUSE, SOUTH STACK ROAD, HOLYHEAD
-            "10024356434",  # HENLLYS, LLANGAFFO, GAERWEN
-            "10024359360",  # CAE'R WENNOL, LLANGAFFO, GAERWEN
             "10013463367",  # HARBOUR HOUSE, TRAETH BYCHAN, MARIANGLAS
             "10013466388",  # OLD GRANARY, PENTRAETH
             "10013853106",  # PANT Y BWLCH, LLANDDONA, BEAUMARIS
             "10013466115",  # RHANDIR, LLANFIGAEL, HOLYHEAD
-            "10013463941",  # TYN DRYFOL BACH, BODORGAN
-            "10013457915",  # CASTELL GRUG, SOUTH STACK, HOLYHEAD
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # YR HEN FECWS, DWYRAN, YNYS MON
-        if self.get_station_hash == "62-yr-hen-fecws":
-            record = record._replace(pollingstationpostcode="LL61 6AU")
-        # NEUADD EGLWYS SANTES FAIR, 1 FFORDD BRYNGWYN, CAERGYBI, YNYS MON
-        if self.get_station_hash(record) == "7-neuadd-eglwys-santes-fair":
-            record = record._replace(pollingstationpostcode="LL65 1TR")
-        # NEUADD GYMUNED LLAINGOCH, SOUTH STACK ROAD, LLAINGOCH, CAERGYBI / HOLYHEAD, YNYS MON
-        if self.get_station_hash(record) == "5-neuadd-gymuned-llaingoch":
-            record = record._replace(pollingstationpostcode="LL65 1LU")
-        return super().station_record_to_dict(record)
