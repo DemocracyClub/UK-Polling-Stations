@@ -1,11 +1,11 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "SHF"
-    addresses_name = "2024-07-04/2024-06-03T10:21:10.582196/Eros_SQL_Output001.csv"
-    stations_name = "2024-07-04/2024-06-03T10:21:10.582196/Eros_SQL_Output001.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-05T21:25:47.332823/Democracy Club - Idox_2026-03-05 17-45.csv"
+    stations_name = "2026-05-07/2026-03-05T21:25:47.332823/Democracy Club - Idox_2026-03-05 17-45.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -13,8 +13,12 @@ class Command(BaseHalaroseCsvImporter):
         if (
             uprn
             in [
-                "100052101093",  # BROOKFIELD, LONG LANE, STANNINGTON, SHEFFIELD
-                "100051016653",  # EDENFIELD, LONG LANE, STANNINGTON, SHEFFIELD
+                "100051058540",  # 60A RAVENCARR ROAD, SHEFFIELD, S2 1QA
+                "100050979318",  # MANAGERS FLAT HARLEY HOTEL 334 GLOSSOP ROAD, SHEFFIELD, S10 2HW
+                "100051072752",  # VIEW COTTAGE SHEEPHILL ROAD, SHEFFIELD, S11 7TU
+                "10023156883",  # 8B STUMPERLOWE HALL ROAD, SHEFFIELD, S10 3QR
+                "100051069483",  # STUBBIN COTTAGE, SANDYGATE LANE, SHEFFIELD, S10 5SQ
+                "10091130199",  # 1B LAIRD ROAD, SHEFFIELD, S6 4BS
                 "100052094057",  # HALLWOOD HOUSE, PENISTONE ROAD, CHAPELTOWN, SHEFFIELD
                 "10013646160",  # THE BUNGALOW, HALLWOOD, PENISTONE ROAD, CHAPELTOWN, SHEFFIELD
                 "10022924822",  # 3 WADSLEY LANE, SHEFFIELD
@@ -26,50 +30,44 @@ class Command(BaseHalaroseCsvImporter):
                 "10094515334",  # FLAT, ABOVE 649-651, CHESTERFIELD ROAD, SHEFFIELD
                 "10091734040",  # 165B BIRLEY SPA LANE, SHEFFIELD
                 "10091734039",  # 165A BIRLEY SPA LANE, SHEFFIELD
-                "100051088863",  # KNOWLE HILL, STREETFIELDS, HALFWAY, SHEFFIELD
                 "10003573833",  # GROUNDS PLUS, UNIT 6 LONG ACRE WAY, SHEFFIELD
-                "10023151677",  # 8A SOUTHEY GREEN ROAD, SHEFFIELD
                 "100050944918",  # 1 COLLINGBOURNE DRIVE, SOTHALL, SHEFFIELD
                 "100051021259",  # MOOR HOUSE FARM, STOCKSBRIDGE, SHEFFIELD
                 "10013554418",  # WIND HILL FARM, STOCKSBRIDGE, SHEFFIELD
                 "100051111037",  # 647 WHITLEY LANE, GRENOSIDE, SHEFFIELD
-                "100051111039",  # SYCAMORE FARM, WHITLEY LANE, GRENOSIDE, SHEFFIELD
                 "10091127976",  # OLD CROWN INN, MANAGERS ACCOMMODATION 710 PENISTONE ROAD, OWLERTON, SHEFFIELD
                 "10013159771",  # CRAWSHAW FARM, UGHILL, BRADFIELD, SHEFFIELD
-                "10091733736",  # 386A STANNINGTON ROAD, SHEFFIELD
-                "10093467393",  # 5 WOOD STREET, SHEFFIELD
-                "100050912255",  # 800 BARNSLEY ROAD, SHEFFIELD
-                "100051016622",  # 101A LONDON ROAD, SHEFFIELD
-                "10003574282",  # 79A LONDON ROAD, SHEFFIELD
-                "10091129534",  # THE ALBION, MANAGERS ACCOMMODATION 71-75 LONDON ROAD, SHEFFIELD
-                "10091129582",  # THE CLUBHOUSE, MANAGERS ACCOMMODATION 13 LONDON ROAD, SHEFFIELD
-                "100051058537",  # 55 RAVENCARR ROAD, SHEFFIELD
-                "100051058539",  # 59 RAVENCARR ROAD, SHEFFIELD
-                "100051058536",  # 53 RAVENCARR ROAD, SHEFFIELD
-                "100051058538",  # 57 RAVENCARR ROAD, SHEFFIELD
                 "100050920075",  # 101 BIRLEY SPA LANE, SHEFFIELD
                 "200003021647",  # WHITE LODGE FARM, HIGH BRADFIELD, BRADFIELD, SHEFFIELD
+                "100051110508",  # 282 WHITEHOUSE LANE, SHEFFIELD
+                "10093467393",  # 5 WOOD STREET, SHEFFIELD
             ]
         ):
             return None
 
-        if record.housepostcode in [
+        if record.postcode in [
             # split
+            "S2 2SY",
+            "S6 4AS",
             "S1 4TA",
-            "S8 0PL",
             "S35 9XS",
-            "S10 3LG",
+            "S20 4TB",
             "S10 3GW",
+            "S6 6AD",
             # suspect
-            "S35 2TQ",
-            "S35 2WW",
-            "S6 2BH",
-            "S6 3ED",
-            "S7 1FF",
-            "S7 1FH",
             "S2 1BP",
-            "S13 7EQ",
+            "S6 2LN",
+            "S10 4JY",
+            "S17 4DN",
+            "S6 2PB",
+            "S3 7LY",
         ]:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # postcode correction for: Unity Gardens Community Room, 3 Reneville Crescent, Ecclesfield, Sheffield, S35 9DA
+        if record.pollingstationnumber == "80":
+            record = record._replace(pollingstationpostcode="S5 9DE")
+        return super().station_record_to_dict(record)
