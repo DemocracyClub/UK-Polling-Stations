@@ -8,6 +8,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # Adding Missing UPRNs from the council for:
+        # Kingsley Hall, 5 Austen Close Loughton
+        if record.polling_place_id == "3892":
+            record = record._replace(polling_place_uprn="100091479336")
+        # Ongar Youth Centre, The Gables, Fyfield Road
+        if record.polling_place_id == "3900":
+            record = record._replace(polling_place_uprn="10022854094")
+        # The Black Swan Broadley Common
+        if record.polling_place_id == "3873":
+            record = record._replace(polling_place_uprn="100091477706")
+        # Victory Hall, Hainault Road, Chigwell
+        if record.polling_place_id == "3848":
+            record = record._replace(polling_place_uprn="100091480121")
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
