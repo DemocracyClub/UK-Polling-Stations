@@ -61,6 +61,22 @@ class WDIVOncePerTagCommandRunner(Stack):
             )
         )
 
+        # Lambda to format SSM failure events into readable emails
+        format_ssm_event_lambda = aws_lambda.Function(
+            self,
+            "FormatSSMCommandEvent",
+            function_name=f"format-ssm-command-event-{dc_environment}",
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
+            handler="handler.handler",
+            code=aws_lambda.Code.from_asset("cdk/lambdas/format_ssm_command_event"),
+            environment={
+                "SNS_TOPIC_ARN": self.ssm_failure_topic.topic_arn,
+                "DC_ENVIRONMENT": dc_environment,
+            },
+            timeout=Duration.seconds(30),
+        )
+        self.ssm_failure_topic.grant_publish(format_ssm_event_lambda)
+
         # EventBridge rule to capture SSM command failures and route to SNS
         # https://docs.aws.amazon.com/systems-manager/latest/userguide/monitoring-systems-manager-events.html
         # https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html
@@ -90,7 +106,9 @@ class WDIVOncePerTagCommandRunner(Stack):
                 },
             ),
         )
-        ssm_failure_rule.add_target(aws_events_targets.SnsTopic(self.ssm_failure_topic))
+        ssm_failure_rule.add_target(
+            aws_events_targets.LambdaFunction(format_ssm_event_lambda)
+        )
 
         if dc_environment in ["development", "staging", "production"]:
             self.add_job(
