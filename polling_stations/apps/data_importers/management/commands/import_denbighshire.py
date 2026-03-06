@@ -13,6 +13,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # add missing postcode from council for:
+        # Hafan Deg Day Centre Grange Road Rhyl
+        if record.polling_place_id == "13709":
+            record = record._replace(polling_place_postcode="LL18 4BS")
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
