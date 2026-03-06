@@ -10,7 +10,7 @@ import handler
 SAMPLE_EVENT = {
     "version": "0",
     "id": "abc-123",
-    "detail-type": "EC2 Command Invocation Status-change Notification",
+    "detail-type": "EC2 Command Status-change Notification",
     "source": "aws.ssm",
     "account": "123456789012",
     "time": "2026-03-05T12:00:00Z",
