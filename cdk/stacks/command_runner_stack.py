@@ -93,7 +93,6 @@ class WDIVOncePerTagCommandRunner(Stack):
             event_pattern=aws_events.EventPattern(
                 source=["aws.ssm"],
                 detail_type=[
-                    "EC2 Command Invocation Status-change Notification",
                     "EC2 Command Status-change Notification",
                 ],
                 detail={
