@@ -1,12 +1,8 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "ORK"
-    addresses_name = (
-        "2024-07-04/2024-06-20T14:58:29.571792/Orkney Eros_SQL_Output012.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-20T14:58:29.571792/Orkney Eros_SQL_Output012.csv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-05T12:17:43.857070/Democracy Club - Idox_2026-03-05 11-54.csv"
+    stations_name = "2026-05-07/2026-03-05T12:17:43.857070/Democracy Club - Idox_2026-03-05 11-54.csv"
+    elections = ["2026-05-07"]
