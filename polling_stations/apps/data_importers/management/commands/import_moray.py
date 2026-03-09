@@ -1,12 +1,12 @@
 from addressbase.models import UprnToCouncil
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "MRY"
-    addresses_name = "2024-07-04/2024-06-17T14:56:43.378925/MRY_combined.csv"
-    stations_name = "2024-07-04/2024-06-17T14:56:43.378925/MRY_combined.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-16T11:58:21.052577/MRY_combined.csv"
+    stations_name = "2026-05-07/2026-03-16T11:58:21.052577/MRY_combined.csv"
+    elections = ["2026-05-07"]
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
@@ -34,11 +34,6 @@ class Command(BaseHalaroseCsvImporter):
 
     def address_record_to_dict(self, record):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
-            return None
-
-        if record.housepostcode in [
-            "IV30 8AB",  # split
-        ]:
             return None
 
         return super().address_record_to_dict(record)
