@@ -1,87 +1,67 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from addressbase.models import UprnToCouncil
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "ABD"
-    addresses_name = (
-        "2024-07-04/2024-06-07T15:42:14.722645/Eros_SQL_Output002 - Aberdeenshire.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-07T15:42:14.722645/Eros_SQL_Output002 - Aberdeenshire.csv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-16T11:46:46.121836/ABD_combined_2.csv"
+    stations_name = "2026-05-07/2026-03-16T11:46:46.121836/ABD_combined_2.csv"
+    elections = ["2026-05-07"]
 
-    def station_record_to_dict(self, record):
-        # Skip stations that are not in Aberdeenshire
-        if self.get_station_hash(record) in [
-            "68-function-hall",
-            "69-function-hall",
-            "70-buckie-methodist-church-hall",
-            "72-royal-british-legion-hall",
-            "71-north-church-hall",
-            "73-royal-british-legion-hall",
-            "74-portessie-methodist-church-hall",
-            "60-cullen-bowling-and-tennis-club",
-            "61-deskford-jubilee-hall",
-            "59-mcboyle-hall",
-            "75-town-hall",
-            "76-spey-bay-hall",
-            "78-fochabers-public-institute",
-            "79-fochabers-public-institute",
-            "80-clochan-community-hall",
-            "65-longmore-halls",
-            "66-longmore-halls",
-            "64-old-ogilvie-school-hall",
-            "63-king-memorial-hall-off-a95",
-            "67-rothiemay-school",
-            "62-newmill-public-hall",
-        ]:
-            return None
+    def pre_import(self):
+        # We need to consider rows that don't have a uprn when importing data.
+        # However there are lots of rows for other councils in this file.
+        # So build a list of stations from rows that do have UPRNS
+        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
 
-        # corrects wrong postcode for: TOWIE PUBLIC HALL, TOWIE, GLENKINDIE, ALFORD AB33 8NR
-        if self.get_station_hash(record) in [
-            "23-towie-public-hall",
-            "24-towie-public-hall",
-        ]:
-            record = record._replace(pollingstationpostcode="AB33 8RN")
-
-        # Station address correction from council for:
-        # old: PORTSOY COMMUNITY CHURCH, SEAFIELD STREET, PORTSOY, BANFF AB45 2QL
-        # new: PORTSOY COMMUNITY CHURCH, THE SQUARE, PORTSOY, BANFF AB45 2NX
-        if self.get_station_hash(record) == "1-portsoy-community-church":
-            record = record._replace(
-                pollingstationname="PORTSOY COMMUNITY CHURCH",
-                pollingstationnumber="1",
-                pollingstationaddress_1="THE SQUARE",
-                pollingstationaddress_2="PORTSOY",
-                pollingstationaddress_3="BANFF",
-                pollingstationpostcode="AB45 2NX",
+        council_uprns = set(
+            UprnToCouncil.objects.filter(lad=self.council.geography.gss).values_list(
+                "uprn", flat=True
             )
+        )
+        self.COUNCIL_STATIONS = set()
+        data = self.get_addresses()
 
-        return super().station_record_to_dict(record)
+        for record in data:
+            if record.uprn in council_uprns:
+                self.COUNCIL_STATIONS.add(record.pollingvenueid)
 
     def address_record_to_dict(self, record):
+        if record.pollingvenueid not in self.COUNCIL_STATIONS:
+            return None
         uprn = record.uprn.strip().lstrip("0")
 
         if (
             uprn
             in [
-                "151176868",  # THE BLACK HOUSE, NEWBURGH, ELLON
                 "151176475",  # CARAVAN 5 DYKELANDS FARM A937 SOUTH BALMAKELLY ACCESS ROAD TO A90T SOUTH OF LAURENCEKIRK, LAURENCEKIRK
             ]
         ):
             return None
-        if record.housepostcode in [
+
+        if record.postcode in (
             # splits
-            "AB21 0QJ",
-            "AB51 0UZ",
             "AB51 8XH",
-            "AB41 7UA",
-            "AB39 2UJ",
-            "AB42 5JB",
-            "AB35 5PR",
-            "AB51 5DU",
             "AB43 7AR",
-        ]:
+            "AB35 5PR",
+            "AB51 0UZ",
+            "AB21 0QJ",
+            "AB41 7UA",
+            "AB42 5JB",
+            "AB39 2UJ",
+        ):
             return None
+
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        if record.pollingvenueid not in self.COUNCIL_STATIONS:
+            return None
+        # Remove station in Aberdeen City
+        if record.pollingvenueid == "108":
+            return None
+        # corrects wrong postcode for: TOWIE PUBLIC HALL, TOWIE, GLENKINDIE, ALFORD AB33 8NR
+        if self.get_station_hash(record) == "44-towie-public-hall":
+            record = record._replace(pollingstationpostcode="AB33 8RN")
+
+        return super().station_record_to_dict(record)
