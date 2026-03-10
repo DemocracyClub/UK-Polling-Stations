@@ -50,6 +50,15 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         if record.pollingvenueid == "34":
             record = record._replace(pollingstationpostcode="CF38 2AU")
 
+        # Station change from the council:
+        # OLD: SARON BAPTIST CHAPEL DAVIS STREET ABERAMAN ABERDARE CF44 6PY
+        # NEW: BLAENGWAWR PRIMARY SCHOOL, GWAWR STREET, ABERAMAN, ABERDARE
+        if self.get_station_hash(record) == "17-saron-baptist-chapel":
+            record = record._replace(
+                pollingstationname="BLAENGWAWR PRIMARY SCHOOL",
+                pollingstationaddress1="GWAWR STREET",
+                pollingvenueuprn="100101049452",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -78,5 +87,13 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             "CF37 1PS",
         ]:
             return None
-
+        # Station change from the council:
+        # OLD: SARON BAPTIST CHAPEL DAVIS STREET ABERAMAN ABERDARE CF44 6PY
+        # NEW: BLAENGWAWR PRIMARY SCHOOL, GWAWR STREET, ABERAMAN, ABERDARE
+        if self.get_station_hash(record) == "17-saron-baptist-chapel":
+            record = record._replace(
+                pollingstationname="BLAENGWAWR PRIMARY SCHOOL",
+                pollingstationaddress1="GWAWR STREET",
+                pollingvenueuprn="100101049452",
+            )
         return super().address_record_to_dict(record)
