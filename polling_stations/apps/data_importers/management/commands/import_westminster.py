@@ -1,37 +1,35 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "WSM"
-    addresses_name = "2024-07-04/2024-07-02T11:47:40.424979/WSM_combined_v2.csv"
-    stations_name = "2024-07-04/2024-07-02T11:47:40.424979/WSM_combined_v2.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-10T11:27:05.934023/Democracy Club - Idox_2026-03-10 10-57.csv"
+    stations_name = "2026-05-07/2026-03-10T11:27:05.934023/Democracy Club - Idox_2026-03-10 10-57.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
-            "10033552804",  # FLAT 3, 2 MORETON CLOSE, LONDON
-            "10033618772",  # THIRD FLOOR 48 CHANDOS PLACE, LONDON
             "100022749688",  # 50 ELNATHAN MEWS, LONDON
             "10033529430",  # HYDE PARK BUCK HILL LODGE BAYSWATER ROAD, LONDON
             "100023382377",  # QUEENS GATE LODGE, HYDE PARK GATE, LONDON
             "10033641257",  # HOUSEBOAT WILLOW OPPOSITE 49 BLOMFIELD ROAD, LONDON
-            "10033575787",  # UPPER PENTHOUSE FLAT 12 PARK STREET, LONDON
-            "10033575789",  # LOWER PENTHOUSE FLAT 12 PARK STREET, LONDON
+            "10033654811",  # BOATHOME LILA, BLOMFIELD ROAD, LONDON
+            "10033622302",  # HOUSEBOAT DUENDE, BLOMFIELD ROAD, LONDON
+            "10033649347",  # GROUND FLOOR FLAT 164 PORTNALL ROAD, LONDON
         ]:
             return None
 
-        if record.housepostcode in [
+        if record.postcode in [
             # split
-            "W2 5HA",
-            "W1K 7JB",
-            "W2 6PF",
+            "NW8 8LH",
             "SW1P 4JZ",
             "SW1V 4AF",
-            "W9 3DW",
+            "W1K 7JB",
+            "W2 5HA",
             "W9 2AL",
-            "NW8 8LH",
+            "W9 3DW",
         ]:
             return None
 
