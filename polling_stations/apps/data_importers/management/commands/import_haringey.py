@@ -13,6 +13,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # station name update from council
+        # OLD: Hornsey Parish Church Cranley Gardens London
+        if record.polling_place_id == "12781":
+            record = record._replace(
+                polling_place_name="St Mary with St George Hornsey Parish Church"
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
