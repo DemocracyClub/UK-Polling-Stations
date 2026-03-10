@@ -53,7 +53,7 @@ class Command(BaseCommand):
             )
             .filter(
                 doterm="",  # Active postcodes (not terminated)
-                usertype="0",  # Standard geographic postcodes
+                usrtypind="0",  # Standard geographic postcodes
             )
             .exclude(
                 # Exclude postcodes that exist in the Address model
