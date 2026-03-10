@@ -9,26 +9,24 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
-        # the following stations postcodes are being confirmed by the council:
-        # # 'Village Hall/Neuadd Y Pentref, Ysceifiog, Nr Holywell/Nr Treffynnon, CH8 8NR' (id: 8249)
-        # if record.polling_place_id == "8249":
-        #     record = record._replace(polling_place_postcode="CH8 8NJ")
+        # The postcodes of the following stations have been confirmed by the council:
 
-        # # 'Village Hall/Neuadd Y Pentref, Rhesycae/Rhes-y-Cae, Nr Holywell/Nr Treffynnon, CH8 8JR' (id: 8233)
-        # if record.polling_place_id == "8233":
-        #     record = record._replace(polling_place_postcode="CH8 8JG")
+        # Village Hall/Neuadd Y Pentref, Rhesycae/Rhes-y-Cae, Nr Holywell/Nr Treffynnon, CH8 8JR
+        # Community Centre/Canolfan Gymunedol, Mynydd Isa, Mold/Yr Wyddgrug, CH7 6UH
 
-        # # 'Rhosesmor Village Hall, Neuadd Bentref Rhosesmor, Rhosesmor, Mold/Yr Wyddgrug, CH7 6PQ' (id: 8237)
-        # if record.polling_place_id == "8237":
-        #     record = record._replace(polling_place_postcode="CH7 6WF")
+        # Postcode changes confirmed by council:
+        # Village Hall/Neuadd Y Pentref, Ysceifiog, Nr Holywell/Nr Treffynnon, CH8 8NR
+        if record.polling_place_id == "8249":
+            record = record._replace(polling_place_postcode="CH8 8NJ")
 
-        # # 'St. Michael`s Church/Eglwys Sant Mihangel, Brynford/Brynffordd, CH8 8AD' (id: 8223)
-        # if record.polling_place_id == "8223":
-        #     record = record._replace(polling_place_postcode="CH8 8LQ")
+        # Rhosesmor Village Hall, Neuadd Bentref Rhosesmor, Rhosesmor, Mold/Yr Wyddgrug, CH7 6PQ
+        if record.polling_place_id == "8237":
+            record = record._replace(polling_place_postcode="CH7 6WF")
 
-        # # 'Community Centre/Canolfan Gymunedol, Mynydd Isa, Mold/Yr Wyddgrug, CH7 6UH' (id: 8210)
-        # if record.polling_place_id == "8210":
-        #     record = record._replace(polling_place_postcode="CH7 6UY")
+        # St. Michael`s Church/Eglwys Sant Mihangel, Brynford/Brynffordd, CH8 8AD
+        if record.polling_place_id == "8223":
+            record = record._replace(polling_place_postcode="CH8 8LQ")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
