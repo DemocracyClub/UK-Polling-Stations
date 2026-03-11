@@ -683,7 +683,7 @@ class BaseFcsDemocracyClubApiImporter(
         if record["latitude"] not in badvalues and record["longitude"] not in badvalues:
             # if we've got points, use them
             return Point(
-                float(record["latitude"]), float(record["longitude"]), srid=self.srid
+                float(record["longitude"]), float(record["latitude"]), srid=self.srid
             )
         if not self.allow_station_point_from_postcode:
             return None
