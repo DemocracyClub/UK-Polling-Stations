@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from core.slack_client import SlackClient
-from settings.constants.slack import BOTS_CHANNEL, BOTS_TESTING_CHANNEL
+from polling_stations.settings.constants.slack import BOTS_CHANNEL, BOTS_TESTING_CHANNEL
 from polling_stations.db_routers import (
     get_principal_db_name,
     get_principal_db_connection,
