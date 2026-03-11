@@ -1,41 +1,33 @@
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseFcsDemocracyClubApiImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseFcsDemocracyClubApiImporter):
     council_id = "SWK"
-    addresses_name = (
-        "2024-07-04/2024-06-06T12:15:04.024597/Democracy_Club__04July2024_Southwark.tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-06T12:15:04.024597/Democracy_Club__04July2024_Southwark.tsv"
-    )
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    elections = ["2026-05-07"]
+    fcs_election_id = 58
 
     def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+        uprn = record.get(self.residential_uprn_field)
 
-        if uprn in []:
+        if (
+            uprn
+            in [
+                10097123458,  # FLAT 52 WALTER HOW COURT 840 OLD KENT ROAD, LONDON
+                10097123449,  # FLAT 43 WALTER HOW COURT 840 OLD KENT ROAD, LONDON
+                10096039125,  # 3A PLOUGH WAY, LONDON
+                10009789022,  # BETRA COMMUNITY HALL, 28 RYEGATES, BRAYARDS ROAD ESTATE, LONDON
+                10096875401,  # 79 THORNHILL HOUSE ILDERTON ROAD, LONDON
+            ]
+        ):
             return None
-
-        if record.addressline6 in [
+        if record.get(self.postcode_field).strip() in [
             # split
-            "SE16 6AZ",
+            "SE16 3RT",
             "SE5 0SY",
+            "SE16 6AZ",
             "SE15 6BJ",
-            "SE5 7HY",
             # suspect:
             "SE24 9JQ",
         ]:
             return None
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # station point correction from council for:
-        # Thomas Calton Centre, Corner of Alpha Street and Choumert Road, London
-        if record.polling_place_id == "18506":
-            record = record._replace(
-                polling_place_easting="534244",
-                polling_place_northing="176074",
-            )
-        return super().station_record_to_dict(record)
