@@ -1,29 +1,39 @@
-from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
+from data_importers.management.commands import BaseFcsDemocracyClubApiImporter
 
 
-class Command(BaseXpressDemocracyClubCsvImporter):
+class Command(BaseFcsDemocracyClubApiImporter):
     council_id = "TES"
-    addresses_name = (
-        "2024-07-04/2024-05-28T20:43:41.926480/Democracy_Club__04July2024.tsv"
-    )
-    stations_name = (
-        "2024-07-04/2024-05-28T20:43:41.926480/Democracy_Club__04July2024.tsv"
-    )
-    elections = ["2024-07-04"]
-    csv_encoding = "windows-1252"
-    csv_delimiter = "\t"
+    elections = ["2026-05-07"]
+    fcs_election_id = 99
 
-    def address_record_to_dict(self, record):
-        uprn = record.property_urn.strip().lstrip("0")
+    def station_record_to_dict(self, record):
+        station_id = record.get(self.station_id_field)
 
-        if uprn in [
-            "200000704153",  # WOODLANDS, LOCKES DROVE, PILL HEATH, ANDOVER
-        ]:
-            return None
-        if record.addressline6 in [
-            # split
-            "SP11 0HB",
-            "SO51 6EB",
-        ]:
-            return None
-        return super().address_record_to_dict(record)
+        # add point for: Weir Link Community Centre, 33 Weir Road, London, SW12 0NU
+        if (
+            station_id
+            in [
+                14725,  # Personal Best Education Lounge The Mountbatten School Whitenap Lane Romsey
+                14747,  # Sports Pavilion, Abbottswood Sports Ground Cutforth Way Romsey Hampshire
+                14737,  # Portakabin at Sports Field Kiel Drive Saxon Fields Andover Hampshire
+            ]
+        ):
+            record["longitude"] = 0
+            record["latitude"] = 0
+
+        return super().station_record_to_dict(record)
+
+    # def address_record_to_dict(self, record):
+    #     uprn = record.property_urn.strip().lstrip("0")
+    #
+    #     if uprn in [
+    #         "200000704153",  # WOODLANDS, LOCKES DROVE, PILL HEATH, ANDOVER
+    #     ]:
+    #         return None
+    #     if record.addressline6 in [
+    #         # split
+    #         "SP11 0HB",
+    #         "SO51 6EB",
+    #     ]:
+    #         return None
+    #     return super().address_record_to_dict(record)
