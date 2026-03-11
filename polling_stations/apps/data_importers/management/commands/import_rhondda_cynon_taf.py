@@ -58,6 +58,7 @@ class Command(BaseHalarose2026UpdateCsvImporter):
                 pollingstationname="BLAENGWAWR PRIMARY SCHOOL",
                 pollingstationaddress1="GWAWR STREET",
                 pollingvenueuprn="100101049452",
+                pollingstationpostcode="CF44 6YP",
             )
         return super().station_record_to_dict(record)
 
