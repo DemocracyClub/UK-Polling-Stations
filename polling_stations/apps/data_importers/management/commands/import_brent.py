@@ -34,4 +34,19 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             record = record._replace(xordinate="", yordinate="")
 
+        # The following station coordinates are from the council:
+        # Stonebridge Boxing Club (formerly Abbey Estate Community Centre) Queensbury Road Wembley
+        if record.stationcode in [
+            "3",
+            "4",
+        ]:
+            record = record._replace(xordinate="518724", yordinate="183310")
+
+        # UCFB Arch View House 16 First Way Wembley
+        if record.stationcode in [
+            "125",
+            "126",
+        ]:
+            record = record._replace(xordinate="519665", yordinate="185790")
+
         return super().station_record_to_dict(record)
