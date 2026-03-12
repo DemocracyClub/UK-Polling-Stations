@@ -18,6 +18,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # Hafan Deg Day Centre Grange Road Rhyl
         if record.polling_place_id == "13709":
             record = record._replace(polling_place_postcode="LL18 4BS")
+
+        # Station change from council:
+        # Addresses at: Ystafell Y Foryd / Foryd Room Canolfan Wellington/Wellington Centre Wellington Road Rhyl LL18 1LE
+        # Now go to: Neuadd Tref Y Rhyl / Rhyl Town Hall Ffordd Wellington / Wellington Road Rhyl LL18 1AB
+        if record.polling_place_id == "13732":
+            return None
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -35,5 +42,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "LL18 3AG",
         ]:
             return None
+
+        # Station change from council:
+        # Addresses at: Ystafell Y Foryd / Foryd Room Canolfan Wellington/Wellington Centre Wellington Road Rhyl LL18 1LE
+        # Now go to: Neuadd Tref Y Rhyl / Rhyl Town Hall Ffordd Wellington / Wellington Road Rhyl LL18 1AB
+        if record.polling_place_id == "13732":
+            record = record._replace(polling_place_id="13735")
 
         return super().address_record_to_dict(record)
