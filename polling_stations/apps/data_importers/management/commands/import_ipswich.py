@@ -28,6 +28,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # station change from council:
+        # OLD: Station Hotel, Burrell Road, Ipswich
+        # NEW: Ground Floor Unit – Grafton House, 15-17 Russell Road, Ipswich, IP1 2DE
+        if record.polling_place_id == "9770":
+            record = record._replace(
+                polling_place_name="Ground Floor Unit – Grafton House",
+                polling_place_address_1="15-17 Russell Road",
+                polling_place_postcode="IP1 2DE",
+                polling_place_uprn="10003880936",
+            )
         # Sikh Temple, Guru Nanak Gurdwara, 719 Bramford Road, Ipswich, IP1 5BD
         if record.polling_place_id == "9708":
             record = record._replace(
