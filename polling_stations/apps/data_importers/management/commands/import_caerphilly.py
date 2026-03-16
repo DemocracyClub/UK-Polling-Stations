@@ -76,4 +76,15 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         if record.pollingvenueid == "21":
             record = record._replace(pollingstationpostcode="CF81 8LW")
 
+        # GELLIGAER BOWLS CLUB, THE RECREATION GROUND, GLYNGAER, GELLIGAER, CF82 8FJ
+        if record.pollingvenueid == "164":
+            record = record._replace(pollingstationpostcode="CF82 8BU")
+
+        # PWLLYPANT VILLAGE HALL, WILKINS TERRACE, LLANBRADACH, CAERPHILLY, CF83 2NH
+        if record.pollingvenueid == "41":
+            record = record._replace(pollingstationpostcode="CF83 3SA")
+
+        # ST JOHNS AMBULANCE HALL PONTLLANFRAITH, ISLWYN PARK, LLANARTH ROAD, SPRINGFIELD, PONTLLANFRAITH, NP12 2LN
+        if record.pollingvenueid == "102":
+            record = record._replace(pollingstationpostcode="NP12 2LG")
         return super().station_record_to_dict(record)
