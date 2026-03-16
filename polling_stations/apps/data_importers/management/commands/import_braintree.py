@@ -5,12 +5,12 @@ from django.contrib.gis.geos import Point
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BRA"
     addresses_name = (
-        "2024-07-04/2024-06-10T10:50:28.559545/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-16T13:19:41.945873/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-10T10:50:28.559545/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-16T13:19:41.945873/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -34,20 +34,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "10006922317",  # SPAINS END FARM, CORNISH HALL END, BRAINTREE
                 "10095521841",  # 16 OTTER VALE, WITHAM
                 "10095522116",  # BURGHLEY HOUSE, HAVERHILL ROAD, HELIONS BUMPSTEAD, HAVERHILL
-                "10095521507",  # 12 LAXTON LANE, CRESSING, BRAINTREE
+                "10095522114",  # BURFORDS, HAVERHILL ROAD, HELIONS BUMPSTEAD, HAVERHILL
             ]
         ):
             return None
 
         if record.post_code in [
             # splits
-            "CM7 4QH",
-            "CM8 1HS",
             "CM7 1XX",
-            "CO10 7DH",
+            "CM8 1HS",
+            "CM7 4QH",
             # supect
-            "CM7 3JW",  # 6 - 96 EAST STREET, BRAINTREE
-            "CM7 3JJ",  # 6 - 96 EAST STREET, BRAINTREE
+            "CM7 3JW",
+            "CM7 3JJ",
+            "CO9 4QS",
         ]:
             return None
 
@@ -56,8 +56,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        # Witham Public Hall, Collingwood Road, Witham
-        if rec["internal_council_id"] == "10693":
+        # location correction for: Witham Public Hall, Collingwood Road, Witham, CM8 1EU
+        if rec["internal_council_id"] == "11561":
             rec["location"] = Point(0.6392043768856295, 51.80161589272421, srid=4326)
 
         return rec
