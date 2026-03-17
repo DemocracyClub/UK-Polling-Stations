@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "EHA"
     addresses_name = (
-        "2024-07-04/2024-06-04T10:54:46.192856/Democracy_Club__04July2024 - EHDC.tsv"
+        "2026-05-07/2026-03-17T10:02:53.412815/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-04T10:54:46.192856/Democracy_Club__04July2024 - EHDC.tsv"
+        "2026-05-07/2026-03-17T10:02:53.412815/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -25,29 +25,39 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "10094121538",  # THE STABLES, COLDREY FARM, LOWER FROYLE, ALTON
                 "10009812215",  # THE LITTLE BARN, WOODSIDE FARM, GOSPORT ROAD, PRIVETT, ALTON
                 "10094121982",  # TREESIDE VIEW, THE SHRAVE, FOUR MARKS, ALTON
-                "10094122454",  # LUMBRY BARN, SELBORNE ROAD, ALTON
                 "10094123735",  # OAK LODGE, SELBORNE ROAD, ALTON
-                "1710105096",  # 21 WINCHESTER ROAD, ALTON
                 "10032905135",  # HALF ACRE, HAWKLEY ROAD, LISS
                 "10009812211",  # THE COTTAGE, LOWER BORDEAN, BORDEAN, PETERSFIELD
-                "10096347180",  # RHODESIDE THE SHRAVE, FOUR MARKS, ALTON
-                "100060259943",  # KITWOOD PLACE, SWELLING HILL, ROPLEY, ALRESFORD
                 "10032907288",  # KITCOMBE BARN, KITCOMBE LANE, FARRINGDON, ALTON
                 "1710109658",  # THE HERMITAGE, HEADLEY HILL ROAD, HEADLEY, BORDON
                 "100060265307",  # HIGHMEAD HOUSE, OLD ODIHAM ROAD, ALTON
+                "100060265308",  # HIGHMEAD COTTAGE, OLD ODIHAM ROAD, ALTON
+                "10094122604",  # CORNFLOWERS, DUNSELLS LANE, ROPLEY, ALRESFORD
+                "100060271325",  # RIVERSIDE, HOLLYWATER ROAD, BORDON
+                "10032907889",  # ROYAL MILITARY POLICE, KITCHENER HOUSE, LONGMOOR, LISS
             ]
         ):
             return None
 
         if record.addressline6 in [
             # splits
+            "GU33 7BL",
             "GU33 7BB",
-            "GU30 7QL",
             "PO8 0QR",
+            "GU30 7QL",
             # suspect
-            "GU34 3HL",
             "GU34 3BS",
+            "PO8 0RZ",
+            "GU35 0UP",
+            "GU35 0YU",
         ]:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # add missing postcode for: Guide Headquarters, Alderfield, Borough Road, Petersfield
+        if record.polling_place_id == "16364":
+            record = record._replace(polling_place_postcode="GU32 3LH")
+
+        return super().station_record_to_dict(record)
