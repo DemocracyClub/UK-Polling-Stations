@@ -299,6 +299,17 @@ CORS_ORIGIN_WHITELIST = ()
 CORS_URLS_REGEX = r"^/(api|embed)/.*$"
 
 INTERNAL_IPS = "127.0.0.1"
+
+# Django's SecurityMiddleware defaults to "same-origin", which prevents the browser from sending
+# the Referer header on cross-origin requests, e.g. to tile.openstreetmap.org.
+# "strict-origin-when-cross-origin" sends the origin (i.e. up to, and including the tld) as the
+# referer on cross-origin requests.
+# This doesn't give any information about which specific page on our site a user was visiting
+# (i.e. which might contain postcode/uprn) just that they came from one of our sits.
+# refs:
+#       - https://docs.djangoproject.com/en/5.2/ref/middleware/#referrer-policy
+#       - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 SITE_TITLE = _("Where Do I Vote?")
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
