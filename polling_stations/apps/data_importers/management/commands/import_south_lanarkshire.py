@@ -1,34 +1,43 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "SLK"
-    addresses_name = "2025-06-05/2025-05-20T09:21:33.949450/Eros_SQL_Output004.csv"
-    stations_name = "2025-06-05/2025-05-20T09:21:33.949450/Eros_SQL_Output004.csv"
-    elections = ["2025-06-05"]
+    addresses_name = "2026-05-07/2026-03-17T15:16:09.979745/Democracy Club - Idox_2026-03-17 14-23.csv"
+    stations_name = "2026-05-07/2026-03-17T15:16:09.979745/Democracy Club - Idox_2026-03-17 14-23.csv"
+    elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
-        if record.housepostcode in [
+        if record.uprn in [
+            "484131230",  # MUIRHOUSE FARM, THANKERTON, BIGGAR, ML12 6NJ
+            "484140163",  # WOODLEA, THANKERTON, BIGGAR, ML12 6NF
+            "484121979",  # BROOKFIELD, DEVONSIDE ROAD, CARMICHAEL, BIGGAR, ML12 6PQ
+            "484180542",  # SEAFORTH COURTYARD, BRAIDWOOD, CARLUKE, ML8 5NE
+            "484114775",  # HAWTHORN COTTAGE CARTLAND BRIDGE, LANARK, ML11 9UF
+            "484017180",  # 184 GLENFRUIN ROAD, BLANTYRE, GLASGOW, G72 9RL
+            "484011788",  # BARONHILL, HUNTHILL ROAD, BLANTYRE, GLASGOW, G72 9UY
+        ]:
+            return None
+
+        if record.postcode in [
             # split
-            "G75 8HZ",
-            "ML3 6UG",
-            "ML12 6PP",
             "G74 4DF",
-            "G72 7NT",
-            "G71 7TD",
-            "ML3 7QW",
             "G72 8WN",
-            "G75 8JW",
-            "ML10 6ET",
-            "ML12 6SW",
-            "G71 8DG",
-            "ML11 0BG",
+            "ML3 9GD",
             "G72 8FG",
-            "ML10 6FB",
-            "G75 8ND",
-            "G73 4AP",
+            "G72 7NT",
             "ML11 0PG",
+            "G75 8JW",
+            "G73 4AP",
             "G72 7XQ",
+            "ML10 6ET",
+            "ML11 0BG",
+            "G75 8ND",
+            "ML12 6PP",
+            "ML10 6FB",
+            "ML12 6SW",
+            # looks wrong
+            "ML12 6JJ",
         ]:
             return None
 
