@@ -4,18 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHL"
     addresses_name = (
-        "2026-03-05/2026-02-23T10:07:26.370972/Democracy_Club__07May2026 (3).tsv"
+        "2026-05-07/2026-02-23T09:23:31.641167/Democracy_Club__07May2026 (1).tsv"
     )
     stations_name = (
-        "2026-03-05/2026-02-23T10:07:26.370972/Democracy_Club__07May2026 (3).tsv"
+        "2026-05-07/2026-02-23T09:23:31.641167/Democracy_Club__07May2026 (1).tsv"
     )
-    elections = ["2026-03-05"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
-
-    # WARNING: Geocoding with UPRN. Station record postcode does not match addressbase postcode.
-    # Station address: 'Rettendon Memorial Hall, Main Road, Rettendon, Chelmsford, CM3 8DR' (id: 14871)
-    # File postcode matches gov website, given late date ignoring the warning
-    # https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/301383/contact-information
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -23,11 +18,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if (
             uprn
             in [
-                "100091441445",  # DAIRY FARM COTTAGE, CHELMER VILLAGE WAY, CHELMER VILLAGE, CHELMSFORD, CM2 6TD
-                "10093928515",  # CARAVAN 2 AT OAKVALE DOMSEY LANE, LITTLE WALTHAM, CHELMSFORD, CM3 3PS
-                "200004627211",  # BARNES MILL HOUSE, MILL VUE ROAD, CHELMER VILLAGE, CHELMSFORD, CM2 6NP
-                "100091430409",  # BASSMENT NIGHTCLUB, 16-18 WELLS STREET, CHELMSFORD, CM1 1HZ
+                "10094904420",  # 35 FLEMINGS FARM CLOSE, RUNWELL, WICKFORD, SS11 7PJ
+                "10094904422",  # 12 FLEMINGS FARM CLOSE, RUNWELL, WICKFORD, SS11 7PL
+                "10094904409",  # 23 FLEMINGS FARM CLOSE, RUNWELL, WICKFORD, SS11 7PJ
+                "100091430917",  # CORNER COTTAGE, MARGARETTING ROAD, WRITTLE, CHELMSFORD, CM1 3PJ
+                "10093928574",  # MONTPELIERS FARMHOUSE, MARGARETTING ROAD, WRITTLE, CHELMSFORD, CM1 3PJ
+                "100091440884",  # 1 BARRACK SQUARE, CHELMSFORD, CM2 0UU
                 "10093928503",  # HONEYSTONE, SOUTHEND ROAD, HOWE GREEN, CHELMSFORD, CM2 7TD
+                "100091430409",  # BASSMENT NIGHTCLUB, 16-18 WELLS STREET, CHELMSFORD, CM1 1HZ
             ]
         ):
             return None
@@ -37,9 +35,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "CM1 7AR",
             "CM1 1FU",
             "CM3 1ER",
-            "CM4 0LT",
             "CM4 9JL",
+            "CM4 0LT",
+            # looks wrong
+            "CM2 0UU",
         ]:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # Postcode correction for: Rettendon Memorial Hall, Main Road, Rettendon, Chelmsford, CM3 8DR
+        if record.polling_place_id == "14871":
+            record = record._replace(polling_place_postcode="CM3 8DP")
+        return super().station_record_to_dict(record)
