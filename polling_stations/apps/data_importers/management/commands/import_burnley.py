@@ -4,45 +4,41 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BUN"
     addresses_name = (
-        "2025-05-01/2025-02-27T11:43:17.412314/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-03-17T08:09:31.347670/Democracy_Club__07May2026.CSV"
     )
     stations_name = (
-        "2025-05-01/2025-02-27T11:43:17.412314/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-03-17T08:09:31.347670/Democracy_Club__07May2026.CSV"
     )
-    elections = ["2025-05-01"]
-    csv_delimiter = "\t"
+    elections = ["2026-05-07"]
+    csv_encoding = "windows-1252"
 
     def station_record_to_dict(self, record):
         # postcode and coords correction for: Rosewood Primary School Moorland Road Entrance Burnley, BB11 2NY
-        if record.polling_place_id == "6149":
+        if record.polling_place_id == "6692":
             record = record._replace(polling_place_postcode="BB11 2PH")
             record = record._replace(polling_place_easting=383468)
             record = record._replace(polling_place_northing=431243)
 
         # postcode and coords correction for: St Matthews Church Hall Albion Street Burnley, BB11 4JG
-        if record.polling_place_id == "6117":
+        if record.polling_place_id == "6707":
             record = record._replace(polling_place_postcode="BB11 4JJ")
             record = record._replace(polling_place_easting=383312)
             record = record._replace(polling_place_northing=431998)
 
         # postcode and coords correction for: Dorset Street Entrance Rosegrove Infants School Dorset Street Burnley, BB12 6HT
-        if record.polling_place_id == "6173":
+        if record.polling_place_id == "6684":
             record = record._replace(polling_place_postcode="BB12 6HW")
             record = record._replace(polling_place_easting=381471)
             record = record._replace(polling_place_northing=432575)
 
-        # postcode correction for: St Cuthbert`s Community Hall Sharp Street Burnley, BB10 1UG
-        if record.polling_place_id == "6307":
-            record = record._replace(polling_place_postcode="BB10 1UJ")
-
         # extract postcode from address for: Padiham Road Methodist Church, Brassey Street, Burnley, BB12 8AD
-        if record.polling_place_id in ["6142", "6130"]:
+        if record.polling_place_id in ["6760", "6786"]:
             record = record._replace(
                 polling_place_postcode="BB12 8AD", polling_place_address_4=""
             )
 
         # extract postcode from address for: MAIN ENTRANCE, Burnley Campus, Barden Lane, Burnley, BB10 1JD
-        if record.polling_place_id == "6315":
+        if record.polling_place_id == "6756":
             record = record._replace(
                 polling_place_postcode="BB10 1JD", polling_place_address_4=""
             )
@@ -60,6 +56,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.addressline6 in [
             # split
             "BB10 3JY",
+            "BB10 3PF",
             "BB11 2QR",
             "BB12 8EH",
             # suspect
