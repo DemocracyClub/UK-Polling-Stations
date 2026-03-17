@@ -4,34 +4,44 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "NTY"
     addresses_name = (
-        "2025-05-01/2025-03-10T17:28:20.212349/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-03-17T14:43:43.621138/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2025-05-01/2025-03-10T17:28:20.212349/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-03-17T14:43:43.621138/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2025-05-01"]
+    elections = ["2026-05-07"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if uprn in [
-            "47243589",  # 14 BEECH WAY, KILLINGWORTH
-            "47070238",  # EAST WIDEOPEN FARM COTTAGE, WIDEOPEN, NEWCASTLE UPON TYNE
-            "47014289",  # FLAT ABOVE LOW LIGHTS TAVERN BREWHOUSE BANK, NORTH SHIELDS
-            "47049172",  # 83 HOWDON ROAD, NORTH SHIELDS
-            "47049170",  # 81 HOWDON ROAD, NORTH SHIELDS
-            "47049168",  # 79 HOWDON ROAD, NORTH SHIELDS
-            "47229242",  # REDESDALE COURT, RAKE LANE, NORTH SHIELDS
-        ]:
+        if (
+            uprn
+            in [
+                "47247521",  # 1 UPPER CAMDEN STREET, NORTH SHIELDS, NE30 1QG
+                "47001096",  # 7A ALBION ROAD, NORTH SHIELDS, NE30 2RJ
+                "47000579",  # FLAT ABOVE THE JOLLY BOWMAN ADDINGTON DRIVE, HADRIAN PARK, WALLSEND, NE28 9UR
+                "47070238",  # EAST WIDEOPEN FARM COTTAGE, WIDEOPEN, NEWCASTLE UPON TYNE, NE13 6DW
+                "47084844",  # FLAT ABOVE STATION HOTEL STATION ROAD, KILLINGWORTH, NE12 6RA
+                "47243589",  # 14 BEECH COURT, CAMPERDOWN, NEWCASTLE UPON TYNE, NE12 5AE
+                "47243589",  # 14 BEECH WAY, KILLINGWORTH
+                "47070238",  # EAST WIDEOPEN FARM COTTAGE, WIDEOPEN, NEWCASTLE UPON TYNE
+                "47014289",  # FLAT ABOVE LOW LIGHTS TAVERN BREWHOUSE BANK, NORTH SHIELDS
+                "47229242",  # REDESDALE COURT, RAKE LANE, NORTH SHIELDS
+            ]
+        ):
             return None
 
         if record.addressline6 in [
             # splits
-            "NE12 8EE",
+            "NE28 8BQ",
+            "NE29 8RR",
             # suspect
             "NE28 8AQ",
+            "NE28 8BN",
+            "NE12 6AA",
+            "NE13 6EN",
         ]:
             return None
 
