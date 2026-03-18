@@ -40,6 +40,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # Station chang from council
+        # OLD: Dourdan Pavilion, off the Causeway, Great Dunmow CM6 2AA
+        # NEW: The Garden Room, Rear of St.Mary's Church, Church Street, Great Dunmow, CM6 2AE
+        if record.polling_place_id == "2476":
+            record = record._replace(
+                polling_place_name="The Garden Room",
+                polling_place_address_1="Rear of St.Mary's Church",
+                polling_place_address_2="Church Street",
+                polling_place_address_3="Great Dunmow",
+                polling_place_postcode="CM6 2AE",
+            )
+
         rec = super().station_record_to_dict(record)
 
         # St. Mary`s CoE Foundation Primary School, Stansted School Hall Hampton Road Stansted CM24 8FE
