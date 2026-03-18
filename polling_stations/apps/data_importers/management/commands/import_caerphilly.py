@@ -26,6 +26,11 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
+        # UPRN change for station:
+        # THE NOOK CAFE FORMER PUDDLERS ARMS PLANTATION TERRACE RHYMNEY TREDEGAR NP22 5PX
+        if self.get_station_hash(record) == "4-the-nook-cafe-former-puddlers-arms":
+            record = record._replace(pollingvenueuprn="43180671")
+
         # The council have agreed to the following postcode changes:
 
         # PENYBRYN VILLAGE HALL, TROSNANT CRESCENT, PENYBRYN, HENGOED, CF82 7GF
