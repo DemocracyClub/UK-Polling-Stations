@@ -25,7 +25,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from uk_geo_utils.helpers import Postcode
 
-from .councils import CouncilDataSerializer, tmp_fix_parl_24_scotland_details
+from .councils import (
+    CouncilDataSerializer,
+    tmp_fix_sp_26_details,
+)
 from .fields import PointField
 from .mixins import parse_qs_to_python
 from .pollingstations import PollingStationGeoSerializer
@@ -192,7 +195,7 @@ class AddressViewSet(ViewSet):
         ret["polling_station"] = None
         ee = self.get_ee_wrapper(address, request.query_params)
         has_election = ee.has_election()
-        ret["council"] = tmp_fix_parl_24_scotland_details(ret["council"], ee)
+        ret["council"] = tmp_fix_sp_26_details(ret["council"], ee)
 
         # An address might have an election but we might not know the polling station.
         if has_election and address.polling_station_id:

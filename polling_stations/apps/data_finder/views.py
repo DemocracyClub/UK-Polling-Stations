@@ -4,7 +4,7 @@ from typing import Optional
 from django.utils.safestring import mark_safe
 
 from addressbase.models import Address
-from api.councils import tmp_fix_parl_24_scotland_details
+from api.councils import tmp_fix_sp_26_details
 from councils.models import Council
 from django.conf import settings
 from django.contrib import messages
@@ -301,7 +301,7 @@ class BasePollingStationView(
         context["postcode"] = self.postcode.with_space
         context["location"] = self.location
         context["council"] = self.council
-        context["council"] = tmp_fix_parl_24_scotland_details(context["council"], ee)
+        context["council"] = tmp_fix_sp_26_details(context["council"], ee)
         context["station"] = self.station
         context["directions"] = self.directions
         context["we_know_where_you_should_vote"] = self.we_know_where_you_should_vote()
