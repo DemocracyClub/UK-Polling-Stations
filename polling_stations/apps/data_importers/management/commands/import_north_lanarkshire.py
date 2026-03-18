@@ -1,13 +1,13 @@
 from addressbase.models import UprnToCouncil
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 from django.template.defaultfilters import slugify
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "NLK"
-    addresses_name = "2024-07-04/2024-06-12T11:58:06.789209/NLK_combined.csv"
-    stations_name = "2024-07-04/2024-06-12T11:58:06.789209/NLK_combined.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-18T09:20:01.974806/Democracy Club - Idox_2026-03-17 14-28.csv"
+    stations_name = "2026-05-07/2026-03-18T09:20:01.974806/Democracy Club - Idox_2026-03-17 14-28.csv"
+    elections = ["2026-05-07"]
 
     def get_station_hash(self, record):
         # Otherwise the masonic halls in Coatbridge get confused with each other
@@ -15,9 +15,9 @@ class Command(BaseHalaroseCsvImporter):
             [
                 record.pollingstationnumber.strip(),
                 slugify(record.pollingstationname.strip())[:60],
-                slugify(record.pollingstationaddress_1.strip()),
-                slugify(record.pollingstationaddress_2.strip()),
-                slugify(record.pollingstationaddress_3.strip()),
+                slugify(record.pollingstationaddress1.strip()),
+                slugify(record.pollingstationaddress2.strip()),
+                slugify(record.pollingstationaddress3.strip()),
             ]
         )[:100]
 
@@ -37,22 +37,10 @@ class Command(BaseHalaroseCsvImporter):
 
         for record in data:
             if record.uprn in council_uprns:
-                self.COUNCIL_STATIONS.add(self.get_station_hash(record))
-
-    def station_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
-            return None
-
-        # COMMUNITY EDUCATION CENTRE, 2 CLARK STREET, AIRDRIE ML6 6DQ
-        if (
-            self.get_station_hash(record)
-            == "1-community-education-centre-2-clark-street-airdrie-"
-        ):
-            record = record._replace(pollingstationpostcode="")
-        return super().station_record_to_dict(record)
+                self.COUNCIL_STATIONS.add(record.pollingvenueid)
 
     def address_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+        if record.pollingvenueid not in self.COUNCIL_STATIONS:
             return None
 
         uprn = record.uprn.strip().lstrip("0")
@@ -64,44 +52,45 @@ class Command(BaseHalaroseCsvImporter):
         ]:
             return None
 
-        if record.housepostcode in [
-            # split
-            "ML4 1RF",
-            "ML1 3FD",
-            "G67 2DL",
-            "ML6 8HQ",
-            "ML1 3GE",
-            "ML1 3JW",
-            "ML5 5QH",
-            "ML1 2TD",
-            "ML1 4TU",
-            "ML6 9BA",
-            "G69 8BW",
-            "ML6 8QN",
-            "G65 9NG",
-            "ML4 2RE",
+        if record.postcode in (
+            # splits
             "G33 6GN",
-            "ML1 2BP",
-            "ML6 7SE",
-            "ML2 9NG",
-            "G69 9JF",
+            "ML1 3GE",
+            "ML1 3FD",
+            "G69 8BW",
             "G67 2AG",
-            "ML6 8LW",
+            "ML2 8NB",
+            "G69 0AG",
+            "ML6 8HQ",
+            "ML1 3JW",
+            "ML1 2TD",
+            "ML4 2RE",
+            "G67 2DL",
             "G68 9DB",
-            "ML6 8JE",
+            "ML5 5QH",
+            "ML1 4TU",
+            "ML4 1RF",
+            "ML1 5TU",
+            "ML6 7SE",
+            "ML6 8LW",
+            "G65 9NG",
+            "ML6 9BA",
+            "ML6 8QN",
             # suspect
             "ML6 7SR",  # DYKEHEAD ROAD, RIGGEND, AIRDRIE
-            "G67 1JE",
-            "G67 1JQ",
-            "G67 1JB",
-            "G67 1JG",
-            "G67 1JJ",
-            "G67 1JN",
-            "G67 1JF",
-            "G67 1JL",
-            "G67 1JH",
-            "G67 1JD",
-        ]:
+        ):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        if record.pollingvenueid not in self.COUNCIL_STATIONS:
+            return None
+
+        # COMMUNITY EDUCATION CENTRE, 2 CLARK STREET, AIRDRIE ML6 6DQ
+        if (
+            self.get_station_hash(record)
+            == "1-community-education-centre-2-clark-street-airdrie-"
+        ):
+            record = record._replace(pollingstationpostcode="")
+        return super().station_record_to_dict(record)
