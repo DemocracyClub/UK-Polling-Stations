@@ -175,9 +175,11 @@ class CouncilCSVViewSet(ReadOnlyModelViewSet):
     )
 
 
-def tmp_fix_parl_24_scotland_details(council, ee_wrapper):
+def tmp_fix_sp_26_details(council, ee_wrapper):
     for ballot in getattr(ee_wrapper, "ballots", []):
-        if details := settings.PARL_24_ID_TO_CONTACT_DETAILS.get(ballot["election_id"]):
+        if details := settings.SP_CONSTITUENCY_26_ID_TO_CONTACT_DETAILS.get(
+            ballot["election_id"]
+        ):
             for k, v in details.items():
                 setattr(council, k, v)
             return council

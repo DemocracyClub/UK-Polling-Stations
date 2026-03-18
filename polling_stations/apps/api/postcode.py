@@ -16,7 +16,7 @@ from rest_framework.viewsets import ViewSet
 from uk_geo_utils.helpers import AddressSorter, Postcode
 
 from .address import PostcodeResponseSerializer, get_bug_report_url
-from .councils import tmp_fix_parl_24_scotland_details
+from .councils import tmp_fix_sp_26_details
 from .mixins import parse_qs_to_python
 
 
@@ -115,7 +115,7 @@ class PostcodeViewSet(ViewSet):
         ee = self.get_ee_wrapper(postcode, rh, request.query_params)
         has_election = ee.has_election()
         if has_election:
-            ret["council"] = tmp_fix_parl_24_scotland_details(ret["council"], ee)
+            ret["council"] = tmp_fix_sp_26_details(ret["council"], ee)
 
             # get polling station if there is an election in this area
             ret["polling_station_known"] = False
