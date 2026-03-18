@@ -203,9 +203,6 @@ class EEWrapper(BaseEEWrapper):
         if not self.request_success:
             return []
         ballots = [e for e in self.elections if e["group_type"] is None]
-        ballots = [
-            e for e in ballots if e["election_id"] not in settings.ELECTION_BLACKLIST
-        ]
         return sorted(ballots, key=lambda k: k["poll_open_date"])
 
     def get_future_election_dates(self):
