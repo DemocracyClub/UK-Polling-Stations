@@ -195,24 +195,6 @@ class EveryElectionWrapperTests(TestCase):
             ee = EEWrapper(get_data_only_group(), request_success=True)
             self.assertTrue(ee.has_election())
 
-    @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        ELECTION_BLACKLIST=["foo.bar.baz.date"],
-    )
-    def test_some_blacklisted(self):
-        ee = EEWrapper(get_data_with_elections(), request_success=True)
-        self.assertTrue(ee.has_election())
-        self.assertFalse(ee.multiple_elections)
-
-    @override_settings(
-        EVERY_ELECTION={"CHECK": True, "HAS_ELECTION": True},
-        ELECTION_BLACKLIST=["foo.bar.baz.date", "foo.bar.qux.date"],
-    )
-    def test_all_blacklisted(self):
-        ee = EEWrapper(get_data_with_elections(), request_success=True)
-        self.assertFalse(ee.has_election())
-        self.assertFalse(ee.multiple_elections)
-
     def test_get_voter_id_status_all_ballots_need_id(self):
         ee = EEWrapper(
             get_data_all_ballots_have_id_requirements(), request_success=True

@@ -15,10 +15,6 @@ to see results even if there is no election happening
 """
 EVERY_ELECTION = {"CHECK": True, "HAS_ELECTION": True}
 
-ELECTION_BLACKLIST = [
-    "local.epping-forest.moreton-and-fyfield.by.2018-05-03"  # uncontested
-]
-
 NEXT_CHARISMATIC_ELECTION_DATES = ["2026-05-07"]
 
 if data_path := os.environ.get("ELECTION_PARQUET_DATA_PATH", False):
