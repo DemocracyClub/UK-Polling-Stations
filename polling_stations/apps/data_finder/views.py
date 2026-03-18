@@ -1,6 +1,5 @@
 import abc
 from datetime import datetime
-from typing import Optional
 from django.utils.safestring import mark_safe
 
 from addressbase.models import Address
@@ -109,22 +108,6 @@ class LanguageMixin(object):
         return ""
 
 
-def get_date_context(election_date: Optional[str]) -> dict:
-    if election_date:
-        election_date: datetime = timezone.make_aware(
-            datetime.strptime(election_date, "%Y-%m-%d")
-        )
-        polls_close = election_date.replace(hour=22)
-        now = timezone.now()
-        return {
-            "election_date": election_date,
-            "election_date_is_today": election_date.date() == now.date(),
-            "show_polls_open_card": now < polls_close,
-        }
-
-    return {"show_polls_open_card": False}
-
-
 class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
     form_class = PostcodeLookupForm
     template_name = "home.html"
@@ -134,19 +117,6 @@ class HomeView(WhiteLabelTemplateOverrideMixin, FormView):
         context = super().get_context_data(**kwargs)
 
         context["submit_url"] = reverse(namespace_view(self.namespace, "home"))
-
-        context["show_gb_id_messaging"] = getattr(
-            settings, "SHOW_GB_ID_MESSAGING", False
-        )
-
-        charismatic_dates = getattr(settings, "NEXT_CHARISMATIC_ELECTION_DATES", [])
-        try:
-            election_date = charismatic_dates[0]
-        except IndexError:
-            election_date = None
-
-        date_context = get_date_context(election_date)
-        context.update(**date_context)
 
         return context
 

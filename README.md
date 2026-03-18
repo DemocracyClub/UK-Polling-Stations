@@ -169,8 +169,6 @@ To remove a custom domain, follow these steps:
 As part of preparations for upcoming elections, `NEXT_CHARISMATIC_ELECTION_DATES` will need to be updated in
 `settings/constants/elections.py`. This var takes a ["YYYY-MM-DD",] format.
 
-To show messaging about the 2022 GB voter ID legislation, update `SHOW_GB_ID_MESSAGING` to `True` in `settings/constants/elections.py`.
-
 ## API
 
 This project has an API, however it's not designed for public consumption.
