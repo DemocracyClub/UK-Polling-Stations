@@ -287,6 +287,20 @@ class AddressList(AssignPollingStationsMixin):
                 postcode_lookup[postcode] = {record["polling_station_id"]}
         return [k for k, v in postcode_lookup.items() if len(v) > 1]
 
+    def remove_non_numeric_uprns(self):
+        bad_uprn_records = [e for e in self.elements if not e["uprn"].strip().isdigit()]
+        if bad_uprn_records:
+            self.logger.log_message(
+                logging.WARNING,
+                f"{len(bad_uprn_records)} addresses have non-numeric UPRNs in council data. These have been discarded.",
+            )
+            for record in bad_uprn_records:
+                self.logger.log_message(
+                    logging.INFO,
+                    f'"NON_NUMERIC_UPRN","{record.get("uprn")}","{record.get("address")}","{record.get("postcode")}"',
+                )
+        self.elements = [e for e in self.elements if e["uprn"].isdigit()]
+
     # TODO be more clever to report on duplicates.
     def remove_duplicate_uprns(self):
         uprn_lookup = self.get_uprn_lookup()
@@ -378,6 +392,7 @@ class AddressList(AssignPollingStationsMixin):
     def check_records(self):
         split_postcodes = self.get_council_split_postcodes()
         self.remove_records_missing_uprns()
+        self.remove_non_numeric_uprns()
         self.remove_duplicate_uprns()
         addressbase_data = get_uprn_hash_table(self.gss_code)
         self.remove_records_not_in_addressbase(addressbase_data)
