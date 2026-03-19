@@ -3,43 +3,29 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "TEN"
-    addresses_name = (
-        "2024-07-04/2024-06-04T09:33:44.379451/Democracy Club - Polling Districts.csv"
-    )
-    stations_name = (
-        "2024-07-04/2024-06-04T09:33:44.379451/Democracy Club - Polling Stations.csv"
-    )
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-19T10:47:08.499497/Democracy Club - Polling Districts 2026.csv"
+    stations_name = "2026-05-07/2026-03-19T10:47:08.499497/Democracy Club - Polling Stations 2026.csv"
+    elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
+        if (
+            record.uprn
+            in [
+                "10007943316",  # 48 NEW HALL LODGE PARK LOW ROAD, DOVERCOURT
+                "100090634997",  # 366A MAIN ROAD, HARWICH
+                "10096724996",  # SWEET PEA, MILL LANE, THORPE-LE-SOKEN, CLACTON-ON-SEA
+                "100091268553",  # 163 MEADOW VIEW PARK, ST. OSYTH ROAD, LITTLE CLACTON, CLACTON-ON-SEA
+            ]
+        ):
+            return None
+
         if record.postcode in [
+            # split
+            "CO13 0FZ",
             # suspect
-            "CO15 1HW",
-            "CO15 3BN",
-            "CO15 1JG",
-            "CO15 1JL",
+            "CO15 1HX",
         ]:
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # dirty workaround to remove 32 Colchester stations with no addresses assigned
-        # these records are ordered, we can just exclude them by station_code
-        if int(record.stationcode) > 77:
-            return None
-        # station change from council:
-        # old: The 1912 Centre, Kings Quay Street, Harwich, Essex CO12 3ES
-        # new: Temporary Unit, Wellington road car park, Wellington road, Harwich, Essex, CO12 3DL
-        if record.stationcode == "66":
-            record = record._replace(
-                add1="Wellington Road Car Park",
-                add2="Harwich",
-                placename="Temporary Unit",
-                pollingplaceid="53",
-                postcode="CO12 3DL",
-                xordinate="",
-                yordinate="",
-            )
-        return super().station_record_to_dict(record)
