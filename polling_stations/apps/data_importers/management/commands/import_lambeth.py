@@ -6,6 +6,7 @@ class Command(BaseFcsDemocracyClubApiImporter):
     elections = ["2026-05-07"]
     fcs_election_id = 52
 
+    # comment
     def station_record_to_dict(self, record):
         station_id = record.get(self.station_id_field)
 
