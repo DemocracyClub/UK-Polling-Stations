@@ -177,10 +177,11 @@ class CouncilCSVViewSet(ReadOnlyModelViewSet):
 
 def tmp_fix_sp_26_details(council, ee_wrapper):
     for ballot in getattr(ee_wrapper, "ballots", []):
-        if details := settings.SP_CONSTITUENCY_26_ID_TO_CONTACT_DETAILS.get(
+        if council_id := settings.SP_CONSTITUENCY_26_BALLOT_TO_COUNCIL.get(
             ballot["election_id"]
         ):
-            for k, v in details.items():
-                setattr(council, k, v)
-            return council
+            try:
+                return Council.objects.get(council_id=council_id)
+            except Council.DoesNotExist:
+                pass
     return council
