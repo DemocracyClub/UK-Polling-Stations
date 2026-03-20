@@ -1,18 +1,8 @@
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "STG"
-    addresses_name = "2024-07-04/2024-06-04T16:53:58.873569/Eros_SQL_Output009.csv"
-    stations_name = "2024-07-04/2024-06-04T16:53:58.873569/Eros_SQL_Output009.csv"
-    elections = ["2024-07-04"]
-
-    def address_record_to_dict(self, record):
-        if record.housepostcode in [
-            # split
-            "FK8 1TX",
-            "G63 9HS",
-            "FK7 0LS",
-        ]:
-            return None
-        return super().address_record_to_dict(record)
+    addresses_name = "2026-05-07/2026-03-20T15:51:13.206992/Democracy Club Stirling - Idox_2026-03-20 15-46.csv"
+    stations_name = "2026-05-07/2026-03-20T15:51:13.206992/Democracy Club Stirling - Idox_2026-03-20 15-46.csv"
+    elections = ["2026-05-07"]
