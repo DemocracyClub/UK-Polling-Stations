@@ -1,12 +1,12 @@
 from addressbase.models import UprnToCouncil
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "CLK"
-    addresses_name = "2024-07-04/2024-06-13T09:32:21.733682/CLK_combined.csv"
-    stations_name = "2024-07-04/2024-06-13T09:32:21.733682/CLK_combined.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-20T15:50:17.482256/Democracy Club Clackmannanshire and Dunblane - Idox_2026-03-20 15-48.csv"
+    stations_name = "2026-05-07/2026-03-20T15:50:17.482256/Democracy Club Clackmannanshire and Dunblane - Idox_2026-03-20 15-48.csv"
+    elections = ["2026-05-07"]
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
