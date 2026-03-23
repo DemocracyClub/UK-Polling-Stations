@@ -1,12 +1,12 @@
 from addressbase.models import UprnToCouncil
-from data_importers.management.commands import BaseHalaroseCsvImporter
+from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
-class Command(BaseHalaroseCsvImporter):
+class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "ELN"
-    addresses_name = "2024-07-04/2024-06-13T12:31:53.064062/ELN_combined_UTF-8.csv"
-    stations_name = "2024-07-04/2024-06-13T12:31:53.064062/ELN_combined_UTF-8.csv"
-    elections = ["2024-07-04"]
+    addresses_name = "2026-05-07/2026-03-23T10:20:31.527981/lothian_vjb_combined.csv"
+    stations_name = "2026-05-07/2026-03-23T10:20:31.527981/lothian_vjb_combined.csv"
+    elections = ["2026-05-07"]
 
     def pre_import(self):
         # We need to consider rows that don't have a uprn when importing data.
@@ -23,38 +23,43 @@ class Command(BaseHalaroseCsvImporter):
         data = self.get_addresses()
 
         for record in data:
-            # removes: Summerside Bowling Club 21 Summerside Street
-            if self.get_station_hash(record) == "112-summerside-bowling-club":
-                continue
             if record.uprn in council_uprns:
-                self.COUNCIL_STATIONS.add(self.get_station_hash(record))
+                self.COUNCIL_STATIONS.add(record.pollingvenueid)
 
     def address_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+        if record.pollingvenueid not in self.COUNCIL_STATIONS:
             return None
 
         uprn = record.uprn.strip().lstrip("0")
 
         if uprn in [
-            "138068895",  # 22 MEADOWSIDE, ABERLADY, LONGNIDDRY
+            "138000991",  # SEAFIELD HOUSE, EAST LINKS ROAD, DUNBAR
+            "138007056",  # 94 HIGH STREET, COCKENZIE, PRESTONPANS
+            "138072115",  # 30 SMEATON GARDENS, WHITECRAIG, MUSSELBURGH
         ]:
             return None
 
-        if record.housepostcode in [
-            # split
-            "EH41 4DQ",
-            "EH35 5ND",
-            "EH21 8EJ",
-            "EH31 2HS",
-            "EH21 6TB",
+        if record.postcode in (
+            # splits
             "EH32 0LN",
+            "EH41 4DQ",
+            "EH32 0FL",
+            "EH21 6TB",
+            "EH21 6TF",
+            "EH31 2HS",
+            "EH42 1ZL",
+            "EH21 8EJ",
+            "EH33 2PT",
+            "EH32 9GH",
+            "EH35 5ND",
             "EH39 5EY",
-        ]:
+        ):
             return None
+
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
+        if record.pollingvenueid not in self.COUNCIL_STATIONS:
             return None
 
         return super().station_record_to_dict(record)
