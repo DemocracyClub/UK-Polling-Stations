@@ -14,6 +14,8 @@ from rest_framework_csv.renderers import CSVRenderer
 from rest_framework_gis.fields import GeometrySerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
+from data_finder.helpers.every_election import EEWrapper
+
 
 def contact_type_to_dict(obj, contact_type):
     """
@@ -175,13 +177,25 @@ class CouncilCSVViewSet(ReadOnlyModelViewSet):
     )
 
 
-def tmp_fix_sp_26_details(council, ee_wrapper):
+def tmp_fix_sp_26_details(council: Council, ee_wrapper: EEWrapper) -> Council:
     for ballot in getattr(ee_wrapper, "ballots", []):
         if council_id := settings.SP_CONSTITUENCY_26_BALLOT_TO_COUNCIL.get(
             ballot["election_id"]
         ):
             try:
-                return Council.objects.get(council_id=council_id)
+                ro_council: Council = Council.objects.get(council_id=council_id)
+                ro_field_names = {
+                    "name",
+                    "electoral_services_email",
+                    "electoral_services_website",
+                    "electoral_services_postcode",
+                    "electoral_services_address",
+                    "electoral_services_phone_numbers",
+                }
+                for field_name in ro_field_names:
+                    field_value = getattr(ro_council, field_name)
+                    setattr(council, field_name, field_value)
+                return council
             except Council.DoesNotExist:
                 pass
     return council
