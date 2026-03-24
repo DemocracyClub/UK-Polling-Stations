@@ -5,12 +5,12 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "EAY"
     addresses_name = (
-        "2024-07-04/2024-06-12T17:12:37.552548/Democrcay club polling districts.csv"
+        "2026-05-07/2026-03-24T15:06:36.943466/Democracy club - Polling Districts.csv"
     )
     stations_name = (
-        "2024-07-04/2024-06-12T17:12:37.552548/Democracy Club polling stations.csv"
+        "2026-05-07/2026-03-24T15:06:36.943466/Democracy club - Polling Stations.csv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
 
     def pre_import(self):
@@ -34,11 +34,16 @@ class Command(BaseDemocracyCountsCsvImporter):
     def address_record_to_dict(self, record):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
+        uprn = record.uprn.lstrip("0").strip()
+        if uprn in [
+            "127058561",  # HIGH TODHILL FARM, FENWICK, KILMARNOCK
+            "127050308",  # MO DHACHAIDH COTTAGE, GATEHEAD, KILMARNOCK
+        ]:
+            return None
+
         if record.postcode in [
-            # split
-            "KA18 1UD",
-            "KA3 4BD",
-            "KA18 4QA",
+            # suspect
+            "KA1 2SL",
         ]:
             return None
 
@@ -51,11 +56,11 @@ class Command(BaseDemocracyCountsCsvImporter):
         # Removes wrong point for stations at:
         # NWKLEUS KIRKTON ROAD KILMARNOCK KA3 2DF
         if record.stationcode in [
-            "KAL16",
-            "KAL15",
-            "KAL14",
-            "KAL13",
-            "KAL12",
+            "KIV04",
+            "KIV05",
+            "KIV06",
+            "KIV07",
+            "KIV08",
         ]:
             record = record._replace(xordinate="", yordinate="")
         return super().station_record_to_dict(record)
