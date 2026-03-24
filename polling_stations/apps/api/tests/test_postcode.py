@@ -126,7 +126,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("DEF", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
-        self.assertTrue("advance_voting_station" in response.data)
+        self.assertTrue("advance_voting_stations" in response.data)
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
         self.assertIsInstance(response.data["postcode_location"], dict)
