@@ -1,6 +1,5 @@
 from typing import List
 
-from addressbase.models import UprnToCouncil
 from councils.models import Council
 from data_importers.base_importers import BaseBaseImporter, BaseImporter
 from pollingstations.models import AdvanceVotingStation
@@ -57,7 +56,4 @@ class AdvanceVotingMixin(BaseBaseImporter):
 
     def teardown(self, council):
         super().teardown(council)
-        UprnToCouncil.objects.filter(lad=council.geography.gss).update(
-            advance_voting_station=None
-        )
         AdvanceVotingStation.objects.filter(council=council).delete()

@@ -39,6 +39,16 @@ class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
             council=self.council,
         )
         advance_station.save()
-        UprnToCouncil.objects.filter(lad=self.council.geography.gss).update(
-            advance_voting_station=advance_station
+        through_model = UprnToCouncil.advance_voting_stations.through
+        uprn_ids = UprnToCouncil.objects.filter(
+            lad=self.council.geography.gss
+        ).values_list("uprn", flat=True)
+        through_model.objects.bulk_create(
+            [
+                through_model(
+                    uprntocouncil_id=uid,
+                    advancevotingstation_id=advance_station.id,
+                )
+                for uid in uprn_ids
+            ]
         )
