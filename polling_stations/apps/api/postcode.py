@@ -37,10 +37,16 @@ class PostcodeViewSet(ViewSet):
             return routing_helper.addresses[0].polling_station_with_elections()
         return None
 
-    def generate_advance_voting_station(self, routing_helper):
+    def generate_advance_voting_stations(self, routing_helper):
         if routing_helper.route_type == "single_address":
-            return routing_helper.addresses[0].uprntocouncil.advance_voting_station
-        return None
+            return [
+                avs
+                for avs in routing_helper.addresses[
+                    0
+                ].uprntocouncil.advance_voting_stations.all()
+                if avs.open_in_future
+            ]
+        return []
 
     def get_ee_wrapper(self, postcode, rh, query_params):
         query_params = parse_qs_to_python(query_params)
@@ -129,7 +135,7 @@ class PostcodeViewSet(ViewSet):
                 ret["council"] = ret["polling_station"].council
 
         # get advance voting station
-        ret["advance_voting_station"] = self.generate_advance_voting_station(rh)
+        ret["advance_voting_stations"] = self.generate_advance_voting_stations(rh)
 
         ret["metadata"] = ee.get_metadata()
 
