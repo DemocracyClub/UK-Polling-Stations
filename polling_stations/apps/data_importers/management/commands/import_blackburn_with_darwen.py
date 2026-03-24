@@ -3,13 +3,16 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BBD"
-    addresses_name = "2024-07-04/2024-06-24T14:23:42.710102/BBD_combined.tsv"
-    stations_name = "2024-07-04/2024-06-24T14:23:42.710102/BBD_combined.tsv"
-    elections = ["2024-07-04"]
-    csv_delimiter = "\t"
+    addresses_name = (
+        "2026-05-07/2026-03-24T11:41:56.121266/Democracy_Club__07May2026.CSV"
+    )
+    stations_name = (
+        "2026-05-07/2026-03-24T11:41:56.121266/Democracy_Club__07May2026.CSV"
+    )
+    elections = ["2026-05-07"]
 
     # Following warning checked and no correction needed:
-    # WARNING: Polling station Belthorn Primary School (5798) is in Hyndburn Borough Council (HYN)
+    # WARNING: Polling station Belthorn Primary School (6760) is in Hyndburn Borough Council (HYN)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -26,24 +29,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "10010322678",  # 150A BLACKBURN ROAD, DARWEN
             "100010759333",  # 83 SHORROCK LANE, BLACKBURN
             "100010732406",  # 53 BEECHWOOD DRIVE, BLACKBURN
+            "10096074998",  # FLAT AT 82-84 BOLTON ROAD, BLACKBURN
         ]:
             return None
 
         if record.addressline6 in [
             # splits
-            "BB1 7LT",
-            "BB3 2NQ",
             "BB1 7LS",
-            "BB1 1EB",
             "BB1 2NL",
-            "BB1 1JT",
+            "BB3 2NQ",
             # looks wrong
             "BB2 6TE",
             "BB2 2SS",
             "BB1 1JS",
             "BB3 3QP",
-            # "BB2 5FT",  # waiting for council response
-            # "BB2 5FX",  # waiting for council response
         ]:
             return None
 
