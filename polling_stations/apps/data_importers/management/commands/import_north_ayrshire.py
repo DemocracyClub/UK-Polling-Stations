@@ -5,12 +5,12 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "NAY"
     addresses_name = (
-        "2024-07-04/2024-06-12T17:11:05.868975/Democrcay club polling districts.csv"
+        "2026-05-07/2026-03-24T15:05:48.405682/Democracy club - Polling Districts.csv"
     )
     stations_name = (
-        "2024-07-04/2024-06-12T17:11:05.868975/Democracy Club polling stations.csv"
+        "2026-05-07/2026-03-24T15:05:48.405682/Democracy club - Polling Stations.csv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
 
     def pre_import(self):
@@ -23,7 +23,6 @@ class Command(BaseDemocracyCountsCsvImporter):
             UprnToCouncil.objects.exclude(
                 uprn__in=[
                     "126087302",  # in NAY, but assigned to station in EAY
-                    "127056800",  # in NAY, but assigned to station in EAY
                 ]
             )
             .filter(lad=self.council.geography.gss)
@@ -38,6 +37,19 @@ class Command(BaseDemocracyCountsCsvImporter):
 
     def address_record_to_dict(self, record):
         if record.stationcode not in self.COUNCIL_STATIONS:
+            return None
+
+        uprn = record.uprn.strip().lstrip("0")
+        if uprn in [
+            "126092854",  # 4 EILEAN CLOSE, LAMLASH, ISLE OF ARRAN
+            "126060794",  # LONGFORD COTTAGE, NETHERMAINS ROAD, KILWINNING
+        ]:
+            return None
+
+        if record.postcode in [
+            # suspect
+            "KA11 2HG",
+        ]:
             return None
 
         return super().address_record_to_dict(record)
