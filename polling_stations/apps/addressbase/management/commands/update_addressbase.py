@@ -49,7 +49,7 @@ class UprnToCouncilUpdater(BaseImporter):
 
     def import_data_to_temp_table(self):
         copy_string = f"""
-        COPY {self.temp_table_name} (uprn, lad, polling_station_id, advance_voting_station_id)
+        COPY {self.temp_table_name} (uprn, lad, polling_station_id)
         FROM STDIN
         WITH (FORMAT CSV, DELIMITER ',', null '\\N');
         """
@@ -195,12 +195,13 @@ class Command(BaseCommand):
                 addressbase_updater.rename_temp_table()
                 uprntocouncil_updater.rename_temp_table()
 
+                self.teardown()
+
                 # Add foreign keys back
                 if addressbase_updater.foreign_key_constraints:
                     addressbase_updater.add_foreign_keys()
                 if uprntocouncil_updater.foreign_key_constraints:
                     uprntocouncil_updater.add_foreign_keys()
-                self.teardown()
             self.stdout.write(
                 self.style.SUCCESS(
                     "Successfully updated both Addressbase and UPRN to Council tables"
