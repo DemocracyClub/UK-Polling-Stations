@@ -3,7 +3,6 @@
     <div class="ds-card-body">
         <h3>{% trans "Vote in advance" %}</h3>
         <address>
-            {{ advance_voting_station }}
             {{ advance_voting_station.name }}<br>
             {{ advance_voting_station.address|linebreaksbr }}
             {{ advance_voting_station.postcode }}
@@ -23,6 +22,6 @@
         </p> {% endcomment %}
     </div>
     {% if advance_voting_station.location %}
-        <div id="advance_voting_station_map" class="ds-card-image"></div>
+        <div id="advance_voting_station_map_{{ forloop.counter }}" class="ds-card-image"></div>
     {% endif %}
 </div>
