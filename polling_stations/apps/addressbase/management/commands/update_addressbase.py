@@ -49,7 +49,7 @@ class UprnToCouncilUpdater(BaseImporter):
 
     def import_data_to_temp_table(self):
         copy_string = f"""
-        COPY {self.temp_table_name} (uprn, lad, polling_station_id, advance_voting_station_id)
+        COPY {self.temp_table_name} (uprn, lad, polling_station_id)
         FROM STDIN
         WITH (FORMAT CSV, DELIMITER ',', null '\\N');
         """

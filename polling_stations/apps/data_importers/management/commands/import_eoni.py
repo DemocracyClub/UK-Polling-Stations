@@ -23,7 +23,7 @@ from polling_stations.db_routers import (
 from polling_stations.settings.constants.councils import NIR_IDS
 
 ADDRESSES_FIELDS = ["uprn", "address", "postcode", "location", "addressbase_postal"]
-UPRN_FIELDS = ["uprn", "lad", "polling_station_id", "advance_voting_station_id"]
+UPRN_FIELDS = ["uprn", "lad", "polling_station_id"]
 STATION_FIELDS = [
     "internal_council_id",
     "address",
@@ -192,7 +192,6 @@ class Command(BaseStationsImporter, CsvMixin):
             "uprn": row["PRO_UPRN"],
             "lad": "EONI",
             "polling_station_id": row["PREM_ID"],
-            "advance_voting_station_id": "NULL",
         }
 
     def pre_process_data(self, reprojected=False):
