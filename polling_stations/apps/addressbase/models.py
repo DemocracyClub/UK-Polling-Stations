@@ -107,10 +107,6 @@ class UprnToCouncil(models.Model):
                 name="uprntocouncil_uprn_like_idx",
                 opclasses=["varchar_pattern_ops"],
             ),
-            BTreeIndex(
-                fields=["advance_voting_station"],
-                name="uprntocouncil_adv_v_station_idx",
-            ),
         ]
 
     objects = AbstractOnsudManager()
@@ -123,11 +119,8 @@ class UprnToCouncil(models.Model):
         db_column="uprn",
     )
     polling_station_id = models.CharField(blank=True, max_length=255)
-    advance_voting_station = models.ForeignKey(
+    advance_voting_stations = models.ManyToManyField(
         "pollingstations.AdvanceVotingStation",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
     )
 
 
