@@ -5,12 +5,12 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "SAY"
     addresses_name = (
-        "2024-07-04/2024-06-19T10:07:09.998909/Democrcay club polling districts.csv"
+        "2026-05-07/2026-03-24T11:24:04.940661/Democracy club - Polling Districts.csv"
     )
     stations_name = (
-        "2024-07-04/2024-06-19T10:07:09.998909/Democracy Club polling stations.csv"
+        "2026-05-07/2026-03-24T11:24:04.940661/Democracy club - Polling Stations.csv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
 
     def pre_import(self):
@@ -23,7 +23,6 @@ class Command(BaseDemocracyCountsCsvImporter):
             UprnToCouncil.objects.exclude(
                 uprn__in=[
                     "141045107",  # in SAY, but assigned to station in EAY
-                    "141040335",  # in SAY, but assigned to station in EAY
                 ]
             )
             .filter(lad=self.council.geography.gss)
@@ -41,8 +40,8 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         if record.postcode in [
-            "KA6 6LU",
-            "KA1 5QR",
+            # splits
+            "KA19 8JQ",
         ]:
             return None
 
@@ -52,4 +51,15 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
 
+        # removing suspect coordinates for:
+        # SOUTHCRAIG SCHOOL, BELMONT AVENUE, AYR, KA7 2ND
+        if record.stationcode in [
+            "AYR43",
+            "AYR44",
+            "AYR45",
+        ]:
+            record = record._replace(
+                xordinate="0",
+                yordinate="0",
+            )
         return super().station_record_to_dict(record)
