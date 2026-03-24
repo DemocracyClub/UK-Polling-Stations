@@ -16,6 +16,13 @@ class Command(BaseHalarose2026UpdateCsvImporter):
                 pollingstationaddress4="HEOL CWMGARW",
                 pollingstationaddress5="BRYNAMAN",
             )
+
+        # Station replaced by existing station:
+        # OLD: THE LOUNGE/ROYAL OAK INN RHANDIRMWYN LLANDOVERY SA20 0NY
+        # NEW: Rhys Pritchard Memorial Hall, Llandovery SA20 0DD.
+        if self.get_station_hash(record) == "74-the-loungeroyal-oak-inn":
+            return None
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -61,4 +68,12 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         ]:
             return None
 
+        # Station replaced by existing station:
+        # OLD: THE LOUNGE/ROYAL OAK INN RHANDIRMWYN LLANDOVERY SA20 0NY
+        # NEW: Rhys Pritchard Memorial Hall, Llandovery SA20 0DD.
+        if self.get_station_hash(record) == "74-the-loungeroyal-oak-inn":
+            record = record._replace(
+                pollingstationname="Rhys Pritchard Memorial Hall",
+                pollingstationnumber="61",
+            )
         return super().address_record_to_dict(record)
