@@ -3,10 +3,9 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "DGY"
-    addresses_name = "2026-05-07/2026-03-24T17:03:44.423040/D&G Democracy Counts - Polling Districts 240326.csv"
-    stations_name = "2026-05-07/2026-03-24T17:03:44.423040/D&G Democracy Counts - Polling Stations 240326.csv"
+    addresses_name = "2026-05-07/2026-04-02T11:06:45.484130/DGY_districts_UTF8.csv"
+    stations_name = "2026-05-07/2026-04-02T11:06:45.484130/D&G Democracy Counts - Polling Stations 250326.csv"
     elections = ["2026-05-07"]
-    csv_encoding = "utf-16le"
 
     def station_record_to_dict(self, record):
         # Coord fix verified by council for:
