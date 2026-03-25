@@ -96,24 +96,15 @@ class AdvanceVotingTests(TestCase):
             )
 
             def add_advance_voting_stations(self):
-                through_model = UprnToCouncil.advance_voting_stations.through
                 for i, station in enumerate(
                     PollingStation.objects.filter(council_id=self.council_id)
                 ):
                     avs = AdvanceVotingStationFactory(pk=i)
                     avs.save()
-                    uprn_ids = UprnToCouncil.objects.filter(
+                    uprns = UprnToCouncil.objects.filter(
                         polling_station_id=station.internal_council_id
                     ).values_list("uprn", flat=True)
-                    through_model.objects.bulk_create(
-                        [
-                            through_model(
-                                uprntocouncil_id=uid,
-                                advancevotingstation_id=avs.id,
-                            )
-                            for uid in uprn_ids
-                        ]
-                    )
+                    self.assign_advance_voting_stations(avs, uprns)
 
         AdvanceVotingImporter().handle(
             self.council.pk, verbosity=3, include_past_elections=True

@@ -1,5 +1,7 @@
+from itertools import islice
 from typing import List
 
+from addressbase.models import UprnToCouncil
 from councils.models import Council
 from data_importers.base_importers import BaseBaseImporter, BaseImporter
 from pollingstations.models import AdvanceVotingStation
@@ -49,6 +51,34 @@ class AdvanceVotingMixin(BaseBaseImporter):
         raise NotImplementedError(
             "add_advance_voting_stations when using `AdvanceVotingMixin`"
         )
+
+    def assign_advance_voting_stations(
+        self, avs: AdvanceVotingStation, uprns: List[str]
+    ) -> int:
+        # There might be a lot of addresses if we assign all addresses in a council to a single station
+        # So we need to batch up the creation to avoid loading all the objects into memory.
+        # adapted from: https://docs.djangoproject.com/en/5.2/ref/models/querysets/#bulk-create
+        batch_size = 5000
+
+        through_model = UprnToCouncil.advance_voting_stations.through
+
+        # curved brackets are generator comprehension -> https://docs.python.org/3/tutorial/classes.html#generator-expressions
+        object_generator = (
+            through_model(
+                uprntocouncil_id=uprn,
+                advancevotingstation_id=avs.id,
+            )
+            for uprn in uprns
+        )
+
+        total = 0
+        while True:
+            batch = list(islice(object_generator, batch_size))
+            total += len(batch)
+            if not batch:
+                break
+            through_model.objects.bulk_create(batch, batch_size)
+        return total
 
     def post_import(self):
         super().post_import()
