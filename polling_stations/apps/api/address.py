@@ -123,7 +123,11 @@ class AddressViewSet(ViewSet):
 
     def get_object(self, **kwargs):
         assert "uprn" in kwargs
-        return Address.objects.get(uprn=kwargs["uprn"])
+        return (
+            Address.objects.select_related("uprntocouncil")
+            .prefetch_related("uprntocouncil__advance_voting_stations")
+            .get(uprn=kwargs["uprn"])
+        )
 
     def get_ee_wrapper(self, address, query_params):
         query_params = parse_qs_to_python(query_params)

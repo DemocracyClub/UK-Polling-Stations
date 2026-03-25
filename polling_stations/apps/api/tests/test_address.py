@@ -1,6 +1,6 @@
 import datetime
 
-from addressbase.models import Address
+from addressbase.models import Address, UprnToCouncil
 from api.address import AddressViewSet
 from councils.tests.factories import CouncilFactory
 from data_importers.event_types import DataEventType
@@ -15,6 +15,7 @@ from pollingstations.models import (
     PollingStation,
     VisibilityChoices,
 )
+from pollingstations.tests.factories import AdvanceVotingStationFactory
 from rest_framework.exceptions import APIException
 from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
@@ -248,6 +249,22 @@ class AddressTest(TestCase):
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual(1, len(response.data["addresses"]))
         self.assertEqual(1, len(response.data["ballots"]))
+
+    def test_advance_voting_stations_prefetched(self):
+        utc = UprnToCouncil.objects.get(pk="200")
+        avs = AdvanceVotingStationFactory(
+            council_id="ABC",
+            opening_times=[["2099-01-01", "08:00", "20:00"]],
+        )
+        utc.advance_voting_stations.add(avs)
+
+        # get_object() is how retrieve() fetches the address;
+        # the M2M should be prefetched so no extra query is needed
+        address = self.endpoint.get_object(uprn="200")
+        with self.assertNumQueries(0):
+            stations = list(address.uprntocouncil.advance_voting_stations.all())
+        self.assertEqual(len(stations), 1)
+        self.assertEqual(stations[0].pk, avs.pk)
 
     def test_bad_slug(self):
         # this address is not in our fixture
