@@ -334,7 +334,10 @@ class PostcodeView(BasePollingStationView):
 class AddressView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
         self.address = get_object_or_404(
-            Address.objects.select_related("uprntocouncil"), uprn=self.kwargs["uprn"]
+            Address.objects.select_related("uprntocouncil").prefetch_related(
+                "uprntocouncil__advance_voting_stations"
+            ),
+            uprn=self.kwargs["uprn"],
         )
         self.postcode = Postcode(self.address.postcode)
         context = self.get_context_data(**kwargs)
