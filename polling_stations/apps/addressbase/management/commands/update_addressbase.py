@@ -195,13 +195,12 @@ class Command(BaseCommand):
                 addressbase_updater.rename_temp_table()
                 uprntocouncil_updater.rename_temp_table()
 
-                self.teardown()
-
                 # Add foreign keys back
                 if addressbase_updater.foreign_key_constraints:
                     addressbase_updater.add_foreign_keys()
                 if uprntocouncil_updater.foreign_key_constraints:
                     uprntocouncil_updater.add_foreign_keys()
+                self.teardown()
             self.stdout.write(
                 self.style.SUCCESS(
                     "Successfully updated both Addressbase and UPRN to Council tables"
