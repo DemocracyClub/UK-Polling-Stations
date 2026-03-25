@@ -135,7 +135,7 @@ class PostcodeViewSet(ViewSet):
                 ret["council"] = ret["polling_station"].council
 
         # get advance voting station
-        ret["advance_voting_stations"] = self.generate_advance_voting_stations(rh)
+        ret["alternative_voting_stations"] = self.generate_advance_voting_stations(rh)
 
         ret["metadata"] = ee.get_metadata()
 
