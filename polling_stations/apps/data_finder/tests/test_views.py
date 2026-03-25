@@ -15,7 +15,10 @@ from django.core.management import call_command
 from django.test import RequestFactory, TestCase, override_settings
 from django.utils import timezone
 from pollingstations.models import PollingStation, VisibilityChoices
-from pollingstations.tests.factories import PollingStationFactory
+from pollingstations.tests.factories import (
+    AdvanceVotingStationFactory,
+    PollingStationFactory,
+)
 from uk_geo_utils.helpers import Postcode
 from django.http import QueryDict
 from unittest import mock
@@ -254,6 +257,31 @@ class AddressViewTestCase(TestCase):
         context = view.get_context_data()
         self.assertFalse(context["we_know_where_you_should_vote"])
         self.assertIsNone(context["station"])
+
+    @override_settings(SHOW_ADVANCE_VOTING_STATIONS=True)
+    def test_advance_voting_stations_prefetched(self):
+        address = Address.objects.get(uprn="100")
+        uprn = address.uprntocouncil
+        avs = AdvanceVotingStationFactory(
+            council_id="X01",
+            opening_times=[
+                ["2099-01-01", "08:00", "20:00"],
+            ],
+        )
+        uprn.advance_voting_stations.add(avs)
+
+        # Use the view to fetch the address exactly as production does
+        request = self.factory.get("/address/100/")
+        view = AddressView()
+        view.setup(request, uprn="100")
+        view.get(request, uprn="100")
+
+        # Accessing the M2M on the view's address should not need another query
+        with self.assertNumQueries(0):
+            stations = list(view.address.uprntocouncil.advance_voting_stations.all())
+
+        self.assertEqual(len(stations), 1)
+        self.assertEqual(stations[0].pk, avs.pk)
 
     @override_settings(EVERY_ELECTION={"CHECK": False, "HAS_ELECTION": True})
     def test_log_postcode_has_election_true(self):
