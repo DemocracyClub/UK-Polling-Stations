@@ -1,14 +1,14 @@
 {% load i18n %}
 
 <h2>
-    {% if advance_voting_stations %}
-        {% trans "Your polling stations" %}
-    {% else %}
-        {% trans "Your polling station" %}
-    {% endif %}
+    {% blocktrans count has_avs=advance_voting_station|default_if_none:"1"|length %}
+        Your polling station
+    {% plural %}
+        Your polling stations
+    {% endblocktrans %}
 </h2>
 
-{% if advance_voting_stations %}
+{% if advance_voting_station and advance_voting_station.open_in_future %}
     <p>
         {% if NEXT_CHARISMATIC_ELECTION_DATE %}
             {% blocktrans trimmed %}
@@ -26,14 +26,12 @@
             {% endblocktrans %}
         {% endif %}
     </p>
-    {% for advance_voting_station in advance_voting_stations %}
-        {% include "fragments/advance_voting_station.html" %}
-    {% endfor %}
+    {% include "fragments/advance_voting_station.html" %}
 {% endif %}
 
 <div class="ds-card" id="vote-on-polling-day">
     <div class="ds-card-body">
-        {% if advance_voting_stations %}
+        {% if advance_voting_station %}
             {% if NEXT_CHARISMATIC_ELECTION_DATE %}
                 <h3>{% blocktrans with polling_day=NEXT_CHARISMATIC_ELECTION_DATE%}Vote on {{ polling_day }}{% endblocktrans %}</h3>
             {% else %}
@@ -77,6 +75,19 @@
             {%  if has_at_station_info  %}
                 {% include "fragments/at_the_station.html" %}
             {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{% if advance_voting_station and not advance_voting_station.open_in_future %}
+    <div class="ds-card">
+        <div class="ds-card-body">
+            {% blocktrans %}
+                <h3>Advance voting trial</h3>
+                <p>Your council conducted a trial that allowed you to vote before polling day.</p>
+                <p>The advance voting station is now closed, and you must vote at your assigned polling station.</p>
+                <p>If you voted in advance of polling day, then you can't vote again today.</p>
+            {% endblocktrans %}
         </div>
     </div>
 {% endif %}

@@ -154,16 +154,10 @@ class BasePollingStationView(
     def get_station(self):
         pass
 
-    def get_advance_voting_stations(self):
+    def get_advance_voting_station(self):
         if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
-            return []
-        if hasattr(self, "address"):
-            return [
-                avs
-                for avs in self.address.uprntocouncil.advance_voting_stations.all()
-                if avs.open_in_future
-            ]
-        return []
+            return None
+        return None
 
     def get_ee_wrapper(self, rh: RoutingHelper):
         if rh and rh.route_type == "multiple_addresses":
@@ -196,8 +190,10 @@ class BasePollingStationView(
     def show_map(self, context):
         station = context.get("station")
         station_location = getattr(station, "location", None)
-        advance_voting_stations = context.get("advance_voting_stations", [])
-        any_avs_location = any(avs.location for avs in advance_voting_stations)
+        advance_voting_station = context.get("advance_voting_station")
+        advance_voting_station_location = getattr(
+            advance_voting_station, "location", None
+        )
         we_know_where_you_should_vote = context.get("we_know_where_you_should_vote")
         errors = context.get("errors")
         has_election = context.get("has_election")
@@ -214,7 +210,7 @@ class BasePollingStationView(
         # If we have a station location or advance station location, and there are upcoming elections return true
         if (
             we_know_where_you_should_vote
-            and (station_location or any_avs_location)
+            and (station_location or advance_voting_station_location)
             and has_election
         ):
             return True
@@ -266,7 +262,7 @@ class BasePollingStationView(
         context["multiple_elections"] = ee.multiple_elections
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()
-        context["advance_voting_stations"] = self.get_advance_voting_stations()
+        context["advance_voting_station"] = self.get_advance_voting_station()
         context["requires_voter_id"] = ee.get_voter_id_status()
         context["has_city_of_london_ballots"] = ee.has_city_of_london_ballots
 
