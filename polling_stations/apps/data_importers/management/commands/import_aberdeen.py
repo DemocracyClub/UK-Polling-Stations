@@ -38,10 +38,33 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         ):
             return None
 
+        # station change from council
+        # OLD: ABERDEEN CITADEL (SALVATION ARMY BUILDING) 27-30 CASTLE STREET ABERDEEN AB11 5BG
+        # NEW: ST ANDREW’S CATHEDRAL, 28 King Street, Aberdeen, AB24 5AX
+        if self.get_station_hash(record) in [
+            "95-aberdeen-citadel-salvation-army-building",
+            "96-aberdeen-citadel-salvation-army-building",
+        ]:
+            record = record._replace(
+                pollingstationname="ST ANDREW’S CATHEDRAL",
+            )
+
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
         if record.pollingvenueid not in self.COUNCIL_STATIONS:
             return None
 
+        # station change from council
+        # OLD: ABERDEEN CITADEL (SALVATION ARMY BUILDING) 27-30 CASTLE STREET ABERDEEN AB11 5BG
+        # NEW: ST ANDREW’S CATHEDRAL, 28 King Street, Aberdeen, AB24 5AX
+        if self.get_station_hash(record) in [
+            "95-aberdeen-citadel-salvation-army-building",
+            "96-aberdeen-citadel-salvation-army-building",
+        ]:
+            record = record._replace(
+                pollingstationname="ST ANDREW’S CATHEDRAL",
+                pollingstationaddress1="28 King Street",
+                pollingstationpostcode="AB24 5AX",
+            )
         return super().station_record_to_dict(record)
