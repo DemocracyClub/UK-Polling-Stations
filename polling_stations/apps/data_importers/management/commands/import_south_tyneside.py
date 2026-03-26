@@ -38,3 +38,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # station postcode fix + coords from council for:
+        # Portable Station, Monkton Lane On grassed area near path leading to Hexham Ave Jarrow NE31 2DG
+        if record.polling_place_id == "6221":
+            record = record._replace(
+                polling_place_postcode="NE31 2GD",
+                polling_place_easting="431496",
+                polling_place_northing="562936",
+            )
+        return super().station_record_to_dict(record)
