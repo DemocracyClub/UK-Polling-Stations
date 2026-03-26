@@ -51,7 +51,7 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode not in self.COUNCIL_STATIONS:
             return None
 
-        # removing suspect coordinates for:
+        # coord fix verified by council for:
         # SOUTHCRAIG SCHOOL, BELMONT AVENUE, AYR, KA7 2ND
         if record.stationcode in [
             "AYR43",
@@ -59,7 +59,7 @@ class Command(BaseDemocracyCountsCsvImporter):
             "AYR45",
         ]:
             record = record._replace(
-                xordinate="0",
-                yordinate="0",
+                xordinate="234119",
+                yordinate="620391",
             )
         return super().station_record_to_dict(record)
