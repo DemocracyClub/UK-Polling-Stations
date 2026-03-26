@@ -9,12 +9,12 @@ class Command(BaseDemocracyCountsCsvImporter):
     csv_encoding = "utf-16le"
 
     def station_record_to_dict(self, record):
-        # Removing bad coordinates for:
+        # Coord fix verified by council for:
         # THORNHILL COMMUNITY CENTRE, EAST BACK STREET, DG3 5LH
         if record.stationcode in ["DFS11", "DFS10"]:
             record = record._replace(
-                xordinate="0",
-                yordinate="0",
+                xordinate="287817",
+                yordinate="595787",
             )
         return super().station_record_to_dict(record)
 
