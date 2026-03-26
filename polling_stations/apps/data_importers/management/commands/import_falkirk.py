@@ -23,3 +23,10 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             return
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # postcode fix verified by council for:
+        # Antonine Primary School, Broomhill Road, Bonnybridge, FALKIRK, FK4 2AT
+        if record.pollingvenueid == "82":
+            record = record._replace(pollingstationpostcode="FK4 2AN")
+        return super().station_record_to_dict(record)
