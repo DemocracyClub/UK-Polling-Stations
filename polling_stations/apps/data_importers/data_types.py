@@ -6,6 +6,7 @@ import abc
 import logging
 from collections import namedtuple
 
+
 from addressbase.models import Address, UprnToCouncil, get_uprn_hash_table
 from councils.models import Council
 from pollingstations.models import PollingDistrict, PollingStation
@@ -287,21 +288,43 @@ class AddressList(AssignPollingStationsMixin):
                 postcode_lookup[postcode] = {record["polling_station_id"]}
         return [k for k, v in postcode_lookup.items() if len(v) > 1]
 
-    # TODO be more clever to report on duplicates.
-    def remove_duplicate_uprns(self):
-        uprn_lookup = self.get_uprn_lookup()
-
-        duplicate_count = len(
-            [e for e in self.elements if len(uprn_lookup[e["uprn"]]) > 1]
-        )
-        if duplicate_count >= 1:
+    def remove_non_numeric_uprns(self):
+        bad_uprn_records = [e for e in self.elements if not e["uprn"].strip().isdigit()]
+        if bad_uprn_records:
             self.logger.log_message(
                 logging.WARNING,
-                f"{duplicate_count} UPRNs are assigned to more than one station in council data. These have been discarded.",
+                f"{len(bad_uprn_records)} addresses have non-numeric UPRNs in council data. These have been discarded.",
             )
+            for record in bad_uprn_records:
+                self.logger.log_message(
+                    logging.INFO,
+                    f'"NON_NUMERIC_UPRN","{record.get("uprn")}","{record.get("address")}","{record.get("postcode")}"',
+                )
+        self.elements = [e for e in self.elements if e["uprn"].isdigit()]
+
+    def remove_duplicate_uprns(self):
+        uprn_lookup = self.get_uprn_lookup()
+        duplicate_uprns = {
+            uprn: stations
+            for uprn, stations in uprn_lookup.items()
+            if len(stations) > 1
+        }
+        if duplicate_uprns:
+            duplicate_address_count = sum(
+                1 for e in self.elements if e["uprn"] in duplicate_uprns
+            )
+            self.logger.log_message(
+                logging.WARNING,
+                f"{duplicate_address_count} UPRNs are assigned to more than one station in council data. These have been discarded.",
+            )
+            for uprn, stations in sorted(duplicate_uprns.items()):
+                self.logger.log_message(
+                    logging.INFO,
+                    f'"UPRN_ASSIGNED_MULTIPLE_STATIONS","{uprn}","{stations}"',
+                )
 
         self.elements = [
-            record for record in self.elements if len(uprn_lookup[record["uprn"]]) == 1
+            record for record in self.elements if record["uprn"] not in duplicate_uprns
         ]
 
     def get_polling_station_lookup(self):
@@ -316,14 +339,20 @@ class AddressList(AssignPollingStationsMixin):
         return polling_station_lookup
 
     def remove_records_not_in_addressbase(self, addressbase_data):
-        not_in_address_base_count = len(
-            [e for e in self.elements if e["uprn"] not in addressbase_data]
-        )
-        if not_in_address_base_count >= 1:
+        not_in_addressbase = [
+            e for e in self.elements if e["uprn"] not in addressbase_data
+        ]
+        if not_in_addressbase:
             self.logger.log_message(
                 logging.WARNING,
-                f"{not_in_address_base_count} UPRNs from council data not found in addressbase. These have been discarded.",
+                f"{len(not_in_addressbase)} UPRNs from council data not found in addressbase. These have been discarded.",
             )
+            for record in not_in_addressbase:
+                self.logger.log_message(
+                    logging.INFO,
+                    f'"UPRN_MISSING_IN_ADDRESSBASE","{record.get("uprn")}", "{record.get("address")}", "{record.get("postcode")}"',
+                )
+
         self.elements = [e for e in self.elements if e["uprn"] in addressbase_data]
 
     def remove_records_that_dont_match_addressbase(self, addressbase_data):
@@ -343,15 +372,26 @@ class AddressList(AssignPollingStationsMixin):
                 logging.WARNING,
                 f"{len(to_remove)} council records UPRNs found in addressbase but postcodes don't match. These have been discarded.",
             )
+            for record in to_remove:
+                self.logger.log_message(
+                    logging.INFO,
+                    f'"POSTCODE_DIFFERS","{record.get("uprn")}", "{record.get("address")}", "{record.get("postcode")}"',
+                )
         self.elements = [e for e in self.elements if e not in to_remove]
 
     def remove_records_missing_uprns(self):
-        uprn_missing_count = len([e for e in self.elements if not e.get("uprn")])
-        if uprn_missing_count >= 1:
+        missing_uprn_records = [e for e in self.elements if not e.get("uprn")]
+        if missing_uprn_records:
             self.logger.log_message(
                 logging.WARNING,
-                f"{uprn_missing_count} Addresses are missing a UPRN in council data. These have been discarded",
+                f"{len(missing_uprn_records)} Addresses are missing a UPRN in council data. These have been discarded",
             )
+            for record in missing_uprn_records:
+                self.logger.log_message(
+                    logging.INFO,
+                    f'"UPRN_MISSING_IN_COUNCIL_DATA","{record.get("address")}", "{record.get("postcode")}"',
+                )
+
         self.elements = [e for e in self.elements if e.get("uprn", None)]
 
     def check_split_postcodes_are_split(self, split_postcodes):
@@ -378,6 +418,7 @@ class AddressList(AssignPollingStationsMixin):
     def check_records(self):
         split_postcodes = self.get_council_split_postcodes()
         self.remove_records_missing_uprns()
+        self.remove_non_numeric_uprns()
         self.remove_duplicate_uprns()
         addressbase_data = get_uprn_hash_table(self.gss_code)
         self.remove_records_not_in_addressbase(addressbase_data)
