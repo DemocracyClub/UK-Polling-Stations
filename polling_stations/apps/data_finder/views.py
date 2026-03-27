@@ -157,8 +157,6 @@ class BasePollingStationView(
     def get_advance_voting_station(self):
         if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
             return None
-        if hasattr(self, "address"):
-            return self.address.uprntocouncil.advance_voting_station
         return None
 
     def get_ee_wrapper(self, rh: RoutingHelper):
@@ -336,7 +334,10 @@ class PostcodeView(BasePollingStationView):
 class AddressView(BasePollingStationView):
     def get(self, request, *args, **kwargs):
         self.address = get_object_or_404(
-            Address.objects.select_related("uprntocouncil"), uprn=self.kwargs["uprn"]
+            Address.objects.select_related("uprntocouncil").prefetch_related(
+                "uprntocouncil__advance_voting_stations"
+            ),
+            uprn=self.kwargs["uprn"],
         )
         self.postcode = Postcode(self.address.postcode)
         context = self.get_context_data(**kwargs)

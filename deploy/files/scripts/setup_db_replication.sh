@@ -32,7 +32,7 @@ psql "$DB" -U "$DB_USER" -c 'TRUNCATE "spatial_ref_sys", "auth_permission", "dja
 # Drop constraints to improve sync time
 psql "$DB" -U "$DB_USER" -c 'alter table addressbase_address drop constraint addressbase_address_pkey cascade;'
 psql "$DB" -U "$DB_USER" -c 'alter table addressbase_uprntocouncil drop constraint addressbase_uprntocouncil_pkey cascade;'
-psql "$DB" -U "$DB_USER" -c 'DROP INDEX address_location_gist, address_postcode_idx, address_postcode_like_idx, address_uprn_like_idx, uprntocouncil_adv_v_station_idx, uprntocouncil_uprn_like_idx, uprntocouncil_lad_idx;'
+psql "$DB" -U "$DB_USER" -c 'DROP INDEX address_location_gist, address_postcode_idx, address_postcode_like_idx, address_uprn_like_idx, uprntocouncil_uprn_like_idx, uprntocouncil_lad_idx;'
 
 # Set up subscription
 psql "$DB" -U "$DB_USER" -c "CREATE SUBSCRIPTION $SUBSCRIPTION CONNECTION 'dbname=$RDS_DB_NAME host=$RDS_DB_HOST user=postgres password=$RDS_DB_PASSWORD' PUBLICATION alltables with (streaming=true, binary=true);"
@@ -76,7 +76,6 @@ psql "$DB" -U "$DB_USER" -c 'CREATE INDEX address_location_gist ON public.addres
 psql "$DB" -U "$DB_USER" -c 'CREATE INDEX address_postcode_idx ON public.addressbase_address USING btree (postcode);'
 psql "$DB" -U "$DB_USER" -c 'CREATE INDEX address_postcode_like_idx ON public.addressbase_address USING btree (postcode varchar_pattern_ops);'
 psql "$DB" -U "$DB_USER" -c 'CREATE INDEX address_uprn_like_idx ON public.addressbase_address USING btree (uprn varchar_pattern_ops);'
-psql "$DB" -U "$DB_USER" -c 'CREATE INDEX uprntocouncil_adv_v_station_idx ON public.addressbase_uprntocouncil USING btree (advance_voting_station_id);'
 psql "$DB" -U "$DB_USER" -c 'CREATE INDEX uprntocouncil_uprn_like_idx ON public.addressbase_uprntocouncil USING btree (uprn varchar_pattern_ops);'
 psql "$DB" -U "$DB_USER" -c 'CREATE INDEX uprntocouncil_lad_idx ON public.addressbase_uprntocouncil USING btree (lad);'
 

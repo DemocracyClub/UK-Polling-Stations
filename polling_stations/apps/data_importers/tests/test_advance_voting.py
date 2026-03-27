@@ -101,16 +101,17 @@ class AdvanceVotingTests(TestCase):
                 ):
                     avs = AdvanceVotingStationFactory(pk=i)
                     avs.save()
-                    UprnToCouncil.objects.filter(
+                    uprns = UprnToCouncil.objects.filter(
                         polling_station_id=station.internal_council_id
-                    ).update(advance_voting_station=avs)
+                    ).values_list("uprn", flat=True)
+                    self.assign_advance_voting_stations(avs, uprns)
 
         AdvanceVotingImporter().handle(
             self.council.pk, verbosity=3, include_past_elections=True
         )
         self.assertTrue(AdvanceVotingStation.objects.all().exists())
         assigned_uprns = (
-            UprnToCouncil.objects.filter(advance_voting_station_id=1)
+            UprnToCouncil.objects.filter(advance_voting_stations__id=1)
             .order_by("uprn")
             .count()
         )

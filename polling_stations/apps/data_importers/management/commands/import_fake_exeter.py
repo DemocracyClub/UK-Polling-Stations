@@ -19,11 +19,12 @@ class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
     council_id = "EXE"
     addresses_name = "Democracy_Club__02May2019exe.CSV"
     stations_name = "Democracy_Club__02May2019exe.CSV"
+    elections = ["2026-05-07"]
 
     def add_advance_voting_stations(self):
         opening_times = OpeningTimes()
-        opening_times.add_open_time("2022-04-30", "10:00", "16:00")
-        opening_times.add_open_time("2022-05-01", "10:00", "16:00")
+        opening_times.add_open_time("2026-04-30", "10:00", "16:00")
+        opening_times.add_open_time("2026-05-01", "10:00", "16:00")
 
         advance_station = AdvanceVotingStation(
             name="Exeter Guildhall",
@@ -39,6 +40,29 @@ class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
             council=self.council,
         )
         advance_station.save()
-        UprnToCouncil.objects.filter(lad=self.council.geography.gss).update(
-            advance_voting_station=advance_station
+        advance_station2 = AdvanceVotingStation(
+            name="Exeter Library",
+            address="""Library
+            Castle St
+            Exeter
+            """,
+            postcode="EX4 3PQ",
+            location=Point(-3.5406333, 50.7295503, srid=4326),
+            opening_times=opening_times.as_string_table(),
+            council=self.council,
         )
+        advance_station2.save()
+        through_model = UprnToCouncil.advance_voting_stations.through
+        uprn_ids = UprnToCouncil.objects.filter(
+            lad=self.council.geography.gss
+        ).values_list("uprn", flat=True)
+        for station in [advance_station, advance_station2]:
+            through_model.objects.bulk_create(
+                [
+                    through_model(
+                        uprntocouncil_id=uid,
+                        advancevotingstation_id=station.id,
+                    )
+                    for uid in uprn_ids
+                ]
+            )

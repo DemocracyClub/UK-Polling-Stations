@@ -1,5 +1,6 @@
 import datetime
 
+from addressbase.models import UprnToCouncil
 from api.postcode import PostcodeViewSet
 from councils.tests.factories import CouncilFactory
 from data_finder.helpers import PostcodeError, RoutingHelper
@@ -12,6 +13,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 from pollingstations.models import AccessibilityInformation, PollingStation
+from pollingstations.tests.factories import AdvanceVotingStationFactory
 from rest_framework.exceptions import APIException
 from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.views import APIView
@@ -126,7 +128,7 @@ class PostcodeTest(APITestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual("DEF", response.data["council"]["council_id"])
         self.assertFalse(response.data["polling_station_known"])
-        self.assertTrue("advance_voting_station" in response.data)
+        self.assertTrue("alternative_voting_stations" in response.data)
         self.assertEqual(None, response.data["polling_station"])
         self.assertEqual([], response.data["addresses"])
         self.assertIsInstance(response.data["postcode_location"], dict)
@@ -245,6 +247,25 @@ class PostcodeTest(APITestCase):
         )
 
         self.assertEqual(400, response.status_code)
+
+    def test_advance_voting_stations_prefetched(self):
+        """RoutingHelper.get_addresses() should prefetch advance_voting_stations
+        so generate_advance_voting_stations() doesn't trigger an extra query."""
+        utc = UprnToCouncil.objects.get(pk="203")
+        avs = AdvanceVotingStationFactory(
+            council_id="ABC",
+            opening_times=[["2099-01-01", "08:00", "20:00"]],
+        )
+        utc.advance_voting_stations.add(avs)
+
+        # CC11CC is a single-address postcode (UPRN 203)
+        rh = RoutingHelper(Postcode("CC11CC"))
+        address = rh.addresses[0]
+
+        with self.assertNumQueries(0):
+            stations = list(address.uprntocouncil.advance_voting_stations.all())
+        self.assertEqual(len(stations), 1)
+        self.assertEqual(stations[0].pk, avs.pk)
 
     def test_cors_header(self):
         resp = self.client.get(

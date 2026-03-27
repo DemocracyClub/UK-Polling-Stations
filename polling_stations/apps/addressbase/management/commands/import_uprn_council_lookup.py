@@ -8,7 +8,8 @@ from polling_stations.db_routers import get_principal_db_connection
 class Command(BaseCommand):
     """
     Command to import a csv which maps UPRNs to Local Authority GSS codes.
-    The csv should have two columns: 'uprn' and 'lad'.
+    The csv should have three columns: 'uprn' and 'lad' and 'polling_station_id'.
+    The latter should be blank.
     You probably want to generate it with 'create_uprn_council_lookup'.
     """
 

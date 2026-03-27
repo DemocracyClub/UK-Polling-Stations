@@ -24,8 +24,10 @@ class RoutingHelper:
         return NoOpElectionsHelper
 
     def get_addresses(self):
-        return Address.objects.filter(postcode=self.postcode.with_space).select_related(
-            "uprntocouncil"
+        return (
+            Address.objects.filter(postcode=self.postcode.with_space)
+            .select_related("uprntocouncil")
+            .prefetch_related("uprntocouncil__advance_voting_stations")
         )
 
     @property

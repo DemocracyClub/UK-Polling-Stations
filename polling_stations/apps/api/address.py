@@ -104,7 +104,9 @@ class PostcodeResponseSerializer(serializers.Serializer):
         read_only=True,
         help_text="A GeoJSON Feature containing a Point object describing the centroid of the input postcode.",
     )
-    advance_voting_station = AdvanceVotingStationSerializer(read_only=True)
+    alternative_voting_stations = AdvanceVotingStationSerializer(
+        read_only=True, many=True
+    )
     council = CouncilDataSerializer(read_only=True)
     polling_station = PollingStationGeoSerializer(
         read_only=True, allow_null=True, help_text="A GeoJSON polling station feature"
@@ -123,7 +125,11 @@ class AddressViewSet(ViewSet):
 
     def get_object(self, **kwargs):
         assert "uprn" in kwargs
-        return Address.objects.get(uprn=kwargs["uprn"])
+        return (
+            Address.objects.select_related("uprntocouncil")
+            .prefetch_related("uprntocouncil__advance_voting_stations")
+            .get(uprn=kwargs["uprn"])
+        )
 
     def get_ee_wrapper(self, address, query_params):
         query_params = parse_qs_to_python(query_params)
@@ -177,7 +183,11 @@ class AddressViewSet(ViewSet):
 
         # council object
         ret["council"] = address.council
-        ret["advance_voting_station"] = address.uprntocouncil.advance_voting_station
+        ret["alternative_voting_stations"] = [
+            avs
+            for avs in address.uprntocouncil.advance_voting_stations.all()
+            if avs.open_in_future
+        ]
 
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
