@@ -5,7 +5,7 @@ requires-python = "==3.12.*"
 dependencies = [
     "chardet==5.2.0",
     "requests-paginator==0.2.0",
-    "requests==2.32.4",
+    "requests==2.33.0",
     "sentry-sdk==2.19.2",
 ]
 
