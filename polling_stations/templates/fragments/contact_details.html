@@ -10,7 +10,11 @@
         {% else %}
             <h3>
                 <span aria-hidden="true">📇</span>
-                {% trans "Council Contact info" %}
+                {% if council.nation == "Scotland" %}
+                    {% trans "Returning Officer Contact info" %}
+                {% else %}
+                    {% trans "Council Contact info" %}
+                {% endif %}
             </h3>
         {% endif %}
         <address>
