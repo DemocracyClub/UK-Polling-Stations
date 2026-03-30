@@ -15,6 +15,20 @@ class Command(BaseHalarose2026UpdateCsvImporter):
                 pollingvenueeasting="0",
                 pollingvenuenorthing="0",
             )
+        # Station change from council:
+        # OLD: Evanstown Community Centre Abercerdin Road Evanstown Gilfach Goch CF39 8RP
+        # NEW: Gilfach Goch Bowls Club Gilfach Goch Welfare Park Gilfach Goch CF39 8RH
+        if self.get_station_hash(record) == "409-evanstown-community-centre":
+            record = record._replace(
+                pollingstationname="Gilfach Goch Bowls Club",
+                pollingstationaddress1="Gilfach Goch Welfare Park",
+                pollingstationaddress2="Gilfach Goch",
+                pollingstationpostcode="CF39 8RH",
+                pollingvenueuprn="100101038615",
+                pollingvenueeasting="297828",
+                pollingvenuenorthing="189234",
+            )
+            print(self.get_station_hash(record))
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -34,4 +48,9 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         ]:
             return None
 
+        # Station change from council:
+        # OLD: Evanstown Community Centre Abercerdin Road Evanstown Gilfach Goch CF39 8RP
+        # NEW: Gilfach Goch Bowls Club Gilfach Goch Welfare Park Gilfach Goch CF39 8RH
+        if self.get_station_hash(record) == "409-evanstown-community-centre":
+            record = record._replace(pollingstationname="Gilfach Goch Bowls Club")
         return super().address_record_to_dict(record)
