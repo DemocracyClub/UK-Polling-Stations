@@ -35,14 +35,14 @@ class Command(BaseDemocracyCountsCsvImporter):
         ):
             rec["location"] = Point(527726, 185479, srid=27700)
 
-        # remove point for: ABBEY COMMUNITY CENTRE 172 Belsize Road London pending council response
+        # correct point for: ABBEY COMMUNITY CENTRE 172 Belsize Road London
         if rec["internal_council_id"] == "FB":
-            rec["location"] = None
+            rec["location"] = Point(525888, 183945, srid=27700)
 
-        # remove points  for 2 stations under same address pending councile response:
-        # N1C CENTRE, Plimsoll Building, 1 Handyside Street, London, N1C 4BQ
+        # fix data for 2 stations under same address:
+        # N1C CENTRE, Plimsoll Building, 1 Handyside Street, London, NIC 4BQ
         if rec["internal_council_id"] in ("PD", "PC"):
-            rec["postcode"] = "NIC 4BQ"
-            rec["location"] = None
+            rec["postcode"] = "N1C 4BQ"
+            rec["location"] = Point(529972, 183722, srid=27700)
 
         return rec
