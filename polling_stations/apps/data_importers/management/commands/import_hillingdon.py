@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "HIL"
     addresses_name = (
-        "2024-07-04/2024-06-11T08:46:39.957180/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-30T10:19:19.848410/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-11T08:46:39.957180/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-03-30T10:19:19.848410/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -19,18 +19,23 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "100022832219",  # 1 ELM VIEW HOUSE, SHEPISTON LANE, HAYES
             "100021415931",  # 33 BATH ROAD, HEATHROW, HOUNSLOW
             "100021415932",  # 35 ELM VIEW HOUSE, SHEPISTON LANE, HAYES
+            "10096324795",  # 1 GRAINFIELD WALK, EASTCOTE
         ]:
             return None
         if record.addressline6 in [
             # split
-            "UB4 9QN",
-            "UB3 2FH",
-            "UB3 3PF",
-            "UB4 9QN",
-            "UB8 3QT",
             "UB8 3FE",
-            "UB8 3QD",
+            "UB3 2FH",
+            "UB8 3QT",
             "UB7 9GA",
+            "UB8 3JH",
+            "UB3 3PF",
+            "UB3 5HX",
+            "UB8 3QD",
+            "UB4 9QN",
+            # suspect
+            "UB4 8QJ",
+            "UB4 8QL",
         ]:
             return None
         return super().address_record_to_dict(record)
