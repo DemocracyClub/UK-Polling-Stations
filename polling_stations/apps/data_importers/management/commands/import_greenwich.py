@@ -14,7 +14,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
-        uprn = record.uprn.lstrip("0").strip()
+        uprn = record.property_urn.lstrip("0").strip()
 
         if uprn in [
             "100020975456",  # 56A HILLREACH, LONDON
