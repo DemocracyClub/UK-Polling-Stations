@@ -78,9 +78,26 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         ]:
             return None
 
+        # Station address fix from council:
+        # OLD: Thankerton Hall, 51 Station Road, Thankerton, ML12 6NZ
+        # NEW: Thankerton Hall, Station Road, Thankerton, ML12 6NZ
+        if (
+            self.get_station_hash(record)
+            == "1-thankerton-hall-51-station-road-thankerton-"
+        ):
+            record = record._replace(pollingstationaddress1="Station Road")
+
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
         if self.get_station_hash(record) not in self.COUNCIL_STATIONS:
             return None
+        # Station address fix from council:
+        # OLD: Thankerton Hall, 51 Station Road, Thankerton, ML12 6NZ
+        # NEW: Thankerton Hall, Station Road, Thankerton, ML12 6NZ
+        if (
+            self.get_station_hash(record)
+            == "1-thankerton-hall-51-station-road-thankerton-"
+        ):
+            record = record._replace(pollingstationaddress1="Station Road")
         return super().station_record_to_dict(record)
