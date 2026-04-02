@@ -1,0 +1,64 @@
+{% load i18n %}
+<div class="ds-card" id="voting-hubs">
+    <div class="ds-card-body">
+        <h3>{% trans "Voting hubs" %}</h3>
+        <p>
+            {% blocktrans trimmed %}
+                Your council is part of a flexible voting pilot. As well as
+                voting at your polling station on polling day, you can also
+                vote at any of the following voting hubs.
+            {% endblocktrans %}
+        </p>
+
+        <ul class="ds-details">
+            {% for item in advance_voting_stations_with_directions %}
+                <li>
+                    <details{% if forloop.first %} open{% endif %}>
+                        <summary>{{ item.station.name }}</summary>
+                        <address>
+                            {{ item.station.address|linebreaksbr }}
+                            {{ item.station.postcode }}
+                        </address>
+
+                        {% if item.directions %}
+                            {% if item.directions.mode == "walk" %}
+                                <p>
+                                    It's about {{ item.directions.distance_in_miles|floatformat:"1" }} miles away
+                                    or a {{ item.directions.time_in_minutes }} minute walk from {{ postcode }}.
+                                </p>
+                            {% elif item.directions.mode == "drive" %}
+                                <p>
+                                    It's about {{ item.directions.distance_in_miles|floatformat:"1" }} miles away
+                                    or a {{ item.directions.time_in_minutes }} minute drive from {{ postcode }}.
+                                </p>
+                            {% endif %}
+                            <p>
+                                Get <a href="{{ item.directions.google_maps_url }}" target="_top">walking/driving directions from Google</a>
+                                or <a href="{{ item.directions.cyclestreets_url }}" target="_top">cycling directions from CycleStreets</a>.
+                            </p>
+                        {% endif %}
+
+                        {% if item.station.opening_times %}
+                            <h4>{% trans "Opening times" %}</h4>
+                            <div class="ds-table">
+                                <table>
+                                    <tr>
+                                        <th>{% trans "Date" %}</th>
+                                        <th>{% trans "Open" %}</th>
+                                    </tr>
+                                    {% for opening_time in item.station.opening_times_table %}
+                                        <tr>
+                                            <td>{% ifchanged opening_time.0 %}{{ opening_time.0 }}{% endifchanged %}</td>
+                                            <td>{{ opening_time.1 }} — {{ opening_time.2 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        {% endif %}
+                    </details>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="voting_hubs_map" class="ds-map-leaflet"></div>
+</div>

@@ -97,11 +97,32 @@
                 map.draw(station_point, embed, tile_layer, mq_key, directions);
             });
         {% endif %}
-        {% if we_know_where_you_should_vote and advance_voting_station.location %}
-            var avs_station_point = [{{ advance_voting_station.location.1 }}, {{ advance_voting_station.location.0 }}];
-            var avs_tile_layer = '{{ tile_layer }}';
-            var avs_map = new PollingStationMap('advance_voting_station_map');
-            avs_map.draw(avs_station_point, embed, avs_tile_layer, mq_key, {});
+        {% if advance_voting_stations %}
+            $(document).ready(function() {
+                var tile_layer = '{{ tile_layer }}';
+                var hubs_map = new VotingHubsMap('voting_hubs_map');
+                var hub_points = [
+                    {% for item in advance_voting_stations_with_directions %}
+                        {% if item.station.location %}
+                            {
+                                point: [{{ item.station.location.1 }}, {{ item.station.location.0 }}],
+                                name: "{{ item.station.name|escapejs }}",
+                                opening_times: [
+                                    {% for ot in item.station.opening_times_table %}
+                                        ["{{ ot.0 }}", "{{ ot.1 }}", "{{ ot.2 }}"],
+                                    {% endfor %}
+                                ]
+                            },
+                        {% endif %}
+                    {% endfor %}
+                ];
+                {% if location %}
+                    var user_location = [{{ location.1 }}, {{ location.0 }}];
+                {% else %}
+                    var user_location = null;
+                {% endif %}
+                hubs_map.draw(hub_points, user_location, embed, tile_layer, mq_key);
+            });
         {% endif %}
     </script>
 {% endblock in_page_javascript %}

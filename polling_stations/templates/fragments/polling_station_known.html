@@ -1,37 +1,36 @@
 {% load i18n %}
 
 <h2>
-    {% blocktrans count has_avs=advance_voting_station|default_if_none:"1"|length %}
-        Your polling station
-    {% plural %}
-        Your polling stations
-    {% endblocktrans %}
+    {% if advance_voting_stations %}
+        {% trans "Your polling stations" %}
+    {% else %}
+        {% trans "Your polling station" %}
+    {% endif %}
 </h2>
 
-{% if advance_voting_station and advance_voting_station.open_in_future %}
+{% if advance_voting_stations %}
     <p>
         {% if NEXT_CHARISMATIC_ELECTION_DATE %}
             {% blocktrans trimmed %}
-                Your council is trialling a system that allows you to vote in person before polling day.
-                You can <a href="#vote-in-advance">vote in advance</a>
-                at this location, or <a href="#vote-on-polling-day">vote at your polling station</a>
+                Your council is part of a flexible voting pilot.
+                You can <a href="#voting-hubs">vote at a voting hub</a>
+                before polling day, or <a href="#vote-on-polling-day">vote at your polling station</a>
                 as normal on&nbsp;{{ NEXT_CHARISMATIC_ELECTION_DATE }}.
             {% endblocktrans %}
         {% else %}
             {% blocktrans trimmed %}
-                Your council is trialling a system that allows you to vote in person before polling day.
-                You can <a href="#vote-in-advance">vote in advance</a>
-                at this location, or <a href="#vote-on-polling-day">vote at your polling station</a>
+                Your council is part of a flexible voting pilot.
+                You can <a href="#voting-hubs">vote at a voting hub</a>
+                before polling day, or <a href="#vote-on-polling-day">vote at your polling station</a>
                 as normal on&nbsp;polling day.
             {% endblocktrans %}
         {% endif %}
     </p>
-    {% include "fragments/advance_voting_station.html" %}
 {% endif %}
 
 <div class="ds-card" id="vote-on-polling-day">
     <div class="ds-card-body">
-        {% if advance_voting_station %}
+        {% if advance_voting_stations %}
             {% if NEXT_CHARISMATIC_ELECTION_DATE %}
                 <h3>{% blocktrans with polling_day=NEXT_CHARISMATIC_ELECTION_DATE%}Vote on {{ polling_day }}{% endblocktrans %}</h3>
             {% else %}
@@ -79,15 +78,6 @@
     </div>
 {% endif %}
 
-{% if advance_voting_station and not advance_voting_station.open_in_future %}
-    <div class="ds-card">
-        <div class="ds-card-body">
-            {% blocktrans %}
-                <h3>Advance voting trial</h3>
-                <p>Your council conducted a trial that allowed you to vote before polling day.</p>
-                <p>The advance voting station is now closed, and you must vote at your assigned polling station.</p>
-                <p>If you voted in advance of polling day, then you can't vote again today.</p>
-            {% endblocktrans %}
-        </div>
-    </div>
+{% if advance_voting_stations %}
+    {% include "fragments/voting_hubs.html" %}
 {% endif %}

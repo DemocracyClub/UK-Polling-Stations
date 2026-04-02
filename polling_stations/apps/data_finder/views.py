@@ -154,10 +154,10 @@ class BasePollingStationView(
     def get_station(self):
         pass
 
-    def get_advance_voting_station(self):
+    def get_advance_voting_stations(self):
         if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
-            return None
-        return None
+            return []
+        return []
 
     def get_ee_wrapper(self, rh: RoutingHelper):
         if rh and rh.route_type == "multiple_addresses":
@@ -190,9 +190,9 @@ class BasePollingStationView(
     def show_map(self, context):
         station = context.get("station")
         station_location = getattr(station, "location", None)
-        advance_voting_station = context.get("advance_voting_station")
-        advance_voting_station_location = getattr(
-            advance_voting_station, "location", None
+        advance_voting_stations = context.get("advance_voting_stations", [])
+        any_avs_location = any(
+            getattr(avs, "location", None) for avs in advance_voting_stations
         )
         we_know_where_you_should_vote = context.get("we_know_where_you_should_vote")
         errors = context.get("errors")
@@ -210,7 +210,7 @@ class BasePollingStationView(
         # If we have a station location or advance station location, and there are upcoming elections return true
         if (
             we_know_where_you_should_vote
-            and (station_location or advance_voting_station_location)
+            and (station_location or any_avs_location)
             and has_election
         ):
             return True
@@ -262,7 +262,30 @@ class BasePollingStationView(
         context["multiple_elections"] = ee.multiple_elections
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()
-        context["advance_voting_station"] = self.get_advance_voting_station()
+        context["advance_voting_stations"] = self.get_advance_voting_stations()
+        advance_voting_stations_with_directions = []
+        if self.location and context["advance_voting_stations"]:
+            dh = DirectionsHelper()
+            for avs in context["advance_voting_stations"]:
+                avs_directions = (
+                    dh.get_directions(
+                        start_location=self.location, end_location=avs.location
+                    )
+                    if avs.location
+                    else None
+                )
+                advance_voting_stations_with_directions.append(
+                    {"station": avs, "directions": avs_directions}
+                )
+        advance_voting_stations_with_directions.sort(
+            key=lambda item: (
+                item["directions"].mode != "walk" if item["directions"] else True,
+                item["directions"].time if item["directions"] else float("inf"),
+            )
+        )
+        context["advance_voting_stations_with_directions"] = (
+            advance_voting_stations_with_directions
+        )
         context["requires_voter_id"] = ee.get_voter_id_status()
         context["has_city_of_london_ballots"] = ee.has_city_of_london_ballots
 
@@ -352,6 +375,15 @@ class AddressView(BasePollingStationView):
 
     def get_station(self):
         return self.address.polling_station_with_elections()
+
+    def get_advance_voting_stations(self):
+        if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
+            return []
+        return [
+            s
+            for s in self.address.uprntocouncil.advance_voting_stations.all()
+            if s.open_in_future
+        ]
 
     def get_ee_wrapper(self, rh=None):
         if getattr(settings, "USE_LOCAL_PARQUET_ELECTIONS", False):
