@@ -33,12 +33,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Removing bad coordinates for:
+        # Coords verified with council for:
         # Clock House Community Centre, Defiance Walk, Woolwich Dockyard, London SE18 5QL
         if record.polling_place_id == "10437":
             record = record._replace(
-                polling_place_easting="0",
-                polling_place_northing="0",
+                polling_place_easting="542631",
+                polling_place_northing="179217",
             )
 
         return super().station_record_to_dict(record)
