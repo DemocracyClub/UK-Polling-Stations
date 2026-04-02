@@ -49,4 +49,11 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             record = record._replace(xordinate="519665", yordinate="185790")
 
+        # SWAGAT Hall 19 Dudden Hill Lane London, NW10 2ET
+        if record.stationcode in [
+            "127",
+            "128",
+        ]:
+            record = record._replace(xordinate="522181", yordinate="184858")
+
         return super().station_record_to_dict(record)
