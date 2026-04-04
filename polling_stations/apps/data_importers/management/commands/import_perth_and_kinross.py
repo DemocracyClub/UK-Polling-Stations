@@ -55,4 +55,8 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         if record.pollingstationnumber == "99":
             record = record._replace(pollingstationpostcode="PH2 0RY")
 
+        # Postcode correction for: Pitlochry Town Hall, Pitlochry, PH16 5DR
+        if record.pollingstationnumber in ["19", "20"]:
+            record = record._replace(pollingstationpostcode="PH16 5EA")
+
         return super().station_record_to_dict(record)
