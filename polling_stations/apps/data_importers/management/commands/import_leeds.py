@@ -22,6 +22,20 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="0",
             )
 
+        # station change from council:
+        # OLD: Bridge Centre at The Bridge Community Church, (The Cedar Room), Rider Street, Leeds LS9 7BQ
+        # NEW: Burmantofts Community Projects, The Haslewood Hub, 93 Haslewood Drive, Leeds LS9 7PS
+        if record.polling_place_id == "26924":
+            record = record._replace(
+                polling_place_name="Burmantofts Community Projects",
+                polling_place_address_1="The Haslewood Hub",
+                polling_place_address_2="93 Haslewood Drive",
+                polling_place_postcode="LS9 7PS",
+                polling_place_easting="431591",
+                polling_place_northing="433731",
+                polling_place_uprn="7256454",
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
