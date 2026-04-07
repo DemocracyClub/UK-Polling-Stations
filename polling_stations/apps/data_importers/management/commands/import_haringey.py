@@ -20,6 +20,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(
                 polling_place_name="St Mary with St George Hornsey Parish Church"
             )
+
+        # postcode update from council for:
+        # Alexandra Park Library Alexandra Park Road London N22 4UJ
+        if record.polling_place_id == "12670":
+            record = record._replace(polling_place_postcode="N22 7UJ")
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
