@@ -154,10 +154,69 @@ class BasePollingStationView(
     def get_station(self):
         pass
 
-    def get_advance_voting_station(self):
+    def get_advance_voting_stations(self, election_date):
+        # this method is really a place holder for the actual function which is in AddressView
+        # All voting hubs this election apply to all addresses, so we're not doing anything clever at the
+        # PostcodeView level.
         if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
-            return None
-        return None
+            return [], []
+        return [], []
+
+    def get_directions_for_advance_stations(self, advance_voting_stations):
+        walking_distance = []
+        driving_distance = []
+        dh = DirectionsHelper()
+        for avs in advance_voting_stations:
+            directions = (
+                dh.get_directions(
+                    start_location=self.location, end_location=avs.location
+                )
+                if avs.location and self.location
+                else None
+            )
+            entry = {"station": avs, "directions": directions}
+            if directions and directions.mode == "walk":
+                walking_distance.append(entry)
+            else:
+                driving_distance.append(entry)
+
+        for avs_list in (walking_distance, driving_distance):
+            avs_list.sort(
+                key=lambda item: item["directions"].time
+                if item["directions"]
+                else float("inf")
+            )
+
+        return walking_distance + driving_distance
+
+    def split_advance_stations_by_date(
+        self, advance_voting_stations_with_directions, election_date
+    ):
+        polling_day_hubs = []
+        advance_hubs = []
+        if election_date and advance_voting_stations_with_directions:
+            for item in advance_voting_stations_with_directions:
+                opening_times_table = item["station"].opening_times_table
+                polling_day_times = [
+                    row for row in opening_times_table if row[0] == election_date
+                ]
+                advance_times = [
+                    row for row in opening_times_table if row[0] < election_date
+                ]
+                if polling_day_times:
+                    polling_day_hubs.append(
+                        {**item, "filtered_opening_times": polling_day_times}
+                    )
+                if advance_times:
+                    advance_hubs.append(
+                        {**item, "filtered_opening_times": advance_times}
+                    )
+        else:
+            advance_hubs = [
+                {**item, "filtered_opening_times": item["station"].opening_times_table}
+                for item in advance_voting_stations_with_directions
+            ]
+        return polling_day_hubs, advance_hubs
 
     def get_ee_wrapper(self, rh: RoutingHelper):
         if rh and rh.route_type == "multiple_addresses":
@@ -190,10 +249,8 @@ class BasePollingStationView(
     def show_map(self, context):
         station = context.get("station")
         station_location = getattr(station, "location", None)
-        advance_voting_station = context.get("advance_voting_station")
-        advance_voting_station_location = getattr(
-            advance_voting_station, "location", None
-        )
+        voting_hubs = context.get("polling_day_hubs") + context.get("advance_hubs")
+        any_hub_location = any(hub["station"].location for hub in voting_hubs)
         we_know_where_you_should_vote = context.get("we_know_where_you_should_vote")
         errors = context.get("errors")
         has_election = context.get("has_election")
@@ -210,7 +267,7 @@ class BasePollingStationView(
         # If we have a station location or advance station location, and there are upcoming elections return true
         if (
             we_know_where_you_should_vote
-            and (station_location or advance_voting_station_location)
+            and (station_location or any_hub_location)
             and has_election
         ):
             return True
@@ -262,7 +319,19 @@ class BasePollingStationView(
         context["multiple_elections"] = ee.multiple_elections
         context["election_explainers"] = ee.get_explanations()
         context["cancelled_election"] = ee.get_cancelled_election_info()
-        context["advance_voting_station"] = self.get_advance_voting_station()
+        polling_day = (
+            datetime.strptime(
+                settings.NEXT_CHARISMATIC_ELECTION_DATES[0], "%Y-%m-%d"
+            ).date()
+            if settings.NEXT_CHARISMATIC_ELECTION_DATES
+            else None
+        )
+        polling_day_hubs, advance_hubs = self.get_advance_voting_stations(
+            election_date=polling_day
+        )
+        context["polling_day_hubs"] = polling_day_hubs
+        context["advance_hubs"] = advance_hubs
+
         context["requires_voter_id"] = ee.get_voter_id_status()
         context["has_city_of_london_ballots"] = ee.has_city_of_london_ballots
 
@@ -365,6 +434,24 @@ class AddressView(BasePollingStationView):
             )
 
         return EEWrapper(**EEFetcher(point=self.address.location).fetch())
+
+    def get_advance_voting_stations(self, election_date):
+        if not getattr(settings, "SHOW_ADVANCE_VOTING_STATIONS", False):
+            return [], []
+        advance_voting_stations = [
+            s
+            for s in self.address.uprntocouncil.advance_voting_stations.all()
+            if s.open_in_future
+        ]
+        advance_voting_stations_with_directions = (
+            self.get_directions_for_advance_stations(advance_voting_stations)
+        )
+
+        polling_day_hubs, advance_hubs = self.split_advance_stations_by_date(
+            advance_voting_stations_with_directions, election_date
+        )
+
+        return polling_day_hubs, advance_hubs
 
 
 class ExamplePostcodeView(BasePollingStationView):
