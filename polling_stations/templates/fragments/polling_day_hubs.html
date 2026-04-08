@@ -1,0 +1,47 @@
+{% load i18n %}
+
+{% if polling_day_hubs %}
+    <div class="ds-card-body">
+        <h4 id="also-vote-at">{% trans "You can also vote at" %}</h4>
+        <ul class="ds-details">
+            {% for item in polling_day_hubs %}
+                <li>
+                    <details>
+                        <summary>{{ item.station.name }}</summary>
+                        <address>
+                            {{ item.station.address|linebreaksbr }}<br />
+                            {{ item.station.postcode }}
+                        </address>
+
+                        <br>
+
+                        {% if item.filtered_opening_times %}
+                            <strong>
+                                {% blocktrans with open=item.filtered_opening_times.0.1 close=item.filtered_opening_times.0.2 %}
+                                    You can vote between {{ open }} and {{ close }}
+                                {% endblocktrans %}
+                            </strong>
+                        {% endif %}
+
+                        <br>
+                        <br>
+
+                        {% if item.directions %}
+                            {% include "fragments/travel_time.html" with directions=item.directions %}
+                        {% endif %}
+
+                        <br>
+
+                        {% if item.station.location %}
+                            <div id="polling_day_hub_map_{{ forloop.counter0 }}" class="ds-map-leaflet"
+                                 data-hub-map
+                                 data-lat="{{ item.station.location.1 }}"
+                                 data-lng="{{ item.station.location.0 }}"
+                                 {% if item.directions.route %}data-route="{{ item.directions.route }}" data-precision="{{ item.directions.precision }}"{% endif %}></div>
+                        {% endif %}
+                    </details>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

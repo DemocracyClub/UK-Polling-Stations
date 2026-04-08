@@ -1,0 +1,29 @@
+{% load i18n %}
+
+{% if polling_day_hubs or advance_hubs %}
+    <div class="ds-status-message" >
+        {% trans "Your council is part of a flexible voting pilot." %}
+        <br>
+        {% if advance_hubs and polling_day_hubs %}
+            {% blocktrans trimmed %}
+                You can vote at a voting hub
+                <a href="#vote-before-polling-day">before</a> or
+                <a href="#also-vote-at">on polling day</a>, or
+                <a href="#vote-on-polling-day">vote at your polling station</a>
+                as normal on polling day.
+            {% endblocktrans %}
+        {% elif advance_hubs %}
+            {% blocktrans trimmed %}
+                You can <a href="#vote-before-polling-day">vote at a voting hub</a>
+                before polling day, or <a href="#vote-on-polling-day">vote at your polling station</a>
+                as normal on polling day.
+            {% endblocktrans %}
+        {% elif polling_day_hubs %}
+            {% blocktrans trimmed %}
+                As well as your polling station, you can also
+                <a href="#also-vote-at">vote at a voting hub</a>
+                on polling day.
+            {% endblocktrans %}
+        {% endif %}
+    </div>
+{% endif %}

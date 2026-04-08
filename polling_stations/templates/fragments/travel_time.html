@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div id="directions">
+<div>
     {% if directions.mode == "walk" %}
         <p>
             {% blocktrans trimmed with distance_in_miles=directions.distance_in_miles|floatformat:"1" time_in_minutes=directions.time_in_minutes %}
