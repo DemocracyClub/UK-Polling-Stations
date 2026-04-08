@@ -65,6 +65,7 @@ testing = [
     "djhtml==3.0.7",
     "factory-boy==3.3.3",
     "faker==33.1.0",
+    "moto[s3]==5.0.22",
     "playwright==1.49.1",
     "pytest-cov==6.0.0",
     "pytest-django==4.11.1",
