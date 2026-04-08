@@ -1,43 +1,25 @@
 {% load i18n %}
 
 <h2>
-    {% blocktrans count has_avs=advance_voting_station|default_if_none:"1"|length %}
-        Your polling station
-    {% plural %}
-        Your polling stations
-    {% endblocktrans %}
+    {% if polling_day_hubs or advance_hubs %}
+        {% trans "Your polling stations" %}
+    {% else %}
+        {% trans "Your polling station" %}
+    {% endif %}
 </h2>
 
-{% if advance_voting_station and advance_voting_station.open_in_future %}
-    <p>
-        {% if NEXT_CHARISMATIC_ELECTION_DATE %}
-            {% blocktrans trimmed %}
-                Your council is trialling a system that allows you to vote in person before polling day.
-                You can <a href="#vote-in-advance">vote in advance</a>
-                at this location, or <a href="#vote-on-polling-day">vote at your polling station</a>
-                as normal on&nbsp;{{ NEXT_CHARISMATIC_ELECTION_DATE }}.
-            {% endblocktrans %}
-        {% else %}
-            {% blocktrans trimmed %}
-                Your council is trialling a system that allows you to vote in person before polling day.
-                You can <a href="#vote-in-advance">vote in advance</a>
-                at this location, or <a href="#vote-on-polling-day">vote at your polling station</a>
-                as normal on&nbsp;polling day.
-            {% endblocktrans %}
-        {% endif %}
-    </p>
-    {% include "fragments/advance_voting_station.html" %}
-{% endif %}
+{% include "fragments/voting_pilot_intro.html" %}
 
 <div class="ds-card" id="vote-on-polling-day">
     <div class="ds-card-body">
-        {% if advance_voting_station %}
+        {% if polling_day_hubs %}
             {% if NEXT_CHARISMATIC_ELECTION_DATE %}
-                <h3>{% blocktrans with polling_day=NEXT_CHARISMATIC_ELECTION_DATE%}Vote on {{ polling_day }}{% endblocktrans %}</h3>
+                <h3>{% blocktrans with polling_day=NEXT_CHARISMATIC_ELECTION_DATE%}Places you can vote on {{ polling_day }}{% endblocktrans %}</h3>
             {% else %}
-                <h3>{% trans "Vote on polling day" %}</h3>
+                <h3>{% trans "Places you can vote on polling day" %}</h3>
             {% endif %}
         {% endif %}
+
         <p>
             {% blocktrans %}You can vote in person at:{% endblocktrans %}
         </p>
@@ -55,39 +37,31 @@
 
         {% include "fragments/opening_times.html" %}
 
-        {% comment %} {% if territory != 'NI' %}
-            <p>
-                {% blocktrans %}If you have a postal vote, you can hand it in at this polling station on election day up to 10pm{% endblocktrans %}
-            </p>
-        {% endif %} {% endcomment %}
+        {% if polling_day_hubs and directions.time %}
+            {% include "fragments/travel_time.html" %}
+        {% endif %}
 
     </div>
     {% if station.location %}
         <div id="area_map" class="ds-map-leaflet"></div>
     {% endif %}
+
+    {% include "fragments/polling_day_hubs.html" %}
 </div>
-{% if directions.time or  station.accessibility_information.getting_to_the_station or station_is_temporary or has_at_station_info %}
-    <div class="ds-card" id="station-info">
-        <div class="ds-card-body">
-            {% if directions.time or  station.accessibility_information.getting_to_the_station or station_is_temporary %}
-                {% include "fragments/getting_to_the_station.html" %}
-            {% endif %}
-            {%  if has_at_station_info  %}
-                {% include "fragments/at_the_station.html" %}
-            {% endif %}
+
+{% if not polling_day_hubs %}
+    {% if directions.time or  station.accessibility_information.getting_to_the_station or station_is_temporary or has_at_station_info %}
+        <div class="ds-card" id="station-info">
+            <div class="ds-card-body">
+                {% if directions.time or  station.accessibility_information.getting_to_the_station or station_is_temporary %}
+                    {% include "fragments/getting_to_the_station.html" %}
+                {% endif %}
+                {%  if has_at_station_info  %}
+                    {% include "fragments/at_the_station.html" %}
+                {% endif %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endif %}
 
-{% if advance_voting_station and not advance_voting_station.open_in_future %}
-    <div class="ds-card">
-        <div class="ds-card-body">
-            {% blocktrans %}
-                <h3>Advance voting trial</h3>
-                <p>Your council conducted a trial that allowed you to vote before polling day.</p>
-                <p>The advance voting station is now closed, and you must vote at your assigned polling station.</p>
-                <p>If you voted in advance of polling day, then you can't vote again today.</p>
-            {% endblocktrans %}
-        </div>
-    </div>
-{% endif %}
+{% include "fragments/advance_hubs.html" %}

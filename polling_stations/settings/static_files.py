@@ -37,6 +37,7 @@ PIPELINE["JAVASCRIPT"].update(
                 "@mapbox/polyline/src/polyline.js",
                 "custom_js/polyline_global.js",
                 "custom_js/map.js",
+                "custom_js/hub_maps.js",
             ],
             "output_filename": "js/map.js",
         },
