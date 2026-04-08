@@ -34,6 +34,18 @@ from .mixins import parse_qs_to_python
 from .pollingstations import PollingStationGeoSerializer
 
 
+def sort_stations_by_distance(stations, point):
+    if not point:
+        return stations
+
+    def distance_key(station):
+        if station.location:
+            return point.distance(station.location)
+        return float("inf")
+
+    return sorted(stations, key=distance_key)
+
+
 def get_bug_report_url(request, station_known):
     if not station_known:
         return None
@@ -183,11 +195,14 @@ class AddressViewSet(ViewSet):
 
         # council object
         ret["council"] = address.council
-        ret["alternative_voting_stations"] = [
-            avs
-            for avs in address.uprntocouncil.advance_voting_stations.all()
-            if avs.open_in_future
-        ]
+        ret["alternative_voting_stations"] = sort_stations_by_distance(
+            [
+                avs
+                for avs in address.uprntocouncil.advance_voting_stations.all()
+                if avs.open_in_future
+            ],
+            address.location,
+        )
 
         # attempt to attach point
         # in this situation, failure to geocode is non-fatal
