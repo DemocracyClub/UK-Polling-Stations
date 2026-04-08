@@ -15,7 +15,11 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from uk_geo_utils.helpers import AddressSorter, Postcode
 
-from .address import PostcodeResponseSerializer, get_bug_report_url
+from .address import (
+    PostcodeResponseSerializer,
+    get_bug_report_url,
+    sort_stations_by_distance,
+)
 from .councils import tmp_fix_sp_26_details
 from .mixins import parse_qs_to_python
 
@@ -135,7 +139,9 @@ class PostcodeViewSet(ViewSet):
                 ret["council"] = ret["polling_station"].council
 
         # get advance voting station
-        ret["alternative_voting_stations"] = self.generate_advance_voting_stations(rh)
+        ret["alternative_voting_stations"] = sort_stations_by_distance(
+            self.generate_advance_voting_stations(rh), location
+        )
 
         ret["metadata"] = ee.get_metadata()
 
