@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "THE"
     addresses_name = (
-        "2025-05-01/2025-03-06T09:55:19.565747/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-03-24T11:55:44.867070/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2025-05-01/2025-03-06T09:55:19.565747/Democracy_Club__01May2025.tsv"
+        "2026-05-07/2026-03-24T11:55:44.867070/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2025-05-01"]
+    elections = ["2026-05-07"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -29,6 +29,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # Council confirmed postcode for:
-        # Coates Way School, Coates Way, Garston, Watford, WD25 9NW (id: 6026)
+        # WARNING: Polling station Coates Way School is in Watford Borough Council (WAT)
+        # WARNING: Polling station Leavesden Green is in Watford Borough Council (WAT)
+        # addresses and locations are correct, just across the council border
+
+        # wrong uprn for: Coates Way School, Coates Way, Garston, Watford, WD25 9NW
+        if record.polling_place_id == "6990":
+            record = record._replace(polling_place_uprn="")
+
+        # wrong uprn for: Hillside Centre, Hillside Road, Chorleywood, Rickmansworth, WD3 5AP
+        if record.polling_place_id == "6939":
+            record = record._replace(polling_place_uprn="")
+
         return super().station_record_to_dict(record)
