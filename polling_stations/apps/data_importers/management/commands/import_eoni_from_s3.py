@@ -113,6 +113,8 @@ class Command(BaseCommand):
             "PREM_POSTCODE",
             "PREM_FULLADDRESS",
             "PREM_UPRN",
+            "PREM_FILL_COLOUR",
+            "PREM_BORDER_COLOUR",
         ]
         self.station_x_field_prefix = "PREM_X_COR"
         self.station_y_field_prefix = "PREM_Y_COR"
