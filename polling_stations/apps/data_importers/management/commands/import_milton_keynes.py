@@ -36,7 +36,7 @@ class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
     def add_advance_voting_stations(self):
         # https://www.milton-keynes.gov.uk/your-council-and-elections/elections-and-register-vote/central-voting-hub-trial
         opening_times = OpeningTimes()
-        opening_times.add_open_time("2026-05-07", "07:00", "10:00")
+        opening_times.add_open_time("2026-05-07", "07:00", "22:00")
 
         midsummer_place_advance_station = AdvanceVotingStation(
             name="Midsummer Place Shopping Centre",
