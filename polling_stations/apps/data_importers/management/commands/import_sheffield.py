@@ -3,8 +3,8 @@ from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "SHF"
-    addresses_name = "2026-05-07/2026-03-05T21:25:47.332823/Democracy Club - Idox_2026-03-05 17-45.csv"
-    stations_name = "2026-05-07/2026-03-05T21:25:47.332823/Democracy Club - Idox_2026-03-05 17-45.csv"
+    addresses_name = "2026-05-07/2026-04-09T10:29:11.580036/Democracy Club - Idox_2026-04-09 10-16.csv"
+    stations_name = "2026-05-07/2026-04-09T10:29:11.580036/Democracy Club - Idox_2026-04-09 10-16.csv"
     elections = ["2026-05-07"]
 
     def address_record_to_dict(self, record):
@@ -57,9 +57,7 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             # suspect
             "S2 1BP",
             "S6 2LN",
-            "S10 4JY",
             "S17 4DN",
-            "S6 2PB",
             "S3 7LY",
         ]:
             return None
