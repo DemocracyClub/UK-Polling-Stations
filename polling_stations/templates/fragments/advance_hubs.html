@@ -1,0 +1,52 @@
+{% load i18n %}
+
+{% if advance_hubs %}
+    <div class="ds-card" id="vote-before-polling-day">
+        <div class="ds-card-body">
+            <h3>{% trans "Places you can vote before polling day" %}</h3>
+            <ul class="ds-details">
+                {% for item in advance_hubs %}
+                    <li>
+                        <details{% if forloop.first %} open{% endif %}>
+                            <summary>{{ item.station.name }}</summary>
+                            <address>
+                                {{ item.station.address|linebreaksbr }} <br />
+                                {{ item.station.postcode }}
+                            </address>
+                            <br>
+                            {% if item.directions %}
+                                {% include "fragments/travel_time.html" with directions=item.directions %}
+                            {% endif %}
+                            <br>
+                            {% if item.filtered_opening_times %}
+                                <h4>{% trans "Opening times" %}</h4>
+                                <div class="ds-table">
+                                    <table>
+                                        <tr>
+                                            <th>{% trans "Date" %}</th>
+                                            <th>{% trans "Open" %}</th>
+                                        </tr>
+                                        {% for opening_time in item.filtered_opening_times %}
+                                            <tr>
+                                                <td>{% ifchanged opening_time.0 %}{{ opening_time.0 }}{% endifchanged %}</td>
+                                                <td>{{ opening_time.1 }} — {{ opening_time.2 }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            {% endif %}
+                            <br>
+                            {% if item.station.location %}
+                                <div id="hub_map_{{ forloop.counter0 }}" class="ds-map-leaflet"
+                                     data-hub-map
+                                     data-lat="{{ item.station.location.1 }}"
+                                     data-lng="{{ item.station.location.0 }}"
+                                     {% if item.directions.route %}data-route="{{ item.directions.route }}" data-precision="{{ item.directions.precision }}"{% endif %}></div>
+                            {% endif %}
+                        </details>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}
