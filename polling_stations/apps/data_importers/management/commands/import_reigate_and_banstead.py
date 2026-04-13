@@ -12,6 +12,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # postcode fix confirmed by council for:
+        # Woodmansterne Village Hall, Carshalton Road, Woodmansterne, Banstead, SM7 3HH
+        if record.polling_place_id == "5569":
+            record = record._replace(polling_place_postcode="SM7 3HR")
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.lstrip("0")
 
