@@ -13,6 +13,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # station change from council
+        # OLD: Start-Up Croydon, Weatherill House, 23 Whitestone Way, Croydon, CR0 4WF
+        # NEW: Temporary Polling Station, Car Park, M&S Purley Cross, 330 Purley Way, Croydon CR0 4XJ
+        if record.polling_place_id == "17965":
+            record = record._replace(
+                polling_place_name="Temporary Polling Station",
+                polling_place_address_1="Car Park",
+                polling_place_address_2="M&S Purley Cross",
+                polling_place_address_3="330 Purley Way",
+                polling_place_address_4="Croydon",
+                polling_place_postcode="CR0 4XJ",
+            )
+
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
