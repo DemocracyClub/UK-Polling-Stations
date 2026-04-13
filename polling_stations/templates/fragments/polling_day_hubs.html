@@ -8,6 +8,9 @@
                 <li>
                     <details>
                         <summary>{{ item.station.name }}</summary>
+                        <p>
+                            {% blocktrans %}You can vote in person at:{% endblocktrans %}
+                        </p><br>
                         <address>
                             {{ item.station.name }} <br>
                             {{ item.station.address|linebreaksbr }} <br>
@@ -17,11 +20,14 @@
                         <br>
 
                         {% if item.filtered_opening_times %}
-                            <strong>
-                                {% blocktrans with open=item.filtered_opening_times.0.1 close=item.filtered_opening_times.0.2 %}
-                                    You can vote between {{ open }} and {{ close }}
-                                {% endblocktrans %}
-                            </strong>
+                            <p>
+                                <strong>
+                                    {% blocktrans with open=item.filtered_opening_times.0.1|time:"gA"|lower close=item.filtered_opening_times.0.2|time:"gA"|lower %}
+                                        You can vote between {{ open }} and {{ close }}
+                                    {% endblocktrans %}{% if not next_election_date %}.{% endif %}
+                                    {% if next_election_date %}{% blocktrans %} on {{ next_election_date }}{% endblocktrans %}.{% endif %}
+                                </strong>
+                            </p>
                         {% endif %}
 
                         <br>

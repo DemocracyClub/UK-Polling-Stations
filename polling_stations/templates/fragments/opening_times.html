@@ -10,11 +10,11 @@
             {% endif %}
         </strong>
         {% blocktrans %}
-            For elections to other organisations (e.g: GLA or Parliament) polling stations will be open from 7am to 10pm.
+            For elections to other organisations (e.g: GLA or Parliament) polling stations will be open from 7am to 10pm
         {% endblocktrans %}
     {% else %}
         <strong>
-            {% blocktrans %}Polling stations are open from 7am to 10pm{% endblocktrans %}{% if not next_election_date %}.{% endif %}
+            {% blocktrans %}You can vote between 7am and 10pm{% endblocktrans %}{% if not next_election_date %}.{% endif %}
             {% if next_election_date %}{% blocktrans %} on {{ next_election_date }}{% endblocktrans %}.{% endif %}
         </strong>
     {% endif %}
