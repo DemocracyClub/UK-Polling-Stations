@@ -68,12 +68,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="421019",
             )
         # Halifax Fire Station The Community Room Skircoat Moor Road Halifax West Yorkshire
-        # No photo
-        # if record.polling_place_id == "1330":
-        #     record = record._replace(
-        #         polling_place_easting="",
-        #         polling_place_northing="",
-        #     )
+        if record.polling_place_id == "1330":
+            record = record._replace(
+                polling_place_easting="407880",
+                polling_place_northing="424116",
+            )
         # Halifax Vandals RUFC Warley Town Lane Warley Halifax
         if record.polling_place_id == "1326":
             record = record._replace(
