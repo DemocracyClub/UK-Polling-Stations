@@ -1,51 +1,57 @@
 {% load i18n %}
-{% if requires_voter_id %}
-    <div class="ds-card">
-        <div class="ds-card-body">
-            <h3>
-                <span aria-hidden="true">🪪</span>️
+<div class="ds-card">
+    <div class="ds-card-body">
+        <h3>
+            <span aria-hidden="true">🪪</span>️
+            {% if requires_voter_id %}
                 {% trans "You will need to take photo ID to vote at a polling station in this election" %}
-            </h3>
-            <p>
-                {% trans "You do not need your poll card to vote." %}
-            </p>
-            <p>
-                {% trans "You must vote at your assigned polling station." %}
-            </p>
-
-            {% if territory == 'NI' %}
-                <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
-                    {% trans "Read more about voting in Northern Ireland" %}
-                </a></p>
             {% else %}
-                <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
-                    {% trans "Read more about voting in Great Britain" %}
-                </a></p>
-            {% endif %}
-        </div>
-    </div>
-{% else %}
-    <div class="ds-card">
-        <div class="ds-card-body">
-            <h3>
-                <span aria-hidden="true">🪪</span>️
                 {% trans "You don't need your poll card to vote" %}
-            </h3>
-            <p>
-                {% trans "If you are registered to vote, but you don't have your poll card, you can go to the polling station and give them your name and address." %}
-            </p>
-
-            <p>{% trans "You must vote at your assigned polling station." %}</p>
-
-            {% if territory == 'NI' %}
-                <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
-                    {% trans "Read more about voting in Northern Ireland" %}
-                </a></p>
-            {% else %}
-                <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
-                    {% trans "Read more about voting in Great Britain" %}
-                </a></p>
             {% endif %}
-        </div>
+        </h3>
+        <p>
+            {% if requires_voter_id %}
+                {% trans "You do not need your poll card to vote." %}
+            {% else %}
+                {% trans "If you are registered to vote, but you don't have your poll card, you can go to the polling station and give them your name and address." %}
+            {% endif %}
+        </p>
+
+
+        {% if advance_hubs and not polling_day_hubs %}
+            {% blocktrans trimmed %}
+                <p>
+                    On polling day, you can only vote at your assigned polling station.
+                    You can vote at <a href="#vote-before-polling-day">a voting hub</a> before polling day.
+                </p>
+            {% endblocktrans %}
+        {% elif advance_hubs and polling_day_hubs %}
+            {% blocktrans trimmed %}
+                <p>
+                    You can vote at your <a href="#vote-on-polling-day">assigned polling station</a>
+                    or a <a href="#also-vote-at">voting hub</a> on polling day.
+                    You can also vote at <a href="#vote-before-polling-day">a voting hub</a> before polling day.
+                </p>
+            {% endblocktrans %}
+        {% elif polling_day_hubs and not advance_hubs %}
+            {% blocktrans trimmed %}
+                <p>
+                    You can vote at your <a href="#vote-on-polling-day">assigned polling station</a>
+                    or a <a href="#also-vote-at">voting hub</a> on polling day.
+                </p>
+            {% endblocktrans %}
+        {% else %}
+            <p>{% trans "You must vote at your assigned polling station." %}</p>
+        {% endif %}
+
+        {% if territory == 'NI' %}
+            <p><a href="http://www.eoni.org.uk/Vote/Voting-at-a-polling-place" target="_top">
+                {% trans "Read more about voting in Northern Ireland" %}
+            </a></p>
+        {% else %}
+            <p><a href="https://www.gov.uk/voting-in-the-uk/polling-stations" target="_top">
+                {% trans "Read more about voting in Great Britain" %}
+            </a></p>
+        {% endif %}
     </div>
-{% endif%}
+</div>
