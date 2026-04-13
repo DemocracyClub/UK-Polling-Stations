@@ -82,21 +82,23 @@
         {% if show_map %}
             var tile_layer = '{{ tile_layer }}';
 
-            $(document).ready(function() {
-                var station_point = [{{ station.location.1 }}, {{ station.location.0 }}];
+            {% if station.location %}
+                $(document).ready(function() {
+                    var station_point = [{{ station.location.1 }}, {{ station.location.0 }}];
 
-                {% if directions %}
-                    var directions = {
-                        route: {{ directions.route|safe }},
-                        precision: {{ directions.precision }}
-                    };
-                {% else %}
-                    var directions = {};
-                {% endif %}
+                    {% if directions %}
+                        var directions = {
+                            route: {{ directions.route|safe }},
+                            precision: {{ directions.precision }}
+                        };
+                    {% else %}
+                        var directions = {};
+                    {% endif %}
 
-                var map = new PollingStationMap('area_map');
-                map.draw(station_point, embed, tile_layer, mq_key, directions);
-            });
+                    var map = new PollingStationMap('area_map');
+                    map.draw(station_point, embed, tile_layer, mq_key, directions);
+                });
+            {% endif %}
         {% endif %}
     </script>
 {% endblock in_page_javascript %}
