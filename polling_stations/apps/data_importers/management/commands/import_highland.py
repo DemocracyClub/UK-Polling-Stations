@@ -8,6 +8,33 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
 
+    def station_record_to_dict(self, record):
+        # station change from council:
+        # OLD: SHIELBRIDGE HALL ACHARACLE PH36 4JL
+        # NEW: Acharcle Primary - Acharacle, Argyll, PH36 4JU
+        if record.stationcode == "SLB103":
+            record = record._replace(
+                xordinate="167465",
+                yordinate="768113",
+                placename="Acharcle Primary",
+                add1="",
+                add2="Acharacle",
+                add3="Argyll",
+                postcode="PH36 4JU",
+            )
+
+        # coord fix from council for:
+        # The Green Hall, Sinclair Terrace, Smithton, Inverness, IV2 7NP
+        if record.stationcode in [
+            "IN42",
+            "IN43",
+        ]:
+            record = record._replace(
+                xordinate="271300",
+                yordinate="845865",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
