@@ -76,4 +76,10 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
 
+        # District assignment fix from council
+        if record.polling_place_district_reference == "NLA4":
+            record = record._replace(polling_place_id="25294")
+        if record.polling_place_district_reference == "NLA5":
+            record = record._replace(polling_place_id="25298")
+
         return super().address_record_to_dict(record)
