@@ -10,7 +10,8 @@
                         <details{% if forloop.first %} open{% endif %}>
                             <summary>{{ item.station.name }}</summary>
                             <address>
-                                {{ item.station.address|linebreaksbr }} <br />
+                                {{ item.station.name }} <br>
+                                {{ item.station.address|linebreaksbr }} <br>
                                 {{ item.station.postcode }}
                             </address>
                             <br>
