@@ -51,5 +51,10 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         # Remove duplicated stations names
         record = record._replace(placename="")
+        # station name change from council:
+        # OLD: MÊS BACH / LITTLE ACORNS COMINS COCH BRONGWINAU ABERYSTWYTH, SY23 3BQ
+        # NEW: Ysgol Gynradd Comins Coch Primary School, Comins Coch, Aberystwyth , SY23 3BQ
+        if record.stationcode == "14-1015":
+            record = record._replace(add1="Ysgol Gynradd Comins Coch Primary School")
 
         return super().station_record_to_dict(record)
