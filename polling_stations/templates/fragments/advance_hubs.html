@@ -9,6 +9,9 @@
                     <li>
                         <details{% if forloop.first %} open{% endif %}>
                             <summary>{{ item.station.name }}</summary>
+                            <p>
+                                {% blocktrans %}You can vote in person at:{% endblocktrans %}
+                            </p><br>
                             <address>
                                 {{ item.station.name }} <br>
                                 {{ item.station.address|linebreaksbr }} <br>
