@@ -337,7 +337,7 @@ class Command(BaseCommand):
                     f"{y =}"
                 )
             )
-            self.stdout.write(self.style.WARNNG(f"Exception was: {str(e)}"))
+            self.stdout.write(self.style.WARNING(f"Exception was: {str(e)}"))
             return None, None
 
     def reproject_row(self, row, scheme_suffix, transformer, row_num):
