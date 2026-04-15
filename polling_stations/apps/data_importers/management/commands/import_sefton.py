@@ -3,9 +3,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SFT"
-    addresses_name = "2024-07-04/2024-07-02T11:08:49.736237/SFT_combined.tsv"
-    stations_name = "2024-07-04/2024-07-02T11:08:49.736237/SFT_combined.tsv"
-    elections = ["2024-07-04"]
+    addresses_name = (
+        "2026-05-07/2026-04-15T12:25:11.217522/Democracy_Club__02May2019.tsv"
+    )
+    stations_name = (
+        "2026-05-07/2026-04-15T12:25:11.217522/Democracy_Club__02May2019.tsv"
+    )
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -33,11 +37,27 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "L23 7TX",
+            "L30 7PD",
             # looks wrong
             "PR8 3LH",
             "L20 6JY",
+            "PR9 0AQ",
         ]:
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # postcode correction for: All Saints Parish Hall, Park Road, Southport, PR9 5JR
+        if record.polling_place_id == "4885":
+            record = record._replace(
+                polling_place_postcode=""
+            )  # PR9 9JR, waiting for council approval
+
+        # postcode correction for: Bootle Main Library, 220 Stanley Road, Bootle, L20 3GN
+        if record.polling_place_id == "5030":
+            record = record._replace(
+                polling_place_postcode=""
+            )  # L20 3EN, waiting for council approval
+
+        return super().station_record_to_dict(record)
