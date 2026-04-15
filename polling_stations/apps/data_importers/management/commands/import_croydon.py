@@ -20,8 +20,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         if record.polling_place_id == "17965":
             record = record._replace(
                 polling_place_name="Temporary Polling Station",
-                polling_place_address_1="Car Park",
-                polling_place_address_2="M&S Purley Cross",
+                polling_place_address_1="M&S Car Park",
+                polling_place_address_2="Purley Cross",
                 polling_place_address_3="330 Purley Way",
                 polling_place_address_4="Croydon",
                 polling_place_postcode="CR0 4XJ",
