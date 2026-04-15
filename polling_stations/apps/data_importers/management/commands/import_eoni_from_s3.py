@@ -115,6 +115,9 @@ class Command(BaseCommand):
             "PREM_UPRN",
             "PREM_FILL_COLOUR",
             "PREM_BORDER_COLOUR",
+            "PREM_CONSTITUENCY",
+            "PREM_DEA",
+            "PREM_COUNCIL",
         ]
         self.station_x_field_prefix = "PREM_X_COR"
         self.station_y_field_prefix = "PREM_Y_COR"
