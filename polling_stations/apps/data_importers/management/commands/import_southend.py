@@ -17,6 +17,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if uprn in [
             "10095537349",  # 190B SOUTHCHURCH ROAD, SOUTHEND-ON-SEA, SS1 2NL
+            "10093164023",  # 139 NESS ROAD, SHOEBURYNESS, SOUTHEND-ON-SEA
         ]:
             return None
 
@@ -34,3 +35,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # council change for: Booth 1 and 2, Shoeburyness & Thorpe Bay Baptist Church, 80 Thorpedene Gardens
+        if record.polling_place_id in ["10632", "10634"]:
+            record = record._replace(
+                polling_place_address_1="90 Thorpedene Gardens",
+                polling_place_postcode="SS3 9JD",
+                polling_place_easting="592720",
+                polling_place_northing="185120",
+            )
+
+        return super().station_record_to_dict(record)
