@@ -37,3 +37,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # council change for: Metro Inns Walsall, Birmingham Road, Walsall, WS5 3AB
+        if record.polling_place_id == "5054":
+            record = record._replace(
+                polling_place_name="",
+                polling_place_address_1="Temp on the corner of Lake Avenue and Cornwall Road",
+                polling_place_postcode="",
+                polling_place_easting="402844",
+                polling_place_northing="297186",
+            )
+
+        return super().station_record_to_dict(record)
