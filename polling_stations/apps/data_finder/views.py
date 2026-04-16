@@ -332,6 +332,12 @@ class BasePollingStationView(
         context["polling_day_hubs"] = polling_day_hubs
         context["advance_hubs"] = advance_hubs
 
+        context["pilot_info_url"] = None
+        if polling_day_hubs or advance_hubs:
+            context["pilot_info_url"] = settings.PILOT_LINKS_2026[
+                self.council.council_id
+            ]
+
         context["requires_voter_id"] = ee.get_voter_id_status()
         context["has_city_of_london_ballots"] = ee.has_city_of_london_ballots
 

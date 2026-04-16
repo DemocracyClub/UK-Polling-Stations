@@ -4,6 +4,7 @@
     <div class="ds-status-message" >
         {% trans "Your council is part of a flexible voting pilot." %}
         <br>
+
         {% if advance_hubs and polling_day_hubs %}
             {% blocktrans trimmed %}
                 You can vote at a voting hub
@@ -25,5 +26,9 @@
                 on polling day.
             {% endblocktrans %}
         {% endif %}
+        <br>
+        {% blocktrans with pilot_info_url as pilot_info_url %}
+            Your council has <a href="{{ pilot_info_url }}">more information on the pilot</a>
+        {% endblocktrans %}
     </div>
 {% endif %}
