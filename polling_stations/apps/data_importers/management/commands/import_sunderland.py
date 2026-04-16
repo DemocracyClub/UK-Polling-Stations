@@ -46,4 +46,11 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_northing="558024",
             )
 
+        # council coords correction for: Washington Village Hall, Valley Forge Washington, NE38 7JN
+        if record.polling_place_id == "19970":
+            record = record._replace(
+                polling_place_easting="430880",
+                polling_place_northing="556749",
+            )
+
         return super().station_record_to_dict(record)
