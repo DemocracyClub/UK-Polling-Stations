@@ -258,7 +258,10 @@ class AddressViewTestCase(TestCase):
         self.assertFalse(context["we_know_where_you_should_vote"])
         self.assertIsNone(context["station"])
 
-    @override_settings(SHOW_ADVANCE_VOTING_STATIONS=True)
+    @override_settings(
+        SHOW_ADVANCE_VOTING_STATIONS=True,
+        PILOT_LINKS_2026={"X01": "www.councilx.gov.uk/flexible-pilot-info/"},
+    )
     def test_advance_voting_stations_prefetched(self):
         address = Address.objects.get(uprn="100")
         uprn = address.uprntocouncil
