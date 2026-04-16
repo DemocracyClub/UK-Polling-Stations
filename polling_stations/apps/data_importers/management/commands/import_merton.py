@@ -15,3 +15,18 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # council station name change for: Ravensbury Residents Room, Ravensbury Grove, Mitcham, CR4 4DL
+        if record.pollingstationnumber == "29":
+            record = record._replace(
+                pollingstationname="Portacabin Ravensbury Residents Room"
+            )
+
+        # council station coordinates change for: Cherry Red Records Stadium, Plough Lane, London, SW17 0NR
+        if record.pollingstationnumber == "88":
+            record = record._replace(
+                pollingvenueeasting="526150", pollingvenuenorthing="171722"
+            )
+
+        return super().station_record_to_dict(record)
