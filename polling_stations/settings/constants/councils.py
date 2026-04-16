@@ -70,3 +70,9 @@ SP_CONSTITUENCY_26_BALLOT_TO_COUNCIL = {
     "sp.c.renfrewshire-west-and-levern-valley.2026-05-07": "RFW",  # Renfrewshire Council
     "sp.c.uddingston-and-bellshill.2026-05-07": "NLK",  # North Lanarkshire Council
 }
+
+PILOT_LINKS_2026 = {
+    "CAB": "https://www.cambridge.gov.uk/early-voting-trial/",
+    "MIK": "https://www.milton-keynes.gov.uk/your-council-and-elections/elections-and-register-vote/central-voting-hub-trial/",
+    "TUN": "https://tunbridgewells.gov.uk/council/voting-and-elections/elections/voter-hubs/",
+}
