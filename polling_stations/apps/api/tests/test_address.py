@@ -266,6 +266,30 @@ class AddressTest(TestCase):
         self.assertEqual(len(stations), 1)
         self.assertEqual(stations[0].pk, avs.pk)
 
+    def test_advance_voting_station_includes_pilot_info_url(self):
+        CouncilFactory(council_id="CAB")
+        utc = UprnToCouncil.objects.get(pk="200")
+        avs = AdvanceVotingStationFactory(
+            council_id="CAB",
+            opening_times=[["2099-01-01", "08:00", "20:00"]],
+        )
+        utc.advance_voting_stations.add(avs)
+
+        response = self.endpoint.retrieve(
+            self.request,
+            "200",
+            "json",
+            geocoder=mock_geocode,
+            log=False,
+        )
+
+        stations = response.data["alternative_voting_stations"]
+        self.assertEqual(len(stations), 1)
+        self.assertEqual(
+            stations[0]["pilot_info_url"],
+            "https://www.cambridge.gov.uk/early-voting-trial/",
+        )
+
     def test_bad_slug(self):
         # this address is not in our fixture
         response = self.endpoint.retrieve(
