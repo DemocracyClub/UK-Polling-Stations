@@ -69,9 +69,17 @@ class AddressSerializer(serializers.HyperlinkedModelSerializer):
 class AdvanceVotingStationSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdvanceVotingStation
-        fields = ("name", "address", "postcode", "location", "opening_times")
+        fields = (
+            "name",
+            "address",
+            "postcode",
+            "location",
+            "opening_times",
+            "pilot_info_url",
+        )
 
     opening_times = serializers.SerializerMethodField()
+    pilot_info_url = serializers.SerializerMethodField()
 
     @extend_schema_field(
         {
@@ -85,6 +93,10 @@ class AdvanceVotingStationSerializer(serializers.ModelSerializer):
     def get_opening_times(self, obj: AdvanceVotingStation):
         #
         return obj.opening_times_table
+
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_pilot_info_url(self, obj: AdvanceVotingStation):
+        return settings.PILOT_LINKS_2026.get(obj.council_id)
 
 
 class BallotSerializer(serializers.Serializer):
