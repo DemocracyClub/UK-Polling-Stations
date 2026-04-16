@@ -18,10 +18,9 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="384574")
             record = record._replace(polling_place_northing="345703")
 
-        # waiting for council response
-        # # add missing location for: Newcastle-under-Lyme Children`s Centre, Cemetery Road, Knutton, Newcastle-under-Lyme, Staffs
-        # if record.polling_place_id == "4468":
-        #     record = record._replace(polling_place_postcode="", polling_place_easting="", polling_place_northing="")
+        # add missing location for: Newcastle-under-Lyme Children`s Centre, Cemetery Road, Knutton, Newcastle-under-Lyme, Staffs
+        if record.polling_place_id == "4468":
+            record = record._replace(polling_place_postcode="ST5 6DH")
 
         return super().station_record_to_dict(record)
 
