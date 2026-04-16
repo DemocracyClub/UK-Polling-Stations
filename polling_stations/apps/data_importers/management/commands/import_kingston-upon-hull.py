@@ -39,3 +39,14 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # council change for: The Abbey Hotel, 141 Coronation Road North, Hull, HU5 5QP
+        if record.polling_place_id == "17297":
+            record = record._replace(
+                polling_place_name="Priory Baptist Church",
+                polling_place_address_1="Hotham Road South",
+                polling_place_postcode="HU5 5RN",
+            )
+
+        return super().station_record_to_dict(record)
