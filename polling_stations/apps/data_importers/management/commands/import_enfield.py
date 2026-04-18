@@ -3,10 +3,11 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ENF"
-    addresses_name = "2026-05-07/2026-04-01T13:58:44.346861/Democracy_Club__07May2026 - Updated - Whole Borough.csv"
-    stations_name = "2026-05-07/2026-04-01T13:58:44.346861/Democracy_Club__07May2026 - Updated - Whole Borough.csv"
+    addresses_name = "2026-05-07/2026-04-18T10:42:27.054426/Democracy_Club__07May2026 - Updated 17.4.26.tsv"
+    stations_name = "2026-05-07/2026-04-18T10:42:27.054426/Democracy_Club__07May2026 - Updated 17.4.26.tsv"
     elections = ["2026-05-07"]
     csv_encoding = "windows-1252"
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # Enfield Highway Community Centre, 117 Hertford Road, Enfield
@@ -38,6 +39,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 "207136289",  # CONSERVATIVE CLUB 278 BAKER STREET, ENFIELD
                 "207148523",  # 257 HERTFORD ROAD, ENFIELD
                 "207024752",  # PHOTOVOLTAIC AND PREMISES CUCKOO HALL ACADEMY SCHOOL CUCKOO HALL LANE, EDMONTON
+                "207025563",  # 81A NORTH CIRCULAR ROAD, LONDON
             ]
         ):
             return None
