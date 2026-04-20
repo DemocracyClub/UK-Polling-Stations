@@ -7,6 +7,10 @@ from data_importers.mixins import AdvanceVotingMixin
 from pollingstations.models import AdvanceVotingStation
 
 
+# This comment communicates no useful information
+# I just had to change the file to force it to run
+
+
 class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
     council_id = "TUN"
     addresses_name = (
