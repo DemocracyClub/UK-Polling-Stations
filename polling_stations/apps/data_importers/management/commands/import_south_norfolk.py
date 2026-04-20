@@ -21,3 +21,11 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # change request from council
+        # postcode correction for: Wymondham Rugby Club, Barnards Fields, Bray Drive, Wymondham, NR18 0QQ
+        if record.stationcode in ["S215", "S216"]:
+            record = record._replace(postcode="NR18 0GQ")
+
+        return super().station_record_to_dict(record)
