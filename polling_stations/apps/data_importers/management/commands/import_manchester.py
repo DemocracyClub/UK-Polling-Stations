@@ -41,3 +41,22 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # change requested by council
+        # Old station: Sandilands Primary School, Infant Department, Wendover Road, Brooklands, Manchester, M23 9JX
+        # New station (already in db): Church of the Nazarene, Wendover Road, Brooklands, Manchester, M23 9FN
+        if record.polling_place_id == "15420":
+            record = record._replace(
+                polling_place_name="Church of the Nazarene",
+                polling_place_address_1="Wendover Road",
+                polling_place_address_2="",
+                polling_place_address_3="Brooklands",
+                polling_place_address_4="Manchester",
+                polling_place_postcode="M23 9FN",
+                polling_place_uprn="",
+                polling_place_easting="379820",
+                polling_place_northing="389788",
+            )
+
+        return super().station_record_to_dict(record)
