@@ -59,7 +59,7 @@ class Command(BaseXpressDemocracyClubCsvImporter, AdvanceVotingMixin):
         # Saturday 2 May, from 9am to 6pm
         opening_times.add_open_time("2026-05-02", "09:00", "18:00")
         # Sunday 3 May, from 10.30am to 4.30pm
-        opening_times.add_open_time("2026-05-01", "10:30", "16:30")
+        opening_times.add_open_time("2026-05-03", "10:30", "16:30")
 
         # Royal Victoria Place, Royal Tunbridge Wells, TN1 2SS - Pop in Pop up unit, upper mall near M&S
         royal_victoria_place_avs = AdvanceVotingStation(
