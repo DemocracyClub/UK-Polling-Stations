@@ -1,5 +1,8 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 
+# This comment communicates no useful information
+# I just had to change the file to force it to run
+
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CRY"
