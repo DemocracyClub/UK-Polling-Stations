@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from api.router import router
 import data_finder.views as data_finder_views
 from django.conf import settings
