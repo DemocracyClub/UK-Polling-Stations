@@ -11,6 +11,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     )
     elections = ["2026-05-07"]
 
+    def station_record_to_dict(self, record):
+        # bugreport # 779
+        # remove suspect coords for:
+        # St Philip`s Church, Earl`s Court Road, London, W8 6QH
+        if record.polling_place_id == "1610":
+            record = record._replace(
+                polling_place_easting="0",
+                polling_place_northing="0",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         if record.addressline6 in [
             # split
