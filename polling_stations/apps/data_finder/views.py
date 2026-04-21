@@ -560,6 +560,7 @@ class MultipleCouncilsView(TemplateView, LogLookUpMixin, LanguageMixin):
     def get_context_data(self, **context):
         context["councils"] = Council.objects.filter(council_id__in=self.council_ids)
         context["territory"] = self.postcode.territory
+        context["noindex"] = True
 
         log_data = {
             "we_know_where_you_should_vote": False,
