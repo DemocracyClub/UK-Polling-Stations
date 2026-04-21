@@ -88,4 +88,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="0",
                 polling_place_northing="0",
             )
+        # bugreport # 778
+        # remove suspect coords for:
+        # Arts Centre Hall at Aurora Eccles School, Quidenham Road, Quidenham, NR16 2NZ
+        if record.polling_place_id == "15618":
+            record = record._replace(
+                polling_place_easting="0",
+                polling_place_northing="0",
+            )
         return super().station_record_to_dict(record)
