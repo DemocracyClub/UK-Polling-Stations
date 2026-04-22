@@ -4,21 +4,22 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KEC"
     addresses_name = (
-        "2026-05-07/2026-03-23T15:39:45.538368/Democracy_Club__07May2026.CSV"
+        "2026-05-07/2026-04-22T17:09:24.387101/Democracy_Club__07May2026 (1).tsv"
     )
     stations_name = (
-        "2026-05-07/2026-03-23T15:39:45.538368/Democracy_Club__07May2026.CSV"
+        "2026-05-07/2026-04-22T17:09:24.387101/Democracy_Club__07May2026 (1).tsv"
     )
     elections = ["2026-05-07"]
+    csv_delimiter = "\t"
 
     def station_record_to_dict(self, record):
         # bugreport # 779
-        # remove suspect coords for:
+        # fix coords for:
         # St Philip`s Church, Earl`s Court Road, London, W8 6QH
         if record.polling_place_id == "1610":
             record = record._replace(
-                polling_place_easting="0",
-                polling_place_northing="0",
+                polling_place_easting="525306",
+                polling_place_northing="178973",
             )
         return super().station_record_to_dict(record)
 
