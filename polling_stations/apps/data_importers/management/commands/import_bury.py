@@ -40,18 +40,8 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # removing postcodes in question for now, pending council response
-
-        # Postcode correction for: Greenhill CP School, Mile Lane, Bury, BL9 2JR
-        if record.polling_place_id == "5939":
-            record = record._replace(polling_place_postcode="")
-
         # Postcode correction for: Chapelfield CP School, Clough Street, Radcliffe, M26 9LH
         if record.polling_place_id == "6005":
-            record = record._replace(polling_place_postcode="")
-
-        # Postcode correction for: St Margaret's Youth and Community Centre, St Margaret's Road, Prestwich, M25 5QB
-        if record.polling_place_id == "6045":
-            record = record._replace(polling_place_postcode="")
+            record = record._replace(polling_place_postcode="M26 1LH")
 
         return super().station_record_to_dict(record)
