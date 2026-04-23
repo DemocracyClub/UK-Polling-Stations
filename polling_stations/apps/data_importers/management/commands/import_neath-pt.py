@@ -1,4 +1,6 @@
 from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
+from pollingstations.models import PollingStation
+from addressbase.models import Address
 
 
 class Command(BaseHalarose2026UpdateCsvImporter):
@@ -101,3 +103,47 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             record = record._replace(pollingstationpostcode="SA11 4DB")
 
         return super().station_record_to_dict(record)
+
+    def post_import(self):
+        # The a117 data the councils sent had UPRNs for polling stations that weren't in the EMS data
+        a11y_uprns = {
+            "14-tabernacle-chapel": 10009185692,
+            "16-rock-chapel-vestry": 10023948786,
+            "1-st-marys-centre": 10009188044,
+            "20-afan-christian-fellowship": 10023947135,
+            "26-round-chapel-vestry-beulah": 10009187713,
+            "27-bertha-community-centre": 200002955824,
+            "29-wesley-church-schoolroom": 10009186752,
+            "34-aberavon-green-stars-rfc": 200002955636,
+            "3-bethlehem-evangelical-church": 10009186134,
+            "5-ebenezer-chapel-vestry": 10009186068,
+            "802-aberdulais-community-centre": 10009186156,
+            "803-st-johns-church-hall": 10023949072,
+            "810-cadoxton-community-centre": 10009186157,
+            "820-the-community-hall": 10009185181,
+            "823-dyffryn-clydach-memorial-hall": 10009187888,
+            "825-glynneath-town-hall": 100101040063,
+            "827-community-hall": 10023949024,
+            "835-neath-civic-centre": 10009179669,
+            "837-clive-roberts-hall-cimla-scout-hall": 10009186960,
+            "838-st-josephs-rc-church-hall": 10009186073,
+            "841-alltycham-rhydyfro-community-hall": 10009185155,
+            "843-clyne-community-centre": 100101040321,
+            "845-sardis-chapel-vestry": 10009186142,
+            "846-noddfa-newydd-baptist-church": 10014160520,
+            "847-the-community-centre": 100101040731,
+            "848-trebanos-community-hall": 200002961591,
+            "852-mission-hall": 10009185742,
+            "855-jersey-marine-methodist-church": 10009185744,
+            "856-bay-studios": 10014165056,
+        }
+
+        for station_id, uprn in a11y_uprns.items():
+            try:
+                ps = PollingStation.objects.get(internal_council_id=station_id)
+                if not ps.location:
+                    address = Address.objects.get(uprn=uprn)
+                    ps.location = address.location
+                    ps.save()
+            except (PollingStation.DoesNotExist, Address.DoesNotExist):
+                continue
