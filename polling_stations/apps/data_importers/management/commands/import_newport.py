@@ -1,5 +1,7 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
 from django.contrib.gis.geos import Point
+from pollingstations.models import PollingStation
+from addressbase.models import Address
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
@@ -53,3 +55,31 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def post_import(self):
+        # The a117 data the councils sent had UPRNs for polling stations that weren't in the EMS data
+        a11y_uprns = {
+            "13769": 100101047109,
+            "13794": 100101047036,
+            "13860": 100101046805,
+            "13884": 100101046172,
+            "13913": 10014123002,
+            "13920": 10002154609,
+            "13930": 100101047035,
+            "13932": 10014122665,
+            "13955": 10009645907,
+            "13972": 10093295827,
+            "13988": 10009646747,
+            "13991": 10096454628,
+            "14009": 100100974074,
+        }
+
+        for station_id, uprn in a11y_uprns.items():
+            try:
+                ps = PollingStation.objects.get(internal_council_id=station_id)
+                if not ps.location:
+                    address = Address.objects.get(uprn=uprn)
+                    ps.location = address.location
+                    ps.save()
+            except (PollingStation.DoesNotExist, Address.DoesNotExist):
+                continue
