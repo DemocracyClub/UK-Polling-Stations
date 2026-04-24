@@ -4,37 +4,31 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "ROH"
     addresses_name = (
-        "2024-07-04/2024-06-05T16:44:23.968355/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-04-24T10:10:06.338529/Democracy_Club__07May2026.tsv"
     )
     stations_name = (
-        "2024-07-04/2024-06-05T16:44:23.968355/Democracy_Club__04July2024.tsv"
+        "2026-05-07/2026-04-24T10:10:06.338529/Democracy_Club__07May2026.tsv"
     )
-    elections = ["2024-07-04"]
+    elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if (
-            uprn
-            in [
-                "10002667898",  # MEAD COTTAGE, CROWHURST ROAD, CATSFIELD, BATTLE
-                "10002656457",  # THE CARAVAN, THREE GATES FARM, PASHLEY ROAD, TICEHURST, WADHURST
-                "10002651849",  # THREE GATES FARM, PASHLEY ROAD, TICEHURST, WADHURST
-                "10002668563",  # HOME FARM BARN, ETCHINGHAM
-                "100060097122",  # BOARZWOOD, LONDON ROAD, HURST GREEN, ETCHINGHAM
-                "100062553811",  # BOARSDEN, LONDON ROAD, HURST GREEN, ETCHINGHAM
-                "100061937222",  # BOUNDARY FARM, LONDON ROAD, HURST GREEN, ETCHINGHAM
-                "10002651836",  # LUDPIT COTTAGE, LUDPIT LANE, ETCHINGHAM
-                "10002668412",  # COWFIELD COTTAGE, BODIAM, ROBERTSBRIDGE
-                "10090508857",  # 2 OCKHAM MEWS, BODIAM, ROBERTSBRIDGE
-                "10090507447",  # 1 OCKHAM MEWS, BODIAM, ROBERTSBRIDGE
-                "10002662323",  # DYKES FARM, EWHURST GREEN, ROBERTSBRIDGE
-                "100060089232",  # 49 ELLERSLIE LANE, BEXHILL-ON-SEA
-                "100062584403",  # HIGHWOODS GOLF CLUB LTD, 47 ELLERSLIE LANE, BEXHILL-ON-SEA
-                "100062569487",  # KEEPERS COTTAGE, BRIGHTLING ROAD, ROBERTSBRIDGE
-            ]
-        ):
+        if uprn in [
+            "10002668563",  # HOME FARM BARN, ETCHINGHAM
+            "10002651836",  # LUDPIT COTTAGE, LUDPIT LANE, ETCHINGHAM
+            "10002668412",  # COWFIELD COTTAGE, BODIAM, ROBERTSBRIDGE
+            "10090508857",  # 2 OCKHAM MEWS, BODIAM, ROBERTSBRIDGE
+            "10090507447",  # 1 OCKHAM MEWS, BODIAM, ROBERTSBRIDGE
+            "10002662323",  # DYKES FARM, EWHURST GREEN, ROBERTSBRIDGE
+            "100060089232",  # 49 ELLERSLIE LANE, BEXHILL-ON-SEA
+            "100062584403",  # HIGHWOODS GOLF CLUB LTD, 47 ELLERSLIE LANE, BEXHILL-ON-SEA
+        ]:
             return None
 
+        if record.addressline6 in [
+            "TN40 2AG",  # split
+        ]:
+            return None
         return super().address_record_to_dict(record)
