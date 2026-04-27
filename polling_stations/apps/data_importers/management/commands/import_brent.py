@@ -3,8 +3,10 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "BEN"
-    addresses_name = "2026-05-07/2026-02-18T21:56:26.335831/Democracy Club Polling Districts 2026.csv"
-    stations_name = "2026-05-07/2026-02-18T21:56:26.335831/Democracy Club Polling Polling Stations 2026.csv"
+    addresses_name = "2026-05-07/2026-04-30T17:50:11.053851/Democracy Club Polling Districts 2704.csv"
+    stations_name = (
+        "2026-05-07/2026-04-30T17:50:11.053851/Democracy Club Polling Staions 2704.csv"
+    )
     elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
 
@@ -45,14 +47,14 @@ class Command(BaseDemocracyCountsCsvImporter):
         # UCFB Arch View House 16 First Way Wembley
         if record.stationcode in [
             "125",
-            "126",
+            "124",
         ]:
             record = record._replace(xordinate="519665", yordinate="185790")
 
         # SWAGAT Hall 19 Dudden Hill Lane London, NW10 2ET
         if record.stationcode in [
+            "126",
             "127",
-            "128",
         ]:
             record = record._replace(xordinate="522181", yordinate="184858")
 
