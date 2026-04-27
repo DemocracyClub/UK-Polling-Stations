@@ -12,6 +12,18 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     elections = ["2026-05-07"]
     csv_delimiter = "\t"
 
+    def station_record_to_dict(self, record):
+        # station correction from council for:
+        # OLD: Staffordshire University Academy, Main Entrance off Marston Road, Hednesford, WS12 4JH
+        # NEW: Staffordshire University Academy, View Street entrance, Hednesford, WS12 4JH
+        if record.polling_place_id == "5766":
+            record = record._replace(
+                polling_place_address_1="View Street entrance",
+                polling_place_easting="398886",
+                polling_place_northing="312703",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
