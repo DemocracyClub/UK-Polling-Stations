@@ -96,4 +96,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="0",
                 polling_place_northing="0",
             )
+
+        # bugreport # 784
+        # remove suspect coords for:
+        # Attleborough Baptist Church Leys Lane Attleborough
+        if record.polling_place_id == "15644":
+            record = record._replace(
+                polling_place_easting="0",
+                polling_place_northing="0",
+            )
         return super().station_record_to_dict(record)
