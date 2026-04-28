@@ -252,9 +252,10 @@ LOGGING = {
 }
 
 LANGUAGE_CODE = "en"
+# Welsh is temporarily disabled while translations are being sorted out.
 LANGUAGES = [
     ("en", "English"),
-    ("cy", "Welsh"),
+    # ("cy", "Welsh"),
 ]
 USE_I18N = (True,)
 
