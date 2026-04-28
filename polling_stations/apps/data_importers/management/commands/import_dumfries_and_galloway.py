@@ -15,6 +15,14 @@ class Command(BaseDemocracyCountsCsvImporter):
                 xordinate="287817",
                 yordinate="595787",
             )
+
+        # remove point for BALMAGHIE PUBLIC HALL
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/786/change/
+        if record.stationcode in ["GWD37"]:
+            record = record._replace(
+                xordinate="0",
+                yordinate="0",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
