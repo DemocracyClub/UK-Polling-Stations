@@ -19,6 +19,16 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         # TREFIL VILLAGE HALL, TREFIL, TREDEGAR, NP22 4HG
         # WILLIAM POWELL MEMORIAL HALL, BOURNVILLE ROAD, BLAINA, NP13 3ES
 
+        # station change from council:
+        # OLD: SIX BELLS BOWLS CLUB, LLWYNON ROAD, SIX BELLS, ABERTILLERY, NP13 2QA
+        # NEW: Sixbells Tennis Club, Windsor Road, Sixbells, Abertillery, NP13 2PB
+        if self.get_station_hash(record) == "20-six-bells-bowls-club":
+            record = record._replace(
+                pollingstationname="SIX BELLS TENNIS CLUB",
+                pollingstationaddress1="WINDSOR ROAD",
+                pollingstationpostcode="NP13 2PB",
+                pollingvenueuprn="0",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
@@ -34,5 +44,11 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             "NP23 5DH",  # split
         ]:
             return None
+
+        # station change from council:
+        if self.get_station_hash(record) == "20-six-bells-bowls-club":
+            record = record._replace(
+                pollingstationname="SIX BELLS TENNIS CLUB",
+            )
 
         return super().address_record_to_dict(record)
