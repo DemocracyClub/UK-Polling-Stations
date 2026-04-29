@@ -15,12 +15,12 @@ class Command(BaseDemocracyCountsCsvImporter):
                 xordinate="298052",
                 yordinate="169848",
             )
-        # removing suspect coordinates for:
+        # fixing coordinates for:
         # LLANGAN AND ST MARY HILL COMMUNITY CENTRE (TB0/TC0) HEOL LLIDIARD ST MARY HILL VALE OF GLAMORGAN
         if record.stationcode == "61":
             record = record._replace(
-                xordinate="0",
-                yordinate="0",
+                xordinate="296995",
+                yordinate="178219",
             )
 
         return super().station_record_to_dict(record)
