@@ -19,7 +19,6 @@
     <h3>
         <span aria-hidden="true">🔎</span>
         {% trans "Did you find what you were looking for?" %}
-        <span aria-hidden="true">🔎</span>
     </h3>
     <span id="feedback_choices_container">
         {% for choice in feedback_form.found_useful %}
@@ -30,7 +29,7 @@
     <div id="vote_choices_container">
         <h3><span aria-hidden="true">🗳️</span>
             {% trans "Has this service changed your likelihood of voting?" %}
-            <span aria-hidden="true">🗳️</span></h3>
+        </h3>
         {% for choice in feedback_form.vote %}
             {{ choice.tag }}
             <label class="link-button" for="{{ choice.id_for_label }}"> {{ choice.choice_label }}</label>
