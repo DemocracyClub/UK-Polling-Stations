@@ -357,8 +357,8 @@ wheels = [
 
 [[package]]
 name = "dc-design-system"
-version = "0.9.0"
-source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.9.0#8af8c58cafe8cd19eb2d50c9e06d83f8413c08f6" }
+version = "0.9.2"
+source = { git = "https://github.com/DemocracyClub/design-system.git?tag=0.9.2#986a1685fd8c8d7e99115a2ba3c8e920d8ce43b2" }
 
 [[package]]
 name = "dc-django-utils"
@@ -1890,7 +1890,7 @@ requires-dist = [
     { name = "botocore", specifier = "==1.35.78" },
     { name = "chardet", specifier = "==5.2.0" },
     { name = "commitment", specifier = "==3.0.1" },
-    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.9.0" },
+    { name = "dc-design-system", git = "https://github.com/DemocracyClub/design-system.git?tag=0.9.2" },
     { name = "dc-django-utils", git = "https://github.com/DemocracyClub/dc_django_utils.git?tag=8.0.5" },
     { name = "dc-logging-utils", git = "https://github.com/DemocracyClub/dc_logging.git?tag=3.0.0" },
     { name = "django", specifier = "==5.2.13" },
