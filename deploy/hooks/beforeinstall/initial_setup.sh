@@ -41,6 +41,7 @@ echo "Apt finished, continuing"
 
 
 # Install apt packages
+apt-get upgrade --yes
 apt-get install --yes gdal-bin libproj-dev nginx postgresql-16-postgis-3
 
 # Reinstall unattended-upgrades
