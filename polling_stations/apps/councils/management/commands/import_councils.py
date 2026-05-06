@@ -67,6 +67,13 @@ NI_BOUNDARY_GSS_CODES = [
 NI_ID_FIELD = "LGDCode"
 
 
+def clean_url(url):
+    url = url.replace("\\", "").strip()
+    if url and not url.startswith("http"):
+        return f"https://{url}"
+    return url
+
+
 class Command(BaseCommand):
     """
     Turn off auto system check for all apps
@@ -248,16 +255,16 @@ class Command(BaseCommand):
                 )
                 council.electoral_services_postcode = electoral_services["postcode"]
                 council.electoral_services_phone_numbers = electoral_services["tel"]
-                council.electoral_services_website = electoral_services[
-                    "website"
-                ].replace("\\", "")
+                council.electoral_services_website = clean_url(
+                    electoral_services["website"]
+                )
             if council_data["registration"]:
                 registration = council_data["registration"][0]
                 council.registration_email = registration["email"]
                 council.registration_address = unescape(registration["address"])
                 council.registration_postcode = registration["postcode"]
                 council.registration_phone_numbers = registration["tel"]
-                council.registration_website = registration["website"].replace("\\", "")
+                council.registration_website = clean_url(registration["website"])
 
             if council.council_id in WELSH_COUNCIL_NAMES:
                 council.name_translated["cy"] = WELSH_COUNCIL_NAMES[council.council_id]
