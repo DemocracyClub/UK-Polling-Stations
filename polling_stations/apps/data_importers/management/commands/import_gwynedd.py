@@ -7,6 +7,24 @@ class Command(BaseHalarose2026UpdateCsvImporter):
     stations_name = "2026-05-07/2026-02-23T11:40:14.920142/GWN_combined.csv"
     elections = ["2026-05-07"]
 
+    def station_record_to_dict(self, record):
+        # station change from council:
+        # OLD: PENCADLYS Y SGOWTIAID/SCOUTS H.Q., MAES CADNANT, CAERNARFON CAERNARFON, LL55 1BS
+        # NEW: Ganolfan Hamdden Arfon Leisure Centre, Bethel Rd, Caernarfon LL55 1HW
+        if (
+            self.get_station_hash(record)
+            == "15-pencadlys-y-sgowtiaidscouts-hq-maes-cadnant-caernarfon"
+        ):
+            record = record._replace(
+                pollingstationname="Ganolfan Hamdden Arfon Leisure Centre",
+                pollingstationaddress1="Bethel Rd",
+                pollingstationaddress2="Caernarfon",
+                pollingstationpostcode="LL55 1HW",
+                pollingvenueeasting="0",
+                pollingvenuenorthing="0",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
@@ -41,4 +59,14 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         ]:
             return None
 
+        # station change from council:
+        # OLD: PENCADLYS Y SGOWTIAID/SCOUTS H.Q., MAES CADNANT, CAERNARFON CAERNARFON, LL55 1BS
+        # NEW: Ganolfan Hamdden Arfon Leisure Centre, Bethel Rd, Caernarfon LL55 1HW
+        if (
+            self.get_station_hash(record)
+            == "15-pencadlys-y-sgowtiaidscouts-hq-maes-cadnant-caernarfon"
+        ):
+            record = record._replace(
+                pollingstationname="Ganolfan Hamdden Arfon Leisure Centre",
+            )
         return super().address_record_to_dict(record)
