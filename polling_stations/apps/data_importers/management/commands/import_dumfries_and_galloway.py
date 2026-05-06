@@ -23,6 +23,14 @@ class Command(BaseDemocracyCountsCsvImporter):
                 xordinate="268053",
                 yordinate="564746",
             )
+
+        # remove point for MIDDLEBIE COMMUNITY CENTRE
+        # https://wheredoivote.co.uk/admin/bug_reports/bugreport/791/change/
+        if record.stationcode in ["DFS71"]:
+            record = record._replace(
+                xordinate="0",
+                yordinate="0",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
