@@ -410,7 +410,7 @@ class AddressList(AssignPollingStationsMixin):
         if postcodes_to_warn:
             self.logger.log_message(
                 logging.WARNING,
-                f"These postcodes are split in council data: {', '.join(postcodes_to_warn)}, "
+                f"These postcodes are split in council data: {', '.join(sorted(postcodes_to_warn))}, "
                 "but won't be in the db once imported.",
                 pretty=True,
             )
