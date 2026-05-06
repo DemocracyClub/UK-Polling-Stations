@@ -40,5 +40,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         # postcode correction for: Barley Hall, Ethelburga Way, Barking, IG11 7JG
         if record.polling_place_id == "8335":
             record = record._replace(polling_place_postcode="IG11 7EX")
-
+        # Station change from council
+        # OLD: Roding Primary School, Cannington Road Site, Dagenham, RM9 4BJ
+        # NEW: St Cedd’s Church, 185 Lodge Avenue, Dagenham, RM8 2HQ
+        if record.polling_place_id == "8164":
+            record = record._replace(
+                polling_place_name="St Cedd's Church",
+                polling_place_address_1="185 Lodge Avenue",
+                polling_place_postcode="RM8 2HQ",
+            )
         return super().station_record_to_dict(record)
