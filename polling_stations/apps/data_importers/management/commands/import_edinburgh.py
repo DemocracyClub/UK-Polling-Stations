@@ -47,11 +47,25 @@ class Command(BaseHalarose2026UpdateCsvImporter):
             "EH15 1RB",
         ):
             return None
+        # station change from council
+        if self.get_station_hash(record) == "70-newcraighall-bowling-club":
+            record = record._replace(
+                pollingstationname="Newcraighall Leith Victoria Football Club Pavilion",
+            )
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
         if record.pollingvenueid not in self.COUNCIL_STATIONS:
             return None
-
+        # station change from council
+        # OLD: Newcraighall Bowling Club **Note New Polling Place** 115 Newcraighall Road Musselburgh EH21 8QU
+        # NEW: Newcraighall Leith Victoria Football Club Pavilion, Newcraighall Park, Newcraighall, EH21 8RP
+        if self.get_station_hash(record) == "70-newcraighall-bowling-club":
+            record = record._replace(
+                pollingstationname="Newcraighall Leith Victoria Football Club Pavilion",
+                pollingstationaddress2="Newcraighall Park",
+                pollingstationaddress3="Newcraighall",
+                pollingstationaddress4="EH21 8RP",
+            )
         return super().station_record_to_dict(record)
