@@ -41,4 +41,12 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         if self.get_station_hash(record) == "7-llangyfelach-church-hall":
             record = record._replace(pollingstationpostcode="SA5 7JD")
 
+        # fix station point for:
+        # Mobile Station At Long View Road, Opposite Penrhiw Road, Morriston Swansea, SA6 6BW
+        if self.get_station_hash(record) == "85-mobile-station-at-long-view-road":
+            record = record._replace(
+                pollingvenueeasting="265715",
+                pollingvenuenorthing="198781",
+            )
+
         return super().station_record_to_dict(record)
