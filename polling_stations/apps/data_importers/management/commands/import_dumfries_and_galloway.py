@@ -24,12 +24,18 @@ class Command(BaseDemocracyCountsCsvImporter):
                 yordinate="564746",
             )
 
-        # remove point for MIDDLEBIE COMMUNITY CENTRE
+        # station change from council
+        # OLD: MIDDLEBIE COMMUNITY CENTRE
+        # NEW: Village Hall, Waterbeck, Lockerbie, DG11 3EY
         # https://wheredoivote.co.uk/admin/bug_reports/bugreport/791/change/
         if record.stationcode in ["DFS71"]:
             record = record._replace(
-                xordinate="0",
-                yordinate="0",
+                placename="Village Hall",
+                add1="Waterbeck",
+                add2="Lockerbie",
+                postcode="DG11 3EY",
+                xordinate="324854",
+                yordinate="577654",
             )
         return super().station_record_to_dict(record)
 
