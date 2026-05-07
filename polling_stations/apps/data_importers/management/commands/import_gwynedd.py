@@ -23,6 +23,18 @@ class Command(BaseHalarose2026UpdateCsvImporter):
                 pollingvenueeasting="0",
                 pollingvenuenorthing="0",
             )
+
+        # bug report: https://app.asana.com/1/1204880536137786/project/1207538772343223/task/1214603910201691?focus=true
+        # removing bad coordinates for:
+        # Y GANOLFAN RHEOLAETH/ THE MANAGEMENT CENTRE STRYD Y COLEG/ COLLEGE ROAD BANGOR
+        if (
+            self.get_station_hash(record)
+            == "6-y-ganolfan-rheolaeth-the-management-centre"
+        ):
+            record = record._replace(
+                pollingvenueeasting="257876",
+                pollingvenuenorthing="372501",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
