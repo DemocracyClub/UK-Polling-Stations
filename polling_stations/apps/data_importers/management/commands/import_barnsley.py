@@ -81,4 +81,8 @@ class Command(BaseDemocracyCountsCsvImporter):
         if record.stationcode == "75":
             record = record._replace(xordinate="433482", yordinate="405907")
 
+        # fixed point for: POLLYFOX COMMUNITY CENTRE - Pollyfox Way, Dodworth, Barnsley, S75 3QR
+        if record.stationcode == "55":
+            record = record._replace(xordinate="431632", yordinate="405092")
+
         return super().station_record_to_dict(record)
