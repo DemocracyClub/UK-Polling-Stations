@@ -36,6 +36,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_uprn="7256454",
             )
 
+        # https://app.asana.com/1/1204880536137786/project/1207538772343223/task/1214598458247480?focus=true
+        # removing bad coords for:
+        # West Ardsley Methodist Church (Church Hall) Haigh Moor Road Tingley Wakefield
+        if record.polling_place_id == "25842":
+            record = record._replace(
+                polling_place_easting="0",
+                polling_place_northing="0",
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
