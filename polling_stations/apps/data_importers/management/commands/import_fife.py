@@ -24,6 +24,14 @@ class Command(BaseDemocracyCountsCsvImporter):
                 xordinate="327592",
                 yordinate="700592",
             )
+
+        # bug report # 837
+        if record.stationcode in ["35", "36", "37", "38"]:
+            record = record._replace(
+                xordinate="0",
+                yordinate="0",
+            )
+
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
