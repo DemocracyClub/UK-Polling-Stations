@@ -21,6 +21,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="525306",
                 polling_place_northing="178973",
             )
+
+        # bugreport # 836
+        # fix coords for:
+        # St Barnabas & St Philip's Primary School
+        if record.polling_place_id == "1607":
+            record = record._replace(
+                polling_place_easting="525169",
+                polling_place_northing="179157",
+                polling_place_uprn="",
+            )
         return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
