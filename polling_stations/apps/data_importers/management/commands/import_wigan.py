@@ -40,4 +40,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="0", polling_place_northing="0"
             )
 
+        # bug report # 835
+        # fix co-ordinates for Ince Independent Methodist Church
+        if record.polling_place_id == "12976":
+            record = record._replace(
+                polling_place_easting="359914",
+                polling_place_northing="405344",
+            )
+
         return super().station_record_to_dict(record)
