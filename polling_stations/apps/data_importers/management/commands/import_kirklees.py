@@ -19,15 +19,15 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="419480")
             record = record._replace(polling_place_northing="422649")
 
-        # Removing bad coordinates for:
+        # https://app.asana.com/1/1204880536137786/project/1207538772343223/task/1214597997167016?focus=true
+        # Fixing bad coordinates for:
         # Carlton Junior and Infant School Upper Road Dewsbury, WF13 2DQ
         if record.polling_place_id == "22112":
-            record = record._replace(polling_place_easting="0")
-            record = record._replace(polling_place_northing="0")
+            record = record._replace(polling_place_easting="423982")
+            record = record._replace(polling_place_northing="422773")
             record = record._replace(polling_place_uprn="0")
 
-        # https://app.asana.com/1/1204880536137786/project/1207538772343223/task/1214597997167016?focus=true
-        # Removing bad coordinates for:
+        # Fixng bad coordinates for:
         # Broad Oak Bowling Club, 73 Broad Oak, Cowlersley Lane, Linthwaite, Huddersfield, HD7 5TE
         if record.polling_place_id == "22238":
             record = record._replace(polling_place_easting="410268")
