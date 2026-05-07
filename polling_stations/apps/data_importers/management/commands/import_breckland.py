@@ -105,4 +105,13 @@ class Command(BaseXpressDemocracyClubCsvImporter):
                 polling_place_easting="0",
                 polling_place_northing="0",
             )
+
+        # https://app.asana.com/1/1204880536137786/project/1207538772343223/task/1214597478265162?focus=true
+        # remove suspect coords for:
+        # St Andrews Church, Kilverstone Road, Brettenham IP24 2RP
+        if record.polling_place_id == "15792":
+            record = record._replace(
+                polling_place_easting="0",
+                polling_place_northing="0",
+            )
         return super().station_record_to_dict(record)
