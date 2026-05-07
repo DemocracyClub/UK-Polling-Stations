@@ -66,4 +66,17 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             record = record._replace(polling_place_easting="394124")
             record = record._replace(polling_place_northing="390681")
 
+        # correction from council - mobile station has moved from
+        # Junction of Broadway and Beauvale Avenue
+        # to further up Broadway
+        if record.polling_place_id == "17332":
+            record = record._replace(
+                polling_place_address_1="Broadway",
+                polling_place_address_2="Offerton",
+                polling_place_address_3="",
+                polling_place_address_4="",
+                polling_place_easting="391410",
+                polling_place_northing="389289",
+            )
+
         return super().station_record_to_dict(record)
