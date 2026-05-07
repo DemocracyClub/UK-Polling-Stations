@@ -21,8 +21,8 @@ class Command(BaseDemocracyCountsCsvImporter):
             "186",
         ]:
             record = record._replace(
-                polling_place_easting="327592",
-                polling_place_northing="700592",
+                xordinate="327592",
+                yordinate="700592",
             )
         return super().station_record_to_dict(record)
 
