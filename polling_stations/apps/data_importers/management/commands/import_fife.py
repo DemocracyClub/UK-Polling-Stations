@@ -12,6 +12,20 @@ class Command(BaseDemocracyCountsCsvImporter):
     elections = ["2026-05-07"]
     csv_encoding = "utf-16le"
 
+    def station_record_to_dict(self, record):
+        # bug report: https://app.asana.com/1/1204880536137786/project/1207538772343223/task/1214601728656227?focus=true
+        # Fix coords for:
+        # THE LEARNING CENTRE, 81 ALEXANDER ROAD, GLENROTHES, KY7 4EF
+        if record.stationcode in [
+            "185",
+            "186",
+        ]:
+            record = record._replace(
+                polling_place_easting="327592",
+                polling_place_northing="700592",
+            )
+        return super().station_record_to_dict(record)
+
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
 
