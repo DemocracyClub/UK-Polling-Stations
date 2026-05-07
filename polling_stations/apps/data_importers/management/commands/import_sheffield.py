@@ -68,4 +68,13 @@ class Command(BaseHalarose2026UpdateCsvImporter):
         # postcode correction for: Unity Gardens Community Room, 3 Reneville Crescent, Ecclesfield, Sheffield, S35 9DA
         if record.pollingstationnumber == "80":
             record = record._replace(pollingstationpostcode="S5 9DE")
+
+        # remove incorrect point for Dale Sports Club
+        if record.pollingstationnumber == "77":
+            record = record._replace(
+                pollingvenueuprn="0",
+                pollingvenueeasting="0",
+                pollingvenuenorthing="0",
+            )
+
         return super().station_record_to_dict(record)
