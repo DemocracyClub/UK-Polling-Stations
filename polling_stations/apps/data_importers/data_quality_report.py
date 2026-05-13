@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
+from typing import Optional, TextIO
 
 
 # data quality stats for polling stations
@@ -521,7 +522,10 @@ class DataQualityReportBuilder:
         self.report.add_row(self.build_station_report())
         self.report.add_row(self.build_address_report())
 
-    def generate_string_report(self):
-        recorder = Console(record=True)
+    def generate_string_report(self, file: Optional[TextIO] = None):
+        console_kwargs = {"record": True}
+        if file is not None:
+            console_kwargs["file"] = file
+        recorder = Console(**console_kwargs)
         recorder.print(self.report)
         return recorder.export_text()

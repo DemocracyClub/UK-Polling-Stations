@@ -192,7 +192,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         record[0].num_stations = station_report.get_stations_imported()
         record[0].num_districts = district_report.get_districts_imported()
         record[0].num_addresses = address_report.get_addresses_with_station_id()
-        record[0].report = report.generate_string_report()
+        record[0].report = report.generate_string_report(file=self.stdout)
         record[0].save()
 
     @property
