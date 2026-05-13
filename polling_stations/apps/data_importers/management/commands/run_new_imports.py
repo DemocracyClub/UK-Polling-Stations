@@ -1,12 +1,19 @@
 import re
 import subprocess
+from io import StringIO
 from pathlib import Path
+from typing import Any, Dict
 
 import boto3
 import botocore
+from core.slack_client import SlackClient
 from django.apps import apps
 from django.conf import settings
 from django.core.management import BaseCommand, call_command
+from polling_stations.settings.constants.slack import (
+    BOTS_CHANNEL,
+    BOTS_TESTING_CHANNEL,
+)
 
 
 def get_paths_changed(from_sha, to_sha):
@@ -82,6 +89,17 @@ class Command(BaseCommand):
 
     summary = []
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.slack_client = None
+
+    @property
+    def slack_channel(self):
+        if settings.DC_ENVIRONMENT == "production":
+            return BOTS_CHANNEL
+        else:
+            return BOTS_TESTING_CHANNEL
+
     def add_arguments(self, parser):
         parser.add_argument(
             "-f",
@@ -96,18 +114,29 @@ class Command(BaseCommand):
             default=git_rev_parse("HEAD"),
         )
         parser.add_argument("--post-deploy", action="store_true", default=False)
+        parser.add_argument(
+            "--slack",
+            help="Post a report to slack",
+            action="store_true",
+        )
 
-    def run_scripts(self, changed_paths, opts):
+    def run_scripts(self, changed_paths, should_post_to_slack, opts):
         for script in changed_paths:
             script_path = Path(script)
             try:
-                call_command(script_path.stem, **opts)
+                out = StringIO()
+                call_command(script_path.stem, stdout=out, **opts)
                 self.summary.append(
                     (
                         "INFO",
                         f"Ran import script: {script_path.name}",
                     )
                 )
+                if should_post_to_slack:
+                    self.post_to_slack(
+                        header_message=f":pollingstation: *Successfuly ran {script_path.stem}*",
+                        detail_message=f"```{out.getvalue()}```",
+                    )
             except Exception as e:
                 # usually we want to handle a specific exception, but in this situation
                 # if there is any issue (at all) trying to run the command,
@@ -115,6 +144,11 @@ class Command(BaseCommand):
                 self.summary.append(
                     ("WARNING", f"{script_path.name} could not be run. Due to {e}")
                 )
+                if should_post_to_slack:
+                    self.post_to_slack(
+                        header_message=f":warning: *Failed to run {script_path.stem}*",
+                        detail_message=f"Error: {str(e)}",
+                    )
                 continue
 
     def run_misc_fixes(self):
@@ -160,6 +194,26 @@ class Command(BaseCommand):
                 )
             )
 
+    def post_to_slack(self, header_message: str, detail_message: str = None) -> None:
+        try:
+            response = self.post_header(header_message)
+            if detail_message:
+                thread_ts = response.get("ts")
+                self.post_details(thread_ts, detail_message)
+        except Exception as e:
+            self.stderr.write(f"Error posting to Slack: {str(e)}")
+
+    def post_header(self, message: str) -> Dict[str, Any]:
+        return self.slack_client.send_message(
+            message=message,
+        )
+
+    def post_details(self, thread_ts: str, detail_message: str) -> None:
+        self.slack_client.send_message(
+            message=detail_message,
+            thread_ts=thread_ts,
+        )
+
     def handle(self, *args, **options):
         self.check(
             [
@@ -167,6 +221,11 @@ class Command(BaseCommand):
                 apps.get_app_config("pollingstations"),
             ]
         )
+        should_post_to_slack = False
+
+        if options.get("slack"):
+            self.slack_client = SlackClient(channel=self.slack_channel)
+            should_post_to_slack = True
 
         if not (from_sha := options.get("from_sha")):
             from_sha = get_last_import_sha_from_ssm()
@@ -196,12 +255,12 @@ class Command(BaseCommand):
         if has_imports and not has_application:
             self.stdout.write("Only import scripts have changed\n")
             self.stdout.write("Running import scripts\n")
-            self.run_scripts(changed_scripts, cmd_opts)
+            self.run_scripts(changed_scripts, should_post_to_slack, cmd_opts)
             self.run_misc_fixes()
             self.update_last_import_sha_on_ssm(to_sha)
         elif has_imports and has_application and is_post_deploy:
             self.stdout.write("App has deployed. OK to run import scripts")
-            self.run_scripts(changed_scripts, cmd_opts)
+            self.run_scripts(changed_scripts, should_post_to_slack, cmd_opts)
             self.run_misc_fixes()
             self.update_last_import_sha_on_ssm(to_sha)
         elif has_imports and has_application and not is_post_deploy:
