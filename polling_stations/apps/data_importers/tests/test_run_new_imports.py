@@ -208,6 +208,7 @@ class test_run_new_imports(TestCase):
         # To get these changes I just `git logged` the imports directory and picked some sensible pairs.
         self.cases = {
             "scripts_only": ("4173ae16", "13accc3f"),
+            "single_script": ("ecb31b9c6", "963f0576bd"),
             "app_only": ("f865aaf1", "557c71d6"),
             "scripts_and_app": ("4078f6ac", "cf57110a"),
         }
@@ -224,6 +225,7 @@ class test_run_new_imports(TestCase):
             self.run_new_imports_name,
             to_sha=to_sha,
             from_sha=from_sha,
+            slack=False,
             stdout=out,
         )
         expected_std_out = "Only import scripts have changed\n"
@@ -235,6 +237,7 @@ class test_run_new_imports(TestCase):
                 "polling_stations/apps/data_importers/management/commands/import_knowsley.py",
                 "polling_stations/apps/data_importers/management/commands/import_lambeth.py",
             ],
+            False,
             {
                 "nochecks": True,
                 "verbosity": 1,
@@ -279,6 +282,7 @@ class test_run_new_imports(TestCase):
             self.run_new_imports_name,
             to_sha=to_sha,
             from_sha=from_sha,
+            slack=False,
             stdout=out,
         )
         expected_std_out = "Need to deploy before running import scripts\n"
@@ -297,6 +301,7 @@ class test_run_new_imports(TestCase):
             to_sha=to_sha,
             from_sha=from_sha,
             post_deploy=True,
+            slack=False,
             stdout=out,
         )
         expected_std_out = "App has deployed. OK to run import scripts\n"
@@ -314,10 +319,76 @@ class test_run_new_imports(TestCase):
                 "polling_stations/apps/data_importers/management/commands/import_south_tyneside.py",
                 "polling_stations/apps/data_importers/management/commands/import_welwyn_hatfield.py",
             ],
+            False,
             {
                 "nochecks": True,
                 "verbosity": 1,
                 "use_postcode_centroids": False,
                 "include_past_elections": False,
             },
+        )
+
+    @patch(
+        "data_importers.management.commands.run_new_imports.call_command",
+    )
+    @patch(
+        "data_importers.management.commands.run_new_imports.SlackClient",
+    )
+    def test_posts_to_slack_success(self, slack_client_mock, call_command_mock):
+        out = StringIO()
+        (to_sha, from_sha) = self.cases["single_script"]
+
+        call_command(
+            self.run_new_imports_name,
+            to_sha=to_sha,
+            from_sha=from_sha,
+            slack=True,
+            stdout=out,
+        )
+        expected_std_out = "Only import scripts have changed\n"
+        expected_message = ":pollingstation: *Successfuly ran import_glasgow_city*"
+
+        self.assertIn(expected_std_out, out.getvalue())
+
+        mock_send_message = slack_client_mock.return_value.send_message
+        self.assertEqual(mock_send_message.call_count, 2)
+        self.assertEqual(
+            mock_send_message.call_args_list[0].kwargs["message"], expected_message
+        )
+
+    @patch(
+        "data_importers.management.commands.run_new_imports.call_command",
+    )
+    @patch(
+        "data_importers.management.commands.run_new_imports.SlackClient",
+    )
+    def test_posts_to_slack_failure(self, slack_client_mock, call_command_mock):
+        def side_effect(first_arg, *args, **kwargs):
+            # run_new_imports calls call_command multiple times,
+            # but we only want to raise an exception for the one
+            # that runs the import script
+            if first_arg == "import_glasgow_city":
+                raise Exception("Import failed")
+            return None
+
+        call_command_mock.side_effect = side_effect
+        (to_sha, from_sha) = self.cases["single_script"]
+
+        out = StringIO()
+        call_command(
+            self.run_new_imports_name,
+            to_sha=to_sha,
+            from_sha=from_sha,
+            slack=True,
+            stdout=out,
+        )
+        expected_std_out = "Only import scripts have changed\n"
+        expected_message = ":warning: *Failed to run import_glasgow_city*"
+
+        self.assertIn(expected_std_out, out.getvalue())
+
+        mock_send_message = slack_client_mock.return_value.send_message
+        self.assertEqual(mock_send_message.call_count, 2)
+        self.assertEqual(
+            mock_send_message.call_args_list[0].kwargs["message"], expected_message
         )
