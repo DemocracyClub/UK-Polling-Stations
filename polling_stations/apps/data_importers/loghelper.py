@@ -5,9 +5,15 @@ import pprint
 class LogHelper:
     logger = None
 
-    def __init__(self, verbosity):
+    def __init__(self, verbosity, stream=None):
         logformat = "%(levelname)s: %(message)s"
-        logging.basicConfig(format=logformat)
+        config_kwargs = {"format": logformat}
+
+        if stream:
+            config_kwargs["stream"] = stream
+
+        logging.basicConfig(**config_kwargs)
+
         logger = logging.getLogger(__name__)
         if verbosity == 0:
             logger.setLevel(logging.ERROR)

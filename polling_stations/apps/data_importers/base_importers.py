@@ -268,7 +268,7 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         )
 
         self.verbosity = kwargs.get("verbosity")
-        self.logger = LogHelper(self.verbosity)
+        self.logger = LogHelper(self.verbosity, stream=self.stdout)
         self.validation_checks = not (kwargs.get("nochecks"))
         self.allow_station_point_from_postcode = kwargs.get("use_postcode_centroids")
 
