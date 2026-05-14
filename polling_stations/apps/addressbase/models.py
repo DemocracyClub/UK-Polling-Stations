@@ -72,7 +72,7 @@ class Address(AbstractAddress):
         with the elections field from the most recent data import event
         for the relevant council
         """
-        visibilities = [VisibilityChoices.PUBLISHED]
+        visibilities = [VisibilityChoices.PUBLISHED, VisibilityChoices.LOCATION_HIDDEN]
         if include_unpublished:
             visibilities.append(VisibilityChoices.UNPUBLISHED)
         try:
