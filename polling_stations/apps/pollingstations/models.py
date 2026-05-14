@@ -37,6 +37,8 @@ class PollingDistrict(models.Model):
 class VisibilityChoices(models.TextChoices):
     # Visible on website and in API.
     PUBLISHED = "PUBLISHED", "Published"
+    # Visible on webiste and in APi, but without location data.
+    LOCATION_HIDDEN = "LOCATION_HIDDEN", "Location hidden"
     # Only visible to upload user and admin. I.e. not on website or API.
     UNPUBLISHED = "UNPUBLISHED", "Unpublished"
 
