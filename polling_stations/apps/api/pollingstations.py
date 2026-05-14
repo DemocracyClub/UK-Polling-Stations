@@ -117,13 +117,16 @@ class PollingStationViewSet(PollingEntityMixin, GenericViewSet, ListModelMixin):
         council_id = self.request.query_params.get("council_id", None)
         station_id = self.request.query_params.get(self.id_field, None)
 
+        published_stations = PollingStation.objects.exclude(
+            visibility=VisibilityChoices.UNPUBLISHED
+        )
         if council_id is None:
-            return PollingStation.objects.all()
+            return published_stations
 
         if station_id is None:
-            return PollingStation.objects.filter(council=council_id)
+            return published_stations.filter(council=council_id)
 
-        return PollingStation.objects.filter(
+        return published_stations.filter(
             council=council_id, internal_council_id=station_id
         )
 
