@@ -11,10 +11,13 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 from rest_framework.viewsets import GenericViewSet
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.serializers import (
+    GeoFeatureModelSerializer,
+    GeometrySerializerMethodField,
+)
 
 from .mixins import PollingEntityMixin
-from pollingstations.models import AccessibilityInformation
+from pollingstations.models import AccessibilityInformation, VisibilityChoices
 
 
 class AccessibilityInformationSerializer(ModelSerializer):
@@ -80,6 +83,12 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
     urls = SerializerMethodField("generate_urls")
     council = SerializerMethodField("generate_council")
     accessibility_information = AccessibilityInformationSerializer(read_only=True)
+    station_geom = GeometrySerializerMethodField()
+
+    def get_station_geom(self, obj):
+        if obj.visibility == VisibilityChoices.LOCATION_HIDDEN:
+            return None
+        return obj.location
 
     @extend_schema_field(OpenApiTypes.URI)
     def generate_council(self, record):
@@ -95,7 +104,7 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
 
     class Meta:
         model = PollingStation
-        geo_field = "location"
+        geo_field = "station_geom"
         id_field = "id"
         fields = (
             "id",
@@ -104,7 +113,6 @@ class PollingStationGeoSerializer(PollingStationSerializer, GeoFeatureModelSeria
             "station_id",
             "postcode",
             "address",
-            "location",
             "accessibility_information",
         )
 
