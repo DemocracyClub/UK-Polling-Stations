@@ -29,7 +29,6 @@ class ImportScript:
     def importer_class(self):
         classes = {
             "Idox Eros (Halarose)": "BaseHalaroseCsvImporter",
-            "Idox Eros (Halarose) 2026 Update": "BaseHalarose2026UpdateCsvImporter",
             "Xpress WebLookup": "BaseXpressWebLookupCsvImporter",
             "Xpress DC": "BaseXpressDemocracyClubCsvImporter",
             "Democracy Counts": "BaseDemocracyCountsCsvImporter",

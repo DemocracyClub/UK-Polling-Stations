@@ -312,11 +312,11 @@ class BaseHalaroseCsvImporter(
     station_id_field = "pollingvenueid"
     station_address_fields = [
         "pollingstationname",
-        "pollingstationaddress_1",
-        "pollingstationaddress_2",
-        "pollingstationaddress_3",
-        "pollingstationaddress_4",
-        "pollingstationaddress_5",
+        "pollingstationaddress1",
+        "pollingstationaddress2",
+        "pollingstationaddress3",
+        "pollingstationaddress4",
+        "pollingstationaddress5",
     ]
     residential_uprn_field = "uprn"
 
@@ -412,51 +412,6 @@ class BaseHalaroseCsvImporter(
         )
 
         return address.strip()
-
-    def address_record_to_dict(self, record):
-        if record.streetname.lower().strip() == "other electors":
-            return None
-        if record.streetname.lower().strip() == "other voters":
-            return None
-        if record.streetname.lower().strip() == "other electors address":
-            return None
-
-        if record.housepostcode.strip() == "":
-            return None
-
-        address = self.get_residential_address(record)
-
-        if record.pollingstationnumber.strip() == "n/a":
-            station_id = ""
-        else:
-            station_id = self.get_station_hash(record)
-
-        uprn = getattr(record, self.residential_uprn_field).strip()
-
-        return {
-            "address": address,
-            "postcode": record.housepostcode.strip(),
-            "polling_station_id": station_id,
-            "uprn": uprn,
-        }
-
-
-"""
-Halarose has released an update (Feb 2026) to their EMS that exports CSVs in a new format.
-We don't know which version of the EMS the councils we'll be using
-so for now we'll need to support both formats.
-"""
-
-
-class BaseHalarose2026UpdateCsvImporter(BaseHalaroseCsvImporter, metaclass=abc.ABCMeta):
-    station_address_fields = [
-        "pollingstationname",
-        "pollingstationaddress1",
-        "pollingstationaddress2",
-        "pollingstationaddress3",
-        "pollingstationaddress4",
-        "pollingstationaddress5",
-    ]
 
     def address_record_to_dict(self, record):
         if record.postcode.strip() == "":
