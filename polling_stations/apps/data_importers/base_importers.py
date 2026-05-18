@@ -23,6 +23,7 @@ from data_importers.data_quality_report import (
     DistrictReport,
     StationReport,
 )
+from data_finder.helpers import PostcodeError, geocode_point_only
 from data_importers.data_types import AddressList, DistrictSet, StationSet
 from data_importers.event_helpers import record_teardown_event
 from data_importers.filehelpers import FileHelperFactory
@@ -34,6 +35,7 @@ from django.conf import settings
 from django.contrib.gis import geos
 from django.contrib.gis.geos import GEOSException, GEOSGeometry, Point
 from django.core.management.base import BaseCommand, CommandError
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from file_uploads.models import File, Upload
 from pollingstations.models import PollingDistrict, PollingStation
@@ -1026,6 +1028,69 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
             )
             self.logger.log_message(logging.WARNING, message + "\n")
         return ab_rec.location
+
+    def geocode_from_postcode(self, record):
+        station_postcode = self.get_station_postcode(record)
+        if not station_postcode:
+            return None
+        try:
+            location_data = geocode_point_only(station_postcode)
+            return location_data.centroid
+        except PostcodeError:
+            return None
+
+    def geocode_from_coordinates(self, record):
+        return Point(
+            float(getattr(record, self.station_easting_field)),
+            float(getattr(record, self.station_northing_field)),
+            srid=self.srid,
+        )
+
+    def get_station_point(self, record):
+        location = None
+        # try coords
+        bad_values = ["", "0", "0.00", 0, None]
+        if (
+            hasattr(record, self.station_easting_field)
+            and hasattr(record, self.station_northing_field)
+            and getattr(record, self.station_easting_field) not in bad_values
+            and getattr(record, self.station_northing_field) not in bad_values
+        ):
+            location = self.geocode_from_coordinates(record)
+            self.logger.log_message(
+                logging.INFO,
+                "using grid reference for station %s",
+                getattr(record, self.station_id_field),
+            )
+        # if no coords, try uprn
+        if (
+            location is None
+            and hasattr(record, self.station_uprn_field)
+            and getattr(record, self.station_uprn_field).strip() not in bad_values
+        ):
+            try:
+                location = self.geocode_from_uprn(record)
+                self.logger.log_message(
+                    logging.INFO,
+                    "using UPRN for station %s",
+                    getattr(record, self.station_id_field),
+                )
+            except ObjectDoesNotExist:
+                pass
+        # if no coords or uprn, try postcode (if allowed)
+        if (
+            location is None
+            and self.allow_station_point_from_postcode
+            and hasattr(record, self.station_postcode_field)
+        ):
+            location = self.geocode_from_postcode(record)
+            self.logger.log_message(
+                logging.INFO,
+                "using postcode for station %s",
+                getattr(record, self.station_id_field),
+            )
+
+        return location
 
 
 class BaseShpStationsCsvAddressesImporter(
