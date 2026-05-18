@@ -41,6 +41,13 @@ class VisibilityChoices(models.TextChoices):
     UNPUBLISHED = "UNPUBLISHED", "Unpublished"
 
 
+class LocationSourceChoices(models.TextChoices):
+    NONE = "", "None"
+    POSTCODE = "POSTCODE", "Postcode"
+    UPRN = "UPRN", "UPRN"
+    COORDINATES = "COORDINATES", "Coordinates"
+
+
 class PollingStation(models.Model):
     council = models.ForeignKey(
         "councils.Council", null=True, db_index=True, on_delete=models.CASCADE
@@ -54,6 +61,11 @@ class PollingStation(models.Model):
     postcode = models.CharField(blank=True, null=True, max_length=100)
     address = models.TextField(blank=True, null=True)
     location = models.PointField(null=True, blank=True)
+    location_source = models.CharField(
+        choices=LocationSourceChoices.choices,
+        default=LocationSourceChoices.NONE,
+        blank=True,
+    )
     # This is NOT a FK, as we might not have the polling district at
     # the point of import
     polling_district_id = models.CharField(blank=True, max_length=255)
