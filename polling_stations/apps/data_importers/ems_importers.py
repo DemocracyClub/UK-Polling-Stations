@@ -6,7 +6,6 @@ popular Electoral Management Software packages
 import abc
 import contextlib
 import json
-import logging
 import os
 import tempfile
 
@@ -23,7 +22,6 @@ from data_importers.base_importers import (
 )
 from data_importers.data_types import AddressList, StationSet
 from django.contrib.gis.geos import Point
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.text import slugify
 
 """
@@ -61,12 +59,12 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
 
     @property
     @abc.abstractmethod
-    def easting_field(self):
+    def station_easting_field(self):
         pass
 
     @property
     @abc.abstractmethod
-    def northing_field(self):
+    def station_northing_field(self):
         pass
 
     @property
@@ -80,71 +78,6 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         return format_polling_station_address(
             [getattr(record, field).strip() for field in self.station_address_fields]
         )
-
-    def geocode_from_postcode(self, record):
-        if not self.allow_station_point_from_postcode:
-            return None
-
-        postcode = self.get_station_postcode(record)
-        if not postcode:
-            return None
-        try:
-            location_data = geocode_point_only(postcode)
-            return location_data.centroid
-        except PostcodeError:
-            return None
-
-    def get_station_point(self, record):
-        location = None
-
-        if (
-            hasattr(record, self.easting_field)
-            and hasattr(record, self.northing_field)
-            and getattr(record, self.easting_field) != "0"
-            and getattr(record, self.easting_field) != ""
-            and getattr(record, self.northing_field) != "0"
-            and getattr(record, self.northing_field) != ""
-        ):
-            # if we've got points, use them
-            location = Point(
-                float(getattr(record, self.easting_field)),
-                float(getattr(record, self.northing_field)),
-                srid=27700,
-            )
-            self.logger.log_message(
-                logging.INFO,
-                "using grid reference for station %s",
-                getattr(record, self.station_id_field),
-            )
-        elif (
-            self.station_uprn_field and getattr(record, self.station_uprn_field).strip()
-        ):
-            # if we have a UPRN, try that
-            try:
-                location = self.geocode_from_uprn(record)
-                self.logger.log_message(
-                    logging.INFO,
-                    "using UPRN for station %s",
-                    getattr(record, self.station_id_field),
-                )
-            except ObjectDoesNotExist:
-                # if that fails, fall back to postcode
-                location = self.geocode_from_postcode(record)
-                self.logger.log_message(
-                    logging.INFO,
-                    "using postcode for station %s",
-                    getattr(record, self.station_id_field),
-                )
-        else:
-            # otherwise, geocode using postcode
-            location = self.geocode_from_postcode(record)
-            self.logger.log_message(
-                logging.INFO,
-                "using postcode for station %s",
-                getattr(record, self.station_id_field),
-            )
-
-        return location
 
     def station_record_to_dict(self, record):
         address = self.get_station_address(record)
@@ -175,8 +108,9 @@ class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter, metaclass=abc.ABCMet
         "pollingplaceaddress6",
     ]
     station_id_field = "pollingplaceid"
-    easting_field = "pollingplaceeasting"
-    northing_field = "pollingplacenorthing"
+    station_uprn_field = ""
+    station_easting_field = "pollingplaceeasting"
+    station_northing_field = "pollingplacenorthing"
     residential_uprn_field = "uprn"
 
     def address_record_to_dict(self, record):
@@ -219,8 +153,8 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter, metaclass=abc.AB
     ]
     station_id_field = "polling_place_id"
     station_uprn_field = "polling_place_uprn"
-    easting_field = "polling_place_easting"
-    northing_field = "polling_place_northing"
+    station_easting_field = "polling_place_easting"
+    station_northing_field = "polling_place_northing"
     residential_uprn_field = "property_urn"
 
     def address_record_to_dict(self, record):
@@ -307,6 +241,8 @@ class BaseHalaroseCsvImporter(
     BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta
 ):
     csv_delimiter = ","
+    station_easting_field = "pollingvenueeasting"
+    station_northing_field = "pollingvenuenorthing"
     station_postcode_field = "pollingstationpostcode"
     station_uprn_field = "pollingvenueuprn"
     station_id_field = "pollingvenueid"
@@ -336,36 +272,6 @@ class BaseHalaroseCsvImporter(
                 if getattr(record, field).strip()
             ]
         )
-
-    def get_station_point(self, record):
-        location = None
-        # Try coords first
-        x_coord = float(record.pollingvenueeasting)
-        y_coord = float(record.pollingvenuenorthing)
-        if x_coord > 0 and y_coord > 0:
-            location = Point(x_coord, y_coord, srid=27700)
-
-        # try UPRN next, if available
-        if location is None and (
-            hasattr(record, self.station_uprn_field)
-            and getattr(record, self.station_uprn_field).strip()
-        ):
-            try:
-                location = self.geocode_from_uprn(record)
-            except ObjectDoesNotExist:
-                location = None
-
-        # if UPRN is not available or fails, try postcode if allowed
-        if location is None and self.allow_station_point_from_postcode:
-            postcode = self.get_station_postcode(record)
-            if postcode:
-                try:
-                    location_data = geocode_point_only(postcode)
-                    location = location_data.centroid
-                except PostcodeError:
-                    location = None
-
-        return location
 
     def station_record_to_dict(self, record):
         if record.pollingstationnumber.strip() == "n/a":
@@ -461,6 +367,10 @@ class BaseDemocracyCountsCsvImporter(
     address_fields = ["add1", "add2", "add3", "add4", "add5", "add6"]
     postcode_field = "postcode"
     station_id_field = "stationcode"
+    station_uprn_field = ""
+    station_easting_field = "xordinate"
+    station_northing_field = "yordinate"
+
     residential_uprn_field = "uprn"
 
     def address_record_to_dict(self, record):
@@ -492,32 +402,6 @@ class BaseDemocracyCountsCsvImporter(
             [getattr(record, self.station_name_field)]
             + [getattr(record, field) for field in self.address_fields]
         )
-
-    def get_station_point(self, record):
-        location = None
-
-        badvalues = ["", "0", "0.00"]
-        if record.xordinate not in badvalues and record.yordinate not in badvalues:
-            # if we've got points, use them
-            location = Point(
-                float(record.xordinate), float(record.yordinate), srid=27700
-            )
-        else:
-            if not self.allow_station_point_from_postcode:
-                return None
-
-            # otherwise, geocode using postcode
-            postcode = record.postcode.strip()
-            if postcode == "":
-                return None
-
-            try:
-                location_data = geocode_point_only(postcode)
-                location = location_data.centroid
-            except PostcodeError:
-                location = None
-
-        return location
 
     def station_record_to_dict(self, record):
         address = self.get_station_address(record)
