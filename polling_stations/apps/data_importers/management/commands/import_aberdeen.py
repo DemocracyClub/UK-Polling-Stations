@@ -1,70 +1,8 @@
-from addressbase.models import UprnToCouncil
 from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
 
 
 class Command(BaseHalarose2026UpdateCsvImporter):
     council_id = "ABE"
-    addresses_name = "2026-05-07/2026-03-09T16:25:32.686844/Democracy Club - Idox_2026-03-05 10-02.csv"
-    stations_name = "2026-05-07/2026-03-09T16:25:32.686844/Democracy Club - Idox_2026-03-05 10-02.csv"
-    elections = ["2026-05-07"]
-
-    def pre_import(self):
-        # We need to consider rows that don't have a uprn when importing data.
-        # However there are lots of rows for other councils in this file.
-        # So build a list of stations from rows that do have UPRNS
-        # and then use that list of stations to make sure we check relevant rows, even if they don't have a UPRN
-
-        council_uprns = set(
-            UprnToCouncil.objects.filter(lad=self.council.geography.gss).values_list(
-                "uprn", flat=True
-            )
-        )
-        self.COUNCIL_STATIONS = set()
-        data = self.get_addresses()
-
-        for record in data:
-            if record.uprn in council_uprns:
-                self.COUNCIL_STATIONS.add(record.pollingvenueid)
-
-    def address_record_to_dict(self, record):
-        if record.pollingvenueid not in self.COUNCIL_STATIONS:
-            return None
-
-        if record.postcode in (
-            # splits
-            "AB21 9RN",
-            "AB21 9BE",
-            "AB13 0HQ",
-        ):
-            return None
-
-        # station change from council
-        # OLD: ABERDEEN CITADEL (SALVATION ARMY BUILDING) 27-30 CASTLE STREET ABERDEEN AB11 5BG
-        # NEW: ST ANDREW’S CATHEDRAL, 28 King Street, Aberdeen, AB24 5AX
-        if self.get_station_hash(record) in [
-            "95-aberdeen-citadel-salvation-army-building",
-            "96-aberdeen-citadel-salvation-army-building",
-        ]:
-            record = record._replace(
-                pollingstationname="ST ANDREW’S CATHEDRAL",
-            )
-
-        return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        if record.pollingvenueid not in self.COUNCIL_STATIONS:
-            return None
-
-        # station change from council
-        # OLD: ABERDEEN CITADEL (SALVATION ARMY BUILDING) 27-30 CASTLE STREET ABERDEEN AB11 5BG
-        # NEW: ST ANDREW’S CATHEDRAL, 28 King Street, Aberdeen, AB24 5AX
-        if self.get_station_hash(record) in [
-            "95-aberdeen-citadel-salvation-army-building",
-            "96-aberdeen-citadel-salvation-army-building",
-        ]:
-            record = record._replace(
-                pollingstationname="ST ANDREW’S CATHEDRAL",
-                pollingstationaddress1="28 King Street",
-                pollingstationpostcode="AB24 5AX",
-            )
-        return super().station_record_to_dict(record)
+    addresses_name = "2026-06-25/2026-05-18T10:10:09.390185/Democracy Club - Idox_2026-05-14 17-14 (1).csv"
+    stations_name = "2026-06-25/2026-05-18T10:10:09.390185/Democracy Club - Idox_2026-05-14 17-14 (1).csv"
+    elections = ["2026-06-25"]
