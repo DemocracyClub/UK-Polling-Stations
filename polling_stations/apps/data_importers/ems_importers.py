@@ -81,12 +81,13 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
 
     def station_record_to_dict(self, record):
         address = self.get_station_address(record)
-        location = self.get_station_point(record)
+        location, location_source = self.get_station_point(record)
         return {
             "internal_council_id": getattr(record, self.station_id_field).strip(),
             "postcode": self.get_station_postcode(record),
             "address": address.strip(),
             "location": location,
+            "location_source": location_source,
         }
 
 
@@ -208,12 +209,13 @@ class BaseXpressDCCsvInconsistentPostcodesImporter(
 
     def station_record_to_dict(self, record):
         address = self.get_station_address(record)
-        location = self.get_station_point(record)
+        location, location_source = self.get_station_point(record)
         return {
             "internal_council_id": getattr(record, self.station_id_field).strip(),
             "postcode": "",  # don't rely on get_station_postcode()
             "address": address.strip(),
             "location": location,
+            "location_source": location_source,
         }
 
     def get_station_postcode(self, record):
@@ -278,12 +280,13 @@ class BaseHalaroseCsvImporter(
             return None
 
         address = self.get_station_address(record)
-        location = self.get_station_point(record)
+        location, location_source = self.get_station_point(record)
         return {
             "internal_council_id": self.get_station_hash(record),
             "postcode": getattr(record, self.station_postcode_field).strip(),
             "address": address.strip(),
             "location": location,
+            "location_source": location_source,
         }
 
     def get_residential_address(self, record):
@@ -405,13 +408,14 @@ class BaseDemocracyCountsCsvImporter(
 
     def station_record_to_dict(self, record):
         address = self.get_station_address(record)
-        location = self.get_station_point(record)
+        location, location_source = self.get_station_point(record)
 
         return {
             "internal_council_id": getattr(record, self.station_id_field).strip(),
             "postcode": getattr(record, self.postcode_field).strip(),
             "address": address,
             "location": location,
+            "location_source": location_source,
         }
 
 
