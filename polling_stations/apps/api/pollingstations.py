@@ -1,7 +1,7 @@
 from django.utils.http import urlencode
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
-from pollingstations.models import PollingStation
+from pollingstations.models import PollingStation, VisibilityChoices
 from rest_framework.mixins import ListModelMixin
 from rest_framework.reverse import reverse
 from rest_framework.serializers import (
