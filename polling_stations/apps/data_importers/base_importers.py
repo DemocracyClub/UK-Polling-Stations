@@ -518,6 +518,9 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                         station_record["location"] = Point(
                             *station.shape.points[0], srid=self.get_srid()
                         )
+                        station_record["location_source"] = (
+                            LocationSourceChoices.COORDINATES
+                        )
                     else:
                         # its a polygon: simplify it to a centroid and warn
                         self.logger.log_message(
@@ -528,7 +531,9 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                         poly = self.clean_poly(GEOSGeometry(geojson))
                         poly.srid = self.get_srid()
                         station_record["location"] = poly.centroid
-
+                        station_record["location_source"] = (
+                            LocationSourceChoices.COORDINATES
+                        )
                 if self.validation_checks:
                     self.check_station_point(station_record)
                 self.add_polling_station(station_record)

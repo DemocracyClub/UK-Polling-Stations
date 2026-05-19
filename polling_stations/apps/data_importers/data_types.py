@@ -21,6 +21,7 @@ Station = namedtuple(
         "postcode",
         "address",
         "location",
+        "location_source",
         "polling_district_id",
     ],
 )
@@ -215,6 +216,7 @@ class StationSet(CustomSet):
             element.get("postcode", ""),
             element.get("address", ""),
             location,
+            element.get("location_source", ""),
             element.get("polling_district_id", ""),
         )
 
@@ -235,6 +237,7 @@ class StationSet(CustomSet):
                 postcode=station.postcode,
                 address=station.address,
                 location=station.location,
+                location_source=station.location_source,
                 polling_district_id=station.polling_district_id,
             )
             stations_db.append(record)
