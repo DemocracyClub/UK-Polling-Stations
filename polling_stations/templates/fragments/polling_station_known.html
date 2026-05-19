@@ -44,7 +44,7 @@
         {% endif %}
 
     </div>
-    {% if station.location %}
+    {% if station.location and not station.visibility == "LOCATION_HIDDEN" %}
         <div id="area_map" class="ds-map-leaflet"></div>
     {% endif %}
 

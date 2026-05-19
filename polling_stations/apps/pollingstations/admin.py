@@ -25,7 +25,7 @@ class PollingStationAdmin(admin.ModelAdmin):
 
     inlines = [AccessibilityInformationInline]
 
-    actions = ["unpublish", "publish"]
+    actions = ["unpublish", "publish", "hide_location"]
 
     search_fields = [
         "address",
@@ -100,7 +100,22 @@ class PollingStationAdmin(admin.ModelAdmin):
             )
 
     @admin.action(
-        description="Republish selected Polling Stations. This will make them visible to users."
+        description="Hide location of selected Polling Stations. This will remove their map."
+    )
+    @transaction.atomic(using=DB_NAME)
+    def hide_location(self, request, queryset):
+        queryset.update(visibility=VisibilityChoices.LOCATION_HIDDEN)
+        for station in queryset:
+            record_set_station_visibility_event(
+                station,
+                VisibilityChoices.LOCATION_HIDDEN,
+                metadata={
+                    "source": EventUserType.ADMIN,
+                },
+            )
+
+    @admin.action(
+        description="Republish selected Polling Stations. This will make them visible to users and/or restore their maps."
     )
     @transaction.atomic(using=DB_NAME)
     def publish(self, request, queryset):

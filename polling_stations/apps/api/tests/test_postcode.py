@@ -12,7 +12,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
-from pollingstations.models import AccessibilityInformation, PollingStation
+from pollingstations.models import (
+    AccessibilityInformation,
+    PollingStation,
+    VisibilityChoices,
+)
 from pollingstations.tests.factories import AdvanceVotingStationFactory
 from rest_framework.exceptions import APIException
 from rest_framework.test import APIRequestFactory, APITestCase
@@ -211,6 +215,20 @@ class PostcodeTest(APITestCase):
         self.assertEqual([], response.data["addresses"])
         self.assertIsInstance(response.data["postcode_location"], dict)
         self.assertEqual(0, len(response.data["ballots"]))
+
+    def test_station_found_but_location_hidden(self):
+        # Set the station's visibility to LOCATION_HIDDEN
+        ps = PollingStation.objects.get(internal_council_id="1", council_id="ABC")
+        ps.visibility = VisibilityChoices.LOCATION_HIDDEN
+        ps.save()
+
+        response = self.endpoint.retrieve(
+            self.request, "CC11CC", "json", geocoder=mock_geocode, log=False
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(response.data["polling_station_known"])
+        self.assertIsNotNone(response.data["polling_station"])
+        self.assertIsNone(response.data["polling_station"]["geometry"])
 
     def test_station_found_with_election_but_data_event_for_past_election(self):
         DataEventFactory(
