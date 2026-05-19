@@ -2,6 +2,7 @@ from data_importers.base_importers import BaseCsvStationsCsvAddressesImporter
 from django.test import TestCase
 from collections import namedtuple
 from unittest.mock import patch
+from pollingstations.models import LocationSourceChoices
 
 
 class MockLogger:
@@ -45,6 +46,7 @@ class BaseCsvStationsCsvAddressesImporterGetStationPointTests(TestCase):
         )
         location, location_source = self.importer.get_station_point(test_record)
         self.assertIsNone(location)
+        self.assertEqual(location_source, LocationSourceChoices.NONE)
 
     @patch(
         "data_importers.base_importers.BaseCsvStationsCsvAddressesImporter.geocode_from_postcode",
@@ -60,9 +62,10 @@ class BaseCsvStationsCsvAddressesImporterGetStationPointTests(TestCase):
             station_northing_field="0",
             station_uprn_field="",
         )
-        location = self.importer.get_station_point(test_record)
+        location, location_source = self.importer.get_station_point(test_record)
         mock_postcode_geocode.assert_called_once_with(test_record)
         self.assertEqual(location, mock_postcode_geocode.return_value)
+        self.assertEqual(location_source, LocationSourceChoices.POSTCODE)
 
     @patch(
         "data_importers.base_importers.BaseCsvStationsCsvAddressesImporter.geocode_from_coordinates",
@@ -77,9 +80,10 @@ class BaseCsvStationsCsvAddressesImporterGetStationPointTests(TestCase):
             station_northing_field="179650",
             station_uprn_field="uprn",
         )
-        location = self.importer.get_station_point(test_record)
+        location, location_source = self.importer.get_station_point(test_record)
         mock_coord_geocode.assert_called_once_with(test_record)
         self.assertEqual(location, mock_coord_geocode.return_value)
+        self.assertEqual(location_source, LocationSourceChoices.COORDINATES)
 
     @patch(
         "data_importers.base_importers.BaseCsvStationsCsvAddressesImporter.geocode_from_uprn",
@@ -94,6 +98,7 @@ class BaseCsvStationsCsvAddressesImporterGetStationPointTests(TestCase):
             station_northing_field="0",
             station_uprn_field="uprn",
         )
-        location = self.importer.get_station_point(test_record)
+        location, location_source = self.importer.get_station_point(test_record)
         mock_uprn_geocode.assert_called_once_with(test_record)
         self.assertEqual(location, mock_uprn_geocode.return_value)
+        self.assertEqual(location_source, LocationSourceChoices.UPRN)

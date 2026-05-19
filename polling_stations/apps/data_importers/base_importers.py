@@ -38,7 +38,11 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from file_uploads.models import File, Upload
-from pollingstations.models import PollingDistrict, PollingStation
+from pollingstations.models import (
+    PollingDistrict,
+    PollingStation,
+    LocationSourceChoices,
+)
 from uk_geo_utils.helpers import Postcode
 from polling_stations.db_routers import get_principal_db_name
 
@@ -1046,8 +1050,19 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
             srid=self.srid,
         )
 
-    def get_station_point(self, record):
+    def get_station_point(self, record) -> tuple[Point | None, str]:
+        """
+        Tries to geocode a station from a station record. Attempts to geocode in this order:
+
+        - coordinates
+        - UPRN
+        - postcode (if allowed)
+
+        Returns the first successful result as a Point in a tuple along with the geocoding method.
+        """
         location = None
+        location_source = LocationSourceChoices.NONE
+
         # try coords
         bad_values = ["", "0", "0.00", 0, None]
         if (
@@ -1057,6 +1072,7 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
             and getattr(record, self.station_northing_field) not in bad_values
         ):
             location = self.geocode_from_coordinates(record)
+            location_source = LocationSourceChoices.COORDINATES
             self.logger.log_message(
                 logging.INFO,
                 "using grid reference for station %s",
@@ -1070,6 +1086,7 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
         ):
             try:
                 location = self.geocode_from_uprn(record)
+                location_source = LocationSourceChoices.UPRN
                 self.logger.log_message(
                     logging.INFO,
                     "using UPRN for station %s",
@@ -1084,13 +1101,14 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
             and hasattr(record, self.station_postcode_field)
         ):
             location = self.geocode_from_postcode(record)
+            location_source = LocationSourceChoices.POSTCODE
             self.logger.log_message(
                 logging.INFO,
                 "using postcode for station %s",
                 getattr(record, self.station_id_field),
             )
 
-        return location
+        return location, location_source
 
 
 class BaseShpStationsCsvAddressesImporter(
