@@ -3,6 +3,7 @@ import datetime
 from pathlib import Path
 from typing import Dict, Any
 
+import sentry_sdk
 from addressbase.models import Address, UprnToCouncil
 from core.slack_client import SlackClient
 from councils.models import Council
@@ -334,6 +335,7 @@ class Command(BaseStationsImporter, CsvMixin):
             )
         except Exception as slack_e:
             self.stderr.write(f"Error posting to Slack: {str(slack_e)}")
+            sentry_sdk.capture_exception(slack_e)
 
     def post_to_slack(self) -> None:
         try:
