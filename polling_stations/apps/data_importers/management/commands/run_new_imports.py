@@ -6,6 +6,7 @@ from typing import Any, Dict
 
 import boto3
 import botocore
+import sentry_sdk
 from core.slack_client import SlackClient
 from django.apps import apps
 from django.conf import settings
@@ -152,6 +153,7 @@ class Command(BaseCommand):
                         "detail_message": f"Error: {str(e)}",
                     }
                 )
+                sentry_sdk.capture_exception(e)
                 continue
 
     def run_misc_fixes(self):
@@ -205,6 +207,7 @@ class Command(BaseCommand):
                 self.post_details(thread_ts, detail_message)
         except Exception as e:
             self.stderr.write(f"Error posting to Slack: {str(e)}")
+            sentry_sdk.capture_exception(e)
 
     def post_header(self, message: str) -> Dict[str, Any]:
         return self.slack_client.send_message(
