@@ -35,8 +35,12 @@ class PollingStationAdmin(admin.ModelAdmin):
         "internal_council_id",
     ]
 
-    # Filter on published status or council name
-    list_filter = ["visibility", ("council", admin.RelatedOnlyFieldListFilter)]
+    # Filter on published status, location source, or council name
+    list_filter = [
+        "visibility",
+        "location_source",
+        ("council", admin.RelatedOnlyFieldListFilter),
+    ]
 
     # Human-readable name for list view
     list_display = [
@@ -44,6 +48,7 @@ class PollingStationAdmin(admin.ModelAdmin):
         "council_name",
         "internal_council_id",
         "published_status",
+        "location_source",
     ]
 
     # We're making it readonly for now
@@ -53,6 +58,7 @@ class PollingStationAdmin(admin.ModelAdmin):
         "postcode",
         "address",
         "polling_district_id",
+        "location_source",
     ]
     # Use OSM basemap but make it unmodifiable
     formfield_overrides = {models.PointField: {"widget": UnmodfiableOSMWidget}}
@@ -67,7 +73,7 @@ class PollingStationAdmin(admin.ModelAdmin):
             "polling_district_id",
         )
         if obj.location:
-            fields += ("location",)
+            fields += ("location", "location_source")
         return fields
 
     def save_model(self, request, obj, form, change):
