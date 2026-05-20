@@ -23,6 +23,7 @@ from data_importers.base_importers import (
 from data_importers.data_types import AddressList, StationSet
 from django.contrib.gis.geos import Point
 from django.utils.text import slugify
+from pollingstations.models import LocationSourceChoices
 
 """
 We see a lot of CSVs exported from Xpress
@@ -522,27 +523,30 @@ class BaseFcsDemocracyClubApiImporter(
 
     def get_station_point(self, record):
         location = None
+        location_source = LocationSourceChoices.NONE
+
         badvalues = ["", 0, None]
+        # try to set location from co-ordinates
         if record["latitude"] not in badvalues and record["longitude"] not in badvalues:
-            # if we've got points, use them
-            return Point(
+            location = Point(
                 float(record["longitude"]), float(record["latitude"]), srid=self.srid
             )
-        if not self.allow_station_point_from_postcode:
-            return None
+            location_source = LocationSourceChoices.COORDINATES
 
-        # otherwise, geocode using postcode
-        postcode = record[self.postcode_field].strip()
-        if postcode == "":
-            return None
+        # if no coords, try using postcode, if allowed
+        if (
+            self.allow_station_point_from_postcode
+            and location is None
+            and (postcode := record.get(self.postcode_field).strip())
+        ):
+            try:
+                location_data = geocode_point_only(postcode)
+                location = location_data.centroid
+                location_source = LocationSourceChoices.POSTCODE
+            except PostcodeError:
+                location = None
 
-        try:
-            location_data = geocode_point_only(postcode)
-            location = location_data.centroid
-        except PostcodeError:
-            location = None
-
-        return location
+        return location, location_source
 
     def station_record_to_dict(self, record):
         address = format_polling_station_address(
@@ -550,11 +554,12 @@ class BaseFcsDemocracyClubApiImporter(
             + [record.get(field) for field in self.address_fields]
         )
 
-        location = self.get_station_point(record)
+        location, location_source = self.get_station_point(record)
 
         return {
             "internal_council_id": record.get(self.station_id_field),
             "postcode": record.get(self.postcode_field).strip(),
             "address": address,
             "location": location,
+            "location_source": location_source,
         }
