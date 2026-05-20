@@ -92,6 +92,7 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.slack_client = None
+        self.messages = []
 
     @property
     def slack_channel(self):
@@ -132,11 +133,12 @@ class Command(BaseCommand):
                         f"Ran import script: {script_path.name}",
                     )
                 )
-                if should_post_to_slack:
-                    self.post_to_slack(
-                        header_message=f":pollingstation: *Successfuly ran {script_path.stem}*",
-                        detail_message=f"```{out.getvalue()}```",
-                    )
+                self.messages.append(
+                    {
+                        "header_message": f":pollingstation: *Successfuly ran {script_path.stem}*",
+                        "detail_message": f"```{out.getvalue()}```",
+                    }
+                )
             except Exception as e:
                 # usually we want to handle a specific exception, but in this situation
                 # if there is any issue (at all) trying to run the command,
@@ -144,11 +146,12 @@ class Command(BaseCommand):
                 self.summary.append(
                     ("WARNING", f"{script_path.name} could not be run. Due to {e}")
                 )
-                if should_post_to_slack:
-                    self.post_to_slack(
-                        header_message=f":warning: *Failed to run {script_path.stem}*",
-                        detail_message=f"Error: {str(e)}",
-                    )
+                self.messages.append(
+                    {
+                        "header_message": f":warning: *Failed to run {script_path.stem}*",
+                        "detail_message": f"Error: {str(e)}",
+                    }
+                )
                 continue
 
     def run_misc_fixes(self):
@@ -274,3 +277,7 @@ class Command(BaseCommand):
             self.stdout.write("Not running import scripts")
 
         self.output_summary()
+
+        if should_post_to_slack:
+            for message in self.messages:
+                self.post_to_slack(**message)
