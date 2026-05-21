@@ -1068,11 +1068,16 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
         location = None
         location_source = LocationSourceChoices.NONE
 
+        has_coord_fields = hasattr(self, "station_easting_field") and hasattr(
+            self, "station_northing_field"
+        )
+        has_uprn_field = hasattr(self, "station_uprn_field")
+        has_postcode_field = hasattr(self, "station_postcode_field")
+
         # try coords
         bad_values = ["", "0", "0.00", 0, None]
         if (
-            hasattr(record, self.station_easting_field)
-            and hasattr(record, self.station_northing_field)
+            has_coord_fields
             and getattr(record, self.station_easting_field) not in bad_values
             and getattr(record, self.station_northing_field) not in bad_values
         ):
@@ -1086,7 +1091,7 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
         # if no coords, try uprn
         if (
             location is None
-            and hasattr(record, self.station_uprn_field)
+            and has_uprn_field
             and getattr(record, self.station_uprn_field).strip() not in bad_values
         ):
             try:
@@ -1108,7 +1113,7 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
         if (
             location is None
             and self.allow_station_point_from_postcode
-            and hasattr(record, self.station_postcode_field)
+            and has_postcode_field
         ):
             location = self.geocode_from_postcode(record)
             location_source = LocationSourceChoices.POSTCODE

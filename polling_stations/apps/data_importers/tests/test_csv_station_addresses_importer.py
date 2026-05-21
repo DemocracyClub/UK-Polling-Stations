@@ -102,3 +102,44 @@ class BaseCsvStationsCsvAddressesImporterGetStationPointTests(TestCase):
         mock_uprn_geocode.assert_called_once_with(test_record)
         self.assertEqual(location, mock_uprn_geocode.return_value)
         self.assertEqual(location_source, LocationSourceChoices.UPRN)
+
+    def test_get_station_point_no_uprn_field(self):
+        """
+        Democracy Counts EMS exports don't have a UPRN column.
+        This test ensures that if the station_uprn_field attribute is not defined,
+        the importer doesn't attempt to geocode from UPRN
+        """
+
+        del self.importer.station_uprn_field
+
+        test_record = self.stub_station_record(
+            station_id_field="001",
+            station_postcode_field="postcode",
+            station_easting_field="0",
+            station_northing_field="0",
+            station_uprn_field="uprn",
+        )
+        location, location_source = self.importer.get_station_point(test_record)
+        self.assertIsNone(location)
+        self.assertEqual(location_source, LocationSourceChoices.NONE)
+
+    @patch(
+        "data_importers.base_importers.BaseCsvStationsCsvAddressesImporter.geocode_from_postcode",
+    )
+    def test_get_station_point_no_uprn_field_postcodes_allowed(
+        self, mock_postcode_geocode
+    ):
+        del self.importer.station_uprn_field
+        self.importer.allow_station_point_from_postcode = True
+
+        test_record = self.stub_station_record(
+            station_id_field="001",
+            station_postcode_field="postcode",
+            station_easting_field="0",
+            station_northing_field="0",
+            station_uprn_field="uprn",
+        )
+        location, location_source = self.importer.get_station_point(test_record)
+        mock_postcode_geocode.assert_called_once_with(test_record)
+        self.assertEqual(location, mock_postcode_geocode.return_value)
+        self.assertEqual(location_source, LocationSourceChoices.POSTCODE)
