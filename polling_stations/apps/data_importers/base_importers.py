@@ -1114,6 +1114,7 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
             location is None
             and self.allow_station_point_from_postcode
             and has_postcode_field
+            and getattr(record, self.station_postcode_field)
         ):
             location = self.geocode_from_postcode(record)
             location_source = LocationSourceChoices.POSTCODE
