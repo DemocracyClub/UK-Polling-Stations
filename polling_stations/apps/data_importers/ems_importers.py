@@ -39,7 +39,6 @@ This is the parent class for both of them.
 
 class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta):
     csv_delimiter = ","
-
     # Set this to false in an import script if we want to only set a station
     # point based on UPRN or co-ordinates (even if we've got a valid postcode)
 
@@ -67,10 +66,6 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
     @abc.abstractmethod
     def station_northing_field(self):
         pass
-
-    @property
-    def station_uprn_field(self):
-        return None
 
     def get_station_hash(self, record):
         return "-".join([getattr(record, self.station_id_field)])
@@ -110,7 +105,6 @@ class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter, metaclass=abc.ABCMet
         "pollingplaceaddress6",
     ]
     station_id_field = "pollingplaceid"
-    station_uprn_field = ""
     station_easting_field = "pollingplaceeasting"
     station_northing_field = "pollingplacenorthing"
     residential_uprn_field = "uprn"
@@ -371,7 +365,6 @@ class BaseDemocracyCountsCsvImporter(
     address_fields = ["add1", "add2", "add3", "add4", "add5", "add6"]
     postcode_field = "postcode"
     station_id_field = "stationcode"
-    station_uprn_field = ""
     station_easting_field = "xordinate"
     station_northing_field = "yordinate"
 
