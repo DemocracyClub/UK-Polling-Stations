@@ -1098,7 +1098,12 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
                     getattr(record, self.station_id_field),
                 )
             except ObjectDoesNotExist:
-                pass
+                self.logger.log_message(
+                    logging.INFO,
+                    "failed to use UPRN %s for station %s",
+                    getattr(record, self.station_uprn_field),
+                    getattr(record, self.station_id_field),
+                )
         # if no coords or uprn, try postcode (if allowed)
         if (
             location is None
