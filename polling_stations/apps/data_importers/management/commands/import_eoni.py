@@ -15,7 +15,7 @@ from data_importers.models import DataEvent
 from django.contrib.gis.geos import Point
 from django.db import transaction
 from django.db.models import Q
-from pollingstations.models import PollingStation
+from pollingstations.models import PollingStation, LocationSourceChoices
 
 from polling_stations.db_routers import (
     get_principal_db_name,
@@ -306,6 +306,7 @@ class Command(BaseStationsImporter, CsvMixin):
                 "postcode": record.postcode,
                 "address": record.address,
                 "location": Point().from_ewkt(record.location),
+                "location_source": LocationSourceChoices.COORDINATES,
             }
         return None
 
