@@ -342,6 +342,125 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
     def get_station_hash(self, station):
         raise NotImplementedError
 
+    def get_station_address(self, record):
+        raise NotImplementedError
+
+    def get_station_coordinates(self, record):
+        return None
+
+    def geocode_from_coordinates(self, x, y):
+        return Point(
+            float(x),
+            float(y),
+            srid=self.srid,
+        )
+
+    def get_station_uprn(self, record):
+        return None
+
+    def check_station_postcode_matches_uprn(self, record, ab_rec):
+        ab_postcode = Postcode(ab_rec.postcode)
+        station_postcode = Postcode(self.get_station_postcode(record))
+        if ab_postcode != station_postcode:
+            ab_address = ab_rec.address
+            rec_address = self.get_station_address(record).replace(os.linesep, ", ")
+            station_id = self.get_station_id(record)
+            message = "\n".join(
+                [
+                    "Geocoding with UPRN. Station record postcode does not match addressbase postcode.",
+                    f"Station address: '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
+                    f"Addressbase: '{ab_address}, {ab_postcode.with_space}'",
+                    "SUGGESTION:",
+                    f"        # '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
+                    f"        if record.{self.station_id_field} == '{station_id}': record = record._replace({self.station_postcode_field}='{ab_postcode.with_space}')",
+                ]
+            )
+            self.logger.log_message(logging.WARNING, message + "\n")
+
+    def get_station_postcode(self, record):
+        return None
+
+    def geocode_from_postcode(self, station_postcode):
+        try:
+            location_data = geocode_point_only(station_postcode)
+            return location_data.centroid
+        except PostcodeError:
+            return None
+
+    def get_station_id(self, record):
+        # TODO: Make this an abstract method once we remove district importers
+        raise NotImplementedError
+
+    def get_station_point(self, record) -> tuple[Point | None, str]:
+        """
+        Tries to geocode a station from a station record. Attempts to geocode in this order:
+
+        - coordinates
+        - UPRN
+        - postcode (if allowed)
+
+        Returns the first successful result as a Point in a tuple along with the geocoding method.
+        """
+        location = None
+        location_source = LocationSourceChoices.NONE
+
+        station_id = self.get_station_id(record)
+        station_coords = self.get_station_coordinates(record)
+        station_uprn = self.get_station_uprn(record)
+        try:
+            station_postcode = Postcode(
+                self.get_station_postcode(record),
+                validate=True,
+            ).with_space
+        except ValueError:
+            station_postcode = None
+
+        bad_values = ["", "0", "0.00", 0, None]
+        # try coords
+        if station_coords and all(coord not in bad_values for coord in station_coords):
+            location = self.geocode_from_coordinates(*station_coords)
+            location_source = LocationSourceChoices.COORDINATES
+            self.logger.log_message(
+                logging.INFO,
+                "using grid reference for station %s",
+                station_id,
+            )
+        # if no coords, try uprn
+        if location is None and station_uprn and station_uprn not in bad_values:
+            try:
+                ab_rec = Address.objects.get(uprn=station_uprn.lstrip("0"))
+                location = ab_rec.location
+                location_source = LocationSourceChoices.UPRN
+                if station_postcode:
+                    self.check_station_postcode_matches_uprn(record, ab_rec)
+                self.logger.log_message(
+                    logging.INFO,
+                    "using UPRN for station %s",
+                    station_id,
+                )
+            except ObjectDoesNotExist:
+                self.logger.log_message(
+                    logging.INFO,
+                    "failed to use UPRN %s for station %s",
+                    station_uprn,
+                    station_id,
+                )
+        # if no coords or uprn, try postcode (if allowed)
+        if (
+            location is None
+            and self.allow_station_point_from_postcode
+            and station_postcode
+        ):
+            location = self.geocode_from_postcode(station_postcode)
+            location_source = LocationSourceChoices.POSTCODE
+            self.logger.log_message(
+                logging.INFO,
+                "using postcode for station %s",
+                station_id,
+            )
+
+        return location, location_source
+
     def check_station_point(self, station_record):
         if station_record["location"]:
             self.check_in_council_bounds(station_record)
@@ -1013,118 +1132,30 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
     stations_filetype = "csv"
     addresses_filetype = "csv"
 
+    def get_station_id(self, record):
+        if hasattr(self, "station_id_field"):
+            return getattr(record, self.station_id_field).strip()
+        return None
+
     def get_station_postcode(self, record):
-        return getattr(record, self.station_postcode_field).strip()
+        if hasattr(self, "station_postcode_field"):
+            return getattr(record, self.station_postcode_field).strip()
+        return None
 
-    def geocode_from_uprn(self, record):
-        uprn = getattr(record, self.station_uprn_field).strip().lstrip("0")
-        ab_rec = Address.objects.get(uprn=uprn)
-        ab_postcode = Postcode(ab_rec.postcode)
-        station_postcode = Postcode(self.get_station_postcode(record))
-        if ab_postcode != station_postcode:
-            ab_address = ab_rec.address
-            rec_address = self.get_station_address(record).replace(os.linesep, ", ")
-            station_id = getattr(record, self.station_id_field)
-            message = "\n".join(
-                [
-                    "Geocoding with UPRN. Station record postcode does not match addressbase postcode.",
-                    f"Station address: '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
-                    f"Addressbase: '{ab_address}, {ab_postcode.with_space}'",
-                    "SUGGESTION:",
-                    f"        # '{rec_address}, {station_postcode.with_space}' (id: {station_id})",
-                    f"        if record.{self.station_id_field} == '{station_id}': record = record._replace({self.station_postcode_field}='{ab_postcode.with_space}')",
-                ]
-            )
-            self.logger.log_message(logging.WARNING, message + "\n")
-        return ab_rec.location
+    def get_station_uprn(self, record):
+        if hasattr(self, "station_uprn_field"):
+            return getattr(record, self.station_uprn_field).strip()
+        return None
 
-    def geocode_from_postcode(self, record):
-        station_postcode = self.get_station_postcode(record)
-        if not station_postcode:
-            return None
-        try:
-            location_data = geocode_point_only(station_postcode)
-            return location_data.centroid
-        except PostcodeError:
-            return None
-
-    def geocode_from_coordinates(self, record):
-        return Point(
-            float(getattr(record, self.station_easting_field)),
-            float(getattr(record, self.station_northing_field)),
-            srid=self.srid,
-        )
-
-    def get_station_point(self, record) -> tuple[Point | None, str]:
-        """
-        Tries to geocode a station from a station record. Attempts to geocode in this order:
-
-        - coordinates
-        - UPRN
-        - postcode (if allowed)
-
-        Returns the first successful result as a Point in a tuple along with the geocoding method.
-        """
-        location = None
-        location_source = LocationSourceChoices.NONE
-
-        has_coord_fields = hasattr(self, "station_easting_field") and hasattr(
+    def get_station_coordinates(self, record):
+        if hasattr(self, "station_easting_field") and hasattr(
             self, "station_northing_field"
-        )
-        has_uprn_field = hasattr(self, "station_uprn_field")
-        has_postcode_field = hasattr(self, "station_postcode_field")
-
-        # try coords
-        bad_values = ["", "0", "0.00", 0, None]
-        if (
-            has_coord_fields
-            and getattr(record, self.station_easting_field) not in bad_values
-            and getattr(record, self.station_northing_field) not in bad_values
         ):
-            location = self.geocode_from_coordinates(record)
-            location_source = LocationSourceChoices.COORDINATES
-            self.logger.log_message(
-                logging.INFO,
-                "using grid reference for station %s",
-                getattr(record, self.station_id_field),
+            return (
+                getattr(record, self.station_easting_field),
+                getattr(record, self.station_northing_field),
             )
-        # if no coords, try uprn
-        if (
-            location is None
-            and has_uprn_field
-            and getattr(record, self.station_uprn_field).strip() not in bad_values
-        ):
-            try:
-                location = self.geocode_from_uprn(record)
-                location_source = LocationSourceChoices.UPRN
-                self.logger.log_message(
-                    logging.INFO,
-                    "using UPRN for station %s",
-                    getattr(record, self.station_id_field),
-                )
-            except ObjectDoesNotExist:
-                self.logger.log_message(
-                    logging.INFO,
-                    "failed to use UPRN %s for station %s",
-                    getattr(record, self.station_uprn_field),
-                    getattr(record, self.station_id_field),
-                )
-        # if no coords or uprn, try postcode (if allowed)
-        if (
-            location is None
-            and self.allow_station_point_from_postcode
-            and has_postcode_field
-            and getattr(record, self.station_postcode_field)
-        ):
-            location = self.geocode_from_postcode(record)
-            location_source = LocationSourceChoices.POSTCODE
-            self.logger.log_message(
-                logging.INFO,
-                "using postcode for station %s",
-                getattr(record, self.station_id_field),
-            )
-
-        return location, location_source
+        return None
 
 
 class BaseShpStationsCsvAddressesImporter(
