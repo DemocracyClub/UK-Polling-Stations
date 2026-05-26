@@ -210,10 +210,17 @@ class Council(WelshNameMutationMixin, models.Model):
     def import_script_path(self):
         import_script_path = None
 
+        # Skip import_fake_*.py - those are mock importers used in tests and
+        # local dev, not the real script for a council. When both
+        # import_exeter.py and import_fake_exeter.py declare the same
+        # council_id, the glob iteration order means the fake one wins
+        # without this filter (#8035).
         scripts = Path(
             "./polling_stations/apps/data_importers/management/commands/"
         ).glob("import_*.py")
         for script in scripts:
+            if script.name.startswith("import_fake_"):
+                continue
             if f'council_id = "{self.council_id}"' in script.read_text():
                 import_script_path = script
         if not import_script_path:
