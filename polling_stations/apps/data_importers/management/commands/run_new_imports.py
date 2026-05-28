@@ -136,7 +136,7 @@ class Command(BaseCommand):
                 )
                 self.messages.append(
                     {
-                        "header_message": f":pollingstation: *Successfuly ran {script_path.stem}*",
+                        "header_message": f":pollingstation: *Successfully ran {script_path.stem}*",
                         "detail_message": f"```{out.getvalue()}```",
                     }
                 )
