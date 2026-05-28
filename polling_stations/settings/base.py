@@ -335,9 +335,9 @@ CLEAN_SERVER_FILE = "~/clean"
 INITIAL_REPLICATION_COMPLETE_FILE = (
     "/var/www/polling_stations/home/db_replication_complete"
 )
-
+DC_ENVIRONMENT = os.environ.get("DC_ENVIRONMENT")
 # When we're running on AWS
-if DC_ENVIRONMENT := os.environ.get("DC_ENVIRONMENT", None):
+if DC_ENVIRONMENT and not os.environ.get("CIRCLECI"):
     if not Path(INITIAL_REPLICATION_COMPLETE_FILE).exists():
         DATABASES["local"] = {
             "ENGINE": "django.contrib.gis.db.backends.postgis",
