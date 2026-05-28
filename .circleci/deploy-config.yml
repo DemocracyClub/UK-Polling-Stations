@@ -119,6 +119,11 @@ jobs:
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
+          DC_ENVIRONMENT: "<<parameters.dc-environment>>"
+    parameters:
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
     working_directory: ~/repo
     steps:
       - checkout
@@ -275,7 +280,11 @@ jobs:
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
-
+          DC_ENVIRONMENT: "<<parameters.dc-environment>>"
+    parameters:
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
     working_directory: ~/repo
 
     steps:
@@ -318,6 +327,7 @@ workflows:
         name: "Development: Run New Imports"
         requires: [build_and_test]
         context: [deployment-development-wdiv, slack-secrets, fcs-api]
+        dc-environment: development
         filters: { branches: { only: [ development ] } }
     ###########
     # STAGING #
@@ -326,6 +336,7 @@ workflows:
         name: "Staging: Run New Imports"
         requires: [build_and_test]
         context: [deployment-staging-wdiv, slack-secrets, fcs-api]
+        dc-environment: staging
         filters: { branches: { only: [ main, master ] } }
     ##############
     # PRODUCTION #
@@ -334,6 +345,7 @@ workflows:
         name: "Production: Run New Imports"
         requires: [build_and_test, "Staging: Run New Imports"]
         context: [deployment-production-wdiv, slack-secrets, fcs-api]
+        dc-environment: production
         filters: { branches: { only: [ main, master ] } }
 
 
@@ -374,6 +386,7 @@ workflows:
         name: "Development: Run New Imports Post Deploy"
         requires: ["Development: AWS CodeDeploy"]
         context: [deployment-development-wdiv, slack-secrets, fcs-api]
+        dc-environment: development
         filters: { branches: { only: [ development ] } }
 
     ###########
@@ -401,6 +414,7 @@ workflows:
         name: "Staging: Run New Imports Post Deploy"
         requires: ["Staging: AWS CodeDeploy"]
         context: [deployment-staging-wdiv, slack-secrets, fcs-api]
+        dc-environment: staging
         filters: { branches: { only: [ main, master ] } }
 
     ##############
@@ -434,4 +448,5 @@ workflows:
         name: "Production: Run New Imports Post Deploy"
         requires: ["Production: AWS CodeDeploy"]
         context: [deployment-production-wdiv, slack-secrets, fcs-api]
+        dc-environment: production
         filters: { branches: { only: [ main, master ] } }
