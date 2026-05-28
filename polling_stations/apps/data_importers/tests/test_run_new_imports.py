@@ -346,7 +346,7 @@ class test_run_new_imports(TestCase):
             stdout=out,
         )
         expected_std_out = "Only import scripts have changed\n"
-        expected_message = ":pollingstation: *Successfuly ran import_glasgow_city*"
+        expected_message = ":pollingstation: *Successfully ran import_glasgow_city*"
 
         self.assertIn(expected_std_out, out.getvalue())
 
