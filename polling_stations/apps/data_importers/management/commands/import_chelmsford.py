@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "CHL"
     addresses_name = (
-        "2026-05-07/2026-02-23T09:23:31.641167/Democracy_Club__07May2026 (1).tsv"
+        "2026-06-18/2026-06-01T10:18:56.763322/Democracy_Club__18June2026.tsv"
     )
     stations_name = (
-        "2026-05-07/2026-02-23T09:23:31.641167/Democracy_Club__07May2026 (1).tsv"
+        "2026-06-18/2026-06-01T10:18:56.763322/Democracy_Club__18June2026.tsv"
     )
-    elections = ["2026-05-07"]
+    elections = ["2026-06-18"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -43,9 +43,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Postcode correction for: Rettendon Memorial Hall, Main Road, Rettendon, Chelmsford, CM3 8DR
-        if record.polling_place_id == "14871":
-            record = record._replace(polling_place_postcode="CM3 8DP")
-        return super().station_record_to_dict(record)
