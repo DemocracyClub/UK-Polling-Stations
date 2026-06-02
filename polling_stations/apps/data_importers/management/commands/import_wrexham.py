@@ -4,13 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WRX"
     addresses_name = (
-        "2026-05-07/2026-03-03T13:54:44.245422/Democracy_Club__07May2026.tsv"
+        "2026-06-18/2026-06-02T10:57:21.319221/Democracy_Club__18June2026.tsv"
     )
     stations_name = (
-        "2026-05-07/2026-03-03T13:54:44.245422/Democracy_Club__07May2026.tsv"
+        "2026-06-18/2026-06-02T10:57:21.319221/Democracy_Club__18June2026.tsv"
     )
-    elections = ["2026-05-07"]
-    csv_encoding = "windows-1252"
+    elections = ["2026-06-18"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -47,15 +46,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # postcode correction for: Gresford Methodist Church Hall, Chester Road, Gresford, Wrexham, LL12 8YY
-        if record.polling_place_id == "10770":
-            record = record._replace(polling_place_postcode="LL12 8PA")
-
-        # postcode correction for: Gwersyllt Congregational Church, 3 Dodds Lane, Gwersyllt, Wrexham, LL11 4LG
-        # requested by the council
-        if record.polling_place_id == "10808":
-            record = record._replace(polling_place_postcode="LL11 4NT")
-
-        return super().station_record_to_dict(record)
