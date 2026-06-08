@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "DST"
     addresses_name = (
-        "2026-05-21/2026-04-16T14:31:44.250946/Democracy_Club__21May2026.tsv"
+        "2026-07-02/2026-06-08T11:26:15.733293/Democracy_Club__02July2026.tsv"
     )
     stations_name = (
-        "2026-05-21/2026-04-16T14:31:44.250946/Democracy_Club__21May2026.tsv"
+        "2026-07-02/2026-06-08T11:26:15.733293/Democracy_Club__02July2026.tsv"
     )
-    elections = ["2026-05-21"]
+    elections = ["2026-07-02"]
     csv_delimiter = "\t"
 
     # Maintaining some exclusions as comments for future reference.
@@ -38,27 +38,30 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
 
-        if record.addressline6.strip() in [
-            # split
-            # "BH19 2PG",
-            # suspect
-            "DT6 3BG",
-            # "BH19 1DQ",
-            # "BH19 1BS",
-            # "BH19 1LD",
-            # "DT4 8SA",
-            # "DT5 2FD",
-            # "DT5 2FB",
-            # "DT6 3BG",
-            # "DT7 3FB",
-            # "DT7 3FA",
-            # "SP7 8NW",
-            # "DT4 7LF",
-            # "DT4 7LE",
-            # "DT4 7LA",
-            # "DT4 7LN",
-            # "BH21 7BN",
-        ]:
+        if (
+            record.addressline6.strip()
+            in [
+                # split
+                # "BH19 2PG",
+                # suspect
+                # "DT6 3BG",
+                # "BH19 1DQ",
+                # "BH19 1BS",
+                # "BH19 1LD",
+                # "DT4 8SA",
+                # "DT5 2FD",
+                # "DT5 2FB",
+                # "DT6 3BG",
+                # "DT7 3FB",
+                # "DT7 3FA",
+                # "SP7 8NW",
+                # "DT4 7LF",
+                # "DT4 7LE",
+                # "DT4 7LA",
+                # "DT4 7LN",
+                # "BH21 7BN",
+            ]
+        ):
             return None
 
         if (
