@@ -64,7 +64,8 @@
                         <th>ID</th>
                         <th>Address</th>
                         <th>Postcode</th>
-                        <th>Location?</th>
+                        <th>Location</th>
+                        <th>Location Source</th>
                     </tr>
                     {% for pollingstation in pollingstation_list %}
                         <tr>
@@ -72,6 +73,7 @@
                             <td>{{ pollingstation.address }}</td>
                             <td>{{ pollingstation.postcode }}</td>
                             <td>{{ pollingstation.location|yesno }}</td>
+                            <td>{{ pollingstation.location_source|default:"NONE" }}</td>
                         </tr>
                     {% endfor %}
                 </table>
