@@ -293,6 +293,7 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
                     "postcode": station.postcode,
                     "internal_council_id": station.internal_council_id,
                     "location": "✔️" if station.location else "❌",
+                    "location_source": station.location_source,
                     "accessibility_information": "✔️"
                     if getattr(station, "accessibility_information", None)
                     else "❌",
