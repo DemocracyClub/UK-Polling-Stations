@@ -194,7 +194,15 @@
 
                                 {% if user.is_staff %} <td>{{ station.internal_council_id }}</td> {% endif %}
 
-                                <td>{{ station.location }} </td>
+                                <td>
+                                    {{ station.location }}
+                                    <br>
+                                    {% if user.is_staff and station.location == "✔️" %}
+                                        <small><cite>
+                                            Source: {{station.location_source}}
+                                        </cite></small>
+                                    {% endif %}
+                                </td>
 
                                 {% if council.nation == "Wales" and user.is_staff %}
                                     <td>{{ station.accessibility_information }}</td>
