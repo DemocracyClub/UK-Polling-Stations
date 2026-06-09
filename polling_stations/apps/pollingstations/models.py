@@ -65,6 +65,7 @@ class PollingStation(models.Model):
         choices=LocationSourceChoices.choices,
         default=LocationSourceChoices.NONE,
         blank=True,
+        max_length=20,
     )
     # This is NOT a FK, as we might not have the polling district at
     # the point of import
