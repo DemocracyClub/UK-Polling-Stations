@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 from io import StringIO
@@ -11,10 +12,7 @@ from core.slack_client import SlackClient
 from django.apps import apps
 from django.conf import settings
 from django.core.management import BaseCommand, call_command
-from polling_stations.settings.constants.slack import (
-    BOTS_CHANNEL,
-    BOTS_TESTING_CHANNEL,
-)
+from polling_stations.settings.constants.slack import BOTS_TESTING_CHANNEL
 
 
 def get_paths_changed(from_sha, to_sha):
@@ -97,10 +95,7 @@ class Command(BaseCommand):
 
     @property
     def slack_channel(self):
-        if settings.DC_ENVIRONMENT == "production":
-            return BOTS_CHANNEL
-        else:
-            return BOTS_TESTING_CHANNEL
+        return os.environ.get("BOTS_CHANNEL", BOTS_TESTING_CHANNEL)
 
     def add_arguments(self, parser):
         parser.add_argument(

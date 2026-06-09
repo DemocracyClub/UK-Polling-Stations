@@ -136,6 +136,7 @@ jobs:
             export CI_DB_NAME=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_NAME' --output text`
             export CI_DB_HOST=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_HOST' --output text`
             export SLACK_TOKEN=`aws ssm get-parameter --query Parameter.Value --name 'SLACK_TOKEN' --output text`
+            export BOTS_CHANNEL=`aws ssm get-parameter --query Parameter.Value --name 'BOTS_CHANNEL' --output text`
             export S3_DATA_BUCKET=pollingstations.elections.production
             uv run python manage.py run_new_imports --slack
       # In the event the imports have failed, alert the dev team
@@ -293,6 +294,7 @@ jobs:
             export CI_DB_NAME=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_NAME' --output text`
             export CI_DB_HOST=`aws ssm get-parameter --query Parameter.Value --name 'RDS_DB_HOST' --output text`
             export SLACK_TOKEN=`aws ssm get-parameter --query Parameter.Value --name 'SLACK_TOKEN' --output text`
+            export BOTS_CHANNEL=`aws ssm get-parameter --query Parameter.Value --name 'BOTS_CHANNEL' --output text`
             export S3_DATA_BUCKET=pollingstations.elections.production
             uv run python manage.py run_new_imports --post-deploy --slack
 
