@@ -187,3 +187,39 @@ class BaseStationImporterGetStationPointTests(TestCase):
         location, location_source = self.importer.get_station_point(self.test_record)
         self.assertEqual(location_source, LocationSourceChoices.NONE)
         self.assertIsNone(location)
+
+    @patch("data_importers.base_importers.BaseStationsImporter.get_station_coordinates")
+    @patch(
+        "data_importers.base_importers.BaseStationsImporter.geocode_from_coordinates"
+    )
+    def test_get_station_point_invalid_coordinates(
+        self, mock_coord_geocode, mock_get_station_coordinates
+    ):
+        test_cases = [
+            ("27700", "-1", "179650"),  # Invalid easting
+            ("27700", "530264", "-1"),  # Invalid northing
+            ("27700", "700001", "179650"),  # Out of range easting
+            ("27700", "530264", "1300001"),  # Out of range northing
+            ("27700", "not_a_number", "179650"),  # Non-numeric easting
+            ("27700", "530264", "not_a_number"),  # Non-numeric northing
+            ("4326", "-91", "0"),  # Out of range latitude
+            ("4326", "0", "181"),  # Out of range longitude
+            ("4326", "not_a_number", "0"),  # Non-numeric latitude
+            ("4326", "0", "not_a_number"),  # Non-numeric longitude
+        ]
+
+        for srid, x, y in test_cases:
+            with self.subTest(srid=srid, x=x, y=y):
+                self.importer.srid = srid
+                self.test_record = self.test_record._replace(
+                    station_postcode="",
+                    station_easting=x,
+                    station_northing=y,
+                    station_uprn="",
+                )
+                mock_get_station_coordinates.return_value = (x, y)
+
+                location, location_source = self.importer.get_station_point(
+                    self.test_record
+                )
+                mock_coord_geocode.assert_not_called()

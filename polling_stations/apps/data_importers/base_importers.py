@@ -355,6 +355,18 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             srid=self.srid,
         )
 
+    def validate_coordinates(self, coords):
+        try:
+            x = float(coords[0])
+            y = float(coords[1])
+        except (ValueError, TypeError):
+            return False
+        if self.srid == "27700" and not (0 <= x <= 700000 and 0 <= y <= 1300000):
+            return False
+        if self.srid == "4326" and not (-90 <= x <= 90 and -180 <= y <= 180):
+            return False
+        return True
+
     def get_station_uprn(self, record):
         return None
 
@@ -406,6 +418,14 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
 
         station_id = self.get_station_id(record)
         station_coords = self.get_station_coordinates(record)
+        if station_coords and not self.validate_coordinates(station_coords):
+            self.logger.log_message(
+                logging.WARNING,
+                "Invalid coordinates in record for station %s: %s",
+                station_id,
+                station_coords,
+            )
+            station_coords = None
         station_uprn = self.get_station_uprn(record)
         try:
             station_postcode = Postcode(
