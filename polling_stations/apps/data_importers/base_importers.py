@@ -422,8 +422,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             self.logger.log_message(
                 logging.WARNING,
                 "Invalid coordinates in record for station %s: %s",
-                station_id,
-                station_coords,
+                variable=(station_id, station_coords),
             )
             station_coords = None
         station_uprn = self.get_station_uprn(record)
@@ -462,8 +461,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 self.logger.log_message(
                     logging.INFO,
                     "failed to use UPRN %s for station %s",
-                    station_uprn,
-                    station_id,
+                    variable=(station_uprn, station_id),
                 )
         # if no coords or uprn, try postcode (if allowed)
         if (
