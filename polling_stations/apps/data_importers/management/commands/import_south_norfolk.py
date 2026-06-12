@@ -3,10 +3,10 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "SNO"
-    addresses_name = "2026-05-07/2026-03-05T09:53:17.224658/South Norfolk Council Polling Districts.csv"
-    stations_name = "2026-05-07/2026-03-05T09:53:17.224658/South Norfolk Council Polling Stations.csv"
-    elections = ["2026-05-07"]
-    csv_encoding = "utf-8-sig"
+    addresses_name = "2026-07-16/2026-06-12T15:11:13.982321/South Norfolk Council - polling districts.csv"
+    stations_name = "2026-07-16/2026-06-12T15:11:13.982321/South Norfolk Council - polling stations.csv"
+    elections = ["2026-07-16"]
+    csv_encoding = "utf-16le"
 
     def address_record_to_dict(self, record):
         if record.uprn in [
@@ -21,11 +21,3 @@ class Command(BaseDemocracyCountsCsvImporter):
         ]:
             return None
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # change request from council
-        # postcode correction for: Wymondham Rugby Club, Barnards Fields, Bray Drive, Wymondham, NR18 0QQ
-        if record.stationcode in ["S215", "S216"]:
-            record = record._replace(postcode="NR18 0GQ")
-
-        return super().station_record_to_dict(record)
