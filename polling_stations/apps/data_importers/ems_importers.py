@@ -365,6 +365,7 @@ class BaseDemocracyCountsCsvImporter(
     address_fields = ["add1", "add2", "add3", "add4", "add5", "add6"]
     postcode_field = "postcode"
     station_id_field = "stationcode"
+    station_postcode_field = "postcode"
     station_easting_field = "xordinate"
     station_northing_field = "yordinate"
 
