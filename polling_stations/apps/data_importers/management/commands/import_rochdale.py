@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "RCH"
     addresses_name = (
-        "2026-05-07/2026-03-06T14:11:59.587542/Democracy_Club__07May2026.tsv"
+        "2026-07-30/2026-06-22T14:25:19.621107/Democracy_Club__30July2026.tsv"
     )
     stations_name = (
-        "2026-05-07/2026-03-06T14:11:59.587542/Democracy_Club__07May2026.tsv"
+        "2026-07-30/2026-06-22T14:25:19.621107/Democracy_Club__30July2026.tsv"
     )
-    elections = ["2026-05-07"]
+    elections = ["2026-07-30"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -27,27 +27,29 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             "23038961",  # FERN COTTAGE, BAGSLATE MOOR ROAD, ROCHDALE, OL11 5YH
             "23085791",  # LOWER STARRING FARM, STARRING ROAD, LITTLEBOROUGH, OL15 8HN
             "23090994",  # 9 TOWNHOUSE FLATS, CARRIAGE DRIVE, LITTLEBOROUGH, OL15 9AG
+            "10096505235",  # HELLIWELL HOUSE, BUCKLEY HILL LANE, MILNROW, ROCHDALE
         ]:
             return None
 
         if record.post_code in [
             # splits
-            "OL15 0JH",
-            "M24 2PR",
-            "OL11 3AE",
-            "OL16 1FD",
-            "OL15 0BH",
-            "OL16 4XF",
-            "OL10 3LW",
-            "OL10 2JP",
-            "OL16 2SD",
-            "OL10 3BJ",
-            "OL10 1FH",
-            "OL15 9LY",
-            "OL11 3BG",
             "M24 1LG",
+            "M24 2PR",
             "M24 6UE",
+            "OL10 1FH",
+            "OL10 2JP",
+            "OL10 3BJ",
+            "OL10 3LW",
+            "OL11 3AE",
+            "OL11 3BG",
+            "OL12 0EG",
+            "OL15 0BH",
+            "OL15 0JH",
+            "OL15 9LY",
+            "OL16 1FD",
+            "OL16 2SD",
             "OL16 4RF",
+            "OL16 4XF",
             # looks wrong
             "OL12 9BA",
             "OL15 9AU",
@@ -60,13 +62,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        # Ignore below, address is correct
-        # WARNING: Polling station Room At Rear of St James Church (6558) is in Oldham Metropolitan Borough Council (OLD)
-
-        # postcode correction for: River Beal Cafe, River Beal Court, 14 Ladybarn Lane, Milnrow, Rochdale, OL16 4G
-        if record.polling_place_id == "6885":
-            record = record._replace(polling_place_postcode="OL16 4GQ")
-
-        return super().station_record_to_dict(record)
