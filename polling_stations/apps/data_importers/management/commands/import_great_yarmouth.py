@@ -1,11 +1,11 @@
-from data_importers.management.commands import BaseHalarose2026UpdateCsvImporter
+from data_importers.management.commands import BaseHalaroseCsvImporter
 
 
-class Command(BaseHalarose2026UpdateCsvImporter):
+class Command(BaseHalaroseCsvImporter):
     council_id = "GRY"
-    addresses_name = "2026-05-07/2026-03-17T10:35:37.002013/Democracy Club - Idox_2026-03-17 10-31.csv"
-    stations_name = "2026-05-07/2026-03-17T10:35:37.002013/Democracy Club - Idox_2026-03-17 10-31.csv"
-    elections = ["2026-05-07"]
+    addresses_name = "2026-07-16/2026-06-22T12:37:11.119904/Democracy Club - Idox_2026-06-22 10-49.csv"
+    stations_name = "2026-07-16/2026-06-22T12:37:11.119904/Democracy Club - Idox_2026-06-22 10-49.csv"
+    elections = ["2026-07-16"]
 
     def address_record_to_dict(self, record):
         uprn = record.uprn.strip().lstrip("0")
@@ -32,38 +32,33 @@ class Command(BaseHalarose2026UpdateCsvImporter):
 
         if record.postcode in [
             # split
-            "NR30 2LD",
-            "NR31 6SY",
-            "NR30 2DU",
-            "NR31 9UP",
-            "NR31 8AR",
-            "NR30 5JU",
-            "NR31 9PN",
-            "NR30 2PY",
-            "NR31 0AZ",
-            "NR31 8BZ",
-            "NR31 9NY",
-            "NR31 9TY",
             "NR29 4SL",
+            "NR30 2DU",
+            "NR30 2PY",
+            "NR30 5JU",
+            "NR31 0AZ",
+            "NR31 6SY",
+            "NR31 8AR",
+            "NR31 8BZ",
             "NR31 9EJ",
+            "NR31 9NY",
+            "NR31 9PN",
+            "NR31 9TY",
+            "NR31 9UP",
             # suspect
-            "NR31 9AQ",
+            "NR29 3PJ",
             "NR29 4FF",
             "NR30 1TD",
             "NR31 6JN",
-            "NR29 3PJ",
+            "NR31 9AQ",
         ]:
             return None
 
         return super().address_record_to_dict(record)
 
     def station_record_to_dict(self, record):
-        # add missing postcode for: GORLESTON BAPTIST CHURCH, LOWESTOFT ROAD, GORLESTON
-        if record.pollingstationnumber == "10":
-            record = record._replace(pollingstationpostcode="NR31 6LY")
-
         # add missing postcode for: THURNE CHAPEL SCHOOLROOM, THURNE
-        if record.pollingstationnumber == "38":
+        if self.get_station_hash(record) == "41-thurne-chapel-schoolroom":
             record = record._replace(pollingstationpostcode="NR29 3AP")
 
         return super().station_record_to_dict(record)
