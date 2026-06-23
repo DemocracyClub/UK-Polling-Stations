@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "SLF"
     addresses_name = (
-        "2026-05-07/2026-03-17T10:59:10.971611/Democracy_Club__07May2026.tsv"
+        "2026-07-30/2026-06-23T12:14:57.310812/Democracy_Club__30July2026.tsv"
     )
     stations_name = (
-        "2026-05-07/2026-03-17T10:59:10.971611/Democracy_Club__07May2026.tsv"
+        "2026-07-30/2026-06-23T12:14:57.310812/Democracy_Club__30July2026.tsv"
     )
-    elections = ["2026-05-07"]
+    elections = ["2026-07-30"]
     csv_encoding = "windows-1252"
     csv_delimiter = "\t"
 
@@ -17,7 +17,6 @@ class Command(BaseXpressDemocracyClubCsvImporter):
         uprn = record.property_urn.strip().lstrip("0")
 
         if uprn in [
-            "10004682203",  # ALDERWOOD COTTAGE, LEIGH ROAD, WORSLEY, MANCHESTER
             "10095311109",  # APARTMENT 1, THORNCLIFFE, 48 VINE STREET, SALFORD
             "100012471364",  # WESTWOOD LODGE, PARRIN LANE, ECCLES, MANCHESTER
             "100011357863",  # 2A DUDLEY ROAD, CADISHEAD, MANCHESTER
