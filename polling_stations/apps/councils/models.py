@@ -214,6 +214,8 @@ class Council(WelshNameMutationMixin, models.Model):
             "./polling_stations/apps/data_importers/management/commands/"
         ).glob("import_*.py")
         for script in scripts:
+            if "_fake_" in script.name:
+                continue
             if f'council_id = "{self.council_id}"' in script.read_text():
                 import_script_path = script
         if not import_script_path:
