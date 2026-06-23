@@ -1,4 +1,6 @@
 import datetime
+from pathlib import Path
+from unittest.mock import patch
 
 from councils.models import Council, UnsafeToDeleteCouncil
 from councils.tests.factories import CouncilFactory
@@ -62,6 +64,20 @@ class CouncilTest(TestCase):
     def test_nation(self):
         newport = Council.objects.get(pk="NWP")
         self.assertEqual("Wales", newport.nation)
+
+    def test_import_script_path_ignores_fake_scripts(self):
+        exeter = CouncilFactory(council_id="EXE", name="Exeter")
+        fake_script = Path("/mock/import_fake_exeter.py")
+        real_script = Path("/mock/import_exeter.py")
+
+        with (
+            patch("councils.models.Path.glob", return_value=[fake_script, real_script]),
+            patch("councils.models.Path.read_text", return_value='council_id = "EXE"'),
+        ):
+            import_script_name = Path(exeter.import_script_path).name
+
+        self.assertEqual("import_exeter.py", import_script_name)
+        self.assertNotEqual("import_fake_exeter.py", import_script_name)
 
     def test_latest_data_event(self):
         self.assertEqual(
