@@ -1,16 +1,15 @@
 from data_importers.management.commands import BaseXpressDemocracyClubCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "OLD"
     addresses_name = (
-        "2026-05-07/2026-03-09T14:32:25.829578/Oldham Democracy_Club__07May2026.tsv"
+        "2026-07-30/2026-06-25T10:10:41.522051/Democracy_Club__30July2026.tsv"
     )
     stations_name = (
-        "2026-05-07/2026-03-09T14:32:25.829578/Oldham Democracy_Club__07May2026.tsv"
+        "2026-07-30/2026-06-25T10:10:41.522051/Democracy_Club__30July2026.tsv"
     )
-    elections = ["2026-05-07"]
+    elections = ["2026-07-30"]
     csv_delimiter = "\t"
 
     def address_record_to_dict(self, record):
@@ -50,11 +49,12 @@ class Command(BaseXpressDemocracyClubCsvImporter):
 
         if record.addressline6 in [
             # splits
-            "OL9 6BB",
-            "OL8 3SF",
+            "OL2 6GN",
             "OL2 8DT",
-            "OL8 2NE",
             "OL2 8TN",
+            "OL8 2NE",
+            "OL8 3SF",
+            "OL9 6BB",
             # looks wrong
             "OL8 3HP",
             "OL1 1TD",
@@ -69,13 +69,3 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
-
-    def station_record_to_dict(self, record):
-        rec = super().station_record_to_dict(record)
-
-        # postcode and point correction for: Waterhead Academy Sports Campus, Counthill Road, Moorside, Oldham, OL4 2PY
-        if rec["internal_council_id"] == "12068":
-            rec["postcode"] = "OL4 2PZ"
-            rec["location"] = Point(-2.076175, 53.556648, srid=4326)
-
-        return rec
