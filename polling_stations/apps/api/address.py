@@ -110,6 +110,7 @@ class BallotSerializer(serializers.Serializer):
     replaced_by = serializers.CharField(read_only=True, allow_null=True)
     replaces = serializers.CharField(read_only=True, allow_null=True)
     requires_voter_id = serializers.CharField(read_only=True, allow_null=True)
+    timetable = serializers.DictField(read_only=True)
 
     @extend_schema_field(OpenApiTypes.STR)
     def get_ballot_paper_id(self, obj) -> str:
