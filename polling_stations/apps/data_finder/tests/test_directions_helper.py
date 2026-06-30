@@ -16,10 +16,6 @@ def mock_route_exception(self, start, end):
     raise DirectionsException("oh noes!! terrible things happened :(")
 
 
-def mock_route_google(self, start, end):
-    return Directions(352, 300, "walk", "foo", 5, "Google", start, end)
-
-
 def mock_route_mapbox(self, start, end):
     return Directions(352, 300, "walk", "foo", 6, "Mapbox", start, end)
 
@@ -40,12 +36,8 @@ class DirectionsTest(TestCase):
         "data_finder.helpers.directions.MapboxDirectionsClient.get_route",
         mock_route_exception,
     )
-    @mock.patch(
-        "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
-        mock_route_exception,
-    )
-    def test_all_bad(self):
-        # all directions providers throw a DirectionsException
+    def test_exception(self):
+        # mapbox throws a DirectionsException
         # get_directions() should return None
         d = DirectionsHelper()
         result = d.get_directions(start_location=self.a, end_location=self.b)
@@ -53,28 +45,9 @@ class DirectionsTest(TestCase):
 
     @mock.patch(
         "data_finder.helpers.directions.MapboxDirectionsClient.get_route",
-        mock_route_exception,
-    )
-    @mock.patch(
-        "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
-        mock_route_google,
-    )
-    def test_google(self):
-        # Mapbox throws an exception
-        # Fall back to google
-        d = DirectionsHelper()
-        result = d.get_directions(start_location=self.a, end_location=self.b)
-        self.assertEqual("Google", result.source)
-
-    @mock.patch(
-        "data_finder.helpers.directions.MapboxDirectionsClient.get_route",
         mock_route_mapbox,
     )
-    @mock.patch(
-        "data_finder.helpers.directions.GoogleDirectionsClient.get_route",
-        mock_route_google,
-    )
-    def test_mapbox(self):
+    def test_valid(self):
         # Mapbox returns a valid result
         d = DirectionsHelper()
         result = d.get_directions(start_location=self.a, end_location=self.b)

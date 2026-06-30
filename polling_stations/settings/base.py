@@ -153,7 +153,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "feedback.context_processors.feedback_form",
                 "bug_reports.context_processors.bug_report_form",
-                "pollingstations.context_processors.google_analytics",
                 "pollingstations.context_processors.global_settings",
                 "whitelabel.context_processors.base_template",
                 "dc_utils.context_processors.dc_django_utils",
@@ -428,7 +427,6 @@ from .constants.db import *  # noqa
 from .constants.directions import *  # noqa
 from .constants.elections import *  # noqa
 from .constants.importers import *  # noqa
-from .constants.tiles import *  # noqa
 from .constants.uploads import *  # noqa
 
 

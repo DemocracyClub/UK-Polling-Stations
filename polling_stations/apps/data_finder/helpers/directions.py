@@ -1,7 +1,6 @@
 import abc
 import json
 import math
-import random
 from typing import NamedTuple
 
 import requests
@@ -39,13 +38,6 @@ class Directions(NamedTuple):
         return f"https://www.cyclestreets.net/journey/{self.start.y:.4f},{self.start.x:.4f}/{self.end.y:.4f},{self.end.x:.4f}/"
 
 
-def get_google_directions_token():
-    keys = settings.GOOGLE_API_KEYS
-    if len(keys) == 0:
-        return ""
-    return random.choice(keys)
-
-
 def get_distance(start, end):
     # convert the points to British National Grid first
     # so that .distance() will give us a distance in meters
@@ -63,57 +55,6 @@ class DirectionsClient(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_route(self, start, end):
         pass
-
-
-class GoogleDirectionsClient(DirectionsClient):
-    precision = 5
-
-    def get_base_url(self):
-        return "{base}&key={key}".format(
-            base=settings.BASE_GOOGLE_URL, key=get_google_directions_token()
-        )
-
-    def get_data(self, url):
-        resp = requests.get(url)
-        if resp.status_code != 200:
-            raise DirectionsException(
-                "Google Directions API error: HTTP status code %i" % resp.status_code
-            )
-        return resp.json()
-
-    def get_route(self, start, end):
-        distance_km = get_distance(start, end)
-        if distance_km > 1.5:
-            transport_verb = {"base": "drive", "gerund": "driving"}
-        else:
-            transport_verb = {"base": "walk", "gerund": "walking"}
-
-        url = "{base_url}&mode={mode}&origin={origin}&destination={destination}".format(
-            base_url=self.get_base_url(),
-            mode=transport_verb["gerund"],
-            origin="{0},{1}".format(start.y, start.x),
-            destination="{0},{1}".format(end.y, end.x),
-        )
-
-        directions = self.get_data(url)
-
-        if directions["status"] != "OK":
-            raise DirectionsException(
-                "Google Directions API error: {}".format(directions["status"])
-            )
-
-        route = directions["routes"][0]["overview_polyline"]["points"]
-
-        return Directions(
-            directions["routes"][0]["legs"][0]["duration"]["value"],
-            directions["routes"][0]["legs"][0]["distance"]["value"],
-            transport_verb["base"],
-            json.dumps(route),
-            self.precision,
-            "Google",
-            start,
-            end,
-        )
 
 
 class MapboxDirectionsClient(DirectionsClient):
@@ -165,16 +106,12 @@ class MapboxDirectionsClient(DirectionsClient):
 class DirectionsHelper:
     def get_directions(self, **kwargs):
         if kwargs["start_location"] and kwargs["end_location"]:
-            clients = (
-                MapboxDirectionsClient(),
-                GoogleDirectionsClient(),
-            )
-            for client in clients:
-                try:
-                    return client.get_route(
-                        kwargs["start_location"], kwargs["end_location"]
-                    )
-                except DirectionsException:
-                    pass
+            client = MapboxDirectionsClient()
+            try:
+                return client.get_route(
+                    kwargs["start_location"], kwargs["end_location"]
+                )
+            except DirectionsException:
+                pass
             return None
         return None
