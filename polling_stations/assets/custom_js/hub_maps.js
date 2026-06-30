@@ -17,7 +17,7 @@ $(document).ready(function() {
                     };
                 }
                 var hubMap = new PollingStationMap(mapDiv.id);
-                hubMap.draw(hubPoint, embed, tile_layer, mq_key, hubDirections);
+                hubMap.draw(hubPoint, embed, hubDirections);
             }
         }
 

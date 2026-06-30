@@ -9,148 +9,50 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.7.0 CPython/3.4.3 Darwin/15.2.0
+      - python-requests/2.33.0
     method: GET
-    uri: https://maps.googleapis.com/maps/api/directions/json?units=imperial&key=&mode=walking&origin=51.596012118680264,-2.998065948486328&destination=51.595814835763214,-2.995147704661227
+    uri: https://api.mapbox.com/directions/v5/mapbox/walking/-2.998065948486328,51.596012118680264;-2.995147704661227,51.595814835763214?&alternatives=false&geometries=polyline&steps=false&access_token=not-a-real-key
   response:
     body:
-      string: "{\n   \"geocoded_waypoints\" : [\n      {\n         \"geocoder_status\"
-        : \"OK\",\n         \"place_id\" : \"ChIJNe_VCtHmcUgRCSSEn5q8pWo\",\n         \"types\"
-        : [ \"postal_code\" ]\n      },\n      {\n         \"geocoder_status\" : \"OK\",\n
-        \        \"place_id\" : \"EicyIFRldGJ1cnkgQ2wsIE5ld3BvcnQsIE5ld3BvcnQgTlAyMCwgVUs\",\n
-        \        \"types\" : [ \"street_address\" ]\n      }\n   ],\n   \"routes\"
-        : [\n      {\n         \"bounds\" : {\n            \"northeast\" : {\n               \"lat\"
-        : 51.59587759999999,\n               \"lng\" : -2.9948435\n            },\n
-        \           \"southwest\" : {\n               \"lat\" : 51.5946918,\n               \"lng\"
-        : -2.9996985\n            }\n         },\n         \"copyrights\" : \"Map
-        data \xA92016 Google\",\n         \"legs\" : [\n            {\n               \"distance\"
-        : {\n                  \"text\" : \"0.3 mi\",\n                  \"value\"
-        : 491\n               },\n               \"duration\" : {\n                  \"text\"
-        : \"6 mins\",\n                  \"value\" : 358\n               },\n               \"end_address\"
-        : \"2 Tetbury Cl, Newport, Newport NP20, UK\",\n               \"end_location\"
-        : {\n                  \"lat\" : 51.59587759999999,\n                  \"lng\"
-        : -2.9951459\n               },\n               \"start_address\" : \"Newport,
-        Newport NP20 5GN, UK\",\n               \"start_location\" : {\n                  \"lat\"
-        : 51.595288,\n                  \"lng\" : -2.9996985\n               },\n
-        \              \"steps\" : [\n                  {\n                     \"distance\"
-        : {\n                        \"text\" : \"194 ft\",\n                        \"value\"
-        : 59\n                     },\n                     \"duration\" : {\n                        \"text\"
-        : \"1 min\",\n                        \"value\" : 46\n                     },\n
-        \                    \"end_location\" : {\n                        \"lat\"
-        : 51.5948043,\n                        \"lng\" : -2.9993648\n                     },\n
-        \                    \"html_instructions\" : \"Head \\u003cb\\u003esouth\\u003c/b\\u003e
-        on \\u003cb\\u003eBarrack Hill\\u003c/b\\u003e toward \\u003cb\\u003eHarlequin
-        Dr\\u003c/b\\u003e\",\n                     \"polyline\" : {\n                        \"points\"
-        : \"qe|yHb{hQLEVGDEf@]LQ\"\n                     },\n                     \"start_location\"
-        : {\n                        \"lat\" : 51.595288,\n                        \"lng\"
-        : -2.9996985\n                     },\n                     \"travel_mode\"
-        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
-        : {\n                        \"text\" : \"66 ft\",\n                        \"value\"
-        : 20\n                     },\n                     \"duration\" : {\n                        \"text\"
-        : \"1 min\",\n                        \"value\" : 14\n                     },\n
-        \                    \"end_location\" : {\n                        \"lat\"
-        : 51.5947031,\n                        \"lng\" : -2.9991209\n                     },\n
-        \                    \"html_instructions\" : \"Slight \\u003cb\\u003eleft\\u003c/b\\u003e
-        to stay on \\u003cb\\u003eBarrack Hill\\u003c/b\\u003e\",\n                     \"maneuver\"
-        : \"turn-slight-left\",\n                     \"polyline\" : {\n                        \"points\"
-        : \"ob|yH~xhQDOL_@\"\n                     },\n                     \"start_location\"
-        : {\n                        \"lat\" : 51.5948043,\n                        \"lng\"
-        : -2.9993648\n                     },\n                     \"travel_mode\"
-        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
-        : {\n                        \"text\" : \"289 ft\",\n                        \"value\"
-        : 88\n                     },\n                     \"duration\" : {\n                        \"text\"
-        : \"1 min\",\n                        \"value\" : 58\n                     },\n
-        \                    \"end_location\" : {\n                        \"lat\"
-        : 51.5949353,\n                        \"lng\" : -2.9979345\n                     },\n
-        \                    \"html_instructions\" : \"At the roundabout, take the
-        \\u003cb\\u003e1st\\u003c/b\\u003e exit onto \\u003cb\\u003eQueen's Hill\\u003c/b\\u003e\",\n
-        \                    \"maneuver\" : \"roundabout-left\",\n                     \"polyline\"
-        : {\n                        \"points\" : \"{a|yHnwhQAG@G@EE[MmAEc@GYAECOIY\"\n
-        \                    },\n                     \"start_location\" : {\n                        \"lat\"
-        : 51.5947031,\n                        \"lng\" : -2.9991209\n                     },\n
-        \                    \"travel_mode\" : \"WALKING\"\n                  },\n
-        \                 {\n                     \"distance\" : {\n                        \"text\"
-        : \"315 ft\",\n                        \"value\" : 96\n                     },\n
-        \                    \"duration\" : {\n                        \"text\" :
-        \"1 min\",\n                        \"value\" : 80\n                     },\n
-        \                    \"end_location\" : {\n                        \"lat\"
-        : 51.5952011,\n                        \"lng\" : -2.9967381\n                     },\n
-        \                    \"html_instructions\" : \"At the roundabout, take the
-        \\u003cb\\u003e3rd\\u003c/b\\u003e exit onto \\u003cb\\u003eLyne Rd\\u003c/b\\u003e\",\n
-        \                    \"maneuver\" : \"roundabout-left\",\n                     \"polyline\"
-        : {\n                        \"points\" : \"kc|yH`phQECEGGOGSEQ?ACOAI?IAM?O?O?S@I@I@G@EQa@\"\n
-        \                    },\n                     \"start_location\" : {\n                        \"lat\"
-        : 51.5949353,\n                        \"lng\" : -2.9979345\n                     },\n
-        \                    \"travel_mode\" : \"WALKING\"\n                  },\n
-        \                 {\n                     \"distance\" : {\n                        \"text\"
-        : \"440 ft\",\n                        \"value\" : 134\n                     },\n
-        \                    \"duration\" : {\n                        \"text\" :
-        \"2 mins\",\n                        \"value\" : 90\n                     },\n
-        \                    \"end_location\" : {\n                        \"lat\"
-        : 51.5951653,\n                        \"lng\" : -2.9948435\n                     },\n
-        \                    \"html_instructions\" : \"Turn \\u003cb\\u003eright\\u003c/b\\u003e
-        onto \\u003cb\\u003eEvans St\\u003c/b\\u003e\",\n                     \"maneuver\"
-        : \"turn-right\",\n                     \"polyline\" : {\n                        \"points\"
-        : \"_e|yHrhhQLa@BO@O?WCeAI{E\"\n                     },\n                     \"start_location\"
-        : {\n                        \"lat\" : 51.5952011,\n                        \"lng\"
-        : -2.9967381\n                     },\n                     \"travel_mode\"
-        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
-        : {\n                        \"text\" : \"256 ft\",\n                        \"value\"
-        : 78\n                     },\n                     \"duration\" : {\n                        \"text\"
-        : \"1 min\",\n                        \"value\" : 59\n                     },\n
-        \                    \"end_location\" : {\n                        \"lat\"
-        : 51.59586900000001,\n                        \"lng\" : -2.9949185\n                     },\n
-        \                    \"html_instructions\" : \"Turn \\u003cb\\u003eleft\\u003c/b\\u003e
-        onto \\u003cb\\u003eLedbury Dr\\u003c/b\\u003e\",\n                     \"maneuver\"
-        : \"turn-left\",\n                     \"polyline\" : {\n                        \"points\"
-        : \"yd|yHv|gQaABiAJ\"\n                     },\n                     \"start_location\"
-        : {\n                        \"lat\" : 51.5951653,\n                        \"lng\"
-        : -2.9948435\n                     },\n                     \"travel_mode\"
-        : \"WALKING\"\n                  },\n                  {\n                     \"distance\"
-        : {\n                        \"text\" : \"52 ft\",\n                        \"value\"
-        : 16\n                     },\n                     \"duration\" : {\n                        \"text\"
-        : \"1 min\",\n                        \"value\" : 11\n                     },\n
-        \                    \"end_location\" : {\n                        \"lat\"
-        : 51.59587759999999,\n                        \"lng\" : -2.9951459\n                     },\n
-        \                    \"html_instructions\" : \"Turn \\u003cb\\u003eleft\\u003c/b\\u003e
-        onto \\u003cb\\u003eTetbury Cl\\u003c/b\\u003e\\u003cdiv style=\\\"font-size:0.9em\\\"\\u003eDestination
-        will be on the left\\u003c/div\\u003e\",\n                     \"maneuver\"
-        : \"turn-left\",\n                     \"polyline\" : {\n                        \"points\"
-        : \"ei|yHf}gQAN?\\\\\"\n                     },\n                     \"start_location\"
-        : {\n                        \"lat\" : 51.59586900000001,\n                        \"lng\"
-        : -2.9949185\n                     },\n                     \"travel_mode\"
-        : \"WALKING\"\n                  }\n               ],\n               \"traffic_speed_entry\"
-        : [],\n               \"via_waypoint\" : []\n            }\n         ],\n
-        \        \"overview_polyline\" : {\n            \"points\" : \"qe|yHb{hQd@Ml@c@Ra@L_@AGBMSiBSsAIYECMWQw@Cq@Bw@BMQa@La@D_@C}AI{EaABiAJAN?\\\\\"\n
-        \        },\n         \"summary\" : \"Evans St\",\n         \"warnings\" :
-        [\n            \"Walking directions are in beta.    Use caution \u2013 This
-        route may be missing sidewalks or pedestrian paths.\"\n         ],\n         \"waypoint_order\"
-        : []\n      }\n   ],\n   \"status\" : \"OK\"\n}\n"
+      string: '{"code":"Ok","waypoints":[{"location":[-2.998064,51.595998],"name":"Heidenheim
+        Drive","distance":1.577},{"location":[-2.995155,51.59584],"name":"Tetbury
+        Close","distance":2.88}],"routes":[{"geometry":"_j|yHzphQmCfAqCd@kB@}BY`Cj@xBFbDq@dD{AbAY~@CYwBFkAKc@Pi@OsIiCLDt@","distance":1022.444,"duration":693.326,"weight":1004.175,"weight_name":"pedestrian","legs":[{"steps":[],"summary":"Heidenheim
+        Drive, Evans Street","distance":1022.444,"duration":693.326,"weight":1004.175,"admins":[{"iso_3166_1":"GB","iso_3166_1_alpha3":"GBR"}],"via_waypoints":[]}]}],"uuid":"xaeTlV3TndNhkQcBEh-JbhcfrtoSICqLfER0ih4veXssG9ZQ7IDrVA=="}'
     headers:
+      Access-Control-Allow-Origin:
+      - '*'
       Alt-Svc:
-      - quic=":443"; ma=2592000; v="34,33,32,31,30,29,28,27,26,25"
-      Alternate-Protocol:
-      - 443:quic
+      - h3=":443"; ma=86400
       Cache-Control:
-      - public, max-age=86400
-      Content-Encoding:
-      - gzip
+      - max-age=3600
+      Connection:
+      - keep-alive
       Content-Length:
-      - '1477'
+      - '618'
       Content-Type:
-      - application/json; charset=UTF-8
+      - application/json; charset=utf-8
       Date:
-      - Sat, 11 Jun 2016 10:31:31 GMT
-      Expires:
-      - Sun, 12 Jun 2016 10:31:31 GMT
-      Server:
-      - mafe
+      - Tue, 30 Jun 2026 12:50:36 GMT
       Vary:
-      - Accept-Language
-      X-Frame-Options:
-      - SAMEORIGIN
-      X-XSS-Protection:
-      - 1; mode=block
+      - Accept-Encoding
+      Via:
+      - 1.1 d8be193fc328ac40b80a88ad5287feec.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - xaeTlV3TndNhkQcBEh-JbhcfrtoSICqLfER0ih4veXssG9ZQ7IDrVA==
+      X-Amz-Cf-Pop:
+      - LHR95-P3
+      X-Cache:
+      - Miss from cloudfront
+      X-Rate-Limit-Interval:
+      - '60'
+      X-Rate-Limit-Limit:
+      - '300'
+      X-Rate-Limit-Reset:
+      - '1782823896'
+      x-mapbox-request-id:
+      - xaeTlV3TndNhkQcBEh-JbhcfrtoSICqLfER0ih4veXssG9ZQ7IDrVA==
+      x-mapbox-routing-engine:
+      - v2.0
     status:
       code: 200
       message: OK
@@ -164,70 +66,45 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.7.0 CPython/3.5.2 Linux/4.4.0-67-generic
+      - python-requests/2.33.0
     method: GET
-    uri: https://elections.democracyclub.org.uk/api/elections.json?coords=51.596012118680264,-2.998065948486328&current=1&identifier_type=ballot
+    uri: https://elections.democracyclub.org.uk/api/elections.json?identifier_type=ballot&current=1&coords=51.596012118680264%2C-2.998065948486328
   response:
     body:
       string: '{"count":1,"next":null,"previous":null,"results":[ {"election_id":"blablabla.bla",
         "group_type":null, "cancelled":false, "poll_open_date":"2099-12-31"} ]}'
     headers:
       Allow:
-      - GET, OPTIONS
-      Connection:
-      - keep-alive
-      Content-Type:
-      - application/json
-      Date:
-      - Fri, 17 Mar 2017 16:28:15 GMT
-      Server:
-      - nginx
-      Strict-Transport-Security:
-      - max-age=15768000
-      Vary:
-      - Accept, Cookie
-      X-Frame-Options:
-      - SAMEORIGIN
-    status:
-      code: 200
-      message: OK
-- request:
-    body: null
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      User-Agent:
-      - python-requests/2.27.1
-    method: GET
-    uri: https://api.mapbox.com/directions/v5/mapbox/walking/-2.998065948486328,51.596012118680264;-2.995147704661227,51.595814835763214?&alternatives=false&geometries=polyline&steps=false&access_token=
-  response:
-    body:
-      string: '{"message": "Not Authorized - Invalid Token",  "error_detail": "No
-        valid token prefix found in access_token parameter"}'
-    headers:
+      - GET, HEAD, OPTIONS
       Connection:
       - keep-alive
       Content-Length:
-      - '119'
+      - '52'
       Content-Type:
-      - application/json; charset=utf-8
+      - application/json
+      Cross-Origin-Opener-Policy:
+      - same-origin
       Date:
-      - Fri, 28 Oct 2022 15:05:30 GMT
+      - Tue, 30 Jun 2026 12:50:37 GMT
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
       Server:
-      - awselb/2.0
+      - gunicorn
+      Vary:
+      - Cookie
       Via:
-      - 1.1 941ea2ea996fa7a883fc56177714a71c.cloudfront.net (CloudFront)
+      - 1.1 f546fae491a152f9c1396e6d0a62bb42.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - JWcT5nxsIo1N4pMIdMWsNW-ovxErY-FLdHEahkjwGdHfj04epmp3Ig==
+      - pJDWYd7xLDGoji2HsMeAH0X6QTFV6XnkkpQ1A11yyhdmj03Ndos53Q==
       X-Amz-Cf-Pop:
-      - LHR62-C3
+      - LHR50-P1
       X-Cache:
-      - Error from cloudfront
+      - Miss from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
     status:
-      code: 401
-      message: Unauthorized
+      code: 200
+      message: OK
 version: 1

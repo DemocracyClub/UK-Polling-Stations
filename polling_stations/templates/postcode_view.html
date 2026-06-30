@@ -73,15 +73,7 @@
             var embed = false;
         {% endif %}
 
-        {% if mq_key %}
-            var mq_key = '{{ mq_key }}';
-        {% else %}
-            var mq_key = null;
-        {% endif %}
-
         {% if show_map %}
-            var tile_layer = '{{ tile_layer }}';
-
             {% if station.location %}
                 $(document).ready(function() {
                     var station_point = [{{ station.location.1 }}, {{ station.location.0 }}];
@@ -96,7 +88,7 @@
                     {% endif %}
 
                     var map = new PollingStationMap('area_map');
-                    map.draw(station_point, embed, tile_layer, mq_key, directions);
+                    map.draw(station_point, embed, directions);
                 });
             {% endif %}
         {% endif %}
