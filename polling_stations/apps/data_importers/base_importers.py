@@ -6,11 +6,8 @@ import abc
 import contextlib
 import datetime
 import glob
-import json
 import logging
 import os
-import tempfile
-import urllib.request
 from typing import Callable, List
 
 import rtree
@@ -24,7 +21,7 @@ from data_importers.data_quality_report import (
     StationReport,
 )
 from data_finder.helpers import PostcodeError, geocode_point_only
-from data_importers.data_types import AddressList, DistrictSet, StationSet
+from data_importers.data_types import AddressList, StationSet
 from data_importers.event_helpers import record_teardown_event
 from data_importers.filehelpers import FileHelperFactory
 from data_importers.loghelper import LogHelper
@@ -32,8 +29,7 @@ from data_importers.models import DataEvent, DataEventType, DataQuality
 from data_importers.s3wrapper import S3Wrapper
 from django.apps import apps
 from django.conf import settings
-from django.contrib.gis import geos
-from django.contrib.gis.geos import GEOSException, GEOSGeometry, Point
+from django.contrib.gis.geos import GEOSGeometry, Point
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -55,13 +51,6 @@ class CsvMixin:
 
     def get_csv_options(self):
         return {"csv_encoding": self.csv_encoding, "csv_delimiter": self.csv_delimiter}
-
-
-class ShpMixin:
-    shp_encoding = "utf-8"
-
-    def get_shp_options(self):
-        return {"shp_encoding": self.shp_encoding}
 
 
 class BaseBaseImporter:
@@ -141,9 +130,6 @@ class BaseImporter(BaseBaseImporter, BaseCommand, metaclass=abc.ABCMeta):
         options = {}
         if hasattr(self, "get_csv_options"):
             options.update(self.get_csv_options())
-        if hasattr(self, "get_shp_options"):
-            options.update(self.get_shp_options())
-
         helper = FileHelperFactory.create(filetype, filename, options)
         return helper.get_features()
 
@@ -595,10 +581,7 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
             except NotImplementedError:
                 pass
 
-            if self.stations_filetype in ["shp", "shp.zip"]:
-                record = station.record
-            else:
-                record = station
+            record = station
             station_info = self.station_record_to_dict(record)
 
             """
@@ -640,168 +623,12 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
                 if "council" not in station_record:
                     station_record["council"] = self.council
 
-                """
-                If the file type is shp, we can usually derive 'location'
-                automatically, but we can return it if necessary.
-                For other file types, we must return the key
-                'location' from station_record_to_dict()
-                """
-                if (
-                    self.stations_filetype in ["shp", "shp.zip"]
-                    and "location" not in station_record
-                ):
-                    if len(station.shape.points) == 1:
-                        # we've got a point
-                        station_record["location"] = Point(
-                            *station.shape.points[0], srid=self.get_srid()
-                        )
-                        station_record["location_source"] = (
-                            LocationSourceChoices.COORDINATES
-                        )
-                    else:
-                        # its a polygon: simplify it to a centroid and warn
-                        self.logger.log_message(
-                            logging.WARNING,
-                            "Implicitly converting station geometry to point",
-                        )
-                        geojson = json.dumps(station.shape.__geo_interface__)
-                        poly = self.clean_poly(GEOSGeometry(geojson))
-                        poly.srid = self.get_srid()
-                        station_record["location"] = poly.centroid
-                        station_record["location_source"] = (
-                            LocationSourceChoices.COORDINATES
-                        )
                 if self.validation_checks:
                     self.check_station_point(station_record)
                 self.add_polling_station(station_record)
 
     def add_polling_station(self, station_info):
         self.stations.add(station_info)
-
-
-class BaseDistrictsImporter(BaseImporter, metaclass=abc.ABCMeta):
-    imports_districts = True
-
-    districts = None
-    districts_srid = None
-
-    @property
-    @abc.abstractmethod
-    def districts_filetype(self):
-        pass
-
-    @property
-    @abc.abstractmethod
-    def districts_name(self):
-        pass
-
-    def get_upload(self):
-        return None
-
-    def get_districts(self):
-        districts_file = os.path.join(self.base_folder_path, self.districts_name)
-        return self.get_data(self.districts_filetype, districts_file)
-
-    def clean_poly(self, poly):
-        if isinstance(poly, geos.Polygon):
-            return geos.MultiPolygon(poly, srid=self.get_srid("districts"))
-        return poly
-
-    def strip_z_values(self, geojson):
-        districts = json.loads(geojson)
-        districts["type"] = "Polygon"
-        for points in districts["coordinates"][0][0]:
-            if len(points) == 3:
-                points.pop()
-        districts["coordinates"] = districts["coordinates"][0]
-        return json.dumps(districts)
-
-    @abc.abstractmethod
-    def district_record_to_dict(self, record):
-        pass
-
-    def check_district_overlap(self, district_record):
-        if self.council.geography.geography.contains(district_record["area"]):
-            self.logger.log_message(
-                logging.INFO,
-                "District %s is fully contained by target local auth",
-                variable=district_record["internal_council_id"],
-            )
-            return 100
-
-        try:
-            intersection = self.council.geography.geography.intersection(
-                district_record["area"].transform(4326, clone=True)
-            )
-            district_area = district_record["area"].transform(27700, clone=True).area
-            intersection_area = intersection.transform(27700, clone=True).area
-        except GEOSException as e:
-            self.logger.log_message(logging.ERROR, str(e))
-            return None
-
-        overlap_percentage = (intersection_area / district_area) * 100
-
-        # meh - close enough
-        level = logging.INFO if overlap_percentage > 99 else logging.WARNING
-
-        self.logger.log_message(
-            level,
-            "District {0} is {1:.2f}% contained by target local auth".format(
-                district_record["internal_council_id"], overlap_percentage
-            ),
-        )
-
-        return overlap_percentage
-
-    def import_polling_districts(self):
-        districts = self.get_districts()
-        self.write_info("Districts: Found %i features in input file" % (len(districts)))
-        for district in districts:
-            if self.districts_filetype in ["shp", "shp.zip"]:
-                district_info = self.district_record_to_dict(district.record)
-            else:
-                district_info = self.district_record_to_dict(district)
-
-            """
-            district_record_to_dict() may optionally return None
-            if we want to exclude a particular district record
-            from being imported
-            """
-            if district_info is None:
-                self.logger.log_message(
-                    logging.INFO,
-                    "district_record_to_dict() returned None with input:\n%s",
-                    variable=district,
-                    pretty=True,
-                )
-                continue
-
-            if "council" not in district_info:
-                district_info["council"] = self.council
-
-            """
-            If the file type is shp or geojson, we can usually derive
-            'area' automatically, but we can return it if necessary.
-            For other file types, we must return the key
-            'area' from address_record_to_dict()
-            """
-            if self.districts_filetype in ["shp", "shp.zip"]:
-                geojson = json.dumps(district.shape.__geo_interface__)
-            if self.districts_filetype == "geojson":
-                geojson = json.dumps(district["geometry"])
-            if "area" not in district_info and (
-                self.districts_filetype in ["shp", "shp.zip", "geojson"]
-            ):
-                poly = self.clean_poly(GEOSGeometry(geojson))
-                poly.srid = self.get_srid("districts")
-                district_info["area"] = poly
-
-            if self.validation_checks:
-                self.check_district_overlap(district_info)
-            self.add_polling_district(district_info)
-
-    def add_polling_district(self, district_info):
-        self.districts.add(district_info)
 
 
 class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
@@ -904,103 +731,6 @@ class BaseAddressesImporter(BaseImporter, metaclass=abc.ABCMeta):
         self.addresses.append(address_info)
 
 
-class BaseStationsDistrictsImporter(BaseStationsImporter, BaseDistrictsImporter):
-    def pre_import(self):
-        raise NotImplementedError
-
-    @property
-    def districts_have_station_ids(self):
-        """
-        Check that we've called self.import_polling_{districts,stations}
-        Don't raise an exception though, because we might still want to
-        import just stations or districts for debugging - i.e. to see them
-        in qgis/the db. However if we don't also have the other half we
-        won't be able to update the UprnToCouncil table.
-        """
-        if len(self.districts.elements) < 1:
-            self.logger.log_message(
-                logging.WARNING, "No district records added to self.districts"
-            )
-        if len(self.stations.elements) < 1:
-            self.logger.log_message(
-                logging.WARNING, "No station records added to self.stations"
-            )
-
-        district_ids = {
-            e.internal_council_id
-            for e in self.districts.elements
-            if e.internal_council_id != ""
-        }
-        station_ids_from_districts = {
-            e.polling_station_id
-            for e in self.districts.elements
-            if e.polling_station_id != ""
-        }
-        station_ids = {
-            e.internal_council_id
-            for e in self.stations.elements
-            if e.internal_council_id != ""
-        }
-        district_ids_from_stations = {
-            e.polling_district_id
-            for e in self.stations.elements
-            if e.polling_district_id != ""
-        }
-
-        def get_missing(set_a, set_b):
-            return set_a - set_b
-
-        if station_ids_from_districts:
-            self.write_info("Districts have station ids attached")
-            missing_ids = get_missing(station_ids_from_districts, station_ids)
-            for station_id in missing_ids:
-                self.logger.log_message(
-                    logging.WARNING,
-                    "Station id: %s attached to a district but not found in stations",
-                    variable=station_id,
-                )
-
-            for station_id in get_missing(station_ids, station_ids_from_districts):
-                self.logger.log_message(
-                    logging.WARNING,
-                    "Station id: %s found in stations but not attached to any station",
-                    variable=station_id,
-                )
-            return True
-
-        if district_ids_from_stations:
-            self.write_info("Stations have district ids attached")
-
-            for district_id in get_missing(district_ids_from_stations, district_ids):
-                self.logger.log_message(
-                    logging.WARNING,
-                    "District id: %s attached to a station but not found in districts",
-                    variable=district_id,
-                )
-
-            for district_id in get_missing(district_ids, district_ids_from_stations):
-                self.logger.log_message(
-                    logging.WARNING,
-                    "District id: %s found in districts but not attached to any station",
-                    variable=district_id,
-                )
-            return False
-        return None
-
-    def import_data(self):
-        # Optional step for pre import tasks
-        with contextlib.suppress(NotImplementedError):
-            self.pre_import()
-
-        self.stations = StationSet()
-        self.districts = DistrictSet()
-        self.import_polling_districts()
-        self.import_polling_stations()
-        self.districts.save()
-        self.stations.save()
-        self.districts.update_uprn_to_council_model(self.districts_have_station_ids)
-
-
 class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter):
     def pre_import(self):
         raise NotImplementedError
@@ -1017,128 +747,6 @@ class BaseStationsAddressesImporter(BaseStationsImporter, BaseAddressesImporter)
         self.addresses.check_records()
         self.addresses.update_uprn_to_council_model()
         self.stations.save()
-
-
-class BaseCsvStationsShpDistrictsImporter(
-    BaseStationsDistrictsImporter, CsvMixin, ShpMixin
-):
-    """
-    Stations in CSV format
-    Districts in SHP format
-    """
-
-    stations_filetype = "csv"
-    districts_filetype = "shp"
-
-
-class BaseShpStationsShpDistrictsImporter(BaseStationsDistrictsImporter, ShpMixin):
-    """
-    Stations in SHP format
-    Districts in SHP format
-    """
-
-    stations_filetype = "shp"
-    districts_filetype = "shp"
-
-
-class BaseCsvStationsJsonDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
-    """
-    Stations in CSV format
-    Districts in GeoJSON format
-    """
-
-    stations_filetype = "csv"
-    districts_filetype = "geojson"
-
-
-class BaseCsvStationsKmlDistrictsImporter(BaseStationsDistrictsImporter, CsvMixin):
-    """
-    Stations in CSV format
-    Districts in KML format
-    """
-
-    districts_srid = 4326
-    stations_filetype = "csv"
-    districts_filetype = "kml"
-
-    # this is mainly here for legacy compatibility
-    # mostly we should override this
-    def district_record_to_dict(self, record):
-        geojson = self.strip_z_values(record.geom.geojson)
-        poly = self.clean_poly(GEOSGeometry(geojson, srid=self.get_srid("districts")))
-        return {
-            "internal_council_id": record["Name"].value,
-            "name": record["Name"].value,
-            "area": poly,
-        }
-
-
-class BaseScotlandSpatialHubImporter(
-    BaseShpStationsShpDistrictsImporter, metaclass=abc.ABCMeta
-):
-    """
-    Data from the Scotland SpatialHub will be provided in a single
-    dataset for the whole country. All importers consuming this data
-    should extend BaseScotlandSpatialHubImporter.
-    """
-
-    srid = 27700
-    districts_name = "parl.2019-12-12/Version 2/Polling-Districts/pub_poldi.shp"
-    stations_name = "parl.2019-12-12/Version 2/Polling-Places/pub_polpl.shp"
-    data_prefix = "Scotland-Dec 2019"
-    shp_encoding = "latin-1"
-
-    @property
-    @abc.abstractmethod
-    def council_name(self):
-        pass
-
-    @property
-    def data_path(self):
-        if getattr(settings, "PRIVATE_DATA_PATH", None):
-            path = settings.PRIVATE_DATA_PATH
-        else:
-            s3 = S3Wrapper()
-            s3.fetch_data(self.data_prefix)
-            path = s3.data_path
-        return os.path.abspath(path)
-
-    def get_base_folder_path(self):
-        if getattr(self, "local_files", True) and self.base_folder_path is None:
-            path = os.path.join(self.data_path, self.data_prefix + "*")
-            return glob.glob(path)[0]
-        return self.base_folder_path
-
-    def parse_string(self, text):
-        return text.strip().strip("\x00")
-
-    def district_record_to_dict(self, record):
-        council_name = self.parse_string(record[2])
-        if council_name != self.council_name:
-            return None
-
-        code = self.parse_string(record[0])
-        if not code:
-            return None
-
-        name = self.parse_string(record[1])
-        if not name:
-            name = code
-
-        return {"internal_council_id": code, "name": name, "polling_station_id": code}
-
-    def station_record_to_dict(self, record):
-        council_name = self.parse_string(record[2])
-        if council_name != self.council_name:
-            return None
-
-        code = self.parse_string(record[0])
-        if not code:
-            return None
-
-        address = self.parse_string(record[3])
-
-        return {"internal_council_id": code, "postcode": "", "address": address}
 
 
 class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixin):
@@ -1174,91 +782,3 @@ class BaseCsvStationsCsvAddressesImporter(BaseStationsAddressesImporter, CsvMixi
                 getattr(record, self.station_northing_field),
             )
         return None
-
-
-class BaseShpStationsCsvAddressesImporter(
-    BaseStationsAddressesImporter, CsvMixin, ShpMixin
-):
-    """
-    Stations in SHP format
-    Addresses in CSV format
-    """
-
-    stations_filetype = "shp"
-    addresses_filetype = "csv"
-
-
-class BaseGenericApiImporter(BaseStationsDistrictsImporter):
-    srid = 4326
-    districts_srid = 4326
-
-    districts_name = None
-    districts_url = None
-
-    stations_name = None
-    stations_url = None
-
-    local_files = False
-
-    def import_data(self):
-        # Optional step for pre import tasks
-        with contextlib.suppress(NotImplementedError):
-            self.pre_import()
-
-        self.districts = DistrictSet()
-        self.stations = StationSet()
-
-        # deal with 'stations only' or 'districts only' data
-        if self.districts_url is not None:
-            self.import_polling_districts()
-        if self.stations_url is not None:
-            self.import_polling_stations()
-
-        self.districts.save()
-        self.stations.save()
-        self.districts.update_uprn_to_council_model(self.districts_have_station_ids)
-
-    def get_districts(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            urllib.request.urlretrieve(self.districts_url, tmp.name)
-            return self.get_data(self.districts_filetype, tmp.name)
-
-    def get_stations(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            urllib.request.urlretrieve(self.stations_url, tmp.name)
-            return self.get_data(self.stations_filetype, tmp.name)
-
-    def get_upload(self):
-        return None
-
-
-class BaseApiKmlStationsKmlDistrictsImporter(BaseGenericApiImporter):
-    """
-    Stations in KML format
-    Districts in KML format
-    """
-
-    stations_filetype = "kml"
-    districts_filetype = "kml"
-
-
-class BaseApiShpZipStationsShpZipDistrictsImporter(BaseGenericApiImporter, ShpMixin):
-    """
-    Stations in Zipped SHP format
-    Districts in Zipped SHP format
-    """
-
-    stations_filetype = "shp.zip"
-    districts_filetype = "shp.zip"
-
-
-class BaseApiCsvStationsShpZipDistrictsImporter(
-    BaseGenericApiImporter, CsvMixin, ShpMixin
-):
-    """
-    Stations in CSV format
-    Districts in Zipped SHP format
-    """
-
-    stations_filetype = "csv"
-    districts_filetype = "shp.zip"

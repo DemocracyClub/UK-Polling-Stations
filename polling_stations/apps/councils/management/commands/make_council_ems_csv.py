@@ -17,7 +17,6 @@ IMPORT_CLASS_TO_EMS_DICT = {
     "BaseDemocracyCountsCsvImporter": "Democracy Counts",
     "BaseFcsDemocracyClubApiImporter": "FCS API",
     "BaseGitHubImporter": "Scraper API",
-    "BaseStationsDistrictsImporter": "Stations & Districts geo",
 }
 
 
@@ -43,7 +42,6 @@ def extract_ems_importer_class(input_string):
         BaseDemocracyCountsCsvImporter |
         BaseFcsDemocracyClubApiImporter |
         BaseGitHubImporter |
-        BaseStationsDistrictsImporter
     """,
         re.VERBOSE,
     )
