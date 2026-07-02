@@ -16,9 +16,8 @@ from data_importers.addresshelpers import (
     format_residential_address,
 )
 from data_importers.base_importers import (
-    BaseAddressesImporter,
     BaseCsvStationsCsvAddressesImporter,
-    BaseStationsImporter,
+    BaseStationsAddressesImporter,
 )
 from data_importers.data_types import AddressList, StationSet
 from django.contrib.gis.geos import Point
@@ -415,7 +414,7 @@ class BaseDemocracyCountsCsvImporter(
 
 
 class BaseFcsDemocracyClubApiImporter(
-    BaseStationsImporter, BaseAddressesImporter, metaclass=abc.ABCMeta
+    BaseStationsAddressesImporter, metaclass=abc.ABCMeta
 ):
     local_files = False
     addresses_filetype = json
