@@ -4,13 +4,11 @@ popular Electoral Management Software packages
 """
 
 import abc
-import contextlib
 import json
 import os
 import tempfile
 
 import requests
-from data_finder.helpers import PostcodeError, geocode_point_only
 from data_importers.addresshelpers import (
     format_polling_station_address,
     format_residential_address,
@@ -19,10 +17,7 @@ from data_importers.base_importers import (
     BaseCsvStationsCsvAddressesImporter,
     BaseStationsAddressesImporter,
 )
-from data_importers.data_types import AddressList, StationSet
-from django.contrib.gis.geos import Point
 from django.utils.text import slugify
-from pollingstations.models import LocationSourceChoices
 
 """
 We see a lot of CSVs exported from Xpress
@@ -445,22 +440,6 @@ class BaseFcsDemocracyClubApiImporter(
     def get_api_url(self):
         return os.environ.get(f"FCS_API_URL_{self.council_id}")
 
-    def pre_import(self):
-        raise NotImplementedError
-
-    def import_data(self):
-        # Optional step for pre import tasks
-        with contextlib.suppress(NotImplementedError):
-            self.pre_import()
-
-        self.stations = StationSet()
-        self.addresses = AddressList(self.logger)
-        self.import_residential_addresses()
-        self.import_polling_stations()
-        self.addresses.check_records()
-        self.addresses.update_uprn_to_council_model()
-        self.stations.save()
-
     def get_addresses(self):
         with tempfile.NamedTemporaryFile("w") as tmp:
             response = requests.get(
@@ -514,32 +493,14 @@ class BaseFcsDemocracyClubApiImporter(
             tmp.write(response.content)
             return self.get_data(self.stations_filetype, tmp.name)
 
-    def get_station_point(self, record):
-        location = None
-        location_source = LocationSourceChoices.NONE
+    def get_station_id(self, record):
+        return record.get(self.station_id_field)
 
-        badvalues = ["", 0, None]
-        # try to set location from co-ordinates
-        if record["latitude"] not in badvalues and record["longitude"] not in badvalues:
-            location = Point(
-                float(record["longitude"]), float(record["latitude"]), srid=self.srid
-            )
-            location_source = LocationSourceChoices.COORDINATES
+    def get_station_postcode(self, record):
+        return record.get(self.postcode_field).strip()
 
-        # if no coords, try using postcode, if allowed
-        if (
-            self.allow_station_point_from_postcode
-            and location is None
-            and (postcode := record.get(self.postcode_field).strip())
-        ):
-            try:
-                location_data = geocode_point_only(postcode)
-                location = location_data.centroid
-                location_source = LocationSourceChoices.POSTCODE
-            except PostcodeError:
-                location = None
-
-        return location, location_source
+    def get_station_coordinates(self, record):
+        return record.get(self.latitude_field), record.get(self.longitude_field)
 
     def station_record_to_dict(self, record):
         address = format_polling_station_address(
@@ -550,8 +511,8 @@ class BaseFcsDemocracyClubApiImporter(
         location, location_source = self.get_station_point(record)
 
         return {
-            "internal_council_id": record.get(self.station_id_field),
-            "postcode": record.get(self.postcode_field).strip(),
+            "internal_council_id": self.get_station_id(record),
+            "postcode": self.get_station_postcode(record),
             "address": address,
             "location": location,
             "location_source": location_source,
