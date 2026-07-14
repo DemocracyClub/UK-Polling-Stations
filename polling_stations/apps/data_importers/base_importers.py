@@ -385,9 +385,9 @@ class BaseStationsImporter(BaseImporter, metaclass=abc.ABCMeta):
         except PostcodeError:
             return None
 
+    @abc.abstractmethod
     def get_station_id(self, record):
-        # TODO: Make this an abstract method once we remove district importers
-        raise NotImplementedError
+        pass
 
     def get_station_point(self, record) -> tuple[Point | None, str]:
         """
