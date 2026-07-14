@@ -1,21 +1,6 @@
 import csv
-import fnmatch
 import json
-import os
-import tempfile
-import zipfile
 from collections import namedtuple
-
-import shapefile
-from django.contrib.gis.gdal import DataSource
-
-
-def recursive_find(path, pattern):
-    matches = []
-    for root, dirnames, filenames in os.walk(path):
-        for filename in fnmatch.filter(filenames, pattern):
-            matches.append(os.path.join(root, filename))
-    return matches
 
 
 class CsvHelper:
@@ -65,49 +50,6 @@ class CsvHelper:
         return data
 
 
-class ShpHelper:
-    """
-    Helper class for reading geographic data from ESRI SHP files
-    """
-
-    def __init__(self, filepath, zip=False, encoding="utf-8"):
-        self.filepath = filepath
-        self.zip = zip
-        self.encoding = encoding
-
-    def get_features(self):
-        # If our shapefile is in a zip, extract it
-        # otherwise, we can read it directly
-        if self.zip:
-            zip_file = zipfile.ZipFile(self.filepath, "r")
-            tmpdir = tempfile.mkdtemp()
-            zip_file.extractall(tmpdir)
-
-            shp_files = recursive_find(tmpdir, "*.shp")
-            if len(shp_files) != 1:
-                raise ValueError("Found %i shapefiles in archive" % len(shp_files))
-            shp_file = shp_files[0]
-
-            sf = shapefile.Reader(shp_file, encoding=self.encoding)
-            return sf.shapeRecords()
-        sf = shapefile.Reader(self.filepath, encoding=self.encoding)
-        return sf.shapeRecords()
-
-
-class GeoJsonHelper:
-    """
-    Helper class for reading geographic data from GeoJSON files
-    """
-
-    def __init__(self, filepath):
-        self.filepath = filepath
-
-    def get_features(self):
-        with open(self.filepath) as features_file:
-            geometries = json.load(features_file)
-        return geometries["features"]
-
-
 class JsonHelper:
     """
     Helper class for reading data from JSON files
@@ -121,35 +63,6 @@ class JsonHelper:
             return json.load(features_file)
 
 
-class KmlHelper:
-    """
-    Helper class for reading geographic data from KML/KMZ files
-    """
-
-    def __init__(self, filepath):
-        self.filepath = filepath
-
-    def parse_features(self, kml):
-        ds = DataSource(kml)
-        return ds[0]
-
-    def get_features(self):
-        if not self.filepath.endswith(".kmz"):
-            return self.parse_features(self.filepath)
-
-        # It's a .kmz file
-        # Because the C lib that the Django DataSource is wrapping
-        # expects a file on disk, let's extract the KML to a tmpfile
-        kmz = zipfile.ZipFile(self.filepath, "r")
-        kmlfile = kmz.open("doc.kml", "r")
-
-        with tempfile.NamedTemporaryFile() as tmp:
-            tmp.write(kmlfile.read())
-            data = self.parse_features(tmp.name)
-            tmp.close()
-            return data
-
-
 class FileHelperFactory:
     """
     Factory class for creating file helper objects.
@@ -160,14 +73,6 @@ class FileHelperFactory:
 
     @staticmethod
     def create(filetype, filepath, options):
-        if filetype == "shp":
-            return ShpHelper(filepath, zip=False, encoding=options["shp_encoding"])
-        if filetype == "shp.zip":
-            return ShpHelper(filepath, zip=True, encoding=options["shp_encoding"])
-        if filetype == "kml":
-            return KmlHelper(filepath)
-        if filetype == "geojson":
-            return GeoJsonHelper(filepath)
         if filetype == "json":
             return JsonHelper(filepath)
         if filetype == "csv":
