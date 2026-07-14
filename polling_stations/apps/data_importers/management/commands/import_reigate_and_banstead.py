@@ -4,34 +4,30 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "REI"
     addresses_name = (
-        "2026-05-07/2026-03-17T12:17:02.474701/Democracy_Club__07May2026.tsv"
+        "2026-08-06/2026-07-14T12:14:21.495581/Democracy_Club__06August2026.tsv"
     )
     stations_name = (
-        "2026-05-07/2026-03-17T12:17:02.474701/Democracy_Club__07May2026.tsv"
+        "2026-08-06/2026-07-14T12:14:21.495581/Democracy_Club__06August2026.tsv"
     )
-    elections = ["2026-05-07"]
+    elections = ["2026-08-06"]
     csv_delimiter = "\t"
 
-    def station_record_to_dict(self, record):
-        # postcode fix confirmed by council for:
-        # Woodmansterne Village Hall, Carshalton Road, Woodmansterne, Banstead, SM7 3HH
-        if record.polling_place_id == "5569":
-            record = record._replace(polling_place_postcode="SM7 3HR")
+    # maintaining tweaks through by-election
+    # def station_record_to_dict(self, record):
+    #     # postcode fix confirmed by council for:
+    #     # Woodmansterne Village Hall, Carshalton Road, Woodmansterne, Banstead, SM7 3HH
+    #     if record.polling_place_id == "5569":
+    #         record = record._replace(polling_place_postcode="SM7 3HR")
 
-        return super().station_record_to_dict(record)
+    #     return super().station_record_to_dict(record)
 
-    def address_record_to_dict(self, record):
-        uprn = record.property_urn.lstrip("0")
+    # def address_record_to_dict(self, record):
+    # uprn = record.property_urn.lstrip("0")
 
-        if uprn in [
-            "68137043",  # 170 DOVERS GREEN ROAD, REIGATE
-            "68137147",  # 168 DOVERS GREEN ROAD, REIGATE
-        ]:
-            return None
+    # if uprn in [
+    #     "68137043",  # 170 DOVERS GREEN ROAD, REIGATE
+    #     "68137147",  # 168 DOVERS GREEN ROAD, REIGATE
+    # ]:
+    #     return None
 
-        if record.addressline6 in [
-            "RH6 7HD",
-        ]:
-            return None
-
-        return super().address_record_to_dict(record)
+    # return super().address_record_to_dict(record)
