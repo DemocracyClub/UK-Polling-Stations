@@ -500,7 +500,7 @@ class BaseFcsDemocracyClubApiImporter(
         return record.get(self.postcode_field).strip()
 
     def get_station_coordinates(self, record):
-        return record.get(self.latitude_field), record.get(self.longitude_field)
+        return record["longitude"], record["latitude"]
 
     def station_record_to_dict(self, record):
         address = format_polling_station_address(
