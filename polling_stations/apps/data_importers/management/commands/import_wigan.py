@@ -4,12 +4,12 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "WGN"
     addresses_name = (
-        "2026-06-18/2026-06-01T13:14:34.281958/Democracy_Club__18June2026.CSV"
+        "2026-07-30/2026-07-20T12:13:47.497749/Democracy_Club__30July2026.CSV"
     )
     stations_name = (
-        "2026-06-18/2026-06-01T13:14:34.281958/Democracy_Club__18June2026.CSV"
+        "2026-07-30/2026-07-20T12:13:47.497749/Democracy_Club__30July2026.CSV"
     )
-    elections = ["2026-06-18"]
+    elections = ["2026-07-30"]
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
@@ -36,7 +36,7 @@ class Command(BaseXpressDemocracyClubCsvImporter):
     def station_record_to_dict(self, record):
         # remove wrong coords for:
         # St Aidans Parish Centre, Highfield Grange Ave, Winstanley, Wigan, WN3 6EE
-        if record.polling_place_id == "13354":
+        if record.polling_place_id == "13676":
             record = record._replace(
                 polling_place_easting="0", polling_place_northing="0"
             )
