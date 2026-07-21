@@ -375,3 +375,10 @@ class Command(BaseStationsImporter, CsvMixin):
                 message=f"Council ambiguous for  {len(self.deduced_addresses):,} addresses, so they've been discarded.",
                 thread_ts=thread_ts,
             )
+
+    def get_station_id(self, record):
+        """
+        This was added as an abstract method to BaseStationsImporter.
+        It's never called by this importer. So can be a no op.
+        """
+        ...
