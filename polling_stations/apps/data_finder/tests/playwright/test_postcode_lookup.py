@@ -135,7 +135,7 @@ def test_northern_ireland_has_election(
         with page.expect_navigation():
             page.query_selector("#submit-postcode").click()
         expect(
-            page.locator("text=The Electoral Office for Northern Ireland")
+            page.locator('h3:has-text("The Electoral Office for Northern Ireland")')
         ).not_to_be_empty()
         expect(
             page.locator(
