@@ -2,6 +2,10 @@
 
 <h2>{% blocktrans %}Contact {{ council }}{% endblocktrans %}</h2>
 
+{% if territory == 'NI' %}
+    {% include "fragments/ni_polling_place_consultation.html" %}
+{% endif %}
+
 <p>
     {% trans "Your polling station address should be printed on your polling card, which is delivered by post before an election." %}
 </p>
