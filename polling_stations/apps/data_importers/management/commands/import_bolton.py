@@ -58,3 +58,16 @@ class Command(BaseXpressDemocracyClubCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # station change from council:
+        # OLD: St Columba`s RC Primary School, Ripley Street, BL2 3AR
+        # NEW: St Aidans Church, Crompton Way BL1 8UP
+        if record.polling_place_id == "7099":
+            record = record._replace(
+                polling_place_name="St Aidans Church",
+                polling_place_address_1="Crompton Way",
+                polling_place_postcode="BL1 8UP",
+            )
+
+        return super().station_record_to_dict(record)
