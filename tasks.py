@@ -100,7 +100,7 @@ def describe_parameters(ctx, profile=os.environ.get("AWS_PROFILE", None)):
     ssm_client = session.client("ssm")
     for parameter in ssm_client.describe_parameters()["Parameters"]:
         print(
-            f"{parameter['Name']} => {get_ssm_parameter_value(ssm_client,parameter['Name'])}"
+            f"{parameter['Name']} => {get_ssm_parameter_value(ssm_client, parameter['Name'])}"
         )
         print(f"{parameter.get('Description')}")
         print()

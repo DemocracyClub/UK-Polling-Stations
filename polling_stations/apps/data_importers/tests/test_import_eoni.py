@@ -17,9 +17,7 @@ FIXTURE_PATH = Path(__file__).parent / "fixtures" / "eoni_importer"
 # This is just a  simplified square around an arbitary Belfast suburb:
 #   https://wktmap.com/?5bcf07e5
 BELFAST_GEOGRAPHY = (
-    "MULTIPOLYGON ((("
-    "-5.85 54.58, -5.85 54.60, -5.80 54.60, -5.80 54.58, -5.85 54.58"
-    ")))"
+    "MULTIPOLYGON (((-5.85 54.58, -5.85 54.60, -5.80 54.60, -5.80 54.58, -5.85 54.58)))"
 )
 BELFAST_GSS = "N09000003"
 

@@ -34,7 +34,7 @@ class Command(BaseCommand):
                     try:
                         Address.objects.get(uprn=row["Property_URN"])
                         row["Polling_Place_Name"] = (
-                            f'[TESTING]{row["Polling_Place_Name"]}[TESTING]'
+                            f"[TESTING]{row['Polling_Place_Name']}[TESTING]"
                         )
                         csv_writer.writerow(row)
                     except Address.DoesNotExist:

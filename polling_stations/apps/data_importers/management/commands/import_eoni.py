@@ -182,7 +182,7 @@ class Command(BaseStationsImporter, CsvMixin):
         return {
             "internal_council_id": row["PREM_ID"],
             "postcode": row["PREM_POSTCODE"].strip(),
-            "address": f'{row["PREM_NAME"].strip()}, {row["PREM_FULLADDRESS"].strip()}',
+            "address": f"{row['PREM_NAME'].strip()}, {row['PREM_FULLADDRESS'].strip()}",
             "location": station_location_ewkt,
             "council_id": "EONI",
             "sample_uprn": row["PRO_UPRN"].strip(),

@@ -182,9 +182,9 @@ class BasePollingStationView(
 
         for avs_list in (walking_distance, driving_distance):
             avs_list.sort(
-                key=lambda item: item["directions"].time
-                if item["directions"]
-                else float("inf")
+                key=lambda item: (
+                    item["directions"].time if item["directions"] else float("inf")
+                )
             )
 
         return walking_distance + driving_distance

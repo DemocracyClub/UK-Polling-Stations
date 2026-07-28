@@ -34,7 +34,7 @@ class UploadManagerWithStatus(TestCase):
                 council_id = "FOO"
                 addresses_name = "xyx/data.csv"
                 stations_name = "xyx/data.csv"
-                elections = ["{self.election_date.strftime('%Y-%m-%d')}"]
+                elections = ["{self.election_date.strftime("%Y-%m-%d")}"]
                 csv_encoding = ""
                 """
             ),
@@ -70,7 +70,7 @@ class UploadManagerWithStatus(TestCase):
                 council_id = "FOO"
                 addresses_name = "xyx/data_districts.csv"
                 stations_name = "xyx/data_stations.csv"
-                elections = ["{self.election_date.strftime('%Y-%m-%d')}"]
+                elections = ["{self.election_date.strftime("%Y-%m-%d")}"]
                 csv_encoding = ""
                 """
             ),
