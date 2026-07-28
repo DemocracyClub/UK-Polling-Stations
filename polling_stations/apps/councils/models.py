@@ -192,7 +192,7 @@ class Council(WelshNameMutationMixin, models.Model):
         extras = [
             "London Borough of ",
             "Royal Borough of ",
-            "Council of the " "City of ",
+            "Council of the City of ",
             "City & County of ",
             " City & District Council",
             " City Council",
@@ -220,7 +220,7 @@ class Council(WelshNameMutationMixin, models.Model):
                 import_script_path = script
         if not import_script_path:
             import_script_path = Path(
-                f'./polling_stations/apps/data_importers/management/commands/import_{self.short_name.lower().replace(" ", "_")}.py'
+                f"./polling_stations/apps/data_importers/management/commands/import_{self.short_name.lower().replace(' ', '_')}.py"
             )
 
         return str(import_script_path)

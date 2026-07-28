@@ -99,7 +99,7 @@ class Command(BaseCommand):
             in_ids = set(kwargs["council"])
             db_ids = set([c.council_id for c in councils])
             if in_ids != db_ids:
-                raise Exception(f"Could not find Council IDs: {in_ids-db_ids}")
+                raise Exception(f"Could not find Council IDs: {in_ids - db_ids}")
             self.teardown_councils(councils)
 
         elif kwargs.get("eoni"):

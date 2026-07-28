@@ -335,9 +335,7 @@ class Command(BaseCommand):
         except TypeError as e:
             self.stdout.write(
                 self.style.WARNING(
-                    f"Warning: Failed to transform coords in {row_id} "
-                    f"{x =}"
-                    f"{y =}"
+                    f"Warning: Failed to transform coords in {row_id} {x =}{y =}"
                 )
             )
             self.stdout.write(self.style.WARNING(f"Exception was: {str(e)}"))
