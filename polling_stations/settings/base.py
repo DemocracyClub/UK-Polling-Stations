@@ -200,6 +200,7 @@ INSTALLED_APPS = (
 PROJECT_APPS = (
     "addressbase",
     "api",
+    "core",
     "councils",
     "data_finder",
     "data_importers",
