@@ -531,3 +531,142 @@ class HandlerTests(TestCase):
             os.environ.get("AWS_DEFAULT_REGION")
         ]
         self.assertEqual(0, len(ses_backend.sent_messages))
+
+    def test_json_invalid(self):
+        self.load_fixture("invalid.json", key="snapshot.json")
+
+        main(trigger_payload, None)
+
+        self.assertEqual(2, len(responses.calls))
+        self.assertEqual(
+            "https://wheredoivote.co.uk/api/beta/uploads/",
+            responses.calls[1].request.url,
+        )
+
+        expected_dict = {
+            "github_issue": "",
+            "gss": "X01000000",
+            "council_name": "Piddleton Parish Council",
+            "timestamp": "2019-09-30T17:00:02.396833",
+            "election_date": "2019-12-12",
+            "file_set": [
+                {
+                    "key": "X01000000/2019-12-12/2019-09-30T17:00:02.396833/snapshot.json",
+                    "csv_valid": False,
+                    "csv_rows": 0,
+                    "csv_encoding": "utf-8",
+                    "ems": "unknown",
+                    "errors": "Expecting value: line 1 column 1 (char 0)",
+                }
+            ],
+        }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
+        self.assertDictEqual(expected_dict, json.loads(responses.calls[1].request.body))
+        with self.assertRaises(ClientError):
+            self.conn.get_object(
+                Bucket=self.final_bucket,
+                Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
+            )
+        ses_backend = ses_backends[moto.core.DEFAULT_ACCOUNT_ID][
+            os.environ.get("AWS_DEFAULT_REGION")
+        ]
+        self.assertEqual(1, len(ses_backend.sent_messages))
+        self.assertEqual(
+            "Error with data for council X01000000-Piddleton Parish Council",
+            ses_backend.sent_messages[0].subject,
+        )
+
+    def test_json_unknown_ems(self):
+        self.load_fixture("ems-other.json", key="snapshot.json")
+
+        main(trigger_payload, None)
+
+        self.assertEqual(4, len(responses.calls))
+        self.assertEqual(
+            f"https://api.github.com/repos/{self.repo}/issues",
+            responses.calls[2].request.url,
+        )
+        self.assertEqual(
+            "https://wheredoivote.co.uk/api/beta/uploads/",
+            responses.calls[3].request.url,
+        )
+        expected_dict = {
+            "github_issue": f"https://github.com/{self.repo}/issues/1",
+            "gss": "X01000000",
+            "council_name": "Piddleton Parish Council",
+            "timestamp": "2019-09-30T17:00:02.396833",
+            "election_date": "2019-12-12",
+            "file_set": [
+                {
+                    "key": "X01000000/2019-12-12/2019-09-30T17:00:02.396833/snapshot.json",
+                    "csv_valid": True,
+                    "csv_rows": 0,
+                    "csv_encoding": "utf-8",
+                    "ems": "unknown",
+                    "errors": "",
+                },
+            ],
+        }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
+        self.assertDictEqual(expected_dict, json.loads(responses.calls[3].request.body))
+        resp = self.conn.get_object(
+            Bucket=self.final_bucket,
+            Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
+        )
+        self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
+        ses_backend = ses_backends[moto.core.DEFAULT_ACCOUNT_ID][
+            os.environ.get("AWS_DEFAULT_REGION")
+        ]
+        self.assertEqual(0, len(ses_backend.sent_messages))
+
+    def test_json_fcs(self):
+        self.load_fixture("ems-fcs.json", key="snapshot.json")
+
+        main(trigger_payload, None)
+
+        self.assertEqual(4, len(responses.calls))
+        self.assertEqual(
+            f"https://api.github.com/repos/{self.repo}/issues",
+            responses.calls[2].request.url,
+        )
+        self.assertEqual(
+            "https://wheredoivote.co.uk/api/beta/uploads/",
+            responses.calls[3].request.url,
+        )
+        expected_dict = {
+            "github_issue": f"https://github.com/{self.repo}/issues/1",
+            "gss": "X01000000",
+            "council_name": "Piddleton Parish Council",
+            "timestamp": "2019-09-30T17:00:02.396833",
+            "election_date": "2019-12-12",
+            "file_set": [
+                {
+                    "key": "X01000000/2019-12-12/2019-09-30T17:00:02.396833/snapshot.json",
+                    "csv_valid": True,
+                    "csv_rows": 6,
+                    "csv_encoding": "utf-8",
+                    "ems": "FCS",
+                    "errors": "",
+                }
+            ],
+        }
+
+        upload_serializer = UploadSerializer(data=expected_dict)
+        self.assertTrue(upload_serializer.is_valid(raise_exception=True))
+
+        self.assertDictEqual(expected_dict, json.loads(responses.calls[3].request.body))
+        resp = self.conn.get_object(
+            Bucket=self.final_bucket,
+            Key="X01000000/2019-12-12/2019-09-30T17:00:02.396833/report.json",
+        )
+        self.assertEqual(expected_dict, json.loads(resp["Body"].read()))
+        ses_backend = ses_backends[moto.core.DEFAULT_ACCOUNT_ID][
+            os.environ.get("AWS_DEFAULT_REGION")
+        ]
+        self.assertEqual(0, len(ses_backend.sent_messages))
