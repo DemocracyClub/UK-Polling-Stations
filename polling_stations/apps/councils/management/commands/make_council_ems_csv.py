@@ -15,7 +15,7 @@ IMPORT_CLASS_TO_EMS_DICT = {
     "BaseXpressDCCsvInconsistentPostcodesImporter": "Xpress DC",
     "BaseHalaroseCsvImporter": "Idox Eros (Halarose)",
     "BaseDemocracyCountsCsvImporter": "Democracy Counts",
-    "BaseFcsDemocracyClubApiImporter": "FCS API",
+    "BaseFcsDemocracyClubImporter": "FCS API",
     "BaseGitHubImporter": "Scraper API",
 }
 
@@ -40,7 +40,7 @@ def extract_ems_importer_class(input_string):
         BaseXpressDCCsvInconsistentPostcodesImporter |
         BaseHalaroseCsvImporter |
         BaseDemocracyCountsCsvImporter |
-        BaseFcsDemocracyClubApiImporter |
+        BaseFcsDemocracyClubImporter |
         BaseGitHubImporter |
     """,
         re.VERBOSE,

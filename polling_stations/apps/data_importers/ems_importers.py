@@ -4,11 +4,7 @@ popular Electoral Management Software packages
 """
 
 import abc
-import json
-import os
-import tempfile
 
-import requests
 from data_importers.addresshelpers import (
     format_polling_station_address,
     format_residential_address,
@@ -401,15 +397,21 @@ class BaseDemocracyCountsCsvImporter(
         }
 
 
-class BaseFcsDemocracyClubApiImporter(
+class BaseFcsDemocracyClubImporter(
     BaseStationsAddressesImporter, metaclass=abc.ABCMeta
 ):
-    local_files = False
-    addresses_filetype = json
-    addresses_name = None
-    fcs_election_id = None
-    stations_name = None
+    """
+    Base class for processing data exported from FCS ElectionsPro
+    electoral service software: https://fcssoftware.co.uk/fcs-elections
+    with the addresses and stations in a single CSV file
+
+    This class assumes that we're going to take a snapshot of data from the
+    /api/DemocracyClub/Election/{election_id}/PollingStation
+    endpoint, save it to a JSON file, and then import it from there.
+    """
+
     srid = 4326
+    addresses_filetype = "json"
     stations_filetype = "json"
     station_name_field = "name"
     address_fields = [
@@ -423,36 +425,14 @@ class BaseFcsDemocracyClubApiImporter(
     station_id_field = "id"
     residential_uprn_field = "addressUprn"
 
-    @property
-    def stations_url(self):
-        return f"{self.get_api_url()}/api/DemocracyClub/Election/{self.fcs_election_id}/PollingStation/"
-
-    def get_api_key(self):
-        return os.environ.get(f"FCS_API_KEY_{self.council_id}")
-
-    def get_api_url(self):
-        return os.environ.get(f"FCS_API_URL_{self.council_id}")
-
     def get_addresses(self):
-        with tempfile.NamedTemporaryFile("w") as tmp:
-            response = requests.get(
-                self.stations_url,
-                headers={
-                    "X-API-KEY": self.get_api_key(),
-                    "User-Agent": "Scraper/DemocracyClub",
-                    "Accept": "*/*",
-                },
-                verify=False,
-            )
-            addresses = []
-            stations = response.json()
-            for station in stations:
-                for property in station["properties"]:
-                    property[self.station_id_field] = station[self.station_id_field]
-                addresses += station["properties"]
-            # Was getting JsonDecodeError when using json.dump(addresses,tmp)
-            tmp.write(json.dumps(addresses))
-            return self.get_data(self.stations_filetype, tmp.name)
+        stations = super().get_addresses()
+        addresses = []
+        for station in stations:
+            for prop in station["properties"]:
+                prop[self.station_id_field] = station[self.station_id_field]
+            addresses += station["properties"]
+        return addresses
 
     def address_record_to_dict(self, record):
         if not record.get(self.postcode_field).strip():
@@ -470,21 +450,6 @@ class BaseFcsDemocracyClubApiImporter(
             "polling_station_id": str(record.get(self.station_id_field)),
             "uprn": uprn,
         }
-
-    def get_stations(self):
-        with tempfile.NamedTemporaryFile() as tmp:
-            response = requests.get(
-                self.stations_url,
-                headers={
-                    "X-API-KEY": self.get_api_key(),
-                    "User-Agent": "Scraper/DemocracyClub",
-                    "Accept": "*/*",
-                },
-                verify=False,
-            )
-
-            tmp.write(response.content)
-            return self.get_data(self.stations_filetype, tmp.name)
 
     def get_station_id(self, record):
         return record.get(self.station_id_field)

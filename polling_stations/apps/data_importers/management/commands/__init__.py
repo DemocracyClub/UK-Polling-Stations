@@ -1,7 +1,7 @@
 from data_importers.base_importers import BaseCsvStationsCsvAddressesImporter
 from data_importers.ems_importers import (
     BaseDemocracyCountsCsvImporter,
-    BaseFcsDemocracyClubApiImporter,
+    BaseFcsDemocracyClubImporter,
     BaseHalaroseCsvImporter,
     BaseXpressDCCsvInconsistentPostcodesImporter,
     BaseXpressDemocracyClubCsvImporter,
@@ -15,5 +15,5 @@ __all__ = [
     BaseXpressDCCsvInconsistentPostcodesImporter,
     BaseHalaroseCsvImporter,
     BaseDemocracyCountsCsvImporter,
-    BaseFcsDemocracyClubApiImporter,
+    BaseFcsDemocracyClubImporter,
 ]
