@@ -1,0 +1,35 @@
+{% extends "file_uploads/council_user_base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load pipeline %}
+
+{% block council_content %}
+    <h1>{{ council.name }}</h1>
+    {% if NO_UPCOMING_ELECTIONS %}
+        <p>
+            ⛔ We queried the FCS API, but we couldn't find any elections happening on {{ date }}.
+        </p>
+    {% else %}
+        <form id="file_upload_form" method="POST">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Select election</legend>
+                <div class="ds-stack-smallest">
+                    {% for radio in form.election_id %}
+                        <label class="ds-field-radio">
+                            {{ radio.tag }}
+                            <span>{{ radio.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                    {% if form.election_id.errors %}
+                        <p class="ds-error">{{ form.election_id.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            </fieldset>
+
+            <button type="submit" class="ds-button" id="submit">Next</button>
+        </form>
+    {% endif %}
+
+{% endblock council_content %}

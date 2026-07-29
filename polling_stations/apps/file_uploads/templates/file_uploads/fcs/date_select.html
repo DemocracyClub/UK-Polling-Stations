@@ -1,0 +1,38 @@
+{% extends "file_uploads/council_user_base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load pipeline %}
+
+{% block council_content %}
+    <h1>{{ council.name }}</h1>
+    {% if NO_UPCOMING_DATES %}
+        {% include "file_uploads/no_upcoming_elections_snippet.html" with name=council.name %}
+    {% else %}
+        <form id="file_upload_form" method="POST">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Election date</legend>
+                <p>
+                    There is more than one upcoming election in your region. Please pick the date you'd like to submit a data snapshot for.
+                    If you have more than one upcoming election, you will need to submit a data snapshot for each one.
+                    If your data has changed since you last submitted a snapshot, you'll need to take another snapshot in order to tell us about the changes.
+                </p>
+                <div class="ds-stack-smallest">
+                    {% for radio in form.election_date %}
+                        <label class="ds-field-radio">
+                            {{ radio.tag }}
+                            <span>{{ radio.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                    {% if form.election_date.errors %}
+                        <p class="ds-error">{{ form.election_date.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            </fieldset>
+
+            <button type="submit" class="ds-button" id="submit">Next</button>
+        </form>
+    {% endif %}
+
+{% endblock council_content %}

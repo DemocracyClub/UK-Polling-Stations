@@ -1,0 +1,24 @@
+{% extends "file_uploads/council_user_base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load pipeline %}
+
+{% block council_content %}
+    <h1>{{ council.name }}</h1>
+
+    <form id="file_upload_form" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Snapshot Data</legend>
+            <p>
+                When your polling station scheme is finalised
+                or you want us to update it, send us a snapshot of the data.
+            </p>
+        </fieldset>
+
+        <button type="submit" class="ds-button" id="submit">Snapshot</button>
+    </form>
+
+
+{% endblock council_content %}

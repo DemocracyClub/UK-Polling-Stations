@@ -11,6 +11,12 @@ from .views import (
     FileUploadView,
 )
 
+from .fcs_views import (
+    FcsDateSelectView,
+    FcsElectionSelectView,
+    FcsSnapshotDataView,
+)
+
 app_name = "file_uploads"
 urlpatterns = [
     path("", RedirectView.as_view(url=reverse_lazy("file_uploads:councils_list"))),
@@ -29,6 +35,21 @@ urlpatterns = [
         r"^upload_files/(?P<gss>.+)/$",
         FileUploadView.as_view(),
         name="file_upload",
+    ),
+    path(
+        "fcs/date_select/<str:council_id>/",
+        FcsDateSelectView.as_view(),
+        name="fcs_date_select",
+    ),
+    path(
+        "fcs/election_select/<str:council_id>/<str:date>/",
+        FcsElectionSelectView.as_view(),
+        name="fcs_election_select",
+    ),
+    path(
+        "fcs/snapshot_data/<str:council_id>/<str:date>/<int:election_id>/",
+        FcsSnapshotDataView.as_view(),
+        name="fcs_snapshot_data",
     ),
     path("login/", CouncilLoginView.as_view(), name="council_login_view"),
     path(
