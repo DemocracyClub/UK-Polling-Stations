@@ -32,6 +32,7 @@ class ImportScript:
             "Xpress WebLookup": "BaseXpressWebLookupCsvImporter",
             "Xpress DC": "BaseXpressDemocracyClubCsvImporter",
             "Democracy Counts": "BaseDemocracyCountsCsvImporter",
+            "FCS": "BaseFcsDemocracyClubImporter",
         }
         return classes.get(self.ems, "Unknown")
 
