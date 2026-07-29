@@ -118,6 +118,8 @@ class Command(BaseCommand):
             "PREM_CONSTITUENCY",
             "PREM_DEA",
             "PREM_COUNCIL",
+            "TOTAL_BOXES",
+            "TOTAL_ELECTORATE",
         ]
         self.station_x_field_prefix = "PREM_X_COR"
         self.station_y_field_prefix = "PREM_Y_COR"

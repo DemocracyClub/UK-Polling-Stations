@@ -61,6 +61,10 @@ EONI_CSV_ROW = {
     "PREM_COUNCIL_LC": "",
     "PREM_X_COR_LC": "340500",
     "PREM_Y_COR_LC": "373500",
+    "TOTAL_BOXES_WM": "2",
+    "TOTAL_ELECTORATE_WM": "1857",
+    "TOTAL_BOXES_LC": "2",
+    "TOTAL_ELECTORATE_LC": "1857",
 }
 
 BUCKET_NAME = "test-eoni-bucket"
