@@ -29,3 +29,15 @@ class Command(BaseDemocracyCountsCsvImporter):
             return None
 
         return super().address_record_to_dict(record)
+
+    def station_record_to_dict(self, record):
+        # station name change from council for:
+        # Cann Hall Primary School - Hall in School Constable Avenue Clacton-on-Sea Essex
+        if record.stationcode in [
+            "6",
+            "7",
+        ]:
+            record = record._replace(
+                placename="Little Jimmys Preschool (Cann Hall Primary School) - Hall in School Constable Avenue Clacton-on-Sea Essex"
+            )
+        return super().station_record_to_dict(record)
