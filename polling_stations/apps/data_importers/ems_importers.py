@@ -19,22 +19,20 @@ from data_importers.base_importers import (
 )
 from django.utils.text import slugify
 
-"""
-We see a lot of CSVs exported from Xpress
-electoral service software: http://www.xssl.uk/
-with the addresses and stations in a single CSV file
-
-There are 2 formats we see:
-* WebLookup export (hopefully we will start seeing less of these)
-* DemocracyClub export (hopefully we will start seeing more of these)
-This is the parent class for both of them.
-"""
-
 
 class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta):
+    """
+    Base class for processing CSVs exported from Xpress
+    electoral service software
+    with the addresses and stations in a single CSV file
+
+    There are 2 formats:
+    * WebLookup export (legacy format)
+    * DemocracyClub export (this should be all of them these days)
+    This is the parent class for both of them.
+    """
+
     csv_delimiter = ","
-    # Set this to false in an import script if we want to only set a station
-    # point based on UPRN or co-ordinates (even if we've got a valid postcode)
 
     @property
     @abc.abstractmethod
@@ -81,14 +79,13 @@ class BaseXpressCsvImporter(BaseCsvStationsCsvAddressesImporter, metaclass=abc.A
         }
 
 
-"""
-Specialised case of BaseCsvStationsCsvAddressesImporter
-with some sensible presets for processing WebLookup
-CSVs exported from Xpress
-"""
-
-
 class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter, metaclass=abc.ABCMeta):
+    """
+    Specialised case of BaseCsvStationsCsvAddressesImporter
+    with some sensible presets for processing WebLookup
+    CSVs exported from Xpress
+    """
+
     station_postcode_field = "pollingplaceaddress7"
     station_address_fields = [
         "pollingplaceaddress1",
@@ -125,14 +122,13 @@ class BaseXpressWebLookupCsvImporter(BaseXpressCsvImporter, metaclass=abc.ABCMet
         }
 
 
-"""
-Specialised case of BaseCsvStationsCsvAddressesImporter
-with some sensible presets for processing DemocracyClub
-CSVs exported from Xpress
-"""
-
-
 class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter, metaclass=abc.ABCMeta):
+    """
+    Specialised case of BaseCsvStationsCsvAddressesImporter
+    with some sensible presets for processing DemocracyClub
+    CSVs exported from Xpress
+    """
+
     station_postcode_field = "polling_place_postcode"
     station_address_fields = [
         "polling_place_name",
@@ -171,15 +167,14 @@ class BaseXpressDemocracyClubCsvImporter(BaseXpressCsvImporter, metaclass=abc.AB
         }
 
 
-"""
-Sometimes the postcode doesn't appear in a consistent
-column and we need to work around that
-"""
-
-
 class BaseXpressDCCsvInconsistentPostcodesImporter(
     BaseXpressDemocracyClubCsvImporter, metaclass=abc.ABCMeta
 ):
+    """
+    Sometimes the postcode doesn't appear in a consistent
+    column and we need to work around that
+    """
+
     # concat all the address columns together into address
     # don't bother trying to split into address/postcode
     station_address_fields = [
@@ -217,20 +212,19 @@ class BaseXpressDCCsvInconsistentPostcodesImporter(
         return None
 
 
-"""
-We see a lot of CSVs exported from Halarose
-electoral service software: https://www.halarose.co.uk/
-with the addresses and stations in a single CSV file
-
-This is a specialised case of BaseCsvStationsCsvAddressesImporter
-with some sensible presets for processing CSVs in this format
-but we can override them if necessary
-"""
-
-
 class BaseHalaroseCsvImporter(
     BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta
 ):
+    """
+    Base class for processing data exported from Idox Eros
+    with the addresses and stations in a single CSV file
+    This software used to be called Halarose, hence the name
+
+    This is a specialised case of BaseCsvStationsCsvAddressesImporter
+    with some sensible presets for processing CSVs in this format
+    but we can override them if necessary
+    """
+
     csv_delimiter = ","
     station_easting_field = "pollingvenueeasting"
     station_northing_field = "pollingvenuenorthing"
@@ -340,20 +334,19 @@ class BaseHalaroseCsvImporter(
         }
 
 
-"""
-We see a lot of CSVs exported from Democracy Counts
-electoral service software: http://www.democracycounts.co.uk/
-with the addresses and stations in a single CSV file
-
-This is a specialised case of BaseCsvStationsCsvAddressesImporter
-with some sensible presets for processing CSVs in this format
-but we can override them if necessary
-"""
-
-
 class BaseDemocracyCountsCsvImporter(
     BaseCsvStationsCsvAddressesImporter, metaclass=abc.ABCMeta
 ):
+    """
+    Base class for processing data exported from Democracy Counts
+    electoral service software: http://www.democracycounts.co.uk/
+    with the addresses and stations in a single CSV file
+
+    This is a specialised case of BaseCsvStationsCsvAddressesImporter
+    with some sensible presets for processing CSVs in this format
+    but we can override them if necessary
+    """
+
     csv_delimiter = ","
     station_name_field = "placename"
     address_fields = ["add1", "add2", "add3", "add4", "add5", "add6"]
