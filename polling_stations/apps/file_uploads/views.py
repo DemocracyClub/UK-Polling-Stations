@@ -277,8 +277,10 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
         context = super().get_context_data(**kwargs)
         context["EC_COUNCIL_CONTACT_EMAIL"] = settings.EC_COUNCIL_CONTACT_EMAIL
         council = context["council"]
-        council_from_default_db = Council.objects.using(DEFAULT_DB_ALIAS).get(
-            council_id=council.council_id
+        council_from_default_db = (
+            Council.objects.using(DEFAULT_DB_ALIAS)
+            .select_related("fcscredential")
+            .get(council_id=council.council_id)
         )
         context["STATIONS"] = []
         station_to_example_uprn_map = get_station_to_example_uprn_map(

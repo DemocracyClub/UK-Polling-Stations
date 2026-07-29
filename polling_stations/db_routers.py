@@ -22,6 +22,7 @@ class ReplicationRouter(object):
         if model._meta.label in (
             "file_uploads.Upload",
             "file_uploads.File",
+            "file_uploads.FcsCredential",
         ):
             return PRINCIPAL
 

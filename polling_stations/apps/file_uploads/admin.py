@@ -1,6 +1,6 @@
 from core.admin_mixins import ReadOnlyModelAdminMixin
 from django.contrib import admin
-from file_uploads.models import File, Upload
+from file_uploads.models import FcsCredential, File, Upload
 
 
 class FileInline(admin.StackedInline):
@@ -19,3 +19,9 @@ class UploadAdmin(ReadOnlyModelAdminMixin, admin.ModelAdmin):
 
 
 admin.site.register(Upload, UploadAdmin)
+
+
+@admin.register(FcsCredential)
+class FcsCredentialAdmin(admin.ModelAdmin):
+    list_display = ["council", "url"]
+    search_fields = ["council__name", "url"]
