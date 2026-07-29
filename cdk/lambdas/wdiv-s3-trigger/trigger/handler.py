@@ -8,6 +8,7 @@ import botocore
 import sentry_sdk
 
 from .csv_helpers import get_csv_report, get_object_report
+from .json_helpers import get_json_report
 from .github_helpers import raise_github_issue
 from .wdiv_helpers import gss_to_council, submit_report
 
@@ -42,7 +43,10 @@ def get_file_report(s3, bucket, key, council_id):
     report = {**report, **get_object_report(obj, council_id)}
 
     if not report["errors"]:
-        report = {**report, **get_csv_report(obj, key)}
+        if key.endswith(".json"):
+            report = {**report, **get_json_report(obj, key)}
+        else:
+            report = {**report, **get_csv_report(obj, key)}
 
     return report
 

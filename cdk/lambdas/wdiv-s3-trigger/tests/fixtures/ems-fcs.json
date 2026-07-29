@@ -1,0 +1,102 @@
+[
+  {
+    "id": 7113,
+    "stationId": 3250,
+    "name": "London Ability",
+    "addressLine1": "5 - 11 Ellingham Road",
+    "addressLine2": "Leytonstone",
+    "addressLine3": "London",
+    "addressLine4": "",
+    "addressLine5": "",
+    "addressPostCode": "E15 2AU",
+    "addressUprn": 0,
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "defaultStationId": 65,
+    "properties": [
+      {
+        "addressLine1": "305A High Road Leytonstone",
+        "addressLine2": "",
+        "addressLine3": "",
+        "addressLine4": "London",
+        "addressLine5": "",
+        "addressPostCode": "E11 4JT",
+        "addressUprn": 200001446803
+      },
+      {
+        "addressLine1": "307A High Road Leytonstone",
+        "addressLine2": "",
+        "addressLine3": "",
+        "addressLine4": "London",
+        "addressLine5": "",
+        "addressPostCode": "E11 4JT",
+        "addressUprn": 200001452011
+      },
+      {
+        "addressLine1": "309A High Road Leytonstone",
+        "addressLine2": "",
+        "addressLine3": "",
+        "addressLine4": "London",
+        "addressLine5": "",
+        "addressPostCode": "E11 4JT",
+        "addressUprn": 100022554342
+      }
+    ],
+    "pollingDistricts": [
+      {
+        "id": 66,
+        "name": "Cann Hall D"
+      }
+    ]
+  },
+  {
+    "id": 7174,
+    "stationId": 3251,
+    "name": "Wesleyan Christian Centre",
+    "addressLine1": "1 Harrow Green",
+    "addressLine2": "Leytonstone",
+    "addressLine3": "",
+    "addressLine4": "London",
+    "addressLine5": "",
+    "addressPostCode": "E11 3HP",
+    "addressUprn": 0,
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "defaultStationId": 5818,
+    "properties": [
+      {
+        "addressLine1": "1 Acacia Road",
+        "addressLine2": "",
+        "addressLine3": "",
+        "addressLine4": "London",
+        "addressLine5": "",
+        "addressPostCode": "E11 3PF",
+        "addressUprn": 100022514159
+      },
+      {
+        "addressLine1": "3 Acacia Road",
+        "addressLine2": "",
+        "addressLine3": "",
+        "addressLine4": "London",
+        "addressLine5": "",
+        "addressPostCode": "E11 3PF",
+        "addressUprn": 100022514163
+      },
+      {
+        "addressLine1": "5 Acacia Road",
+        "addressLine2": "",
+        "addressLine3": "",
+        "addressLine4": "London",
+        "addressLine5": "",
+        "addressPostCode": "E11 3PF",
+        "addressUprn": 100022514167
+      }
+    ],
+    "pollingDistricts": [
+      {
+        "id": 51,
+        "name": "Cann Hall A"
+      }
+    ]
+  }
+]
