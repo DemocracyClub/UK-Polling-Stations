@@ -1,0 +1,41 @@
+{% extends "file_uploads/council_user_base.html" %}
+
+{% block title %}{{ council.name }} - Election returns{% endblock title %}
+
+{% block council_content %}
+    <h1>{{ council.name }}</h1>
+    <h2>Post-election returns</h2>
+    <p>
+        A prototype for collecting the same broad categories of information that electoral
+        services teams already report to the Electoral Commission after a poll, alongside the
+        polling station data you upload here.
+    </p>
+
+    {% if ballots %}
+        <div class="ds-card ds-padded">
+            <div class="ds-table">
+                <table>
+                    <tr>
+                        <th>Election</th>
+                        <th>Poll date</th>
+                        <th></th>
+                    </tr>
+                    {% for ballot in ballots %}
+                        <tr>
+                            <td>{{ ballot.election_title }}</td>
+                            <td>{{ ballot.poll_open_date }}</td>
+                            <td>
+                                <a class="ds-cta ds-cta-blue"
+                                   href="{% url 'file_uploads:election_return_detail' gss=council.council_id election_id=ballot.election_id %}">
+                                    {% if ballot.election_return %}Continue{% else %}Start{% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <p>We don't know of any elections for {{ council.name }} at the moment.</p>
+    {% endif %}
+{% endblock council_content %}

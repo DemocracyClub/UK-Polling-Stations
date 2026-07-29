@@ -1,0 +1,23 @@
+{% extends "file_uploads/council_user_base.html" %}
+{% load dc_forms %}
+
+{% block title %}Electoral data return{% endblock title %}
+
+{% block council_content %}
+    <h1>Electoral data return</h1>
+    <p>{{ election_return.election_title }} &middot; {{ election_return.poll_open_date }}</p>
+
+    <div class="ds-card ds-padded">
+        <p>
+            We already know of <strong>{{ known_polling_station_count }}</strong>
+            polling station{{ known_polling_station_count|pluralize }} from your uploaded data,
+            so we won't ask for that count again here.
+        </p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|dc_form }}
+        <button type="submit" class="ds-button">Save</button>
+    </form>
+{% endblock council_content %}

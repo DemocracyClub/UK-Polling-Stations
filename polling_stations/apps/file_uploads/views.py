@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from datetime import datetime
+from functools import cached_property
 
 import boto3
 from addressbase.models import Address, UprnToCouncil
@@ -15,17 +16,24 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
 from django.db.models import Count, Max, Subquery
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.views.generic import DetailView, FormView, ListView, TemplateView
-from file_uploads.forms import CouncilLoginForm, CSVUploadForm
+from file_uploads.forms import (
+    CouncilLoginForm,
+    CSVUploadForm,
+    ElectoralDataReturnForm,
+    PerformanceReportForm,
+    PollingStationVoterIDReturnFormSet,
+)
 from marshmallow import Schema, fields, validate
 from marshmallow import ValidationError as MarshmallowValidationError
 from pollingstations.models import (
@@ -36,7 +44,14 @@ from sesame.utils import get_query_string, get_user
 
 from .accessibility_information_handler import AccessibilityInformationHandler
 from .filters import CouncilListUploadFilter
-from .models import File, Upload
+from .models import (
+    ElectionReturn,
+    ElectoralDataReturn,
+    File,
+    PerformanceReport,
+    PollingStationVoterIDReturn,
+    Upload,
+)
 from .utils import assign_councils_to_user, get_domain
 
 User = get_user_model()
@@ -71,6 +86,28 @@ def get_s3_client():
     return boto3.client("s3", region_name=os.environ.get("AWS_REGION", "eu-west-2"))
 
 
+def get_ee_wrapper(council_id, include_current=False):
+    """
+    Builds the EEWrapper for a council's ballots.
+
+    For local development, `settings.FAKE_ELECTIONS` (a dict of
+    council_id -> list of ballot dicts shaped like EveryElection's) can
+    stand in for a real EveryElection response, so the uploader can be
+    exercised for a council without network access to EE, or for elections
+    that only exist as test fixtures.
+    """
+    fake_ballots = getattr(settings, "FAKE_ELECTIONS", {}).get(council_id)
+    if fake_ballots is not None:
+        return EEWrapper(
+            elections=fake_ballots,
+            request_success=True,
+            include_current=include_current,
+        )
+    return EEWrapper(
+        **EEFetcher(council_id=council_id).fetch(), include_current=include_current
+    )
+
+
 class CouncilFileUploadAllowedMixin(UserPassesTestMixin):
     def get_login_url(self):
         return reverse_lazy("file_uploads:council_login_view")
@@ -95,8 +132,8 @@ class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
             .exclude(council_id__startswith="N09")
             .get(council_id=self.kwargs["gss"])
         )
-        upcoming_election_dates = EEWrapper(
-            **EEFetcher(council_id=self.kwargs["gss"]).fetch()
+        upcoming_election_dates = get_ee_wrapper(
+            self.kwargs["gss"]
         ).get_future_election_dates()
 
         # If the list returns no items, flag that there are no upcoming elections
@@ -202,8 +239,8 @@ class CouncilView:
         context = super().get_context_data(**kwargs)
 
         if self.kwargs.get("pk"):
-            upcoming_election_dates = EEWrapper(
-                **EEFetcher(council_id=self.kwargs["pk"]).fetch()
+            upcoming_election_dates = get_ee_wrapper(
+                self.kwargs["pk"]
             ).get_future_election_dates()
             context["HAS_UPCOMING_ELECTIONS"] = bool(upcoming_election_dates)
             context["NO_COUNCILS"] = False
@@ -433,3 +470,229 @@ class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
                 "council_id": self.council.council_id,
             },
         )
+
+
+class ElectionReturnIndexView(CouncilFileUploadAllowedMixin, DetailView):
+    """
+    Lists the elections we know about for a council (from EveryElection),
+    alongside whether a post-election return has been started for each one.
+    """
+
+    template_name = "file_uploads/election_return_index.html"
+    model = Council
+    pk_url_kwarg = "gss"
+    context_object_name = "council"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        council = context["council"]
+        ballots = get_ee_wrapper(
+            council.council_id, include_current=True
+        ).get_all_ballots()
+        existing_returns = {
+            election_return.election_id: election_return
+            for election_return in ElectionReturn.objects.filter(council=council)
+        }
+        context["ballots"] = [
+            {
+                "election_id": ballot["election_id"],
+                "election_title": ballot["election_title"],
+                "poll_open_date": ballot["poll_open_date"],
+                "election_return": existing_returns.get(ballot["election_id"]),
+            }
+            for ballot in ballots
+        ]
+        return context
+
+
+class ElectionReturnMixin(CouncilFileUploadAllowedMixin):
+    """
+    Resolves `self.council` and `self.election_return` from the `gss` and
+    `election_id` URL kwargs shared by the election return views below.
+
+    Both are cached_properties (rather than being resolved in `dispatch`)
+    so that nothing is looked up - and, in the case of `election_return`,
+    nothing is created - until after CouncilFileUploadAllowedMixin's
+    permission check has already run.
+    """
+
+    @cached_property
+    def council(self):
+        return get_object_or_404(Council, council_id=self.kwargs["gss"])
+
+    @cached_property
+    def election_return(self):
+        election_id = self.kwargs["election_id"]
+        try:
+            return ElectionReturn.objects.get(
+                council=self.council, election_id=election_id
+            )
+        except ElectionReturn.DoesNotExist:
+            pass
+
+        # Not started yet - check EveryElection knows about this ballot for
+        # this council before creating a record for it.
+        ballots = get_ee_wrapper(
+            self.council.council_id, include_current=True
+        ).get_all_ballots()
+        ballot = next(
+            (b for b in ballots if b["election_id"] == election_id), None
+        )
+        if ballot is None:
+            raise Http404(f"Unknown election {election_id} for {self.council}")
+
+        return ElectionReturn.objects.create(
+            council=self.council,
+            election_id=ballot["election_id"],
+            election_title=ballot["election_title"],
+            poll_open_date=ballot["poll_open_date"],
+            requires_voter_id=ballot.get("requires_voter_id") or "",
+            submitted_by=self.request.user,
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["council"] = self.council
+        context["election_return"] = self.election_return
+        return context
+
+    def get_success_url(self):
+        return reverse(
+            "file_uploads:election_return_detail",
+            kwargs={
+                "gss": self.council.council_id,
+                "election_id": self.election_return.election_id,
+            },
+        )
+
+
+class ElectionReturnDetailView(ElectionReturnMixin, TemplateView):
+    """
+    The hub page for a single (council, election) return: links through to
+    whichever of the three forms apply, and shows their current status.
+    """
+
+    template_name = "file_uploads/election_return_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["electoral_data"] = getattr(
+            self.election_return, "electoral_data", None
+        )
+        context["voter_id_return_count"] = self.election_return.voter_id_returns.count()
+        context["performance_report"] = getattr(
+            self.election_return, "performance_report", None
+        )
+        return context
+
+
+class ElectoralDataReturnEditView(ElectionReturnMixin, FormView):
+    template_name = "file_uploads/electoral_data_return.html"
+    form_class = ElectoralDataReturnForm
+
+    def get_instance(self):
+        instance, _ = ElectoralDataReturn.objects.get_or_create(
+            election_return=self.election_return, defaults={"electorate": 0}
+        )
+        return instance
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = self.get_instance()
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["known_polling_station_count"] = (
+            self.election_return.known_polling_station_count
+        )
+        return context
+
+    def form_valid(self, form):
+        electoral_data = form.save(commit=False)
+        electoral_data.election_return = self.election_return
+        electoral_data.save()
+        messages.success(self.request, "Electoral data return saved.")
+        return super().form_valid(form)
+
+
+class VoterIDReturnEditView(ElectionReturnMixin, TemplateView):
+    """
+    One VIDEF-style summary form per polling station this council has
+    already uploaded data for - the station list itself isn't asked for
+    again, it's pre-populated from `PollingStation`.
+    """
+
+    template_name = "file_uploads/voter_id_return.html"
+
+    def ensure_rows_exist(self):
+        for station in self.election_return.known_polling_stations:
+            PollingStationVoterIDReturn.objects.get_or_create(
+                election_return=self.election_return, polling_station=station
+            )
+
+    def get_queryset(self):
+        return self.election_return.voter_id_returns.select_related(
+            "polling_station"
+        ).order_by("polling_station__internal_council_id")
+
+    def get(self, request, *args, **kwargs):
+        self.ensure_rows_exist()
+        self.formset = PollingStationVoterIDReturnFormSet(
+            queryset=self.get_queryset()
+        )
+        return self.render_to_response(self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        self.ensure_rows_exist()
+        self.formset = PollingStationVoterIDReturnFormSet(
+            request.POST, queryset=self.get_queryset()
+        )
+        if self.formset.is_valid():
+            self.formset.save()
+            messages.success(request, "Voter ID return saved.")
+            return redirect(self.get_success_url())
+        return self.render_to_response(self.get_context_data())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["formset"] = self.formset
+        return context
+
+
+class PerformanceReportEditView(ElectionReturnMixin, FormView):
+    """
+    A council's report against the Commission's four performance standard
+    outcomes. The figures shown alongside each outcome are pulled from the
+    electoral data / Voter ID returns already submitted for this election,
+    rather than asked for a second time.
+    """
+
+    template_name = "file_uploads/performance_report.html"
+    form_class = PerformanceReportForm
+
+    def get_instance(self):
+        instance, _ = PerformanceReport.objects.get_or_create(
+            election_return=self.election_return
+        )
+        return instance
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = self.get_instance()
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["electoral_data"] = getattr(
+            self.election_return, "electoral_data", None
+        )
+        context["voter_id_returns"] = self.election_return.voter_id_returns.all()
+        return context
+
+    def form_valid(self, form):
+        report = form.save(commit=False)
+        report.election_return = self.election_return
+        report.save()
+        messages.success(self.request, "Performance report saved.")
+        return super().form_valid(form)

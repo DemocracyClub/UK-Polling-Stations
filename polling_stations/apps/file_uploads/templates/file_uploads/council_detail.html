@@ -89,6 +89,14 @@
         {% include "./no_upcoming_elections_snippet.html" with name=object.name %}
     {% endif %}
 
+    {# Post-election returns are relevant regardless of whether there's an
+       upcoming election - often most relevant right after one. #}
+    <div class="ds-cluster">
+        <a href="{% url 'file_uploads:election_return_index' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+            Post-election returns
+        </a>
+    </div>
+
     <h2>Contact details</h2>
     <p>We hold the following contact details for {{ object.name }}. These details are shown to the general public on our
         websites, widgets, and via our API. We receive this information directly from the Electoral Commission.</p>

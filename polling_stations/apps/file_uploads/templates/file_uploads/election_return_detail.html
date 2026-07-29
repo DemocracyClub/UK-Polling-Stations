@@ -1,0 +1,64 @@
+{% extends "file_uploads/council_user_base.html" %}
+
+{% block title %}{{ election_return.election_title }} - Return{% endblock title %}
+
+{% block council_content %}
+    <h1>{{ election_return.election_title }}</h1>
+    <p>{{ election_return.poll_open_date }} &middot; {{ council.name }}</p>
+
+    <div class="ds-card ds-padded">
+        <h2>Electoral data return</h2>
+        <p>Turnout, postal voting and rejected ballot statistics - the figures the Commission
+            requests after each set of scheduled elections.</p>
+        {% if electoral_data %}
+            <p>✔️ Saved.
+                {% if electoral_data.turnout_percentage %}Turnout: {{ electoral_data.turnout_percentage }}%{% endif %}</p>
+        {% else %}
+            <p>❌ Not started.</p>
+        {% endif %}
+        <a class="ds-cta ds-cta-blue"
+           href="{% url 'file_uploads:electoral_data_return_edit' gss=council.council_id election_id=election_return.election_id %}">
+            {% if electoral_data %}Edit{% else %}Start{% endif %}
+        </a>
+    </div>
+
+    <div class="ds-card ds-padded">
+        <h2>Voter ID return (VIDEF)</h2>
+        {% if election_return.requires_voter_id %}
+            <p>Required for this election.</p>
+        {% else %}
+            <p>Not a statutory requirement for this election, but you can still record it.</p>
+        {% endif %}
+        <p>
+            We already know about {{ election_return.known_polling_station_count }}
+            polling station{{ election_return.known_polling_station_count|pluralize }} from your
+            uploaded data
+            {% if voter_id_return_count %}- {{ voter_id_return_count }}
+                return{{ voter_id_return_count|pluralize }} saved{% endif %}.
+        </p>
+        <a class="ds-cta ds-cta-blue"
+           href="{% url 'file_uploads:voter_id_return_edit' gss=council.council_id election_id=election_return.election_id %}">
+            {% if voter_id_return_count %}Edit{% else %}Start{% endif %}
+        </a>
+    </div>
+
+    <div class="ds-card ds-padded">
+        <h2>Performance report</h2>
+        {% if election_return.requires_performance_report %}
+            <p>The Commission may direct a performance report for this election type.</p>
+        {% else %}
+            <p>Not typically required for this election type, but you're welcome to complete one.</p>
+        {% endif %}
+        {% if performance_report and performance_report.submitted %}
+            <p>✔️ Submitted.</p>
+        {% elif performance_report %}
+            <p>⌛ Draft saved.</p>
+        {% else %}
+            <p>❌ Not started.</p>
+        {% endif %}
+        <a class="ds-cta ds-cta-blue"
+           href="{% url 'file_uploads:performance_report_edit' gss=council.council_id election_id=election_return.election_id %}">
+            {% if performance_report %}Edit{% else %}Start{% endif %}
+        </a>
+    </div>
+{% endblock council_content %}
