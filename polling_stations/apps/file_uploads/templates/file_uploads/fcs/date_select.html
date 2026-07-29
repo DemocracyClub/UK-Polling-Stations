@@ -1,5 +1,6 @@
 {% extends "file_uploads/council_user_base.html" %}
 
+{% load date_filters %}
 {% load i18n %}
 {% load static %}
 {% load pipeline %}
@@ -22,7 +23,7 @@
                     {% for radio in form.election_date %}
                         <label class="ds-field-radio">
                             {{ radio.tag }}
-                            <span>{{ radio.choice_label }}</span>
+                            <span>{{ radio.choice_label|human_date }}</span>
                         </label>
                     {% endfor %}
                     {% if form.election_date.errors %}

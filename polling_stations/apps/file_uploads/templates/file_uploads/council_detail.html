@@ -1,5 +1,7 @@
 {% extends "file_uploads/council_user_base.html" %}
+
 {% load humanize %}
+{% load date_filters %}
 {% load i18n %}
 {% load upload_status_emoji %}
 
@@ -25,9 +27,9 @@
                     <tr>
                         <td>
                             {% if upload.github_issue %}
-                                <a href="{{ upload.github_issue }}">{{ upload.election_date }}</a>
+                                <a href="{{ upload.github_issue }}">{{ upload.election_date|human_date }}</a>
                             {% else %}
-                                {{ upload.election_date }}
+                                {{ upload.election_date|human_date }}
                             {% endif %}
                         </td>
                         <td>{{ upload.timestamp|naturaltime }}</td>

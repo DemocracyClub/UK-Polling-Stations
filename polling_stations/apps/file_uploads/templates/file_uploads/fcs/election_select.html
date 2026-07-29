@@ -1,5 +1,6 @@
 {% extends "file_uploads/council_user_base.html" %}
 
+{% load date_filters %}
 {% load i18n %}
 {% load static %}
 {% load pipeline %}
@@ -8,7 +9,8 @@
     <h1>{{ council.name }}</h1>
     {% if NO_UPCOMING_ELECTIONS %}
         <p>
-            ⛔ We queried the FCS API, but we couldn't find any elections happening on {{ date }}.
+            ⛔ We queried the FCS API, but we couldn't find any
+            elections happening on {{ date|human_date }}.
         </p>
     {% else %}
         <form id="file_upload_form" method="POST">

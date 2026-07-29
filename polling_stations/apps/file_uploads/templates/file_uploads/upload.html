@@ -1,6 +1,7 @@
 {% extends "file_uploads/council_user_base.html" %}
 
 {% load i18n %}
+{% load date_filters %}
 {% load static %}
 {% load pipeline %}
 
@@ -53,15 +54,14 @@
                         {% for election_date in UPCOMING_ELECTION_DATES %}
                             <label class="ds-field-radio">
                                 <input type="radio" name="election_date" value="{{ election_date }}" required >
-                                <span>{{ election_date }}</span>
+                                <span>{{ election_date|human_date }}</span>
                             </label>
                         {% endfor %}
-
                     </div>
                 </fieldset>
 
             {% else %}
-                <p>Please upload data for the elections taking place on <strong>{{ UPCOMING_ELECTION_DATES.0 }}</strong></p>
+                <p>Please upload data for the elections taking place on <strong>{{ UPCOMING_ELECTION_DATES.0|human_date }}</strong></p>
                 <input type="hidden" name="election_date" value="{{ UPCOMING_ELECTION_DATES.0 }}">
             {% endif %}
 
