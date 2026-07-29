@@ -321,3 +321,15 @@ class File(models.Model):
     @property
     def status_emoji(self):
         return status_to_emoji(self.status)
+
+
+class FcsCredential(models.Model):
+    council = models.OneToOneField(
+        "councils.Council",
+        on_delete=models.CASCADE,
+    )
+    url = models.URLField()
+    token = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.council} - {self.url}"
