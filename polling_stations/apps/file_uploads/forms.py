@@ -43,3 +43,25 @@ class CouncilLoginForm(forms.Form):
 
 class CSVUploadForm(forms.Form):
     csv_file = forms.FileField()
+
+
+class ElectionDateForm(forms.Form):
+    election_date = forms.ChoiceField(
+        choices=[],
+        widget=forms.RadioSelect,
+    )
+
+    def __init__(self, *args, election_dates, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["election_date"].choices = [(date, date) for date in election_dates]
+
+
+class ElectionForm(forms.Form):
+    election_id = forms.ChoiceField(
+        choices=[],
+        widget=forms.RadioSelect,
+    )
+
+    def __init__(self, *args, elections, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["election_id"].choices = [(e["id"], e["name"]) for e in elections]

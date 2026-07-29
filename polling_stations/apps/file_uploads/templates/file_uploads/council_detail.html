@@ -70,21 +70,38 @@
             <p>We've not received any data for future elections yet.</p>
             <p>Please note that this service does not support town, parish, or community council elections. </p>
         {% endif %}
-        <div class="ds-cluster">
-            <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
-                Upload
-                {% if upload_set.exists %}
-                    an updated
-                {% endif %}
-                EMS export
-            </a>
-            {% if live_upload  and user.is_staff %}
 
-                <a href="{% url 'file_uploads:accessibility_upload' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
-                    Upload Accessibility CSV
-                </a>
-            {% endif %}
-        </div>
+        {% if object.fcscredential and not user.is_staff %}
+            <p>
+                Our records indicate that your council uses FCS.
+                <a href="mailto:pollingstations@democracyclub.org.uk">Contact us</a>
+                when your polling data scheme is finalised or updated so we can import the data.
+            </p>
+        {% else %}
+            <div class="ds-cluster">
+                {% if object.fcscredential %}
+                    {% if user.is_staff %}
+                        <a href="{% url 'file_uploads:fcs_date_select' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                            Snapshot data from API
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                        Upload
+                        {% if upload_set.exists %}
+                            an updated
+                        {% endif %}
+                        EMS export
+                    </a>
+                {% endif %}
+                {% if live_upload  and user.is_staff %}
+
+                    <a href="{% url 'file_uploads:accessibility_upload' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                        Upload Accessibility CSV
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
     {% else %}
         {% include "./no_upcoming_elections_snippet.html" with name=object.name %}
     {% endif %}

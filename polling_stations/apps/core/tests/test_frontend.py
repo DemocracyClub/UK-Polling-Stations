@@ -67,7 +67,7 @@ class TestHtml:
         ]
 
     @pytest.mark.django_db
-    @mock.patch("file_uploads.views.CouncilFileUploadAllowedMixin.test_func")
+    @mock.patch("file_uploads.mixins.CouncilMatchesMixin.test_func")
     def test_html_valid(self, test_func, admin_client, subtests, urls):
         test_func.return_value = True
         for url in urls:

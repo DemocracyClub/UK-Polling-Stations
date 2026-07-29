@@ -11,7 +11,6 @@ from data_finder.helpers.every_election import EEFetcher, EEWrapper
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import DEFAULT_DB_ALIAS
 from django.db.models import Count, Max, Subquery
@@ -19,7 +18,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -38,6 +37,7 @@ from .accessibility_information_handler import AccessibilityInformationHandler
 from .filters import CouncilListUploadFilter
 from .models import File, Upload
 from .utils import assign_councils_to_user, get_domain
+from .mixins import ActiveUserRequiredMixin, CouncilMatchesMixin, StaffUserRequiredMixin
 
 User = get_user_model()
 
@@ -71,19 +71,14 @@ def get_s3_client():
     return boto3.client("s3", region_name=os.environ.get("AWS_REGION", "eu-west-2"))
 
 
-class CouncilFileUploadAllowedMixin(UserPassesTestMixin):
-    def get_login_url(self):
-        return reverse_lazy("file_uploads:council_login_view")
-
-    def test_func(self):
-        return self.request.user.is_active
-
-
 logger = logging.getLogger(__name__)
 
 
-class FileUploadView(CouncilFileUploadAllowedMixin, TemplateView):
+class FileUploadView(CouncilMatchesMixin, TemplateView):
     template_name = "file_uploads/upload.html"
+
+    def get_council_id(self):
+        return self.kwargs["gss"]
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
@@ -211,7 +206,7 @@ class CouncilView:
         return context
 
 
-class CouncilListView(CouncilFileUploadAllowedMixin, CouncilView, ListView):
+class CouncilListView(ActiveUserRequiredMixin, CouncilView, ListView):
     template_name = "file_uploads/council_list.html"
 
     def get_queryset(self):
@@ -270,8 +265,11 @@ def get_example_postcode(station, station_to_example_uprn_map):
     return None
 
 
-class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
+class CouncilDetailView(CouncilMatchesMixin, CouncilView, DetailView):
     template_name = "file_uploads/council_detail.html"
+
+    def get_council_id(self):
+        return self.kwargs["pk"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -316,9 +314,13 @@ class CouncilDetailView(CouncilFileUploadAllowedMixin, CouncilView, DetailView):
         return context
 
 
-class FileDetailView(CouncilFileUploadAllowedMixin, DetailView):
+class FileDetailView(CouncilMatchesMixin, DetailView):
     template_name = "file_uploads/file_detail.html"
     model = File
+
+    def get_council_id(self):
+        obj = self.get_object()
+        return obj.upload.gss.pk
 
 
 class CouncilLoginView(FormView):
@@ -390,7 +392,7 @@ class AuthenticateView(TemplateView):
         return redirect("file_uploads:councils_list")
 
 
-class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
+class AccessibilityInformationUploadView(StaffUserRequiredMixin, FormView):
     template_name = "file_uploads/accessibility_information_upload.html"
     form_class = CSVUploadForm
 
@@ -401,9 +403,6 @@ class AccessibilityInformationUploadView(UserPassesTestMixin, FormView):
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         return super().get(self, request, *args, **kwargs)
-
-    def test_func(self):
-        return self.request.user.is_staff
 
     def list_to_ul(self, items):
         if not items:
