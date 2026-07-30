@@ -1,5 +1,4 @@
 import csv
-import re
 from pathlib import Path
 
 import chardet
@@ -43,33 +42,6 @@ def get_body_sample(body: bytes):
     if len(lines) > 20:
         return line_sep.join(lines[:20])
     return line_sep.join(lines)
-
-
-def is_eoni_export_key(key: str) -> bool:
-    """
-    Should return true for things like:
-    '2023-04-12-EONIextract.txt',
-    '2024-07-03-EONIextract-sample.txt',
-    '2024-11-21-EONIextract_NEW.txt'
-
-    """
-    eoni_export_key_pattern = re.compile(
-        r"""
-        ^           # Start of string
-        20[2-9]     # First 3 digits of year: 202-209
-        [0-9]       # Last digit of year: 0-9
-        -           # Separator
-        [0-9]{2}    # Month as 2 digits
-        -           # Separator
-        [0-9]{2}    # Day as 2 digits
-        -.+         # Hyphen followed by any text
-        \.txt       # Literal .txt extension
-        """,
-        re.VERBOSE,
-    )
-    if eoni_export_key_pattern.match(key):
-        return True
-    return False
 
 
 class EONIUploadValidationError(Exception):
@@ -252,16 +224,18 @@ class Command(BaseCommand):
             self.stdout.write(f"Using cached version found at:\n\t{self.local_path}")
 
     def get_latest_file_on_s3(self):
-        objects = self.s3_wrapper.bucket.objects.all()
-        object_keys = sorted(
-            [obj.key for obj in objects if is_eoni_export_key(obj.key)]
-        )
+        objects = [
+            o
+            for o in self.s3_wrapper.bucket.objects.all()
+            if o.key.endswith(".txt") and o.key.startswith("EONIPropsAndPrems")
+        ]
 
-        if len(object_keys) == 0:
+        if len(objects) == 0:
             raise CommandError(
                 f"Failed to find any EONI export keys for {self.bucket_name}"
             )
-        return object_keys[-1]
+
+        return sorted(objects, key=lambda obj: obj.last_modified, reverse=True)[0].key
 
     def decode_csv(self):
         with open(self.local_path, "rb") as csv_file:
