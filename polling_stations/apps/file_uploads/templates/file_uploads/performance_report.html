@@ -1,0 +1,44 @@
+{% extends "file_uploads/council_user_base.html" %}
+{% load dc_forms %}
+
+{% block title %}Performance report{% endblock title %}
+
+{% block council_content %}
+    <h1>Performance report</h1>
+    <p>{{ election_return.election_title }} &middot; {{ election_return.poll_open_date }}</p>
+    <p>
+        Reported against the Commission's four published
+        <a href="https://www.gov.uk/government/publications/electoral-commission-performance-standards/performance-standards-for-returning-officers">performance
+            standard outcomes</a> for Returning Officers.
+    </p>
+
+    {% if electoral_data or voter_id_returns %}
+        <div class="ds-card ds-padded">
+            <h3>Figures already captured for this election</h3>
+            <p>
+                The Commission's own guidance lists figures like these as evidence for Outcome 2
+                and Outcome 4, so they're carried over from your other returns rather than
+                asked for again here.
+            </p>
+            <ul>
+                {% if electoral_data %}
+                    <li>Turnout: {{ electoral_data.turnout_percentage|default:"—" }}%</li>
+                    <li>Rejected ballot papers: {{ electoral_data.rejected_ballots_total }} of
+                        {{ electoral_data.ballot_papers_issued|default:"—" }} issued</li>
+                    <li>Rejected postal votes: {{ electoral_data.postal_votes_rejected_total }} of
+                        {{ electoral_data.postal_votes_returned|default:"—" }} returned</li>
+                {% endif %}
+                {% if voter_id_returns %}
+                    <li>Voter ID: {{ voter_id_returns|length }} polling station
+                        return{{ voter_id_returns|length|pluralize }} recorded</li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|dc_form }}
+        <button type="submit" class="ds-button">Save</button>
+    </form>
+{% endblock council_content %}

@@ -1,0 +1,43 @@
+{% extends "file_uploads/council_user_base.html" %}
+{% load dc_forms %}
+
+{% block title %}Voter ID return (VIDEF){% endblock title %}
+
+{% block council_content %}
+    <h1>Voter ID return (VIDEF)</h1>
+    <p>{{ election_return.election_title }} &middot; {{ election_return.poll_open_date }}</p>
+    <p>
+        One close-of-poll summary per polling station, pre-filled from the stations you've
+        already uploaded for {{ council.name }} - there's no need to list them again.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% if formset.non_form_errors %}
+            <div class="ds-error">
+                {% for error in formset.non_form_errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+
+        {% for form in formset %}
+            <div class="ds-card ds-padded">
+                <h2>
+                    {% if form.instance.polling_station %}
+                        {{ form.instance.polling_station.address }}
+                    {% else %}
+                        {{ form.instance.polling_station_label|default:"Unknown station" }}
+                    {% endif %}
+                </h2>
+                {{ form|dc_form }}
+            </div>
+        {% empty %}
+            <p>We don't have any polling stations on file for {{ council.name }} yet - upload
+                your polling station data first.</p>
+        {% endfor %}
+
+        {% if formset.forms %}
+            <button type="submit" class="ds-button">Save</button>
+        {% endif %}
+    </form>
+{% endblock council_content %}

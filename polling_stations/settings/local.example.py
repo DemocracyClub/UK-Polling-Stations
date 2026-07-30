@@ -16,6 +16,26 @@ DATABASES = {
 }
 
 EVERY_ELECTION = {"CHECK": False, "HAS_ELECTION": True}
+
+# Stand-in EveryElection ballots for local testing, keyed by council_id, so
+# the uploader (and the election-return prototype) can be exercised without
+# needing network access to the real EveryElection API. See
+# file_uploads.views.get_ee_wrapper.
+FAKE_ELECTIONS = {
+    "STO": [
+        {
+            "election_id": "local.stroud.2026-05-07",
+            "election_title": "Stroud District Council local election",
+            "poll_open_date": "2026-05-07",
+            "group_type": None,
+            "cancelled": False,
+            "replaced_by": None,
+            "metadata": None,
+            "requires_voter_id": "EA-2022",
+        },
+    ]
+}
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 CACHES = {
     "default": {

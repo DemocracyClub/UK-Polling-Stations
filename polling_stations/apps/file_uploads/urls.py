@@ -7,8 +7,13 @@ from .views import (
     CouncilDetailView,
     CouncilListView,
     CouncilLoginView,
+    ElectionReturnDetailView,
+    ElectionReturnIndexView,
+    ElectoralDataReturnEditView,
     FileDetailView,
     FileUploadView,
+    PerformanceReportEditView,
+    VoterIDReturnEditView,
 )
 
 app_name = "file_uploads"
@@ -46,5 +51,30 @@ urlpatterns = [
         "^accessibility_info_upload/(?P<council_id>.+)/$",
         AccessibilityInformationUploadView.as_view(),
         name="accessibility_upload",
+    ),
+    re_path(
+        r"^election_returns/(?P<gss>[^/]+)/$",
+        ElectionReturnIndexView.as_view(),
+        name="election_return_index",
+    ),
+    re_path(
+        r"^election_returns/(?P<gss>[^/]+)/(?P<election_id>[^/]+)/$",
+        ElectionReturnDetailView.as_view(),
+        name="election_return_detail",
+    ),
+    re_path(
+        r"^election_returns/(?P<gss>[^/]+)/(?P<election_id>[^/]+)/electoral_data/$",
+        ElectoralDataReturnEditView.as_view(),
+        name="electoral_data_return_edit",
+    ),
+    re_path(
+        r"^election_returns/(?P<gss>[^/]+)/(?P<election_id>[^/]+)/voter_id/$",
+        VoterIDReturnEditView.as_view(),
+        name="voter_id_return_edit",
+    ),
+    re_path(
+        r"^election_returns/(?P<gss>[^/]+)/(?P<election_id>[^/]+)/performance_report/$",
+        PerformanceReportEditView.as_view(),
+        name="performance_report_edit",
     ),
 ]
