@@ -73,6 +73,11 @@ class Command(BaseStationsImporter, CsvMixin):
             action="store_true",
         )
         parser.add_argument(
+            "--s3-source",
+            help="Original s3 source file for reporting to slack",
+            action="store",
+        )
+        parser.add_argument(
             "--slack",
             help="Post a report to slack in the channel specified",
             action="store",
@@ -82,6 +87,8 @@ class Command(BaseStationsImporter, CsvMixin):
         if slack_channel := options.get("slack"):
             self.slack_client = SlackClient(channel=slack_channel)
             self.should_post_to_slack = True
+
+        self.s3_source = options.get("s3_source", "unset")
 
         try:
             self.eoni_export_path = Path(options["eoni_csv"])
@@ -332,6 +339,10 @@ class Command(BaseStationsImporter, CsvMixin):
                 message=":warning: *EONI Data Import Failed*",
             )
             self.slack_client.send_message(
+                message=f"Tried to import {self.s3_source}.",
+                thread_ts=response.get("ts"),
+            )
+            self.slack_client.send_message(
                 message=f"Error: {str(exception)}", thread_ts=response.get("ts")
             )
         except Exception as slack_e:
@@ -352,6 +363,10 @@ class Command(BaseStationsImporter, CsvMixin):
         )
 
     def post_details(self, thread_ts: str) -> None:
+        self.slack_client.send_message(
+            message=f"Imported data from {self.s3_source}.",
+            thread_ts=thread_ts,
+        )
         # Post address counts
         address_counts_text = ["*Address Counts by Council:*"]
         for council_id, count in self.address_counts.items():

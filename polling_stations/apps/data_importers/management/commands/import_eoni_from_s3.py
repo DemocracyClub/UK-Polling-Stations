@@ -411,6 +411,7 @@ class Command(BaseCommand):
             "eoni_csv": self.output_path,
             "verbosity": 1,
             "include_past_elections": True,
+            "s3_source": f"s3://{self.bucket_name}/{self.input_key}",
         }
 
         if options.get("send_slack_report"):
@@ -423,6 +424,10 @@ class Command(BaseCommand):
         try:
             response = slack_client.send_message(
                 message=":warning: *import_eoni_from_s3 command failed*",
+            )
+            slack_client.send_message(
+                message=f"Tried to import s3://{self.bucket_name}/{self.input_key}.",
+                thread_ts=response.get("ts"),
             )
             slack_client.send_message(
                 message=f"Error: {str(exception)}", thread_ts=response.get("ts")
