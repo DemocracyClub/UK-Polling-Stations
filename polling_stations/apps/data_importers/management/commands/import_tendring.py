@@ -38,6 +38,6 @@ class Command(BaseDemocracyCountsCsvImporter):
             "7",
         ]:
             record = record._replace(
-                placename="Little Jimmys Preschool (Cann Hall Primary School) - Hall in School Constable Avenue Clacton-on-Sea Essex"
+                placename="Little Jimmys Preschool (Cann Hall Primary School) - Hall in School"
             )
         return super().station_record_to_dict(record)
