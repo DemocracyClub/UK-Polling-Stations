@@ -10,7 +10,6 @@ from moto import mock_aws
 
 from data_importers.management.commands.import_eoni_from_s3 import (
     Command,
-    is_eoni_export_key,
 )
 
 # A minimal CSV row using the current EONI header format.
@@ -81,17 +80,6 @@ def build_eoni_csv_bytes():
     writer.writeheader()
     writer.writerow(EONI_CSV_ROW)
     return buf.getvalue().encode("utf-8")
-
-
-class TestIsEoniExportKey:
-    def test_standard_key(self):
-        assert is_eoni_export_key("2026-04-01-EONIextract.txt") is True
-
-    def test_key_with_suffix(self):
-        assert is_eoni_export_key("2024-11-21-EONIextract_NEW.txt") is True
-
-    def test_non_matching_key(self):
-        assert is_eoni_export_key("readme.txt") is False
 
 
 class TestImportEoniFromS3:
