@@ -1,6 +1,8 @@
 {% load i18n_with_welsh %}
 {% load dc_forms %}
 
+{% include 'fragments/ni_polling_place_consultation.html' %}
+
 {% if cancelled_election.cancelled %}
     {% include "fragments/cancelled_election.html" %}
 {% else %}
