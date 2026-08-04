@@ -9,8 +9,11 @@
     <h1>{{ council.name }}</h1>
     {% if NO_UPCOMING_ELECTIONS %}
         <p>
-            ⛔ We queried the FCS API, but we couldn't find any
-            elections happening on {{ date|human_date }}.
+            ⛔ We couldn't find any elections happening on
+            {{ date|human_date }} in FCS ElectionsPro.
+        </p>
+        <p>
+            If you need help, <a href="mailto:pollingstations@democracyclub.org.uk">contact us</a>.
         </p>
     {% else %}
         <form id="file_upload_form" method="POST">
