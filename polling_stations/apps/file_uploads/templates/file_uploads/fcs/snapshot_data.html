@@ -7,7 +7,7 @@
 {% block council_content %}
     <h1>{{ council.name }}</h1>
 
-    <form id="file_upload_form" method="POST">
+    <form id="snapshot_form" method="POST">
         {% csrf_token %}
         <fieldset>
             <legend>Snapshot Data</legend>
@@ -22,3 +22,14 @@
 
 
 {% endblock council_content %}
+
+{% block in_page_javascript %}
+    <script type="text/javascript">
+        var form = document.getElementById("snapshot_form");
+        form.addEventListener("submit", (e) => {
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            button.textContent = "Working...";
+        });
+    </script>
+{% endblock %}
