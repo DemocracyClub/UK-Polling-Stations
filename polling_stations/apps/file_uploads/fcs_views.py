@@ -5,6 +5,8 @@ import boto3
 import requests
 
 from django.conf import settings
+from django.contrib import messages
+from django.core.cache import cache
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -155,33 +157,50 @@ class FcsSnapshotDataView(StaffUserRequiredMixin, TemplateView):
 
         now = dt.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
 
-        resp = requests.get(
-            urljoin(
-                council.fcscredential.url,
-                f"/api/DemocracyClub/Election/{election_id}/PollingStation",
-            ),
-            headers={
-                "Accept": "*/*",
-                "User-Agent": "Scraper/DemocracyClub",
-                "X-API-KEY": council.fcscredential.token,
-            },
-        )
+        # acquire lock
+        # https://github.com/DemocracyClub/UK-Polling-Stations/pull/9552#discussion_r3706676826
+        cache_key = f"fcslock-{council.council_id}-{election_date}"
+        if cache.get(cache_key):
+            messages.error(
+                self.request, "snapshot already in progress - refresh page in 1 minute"
+            )
+            return redirect(
+                reverse("file_uploads:councils_detail", kwargs={"pk": council.pk}),
+            )
+        else:
+            cache.set(cache_key, True, timeout=40)
 
-        resp.raise_for_status()
+        try:
+            resp = requests.get(
+                urljoin(
+                    council.fcscredential.url,
+                    f"/api/DemocracyClub/Election/{election_id}/PollingStation",
+                ),
+                headers={
+                    "Accept": "*/*",
+                    "User-Agent": "Scraper/DemocracyClub",
+                    "X-API-KEY": council.fcscredential.token,
+                },
+            )
 
-        conn = boto3.client("s3")
-        conn.put_object(
-            Bucket=settings.S3_UPLOADS_BUCKET,
-            Key=f"{council.council_id}/{election_date}/{now}/snapshot.json",
-            Body=resp.text,
-        )
+            resp.raise_for_status()
 
-        Upload.objects.create(
-            gss=council,
-            election_date=kwargs["date"],
-            timestamp=now,
-            upload_user=request.user,
-        )
+            conn = boto3.client("s3")
+            conn.put_object(
+                Bucket=settings.S3_UPLOADS_BUCKET,
+                Key=f"{council.council_id}/{election_date}/{now}/snapshot.json",
+                Body=resp.text,
+            )
+
+            Upload.objects.create(
+                gss=council,
+                election_date=kwargs["date"],
+                timestamp=now,
+                upload_user=request.user,
+            )
+        finally:
+            # unlock
+            cache.delete(cache_key)
 
         return redirect(
             reverse("file_uploads:councils_detail", kwargs={"pk": council.pk}),
