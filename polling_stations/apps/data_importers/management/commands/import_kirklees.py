@@ -4,36 +4,13 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "KIR"
     addresses_name = (
-        "2026-05-07/2026-01-28T13:18:41.550999/Democracy_Club__07May2026.tsv"
+        "2026-08-13/2026-08-10T13:27:31.372593/Democracy_Club__13August2026.tsv"
     )
     stations_name = (
-        "2026-05-07/2026-01-28T13:18:41.550999/Democracy_Club__07May2026.tsv"
+        "2026-08-13/2026-08-10T13:27:31.372593/Democracy_Club__13August2026.tsv"
     )
-    elections = ["2026-05-07"]
-    csv_encoding = "windows-1252"
+    elections = ["2026-08-13"]
     csv_delimiter = "\t"
-
-    def station_record_to_dict(self, record):
-        # Roberttown Community Centre - Entrance is on Church Rd
-        if record.polling_place_id == "22518":
-            record = record._replace(polling_place_easting="419480")
-            record = record._replace(polling_place_northing="422649")
-
-        # https://app.asana.com/1/1204880536137786/project/1207538772343223/task/1214597997167016?focus=true
-        # Fixing bad coordinates for:
-        # Carlton Junior and Infant School Upper Road Dewsbury, WF13 2DQ
-        if record.polling_place_id == "22112":
-            record = record._replace(polling_place_easting="423982")
-            record = record._replace(polling_place_northing="422773")
-            record = record._replace(polling_place_uprn="0")
-
-        # Fixng bad coordinates for:
-        # Broad Oak Bowling Club, 73 Broad Oak, Cowlersley Lane, Linthwaite, Huddersfield, HD7 5TE
-        if record.polling_place_id == "22238":
-            record = record._replace(polling_place_easting="410268")
-            record = record._replace(polling_place_northing="414480")
-
-        return super().station_record_to_dict(record)
 
     def address_record_to_dict(self, record):
         uprn = record.property_urn.strip().lstrip("0")
