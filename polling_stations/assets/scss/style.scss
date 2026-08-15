@@ -244,6 +244,23 @@ footer .ds-cluster-center ul li:nth-child(3) a span {
     color: inherit;
 }
 
+footer .site-share-button {
+    appearance: none;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+footer .site-share-button:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+}
+
 // override so logout button can look like ds-cta anchor
 .ds-logout button.ds-cta-logout {
     display: inline-block;

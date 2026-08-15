@@ -5,7 +5,7 @@ from dc_utils.settings.pipeline import (  # noqa
 
 PIPELINE = get_pipeline_settings(
     extra_css=["scss/style.scss", "font-awesome/css/font-awesome.min.css"],
-    extra_js=[],
+    extra_js=["custom_js/share.js"],
 )
 
 PIPELINE["STYLESHEETS"].update(
