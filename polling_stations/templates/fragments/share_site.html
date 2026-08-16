@@ -1,0 +1,27 @@
+{% load i18n %}
+
+{% trans "Where Do I Vote?" as share_title %}
+{% blocktrans asvar share_text %}Help someone find where to vote with Where Do I Vote?{% endblocktrans %}
+
+<nav aria-labelledby="share-site-heading">
+    <h2 id="share-site-heading" class="ds-h6">{% trans "Share Where Do I Vote?" %}</h2>
+    <p>{% trans "Help friends and family find the right polling station." %}</p>
+    <ul>
+        <li>
+            <button type="button"
+                    class="site-share-button"
+                    data-site-share
+                    data-share-title="{{ share_title }}"
+                    data-share-text="{{ share_text }}"
+                    data-share-url="https://www.wheredoivote.co.uk/"
+                    data-copy-success="{% trans 'Link copied. You can now paste it into a message.' %}"
+                    data-share-unavailable="{% trans 'Sharing is not available. Please use the email link instead.' %}"
+                    data-copy-unavailable="{% trans 'Copying is not available. Please use the email link instead.' %}"
+                    hidden>{% trans "Share this site" %}</button>
+        </li>
+        <li>
+            <a href="mailto:?subject={{ share_title|urlencode }}&amp;body={{ share_text|add:' https://www.wheredoivote.co.uk/'|urlencode }}">{% trans "Share by email" %}</a>
+        </li>
+    </ul>
+    <p data-site-share-status role="status" aria-live="polite"></p>
+</nav>

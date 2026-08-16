@@ -85,3 +85,14 @@ class TestBaseTemplate(TestCase):
             req = self.client.get("/")
             assert req.status_code == 200
             assert "dc_base_naked.html" in (t.name for t in req.templates)
+
+    def test_share_site_uses_public_homepage(self):
+        response = self.client.get("/")
+
+        assert response.status_code == 200
+        self.assertContains(
+            response,
+            'data-share-url="https://www.wheredoivote.co.uk/"',
+            html=False,
+        )
+        self.assertContains(response, "Share by email")
