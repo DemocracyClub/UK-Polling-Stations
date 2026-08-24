@@ -3,13 +3,11 @@ from data_importers.management.commands import BaseDemocracyCountsCsvImporter
 
 class Command(BaseDemocracyCountsCsvImporter):
     council_id = "HLD"
-    addresses_name = (
-        "2026-06-25/2026-05-22T11:01:15.431850/Democracy Club - Polling Districts.csv"
-    )
+    addresses_name = "2026-10-01/2026-08-24T10:30:32.968228/Democracy Club - Polling Districts W3.csv"
     stations_name = (
-        "2026-06-25/2026-05-22T11:01:15.431850/Democracy Club - Polling Stations.csv"
+        "2026-10-01/2026-08-24T10:30:32.968228/Democracy Club - Polling Stations W3.csv"
     )
-    elections = ["2026-06-25"]
+    elections = ["2026-10-01"]
     csv_encoding = "utf-16le"
 
     # maintaining exclusions through by-election
