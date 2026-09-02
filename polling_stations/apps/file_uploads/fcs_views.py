@@ -11,6 +11,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from django.utils import timezone
+
 from django.views.generic import TemplateView
 
 from councils.models import Council
@@ -83,7 +85,15 @@ class FcsElectionSelectView(StaffUserRequiredMixin, TemplateView):
         )
         resp.raise_for_status()
         elections = resp.json()
-        return [e for e in elections if e["electionDate"].startswith(date)]
+        # The FCS API returns election dates as UTC datetimes in ISO format
+        # so we need to convert them to local dates before comparing with the requested date
+        requested_date = dt.date.fromisoformat(date)
+        return [
+            e
+            for e in elections
+            if timezone.localdate(dt.datetime.fromisoformat(e["electionDate"]))
+            == requested_date
+        ]
 
     def get_context_data(self, form=None, **kwargs):
         context = super().get_context_data(**kwargs)
