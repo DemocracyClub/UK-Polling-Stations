@@ -103,6 +103,11 @@ class TestFcsElectionSelectView(FcsViewTestCase):
             "file_uploads:fcs_election_select",
             kwargs={"council_id": self.council.council_id, "date": self.date},
         )
+        FcsCredential.objects.create(
+            council=self.council,
+            url="https://example.com",
+            token="fake-token",
+        )
 
     def patch_elections_for_date(self, elections):
         return mock.patch(
@@ -134,6 +139,34 @@ class TestFcsElectionSelectView(FcsViewTestCase):
                 kwargs={
                     "council_id": self.council.council_id,
                     "date": self.date,
+                    "election_id": 1,
+                },
+            ),
+            fetch_redirect_response=False,
+        )
+
+    def test_date_comparison_is_timezone_aware(self):
+        self.client.force_login(self.staff_user)
+        isoformat_date_during_bst = "2026-10-07T23:00:00Z"
+        election_date = "2026-10-08"
+        url = reverse(
+            "file_uploads:fcs_election_select",
+            kwargs={"council_id": self.council.council_id, "date": election_date},
+        )
+        mock_resp = mock.Mock(return_value=None)
+        mock_resp.json.return_value = [
+            {"id": 1, "name": "Election 1", "electionDate": isoformat_date_during_bst}
+        ]
+
+        with mock.patch("file_uploads.fcs_views.requests.get", return_value=mock_resp):
+            response = self.client.get(url)
+        self.assertRedirects(
+            response,
+            reverse(
+                "file_uploads:fcs_snapshot_data",
+                kwargs={
+                    "council_id": self.council.council_id,
+                    "date": election_date,
                     "election_id": 1,
                 },
             ),
