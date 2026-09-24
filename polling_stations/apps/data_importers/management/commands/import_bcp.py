@@ -4,17 +4,15 @@ from data_importers.management.commands import BaseXpressDemocracyClubCsvImporte
 class Command(BaseXpressDemocracyClubCsvImporter):
     council_id = "BPC"
     addresses_name = (
-        "2025-09-11/2025-08-05T16:16:31.813624/Democracy_Club__11September2025.tsv"
+        "2026-11-05/2026-09-24T15:50:01.228864/Democracy_Club__05November2026.tsv"
     )
     stations_name = (
-        "2025-09-11/2025-08-05T16:16:31.813624/Democracy_Club__11September2025.tsv"
+        "2026-11-05/2026-09-24T15:50:01.228864/Democracy_Club__05November2026.tsv"
     )
-    elections = ["2025-09-11"]
+    elections = ["2026-11-05"]
     csv_delimiter = "\t"
 
     # These exclusions aren't relevant for the by-election but I'm maintaining them as a comment for future reference
-    # comment to deploy
-
     # def address_record_to_dict(self, record):
     #     if record.addressline6 in [
     #         # split
