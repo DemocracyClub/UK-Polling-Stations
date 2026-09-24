@@ -1,5 +1,4 @@
 from data_importers.management.commands import BaseDemocracyCountsCsvImporter
-from django.contrib.gis.geos import Point
 
 
 class Command(BaseDemocracyCountsCsvImporter):
@@ -12,10 +11,10 @@ class Command(BaseDemocracyCountsCsvImporter):
     def station_record_to_dict(self, record):
         rec = super().station_record_to_dict(record)
 
-        # fix data for 2 stations under same address:
-        # N1C CENTRE, Plimsoll Building, 1 Handyside Street, London, NIC 4BQ
-        if rec["internal_council_id"] in ("PD", "PC"):
-            rec["postcode"] = "N1C 4BQ"
-            rec["location"] = Point(529972, 183722, srid=27700)
+        # correction from council on 25/09/2026
+        if rec["internal_council_id"] == "PD":
+            rec["address"] = "Abacus Belsize Primary School\n105 Camley Street\nLondon"
+            rec["postcode"] = "N1C 4PF"
+            rec["location"] = None
 
         return rec
