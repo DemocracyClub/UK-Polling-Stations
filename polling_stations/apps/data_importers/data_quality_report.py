@@ -1,7 +1,11 @@
 from addressbase.models import UprnToCouncil
 from councils.models import Council
 from django.db.models import Q
-from pollingstations.models import PollingDistrict, PollingStation
+from pollingstations.models import (
+    PollingDistrict,
+    PollingStation,
+    LocationSourceChoices,
+)
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -75,6 +79,13 @@ class StationReport:
     def get_stations_with_point(self):
         return PollingStation.objects.filter(
             council_id__in=self.councils, location__isnull=False
+        ).count()
+
+    def get_stations_by_location_source(self, location_source: LocationSourceChoices):
+        return PollingStation.objects.filter(
+            council_id__in=self.councils,
+            location__isnull=False,
+            location_source=location_source,
         ).count()
 
     def get_stations_without_point(self):
@@ -342,6 +353,33 @@ class DataQualityReportBuilder:
             table.add_row(
                 " - with point",
                 str(stations_report.get_stations_with_point()),
+                style="green",
+            )
+            table.add_row(
+                "     - geocoded by postcode ",
+                str(
+                    stations_report.get_stations_by_location_source(
+                        LocationSourceChoices.POSTCODE
+                    )
+                ),
+                style="green",
+            )
+            table.add_row(
+                "     - geocoded by UPRN ",
+                str(
+                    stations_report.get_stations_by_location_source(
+                        LocationSourceChoices.UPRN
+                    )
+                ),
+                style="green",
+            )
+            table.add_row(
+                "     - geocoded by coordinates",
+                str(
+                    stations_report.get_stations_by_location_source(
+                        LocationSourceChoices.COORDINATES
+                    )
+                ),
                 style="green",
             )
             table.add_row(
