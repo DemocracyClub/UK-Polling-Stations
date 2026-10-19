@@ -68,7 +68,7 @@ hooks:
 #   in the script specified in "location".
   BeforeInstall:
     - location: deploy/hooks/beforeinstall/initial_setup.sh
-      timeout: 300
+      timeout: 420
       runas: root
     - location: deploy/files/scripts/install_uv.sh
       timeout: 300
