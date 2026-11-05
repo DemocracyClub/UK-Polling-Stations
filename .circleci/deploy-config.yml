@@ -168,6 +168,9 @@ jobs:
           name: Build wdiv-s3-trigger requirements
           command: ./cdk/scripts/wdiv-s3-trigger-requirements.sh
     - run:
+          name: Build format-ssm-command-event requirements
+          command: ./cdk/scripts/format-ssm-command-event-requirements.sh
+    - run:
         name: CDK version
         command: |
           uv run npx cdk --version
@@ -180,6 +183,7 @@ jobs:
         paths:
           - cdk.out
           - cdk/lambdas/wdiv-s3-trigger/requirements.txt
+          - cdk/lambdas/format_ssm_command_event/requirements.txt
     - slack/notify:
         event: fail
         template: basic_fail_1
