@@ -133,6 +133,7 @@ MIDDLEWARE = (
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "dc_utils.middleware.BasicAuthMiddleware",
+    "file_uploads.middleware.NoCacheMiddleware",
 )
 
 TEMPLATES = [
