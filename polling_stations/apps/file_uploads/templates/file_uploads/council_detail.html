@@ -14,7 +14,7 @@
     <h2>Uploads</h2>
     {% if HAS_UPCOMING_ELECTIONS %}
 
-        {% if upload_set.with_status.future.exists %}
+        {% if upload_set.exists %}
             <table class="ds-table">
                 <th>Election Date</th>
                 <th>Uploaded</th>
@@ -22,7 +22,7 @@
                 <th>File upload status</th>
                 <th>Data live?</th>
 
-                {% for upload in upload_set.with_status.future %}
+                {% for upload in upload_set %}
 
                     <tr>
                         <td>
@@ -80,29 +80,61 @@
                 when your polling data scheme is finalised or updated so we can import the data.
             </p>
         {% else %}
-            <div class="ds-cluster">
-                {% if object.fcscredential %}
-                    {% if user.is_staff %}
-                        <a href="{% url 'file_uploads:fcs_date_select' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
-                            Snapshot data from API
-                        </a>
-                    {% endif %}
-                {% else %}
-                    <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
-                        Upload
-                        {% if upload_set.exists %}
-                            an updated
-                        {% endif %}
-                        EMS export
-                    </a>
-                {% endif %}
-                {% if live_upload  and user.is_staff %}
 
-                    <a href="{% url 'file_uploads:accessibility_upload' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
-                        Upload Accessibility CSV
-                    </a>
+            {% if object.fcscredential %}
+                {% if user.is_staff %}
+                    <div class="ds-card">
+                        <div class="ds-card-body">
+                            <p>
+                                {% if upload_set %}
+                                    We already have polling station data for your upcoming election. If you need us to update it, you can send us a new snapshot of the data.
+                                {% else %}
+                                    When your polling station scheme is finalised, send us a snapshot of the polling station data.
+                                {% endif %}
+                            </p>
+
+                            <div class="ds-cluster">
+                                <a href="{% url 'file_uploads:fcs_date_select' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                                    Snapshot data from FCS
+                                </a>
+                                {% if live_upload and user.is_staff %}
+                                    <a href="{% url 'file_uploads:accessibility_upload' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                                        Upload Accessibility CSV
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
-            </div>
+            {% else %}
+                <div class="ds-card">
+                    <div class="ds-card-body">
+                        <p>
+                            {% if upload_set %}
+                                We already have polling station data for your upcoming election. If you need us to update it, you can upload an updated export from your EMS.
+                            {% else %}
+                                When your polling station scheme is finalised, upload an export from your EMS.
+                            {% endif %}
+                        </p>
+
+                        <div class="ds-cluster">
+                            <a href="{% url 'file_uploads:file_upload' gss=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                                Upload
+                                {% if upload_set %}
+                                    an updated
+                                {% endif %}
+                                EMS export
+                            </a>
+                            {% if live_upload and user.is_staff %}
+                                <a href="{% url 'file_uploads:accessibility_upload' council_id=object.council_id %}" class="ds-cta ds-cta-blue" style="margin: 0.85rem;">
+                                    Upload Accessibility CSV
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
         {% endif %}
     {% else %}
         {% include "./no_upcoming_elections_snippet.html" with name=object.name %}
