@@ -12,7 +12,8 @@
       "python/__pycache__",
       "tests",
       "test_data",
-      "cdk/lambdas/wdiv-s3-trigger/tests/*"
+      "cdk/lambdas/wdiv-s3-trigger/tests/*",
+      "cdk/lambdas/format_ssm_command_event/tests/*"
     ]
   },
   "context": {

@@ -63,13 +63,14 @@ class WDIVOncePerTagCommandRunner(Stack):
         )
 
         # Lambda to format SSM failure events into readable emails
-        format_ssm_event_lambda = aws_lambda.Function(
+        format_ssm_event_lambda = aws_lambda_python.PythonFunction(
             self,
             "FormatSSMCommandEvent",
             function_name=f"format-ssm-command-event-{dc_environment}",
+            entry="cdk/lambdas/format_ssm_command_event",
+            index="handler.py",
+            handler="handler",
             runtime=aws_lambda.Runtime.PYTHON_3_12,
-            handler="handler.handler",
-            code=aws_lambda.Code.from_asset("cdk/lambdas/format_ssm_command_event"),
             environment={
                 "SNS_TOPIC_ARN": self.ssm_failure_topic.topic_arn,
                 "DC_ENVIRONMENT": dc_environment,
