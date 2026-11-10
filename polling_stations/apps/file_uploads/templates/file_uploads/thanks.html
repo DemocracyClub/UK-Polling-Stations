@@ -8,9 +8,9 @@
 
   <div class="ds-card">
     <div class="ds-card-body">
-      <h3>Success</h3>
+      <h3>Thanks</h3>
       <p>
-        You have provided Democracy Club with polling station data for your upcoming election.
+        Thanks for providing Democracy Club with polling station data for your upcoming election.
         We will email you as soon as your data has been published for voters to use.
         If you have any questions, please <a href="mailto:pollingstations@democracyclub.org.uk">contact us</a>.
       </p>
@@ -20,7 +20,11 @@
           class="ds-cta ds-cta-blue"
           style="margin: 0.85rem;"
         >
-          Return to council view
+          {% if request.user.is_staff %}
+            Return to council view
+          {% else %}
+            Return to Home
+          {% endif %}
         </a>
       </div>
     </div>
