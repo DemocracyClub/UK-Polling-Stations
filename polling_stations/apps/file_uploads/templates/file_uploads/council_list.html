@@ -57,9 +57,15 @@
                     {% endif %}
                     {% if request.user.is_staff %}
                         <td>
-                            <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
-                                upload
-                            </a>
+                            {% if council.fcscredential %}
+                                <a href="{% url 'file_uploads:fcs_date_select' council_id=council.council_id %}">
+                                    snapshot
+                                </a>
+                            {% else %}
+                                <a href="{% url 'file_uploads:file_upload' gss=council.council_id %}">
+                                    upload
+                                </a>
+                            {% endif %}
                         </td>
                     {% endif %}
                     <td>
