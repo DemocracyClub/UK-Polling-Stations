@@ -211,6 +211,7 @@ class CouncilListView(ActiveUserRequiredMixin, CouncilView, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = queryset.select_related("fcscredential")
         self.filter = CouncilListUploadFilter(self.request.GET, queryset=queryset)
         return self.filter.qs
 
