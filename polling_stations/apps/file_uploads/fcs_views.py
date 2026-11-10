@@ -213,5 +213,5 @@ class FcsSnapshotDataView(StaffUserRequiredMixin, TemplateView):
             cache.delete(cache_key)
 
         return redirect(
-            reverse("file_uploads:councils_detail", kwargs={"pk": council.pk}),
+            reverse("file_uploads:thanks", kwargs={"council_id": council.pk}),
         )

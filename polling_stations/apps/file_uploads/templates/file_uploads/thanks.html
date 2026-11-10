@@ -1,0 +1,29 @@
+{% extends "file_uploads/council_user_base.html" %}
+{% load i18n %}
+
+{% block page_title %}Thanks{% endblock page_title %}
+{% block title %}Thanks{% endblock title %}
+
+{% block council_content %}
+
+  <div class="ds-card">
+    <div class="ds-card-body">
+      <h3>Success</h3>
+      <p>
+        You have provided Democracy Club with polling station data for your upcoming election.
+        We will email you as soon as your data has been published for voters to use.
+        If you have any questions, please <a href="mailto:pollingstations@democracyclub.org.uk">contact us</a>.
+      </p>
+      <div class="ds-cluster">
+        <a
+          href="{% url "file_uploads:councils_detail" pk=request.resolver_match.kwargs.council_id %}"
+          class="ds-cta ds-cta-blue"
+          style="margin: 0.85rem;"
+        >
+          Return to council view
+        </a>
+      </div>
+    </div>
+  </div>
+
+{% endblock council_content %}

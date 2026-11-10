@@ -51,6 +51,11 @@ urlpatterns = [
         FcsSnapshotDataView.as_view(),
         name="fcs_snapshot_data",
     ),
+    path(
+        "thanks/<str:council_id>/",
+        TemplateView.as_view(template_name="file_uploads/thanks.html"),
+        name="thanks",
+    ),
     path("login/", CouncilLoginView.as_view(), name="council_login_view"),
     path(
         "about/",
