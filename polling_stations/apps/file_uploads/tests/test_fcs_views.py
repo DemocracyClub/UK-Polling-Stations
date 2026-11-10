@@ -273,7 +273,7 @@ class TestFcsSnapshotDataView(FcsViewTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(
             reverse(
-                "file_uploads:councils_detail", kwargs={"pk": self.council.council_id}
+                "file_uploads:thanks", kwargs={"council_id": self.council.council_id}
             ),
             response.url,
         )
