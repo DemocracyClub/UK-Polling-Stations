@@ -63,7 +63,7 @@
                         </td>
                     {% endif %}
                     <td>
-                        {{ council.upload_set.future.with_status.latest.status | upload_status_emoji }}
+                        {{ council.latest_upload_status | default_if_none:"" | upload_status_emoji }}
                     </td>
                     {% if council.ps_count  %}
                         <td>✔️ <cite><small>({{ council.ps_count }})</small></cite></td>
