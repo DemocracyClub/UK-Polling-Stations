@@ -1,1 +1,1 @@
-# don't enable /admin for this model
+# don't enable admin for this model
